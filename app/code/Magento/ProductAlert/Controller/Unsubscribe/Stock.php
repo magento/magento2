@@ -32,7 +32,7 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
     protected $productRepository;
 
     /**
-     * @var StoreManagerInterface
+     * @var StoreManagerInterface|null
      */
     private $storeManager;
 
@@ -79,18 +79,18 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
         try {
             $product = $this->retrieveProduct($productId);
             $model = $this->stockFactory->create()
-                                        ->setCustomerId($this->customerSession->getCustomerId())
-                                        ->setProductId($product->getId())
-                                        ->setWebsiteId(
-                                            $this->storeManager
-                                                ->getStore()
-                                                ->getWebsiteId()
-                                        )->setStoreId(
-                                            $this->storeManager
-                                                ->getStore()
-                                                ->getId()
-                                        )
-                                        ->loadByParam();
+                ->setCustomerId($this->customerSession->getCustomerId())
+                ->setProductId($product->getId())
+                ->setWebsiteId(
+                    $this->storeManager
+                        ->getStore()
+                        ->getWebsiteId()
+                )->setStoreId(
+                    $this->storeManager
+                        ->getStore()
+                        ->getId()
+                )
+                ->loadByParam();
             if ($model->getId()) {
                 $model->delete();
             }
