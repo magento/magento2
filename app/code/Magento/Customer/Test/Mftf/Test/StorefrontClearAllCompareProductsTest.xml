@@ -38,6 +38,30 @@
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct1">
                 <requiredEntity createDataKey="createSimpleCategory1"/>
             </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
 
             <!-- Create Virtual Product -->
             <createData entity="VirtualProduct" stepKey="createVirtualProduct1">
@@ -76,6 +100,9 @@
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createDownloadableProduct1"/>
             </createData>
+
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
             <!-- Login -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
