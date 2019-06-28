@@ -66,7 +66,9 @@ return [
     ],
     'mt_srand' => [
         'replacement' => '',
-        'exclude' => []
+        'exclude' => [
+            ['type' => 'setup', 'path' => 'src/Magento/Setup/Fixtures/ConfigurableProductsFixture.php'],
+        ]
     ],
     'htmlspecialchars' => [
         'replacement' => '\Magento\Framework\Escaper::escapeHtml',

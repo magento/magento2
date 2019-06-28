@@ -47,6 +47,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'storeManager' => $this->storeManagerMock,
         ]);
         $this->statusFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\StatusFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['load', 'create'])
             ->getMock();
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
