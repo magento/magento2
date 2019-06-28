@@ -163,27 +163,6 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/GraphQl/Customer/_files/enable_customer_account_confirmation.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage This account isn't confirmed. Verify and try again.
-     */
-    public function testChangePasswordIfAccountIsNotConfirmed()
-    {
-        $customerEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $newPassword = 'anotherPassword1';
-
-        /* get header map before setting the customer unconfirmed */
-        $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
-
-        $this->setCustomerConfirmation(1);
-        $query = $this->getQuery($currentPassword, $newPassword);
-
-        $this->graphQlMutation($query, [], '', $headerMap);
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
      * @expectedExceptionMessage The account is locked.
@@ -212,19 +191,6 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
         $customerSecure->setLockExpires('2030-12-31 00:00:00');
         $this->customerAuthUpdate->saveAuth($customerId);
-    }
-
-    /**
-     * @param int $customerId
-     *
-     * @return void
-     * @throws LocalizedException
-     */
-    private function setCustomerConfirmation(int $customerId): void
-    {
-        $customer = $this->customerRepository->getById($customerId);
-        $customer->setConfirmation('d5a21f15bd4cc21bd1b21ef6d9989a38');
-        $this->customerRepository->save($customer);
     }
 
     /**

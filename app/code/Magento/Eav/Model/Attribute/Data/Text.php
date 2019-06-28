@@ -168,7 +168,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      */
     private function validateInputRule(string $value): array
     {
-        $result = $this->_validateInputRule($value);
+        $result = $this->_validateInputRule(trim($value));
         return \is_array($result) ? $result : [];
     }
 }
