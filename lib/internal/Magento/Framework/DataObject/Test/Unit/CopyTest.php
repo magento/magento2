@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\DataObject\Test\Unit;
 
+use Magento\Quote\Model\Quote\Address;
+
 class CopyTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -299,5 +301,87 @@ class CopyTest extends \PHPUnit\Framework\TestCase
             [],
             $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock)
         );
+    }
+
+    public function testGetExtensionAttributeForDataObjectChild()
+    {
+        $fields['code']['aspect'] = '*';
+        $this->fieldsetConfigMock
+            ->expects($this->once())
+            ->method('getFieldset')
+            ->with('fieldset', 'global')
+            ->will($this->returnValue($fields));
+
+        $sourceMock = $this->createPartialMock(Address::class, [
+            'getExtensionAttributes', 'getCode'
+        ]);
+        $targetMock = $this->createPartialMock(
+            Address::class, [
+            'getExtensionAttributes',
+            'setCode',
+            'setExtensionAttributes'
+        ]);
+
+        $sourceMock
+            ->expects($this->any())
+            ->method('getExtensionAttributes')
+            ->willReturnSelf();
+        $sourceMock
+            ->expects($this->once())
+            ->method('getCode')
+            ->willReturn('code');
+
+        $targetMock
+            ->expects($this->any())
+            ->method('getExtensionAttributes')
+            ->willReturnSelf();
+        $targetMock
+            ->expects($this->any())
+            ->method('setExtensionAttributes')
+            ->willReturnSelf();
+        $targetMock
+            ->expects($this->once())
+            ->method('setCode')
+            ->with('code');
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $result = $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $sourceMock, $targetMock);
+        $this->assertEquals($result, $targetMock);
+    }
+
+    public function testGetDataObjectFieldFromExtensbielEntity()
+    {
+        $fields['code']['aspect'] = '*';
+        $this->fieldsetConfigMock
+            ->expects($this->once())
+            ->method('getFieldset')
+            ->with('fieldset', 'global')
+            ->will($this->returnValue($fields));
+
+        $sourceMock = $this->createPartialMock(Address::class, [
+            'getExtensionAttributes'
+        ]);
+        $targetMock = $this->createPartialMock(
+            Address::class, [
+            'getExtensionAttributes'
+        ]);
+
+        $sourceMock
+            ->expects($this->any())
+            ->method('getExtensionAttributes')
+            ->willReturn(null);
+        $value = 'code';
+        $sourceMock->setData('code', $value);
+
+        $targetMock
+            ->expects($this->any())
+            ->method('getExtensionAttributes')
+            ->willReturn(null);
+
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $result = $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $sourceMock, $targetMock);
+        $this->assertEquals($result, $targetMock);
+        $this->assertEquals($value, $result->getCode());
     }
 }
