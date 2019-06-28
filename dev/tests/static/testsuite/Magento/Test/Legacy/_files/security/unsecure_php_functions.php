@@ -70,4 +70,10 @@ return [
             ['type' => 'setup', 'path' => 'src/Magento/Setup/Fixtures/ConfigurableProductsFixture.php'],
         ]
     ],
+    'htmlspecialchars' => [
+        'replacement' => '\Magento\Framework\Escaper::escapeHtml',
+        'exclude' => [
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'Escaper.php'],
+        ]
+    ],
 ];
