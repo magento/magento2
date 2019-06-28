@@ -214,7 +214,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                 throw new \InvalidArgumentException('Incompatible product type');
             }
             $option->setProductId($product->getData($metadata->getLinkField()));
-            $option->setId($this->optionResource->getIdByProductIdAndAttributeId($option, $option->getProductId(), $option->getAttributeId()));
+            $id = $this->optionResource->getIdByProductIdAndAttributeId(
+                $option,
+                $option->getProductId(),
+                $option->getAttributeId()
+            );
+            $option->setId($id);
         }
 
         try {
