@@ -530,10 +530,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Example: the catalog inventory validation of decimal qty can change qty to int,
      * so need to change quote item qty option value too.
      *
-     * @param   array $options
-     * @param   \Magento\Framework\DataObject $option
-     * @param   mixed $value
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param array $options
+     * @param \Magento\Framework\DataObject $option
+     * @param mixed $value
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
