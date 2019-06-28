@@ -205,7 +205,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->productRepository->delete($updatedProduct);
     }
 
-    /*
+    /**
      * Test authorization when saving product's design settings.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
