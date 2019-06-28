@@ -34,9 +34,9 @@ class QuantityDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(array $cartItemData): array
     {
-        $qty = $this->arrayManager->get('data/qty', $cartItemData);
+        $qty = $this->arrayManager->get('data/quantity', $cartItemData);
         if (!isset($qty)) {
-            throw new GraphQlInputException(__('Missing key "qty" in cart item data'));
+            throw new GraphQlInputException(__('Missing key "quantity" in cart item data'));
         }
 
         return ['qty' => (float)$qty];
