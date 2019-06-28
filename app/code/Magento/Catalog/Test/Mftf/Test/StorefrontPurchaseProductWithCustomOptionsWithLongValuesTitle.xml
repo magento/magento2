@@ -102,6 +102,7 @@
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
