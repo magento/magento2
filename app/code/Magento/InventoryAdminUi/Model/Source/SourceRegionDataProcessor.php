@@ -20,11 +20,11 @@ class SourceRegionDataProcessor
      */
     public function execute(array $data): array
     {
-        if ($this->doesFieldEmpty('region_id', $data)) {
+        if ($this->isFieldEmpty('region_id', $data)) {
             $data['region_id'] = null;
         }
 
-        if ($this->doesFieldEmpty('region', $data)) {
+        if ($this->isFieldEmpty('region', $data)) {
             $data['region'] = null;
         }
 
@@ -39,7 +39,7 @@ class SourceRegionDataProcessor
      *
      * @return bool
      */
-    private function doesFieldEmpty(string $fieldName, array $data): bool
+    private function isFieldEmpty(string $fieldName, array $data): bool
     {
         return !isset($data[$fieldName]) || '' === $data[$fieldName];
     }
