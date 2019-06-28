@@ -372,7 +372,6 @@ class Context implements ContextInterface
      * @param array $data
      * @param UiComponentInterface $component
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function prepareDataSource(array & $data, UiComponentInterface $component)
     {
