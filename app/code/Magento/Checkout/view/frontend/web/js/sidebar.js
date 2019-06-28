@@ -10,7 +10,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'mage/decorate',
     'mage/collapsible',
     'mage/cookies'

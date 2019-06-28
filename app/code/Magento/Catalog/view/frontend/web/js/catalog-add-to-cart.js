@@ -8,7 +8,8 @@ define([
     'mage/translate',
     'underscore',
     'Magento_Catalog/js/product/view/product-ids-resolver',
-    'jquery/ui'
+    'jquery-ui-modules/core',
+    'jquery-ui-modules/widget'
 ], function ($, $t, _, idsResolver) {
     'use strict';
 

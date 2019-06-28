@@ -14,7 +14,8 @@ define([
     'text!ui/template/modal/modal-slide.html',
     'text!ui/template/modal/modal-custom.html',
     'Magento_Ui/js/lib/key-codes',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'mage/translate'
 ], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';

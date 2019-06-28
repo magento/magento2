@@ -9,7 +9,8 @@
     if (typeof define === 'function' && define.amd) {
         define([
             'jquery',
-            'jquery/ui',
+            'jquery-ui-modules/widget',
+            'jquery-ui-modules/core',
             'mage/validation/validation'
         ], factory);
     } else {

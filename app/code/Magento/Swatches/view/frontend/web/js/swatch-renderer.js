@@ -10,7 +10,8 @@ define([
     'mage/smart-keyboard-handler',
     'mage/translate',
     'priceUtils',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'jquery/jquery.parsequery',
     'mage/validation/validation'
 ], function ($, _, mageTemplate, keyboardHandler, $t, priceUtils) {

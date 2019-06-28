@@ -4,7 +4,8 @@
  */
 define([
     'jquery',
-    'jquery/ui'
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core'
 ], function ($) {
     'use strict';
 

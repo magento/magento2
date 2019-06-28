@@ -5,7 +5,8 @@
 
 define([
     'jquery',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'catalogGallery',
     'loadPlayer'
 ], function ($) {
