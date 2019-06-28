@@ -88,7 +88,7 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/payments.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
      */
     public function testPlaceOrder()
     {
@@ -121,7 +121,7 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/payments.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
      */
     public function testPlaceOrderSaveInVault()
     {
@@ -161,8 +161,8 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/payments.php
-     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/token.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/token.php
      */
     public function testPlaceOrderWithVault()
     {
@@ -224,11 +224,9 @@ mutation {
     cart_id:"{$maskedQuoteId}"
     payment_method:{
       code:"braintree"
-      additional_data:{
-        braintree:{
-          is_active_payment_token_enabler:{$saveInVault}
-          payment_method_nonce:"fake-valid-nonce"
-        }
+      braintree:{
+        is_active_payment_token_enabler:{$saveInVault}
+        payment_method_nonce:"fake-valid-nonce"
       }
     }
   }) {
@@ -262,12 +260,10 @@ mutation {
     cart_id:"{$maskedQuoteId}"
     payment_method:{
       code:"braintree_cc_vault"
-      additional_data:{
-        braintree_cc_vault:{
-          is_active_payment_token_enabler:{$saveInVault}
-          payment_method_nonce:"{$nonce}"
-          public_hash:"{$publicHash}"
-        }
+      braintree_cc_vault:{
+        is_active_payment_token_enabler:{$saveInVault}
+        payment_method_nonce:"{$nonce}"
+        public_hash:"{$publicHash}"
       }
     }
   }) {

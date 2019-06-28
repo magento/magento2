@@ -8,17 +8,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenRepository;
 
-$requiredConst = [
-    'TESTS_BRAINTREE_MERCHANT_ID',
-    'TESTS_BRAINTREE_PUBLIC_KEY',
-    'TESTS_BRAINTREE_PRIVATE_KEY',
-];
-foreach ($requiredConst as $const) {
-    if (!defined($const)) {
-        return;
-    }
-}
-
 $objectManager = Bootstrap::getObjectManager();
 
 $adapterFactory = $objectManager->get(\Magento\Braintree\Model\Adapter\BraintreeAdapterFactory::class);

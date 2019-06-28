@@ -15,7 +15,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  */
 class BraintreeDataProvider implements AdditionalDataProviderInterface
 {
-    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data/braintree';
+    private const PATH_ADDITIONAL_DATA = 'braintree';
 
     /**
      * @var ArrayManager

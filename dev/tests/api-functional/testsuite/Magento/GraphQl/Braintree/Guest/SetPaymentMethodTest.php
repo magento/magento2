@@ -20,12 +20,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class SetPaymentMethodTest extends GraphQlAbstract
 {
-    private const REQUIRED_CONSTS = [
-        'TESTS_BRAINTREE_MERCHANT_ID',
-        'TESTS_BRAINTREE_PUBLIC_KEY',
-        'TESTS_BRAINTREE_PRIVATE_KEY',
-    ];
-
     /**
      * @var CustomerTokenServiceInterface
      */
@@ -56,12 +50,6 @@ class SetPaymentMethodTest extends GraphQlAbstract
      */
     protected function setUp()
     {
-        foreach (static::REQUIRED_CONSTS as $const) {
-            if (!defined($const)) {
-                $this->markTestSkipped('Braintree sandbox credentials must be defined in phpunit_graphql.xml.dist');
-            }
-        }
-
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
@@ -79,7 +67,7 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/Graphql/Braintree/_files/payments.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
      */
     public function testPlaceOrder()
     {
@@ -126,11 +114,9 @@ mutation {
     cart_id:"{$maskedQuoteId}"
     payment_method:{
       code:"braintree"
-      additional_data:{
-        braintree:{
-          is_active_payment_token_enabler:false
-          payment_method_nonce:"fake-valid-nonce"
-        }
+      braintree:{
+        is_active_payment_token_enabler:false
+        payment_method_nonce:"fake-valid-nonce"
       }
     }
   }) {
