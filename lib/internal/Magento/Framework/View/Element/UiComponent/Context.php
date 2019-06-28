@@ -383,18 +383,6 @@ class Context implements ContextInterface
             }
         }
         $data = $component->prepareDataSource($data);
-        if (isset($data['data']['items'])) {
-            foreach ($data['data']['items'] as & $item) {
-                $name = $component->getData('name');
-                if (array_key_exists($name, $item) && is_array($item[$name])) {
-                    foreach ($item[$name] as $action => &$actionItem) {
-                        if (is_array($actionItem)) {
-                            $actionItem['__disableTmpl'] = true;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     /**
