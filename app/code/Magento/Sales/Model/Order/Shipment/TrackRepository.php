@@ -16,8 +16,8 @@ use Magento\Sales\Api\Data\ShipmentTrackInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentTrackSearchResultInterfaceFactory;
 use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
-use \Magento\Sales\Api\OrderRepositoryInterface;
-use \Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -46,9 +46,9 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @var OrderRepositoryInterface
+     * @var CollectionFactory
      */
-    private $orderRepository;
+    private $shipmentCollection;
 
     /**
      * @var LoggerInterface
@@ -60,7 +60,7 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
      * @param ShipmentTrackInterfaceFactory $trackFactory
      * @param ShipmentTrackSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
-     * @param OrderRepositoryInterface|null $orderRepository
+     * @param CollectionFactory|null $shipmentCollection
      * @param LoggerInterface|null $logger
      */
     public function __construct(
@@ -68,15 +68,15 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
         ShipmentTrackInterfaceFactory $trackFactory,
         ShipmentTrackSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        OrderRepositoryInterface $orderRepository = null,
+        CollectionFactory $shipmentCollection = null,
         LoggerInterface $logger = null
     ) {
         $this->trackResource = $trackResource;
         $this->trackFactory = $trackFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
-        $this->orderRepository = $orderRepository ?:
-            ObjectManager::getInstance()->get(OrderRepositoryInterface::class);
+        $this->shipmentCollection = $shipmentCollection ?:
+            ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->logger = $logger ?:
             ObjectManager::getInstance()->get(LoggerInterface::class);
     }
@@ -120,9 +120,9 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
      */
     public function save(ShipmentTrackInterface $entity)
     {
-        $shipmentCollection = $this->orderRepository->get($entity['order_id'])->getShipmentsCollection();
+        $shipments = $this->shipmentCollection->create()->addFieldToFilter('order_id', $entity['order_id']);
         $shipmentId = [];
-        foreach ($shipmentCollection as $shipment) {
+        foreach ($shipments->getItems() as $shipment) {
             $shipmentId[] = $shipment->getId();
         }
 
