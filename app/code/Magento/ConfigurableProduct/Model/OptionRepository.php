@@ -142,7 +142,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * @inheritdoc}
+     * @inheritdoc
      */
     public function delete(OptionInterface $option)
     {
