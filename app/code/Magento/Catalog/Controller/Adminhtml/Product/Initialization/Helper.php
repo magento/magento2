@@ -407,9 +407,9 @@ class Helper
     private function filterWebsiteIds($websiteIds)
     {
         if (!$this->storeManager->isSingleStoreMode()) {
-            $websiteIds = array_filter((array)$websiteIds);
+            $websiteIds = array_keys(array_filter((array)$websiteIds));
         } else {
-            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = 1;
+            $websiteIds = [$this->storeManager->getWebsite(true)->getId()];
         }
 
         return $websiteIds;

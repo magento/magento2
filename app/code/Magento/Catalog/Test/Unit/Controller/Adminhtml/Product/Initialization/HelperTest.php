@@ -340,7 +340,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             [
                 'single_store' => false,
                 'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'expected_website_ids' => [1, 2],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
@@ -349,7 +349,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             [
                 'single_store' => false,
                 'website_ids' => ['1' => 1, '2' => 0],
-                'expected_website_ids' => ['1' => 1],
+                'expected_website_ids' => [1],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
@@ -365,7 +365,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             [
                 'single_store' => true,
                 'website_ids' => [],
-                'expected_website_ids' => ['1' => 1],
+                'expected_website_ids' => [1],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
@@ -375,7 +375,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             [
                 'single_store' => false,
                 'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'expected_website_ids' => [1, 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -401,7 +401,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             [
                 'single_store' => false,
                 'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'expected_website_ids' => [1, 2],
                 'links' => [
                     'customlink' => [
                         0 => [
@@ -427,7 +427,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             [
                 'single_store' => false,
                 'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'expected_website_ids' => [1, 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -467,7 +467,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             [
                 'single_store' => false,
                 'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'expected_website_ids' => [1, 2],
                 'links' => [
                     'related' => [
                         0 => [
