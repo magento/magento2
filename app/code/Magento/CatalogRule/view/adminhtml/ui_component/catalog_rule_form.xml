@@ -302,6 +302,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="default" xsi:type="number">0</item>
                 </item>
             </argument>
             <settings>
