@@ -248,7 +248,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     
     /**
      * Calculate Maximum Probability based current coupon generate request
-     * 
+     *
      * @return int
      */
     public function getMaxProbability()
