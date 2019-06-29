@@ -157,18 +157,12 @@
         <column name="billing_telephone" sortOrder="60">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Phone</label>
             </settings>
         </column>
         <column name="billing_postcode" sortOrder="70">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">ZIP</label>
             </settings>
         </column>
