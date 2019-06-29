@@ -1059,7 +1059,7 @@ define([
                     currentDateUnix = moment.utc(currentDate, params.dateFormat).unix(),
                     insertedDateUnix = moment.utc(insertedDate, params.dateFormat).unix();
 
-                return insertedDate > insertedDateUnix;
+                return currentDateUnix > insertedDateUnix;
             },
             $.mage.__('The date should be earlier than the current date.')
         ],
