@@ -17,6 +17,8 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInterface;
 
 /**
+ * Declared Tier Price Class
+ *
  * @api
  * @since 100.0.2
  */
@@ -136,6 +138,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Get Tier Price Count
+     *
      * @return int
      */
     public function getTierPriceCount()
@@ -144,6 +148,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Get Tier Price List
+     *
      * @return array
      */
     public function getTierPriceList()
@@ -164,6 +170,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Filter Tier Prices
+     *
      * @param array $priceList
      * @return array
      */
@@ -215,6 +223,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Get Base Price
+     *
      * @return float
      */
     protected function getBasePrice()
@@ -224,8 +234,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
-     * Calculates savings percentage according to the given tier price amount
-     * and related product price amount.
+     * Calculates savings percentage according to the given tier price amount and related product price amount.
      *
      * @param AmountInterface $amount
      *
@@ -243,6 +252,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Apply adjustment
+     *
      * @param float|string $price
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
@@ -325,6 +336,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Is percentage discount
+     *
      * @return bool
      */
     public function isPercentageDiscount()
