@@ -208,6 +208,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     break;
             }
         }
+
+        $additional_classes = $sourceAttributes->getNamedItem('additional_classes');
+        if ($additional_classes) {
+            $parameter['additional_classes'] = $additional_classes->nodeValue;
+        }
+        
         return $parameter;
     }
 

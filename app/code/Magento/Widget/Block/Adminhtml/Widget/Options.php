@@ -142,13 +142,19 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->getForm();
         $fieldset = $this->getMainFieldset();
 
+        $cssClass = 'widget-option';
+        $additionalClasses = $parameter->getAdditionalClasses();
+        if ($additionalClasses) {
+            $cssClass .= ' '.$additionalClasses;
+        }
+
         // prepare element data with values (either from request of from default values)
         $fieldName = $parameter->getKey();
         $data = [
             'name' => $form->addSuffixToName($fieldName, 'parameters'),
             'label' => __($parameter->getLabel()),
             'required' => $parameter->getRequired(),
-            'class' => 'widget-option',
+            'class' => $cssClass,
             'note' => __($parameter->getDescription()),
         ];
 
