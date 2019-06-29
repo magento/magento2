@@ -337,6 +337,9 @@ class Column extends Widget
             $renderedValue = call_user_func($frameCallback, $renderedValue, $row, $this, true);
         }
 
+        $renderedValue = str_replace("\r\n", " > ", trim($renderedValue));
+        $renderedValue = str_replace("   ", "", $renderedValue);
+
         return $renderedValue;
     }
 
