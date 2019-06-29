@@ -246,8 +246,8 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         return $this->generatedCount;
     }
     
-    /*
-     * Calculate Maximum Probility based current coupon generate request
+    /**
+     * Calculate Maximum Probability based current coupon generate request
      * 
      * @return int
      */
