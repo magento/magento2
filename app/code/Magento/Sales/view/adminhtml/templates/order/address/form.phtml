@@ -10,12 +10,12 @@
     </div>
 </div>
 
-<fieldset class="fieldset admin__fieldset-wrapper">
+<fieldset class="fieldset admin__fieldset-wrapper admin__fieldset">
     <legend class="legend admin__legend">
         <span><?= $block->escapeHtml($block->getHeaderText()) ?></span>
     </legend>
     <br>
-    <div class="form-inline" data-mage-init='{"Magento_Sales/order/edit/address/form":{}}'>
+    <div class="form-inline form-order-info" data-mage-init='{"Magento_Sales/order/edit/address/form":{}}'>
         <?= $block->getForm()->toHtml() ?>
     </div>
 </fieldset>
