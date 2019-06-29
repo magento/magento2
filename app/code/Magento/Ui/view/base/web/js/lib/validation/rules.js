@@ -1052,6 +1052,14 @@ define([
             },
             $.mage.__('The date is not within the specified range.')
         ],
+        'validate-future-date': [
+            function (value, params) {
+                var currentDate = new Date().toDateString();
+                var insertedDate = new Date(value).toDateString();
+                return moment.utc(currentDate, params.dateFormat).unix() > moment.utc(insertedDate, params.dateFormat).unix();
+            },
+            $.mage.__('The date should be earlier than the current date.')
+        ],
         'validate-color': [
             function (value) {
                 if (value === '') {
