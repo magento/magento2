@@ -16,12 +16,12 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Maximum probability of guessing the coupon on the first attempt
      */
-    const MAX_PROBABILITY_OF_GUESSING = 0.25;
+    const MAX_PROBABILITY_OF_GUESSING = 0.99;
 
     /**
      * Number of attempts to generate
      */
-    const MAX_GENERATE_ATTEMPTS = 10;
+    const MAX_GENERATE_ATTEMPTS = 70;
 
     /**
      * Count of generated Coupons
