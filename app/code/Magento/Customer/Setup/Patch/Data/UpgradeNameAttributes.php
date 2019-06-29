@@ -14,6 +14,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class UpgradeNameAttributes
+ *
  * @package Magento\Customer\Setup\Patch
  */
 class UpgradeNameAttributes implements DataPatchInterface, PatchVersionInterface
