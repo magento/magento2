@@ -6,20 +6,19 @@
 .tree-store-scope {
     &.admin__fieldset {
         padding: 0;
-
-        > .admin__field {
-            margin-left: -@temp_gutter;
-        }
     }
 
     [class*='field-w'],
     [class*='field-sg'] {
         &.admin__field {
-            margin: 0 0 0 -@temp_gutter;
+            margin: 0 0 0 -30px;
         }
 
-        .admin__field-label {
-            text-align: left;
+        .label.admin__field-label {
+            text-align: right;
+            float: left;
+            margin-left: 30px;
+            text-align: right;
         }
     }
 
