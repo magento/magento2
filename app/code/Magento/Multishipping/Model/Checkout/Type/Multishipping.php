@@ -419,8 +419,10 @@ class Multishipping extends \Magento\Framework\DataObject
             $itemsInfo = [];
             foreach ($info as $itemData) {
                 foreach ($itemData as $quoteItemId => $data) {
-                    $allQty += $data['qty'];
-                    $itemsInfo[$quoteItemId] = $data;
+                    if (is_numeric($data['qty'])) {
+                        $allQty += $data['qty'];
+                        $itemsInfo[$quoteItemId] = $data;
+                    }
                 }
             }
 
