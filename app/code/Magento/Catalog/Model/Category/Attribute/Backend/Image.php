@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 
 /**
  * Catalog category image attribute backend model
@@ -52,6 +53,12 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @var string
      */
     private $additionalData = '_additional_data_';
+    
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 101.0.0
+     */
+    private $mediaDirectory;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
@@ -66,6 +73,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
         $this->_logger = $logger;
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
@@ -73,12 +81,20 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Will return empty string in a case when $value is not an array
      *
      * @param array $value Attribute value
+     * 
+     * @param string $type Flag based on file location (tmp, base)
+     * 
      * @return string
      */
-    private function getUploadedImageName($value)
+    private function getUploadedImageName($value, $type = 'tmp')
     {
         if (is_array($value) && isset($value[0]['name'])) {
-            return $value[0]['name'];
+            if($type == 'base'){
+                // Get new filename if file already exists in base directory.
+                return FileUploader::getNewFileName($this->mediaDirectory->getAbsolutePath($this->getImageUploader()->getFilePath($this->getImageUploader()->getBasePath(), $value[0]['name'])));
+            }else{
+                return $value[0]['name'];
+            }
         }
 
         return '';
@@ -102,7 +118,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $value[0]['name'] = $value[0]['url'];
         }
 
-        if ($imageName = $this->getUploadedImageName($value)) {
+        if ($imageName = $this->getUploadedImageName($value, 'base')) {
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
@@ -168,9 +184,10 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
 
-        if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
+        $newFile = FileUploader::getNewFileName($this->mediaDirectory->getAbsolutePath($this->getImageUploader()->getFilePath($this->getImageUploader()->getBasePath(), $value[0]['name'])));
+        if ($this->isTmpFileAvailable($value) && $tmpImageName = $this->getUploadedImageName($value)) {
             try {
-                $this->getImageUploader()->moveFileFromTmp($imageName);
+                $this->getImageUploader()->moveFileFromTmp($tmpImageName, $this->getUploadedImageName($value, 'base'));
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }

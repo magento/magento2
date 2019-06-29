@@ -188,19 +188,21 @@ class ImageUploader
     /**
      * Checking file for moving and move it
      *
-     * @param string $imageName
+     * @param string $tmpImageName
+     * 
+     * @param string $baseImageName
      *
      * @return string
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function moveFileFromTmp($imageName)
+    public function moveFileFromTmp($tmpImageName, $baseImageName)
     {
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
 
-        $baseImagePath = $this->getFilePath($basePath, $imageName);
-        $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
+        $baseImagePath = $this->getFilePath($basePath, $baseImageName);
+        $baseTmpImagePath = $this->getFilePath($baseTmpPath, $tmpImageName);
 
         try {
             $this->coreFileStorageDatabase->copyFile(
