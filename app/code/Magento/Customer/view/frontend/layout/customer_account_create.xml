@@ -33,9 +33,9 @@
             <block class="Magento\Framework\View\Element\Template" name="form_additional_info_customer" template="Magento_Customer::additionalinfocustomer.phtml"/>
         </referenceContainer>
         <referenceBlock name="customer_form_register">
-            <action method="setShowAddressFields">
-                <argument name="show.address.fields" xsi:type="boolean">true</argument>
-            </action>
-       </referenceBlock>
+            <arguments>
+                <argument name="show_address_fields" xsi:type="boolean">true</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>
