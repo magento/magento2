@@ -62,6 +62,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      */
     private $connectionPool;
 
+    /**   
+     * @var \Magento\Checkout\Helper\Data
+     */
+    private $checkoutHelper;
+
     /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
@@ -69,7 +74,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
-     * @param ResourceConnection $connectionPool
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Psr\Log\LoggerInterface $logger
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -77,7 +83,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
         \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
-        \Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface $MaskedQuoteIdToQuoteIdInterface,
+        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
         ResourceConnection $connectionPool = null,
         \Magento\Checkout\Helper\Data $checkoutHelper = null,
@@ -87,7 +93,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartManagement = $cartManagement;
         $this->paymentInformationManagement = $paymentInformationManagement;
-        $this->MaskedQuoteIdToQuoteIdInterface = $MaskedQuoteIdToQuoteIdInterface;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->cartRepository = $cartRepository;
         $this->connectionPool = $connectionPool ?: ObjectManager::getInstance()->get(ResourceConnection::class);
         $this->checkoutHelper = $checkoutHelper ?:
@@ -114,7 +120,9 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             try {
                 $orderId = $this->cartManagement->placeOrder($cartId);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $quoteIdMask = $this->MaskedQuoteIdToQuoteIdInterface->create()->load($cartId, 'masked_id');
+                /** @var $quoteIdMask QuoteIdMask */
+                $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+                /** @var \Magento\Quote\Model\Quote $quote */
                 $quote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
                 $this->checkoutHelper->sendPaymentFailedEmail($quote, __($e->getMessage()));
                 throw new CouldNotSaveException(

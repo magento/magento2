@@ -51,6 +51,11 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $cartRepository;
+    /**
+     * @var \Magento\Checkout\Helper\Data
+     */
+    private $checkoutHelper;
+
 
     /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
