@@ -36,7 +36,6 @@
             <?php if ($block->hasDefaultOption()) : ?>
                 <li class="store-switcher-all <?php if (!($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) : ?>disabled<?php endif; ?> <?php if (!$block->hasScopeSelected()) : ?>current<?php endif; ?>">
                     <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) : ?>
-                        ?>
                         <a data-role="store-view-id" data-value="" href="#">
                             <?= $block->escapeHtml($block->getDefaultSelectionName()) ?>
                         </a>
