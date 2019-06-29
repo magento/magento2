@@ -9,14 +9,13 @@ namespace Magento\AuthorizenetGraphQl\Model;
 
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Framework\GraphQL\DataObjectConverter;
 
 /**
  * DataProvider Model for Authorizenet
  */
 class AuthorizenetDataProvider implements AdditionalDataProviderInterface
 {
-    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data/authorizenet_acceptjs';
+    private const PATH_ADDITIONAL_DATA = 'authorizenet_acceptjs';
 
     /**
      * @var ArrayManager
@@ -36,12 +35,12 @@ class AuthorizenetDataProvider implements AdditionalDataProviderInterface
     /**
      * Return additional data
      *
-     * @param array $args
+     * @param array $data
      * @return array
      */
-    public function getData(array $args): array
+    public function getData(array $data): array
     {
-        $additionalData = $this->arrayManager->get(static::PATH_ADDITIONAL_DATA, $args) ?? [];
+        $additionalData = $this->arrayManager->get(static::PATH_ADDITIONAL_DATA, $data) ?? [];
         foreach ($additionalData as $key => $value) {
             $additionalData[$this->snakeCaseToCamelCase($key)] = $value;
             unset($additionalData[$key]);
