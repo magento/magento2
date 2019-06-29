@@ -245,4 +245,16 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     {
         return $this->generatedCount;
     }
+    
+    /**
+     * Calculate Maximum Probability based current coupon generate request
+     * 
+     * @return int
+     */
+    public function getMaxProbability()
+    {
+        $chars = count($this->salesRuleCoupon->getCharset($this->getFormat()));
+        $length = (int)$this->getLength();
+        return (pow($chars, $length) - 1) / pow($chars, $length);
+    }
 }
