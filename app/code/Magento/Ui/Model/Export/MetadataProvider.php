@@ -118,13 +118,6 @@ class MetadataProvider
         foreach ($this->getColumns($component) as $column) {
             $row[] = $column->getData('config/label');
         }
-
-        array_walk($row, function (&$header) {
-            if (mb_strpos($header, 'ID') === 0) {
-                $header = '"' . $header . '"';
-            }
-        });
-
         return $row;
     }
 
