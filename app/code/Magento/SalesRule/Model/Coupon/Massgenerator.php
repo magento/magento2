@@ -254,8 +254,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     public function getMaxProbability()
     {
         $chars = count($this->salesRuleCoupon->getCharset($this->getFormat()));
-        $size = $this->getQty();
         $length = (int)$this->getLength();
-        return $maxProbability= (pow($chars, $length) - 1) / pow($chars, $length); 
+        return (pow($chars, $length) - 1) / pow($chars, $length); 
     }
 }
