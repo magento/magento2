@@ -122,18 +122,16 @@ define([
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
                     dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
-
                     shiftedValue = moment(value, dateFormat);
                 }
 
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
-            } else {
-                shiftedValue = '';
+
+                if (shiftedValue !== this.shiftedValue()) {
+                    this.shiftedValue(shiftedValue);
+                }
             }
 
-            if (shiftedValue !== this.shiftedValue()) {
-                this.shiftedValue(shiftedValue);
-            }
         },
 
         /**

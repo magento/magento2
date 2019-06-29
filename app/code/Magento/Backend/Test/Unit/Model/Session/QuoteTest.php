@@ -267,7 +267,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $cartInterfaceMock->expects($this->atLeastOnce())->method('getId')->willReturn($quoteId);
         $defaultGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)->getMock();
         $defaultGroup->expects($this->any())->method('getId')->will($this->returnValue($customerGroupId));
-        $this->groupManagementMock->expects($this->any())->method('getDefaultGroup')->willReturn($defaultGroup);
+        $this->groupManagementMock
+            ->method('getDefaultGroup')
+            ->with($storeId)
+            ->willReturn($defaultGroup);
 
         $dataCustomerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()

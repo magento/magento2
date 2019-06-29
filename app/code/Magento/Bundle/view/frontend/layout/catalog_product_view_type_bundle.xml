@@ -29,10 +29,22 @@
                 <container name="product.info.bundle.options.top" as="product_info_bundle_options_top">
                     <block class="Magento\Catalog\Block\Product\View" name="bundle.back.button" as="backButton" before="-" template="Magento_Bundle::catalog/product/view/backbutton.phtml"/>
                 </container>
-                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select"/>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                    </arguments>
+                </block>
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi" name="product.info.bundle.options.multi" as="multi"/>
-                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio"/>
-                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox"/>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                    </arguments>
+                </block>
             </block>
         </referenceBlock>
         <referenceBlock name="product.info.form.options">

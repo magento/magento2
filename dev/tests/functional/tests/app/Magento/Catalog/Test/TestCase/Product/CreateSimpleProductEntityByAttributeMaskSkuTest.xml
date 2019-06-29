@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\CreateSimpleProductEntityByAttributeMaskSkuTest" summary="Create Simple Product with attribute sku mask" ticketId="MAGETWO-59861">
         <variation name="CreateSimpleProductEntityByAttributeMaskSkuTest1">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="configData" xsi:type="string">attribute_product_mask_sku</data>
             <data name="description" xsi:type="string">Create product with country of manufacture attribute sku mask</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>

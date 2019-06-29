@@ -56,10 +56,17 @@ class RendererProxy extends SelectRenderer
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return ['_subject', '_isShared'];
     }
 
@@ -67,9 +74,14 @@ class RendererProxy extends SelectRenderer
      * Retrieve ObjectManager from global scope
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
@@ -99,7 +111,7 @@ class RendererProxy extends SelectRenderer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function render(\Magento\Framework\DB\Select $select, $sql = '')
     {

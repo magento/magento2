@@ -60,15 +60,9 @@ class Result extends \Magento\Framework\App\Action\Action implements HttpGetActi
     {
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQueryValue());
-            $size = $this->_catalogSearchAdvanced->getProductCollection()->getSize();
-
-            $handles = null;
-            if ($size == 0) {
-                $this->_view->getPage()->initLayout();
-                $handles = $this->_view->getLayout()->getUpdate()->getHandles();
-                $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
-            }
-
+            $this->_view->getPage()->initLayout();
+            $handles = $this->_view->getLayout()->getUpdate()->getHandles();
+            $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
             $this->_view->loadLayout($handles);
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

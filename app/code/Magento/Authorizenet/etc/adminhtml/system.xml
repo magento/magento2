@@ -9,7 +9,7 @@
     <system>
         <section id="payment">
             <group id="authorizenet_directpost" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Authorize.net Direct Post</label>
+                <label>Authorize.Net Direct Post (Deprecated)</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -27,6 +27,10 @@
                 </field>
                 <field id="trans_key" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Transaction Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="signature_key" translate="label" type="obscure" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Signature Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="trans_md5" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">

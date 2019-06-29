@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySearchSuggestionByProductDescriptionTest">
+        <annotations>
+            <stories value="Search Term"/>
+            <title value="Create search query using product description and verify search suggestions"/>
+            <description value="Storefront search by product description, generate search query and verify dropdown product search suggestions"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14765"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17012"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create product with description -->
+            <createData entity="SimpleProductWithDescription" stepKey="simpleProduct"/>
+        </before>
+        <after>
+             <!--Delete create product -->
+            <deleteData createDataKey="simpleProduct"  stepKey="deleteProduct"/>
+
+             <!--Go to the catalog search term page -->
+            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
+            <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+
+            <!--Filter the search term -->
+            <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByThirdSearchQuery">
+                <argument name="searchQuery" value="{{ApiProductDescription.value}}"/>
+            </actionGroup>
+
+            <!-- Delete created below search terms -->
+            <actionGroup ref="deleteSearchTerm" stepKey="deleteSearchTerms"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+
+         <!--Storefront quick search by  product name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
+            <argument name="phrase" value="{{ApiProductDescription.value}}"/>
+        </actionGroup>
+
+        <!--Verify search suggestions and select the suggestion from dropdown options -->
+        <actionGroup ref="StoreFrontSelectDropDownSearchSuggestionActionGroup" stepKey="seeDropDownSearchSuggestion">
+            <argument name="searchQuery" value="{{ApiProductDescription.value}}"/>
+        </actionGroup>
+
+        <!-- Assert Product storefront main page -->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to the catalog search term page -->
+        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
+        <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+
+        <!--Filter the search term -->
+        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByThirdSearchQuery">
+            <argument name="searchQuery" value="{{ApiProductDescription.value}}"/>
+        </actionGroup>
+
+        <!--Assert Search Term in grid -->
+        <see stepKey="seeSearchTermInGrid" selector="{{AdminCatalogSearchTermIndexSection.gridRow}}" userInput="{{ApiProductDescription.value}}" />
+        <see selector="{{AdminCatalogSearchTermIndexSection.numberOfSearchTermResults}}"  userInput="1"  stepKey="seeNumberOfSearchTermResultInGrid"/>
+    </test>
+</tests>
