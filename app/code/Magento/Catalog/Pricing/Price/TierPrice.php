@@ -200,7 +200,18 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 $qtyCache[$price['price_qty']] = $priceKey;
             }
         }
-        return array_values($priceList);
+        $priceListArray = array_values($priceList);
+        $priceList = [];
+        $i=1;
+        foreach ($priceListArray as $key => $priceListValue) {
+            if ($key == 0 ||
+                !$this->isFirstPriceBetter($priceListArray[$key-$i]['price'], $priceListValue['price'])) {
+                $priceList[] = $priceListValue;
+            } else {
+                $i++;
+            }
+        }
+        return $priceList;
     }
 
     /**
