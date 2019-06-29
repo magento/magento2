@@ -205,7 +205,8 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      */
     private function _isFullyQualifiedUrl($value)
     {
-        return preg_match('/\/$/', $value) && $this->getUrlValidator()->isValid($value, ['http', 'https']);
+        $value = preg_match('/\/$/', $value) ? $value : $value . '/';
+        return $this->getUrlValidator()->isValid($value, ['http', 'https']);
     }
 
     /**
