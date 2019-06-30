@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\ResourceModel\Report\Bestsellers;
 
+use DateTime;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -139,8 +140,10 @@ class Collection extends AbstractCollection
     }
 
     /**
-     * @param $from
-     * @param $to
+     * Apply time boundaries
+     *
+     * @param string $from
+     * @param string $to
      *
      * @return Select
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -265,12 +268,14 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * Set time boundaries
      *
      * @return $this|AbstractCollection
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @throws \Zend_Db_Select_Exception
+     * @SuppressWarnings(PHPMD)
      */
     protected function _beforeLoad()
     {
@@ -282,8 +287,8 @@ class Collection extends AbstractCollection
             $selectUnions = [];
 
             // apply date boundaries (before calling $this->_applyDateRangeFilter())
-            $periodFrom = $this->_from !== null ? new \DateTime($this->_from) : null;
-            $periodTo = $this->_to !== null ? new \DateTime($this->_to) : null;
+            $periodFrom = $this->_from !== null ? new DateTime($this->_from) : null;
+            $periodTo = $this->_to !== null ? new DateTime($this->_to) : null;
             if ('year' == $this->_period) {
                 if ($periodFrom) {
                     // not the first day of the year

@@ -6,6 +6,14 @@
 
 namespace Magento\Sales\Block\Adminhtml\Report\Filter;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Order\ConfigFactory;
+use Magento\Reports\Block\Adminhtml\Filter\Form as ReportsBlockFilterForm;
+
 /**
  * Sales Adminhtml report filter form
  *
@@ -16,29 +24,41 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
  * @deprecated
  * @see        \Magento\Reports\Block\Adminhtml\Bestsellers\Filter\Form
  */
-class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
+class Form extends ReportsBlockFilterForm
 {
     /**
      * Order config
      *
-     * @var \Magento\Sales\Model\Order\ConfigFactory
+     * @var ConfigFactory
      */
     protected $_orderConfig;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
+     * Sorting limits for items displayed
+     *
+     * @var []
+     */
+    private $itemSortLimit;
+
+    /**
+     * Form constructor.
+     *
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param ConfigFactory $orderConfig
      * @param array $data
+     * @param array $itemSortLimit
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Sales\Model\Order\ConfigFactory $orderConfig,
-        array $data = []
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        ConfigFactory $orderConfig,
+        array $data = [],
+        array $itemSortLimit = []
     ) {
+        $this->itemSortLimit = $itemSortLimit;
         $this->_orderConfig = $orderConfig;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -46,17 +66,18 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
     /**
      * Add fields to base fieldset which are general to sales reports
      *
-     * @return $this
+     * @return $this|ReportsBlockFilterForm
+     * @throws LocalizedException
      */
     protected function _prepareForm()
     {
         parent::_prepareForm();
         $form = $this->getForm();
         $htmlIdPrefix = $form->getHtmlIdPrefix();
-        /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
+        /** @var Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
 
-        if (is_object($fieldset) && $fieldset instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
+        if (is_object($fieldset) && $fieldset instanceof Fieldset) {
             $statuses = $this->_orderConfig->create()->getStatuses();
             $values = [];
             foreach ($statuses as $code => $label) {
@@ -88,6 +109,7 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
                 ],
                 'show_order_statuses'
             );
+            $this->setBestsellersItemLimit($fieldset);
 
             // define field dependencies
             if ($this->getFieldVisibility('show_order_statuses') && $this->getFieldVisibility('order_statuses')) {
@@ -111,5 +133,26 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
         }
 
         return $this;
+    }
+
+    /**
+     * Element for setting bestsellers limit
+     *
+     * @param Fieldset $fieldset
+     */
+    private function setBestsellersItemLimit(Fieldset $fieldset)
+    {
+        if ($this->getData('report_type') == 'bestseller') {
+            $fieldset->addField(
+                'rating_limit',
+                'select',
+                [
+                    'name' => 'rating_limit',
+                    'label' => __('Display items'),
+                    'options' => $this->itemSortLimit
+                ],
+                'to'
+            );
+        }
     }
 }

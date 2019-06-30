@@ -3,7 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Reports\Block\Adminhtml\Filter\Form as ReportsBlockFilterForm;
+use Magento\Sales\Model\Order\ConfigFactory;
+use Magento\SalesRule\Model\ResourceModel\Report\RuleFactory;
+use Magento\Sales\Block\Adminhtml\Report\Filter\Form as SalesBlockForm;
 
 /**
  * Sales Adminhtml report filter form for coupons report
@@ -11,9 +22,9 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 100.0.2
+ * @since      100.0.2
  */
-class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
+class Coupon extends SalesBlockForm
 {
     /**
      * Flag that keep info should we render specific dependent element or not
@@ -25,43 +36,44 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     /**
      * Rule factory
      *
-     * @var \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory
+     * @var RuleFactory
      */
     protected $_reportRule;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
-     * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $reportRule
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param ConfigFactory $orderConfig
+     * @param RuleFactory $reportRule
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Sales\Model\Order\ConfigFactory $orderConfig,
-        \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $reportRule,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        ConfigFactory $orderConfig,
+        RuleFactory $reportRule,
         array $data = []
     ) {
         $this->_reportRule = $reportRule;
-        parent::__construct($context, $registry, $formFactory, $orderConfig, $data);
+        parent::__construct($context, $registry, $formFactory, $orderConfig, $data, []);
     }
 
     /**
      * Prepare form
      *
-     * @return $this
+     * @return $this|ReportsBlockFilterForm|SalesBlockForm
+     * @throws LocalizedException
      */
     protected function _prepareForm()
     {
         parent::_prepareForm();
 
-        /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
+        /** @var Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
 
-        if (is_object($fieldset) && $fieldset instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
+        if (is_object($fieldset) && $fieldset instanceof Fieldset) {
             $fieldset->addField(
                 'price_rule_type',
                 'select',
@@ -99,10 +111,12 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     }
 
     /**
-     * Processing block html after rendering
+     * Create html
      *
      * @param string $html
+     *
      * @return string
+     * @throws LocalizedException
      */
     protected function _afterToHtml($html)
     {
