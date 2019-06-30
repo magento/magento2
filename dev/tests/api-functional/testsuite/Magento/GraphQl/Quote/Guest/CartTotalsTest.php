@@ -59,31 +59,31 @@ class CartTotalsTest extends GraphQlAbstract
         self::assertEquals('USD', $appliedTaxesResponse[0]['amount']['currency']);
     }
 
-	/**
-	 * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
-	 * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-	 * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/apply_tax_for_simple_product.php
-	 * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-	 * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-	 * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-	 */
-	public function testGetCartTotalsWithEmptyCart()
-	{
-		$maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-		$query = $this->getQuery($maskedQuoteId);
-		$response = $this->graphQlQuery($query);
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/apply_tax_for_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     */
+    public function testGetCartTotalsWithEmptyCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
 
-		self::assertArrayHasKey('prices', $response['cart']);
-		$pricesResponse = $response['cart']['prices'];
-		self::assertEquals(0, $pricesResponse['grand_total']['value']);
-		self::assertEquals(0, $pricesResponse['subtotal_including_tax']['value']);
-		self::assertEquals(0, $pricesResponse['subtotal_excluding_tax']['value']);
-		self::assertEquals(0, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+        self::assertArrayHasKey('prices', $response['cart']);
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(0, $pricesResponse['grand_total']['value']);
+        self::assertEquals(0, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(0, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(0, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
 
-		$appliedTaxesResponse = $pricesResponse['applied_taxes'];
+        $appliedTaxesResponse = $pricesResponse['applied_taxes'];
 
-		self::assertCount(0, $appliedTaxesResponse);
-	}
+        self::assertCount(0, $appliedTaxesResponse);
+    }
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
