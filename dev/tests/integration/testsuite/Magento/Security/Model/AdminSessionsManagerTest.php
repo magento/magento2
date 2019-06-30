@@ -3,8 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Security\Model;
 
+/**
+ * Class AdminSessionsManagerTest
+ * TODO: test AdminSessionsManager::processLogin
+ * TODO: test AdminSessionsManager::processProlong
+ *
+ * @package Magento\Security\Model
+ */
 class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -61,8 +69,8 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
     protected function tearDown()
     {
         $this->auth = null;
-        $this->authSession  = null;
-        $this->adminSessionInfo  = null;
+        $this->authSession = null;
+        $this->adminSessionInfo = null;
         $this->adminSessionsManager = null;
         $this->objectManager = null;
         parent::tearDown();
@@ -125,8 +133,21 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
         $session->load('669e2e3d752e8', 'session_id');
         $this->assertEquals(
             AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
-            (int) $session->getStatus()
+            (int)$session->getStatus()
         );
+    }
+
+    /**
+     * Test that expired users cannot login.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedException \Magento\Framework\Exception\AuthenticationException
+     * @magentoDataFixture Magento/Security/_files/expired_users.php
+     * @magentoDbIsolation enabled
+     */
+    public function testExpiredUserProcessLogin()
+    {
+        static::markTestSkipped('to implement');
     }
 
     /**

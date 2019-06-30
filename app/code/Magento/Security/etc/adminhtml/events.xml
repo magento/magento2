@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <event name="admin_user_save_after">
+        <observer name="add_user_expiration" instance="Magento\Security\Observer\AfterAdminUserSave"/>
+    </event>
+    <event name="admin_user_load_after">
+        <observer name="add_user_expiration" instance="Magento\Security\Observer\AfterAdminUserLoad"/>
+    </event>
+    <event name="admin_user_authenticate_before">
+        <observer name="captcha" instance="Magento\Security\Observer\BeforeAdminUserAuthenticate"/>
+    </event>
+</config>

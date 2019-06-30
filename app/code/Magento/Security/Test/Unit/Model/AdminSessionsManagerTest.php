@@ -50,7 +50,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    /*
+    /**
      * @var RemoteAddress
      */
     protected $remoteAddressMock;

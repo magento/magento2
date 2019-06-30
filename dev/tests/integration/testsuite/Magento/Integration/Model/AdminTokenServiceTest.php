@@ -60,6 +60,25 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * TODO: fix failing test
+     * @magentoDataFixture Magento/Security/_files/expired_users.php
+     * @expectedException \Magento\Framework\Exception\AuthenticationException
+     */
+    public function testCreateAdminAccessTokenExpiredUser()
+    {
+        $adminUserNameFromFixture = 'adminUserExpired';
+        $this->tokenService->createAdminAccessToken(
+            $adminUserNameFromFixture,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.'
+        );
+    }
+
+    /**
      * @dataProvider validationDataProvider
      */
     public function testCreateAdminAccessTokenEmptyOrNullCredentials($username, $password)
