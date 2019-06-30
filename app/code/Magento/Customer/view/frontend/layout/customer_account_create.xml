@@ -20,6 +20,9 @@
                 </arguments>
                 <container name="form.additional.info" as="form_additional_info"/>
                 <container name="customer.form.register.fields.before" as="form_fields_before" label="Form Fields Before" htmlTag="div" htmlClass="customer-form-before"/>
+                <action method="setShowAddressFields">
+                    <argument name="show.address.fields" xsi:type="boolean">true</argument>
+                </action>
             </block>
             <block class="Magento\Cookie\Block\RequireCookie" name="require-cookie" template="Magento_Cookie::require_cookie.phtml">
                 <arguments>
@@ -32,10 +35,5 @@
         <referenceContainer name="form.additional.info">
             <block class="Magento\Framework\View\Element\Template" name="form_additional_info_customer" template="Magento_Customer::additionalinfocustomer.phtml"/>
         </referenceContainer>
-        <referenceBlock name="customer_form_register">
-            <arguments>
-                <argument name="show_address_fields" xsi:type="boolean">true</argument>
-            </arguments>
-        </referenceBlock>
     </body>
 </page>
