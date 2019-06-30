@@ -72,7 +72,10 @@ class UpdateCustomer implements ResolverInterface
         }
 
         $customer = $this->getCustomer->execute($context);
-        $this->updateCustomerAccount->execute($customer, $args['input'], $context->getExtensionAttributes()->getStore());
+        $this->updateCustomerAccount->execute(
+            $customer,
+            $args['input'], $context->getExtensionAttributes()->getStore()
+        );
 
         $data = $this->extractCustomerData->execute($customer);
         return ['customer' => $data];
