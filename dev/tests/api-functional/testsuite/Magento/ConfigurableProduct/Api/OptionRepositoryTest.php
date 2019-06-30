@@ -176,7 +176,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
-    public function testUpdate($includeOptionId=true)
+    public function testUpdate($includeOptionId = true)
     {
         $productSku = 'configurable';
         $configurableAttribute = $this->getConfigurableAttribute($productSku);
@@ -210,11 +210,11 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $this->assertEquals($requestBody['option']['label'], $configurableAttribute[0]['label']);
     }
 
-
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
-    public function testUpdateWithoutOptionId(){
+    public function testUpdateWithoutOptionId()
+    {
         $this->testUpdate(false);
     }
 
