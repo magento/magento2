@@ -72,24 +72,6 @@ class UserExpirationManager
     }
 
     /**
-     * Revoke admin tokens for expired users.
-     * TODO: any better way than looping?
-     * TODO: remove
-     * @param \Magento\User\Model\User $user
-     * @throws \Exception
-     */
-    public function deactivateExpiredUser(\Magento\User\Model\User $user): void
-    {
-        $currentSessions = $this->getSessionsForUser($user);
-        $currentSessions->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT)
-            ->save();
-        $user
-            ->setIsActive(0)
-            ->save();
-        // TODO: remove expires_at record from new table
-    }
-
-    /**
      * Deactivate expired user accounts and invalidate their sessions.
      *
      * @param array|null $userIds
@@ -123,23 +105,6 @@ class UserExpirationManager
     }
 
     /**
-     * Get sessions for the given user.
-     * TODO: remove
-     * @param \Magento\User\Model\User $user
-     * @return ResourceModel\AdminSessionInfo\Collection
-     */
-    private function getSessionsForUser(\Magento\User\Model\User $user)
-    {
-        $collection = $this->adminSessionInfoCollectionFactory->create();
-        $collection
-            ->filterByUser($user->getId(), \Magento\Security\Model\AdminSessionInfo::LOGGED_IN)
-            ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
-            ->loadData();
-
-        return $collection;
-    }
-
-    /**
      * Check if the given user is expired.
      * // TODO: check users expired an hour ago (timezone stuff)
      * @param \Magento\User\Model\User $user
@@ -150,30 +115,12 @@ class UserExpirationManager
         $isExpired = false;
         $expiredRecord = $this->userExpirationCollectionFactory->create()
             ->addExpiredRecordsForUserFilter($user->getId())
-            ->getFirstItem(); // expiresAt: 1561824907, current timestamp: 1561824932
+            ->getFirstItem();
         if ($expiredRecord && $expiredRecord->getId()) {
-            //$expiresAt = $this->dateTime->gmtTimestamp($expiredRecord->getExpiredAt());
             $expiresAt = $this->dateTime->timestamp($expiredRecord->getExpiresAt());
             $isExpired = $expiresAt < $this->dateTime->gmtTimestamp();
         }
 
         return $isExpired;
     }
-
-    /**
-     * Check if the current user is expired and, if so, revoke their admin token.
-     */
-    //    private function revokeExpiredAdminUser()
-    //    {
-    //        $expiresAt = $this->dateTime->gmtTimestamp($this->authSession->getUser()->getExpiresAt());
-    //        if ($expiresAt < $this->dateTime->gmtTimestamp()) {
-    //            $currentSessions = $this->getSessionsForCurrentUser();
-    //            $currentSessions->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT)
-    //                        ->save();
-    //            $this->authSession->getUser()
-    //                ->setIsActive(0)
-    //                ->setExpiresAt(null)
-    //                ->save();
-    //        }
-    //    }
 }

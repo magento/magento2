@@ -11,8 +11,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test for \Magento\Security\Observer\AfterAdminUserSave
- *
- * @magentoAppArea adminhtml
  */
 class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
 {

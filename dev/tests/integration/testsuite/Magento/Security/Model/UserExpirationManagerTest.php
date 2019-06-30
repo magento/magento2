@@ -11,11 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * TODO: test logging out sessions
- * TODO: test that you cannot create a token for an expired user (where would I put this test?)
- * TODO: test AdminSessionsManager::processLogin
- * TODO: test AdminSessionsManager::processProlong (do it here or in the AdminSessionsManagerTest?)
  *
- * @magentoAppArea adminhtml
  */
 class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
 {

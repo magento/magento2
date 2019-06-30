@@ -76,19 +76,12 @@ class AdminSessionsManager
     private $maxIntervalBetweenConsecutiveProlongs = 60;
 
     /**
-     * TODO: make sure we need this here
-     * @var UserExpirationManager
-     */
-    private $userExpirationManager;
-
-    /**
      * @param ConfigInterface $securityConfig
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param AdminSessionInfoFactory $adminSessionInfoFactory
      * @param CollectionFactory $adminSessionInfoCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param RemoteAddress $remoteAddress
-     * @param UserExpirationManager|null $userExpirationManager
      */
     public function __construct(
         ConfigInterface $securityConfig,
@@ -96,8 +89,7 @@ class AdminSessionsManager
         \Magento\Security\Model\AdminSessionInfoFactory $adminSessionInfoFactory,
         \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory $adminSessionInfoCollectionFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        RemoteAddress $remoteAddress,
-        \Magento\Security\Model\UserExpirationManager $userExpirationManager = null
+        RemoteAddress $remoteAddress
     ) {
         $this->securityConfig = $securityConfig;
         $this->authSession = $authSession;
@@ -105,13 +97,10 @@ class AdminSessionsManager
         $this->adminSessionInfoCollectionFactory = $adminSessionInfoCollectionFactory;
         $this->dateTime = $dateTime;
         $this->remoteAddress = $remoteAddress;
-        $this->userExpirationManager = $userExpirationManager ?:
-                    \Magento\Framework\App\ObjectManager::getInstance()
-                        ->get(\Magento\Security\Model\UserExpirationManager::class);
     }
 
     /**
-     * Handle all others active sessions according Sharing Account Setting and expired users.
+     * Handle all others active sessions according Sharing Account Setting
      *
      * @return $this
      * @since 100.1.0
@@ -144,33 +133,7 @@ class AdminSessionsManager
      */
     public function processProlong()
     {
-        // TODO: is this the right place for this? Or should I use a plugin? This method is called in a plugin
-        // also, don't want to hit the database every single time. We could put it within the lastProlongIsOldEnough
-        // in order to reduece database loads, but what if the user is expired already? How granular do we want to get?
-        // if their session is expired, then they will get logged out anyways, and we can handle deactivating them
-        // upon login or via the cron
-
-        // already (\Magento\Security\Model\Plugin\AuthSession::aroundProlong, which plugs into
-        // \Magento\Backend\Model\Auth\Session::prolong, which is called from
-        // \Magento\Backend\App\Action\Plugin\Authentication::aroundDispatch, which is a plugin to
-        // \Magento\Backend\App\AbstractAction::dispatch)
-
-        // \Magento\Backend\App\AbstractAction::dispatch is called, which kicks off the around plugin
-        // \Magento\Backend\App\Action\Plugin\Authentication::aroundDispatch, which calls
-        // \Magento\Backend\Model\Auth\Session::prolong, which kicks off the around plugin
-        // \Magento\Security\Model\Plugin\AuthSession::aroundProlong, which calls
-        // this method.
-
-        // this method will prolong the session only if it's old enough, otherwise it's not called.
-//        if ($this->userExpirationManager->userIsExpired($this->authSession->getUser())) {
-//            $this->userExpirationManager->deactivateExpiredUsers([$this->authSession->getUser()->getId()]);
-//        }
-
         if ($this->lastProlongIsOldEnough()) {
-            // TODO: throw exception?
-            if ($this->userExpirationManager->userIsExpired($this->authSession->getUser())) {
-                $this->userExpirationManager->deactivateExpiredUsers([$this->authSession->getUser()->getId()]);
-            }
             $this->getCurrentSession()->setData(
                 'updated_at',
                 date(
@@ -342,8 +305,6 @@ class AdminSessionsManager
     }
 
     /**
-     * Create admin session info collection.
-     *
      * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
      * @since 100.1.0
      */
@@ -354,7 +315,8 @@ class AdminSessionsManager
 
     /**
      * Calculates diff between now and last session updated_at
-     * and decides whether new prolong must be triggered or not.
+     * and decides whether new prolong must be triggered or not
+     *
      * This is done to limit amount of session prolongs and updates to database
      * within some period of time - X
      * X - is calculated in getIntervalBetweenConsecutiveProlongs()

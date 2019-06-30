@@ -60,7 +60,6 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * TODO: fix failing test
      * @magentoDataFixture Magento/Security/_files/expired_users.php
      * @expectedException \Magento\Framework\Exception\AuthenticationException
      */

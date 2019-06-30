@@ -37,6 +37,12 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
+    /**@var \Magento\Security\Model\UserExpirationManager */
+    protected $userExpirationManagerMock;
+
+    /**@var \Magento\User\Model\User */
+    protected $userMock;
+
     /**
      * Init mocks for tests
      * @return void
@@ -61,12 +67,22 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
 
         $this->securityCookieMock = $this->createPartialMock(SecurityCookie::class, ['setLogoutReasonCookie']);
 
-        $this->authSessionMock = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['destroy']);
+        $this->authSessionMock = $this->createPartialMock(
+            \Magento\Backend\Model\Auth\Session::class,
+            ['destroy', 'getUser']
+        );
 
         $this->currentSessionMock = $this->createPartialMock(
             \Magento\Security\Model\AdminSessionInfo::class,
             ['isLoggedInStatus', 'getStatus', 'isActive']
         );
+
+        $this->userExpirationManagerMock = $this->createPartialMock(
+            \Magento\Security\Model\UserExpirationManager::class,
+            ['userIsExpired']
+        );
+
+        $this->userMock = $this->createMock(\Magento\User\Model\User::class);
 
         $this->model = $this->objectManager->getObject(
             \Magento\Security\Model\Plugin\AuthSession::class,
@@ -74,7 +90,8 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
                 'request' => $this->requestMock,
                 'messageManager' => $this->messageManagerMock,
                 'sessionsManager' => $this->adminSessionsManagerMock,
-                'securityCookie' => $this->securityCookieMock
+                'securityCookie' => $this->securityCookieMock,
+                'userExpirationManager' => $this->userExpirationManagerMock,
             ]
         );
 
@@ -157,6 +174,50 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testAroundProlongSessionIsActiveUserIsExpired()
+    {
+        $result = 'result';
+        $errorMessage = 'Error Message';
+
+        $proceed = function () use ($result) {
+            return $result;
+        };
+
+        $this->currentSessionMock->expects($this->once())
+            ->method('isLoggedInStatus')
+            ->willReturn(true);
+
+        $this->authSessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturn($this->userMock);
+
+        $this->userExpirationManagerMock->expects($this->once())
+            ->method('userIsExpired')
+            ->with($this->userMock)
+            ->willReturn(true);
+
+        $this->authSessionMock->expects($this->once())
+            ->method('destroy');
+
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('isAjax')
+            ->willReturn(false);
+
+        $this->adminSessionsManagerMock->expects($this->once())
+            ->method('getLogoutReasonMessage')
+            ->willReturn($errorMessage);
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($errorMessage);
+
+        $this->model->aroundProlong($this->authSessionMock, $proceed);
+    }
+
+    /**
+     * @return void
+     */
     public function testAroundProlongSessionIsActive()
     {
         $result = 'result';
@@ -167,6 +228,15 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         $this->currentSessionMock->expects($this->any())
             ->method('isLoggedInStatus')
             ->willReturn(true);
+
+        $this->authSessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturn($this->userMock);
+
+        $this->userExpirationManagerMock->expects($this->once())
+            ->method('userIsExpired')
+            ->with($this->userMock)
+            ->willReturn(false);
 
         $this->adminSessionsManagerMock->expects($this->any())
             ->method('processProlong');

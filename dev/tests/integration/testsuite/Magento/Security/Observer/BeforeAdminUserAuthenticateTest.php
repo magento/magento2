@@ -11,7 +11,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test for \Magento\Security\Observer\BeforeAdminUserAuthenticate
- * @magentoAppArea adminhtml
  */
 class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
 {

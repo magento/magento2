@@ -10,9 +10,7 @@ namespace Magento\Security\Observer;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test for \Magento\Security\Observer\AfterAdminUserLoad
- *
- * @magentoAppArea adminhtml
+ * Test for \Magento\Security\Observer\AfterAdminUserLoad *
  */
 class AfterAdminUserLoadTest extends \PHPUnit\Framework\TestCase
 {
