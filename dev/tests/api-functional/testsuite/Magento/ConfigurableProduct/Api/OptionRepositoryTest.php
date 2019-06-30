@@ -176,11 +176,11 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
-    public function testUpdate()
+    public function testUpdate($includeOptionId=true)
     {
         $productSku = 'configurable';
         $configurableAttribute = $this->getConfigurableAttribute($productSku);
-        $optionId = $configurableAttribute[0]['id'];
+        $optionId = $includeOptionId ? $configurableAttribute[0]['id']: '';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/options' . '/' . $optionId,
@@ -208,6 +208,14 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $this->assertGreaterThan(0, $result);
         $configurableAttribute = $this->getConfigurableAttribute($productSku);
         $this->assertEquals($requestBody['option']['label'], $configurableAttribute[0]['label']);
+    }
+
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testUpdateWithoutOptionId(){
+        $this->testUpdate(false);
     }
 
     /**
