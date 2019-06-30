@@ -63,6 +63,8 @@ class CreditmemoCommentSender extends NotifySender
     public function send(Creditmemo $creditmemo, $notify = true, $comment = '')
     {
         $order = $creditmemo->getOrder();
+        $this->identityContainer->setStore($order->getStore());
+
         $transport = [
             'order' => $order,
             'creditmemo' => $creditmemo,
