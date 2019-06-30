@@ -106,7 +106,7 @@ class SynonymReader extends AbstractDb
      */
     private function escapePhrase(string $phrase): string
     {
-        return preg_replace('/@+|[@+-]+$/', '', $phrase);
+        return preg_replace('/@+|[@+-]+$|[<>]/', '', $phrase);
     }
 
     /**

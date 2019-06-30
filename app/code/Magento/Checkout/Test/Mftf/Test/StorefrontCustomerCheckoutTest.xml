@@ -72,6 +72,7 @@
         <click stepKey="s81" selector="{{AdminOrdersGridSection.submitSearch22}}" />
         <waitForPageLoad stepKey="s831"/>
         <click stepKey="s84" selector="{{AdminOrdersGridSection.firstRow}}" />
+        <waitForPageLoad stepKey="waitForOrderToLoad"/>
         <see stepKey="s85" selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
         <see stepKey="s87" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
         <see stepKey="s89" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
