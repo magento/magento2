@@ -50,7 +50,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    /**
+    /*
      * @var RemoteAddress
      */
     protected $remoteAddressMock;
@@ -91,9 +91,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
 
-        $this->currentSessionMock = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionInfo::class,
-            [
+        $this->currentSessionMock = $this->createPartialMock(\Magento\Security\Model\AdminSessionInfo::class, [
                 'isActive',
                 'getStatus',
                 'load',
@@ -103,8 +101,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
                 'getUserId',
                 'getSessionId',
                 'getUpdatedAt'
-            ]
-        );
+            ]);
 
         $this->securityConfigMock = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
             ->disableOriginalConstructor()
@@ -154,7 +151,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getSessionId')
             ->willReturn($sessionId);
 
-        $this->authSessionMock->expects($this->any())
+        $this->authSessionMock->expects($this->once())
             ->method('getUser')
             ->willReturn($this->userMock);
         $this->userMock->expects($this->once())
@@ -255,10 +252,6 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
         $this->currentSessionMock->expects($this->once())
             ->method('save')
             ->willReturnSelf();
-
-        $this->authSessionMock->expects($this->once())
-            ->method('getUser')
-            ->willReturn($this->userMock);
 
         $this->model->processProlong();
     }
