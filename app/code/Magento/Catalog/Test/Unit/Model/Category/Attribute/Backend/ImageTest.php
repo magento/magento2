@@ -285,8 +285,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             'logger' => $this->logger
         ]);
         
-        $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
         $this->objectManager->setBackwardCompatibleProperty($model, 'mediaDirectory', $this->mediaDirectory);
+        $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
 
         return $model->setAttribute($this->attribute);
     }
