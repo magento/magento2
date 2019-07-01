@@ -239,6 +239,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $requestBody['sku'] = $productSku;
+            $requestBody['id'] = '';
         }
 
         $result = $this->_webApiCall($serviceInfo, $requestBody);
