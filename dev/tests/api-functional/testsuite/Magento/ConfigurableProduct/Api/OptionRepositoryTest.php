@@ -219,6 +219,13 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
     public function testUpdateWithoutOptionId()
     {
         $productSku = 'configurable';
+        /** @var AttributeRepositoryInterface $attributeRepository */
+
+        $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
+
+        /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
+        $attribute = $attributeRepository->get('catalog_product', 'test_configurable');
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/options',
@@ -231,21 +238,24 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             ]
         ];
 
-        $requestBody = [
-            'option' => [
-                'label' => 'Update Test Configurable',
-            ]
+        $option = [
+            'attribute_id' => $attribute->getAttributeId(),
+            'label' => 'Update Test Configurable with sku and attribute_id',
+            'values' => [
+                [
+                    'value_index' => 1,
+                ]
+            ],
         ];
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $requestBody['sku'] = $productSku;
-            $requestBody['id'] = '';
         }
 
-        $result = $this->_webApiCall($serviceInfo, $requestBody);
+        $result = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'option' => $option]);
         $this->assertGreaterThan(0, $result);
         $configurableAttribute = $this->getConfigurableAttribute($productSku);
-        $this->assertEquals($requestBody['option']['label'], $configurableAttribute[0]['label']);
+        $this->assertEquals($option['label'], $configurableAttribute[0]['label']);
     }
 
     /**
