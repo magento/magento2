@@ -12,11 +12,16 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
      * Update product configuration for a cart item
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @throws \Magento\Framework\Exception\NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+        }
+
         $id = (int)$this->getRequest()->getParam('id');
         $params = $this->getRequest()->getParams();
 

@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="productAttributeWithTwoOptions" type="ProductAttribute">
         <data key="name" unique="suffix">ProductAttributeWithTwoOptions</data>
         <data key="attribute_code" unique="suffix">attribute</data>
@@ -56,6 +56,30 @@
     <entity name="ProductAttributeMultiselectTwoOptions" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">multiselect</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="ProductAttributeText" extends="productAttributeWithTwoOptions">
+        <data key="frontend_input">text</data>
+    </entity>
+    <entity name="productVisualSwatchAttribute" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">swatch_visual</data>
         <data key="scope">global</data>
         <data key="is_required">false</data>
         <data key="is_unique">false</data>

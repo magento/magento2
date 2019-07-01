@@ -38,20 +38,10 @@
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" after="seeRegion" stepKey="waitNextButton"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" after="waitNextButton" stepKey="selectShippingMethod"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" after="selectShippingMethod" stepKey="clickNextButton" />
-        <waitForPageLoad after="clickNextButton" stepKey="waitBillingForm"/>
-        <seeElement selector="{{CheckoutPaymentSection.isPaymentSection}}" after="waitBillingForm" stepKey="checkoutPaymentStepIsOpened"/>
-
-        <!-- Fill UK Address and verify that payment available and checkout successful -->
-        <click selector="{{CheckoutShippingSection.newAdress}}" after="shippingStepIsOpened1" stepKey="fillNewAddress" />
-        <actionGroup ref="LoggedInUserCheckoutAddNewShippingSectionWithoutRegionActionGroup" after="fillNewAddress" stepKey="customerCheckoutFillingShippingSectionUK">
-            <argument name="customerVar" value="$$createSimpleUsCustomer$$" />
-            <argument name="customerAddressVar" value="UK_Default_Address" />
-        </actionGroup>
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" after="customerCheckoutFillingShippingSectionUK" stepKey="waitNextButton1"/>
-        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" after="waitNextButton1" stepKey="selectShippingMethod1"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" after="selectShippingMethod1" stepKey="clickNextButton1" />
-
-        <actionGroup ref="CheckoutPlaceOrderActionGroup" after="selectCheckMoneyOrderPayment" stepKey="customerPlaceorder">
+        <waitForPageLoad after="clickNextButton" stepKey="waitForPaymentStep"/>
+        <selectOption selector="{{CheckoutPaymentSection.billingAddressSelectShared}}" userInput="New Address" after="uncheckBillingAddressSameAsShippingCheckCheckBox" stepKey="clickOnNewAddress"/>
+        <waitForPageLoad stepKey="waitBillingAddressForm"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceorder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>

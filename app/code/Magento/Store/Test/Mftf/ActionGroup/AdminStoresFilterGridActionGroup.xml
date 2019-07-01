@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="filterStoresGridByWebsite">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminStoresGridFilterSection.clearFilters}}" dependentSelector="{{AdminStoresGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminStoresGridFilterSection.filters}}" stepKey="openStoresFilters"/>
+        <fillField selector="{{AdminStoresGridFilterSection.websiteFilter}}" userInput="{{website}}" stepKey="fillWebsiteFilter"/>
+        <click selector="{{AdminStoresGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+    </actionGroup>
+
+    <actionGroup name="filterStoresGridByStore">
+        <arguments>
+            <argument name="store" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminStoresGridFilterSection.clearFilters}}" dependentSelector="{{AdminStoresGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminStoresGridFilterSection.filters}}" stepKey="openStoresFilters"/>
+        <fillField selector="{{AdminStoresGridFilterSection.storeFilter}}" userInput="{{store}}" stepKey="fillStoreFilter"/>
+        <click selector="{{AdminStoresGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+    </actionGroup>
+
+    <actionGroup name="filterStoresGridByStoreView">
+        <arguments>
+            <argument name="storeView" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminStoresGridFilterSection.clearFilters}}" dependentSelector="{{AdminStoresGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminStoresGridFilterSection.filters}}" stepKey="openStoresFilters"/>
+        <fillField selector="{{AdminStoresGridFilterSection.storeViewFilter}}" userInput="{{storeView}}" stepKey="fillStoreViewFilter"/>
+        <click selector="{{AdminStoresGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+    </actionGroup>
+</actionGroups>

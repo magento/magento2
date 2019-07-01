@@ -52,6 +52,7 @@
         <actionGroup ref="SwitchToTheNewStoreView" stepKey="switchToCustomStoreView">
             <argument name="storeViewName" value="customStore"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrolToShowNameField"/>
         <click selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckUseDefault"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createProduct.name$$-new" stepKey="fillProductName"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>

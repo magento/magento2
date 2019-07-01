@@ -6,16 +6,23 @@
   */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ProductOptionField" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionField</data>
+        <data key="sku">OptionField</data>
         <data key="type">field</data>
+        <data key="type_label">Field</data>
         <data key="is_require">true</data>
         <data key="sort_order">1</data>
         <data key="price">10</data>
         <data key="price_type">fixed</data>
         <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField2" type="product_option" extends="ProductOptionField">
+        <data key="title">OptionField2</data>
+        <data key="sku">OptionField2</data>
+        <data key="price">20</data>
     </entity>
     <entity name="ProductOptionArea" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
@@ -31,6 +38,7 @@
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionFile</data>
         <data key="type">file</data>
+        <data key="type_label">File</data>
         <data key="is_require">true</data>
         <data key="sort_order">3</data>
         <data key="price">9.99</data>

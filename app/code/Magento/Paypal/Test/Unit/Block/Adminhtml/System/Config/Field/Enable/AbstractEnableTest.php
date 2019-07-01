@@ -5,6 +5,8 @@
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 /**
  * Class AbstractEnableTest
  *
@@ -31,20 +33,30 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
         $this->elementMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
             ->setMethods(
                 [
                     'getHtmlId',
+                    'getName',
                     'getTooltip',
                     'getForm',
                 ]
             )->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->elementMock,
+            '_escaper',
+            $escaper
+        );
+
         $this->abstractEnable = $objectManager->getObject(
-            \Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub::class
+            \Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub::class,
+            [
+                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
+            ]
         );
     }
 

@@ -5,13 +5,10 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 class Validate extends ImportResultController
 {

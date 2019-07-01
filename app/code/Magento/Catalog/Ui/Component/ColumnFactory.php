@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Ui\Component;
 
+use Magento\Ui\Component\Filters\FilterModifier;
+
 /**
  * @api
  * @since 100.0.2
@@ -54,13 +56,15 @@ class ColumnFactory
      */
     public function create($attribute, $context, array $config = [])
     {
+        $filterModifiers = $context->getRequestParam(FilterModifier::FILTER_MODIFIER, []);
+
         $columnName = $attribute->getAttributeCode();
         $config = array_merge([
             'label' => __($attribute->getDefaultFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
-            'filter' => ($attribute->getIsFilterableInGrid())
+            'filter' => ($attribute->getIsFilterableInGrid() || array_key_exists($columnName, $filterModifiers))
                 ? $this->getFilterType($attribute->getFrontendInput())
                 : null,
         ], $config);

@@ -102,4 +102,9 @@
         <data key="store_type">group</data>
         <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
+    <entity name="AllStoreViews" type="store">
+        <data key="name">All Store Views</data>
+        <data key="code">allstoreviews</data>
+        <data key="is_active">1</data>
+    </entity>
 </entities>

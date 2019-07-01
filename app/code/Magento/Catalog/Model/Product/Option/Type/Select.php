@@ -30,22 +30,34 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $string;
 
     /**
+     * @var array
+     */
+    private $singleSelectionTypes;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
+     * @param array $singleSelectionTypes
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Escaper $escaper,
-        array $data = []
+        array $data = [],
+        array $singleSelectionTypes = []
     ) {
         $this->string = $string;
         $this->_escaper = $escaper;
         parent::__construct($checkoutSession, $scopeConfig, $data);
+
+        $this->singleSelectionTypes = $singleSelectionTypes ?: [
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
+        ];
     }
 
     /**
@@ -68,7 +80,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         }
         if (!$this->_isSingleSelection()) {
             $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
-            if ($valuesCollection->count() != count($value)) {
+            $valueCount = is_array($value) ? count($value) : 0;
+            if ($valuesCollection->count() != $valueCount) {
                 $this->setIsValid(false);
                 throw new LocalizedException(__('Please specify product\'s required option(s).'));
             }
@@ -301,10 +314,6 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     protected function _isSingleSelection()
     {
-        $single = [
-            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
-            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
-        ];
-        return in_array($this->getOption()->getType(), $single);
+        return in_array($this->getOption()->getType(), $this->singleSelectionTypes, true);
     }
 }

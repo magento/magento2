@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFreeShippingRecalculationAfterCouponCodeAddedTest">
+        <annotations>
+            <features value="Sales"/>
+            <title value="Checkout Free Shipping Recalculation after Coupon Code Applied"/>
+            <stories value="Checkout Free Shipping Recalculation after Coupon Code Applied"/>
+            <description value="User should be able to do checkout free shipping recalculation after adding coupon code"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15412"/>
+            <useCaseId value="MAGETWO-96375"/>
+            <group value="sales"/>
+            <group value="salesRule"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <field key="price">90</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer"/>
+
+            <!-- Enable Free Shipping and set minimum order amount -->
+            <createData entity="FreeShippingMethodWithMinimumOrderAmount90" stepKey="enableFreeShippingAndSetMinimumOrderAmount"/>
+
+            <!-- Create Cart Price Rule -->
+            <createData entity="SalesRuleSpecificCouponWithPercentDiscount" stepKey="createCartPriceRule">
+                <field key="simple_free_shipping">0</field>
+            </createData>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+            <actionGroup ref="CustomerLoginOnStorefront" stepKey="loginToStorefront">
+                <argument name="customer" value="$$createSimpleUsCustomer$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <createData entity="ResetFreeShippingMethodWithMinimumOrderAmount90" stepKey="resetFreeShippingMethodAndMinimumOrderAmount"/>
+            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="logoutFromStorefront"/>
+        </after>
+
+        <!-- Add product to Shopping Cart and apply coupon -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="navigateToProductPage"/>
+        <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartRule">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
+        </actionGroup>
+
+        <!-- Proceed to Checkout and make sure Free Shipping method isn't displaying -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <dontSeeElement selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}" stepKey="dontSeeFreeShipping"/>
+
+        <!-- Back to Shopping Cart page and cancel coupon-->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="StorefrontCancelCouponActionGroup" stepKey="cancelCoupon"/>
+
+        <!-- Proceed to Checkout, select Free Shipping method and apply coupon -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
+        <actionGroup ref="CheckoutSelectShippingMethodActionGroup" stepKey="selectFreeShipping">
+            <argument name="shippingMethod" value="Free"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontApplyCouponOnCheckoutActionGroup" stepKey="applyCouponOnCheckout">
+            <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
+            <argument name="successMessage" value="Your coupon was successfully applied."/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+
+        <!-- Try to Place Order -->
+        <actionGroup ref="AssertStorefrontErrorMessageOnOrderSubmit" stepKey="tryToPlaceOrder">
+            <argument name="errorMessage" value="The shipping method is missing. Select the shipping method and try again."/>
+        </actionGroup>
+
+        <!-- Go back to Shipping step and select Shipping method -->
+        <amOnPage url="{{CheckoutPage.url}}/#shipping" stepKey="navigateToShippingStep"/>
+        <actionGroup ref="CheckoutSelectShippingMethodActionGroup" stepKey="selectFlatRateShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+        <!-- Select Payment method and Place order-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod1"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+    </test>
+</tests>

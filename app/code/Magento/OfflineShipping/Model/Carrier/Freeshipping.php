@@ -80,9 +80,8 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
 
         $this->_updateFreeMethodQuote($request);
 
-        if ($request->getFreeShipping() || $request->getBaseSubtotalInclTax() >= $this->getConfigData(
-            'free_shipping_subtotal'
-        )
+        if ($request->getFreeShipping()
+            || ($request->getPackageValueWithDiscount() >= $this->getConfigData('free_shipping_subtotal'))
         ) {
             /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
             $method = $this->_rateMethodFactory->create();

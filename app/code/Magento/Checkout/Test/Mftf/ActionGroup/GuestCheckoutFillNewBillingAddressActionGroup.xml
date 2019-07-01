@@ -56,4 +56,10 @@
         <selectOption selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="" stepKey="clearFieldCounty"/>
         <clearField selector="{{classPrefix}} {{CheckoutShippingSection.telephone}}" stepKey="clearFieldPhoneNumber"/>
     </actionGroup>
+
+    <actionGroup name="GuestCheckoutFillNewBillingAddressWithoutEmailActionGroup"
+                 extends="GuestCheckoutFillNewBillingAddressActionGroup">
+        <remove keyForRemoval="enterEmail"/>
+        <selectOption selector="{{CheckoutPaymentSection.country}}" userInput="{{customerAddressVar.country_id}}" stepKey="selectCounty" />
+    </actionGroup>
 </actionGroups>

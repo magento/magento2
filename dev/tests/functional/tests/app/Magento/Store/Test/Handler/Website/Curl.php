@@ -103,23 +103,30 @@ class Curl extends AbstractCurl implements WebsiteInterface
      */
     protected function getWebSiteIdByWebsiteName($websiteName)
     {
-        // Set pager limit to 2000 in order to find created website by name
-        $url = $_ENV['app_backend_url'] . 'admin/system_store/index/sort/group_title/dir/asc/limit/2000';
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'store_listing',
+            'filters' => [
+                'placeholder' => true,
+                'name' => $websiteName,
+            ],
+            'paging' => [
+                'pageSize' => 1,
+            ]
+        ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write($url, [], CurlInterface::GET);
+
+        $curl->write($url, $data, CurlInterface::POST);
         $response = $curl->read();
+        $curl->close();
 
-        $expectedUrl = '/admin/system_store/editWebsite/website_id/';
-        $expectedUrl = preg_quote($expectedUrl);
-        $expectedUrl = str_replace('/', '\/', $expectedUrl);
-        preg_match('/' . $expectedUrl . '([0-9]*)\/(.)*>' . $websiteName . '<\/a>/', $response, $matches);
+        preg_match('/store_listing_data_source.+items.+"website_id":"(\d+)"/', $response, $match);
 
-        if (empty($matches)) {
+        if (empty($match)) {
             throw new \Exception('Cannot find website id.');
         }
 
-        return (int)$matches[1];
+        return (int)$match[1];
     }
 
     /**

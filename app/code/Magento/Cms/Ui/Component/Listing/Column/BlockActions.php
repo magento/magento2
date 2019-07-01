@@ -87,7 +87,8 @@ class BlockActions extends Column
                             'confirm' => [
                                 'title' => __('Delete %1', $title),
                                 'message' => __('Are you sure you want to delete a %1 record?', $title)
-                            ]
+                            ],
+                            'post' => true,
                         ]
                     ];
                 }
@@ -99,6 +100,7 @@ class BlockActions extends Column
 
     /**
      * Get instance of escaper
+     *
      * @return Escaper
      * @deprecated 101.0.7
      */

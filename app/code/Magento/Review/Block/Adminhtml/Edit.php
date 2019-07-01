@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Review\Block\Adminhtml;
 
 /**
- * Review edit form
+ * Review edit form.
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -56,6 +57,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _construct()
     {
@@ -77,7 +79,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 'previous',
                 [
                     'label' => __('Previous'),
-                    'onclick' => 'setLocation(\'' . $this->getUrl('review/*/*', ['id' => $prevId]) . '\')'
+                    'onclick' => 'setLocation(\'' . $this->getUrl(
+                        'review/*/*',
+                        [
+                            'id' => $prevId,
+                            'ret' => $this->getRequest()->getParam('ret'),
+                        ]
+                    ) . '\')'
                 ],
                 3,
                 10
@@ -93,7 +101,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                             'button' => [
                                 'event' => 'save',
                                 'target' => '#edit_form',
-                                'eventData' => ['action' => ['args' => ['next_item' => $prevId]]],
+                                'eventData' => ['action' => ['args' => [
+                                    'next_item' => $prevId,
+                                    'ret' => $this->getRequest()->getParam('ret'),
+                                ]]],
                             ],
                         ],
                     ]
@@ -113,7 +124,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                             'button' => [
                                 'event' => 'save',
                                 'target' => '#edit_form',
-                                'eventData' => ['action' => ['args' => ['next_item' => $nextId]]],
+                                'eventData' => ['action' => ['args' => [
+                                    'next_item' => $nextId,
+                                    'ret' => $this->getRequest()->getParam('ret'),
+                                ]]],
                             ],
                         ],
                     ]
@@ -126,7 +140,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 'next',
                 [
                     'label' => __('Next'),
-                    'onclick' => 'setLocation(\'' . $this->getUrl('review/*/*', ['id' => $nextId]) . '\')'
+                    'onclick' => 'setLocation(\'' . $this->getUrl(
+                        'review/*/*',
+                        [
+                            'id' => $nextId,
+                            'ret' => $this->getRequest()->getParam('ret'),
+                        ]
+                    ) . '\')'
                 ],
                 3,
                 105
@@ -159,16 +179,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->getRequest()->getParam('ret', false) == 'pending') {
-            $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('catalog/*/pending') . '\')');
+            $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('review/*/pending') . '\')');
             $this->buttonList->update(
                 'delete',
                 'onclick',
                 'deleteConfirm(' . '\'' . __(
                     'Are you sure you want to do this?'
-                ) . '\' ' . '\'' . $this->getUrl(
+                ) . '\', ' . '\'' . $this->getUrl(
                     '*/*/delete',
                     [$this->_objectId => $this->getRequest()->getParam($this->_objectId), 'ret' => 'pending']
-                ) . '\'' . ')'
+                ) . '\'' . ', {data: {}})'
             );
             $this->_coreRegistry->register('ret', 'pending');
         }

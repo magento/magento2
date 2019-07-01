@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">store_listing.store_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="adminhtml/*/newWebsite"/>
+                <class>primary</class>
+                <label translate="true">Create Website</label>
+            </button>
+            <button name="add_store">
+                <url path="adminhtml/*/newStore"/>
+                <class>add add-store-view</class>
+                <label translate="true">Create Store View</label>
+            </button>
+            <button name="add_group">
+                <url path="adminhtml/*/newGroup"/>
+                <class>add add-store</class>
+                <label translate="true">Create Store</label>
+            </button>
+        </buttons>
+        <spinner>store_columns</spinner>
+        <deps>
+            <dep>store_listing.store_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="store_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">store_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Backend::store</aclResource>
+        <dataProvider class="Magento\Store\Ui\DataProvider\WebsiteDataProvider" name="store_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>website_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="store_columns">
+        <settings>
+        </settings>
+        <column name="name" sortOrder="10" class="Magento\Store\Ui\Component\Listing\Column\WebsiteName">
+            <settings>
+                <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Web Site</label>
+            </settings>
+        </column>
+        <column name="group_title" sortOrder="20" class="Magento\Store\Ui\Component\Listing\Column\GroupTitle">
+            <settings>
+                <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Store</label>
+            </settings>
+        </column>
+        <column name="store_title" sortOrder="30" class="Magento\Store\Ui\Component\Listing\Column\StoreTitle">
+            <settings>
+                <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <label translate="true">Store View</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

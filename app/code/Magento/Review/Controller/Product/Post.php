@@ -22,7 +22,7 @@ class Post extends ProductController
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        if (!$this->formKeyValidator->validate($this->getRequest())) {
+        if (!$this->getRequest()->isPost() || !$this->formKeyValidator->validate($this->getRequest())) {
             $resultRedirect->setUrl($this->_redirect->getRefererUrl());
             return $resultRedirect;
         }

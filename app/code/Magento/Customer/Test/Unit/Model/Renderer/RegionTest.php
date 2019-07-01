@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Renderer;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class RegionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -23,7 +25,7 @@ class RegionTest extends \PHPUnit\Framework\TestCase
         $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $elementMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
-            ['getForm', 'getHtmlAttributes']
+            ['getForm', 'getHtmlAttributes', 'getHtmlId', 'getName']
         );
         $countryMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
@@ -58,6 +60,15 @@ class RegionTest extends \PHPUnit\Framework\TestCase
                 ]
             )
         );
+
+        $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $objectManager->setBackwardCompatibleProperty(
+            $elementMock,
+            '_escaper',
+            $escaper
+        );
+
         $formMock->expects(
             $this->any()
         )->method(

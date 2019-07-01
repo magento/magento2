@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\Data\Test\Unit\Form\Element;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\AbstractElement
  */
-namespace Magento\Framework\Data\Test\Unit\Form\Element;
-
 class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -27,9 +28,9 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     protected $_collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper
      */
-    protected $_escaperMock;
+    protected $_escaper;
 
     protected function setUp()
     {
@@ -37,14 +38,15 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $this->_collectionFactoryMock =
             $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $this->_escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $objectManager = new ObjectManager($this);
+        $this->_escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
 
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
             [
                 $this->_factoryMock,
                 $this->_collectionFactoryMock,
-                $this->_escaperMock
+                $this->_escaper
             ]
         );
     }
@@ -241,9 +243,9 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEscapedValueWithoutFilter()
     {
-        $this->_model->setValue('<a href="#hash_tag">my \'quoted\' string</a>');
+        $this->_model->setValue('<a href="#hash_tag">my &#039;quoted&#039; string</a>');
         $this->assertEquals(
-            '&lt;a href=&quot;#hash_tag&quot;&gt;my \'quoted\' string&lt;/a&gt;',
+            '&lt;a href=&quot;#hash_tag&quot;&gt;my &#039;quoted&#039; string&lt;/a&gt;',
             $this->_model->getEscapedValue()
         );
     }
@@ -253,8 +255,8 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEscapedValueWithFilter()
     {
-        $value = '<a href="#hash_tag">my \'quoted\' string</a>';
-        $expectedValue = '&lt;a href=&quot;#hash_tag&quot;&gt;my \'quoted\' string&lt;/a&gt;';
+        $value = '<a href="#hash_tag">my &#039;quoted&#039; string</a>';
+        $expectedValue = '&lt;a href=&quot;#hash_tag&quot;&gt;my &#039;quoted&#039; string&lt;/a&gt;';
 
         $filterMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['filter']);
         $filterMock->expects($this->once())
@@ -302,7 +304,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $initialData
      * @param string $expectedValue
-     * @dataProvider testGetDefaultHtmlDataProvider
+     * @dataProvider defaultHtmlDataProvider
      * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getDefaultHtml()
      */
     public function testGetDefaultHtml(array $initialData, $expectedValue)
@@ -423,9 +425,6 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddElementValues(array $initialData, $expectedValue)
     {
-        $this->_escaperMock->expects($this->any())
-            ->method('escapeHtml')
-            ->will($this->returnArgument(0));
         $this->_model->setValues($initialData['initial_values']);
         $this->_model->addElementValues($initialData['add_values'], $initialData['overwrite']);
 
@@ -522,7 +521,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function testGetDefaultHtmlDataProvider()
+    public function defaultHtmlDataProvider()
     {
         return [
             [

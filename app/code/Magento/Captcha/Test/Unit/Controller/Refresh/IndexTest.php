@@ -95,6 +95,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $blockMethods = ['setFormId', 'setIsAjax', 'toHtml'];
         $blockMock = $this->createPartialMock(\Magento\Captcha\Block\Captcha::class, $blockMethods);
 
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
         $this->requestMock->expects($this->any())->method('getPost')->with('formId')->will($this->returnValue($formId));
         $this->requestMock->expects($this->exactly($callsNumber))->method('getContent')
             ->will($this->returnValue(json_encode($content)));

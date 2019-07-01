@@ -65,6 +65,10 @@ class UpdateQty extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
+            if (!$this->getRequest()->isPost()) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid request type.'));
+            }
+
             $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
             $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));

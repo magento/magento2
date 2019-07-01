@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DefaultMaxQtyAllowedConfig" type="max_qty_allowed_config">
+        <requiredEntity type="max_qty_allowed_config_default">DefaultMaxQtyAllowed</requiredEntity>
+    </entity>
+    <entity name="DefaultMaxQtyAllowed" type="max_qty_allowed_config_default">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="SetMaxQtyAllowedConfigZero" type="max_qty_allowed_config">
+        <data key="value">0</data>
+    </entity>
+</entities>

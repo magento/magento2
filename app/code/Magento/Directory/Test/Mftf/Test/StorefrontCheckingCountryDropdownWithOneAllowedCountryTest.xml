@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckingCountryDropdownWithOneAllowedCountryTest">
+        <annotations>
+            <features value="Directory"/>
+            <stories value="Country dropdown"/>
+            <title value="Checking country dropdown with one allowed country"/>
+            <description value="Checking country dropdown with one allowed country"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14810"/>
+            <useCaseId value="MAGETWO-76424"/>
+            <group value="directory"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!--Create customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Set "Allow Countries" config to US only-->
+            <createData entity="SetAllowCountriesConfigUS" stepKey="setAllowCountriesConfigToUS"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <!--Login as Customer-->
+            <actionGroup ref="CustomerLoginOnStorefront" stepKey="customerLogin">
+                <argument name="customer" value="$createCustomer$" />
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete Customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Set "Allow Countries" config to default-->
+            <createData entity="DefaultAllowCountriesConfig" stepKey="setAllowCountriesConfigToDefault"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <!--Logout-->
+            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="logoutFromStorefront"/>
+        </after>
+
+        <!--Go to "Add New Address" page-->
+        <amOnPage url="{{StorefrontCustomerAddressNewPage.url}}" stepKey="goToAddNewAddressPage"/>
+        <!--Click on Country dropdown-->
+        <click selector="{{StorefrontCustomerAddressEditFormSection.country}}" stepKey="clickOnCountryDropdown"/>
+        <!--Check dropdown options-->
+        <see selector="{{StorefrontCustomerAddressEditFormSection.country}}" userInput="United States" stepKey="seeUSInCountryDropdown"/>
+        <dontSee selector="{{StorefrontCustomerAddressEditFormSection.country}}" userInput="Brazil" stepKey="dontSeeBrazilInCountryDropdown"/>
+        <dontSeeElement selector="{{StorefrontCustomerAddressEditFormSection.countryEmptyOption}}" stepKey="dontSeeEmptyOptionInCountryDropdown"/>
+    </test>
+</tests>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<req:ShipmentValidateRequestAP xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dhl.com ship-val-req_AP.xsd">
+    <Request xmlns="">
+        <ServiceHeader>
+            <SiteID>some ID</SiteID>
+            <Password>some password</Password>
+        </ServiceHeader>
+    </Request>
+    <LanguageCode xmlns="">EN</LanguageCode>
+    <PiecesEnabled xmlns="">Y</PiecesEnabled>
+    <Billing xmlns="">
+        <ShipperAccountNumber>1234567890</ShipperAccountNumber>
+        <ShippingPaymentType>S</ShippingPaymentType>
+        <BillingAccountNumber>1234567890</BillingAccountNumber>
+        <DutyPaymentType>S</DutyPaymentType>
+        <DutyAccountNumber>1234567890</DutyAccountNumber>
+    </Billing>
+    <Consignee xmlns="">
+        <CompanyName/>
+        <AddressLine/>
+        <City/>
+        <PostalCode/>
+        <CountryCode/>
+        <CountryName/>
+        <Contact>
+            <PersonName/>
+            <PhoneNumber/>
+        </Contact>
+    </Consignee>
+    <Commodity xmlns="">
+        <CommodityCode>1</CommodityCode>
+    </Commodity>
+    <Dutiable xmlns="">
+        <DeclaredValue>10.00</DeclaredValue>
+        <DeclaredCurrency>USD</DeclaredCurrency>
+    </Dutiable>
+    <Reference xmlns="">
+        <ReferenceID>shipment reference</ReferenceID>
+        <ReferenceType>St</ReferenceType>
+    </Reference>
+    <ShipmentDetails xmlns="">
+        <NumberOfPieces>1</NumberOfPieces>
+        <CurrencyCode>USD</CurrencyCode>
+        <Pieces xmlns="">
+            <Piece xmlns="">
+                <PieceID>1</PieceID>
+                <PackageType>CP</PackageType>
+                <Weight>0.5</Weight>
+                <Depth>3</Depth>
+                <Width>3</Width>
+                <Height>3</Height>
+                <PieceContents>item_name</PieceContents>
+            </Piece>
+        </Pieces>
+        <PackageType>CP</PackageType>
+        <Weight>0.454</Weight>
+        <DimensionUnit>C</DimensionUnit>
+        <WeightUnit>K</WeightUnit>
+        <GlobalProductCode/>
+        <LocalProductCode/>
+        <DoorTo>DD</DoorTo>
+        <Date/>
+        <Contents>DHL Parcel TEST</Contents>
+    </ShipmentDetails>
+    <Shipper xmlns="">
+        <ShipperID>1234567890</ShipperID>
+        <CompanyName/>
+        <AddressLine/>
+        <City/>
+        <PostalCode/>
+        <CountryCode/>
+        <CountryName/>
+        <Contact xmlns="">
+            <PersonName/>
+            <PhoneNumber/>
+        </Contact>
+    </Shipper>
+    <LabelImageFormat xmlns="">PDF</LabelImageFormat>
+</req:ShipmentValidateRequestAP>

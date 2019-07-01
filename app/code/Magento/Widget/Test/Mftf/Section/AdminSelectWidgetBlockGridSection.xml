@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminSelectWidgetBlockGridSection">
+        <element name="blockTitleFilter" type="input" selector=".modal-content input[name='chooser_title']"/>
+        <element name="blockStatusFilter" type="select" selector=".modal-content select[name='chooser_is_active']"/>
+        <element name="sectionTitle" type="button" selector="//*[@class='modal-header']//h1[contains(text(), 'Select Block')]"/>
+    </section>
+</sections>

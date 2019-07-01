@@ -87,13 +87,14 @@ class FrontendActionsFlushTest extends \PHPUnit\Framework\TestCase
                 'recently_viewed_product'
             ]);
 
+        $time = time() - 1500;
         $connectionMock->expects($this->once())
             ->method('quoteInto')
-            ->with('added_at < ?', time() - 1500)
-            ->willReturn(['added_at < ?', time() - 1500]);
+            ->with('added_at < ?', $time)
+            ->willReturn(['added_at < ?', $time]);
         $connectionMock->expects($this->once())
             ->method('delete')
-            ->with('catalog_product_frontend_action', [['added_at < ?', time() - 1500]]);
+            ->with('catalog_product_frontend_action', [['added_at < ?', $time]]);
 
         $this->model->execute();
     }

@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminSlideOutDialogSection">
-        <element name="closeButton" type="button" selector=".modal-slide._show [data-role='closeBtn']" timeout="30"/>
+        <element name="closeButton" type="button" selector=".modal-slide._show [data-role=&quot;closeBtn&quot;]" timeout="30"/>
         <element name="cancelButton" type="button" selector="//*[contains(@class, 'modal-slide') and contains(@class, '_show')]//*[contains(@class, 'page-actions')]//button[normalize-space(.)='Cancel']" timeout="30"/>
         <element name="doneButton" type="button" selector="//*[contains(@class, 'modal-slide') and contains(@class, '_show')]//*[contains(@class, 'page-actions')]//button[normalize-space(.)='Done']" timeout="30"/>
         <element name="saveButton" type="button" selector="//*[contains(@class, 'modal-slide') and contains(@class, '_show')]//*[contains(@class, 'page-actions')]//button[normalize-space(.)='Save']" timeout="30"/>

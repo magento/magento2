@@ -77,6 +77,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($fullDirectoryPath));
 
         $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getRequest()->setMethod('POST');
         $this->model->getStorage()->getSession()->setCurrentPath($fullDirectoryPath);
         $this->model->execute();
         $this->assertTrue(
@@ -101,6 +102,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $fullDirectoryPath = $this->filesystem->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath() . DIRECTORY_SEPARATOR . $directoryName;
         $wysiwygDir = $this->mediaDirectory->getAbsolutePath() . '/wysiwyg';
+        $this->model->getRequest()->setMethod('POST');
         $this->model->getRequest()->setParams(['type' => 'image/png']);
         $this->model->getStorage()->getSession()->setCurrentPath($wysiwygDir);
         $this->model->execute();

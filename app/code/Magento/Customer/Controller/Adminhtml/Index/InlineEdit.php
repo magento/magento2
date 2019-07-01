@@ -116,8 +116,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Inline edit action execute
      *
      * @return \Magento\Framework\Controller\Result\Json
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
     {
@@ -125,7 +123,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         $resultJson = $this->resultJsonFactory->create();
 
         $postItems = $this->getRequest()->getParam('items', []);
-        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+        if (!($this->getRequest()->getParam('isAjax') && $this->getRequest()->isPost() && count($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
                 'error' => true,

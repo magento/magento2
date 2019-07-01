@@ -9,6 +9,7 @@ namespace Magento\Customer\Controller\Adminhtml\Group;
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 class Save extends \Magento\Customer\Controller\Adminhtml\Group
 {
@@ -66,9 +67,14 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      * Create or save customer group.
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         $taxClass = (int)$this->getRequest()->getParam('tax_class');
 
         /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */

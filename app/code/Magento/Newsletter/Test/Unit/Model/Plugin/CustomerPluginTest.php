@@ -10,8 +10,6 @@ use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
 class CustomerPluginTest extends \PHPUnit\Framework\TestCase
 {
@@ -55,11 +53,6 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
      */
     private $customerMock;
 
-    /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeManagerMock;
-
     protected function setUp()
     {
         $this->subscriberFactory = $this->getMockBuilder(\Magento\Newsletter\Model\SubscriberFactory::class)
@@ -94,8 +87,6 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ->setMethods(["getExtensionAttributes"])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-
         $this->subscriberFactory->expects($this->any())->method('create')->willReturn($this->subscriber);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->plugin = $this->objectManager->getObject(
@@ -103,8 +94,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             [
                 'subscriberFactory' => $this->subscriberFactory,
                 'extensionFactory' => $this->extensionFactoryMock,
-                'subscriberResource' => $this->subscriberResourceMock,
-                'storeManager' => $this->storeManagerMock,
+                'subscriberResource' => $this->subscriberResourceMock
             ]
         );
     }
@@ -208,7 +198,6 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
     ) {
         $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $subscriber = [$subscriberStatusKey => $subscriberStatusValue];
-        $this->prepareStoreData();
         $this->extensionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerExtensionMock);
@@ -234,7 +223,6 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
     {
         $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $subscriber = ['subscriber_id' => 1, 'subscriber_status' => 1];
-        $this->prepareStoreData();
         $this->customerMock->expects($this->any())
             ->method('getExtensionAttributes')
             ->willReturn($this->customerExtensionMock);
@@ -266,18 +254,5 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
             ['subscriber_status', 4, false],
             [null, null, false]
         ];
-    }
-
-    /**
-     * Prepare store information
-     *
-     * @return void
-     */
-    private function prepareStoreData()
-    {
-        $storeId = 1;
-        $storeMock = $this->createMock(Store::class);
-        $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
     }
 }

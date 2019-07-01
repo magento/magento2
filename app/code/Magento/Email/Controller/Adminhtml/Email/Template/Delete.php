@@ -12,9 +12,14 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
      * Delete transactional email action
      *
      * @return void
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+        }
+
         $template = $this->_initTemplate('id');
         if ($template->getId()) {
             try {

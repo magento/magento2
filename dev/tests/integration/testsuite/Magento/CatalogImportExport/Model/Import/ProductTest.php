@@ -28,11 +28,14 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ImportExport\Model\Import\Source\Csv;
 
 /**
  * Class ProductTest
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
+ * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -72,6 +75,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     private $logger;
 
     /**
+     * @var array
+     */
+    private $importedProducts;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -84,8 +92,25 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['logger' => $this->logger]
         );
+        $this->importedProducts = [];
 
         parent::setUp();
+    }
+
+    protected function tearDown()
+    {
+        /* We rollback here the products created during the Import because they were
+           created during test execution and we do not have the rollback for them */
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        foreach ($this->importedProducts as $productSku) {
+            try {
+                $product = $productRepository->get($productSku, false, null, true);
+                $productRepository->delete($product);
+            } catch (NoSuchEntityException $e) {
+                // nothing to delete
+            }
+        }
     }
 
     /**
@@ -271,6 +296,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @param string $importFile
      * @param string $sku
      * @param int $expectedOptionsQty
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppIsolation enabled
      */
     public function testSaveCustomOptions($importFile, $sku, $expectedOptionsQty)
@@ -1244,6 +1271,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testNewProductPositionInCategory()
     {
@@ -1369,6 +1398,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $expectedErrors array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateUrlKeys($importFile, $expectedErrors)
     {
@@ -1560,6 +1590,35 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
+    public function testImportWithoutChangingUrlKeys()
+    {
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_without_url_key_column.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->assertEquals('url-key', $productRepository->get('simple1')->getUrlKey());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
     public function testImportWithoutUrlKeys()
     {
         $products = [
@@ -1597,12 +1656,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testImportWithUrlKeysWithSpaces()
     {
         $products = [
-            'simple1' => 'url-key-with-spaces1',
-            'simple2' => 'url-key-with-spaces2',
+            'simple1' => 'url key with spaces1',
+            'simple2' => 'url key with spaces2',
         ];
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -1625,6 +1685,52 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_non_latin_url_key.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testImportWithNonLatinUrlKeys()
+    {
+        $productsCreatedByFixture = [
+            'ukrainian-with-url-key' => 'nove-im-ja-pislja-importu-scho-stane-url-key',
+            'ukrainian-without-url-key' => 'новий url key після імпорту',
+        ];
+        $productsImportedByCsv = [
+            'imported-ukrainian-with-url-key' => 'імпортований продукт',
+            'imported-ukrainian-without-url-key' => 'importovanij-produkt-bez-url-key',
+        ];
+        $productSkuMap = array_merge($productsCreatedByFixture, $productsImportedByCsv);
+        $this->importedProducts = array_keys($productsImportedByCsv);
+
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_non_latin_url_keys.csv',
+                'directory' => $directory,
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertEquals($errors->getErrorsCount(), 0);
+        $this->_model->importData();
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        foreach ($productSkuMap as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
     }
@@ -1844,6 +1950,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @param string $fileName
      * @param int $expectedErrors
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
     {
@@ -2060,7 +2167,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     *
      */
     public function testImportDataChangeAttributeSet()
     {
@@ -2077,7 +2183,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
         $errors = $this->_model->setParameters(
             [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => \Magento\Catalog\Model\Product::ENTITY
             ]
         )->setSource(
@@ -2266,6 +2372,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * Import file by providing import filename in parameters
      *
      * @param string $fileName
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function importFile(string $fileName)
     {
@@ -2297,6 +2404,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * Import file with non-existing images and skip-errors strategy.
      *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testImportWithSkipErrorsAndNonExistingImage()
     {
@@ -2382,6 +2490,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveProductOnImportNonExistingImage()
     {
@@ -2414,6 +2523,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testImportProductWithContinueOnError()
     {

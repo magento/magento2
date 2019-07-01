@@ -7,6 +7,7 @@
 namespace Magento\Wishlist\Model\Rss;
 
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Wishlist RSS model
@@ -114,10 +115,8 @@ class Wishlist implements DataProviderInterface
      */
     public function isAllowed()
     {
-        return (bool)$this->scopeConfig->getValue(
-            'rss/wishlist/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->scopeConfig->isSetFlag('rss/wishlist/active', ScopeInterface::SCOPE_STORE)
+            && $this->getWishlist()->getCustomerId() == $this->wishlistHelper->getCustomer()->getId();
     }
 
     /**
@@ -180,8 +179,8 @@ class Wishlist implements DataProviderInterface
             }
         } else {
             $data = [
-                'title' => __('We cannot retrieve the Wish List.'),
-                'description' => __('We cannot retrieve the Wish List.'),
+                'title' => __('We cannot retrieve the Wish List.')->render(),
+                'description' => __('We cannot retrieve the Wish List.')->render(),
                 'link' => $this->urlBuilder->getUrl(),
                 'charset' => 'UTF-8',
             ];
@@ -195,7 +194,7 @@ class Wishlist implements DataProviderInterface
      */
     public function getCacheKey()
     {
-        return 'rss_wishlist_data';
+        return 'rss_wishlist_data_' . $this->getWishlist()->getId();
     }
 
     /**
@@ -215,7 +214,7 @@ class Wishlist implements DataProviderInterface
     {
         $customerId = $this->getWishlist()->getCustomerId();
         $customer = $this->customerFactory->create()->load($customerId);
-        $title = __('%1\'s Wishlist', $customer->getName());
+        $title = __('%1\'s Wishlist', $customer->getName())->render();
         $newUrl = $this->urlBuilder->getUrl(
             'wishlist/shared/index',
             ['code' => $this->getWishlist()->getSharingCode()]

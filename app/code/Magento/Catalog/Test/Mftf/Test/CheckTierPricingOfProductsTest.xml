@@ -71,7 +71,7 @@
             <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct1">
-            <argument name="website" value="SecondWebsite"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct2">
@@ -84,7 +84,7 @@
             <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct2">
-            <argument name="website" value="SecondWebsite"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct3">
@@ -97,7 +97,7 @@
             <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct3">
-            <argument name="website" value="SecondWebsite"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
         </actionGroup>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct4">
@@ -110,7 +110,7 @@
             <argument name="website" value="SecondWebsite"/>
         </actionGroup>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="setAdvancedPricingForProduct4">
-            <argument name="website" value="SecondWebsite"/>
+            <argument name="website" value="{{SecondWebsite.name}}"/>
         </actionGroup>
 
         <!--Flush cache-->

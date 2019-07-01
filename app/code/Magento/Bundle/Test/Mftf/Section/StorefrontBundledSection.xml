@@ -15,5 +15,9 @@
         <element name="addToCartConfigured" type="button" selector="#product-addtocart-button" timeout="30"/>
         <element name="updateCart" type="button" selector="#product-updatecart-button" timeout="30"/>
         <element name="configuredPrice" type="block" selector=".price-configured_price .price"/>
+        <element name="dropDownOptionInput" type="select" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//select" parameterized="true"/>
+        <element name="dropDownOptionTierPrices" type="text" selector="//label//span[contains(text(), '{{optionName}}')]/../..//div[@class='control']//div[@class='option-tier-prices']" parameterized="true"/>
+        <element name="radioButtonOptionLabel" type="text" selector="//label//span[contains(text(), '{{optionName}}')]/../..//div[@class='control']//div[@class='field choice']//label[contains(.,'{{productName}}')]" parameterized="true"/>
+        <element name="checkboxOptionLabel" type="text" selector="//label//span[contains(text(), '{{optionName}}')]/../..//div[@class='control']//div[@class='field choice']//label[contains(.,'{{productName}}')]" parameterized="true"/>
     </section>
 </sections>

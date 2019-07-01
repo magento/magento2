@@ -58,7 +58,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     public function testSetBodyClass()
     {
         $class1 = 'class_1';
-        $class2 = 'class_2';
+        $class2 = 'class--2';
         $expected = [$class1, $class2];
         $this->structure->setBodyClass($class1);
         $this->structure->setBodyClass($class2);

@@ -249,7 +249,25 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                         ],
                                     ],
                                 ],
-                            ]
+                            ],
+                            'street' => [
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'multiline',
+                                            'formElement' => 'multiline',
+                                            'visible' => true,
+                                            'required' => '1',
+                                            'label' => __('Multiline address'),
+                                            'sortOrder' => '70',
+                                            'notice' => 'note',
+                                            'default' => 'Default',
+                                            'size' => '2',
+                                            'componentType' => Field::NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ]
@@ -477,6 +495,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->injectVisibilityProps($attributeMock, $attributeBooleanMock, $options);
         if ($type == "address") {
             $mocks[] = $this->getCountryAttrMock();
+            $mocks[] = $this->getStreetAttrMock();
         }
         return $mocks;
     }
@@ -542,6 +561,54 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         return $countryAttrMock;
+    }
+
+    /**
+     * @return AbstractAttribute|\PHPUnit_Framework_MockObject_MockObjec
+     */
+    private function getStreetAttrMock()
+    {
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(
+                [
+                    'getAttributeCode',
+                    'getDataUsingMethod',
+                    'usesSource',
+                    'getFrontendInput',
+                    'getIsVisible',
+                    'getSource',
+                    'getIsUserDefined',
+                    'getUsedInForms',
+                    'getEntityType',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $map = [
+            ['frontend_input', null, 'multiline'],
+            ['is_required', null, '1'],
+            ['frontend_label', null, __('Multiline address')],
+            ['note', null, 'note'],
+            ['sort_order', null, '70'],
+            ['note', null, null],
+            ['default_value', null, 'Default'],
+            ['multiline_count', null, 2],
+        ];
+
+        $attributeMock->method('getDataUsingMethod')
+            ->will($this->returnValueMap($map));
+
+        $attributeMock->method('getAttributeCode')
+            ->willReturn('street');
+
+        $attributeMock->method('usesSource')
+            ->willReturn(false);
+
+        $attributeMock->method('getIsVisible')
+            ->willReturn(true);
+
+        return $attributeMock;
     }
 
     /**
@@ -1295,16 +1362,15 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $meta = $dataProvider->getMeta();
         $this->assertNotEmpty($meta);
-        $this->assertEquals($this->getExpectationForVisibleAttributes(false), $meta);
+        $this->assertEquals($this->getExpectationForVisibleAttributes(), $meta);
     }
 
     /**
      * Retrieve all customer variations of attributes with all variations of visibility
      *
-     * @param bool $isRegistration
      * @return array
      */
-    private function getCustomerAttributeExpectations($isRegistration)
+    private function getCustomerAttributeExpectations()
     {
         return [
             self::ATTRIBUTE_CODE . "_1" => [
@@ -1314,7 +1380,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                             'dataType' => 'frontend_input',
                             'formElement' => 'frontend_input',
                             'options' => 'test-options',
-                            'visible' => !$isRegistration,
+                            'visible' => true,
                             'required' => 'is_required',
                             'label' => __('frontend_label'),
                             'sortOrder' => 'sort_order',
@@ -1351,7 +1417,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         'config' => [
                             'dataType' => 'frontend_input',
                             'formElement' => 'frontend_input',
-                            'visible' => $isRegistration,
+                            'visible' => true,
                             'required' => 'is_required',
                             'label' => __('frontend_label'),
                             'sortOrder' => 'sort_order',
@@ -1374,7 +1440,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         'config' => [
                             'dataType' => 'frontend_input',
                             'formElement' => 'frontend_input',
-                            'visible' => $isRegistration,
+                            'visible' => true,
                             'required' => 'is_required',
                             'label' => __('frontend_label'),
                             'sortOrder' => 'sort_order',
@@ -1397,14 +1463,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve all variations of attributes with all variations of visibility
      *
-     * @param bool $isRegistration
      * @return  array
      */
-    private function getExpectationForVisibleAttributes($isRegistration = true)
+    private function getExpectationForVisibleAttributes()
     {
         return [
             'customer' => [
-                'children' => $this->getCustomerAttributeExpectations($isRegistration),
+                'children' => $this->getCustomerAttributeExpectations(),
             ],
             'address' => [
                 'children' => [
@@ -1472,7 +1537,25 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                 ],
                             ],
                         ],
-                    ]
+                    ],
+                    'street' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'dataType' => 'multiline',
+                                    'formElement' => 'multiline',
+                                    'visible' => true,
+                                    'required' => '1',
+                                    'label' => __('Multiline address'),
+                                    'sortOrder' => '70',
+                                    'notice' => 'note',
+                                    'default' => 'Default',
+                                    'size' => '2',
+                                    'componentType' => Field::NAME,
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckingMaxQtyAllowedInWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Update wishlist item"/>
+            <title value="Validate quantity field during updating wishlist item"/>
+            <description value="Validate quantity field during updating wishlist item"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-7192"/>
+            <useCaseId value="MAGETWO-73613"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <!--Create category-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!--Create product-->
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Login as Customer-->
+            <actionGroup ref="CustomerLoginOnStorefront" stepKey="customerLogin">
+                <argument name="customer" value="$createCustomer$" />
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete entities-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Set "Maximum Qty Allowed in Shopping Cart" config to default-->
+            <createData entity="DefaultMaxQtyAllowedConfig" stepKey="setMaxQtyAllowedConfigToDefault"/>
+            <!--Logout-->
+            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogout"/>
+        </after>
+
+        <!--Go to product page-->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+        <!--Add product to Wishlist-->
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
+            <argument name="productVar" value="$createProduct$"/>
+        </actionGroup>
+        <!--Validate quantity after edit product in Wishlist - Case 1-->
+        <actionGroup ref="StorefrontValidateQtyAfterEditProductInWishlist" stepKey="validateQtyFirstCase">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="description" value="Test Description"/>
+            <argument name="quantity" value="222222222222222"/>
+            <argument name="maxQtyAllowed" value="10000"/>
+        </actionGroup>
+        <!--Set "Maximum Qty Allowed in Shopping Cart" config to "0"-->
+        <createData entity="SetMaxQtyAllowedConfigZero" stepKey="setMaxQtyAllowedConfigToZero"/>
+        <!--Go to Wishlist page-->
+        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishlistPage"/>
+        <!--Validate quantity after edit product in Wishlist - Case 1-->
+        <actionGroup ref="StorefrontValidateQtyAfterEditProductInWishlist" stepKey="validateQtySecondCase">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="description" value="Test Description"/>
+            <argument name="quantity" value="222222222222222"/>
+            <argument name="maxQtyAllowed" value="99999999"/>
+        </actionGroup>
+    </test>
+</tests>

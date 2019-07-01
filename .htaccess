@@ -29,6 +29,8 @@
 
 ############################################
 ## default index file
+## Specifies option, to use methods arguments in backtrace or not
+    SetEnv MAGE_DEBUG_SHOW_ARGS 1
 
     DirectoryIndex index.php
 
@@ -356,6 +358,15 @@
         </IfVersion>
     </Files>
     <Files magento_umask>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+    <Files .user.ini>
         <IfVersion < 2.4>
             order allow,deny
             deny from all

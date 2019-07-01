@@ -71,6 +71,13 @@
         <data key="value"/>
     </entity>
 
+    <entity name="DefaultBraintreeWithPaypalConfig" extends="DefaultBraintreeConfig">
+        <requiredEntity type="active_braintree_paypal">DefaultActiveBraintreePaypal</requiredEntity>
+    </entity>
+    <entity name="DefaultActiveBraintreePaypal" type="active_braintree_paypal">
+        <data key="value">0</data>
+    </entity>
+
     <entity name="SandboxBraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">EnabledTitle</requiredEntity>
         <requiredEntity type="payment_action">AuthorizePaymentAction</requiredEntity>
@@ -104,6 +111,13 @@
     </entity>
     <entity name="EnabledMerchantAccountId" type="merchant_account_id">
         <data key="value">Magneto</data>
+    </entity>
+
+    <entity name="SandboxBraintreeWithPaypalConfig" extends="SandboxBraintreeConfig">
+        <requiredEntity type="active_braintree_paypal">EnableActiveBraintreePaypal</requiredEntity>
+    </entity>
+    <entity name="EnableActiveBraintreePaypal" type="active_braintree_paypal">
+        <data key="value">1</data>
     </entity>
 
     <entity name="BraintreeCard" type="creditCard">

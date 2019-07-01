@@ -73,13 +73,15 @@ abstract class AbstractSource implements
             }
         }
         // End
-        if (isset($options[$value])) {
+        if (is_scalar($value) && isset($options[$value])) {
             return $options[$value];
         }
         return false;
     }
 
     /**
+     * Get option id.
+     *
      * @param string $value
      * @return null|string
      */

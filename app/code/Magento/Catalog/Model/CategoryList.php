@@ -78,8 +78,8 @@ class CategoryList implements CategoryListInterface
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         $items = [];
-        foreach ($collection->getItems() as $category) {
-            $items[] = $this->categoryRepository->get($category->getId());
+        foreach ($collection->getAllIds() as $id) {
+            $items[] = $this->categoryRepository->get($id);
         }
 
         /** @var CategorySearchResultsInterface $searchResult */

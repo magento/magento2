@@ -9,11 +9,12 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
  * Store render group
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated since Store Grid is refactored with UI Components
  */
 class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function render(\Magento\Framework\DataObject $row)
     {

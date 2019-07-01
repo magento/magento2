@@ -46,7 +46,7 @@ class MassDeleteTest extends \PHPUnit\Framework\TestCase
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['isPost'])
             ->getMockForAbstractClass();
         $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
@@ -85,6 +85,7 @@ class MassDeleteTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->controller = $this->objectManagerHelper->getObject(

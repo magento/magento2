@@ -77,7 +77,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 if ($theme->hasChildThemes()) {
                     $message = __('Are you sure you want to delete this theme?');
                     $onClick = sprintf(
-                        "deleteConfirm('%s', '%s')",
+                        "deleteConfirm('%s', '%s', {data: {}})",
                         $message,
                         $this->getUrl('adminhtml/*/delete', ['id' => $theme->getId()])
                     );

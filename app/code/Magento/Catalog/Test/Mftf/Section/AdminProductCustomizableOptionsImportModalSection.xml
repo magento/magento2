@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductCustomizableOptionsImportModalSection">
+        <element name="selectProductTitle" type="text" selector="//aside[contains(@class, '_show')]//h1[normalize-space(text())='Select Product']"/>
+        <element name="nameFilter" type="input" selector="//aside[contains(@class, '_show')]//input[@name='name']"/>
+        <element name="importButton" type="button" selector="//aside[contains(@class, '_show')]//button[contains(@class, 'action-primary') and normalize-space(.)='Import']" timeout="30"/>
+    </section>
+</sections>

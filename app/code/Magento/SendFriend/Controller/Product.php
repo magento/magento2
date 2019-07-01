@@ -102,7 +102,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
         }
         try {
             $product = $this->productRepository->getById($productId);
-            if (!$product->isVisibleInCatalog()) {
+            if (!$product->isVisibleInSiteVisibility() || !$product->isVisibleInCatalog()) {
                 return false;
             }
         } catch (NoSuchEntityException $noEntityException) {

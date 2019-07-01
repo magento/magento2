@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingAttributeValueOnProductEditPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/configure Dropdown product attribute"/>
+            <title value="Checking attribute values on a product edit page"/>
+            <description value="Checking attribute values on a product edit page"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-15746"/>
+            <useCaseId value="MAGETWO-74037"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!--Create Dropdown product attribute-->
+            <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createDropdownProductAttribute"/>
+            <!--Add options to attribute-->
+            <createData entity="ProductAttributeAdminOption1" stepKey="createFirstOption">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeAdminOption2" stepKey="createSecondOption">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+            </createData>
+            <!--Add attribute to Default Attribute Set-->
+            <createData entity="AddToDefaultSet" stepKey="attributeSet">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+            </createData>
+            <!--Create category-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!--Create Simple product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Login as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete product attribute-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createDropdownProductAttribute" stepKey="deleteDropdownProductAttribute"/>
+            <!--Logout-->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Go to Product edit page-->
+        <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <scrollToTopOfPage stepKey="scrollToShowAttribute"/>
+
+        <!-- Grab attribute dropdown options -->
+        <grabMultiple selector="{{AdminProductFormSection.customAttributeSelectOptions($$createDropdownProductAttribute.attribute[attribute_code]$$)}}" stepKey="clickOnAttributeDropdown" />
+
+        <!--Check attribute dropdown options-->
+        <assertContains stepKey="seeFirstAdminOption">
+            <actualResult type="variable">clickOnAttributeDropdown</actualResult>
+            <expectedResult type="string">admin_option_1</expectedResult>
+        </assertContains>
+        <assertContains stepKey="seeSecondAdminOption">
+            <actualResult type="variable">clickOnAttributeDropdown</actualResult>
+            <expectedResult type="string">admin_option_2</expectedResult>
+        </assertContains>
+
+        <assertNotContains stepKey="dontSeeFirstStoreOption">
+            <actualResult type="variable">clickOnAttributeDropdown</actualResult>
+            <expectedResult type="string">option1</expectedResult>
+        </assertNotContains>
+        <assertNotContains stepKey="dontSeeSecondStoreOption">
+            <actualResult type="variable">clickOnAttributeDropdown</actualResult>
+            <expectedResult type="string">option2</expectedResult>
+        </assertNotContains>
+    </test>
+</tests>

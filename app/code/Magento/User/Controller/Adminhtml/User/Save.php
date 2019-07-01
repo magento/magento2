@@ -44,6 +44,9 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     {
         $userId = (int)$this->getRequest()->getParam('user_id');
         $data = $this->getRequest()->getPostValue();
+        if (array_key_exists('form_key', $data)) {
+            unset($data['form_key']);
+        }
         if (!$data) {
             $this->_redirect('adminhtml/*/');
             return;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductSetMsrp">
+        <arguments>
+            <argument name="product"/>
+            <argument name="msrp" type="string" defaultValue="100"/>
+        </arguments>
+        <amOnPage url="{{AdminProductEditPage.url(product.id)}}" stepKey="goToProductEditPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopToSeeAdvancedPricingButton"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrpElement"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.msrp}}" userInput="{{msrp}}" stepKey="fillMsrpField"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+    </actionGroup>
+</actionGroups>

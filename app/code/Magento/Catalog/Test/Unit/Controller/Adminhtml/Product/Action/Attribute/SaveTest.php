@@ -229,6 +229,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
             [\Magento\CatalogInventory\Api\StockConfigurationInterface::class, $this->stockConfig],
         ]));
+
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
     }
 
     public function testExecuteThatProductIdsAreObtainedFromAttributeHelper()

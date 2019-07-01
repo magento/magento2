@@ -6,15 +6,22 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
+use Magento\Framework\Exception\NotFoundException;
+
 class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol
 {
     /**
      * Save custom Currency symbol
      *
      * @return void
+     * @throws NotFoundException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new NotFoundException(__('Page not found'));
+        }
+
         $symbolsDataArray = $this->getRequest()->getParam('custom_currency_symbol', null);
         if (is_array($symbolsDataArray)) {
             foreach ($symbolsDataArray as &$symbolsData) {
@@ -27,9 +34,9 @@ class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencys
         try {
             $this->_objectManager->create(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
                 ->setCurrencySymbolsData($symbolsDataArray);
-            $this->messageManager->addSuccess(__('You applied the custom currency symbols.'));
+            $this->messageManager->addSuccessMessage(__('You applied the custom currency symbols.'));
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));

@@ -57,6 +57,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _construct()
     {
@@ -83,7 +84,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
             -1
         );
 
-        $objId = $this->getRequest()->getParam($this->_objectId);
+        $objId = (int)$this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
             $this->addButton(
@@ -93,7 +94,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
                     'class' => 'delete',
                     'onclick' => 'deleteConfirm(\'' . __(
                         'Are you sure you want to do this?'
-                    ) . '\', \'' . $this->getDeleteUrl() . '\')'
+                    ) . '\', \'' . $this->getDeleteUrl() . '\', {data: {}})'
                 ]
             );
         }
@@ -155,7 +156,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', [$this->_objectId => $this->getRequest()->getParam($this->_objectId)]);
+        return $this->getUrl('*/*/delete', [$this->_objectId => (int)$this->getRequest()->getParam($this->_objectId)]);
     }
 
     /**

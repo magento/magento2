@@ -13,7 +13,7 @@
             <field key="title">string</field>
             <field key="identifier">string</field>
             <field key="content">string</field>
-            <field key="active">true</field>
+            <field key="active">string</field>
         </object>
     </operation>
 

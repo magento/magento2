@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
+use Magento\Payment\Model\Method\Logger;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\View\Layout;
 use Magento\Checkout\Model\Session;
@@ -63,6 +64,14 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
      * @var Review
      */
     private $review;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+
+    /**
+     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
 
     protected function setUp()
     {
@@ -87,6 +96,9 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
+        $this->loggerMock = $this->getMockBuilder(Logger::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $contextMock->expects(self::once())
             ->method('getRequest')
@@ -102,7 +114,8 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             $contextMock,
             $this->configMock,
             $this->checkoutSessionMock,
-            $this->quoteUpdaterMock
+            $this->quoteUpdaterMock,
+            $this->loggerMock
         );
     }
 

@@ -68,8 +68,10 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
         try {
             $product = $this->productRepository->save($product);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (InputException $inputException) {
             throw $inputException;
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             throw new StateException(__('Cannot save product.'));
         }
@@ -100,7 +102,10 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
             if ($existingEntry->getId() == $entry->getId()) {
                 $found = true;
-                if ($entry->getFile()) {
+
+                $file = $entry->getContent();
+
+                if ($file && $file->getBase64EncodedData() || $entry->getFile()) {
                     $entry->setId(null);
                 }
                 $existingMediaGalleryEntries[$key] = $entry;

@@ -128,7 +128,8 @@ class CustomOptions extends Form
      *
      * @var string
      */
-    private $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "required field")]';
+    private $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "required field")' .
+    ' and not(contains(@style,"display"))]';
 
     /**
      * Get product options

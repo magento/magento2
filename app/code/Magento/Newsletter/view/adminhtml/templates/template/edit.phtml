@@ -34,9 +34,10 @@ require([
     'tinymce',
     'Magento_Ui/js/modal/prompt',
     'Magento_Ui/js/modal/confirm',
+    'mage/dataPost',
     'mage/mage',
     'prototype'
-], function(jQuery, tinyMCE, prompt, confirm){
+], function(jQuery, tinyMCE, prompt, confirm, dataPost){
 
 //<![CDATA[
     jQuery('#newsletter_template_edit_form').mage('form').mage('validation');
@@ -203,7 +204,10 @@ require([
                 content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to delete this template?'))) ?>",
                 actions: {
                     confirm: function() {
-                        window.location.href = '<?= $block->escapeUrl($block->getDeleteUrl()) ?>';
+                        dataPost().postData({
+                            action: '<?= $block->escapeUrl($block->getDeleteUrl()) ?>',
+                            data: {}
+                        });
                     }
                 }
             });

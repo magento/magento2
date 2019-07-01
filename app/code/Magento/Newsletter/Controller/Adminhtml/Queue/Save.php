@@ -9,18 +9,25 @@
 
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+use Magento\Framework\Exception\NotFoundException;
+
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**
-     * Save Newsletter queue
+     * Save newsletter queue.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         try {
+            if (!$this->getRequest()->isPost()) {
+                throw new NotFoundException(__('Page not found'));
+            }
+
             /* @var $queue \Magento\Newsletter\Model\Queue */
             $queue = $this->_objectManager->create(\Magento\Newsletter\Model\Queue::class);
 
@@ -30,7 +37,9 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
                 $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class)->load($templateId);
 
                 if (!$template->getId() || $template->getIsSystem()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the newsletter template and try again.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Please correct the newsletter template and try again.')
+                    );
                 }
 
                 $queue->setTemplateId(

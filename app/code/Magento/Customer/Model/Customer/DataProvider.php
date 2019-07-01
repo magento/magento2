@@ -27,6 +27,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Ui\Component\Form\Element\Multiline;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -376,44 +377,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Check whether the specific attribute can be shown in form: customer registration, customer edit, etc...
-     *
-     * @param Attribute $customerAttribute
-     * @return bool
-     */
-    private function canShowAttributeInForm(AbstractAttribute $customerAttribute)
-    {
-        $isRegistration = $this->context->getRequestParam($this->getRequestFieldName()) === null;
-
-        if ($customerAttribute->getEntityType()->getEntityTypeCode() === 'customer') {
-            return is_array($customerAttribute->getUsedInForms()) &&
-                (
-                    (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
-                    (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
-                );
-        } else {
-            return is_array($customerAttribute->getUsedInForms()) &&
-                in_array('customer_address_edit', $customerAttribute->getUsedInForms());
-        }
-    }
-
-    /**
      * Detect can we show attribute on specific form or not
      *
      * @param Attribute $customerAttribute
      * @return bool
      */
-    private function canShowAttribute(AbstractAttribute $customerAttribute)
+    private function canShowAttribute(AbstractAttribute $customerAttribute): bool
     {
-        $userDefined = (bool) $customerAttribute->getIsUserDefined();
-        if (!$userDefined) {
-            return $customerAttribute->getIsVisible();
-        }
-
-        $canShowOnForm = $this->canShowAttributeInForm($customerAttribute);
-
-        return ($this->allowToShowHiddenAttributes && $canShowOnForm) ||
-            (!$this->allowToShowHiddenAttributes && $canShowOnForm && $customerAttribute->getIsVisible());
+        return $this->allowToShowHiddenAttributes && (bool) $customerAttribute->getIsUserDefined()
+            ? true
+            : (bool) $customerAttribute->getIsVisible();
     }
 
     /**
@@ -596,8 +569,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ) {
             $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
         }
-        if (isset($addresses[$addressId]['street']) && !is_array($addresses[$addressId]['street'])) {
-            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
+
+        foreach ($this->meta['address']['children'] as $attributeName => $attributeMeta) {
+            if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
+                && isset($addresses[$addressId][$attributeName])
+                && !\is_array($addresses[$addressId][$attributeName])
+            ) {
+                $addresses[$addressId][$attributeName] = explode("\n", $addresses[$addressId][$attributeName]);
+            }
         }
     }
 

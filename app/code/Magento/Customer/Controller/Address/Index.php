@@ -28,9 +28,9 @@ class Index extends \Magento\Customer\Controller\Address
      * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

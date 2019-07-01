@@ -347,15 +347,15 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Retrieve array with expected parameters for method getJsonConfig()
+     * Retrieve array with expected parameters for method getJsonConfig().
      *
-     * @param $productId
-     * @param $amount
-     * @param $priceQty
-     * @param $percentage
+     * @param int $productId
+     * @param float $amount
+     * @param int $priceQty
+     * @param int $percentage
      * @return array
      */
-    private function getExpectedArray($productId, $amount, $priceQty, $percentage)
+    private function getExpectedArray(int $productId, float $amount, int $priceQty, int $percentage): array
     {
         $expectedArray = [
             'attributes' => [],
@@ -378,6 +378,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                             'price' => $amount,
                             'percentage' => $percentage,
                         ],
+                    ],
+                    'msrpPrice' => [
+                        'amount' => null,
                     ],
                 ],
             ],

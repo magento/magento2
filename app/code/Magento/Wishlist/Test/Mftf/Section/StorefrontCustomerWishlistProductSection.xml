@@ -17,9 +17,8 @@
         <element name="productImageByImageName" type="text" selector="//main//li//a//img[contains(@src, '{{var1}}')]" parameterized="true"/>
         <element name="productDescription" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//textarea[@class='product-item-comment']" parameterized="true"/>
         <element name="productQuantity" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//input[@class='input-text qty']" parameterized="true"/>
-        <element name="productEditButtonByName" type="button" selector="//li[.//a[contains(text(), '{{var1}}')]]//span[contains(text(), 'Edit')]" parameterized="true"/>
         <element name="productUpdateWishList" type="button" selector=".column.main .actions-toolbar .action.update" timeout="30"/>
         <element name="productAddAllToCart" type="button" selector=".column.main .actions-toolbar .action.tocart" timeout="30"/>
-        <element name="productQtyError" type="text" selector="//li[.//a[contains(text(), '{{var1}}')]]//div[@class='mage-error']" parameterized="true" timeout="30"/>
+        <element name="productQtyError" type="text" selector="//li[.//a[contains(text(), '{{productName}}')]]//div[@class='mage-error']" parameterized="true" timeout="30"/>
     </section>
 </sections>
