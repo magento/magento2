@@ -6,6 +6,9 @@
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem;
 
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,6 +36,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filesystem;
+    
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 101.0.0
+     */
+    private $mediaDirectory;
 
     /**
      * @inheritdoc
@@ -70,8 +79,20 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ['moveFileFromTmp']
         );
 
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()
+        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->baseDirectory = $this->getMockBuilder(ReadInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
             ->getMock();
+        
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($this->mediaDirectory);
     }
 
     /**
@@ -154,6 +175,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 ['name' => 'test123.jpg']
             ]
         ]);
+        
+        $this->objectManager->setBackwardCompatibleProperty($model, 'mediaDirectory', $this->mediaDirectory);
+        $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
 
         $model->beforeSave($object);
 
@@ -185,7 +209,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ]);
-
+        
+        $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
         $model->beforeSave($object);
 
         $this->assertEquals('/pub/media/wysiwyg/test123.jpg', $object->getTestAttribute());
@@ -203,12 +228,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
+        $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
+        $this->objectManager->setBackwardCompatibleProperty($model, 'mediaDirectory', $this->mediaDirectory);
         $object = new \Magento\Framework\DataObject([
             'test_attribute' => [
                 ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']
             ]
         ]);
-
+        
         $model->beforeSave($object);
 
         $this->assertEquals([
@@ -257,7 +284,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             'objectManager' => $objectManagerMock,
             'logger' => $this->logger
         ]);
+        
         $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
+        $this->objectManager->setBackwardCompatibleProperty($model, 'mediaDirectory', $this->mediaDirectory);
 
         return $model->setAttribute($this->attribute);
     }

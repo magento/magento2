@@ -81,24 +81,27 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Will return empty string in a case when $value is not an array
      *
      * @param array $value Attribute value
-     * 
+     *
      * @param string $type Flag based on file location (tmp, base)
-     * 
+     *
      * @return string
      */
     private function getUploadedImageName($value, $type = 'tmp')
     {
         if (is_array($value) && isset($value[0]['name'])) {
-            if($type == 'base'){
+            if ($type == 'base') {
                 // Get new filename if file already exists in base directory.
-                return FileUploader::getNewFileName($this->mediaDirectory->getAbsolutePath($this->getImageUploader()->getFilePath($this->getImageUploader()->getBasePath(), $value[0]['name'])));
-            }else{
+                $fileName = FileUploader::getNewFileName($this->mediaDirectory->getAbsolutePath($this->getImageUploader()->getFilePath($this->getImageUploader()->getBasePath(), $value[0]['name'])));
+                return ($fileName) ? $fileName : $value[0]['name'];
+            } else {
                 return $value[0]['name'];
             }
         }
 
         return '';
     }
+    
+    
 
     /**
      * Avoiding saving potential upload data to DB
@@ -117,7 +120,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             // use relative path for image attribute so we know it's outside of category dir when we fetch it
             $value[0]['name'] = $value[0]['url'];
         }
-
+        
         if ($imageName = $this->getUploadedImageName($value, 'base')) {
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
@@ -184,7 +187,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
 
-        $newFile = FileUploader::getNewFileName($this->mediaDirectory->getAbsolutePath($this->getImageUploader()->getFilePath($this->getImageUploader()->getBasePath(), $value[0]['name'])));
         if ($this->isTmpFileAvailable($value) && $tmpImageName = $this->getUploadedImageName($value)) {
             try {
                 $this->getImageUploader()->moveFileFromTmp($tmpImageName, $this->getUploadedImageName($value, 'base'));
