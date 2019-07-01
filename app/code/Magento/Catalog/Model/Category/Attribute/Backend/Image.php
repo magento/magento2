@@ -88,27 +88,18 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if (is_array($value) && isset($value[0]['name'])) {
             if ($type == 'base') {
                 // Get new filename if file already exists in base directory.
-                return ($this->getNewFileName($value)) ? $this->getNewFileName($value) : $value[0]['name'];
+                $basePath = $this->getImageUploader()->getBasePath();
+                $baseImagePath = $this->getImageUploader()->getFilePath(
+                    $basePath,
+                    $value[0]['name']
+                );
+                return (FileUploader::getNewFileName($baseImagePath)) ? FileUploader::getNewFileName($baseImagePath) : $value[0]['name'];
             } else {
                 return $value[0]['name'];
             }
         }
 
         return '';
-    }
-    
-    /**
-     * Gets new image name in case image with same name already exists.
-     * @param array $value Attribute value
-     * @return string
-     */
-    protected function getNewFileName($value) {
-        $basePath = $this->getImageUploader()->getBasePath();
-        $baseImagePath = $this->getImageUploader()->getFilePath(
-            $basePath,
-            $value[0]['name']
-        );
-        return FileUploader::getNewFileName($baseImagePath);
     }
     
     /**
@@ -195,7 +186,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
 
-        if ($this->isTmpFileAvailable($value) && $tmpImageName = $this->getUploadedImageName($value)) {
+        if ($this->isTmpFileAvailable($value) && $tmpImageName = $this->getUploadedImageName($value, 'tmp')) {
             try {
                 $this->getImageUploader()->moveFileFromTmp($tmpImageName, $this->getUploadedImageName($value, 'base'));
             } catch (\Exception $e) {
