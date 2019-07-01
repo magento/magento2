@@ -61,6 +61,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $widgetSubNode
      * @param array $widgetArray
+     * @return array
      * @throws \LogicException
      */
     protected function processWidgetSubNode($widgetSubNode, $widgetArray)
