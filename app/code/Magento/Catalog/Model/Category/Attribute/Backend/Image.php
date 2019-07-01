@@ -93,7 +93,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                     $basePath,
                     $value[0]['name']
                 );
-                return (FileUploader::getNewFileName($baseImagePath)) ? FileUploader::getNewFileName($baseImagePath) : $value[0]['name'];
+                $image = FileUploader::getNewFileName($this->mediaDirectory->getAbsolutePath($baseImagePath));
+                return ($image) ? $image : $value[0]['name'];
             } else {
                 return $value[0]['name'];
             }
