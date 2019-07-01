@@ -3,12 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * Widget Block Converter
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 namespace Magento\Widget\Model\Config;
 
+/**
+ * Widget Converter Model
+ *
+ * @since 100.0.2
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
-     * {@inheritdoc}
+     * Convert widget xml code into array
+     * 
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -246,7 +258,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ];
 
                 continue;
-            } else if (!isset($depends[$dependencyName]['values'])) {
+            } elseif (!isset($depends[$dependencyName]['values'])) {
                 $depends[$dependencyName]['values'] = [$depends[$dependencyName]['value']];
                 unset($depends[$dependencyName]['value']);
             }
