@@ -49,7 +49,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $widgetId = $widgetAttributes->getNamedItem('id');
             /** @var $widgetSubNode \DOMNode */
             foreach ($widget->childNodes as $widgetSubNode) {
-                $this->processWidgetSubNode($widgetSubNode, $widgetArray);                
+                $this->processWidgetSubNode($widgetSubNode, $widgetArray);
             }
             $widgets[$widgetId->nodeValue] = $widgetArray;
         }
