@@ -5,7 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
+use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
@@ -67,7 +69,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $this->imageUploader = $this->createPartialMock(
             \Magento\Catalog\Model\ImageUploader::class,
-            ['moveFileFromTmp']
+            ['moveFileFromTmp', 'getBasePath']
         );
 
         $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()
@@ -146,8 +148,21 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveAttributeFileName()
     {
-        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
-        $model->setAttribute($this->attribute);
+        $model = $this->setUpModelForAfterSave();
+        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($mediaDirectoryMock);
+        $this->imageUploader->expects($this->once())->method('getBasePath')->willReturn('base/path');
+        $mediaDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('base/path/test123.jpg')
+            ->willReturn('absolute/path/base/path/test123.jpg');
+        $mediaDirectoryMock->expects($this->once())
+            ->method('isExist')
+            ->with('absolute/path/base/path/test123.jpg')
+            ->willReturn(false);
 
         $object = new \Magento\Framework\DataObject([
             'test_attribute' => [
@@ -165,12 +180,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveAttributeFileNameOutsideOfCategoryDir()
     {
-        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
-            'filesystem' => $this->filesystem
-        ]);
-
+        $model = $this->setUpModelForAfterSave();
         $model->setAttribute($this->attribute);
 
+        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($mediaDirectoryMock);
         $this->filesystem
             ->expects($this->once())
             ->method('getUri')
@@ -200,8 +217,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveTemporaryAttribute()
     {
-        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
+        $model = $this->setUpModelForAfterSave();
         $model->setAttribute($this->attribute);
+
+        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($mediaDirectoryMock);
 
         $object = new \Magento\Framework\DataObject([
             'test_attribute' => [
@@ -246,7 +269,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($class, $params = []) use ($imageUploaderMock) {
-                if ($class == \Magento\Catalog\CategoryImageUpload::class) {
+                if ($class == ImageUploader::class) {
                     return $imageUploaderMock;
                 }
 
@@ -255,7 +278,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
             'objectManager' => $objectManagerMock,
-            'logger' => $this->logger
+            'logger' => $this->logger,
+            'filesystem' => $this->filesystem,
         ]);
         $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
 

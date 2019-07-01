@@ -47,8 +47,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         $this->imageUploader = $this->objectManager->create(
             \Magento\Catalog\Model\ImageUploader::class,
             [
-                'baseTmpPath' => $this->mediaDirectory->getRelativePath('tmp'),
-                'basePath' => __DIR__,
+                'baseTmpPath' => $this->mediaDirectory->getRelativePath('catalog/tmp/category'),
+                'basePath' => $this->mediaDirectory->getRelativePath('catalog/category'),
                 'allowedExtensions' => ['jpg', 'jpeg', 'gif', 'png'],
                 'allowedMimeTypes' => ['image/jpg', 'image/jpeg', 'image/gif', 'image/png']
             ]
@@ -77,6 +77,29 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         $this->imageUploader->saveFileToTmpDir('image');
         $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR. $fileName;
         $this->assertTrue(is_file($this->mediaDirectory->getAbsolutePath($filePath)));
+    }
+
+    public function testMoveFileFromTmp(): void
+    {
+        $fileName = 'magento_small_image.jpg';
+        $expectedFileName = 'magento_small_image_1.jpg';
+        $fixtureDir = realpath(__DIR__ . '/../_files');
+        $tmpFilePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR. $fileName;
+        $this->mediaDirectory->create($this->imageUploader->getBaseTmpPath());
+
+        copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $this->mediaDirectory->getAbsolutePath($tmpFilePath));
+
+        $this->imageUploader->moveFileFromTmp($fileName);
+
+        $filePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . $fileName;
+        $this->assertTrue(is_file($this->mediaDirectory->getAbsolutePath($filePath)));
+
+        copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $this->mediaDirectory->getAbsolutePath($tmpFilePath));
+
+        $this->imageUploader->moveFileFromTmp($fileName);
+
+        $expectedFilePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . $expectedFileName;
+        $this->assertTrue(is_file($this->mediaDirectory->getAbsolutePath($expectedFilePath)));
     }
 
     /**
@@ -143,5 +166,6 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete('tmp');
+        $mediaDirectory->delete('catalog');
     }
 }

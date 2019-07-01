@@ -5,7 +5,9 @@
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
+use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\File\Uploader;
 
 /**
  * Catalog category image attribute backend model
@@ -85,6 +87,27 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Check that image name exists in catalog/category directory and return new image name if it already exists.
+     *
+     * @param string $imageName
+     * @return string
+     */
+    private function checkUniqueImageName(string $imageName): string
+    {
+        $imageUploader = $this->getImageUploader();
+        $mediaDirectory = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $imageAbsolutePath = $mediaDirectory->getAbsolutePath(
+            $imageUploader->getBasePath() . DIRECTORY_SEPARATOR . $imageName
+        );
+
+        if ($mediaDirectory->isExist($imageAbsolutePath)) {
+            $imageName = Uploader::getNewFilename($imageAbsolutePath);
+        }
+
+        return $imageName;
+    }
+
+    /**
      * Avoiding saving potential upload data to DB
      * Will set empty image attribute value if image was not uploaded
      *
@@ -103,6 +126,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if ($imageName = $this->getUploadedImageName($value)) {
+            $imageName = $this->checkUniqueImageName($imageName);
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
@@ -113,7 +137,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @return \Magento\Catalog\Model\ImageUploader
+     * @return ImageUploader
      *
      * @deprecated 101.0.0
      */
@@ -121,7 +145,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         if ($this->imageUploader === null) {
             $this->imageUploader = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\CategoryImageUpload::class);
+                ->get(ImageUploader::class);
         }
 
         return $this->imageUploader;
