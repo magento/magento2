@@ -79,20 +79,16 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Gets image name from $value array.
      * Will return empty string in a case when $value is not an array
-     *
      * @param array $value Attribute value
-     *
      * @param string $type Flag based on file location (tmp, base)
-     *
      * @return string
      */
-    private function getUploadedImageName($value, $type = 'tmp')
+    private function getUploadedImageName($value, $type)
     {
         if (is_array($value) && isset($value[0]['name'])) {
             if ($type == 'base') {
                 // Get new filename if file already exists in base directory.
-                $fileName = FileUploader::getNewFileName($this->mediaDirectory->getAbsolutePath($this->getImageUploader()->getFilePath($this->getImageUploader()->getBasePath(), $value[0]['name'])));
-                return ($fileName) ? $fileName : $value[0]['name'];
+                return ($this->getNewFileName($value)) ? $this->getNewFileName($value) : $value[0]['name'];
             } else {
                 return $value[0]['name'];
             }
@@ -101,8 +97,20 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         return '';
     }
     
+    /**
+     * Gets new image name in case image with same name already exists.
+     * @param array $value Attribute value
+     * @return string
+     */
+    protected function getNewFileName($value) {
+        $basePath = $this->getImageUploader()->getBasePath();
+        $baseImagePath = $this->getImageUploader()->getFilePath(
+            $basePath,
+            $value[0]['name']
+        );
+        return FileUploader::getNewFileName($baseImagePath);
+    }
     
-
     /**
      * Avoiding saving potential upload data to DB
      * Will set empty image attribute value if image was not uploaded

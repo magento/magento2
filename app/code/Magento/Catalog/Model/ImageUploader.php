@@ -189,7 +189,6 @@ class ImageUploader
      * Checking file for moving and move it
      *
      * @param string $tmpImageName
-     *
      * @param string $baseImageName
      *
      * @return string
@@ -219,7 +218,7 @@ class ImageUploader
             );
         }
 
-        return $imageName;
+        return $baseImageName;
     }
 
     /**
