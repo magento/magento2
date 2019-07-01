@@ -74,29 +74,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $widgetArray['description'] = $widgetSubNode->nodeValue;
                 break;
             case 'parameters':
-                /** @var $parameter \DOMNode */
-                foreach ($widgetSubNode->childNodes as $parameter) {
-                    if ($parameter->nodeName === '#text' || $parameter->nodeName === '#comment') {
-                        continue;
-                    }
-                    $subNodeAttributes = $parameter->attributes;
-                    $parameterName = $subNodeAttributes->getNamedItem('name')->nodeValue;
-                    $widgetArray['parameters'][$parameterName] = $this->_convertParameter($parameter);
-                }
+                $widgetArray = $this->processParameters($widgetSubNode, $widgetArray);
                 break;
             case 'containers':
-                if (!isset($widgetArray['supported_containers'])) {
-                    $widgetArray['supported_containers'] = [];
-                }
-                foreach ($widgetSubNode->childNodes as $container) {
-                    if ($container->nodeName === '#text' || $container->nodeName === '#comment') {
-                        continue;
-                    }
-                    $widgetArray['supported_containers'] = array_merge(
-                        $widgetArray['supported_containers'],
-                        $this->_convertContainer($container)
-                    );
-                }
+                $widgetArray = $this->processContainers($widgetSubNode, $widgetArray);
                 break;
             case "#text":
                 break;
@@ -112,6 +93,51 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
 
         return $widgetArray;
+    }
+
+    /**
+     * Convert dom sub node to Magento array
+     *
+     * @param \DOMNode $widgetSubNode
+     * @param array $widgetArray
+     * @return array
+     */
+    protected function processParameters($widgetSubNode, $widgetArray)
+    {
+        /** @var $parameter \DOMNode */
+        foreach ($widgetSubNode->childNodes as $parameter) {
+            if ($parameter->nodeName === '#text' || $parameter->nodeName === '#comment') {
+                continue;
+            }
+            $subNodeAttributes = $parameter->attributes;
+            $parameterName = $subNodeAttributes->getNamedItem('name')->nodeValue;
+            $widgetArray['parameters'][$parameterName] = $this->_convertParameter($parameter);
+        }
+
+        return $widgetArray;
+    }
+
+    /**
+     * Convert dom sub node to Magento array
+     *
+     * @param \DOMNode $widgetSubNode
+     * @param array $widgetArray
+     * @return array
+     */
+    protected function processContainers($widgetSubNode, $widgetArray)
+    {
+        if (!isset($widgetArray['supported_containers'])) {
+            $widgetArray['supported_containers'] = [];
+        }
+        foreach ($widgetSubNode->childNodes as $container) {
+            if ($container->nodeName === '#text' || $container->nodeName === '#comment') {
+                continue;
+            }
+            $widgetArray['supported_containers'] = array_merge(
+                $widgetArray['supported_containers'],
+                $this->_convertContainer($container)
+            );
+        }
     }
 
     /**
