@@ -26,6 +26,6 @@
         </after>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <actionGroup ref="EnableAuthorizenetAcceptjs" stepKey="enableAuthorizenetAcceptjs"/>
-        <actionGroup ref="AssertAuthorizenetAcceptjsRequiredFieldsValidationArePresentOnSave" stepKey="assertErrorMessages"/>
+        <actionGroup ref="AssertAuthorizenetAcceptjsRequiredFieldsValidationIsPresentOnSave" stepKey="assertErrorMessages"/>
     </test>
 </tests>
