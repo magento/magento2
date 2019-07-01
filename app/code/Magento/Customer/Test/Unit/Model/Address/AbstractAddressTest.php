@@ -95,7 +95,8 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
                 'regionFactory' => $this->regionFactoryMock,
                 'countryFactory' => $this->countryFactoryMock,
                 'resource' => $this->resourceMock,
-                'resourceCollection' => $this->resourceCollectionMock
+                'resourceCollection' => $this->resourceCollectionMock,
+                'escaper' => $this->objectManager->getObject(\Magento\Framework\Escaper::class)
             ]
         );
     }
