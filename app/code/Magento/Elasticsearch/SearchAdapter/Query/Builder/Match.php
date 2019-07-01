@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
@@ -80,7 +82,8 @@ class Match implements QueryInterface
      */
     public function build(array $selectQuery, RequestQueryInterface $requestQuery, $conditionType)
     {
-        $queryValue = $this->prepareQuery($requestQuery->getValue(), $conditionType);
+        $preparedValue = $this->prepareValue($requestQuery->getValue());
+        $queryValue = $this->prepareQuery($preparedValue, $conditionType);
         $queries = $this->buildQueries($requestQuery->getMatches(), $queryValue);
         $requestQueryBoost = $requestQuery->getBoost() ?: 1;
         foreach ($queries as $query) {
@@ -111,6 +114,19 @@ class Match implements QueryInterface
             'condition' => $condition,
             'value' => $queryValue,
         ];
+    }
+
+    /**
+     * Removes special query characters which are cause of mysql error: '(', ')', '?'
+     *
+     * @param string $queryValue
+     * @return string
+     */
+    private function prepareValue($queryValue)
+    {
+        $pattern = '/(\(|\)|\?)/';
+        $replace = '';
+        return preg_replace($pattern, $replace, $queryValue);
     }
 
     /**
