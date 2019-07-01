@@ -843,10 +843,11 @@ class ConfigurableProductsFixture extends Fixture
             $minAmountOfWordsDescription,
             $descriptionPrefix
         ) {
-            $count = $searchTerms === null
+            $countSearchTerms = is_array($searchTerms) ? count($searchTerms) : 0;
+            $count = !$searchTerms
                 ? 0
                 : round(
-                    $searchTerms[$index % count($searchTerms)]['count'] * (
+                    $searchTerms[$index % $countSearchTerms]['count'] * (
                         $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
                     )
                 );
@@ -856,8 +857,8 @@ class ConfigurableProductsFixture extends Fixture
                 $maxAmountOfWordsDescription,
                 $descriptionPrefix . '-' . $index
             ) .
-            ($index <= ($count * count($searchTerms)) ? ' ' .
-            $searchTerms[$index % count($searchTerms)]['term'] : '');
+            ($index <= ($count * $countSearchTerms) ? ' ' .
+            $searchTerms[$index % $countSearchTerms]['term'] : '');
         };
     }
 
