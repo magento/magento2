@@ -222,7 +222,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/options',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
