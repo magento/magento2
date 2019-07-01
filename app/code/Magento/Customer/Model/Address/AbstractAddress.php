@@ -120,6 +120,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -136,6 +141,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Escaper|null $escaper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -154,7 +160,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -166,6 +173,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
         parent::__construct(
             $context,
             $registry,
@@ -629,7 +639,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
                     'Invalid value of "%value" provided for the %fieldName field.',
                     [
                         'fieldName' => 'countryId',
-                        'value' => htmlspecialchars($countryId)
+                        'value' => $this->escaper->escapeHtml($countryId)
                     ]
                 );
             } else {
@@ -654,7 +664,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
                         'Invalid value of "%value" provided for the %fieldName field.',
                         [
                             'fieldName' => 'regionId',
-                            'value' => htmlspecialchars($regionId)
+                            'value' => $this->escaper->escapeHtml($regionId)
                         ]
                     );
                 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Translation\Model\Js;
 
 use Magento\Framework\App\AreaList;
@@ -85,13 +86,13 @@ class PreProcessor implements PreProcessorInterface
     }
 
     /**
-     * Replace callback for preg_replace_callback function
+     * Replace callback for preg_replace_callback function.
      *
      * @param array $matches
      * @return string
      */
     protected function replaceCallback($matches)
     {
-        return '"' . __($matches[1]) . '"';
+        return '\'' . __($matches['translate']) . '\'';
     }
 }
