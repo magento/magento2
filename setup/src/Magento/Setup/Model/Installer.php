@@ -363,6 +363,7 @@ class Installer
         foreach ($script as $item) {
             list($message, $method, $params) = $item;
             $this->log->log($message);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             call_user_func_array([$this, $method], $params);
             $this->logProgress();
         }
@@ -1247,6 +1248,7 @@ class Installer
         $cacheManager->clean($enabledTypes);
 
         $this->log->log('Current status:');
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->log->log(print_r($cacheManager->getStatus(), true));
     }
 
