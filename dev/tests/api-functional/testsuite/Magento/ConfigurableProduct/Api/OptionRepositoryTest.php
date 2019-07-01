@@ -219,7 +219,6 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
     public function testUpdateWithoutOptionId()
     {
         $productSku = 'configurable';
-        $configurableAttribute = $this->getConfigurableAttribute($productSku);
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/options',
