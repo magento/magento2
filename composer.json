@@ -38,7 +38,7 @@
         "elasticsearch/elasticsearch": "~2.0|~5.1|~6.1",
         "magento/composer": "dev-master",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "~1.14.1",
+        "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^1.17",
         "wikimedia/less.php": "~1.8.0",
         "paragonie/sodium_compat": "^1.6",
@@ -334,10 +334,14 @@
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
         }
     },
-        "repositories": [
+    "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/magento/composer"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/magento-techdivision/zf1.git"
         }
     ],
     "prefer-stable": true
