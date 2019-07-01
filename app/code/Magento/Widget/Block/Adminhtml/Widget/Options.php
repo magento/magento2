@@ -237,7 +237,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * get css classes from xml to apply for validation and/or css styles
+     * Get css classes from xml to apply for validation and/or css styles
      *
      * @param \Magento\Framework\DataObject $parameter
      * @return string
