@@ -77,7 +77,7 @@ class Data extends \Magento\Framework\View\Element\Template
      */
     public function getLoadrRegionUrl()
     {
-        return $this->getUrl('directory/json/childRegion');
+        return $this->getUrl('directory/json/countryRegion');
     }
 
     /**
