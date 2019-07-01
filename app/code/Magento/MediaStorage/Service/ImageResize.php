@@ -152,12 +152,12 @@ class ImageResize
      */
     public function resizeFromThemes(array $themes = null): \Generator
     {
-        $count = $this->productImage->getCountAllProductImages();
+        $count = $this->productImage->getCountUsedProductImages();
         if (!$count) {
             throw new NotFoundException(__('Cannot resize images - product images not found'));
         }
 
-        $productImages = $this->productImage->getAllProductImages();
+        $productImages = $this->productImage->getUsedProductImages();
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
 
         foreach ($productImages as $image) {
@@ -202,10 +202,12 @@ class ImageResize
         $viewImages = [];
         /** @var \Magento\Theme\Model\Theme $theme */
         foreach ($themes as $theme) {
-            $config = $this->viewConfig->getViewConfig([
-                'area' => Area::AREA_FRONTEND,
-                'themeModel' => $theme,
-            ]);
+            $config = $this->viewConfig->getViewConfig(
+                [
+                    'area' => Area::AREA_FRONTEND,
+                    'themeModel' => $theme,
+                ]
+            );
             $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
             foreach ($images as $imageId => $imageData) {
                 $uniqIndex = $this->getUniqueImageIndex($imageData);
@@ -226,6 +228,7 @@ class ImageResize
     {
         ksort($imageData);
         unset($imageData['type']);
+        // phpcs:disable Magento2.Security.InsecureFunction
         return md5(json_encode($imageData));
     }
 
