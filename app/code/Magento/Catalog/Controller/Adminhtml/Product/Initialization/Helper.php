@@ -17,10 +17,9 @@ use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
+use Magento\Framework\Escaper;
 
 /**
- * Product helper
- *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -97,6 +96,11 @@ class Helper
     private $attributeFilter;
 
     /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\RequestInterface $request
@@ -105,6 +109,7 @@ class Helper
      * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param Escaper $escaper
      * @param CustomOptionFactory|null $customOptionFactory
      * @param ProductLinkFactory|null $productLinkFactory
      * @param ProductRepositoryInterface|null $productRepository
@@ -119,6 +124,7 @@ class Helper
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        Escaper $escaper,
         CustomOptionFactory $customOptionFactory = null,
         ProductLinkFactory $productLinkFactory = null,
         ProductRepositoryInterface $productRepository = null,
@@ -131,7 +137,7 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
-
+        $this->escaper = $escaper;
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->customOptionFactory = $customOptionFactory ?: $objectManager->get(CustomOptionFactory::class);
         $this->productLinkFactory = $productLinkFactory ?: $objectManager->get(ProductLinkFactory::class);
@@ -271,7 +277,7 @@ class Helper
                     $link->setSku($product->getSku())
                         ->setLinkedProductSku($linkProduct->getSku())
                         ->setLinkType($linkType)
-                        ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
+                        ->setPosition(isset($linkData['position']) ? $this->escaper->escapeHtml(trim($linkData['position'])) : 0);
                     $productLinks[] = $link;
                 }
             }
@@ -367,10 +373,8 @@ class Helper
     }
 
     /**
-     * Get link resolver instance
-     *
      * @return LinkResolver
-     * @deprecated 101.0.0
+     * @deprecated 102.0.0
      */
     private function getLinkResolver()
     {
@@ -381,10 +385,8 @@ class Helper
     }
 
     /**
-     * Get DateTimeFilter instance
-     *
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     * @deprecated 101.0.0
+     * @deprecated 102.0.0
      */
     private function getDateTimeFilter()
     {
@@ -397,7 +399,6 @@ class Helper
 
     /**
      * Remove ids of non selected websites from $websiteIds array and return filtered data
-     *
      * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
      * Only one id (default website ID) will be set to $websiteIds array when the single store mode is turned on
      *
@@ -470,7 +471,6 @@ class Helper
     private function convertSpecialFromDateStringToObject($productData)
     {
         if (isset($productData['special_from_date']) && $productData['special_from_date'] != '') {
-            $productData['special_from_date'] = $this->getDateTimeFilter()->filter($productData['special_from_date']);
             $productData['special_from_date'] = new \DateTime($productData['special_from_date']);
         }
 
