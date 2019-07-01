@@ -16,7 +16,7 @@
  *
  */
 /* @var $block \Magento\Backend\Block\Widget\Grid */
-$numColumns = ($block->getColumns() !== null) ? count($block->getColumns()) : 0;
+$numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
 ?>
 <?php if ($block->getCollection()) : ?>
     <?php if ($block->canDisplayContainer()) : ?>
