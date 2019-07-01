@@ -14498,7 +14498,7 @@ vars.putObject("product_attributes", attributes);
       <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
         <stringProp name="RegexExtractor.useHeaders">false</stringProp>
         <stringProp name="RegexExtractor.refname">attribute_set_id</stringProp>
-        <stringProp name="RegexExtractor.regex">catalog&amp;#x2F;product_set&amp;#x2F;edit&amp;#x2F;id&amp;#x2F;([\d]+)&amp;#x2F;"[\D\d]*Attribute Set 1</stringProp>
+        <stringProp name="RegexExtractor.regex">catalog\/product_set\/edit\/id\/([\d]+)\/"[\D\d]*Attribute Set 1</stringProp>
         <stringProp name="RegexExtractor.template">$1$</stringProp>
         <stringProp name="RegexExtractor.default"/>
         <stringProp name="RegexExtractor.match_number">1</stringProp>
