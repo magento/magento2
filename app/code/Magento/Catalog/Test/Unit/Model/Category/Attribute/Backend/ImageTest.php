@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
-use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
@@ -269,7 +268,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($class, $params = []) use ($imageUploaderMock) {
-                if ($class == ImageUploader::class) {
+                if ($class == \Magento\Catalog\CategoryImageUpload::class) {
                     return $imageUploaderMock;
                 }
 

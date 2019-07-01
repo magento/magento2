@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
-use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Uploader;
 
@@ -137,7 +136,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @return ImageUploader
+     * @return \Magento\Catalog\Model\ImageUploader
      *
      * @deprecated 101.0.0
      */
@@ -145,7 +144,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         if ($this->imageUploader === null) {
             $this->imageUploader = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(ImageUploader::class);
+                ->get(\Magento\Catalog\CategoryImageUpload::class);
         }
 
         return $this->imageUploader;
