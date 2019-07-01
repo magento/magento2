@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -19,7 +16,7 @@
  *
  */
 /* @var $block \Magento\Backend\Block\Widget\Grid */
-$numColumns = !is_null($block->getColumns()) ? sizeof($block->getColumns()) : 0;
+$numColumns = !is_null($block->getColumns()) ? count($block->getColumns()) : 0;
 ?>
 <?php if ($block->getCollection()) : ?>
     <?php if ($block->canDisplayContainer()) : ?>
