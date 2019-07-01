@@ -51,7 +51,7 @@ class Form extends ReportsBlockFilterForm
     /**
      * @inheritdoc
      */
-    protected function _prepareForm()
+    public function _prepareForm()
     {
         parent::_prepareForm();
         /** @var Fieldset $fieldset */

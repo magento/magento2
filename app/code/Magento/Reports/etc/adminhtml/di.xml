@@ -36,4 +36,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Reports\Block\Adminhtml\Bestsellers\Filter\Form">
+        <arguments>
+            <argument name="itemSortLimit" xsi:type="array">
+                <item name="5" xsi:type="number">5</item>
+                <item name="10" xsi:type="number">10</item>
+                <item name="20" xsi:type="number">20</item>
+                <item name="50" xsi:type="number">50</item>
+                <item name="100" xsi:type="number">100</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

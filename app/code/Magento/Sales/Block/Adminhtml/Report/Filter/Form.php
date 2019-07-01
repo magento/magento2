@@ -21,8 +21,6 @@ use Magento\Reports\Block\Adminhtml\Filter\Form as ReportsBlockFilterForm;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since      100.0.2
- * @deprecated
- * @see        \Magento\Reports\Block\Adminhtml\Bestsellers\Filter\Form
  */
 class Form extends ReportsBlockFilterForm
 {
@@ -139,6 +137,9 @@ class Form extends ReportsBlockFilterForm
      * Element for setting bestsellers limit
      *
      * @param Fieldset $fieldset
+     *
+     * @deprecated
+     * @see \Magento\Reports\Block\Adminhtml\Bestsellers\Filter\Form
      */
     private function setBestsellersItemLimit(Fieldset $fieldset)
     {
