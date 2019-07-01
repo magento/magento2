@@ -118,7 +118,9 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)->getMockForAbstractClass();
-        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)->getMock();
+        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
