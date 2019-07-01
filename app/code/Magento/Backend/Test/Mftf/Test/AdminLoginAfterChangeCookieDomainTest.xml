@@ -20,12 +20,12 @@
             <group value="backend"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set web/cookie/cookie_domain --scope=website --scope-code=base testDomain.com" stepKey="changeDomainForMainWebsiteBeforeTestRun"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheBeforeTestRun"/>
+            <magentoCLI command="config:set {{ChangedCookieDomainForMainWebsiteConfigData.path}} --scope={{ChangedCookieDomainForMainWebsiteConfigData.scope}} --scope-code={{ChangedCookieDomainForMainWebsiteConfigData.scope_code}} {{ChangedCookieDomainForMainWebsiteConfigData.value}}" stepKey="changeDomainForMainWebsiteBeforeTestRun"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
         </before>
         <after>
-            <magentoCLI command="config:set web/cookie/cookie_domain --scope=website --scope-code=base ''" stepKey="changeDomainForMainWebsiteAfterTestComplete"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheAfterTestComplete"/>
+            <magentoCLI command="config:set {{EmptyCookieDomainForMainWebsiteConfigData.path}} --scope={{EmptyCookieDomainForMainWebsiteConfigData.scope}} --scope-code={{EmptyCookieDomainForMainWebsiteConfigData.scope_code}} {{EmptyCookieDomainForMainWebsiteConfigData.value}}" stepKey="changeDomainForMainWebsiteAfterTestComplete"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestComplete"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
