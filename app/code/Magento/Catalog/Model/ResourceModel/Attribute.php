@@ -81,23 +81,6 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
     }
 
     /**
-     * Perform actions before object delete
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
-    {
-        if (!$object->getIsUserDefined()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Cannot delete system defined attribute')
-            );
-        } 
-    
-        return parent::_beforeDelete($object);     
-    }
-
-    /**
      * Clear useless attribute values
      *
      * @param  \Magento\Framework\Model\AbstractModel $object

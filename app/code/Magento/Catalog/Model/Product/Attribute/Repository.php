@@ -186,6 +186,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     public function delete(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
+        if (!$attribute->getIsUserDefined()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Cannot delete system defined attribute')
+            );
+        }
         $this->attributeResource->delete($attribute);
         return true;
     }
