@@ -138,6 +138,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $this->_convertContainer($container)
             );
         }
+
+        return $widgetArray;
     }
 
     /**
