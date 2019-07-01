@@ -18,7 +18,8 @@
         </annotations>
 
         <before>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
             <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createDownloadableProduct"/>
@@ -49,7 +50,7 @@
         <!--Assert Shopping Cart Summary-->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="AssertCartSummary" >
             <argument name="subtotal" value="$123.00"/>
-            <argument name="total" value="$123.00"/>
+            <argument name="total" value="123.00"/>
         </actionGroup>
 
         <!--Assert Product Details In Checkout cart -->
