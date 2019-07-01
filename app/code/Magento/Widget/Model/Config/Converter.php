@@ -20,7 +20,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Convert widget xml code into array
-     * 
+     *
+     * @param \DOMNode $source
+     * @return array
+     * @throws \LogicException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
