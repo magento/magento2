@@ -3,9 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
 ?>
 <?php
@@ -17,7 +15,7 @@ $currencySymbol = $block->getCurrencySymbol();
 <div id="product-variations-matrix" data-role="product-variations-matrix">
     <div data-bind="scope: 'configurableVariations'">
         <h3 class="hidden" data-bind="css: {hidden: !showVariations() }" class="title">
-            <?= /* @escapeNotVerified */ __('Current Variations') ?>
+            <?= $block->escapeHtml(__('Current Variations')) ?>
         </h3>
 
         <script data-template-for="variation-image" type="text/x-magento-template">
@@ -47,22 +45,22 @@ $currencySymbol = $block->getCurrencySymbol();
                         <thead>
                             <tr>
                                 <th class="data-grid-th data-grid-thumbnail-cell col-image" data-column="image">
-                                    <?= /* @escapeNotVerified */  __('Image') ?>
+                                    <?= $block->escapeHtml(__('Image')) ?>
                                 </th>
                                 <th class="data-grid-th col-name" data-column="name">
-                                    <?= /* @escapeNotVerified */  __('Name') ?>
+                                    <?= $block->escapeHtml(__('Name')) ?>
                                 </th>
                                 <th class="data-grid-th col-sku" data-column="sku">
-                                    <?= /* @escapeNotVerified */  __('SKU') ?>
+                                    <?= $block->escapeHtml(__('SKU')) ?>
                                 </th>
                                 <th class="data-grid-th col-price" data-column="price">
-                                    <?= /* @escapeNotVerified */  __('Price') ?>
+                                    <?= $block->escapeHtml(__('Price')) ?>
                                 </th>
                                 <th class="data-grid-th col-qty" data-column="qty">
-                                    <?= /* @escapeNotVerified */  __('Quantity') ?>
+                                    <?= $block->escapeHtml(__('Quantity')) ?>
                                 </th>
                                 <th class="data-grid-th col-weight" data-column="weight">
-                                    <?= /* @escapeNotVerified */  __('Weight') ?>
+                                    <?= $block->escapeHtml(__('Weight')) ?>
                                 </th>
                                 <!-- ko foreach: getAttributesOptions() -->
                                     <th data-bind="attr: {class:'data-grid-th col-' + $data.attribute_code},
@@ -70,7 +68,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                     </th>
                                 <!-- /ko -->
                                 <th class="data-grid-th">
-                                    <?= /* @escapeNotVerified */  __('Actions') ?>
+                                    <?= $block->escapeHtml(__('Actions')) ?>
                                 </th>
                             </tr>
                         </thead>
@@ -88,7 +86,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                                 <input type="hidden" data-bind="
                                                     attr: {id: $parent.getRowId(variation, 'image'),
                                                     name: $parent.getVariationRowName(variation, 'image')}"/>
-                                                <span><?= /* @escapeNotVerified */  __('Upload Image') ?></span>
+                                                <span><?= $block->escapeHtml(__('Upload Image')) ?></span>
                                                 <input name="image" type="file"
                                                        data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
                                                        title="<?= $block->escapeHtml(__('Upload image')) ?>"/>
@@ -102,11 +100,11 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <!-- /ko -->
                                         <button type="button" class="action toggle no-display" data-toggle="dropdown"
                                                 data-mage-init='{"dropdown":{}}'>
-                                            <span><?= /* @escapeNotVerified */  __('Select') ?></span>
+                                            <span><?= $block->escapeHtml(__('Select')) ?></span>
                                         </button>
                                         <ul class="dropdown">
                                             <li>
-                                                <a class="item" data-action="no-image"><?= /* @escapeNotVerified */  __('No Image') ?></a>
+                                                <a class="item" data-action="no-image"><?= $block->escapeHtml(__('No Image')) ?></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -208,7 +206,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                                     "
                                                    data-action="choose"
                                                    href="#">
-                                                    <?= /* @escapeNotVerified */  __('Choose a different Product') ?>
+                                                    <?= $block->escapeHtml(__('Choose a different Product')) ?>
                                                 </a>
                                             </li>
                                             <li>
@@ -219,7 +217,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                             </li>
                                             <li>
                                                 <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
-                                                    <?= /* @escapeNotVerified */  __('Remove Product') ?>
+                                                    <?= $block->escapeHtml(__('Remove Product')) ?>
                                                 </a>
                                             </li>
                                         </ul>
@@ -233,15 +231,14 @@ $currencySymbol = $block->getCurrencySymbol();
         <!-- /ko -->
     </div>
     <div data-role="step-wizard-dialog"
-         data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= /* @escapeNotVerified */  __('Create Product Configurations') ?>",
+         data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= $block->escapeJs(__('Create Product Configurations')) ?>",
          "buttons":[]}}'
          class="no-display">
-        <?php
-        /* @escapeNotVerified */ echo $block->getVariationWizard([
+        <?= /* @noEscape */ $block->getVariationWizard([
             'attributes' => $attributes,
             'configurations' => $productMatrix
         ]);
-        ?>
+?>
     </div>
 </div>
 
@@ -252,8 +249,8 @@ $currencySymbol = $block->getCurrencySymbol();
                 "components": {
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
-                        "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
-                        "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
+                        "variations": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($productMatrix) ?>,
+                        "productAttributes": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($attributes) ?>,
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
                         "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
                         "configurableProductGrid": "configurableProductGrid"

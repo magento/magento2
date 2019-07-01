@@ -41,6 +41,18 @@
         <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
         <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad" />
     </actionGroup>
+
+    <actionGroup name="StorefrontFillRegistrationFormActionGroup" extends="StorefrontCreateCustomerSignedUpNewsletterActionGroup">
+        <remove keyForRemoval="checkSignUpForNewsletter"/>
+        <remove keyForRemoval="clickCreateAccountButton"/>
+        <remove keyForRemoval="waitForCreateAccountButtonToLoad"/>
+    </actionGroup>
+
+    <actionGroup name="SaveRegistrationFormActionGroup">
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad" />
+    </actionGroup>
+
     <actionGroup name="AssertSignedUpNewsletterActionGroup">
         <arguments>
             <argument name="customer" defaultValue="CustomerEntityOne"/>
@@ -57,7 +69,7 @@
         <arguments>
             <argument name="Address"/>
         </arguments>
-        
+
         <amOnPage url="customer/address/new/" stepKey="goToAddressPage"/>
         <waitForPageLoad stepKey="waitForAddressPage"/>
         <fillField stepKey="fillFirstName" selector="{{StorefrontCustomerAddressSection.firstName}}" userInput="{{Address.firstname}}"/>
