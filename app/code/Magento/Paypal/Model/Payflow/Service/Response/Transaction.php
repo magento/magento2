@@ -11,7 +11,6 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
-use Magento\Framework\Session\Generic;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Paypal\Model\Payflow\Transparent;
@@ -25,11 +24,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  */
 class Transaction
 {
-    /**
-     * @var Generic
-     */
-    protected $sessionTransparent;
-
     /**
      * @var CartRepositoryInterface
      */
@@ -61,7 +55,6 @@ class Transaction
     private $dateTimeFactory;
 
     /**
-     * @param Generic $sessionTransparent
      * @param CartRepositoryInterface $quoteRepository
      * @param Transparent $transparent
      * @param PaymentMethodManagementInterface $paymentManagement
@@ -70,7 +63,6 @@ class Transaction
      * @param DateTimeFactory $dateTimeFactory
      */
     public function __construct(
-        Generic $sessionTransparent,
         CartRepositoryInterface $quoteRepository,
         Transparent $transparent,
         PaymentMethodManagementInterface $paymentManagement,
@@ -78,7 +70,6 @@ class Transaction
         Logger $logger,
         DateTimeFactory $dateTimeFactory
     ) {
-        $this->sessionTransparent = $sessionTransparent;
         $this->quoteRepository = $quoteRepository;
         $this->transparent = $transparent;
         $this->paymentManagement = $paymentManagement;
@@ -111,13 +102,13 @@ class Transaction
      * Saves payment information in quote.
      *
      * @param DataObject $response
+     * @param int $cartId
      * @return void
      * @throws \InvalidArgumentException
      */
-    public function savePaymentInQuote($response)
+    public function savePaymentInQuote($response, $cartId)
     {
-        $quote = $this->quoteRepository->get($this->sessionTransparent->getQuoteId());
-
+        $quote = $this->quoteRepository->get($cartId);
         $payment = $this->paymentManagement->get($quote->getId());
         if (!$payment instanceof Payment) {
             throw new \InvalidArgumentException("Variable must contain instance of \\Quote\\Payment.");

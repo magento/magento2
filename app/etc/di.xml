@@ -65,6 +65,7 @@
     <preference for="Magento\Framework\Config\CacheInterface" type="Magento\Framework\App\Cache\Type\Config" />
     <preference for="Magento\Framework\Config\ValidationStateInterface" type="Magento\Framework\App\Arguments\ValidationState" />
     <preference for="Magento\Framework\Module\ModuleListInterface" type="Magento\Framework\Module\ModuleList" />
+    <preference for="Magento\Framework\Module\ModuleManagerInterface" type="Magento\Framework\Module\Manager" />
     <preference for="Magento\Framework\Component\ComponentRegistrarInterface" type="Magento\Framework\Component\ComponentRegistrar"/>
     <preference for="Magento\Framework\Event\ConfigInterface" type="Magento\Framework\Event\Config" />
     <preference for="Magento\Framework\Event\InvokerInterface" type="Magento\Framework\Event\Invoker\InvokerDefault" />
@@ -760,6 +761,7 @@
                 <item name="extensionInterface" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator</item>
                 <item name="extension" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator</item>
                 <item name="remote" xsi:type="string">\Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator</item>
+                <item name="proxyDeferred" xsi:type="string">\Magento\Framework\Async\Code\Generator\ProxyDeferredGenerator</item>
             </argument>
         </arguments>
     </type>
@@ -1764,6 +1766,7 @@
             <argument name="delayTimeout" xsi:type="number">20</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\HTTP\AsyncClientInterface" type="Magento\Framework\HTTP\AsyncClient\GuzzleAsyncClient" />
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompare"/>
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPut"/>
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillRead"/>
