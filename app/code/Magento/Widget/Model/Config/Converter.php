@@ -49,7 +49,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $widgetId = $widgetAttributes->getNamedItem('id');
             /** @var $widgetSubNode \DOMNode */
             foreach ($widget->childNodes as $widgetSubNode) {
-                $this->processWidgetSubNode($widgetSubNode, $widgetArray);
+                $widgetArray = $this->processWidgetSubNode($widgetSubNode, $widgetArray);
             }
             $widgets[$widgetId->nodeValue] = $widgetArray;
         }
@@ -63,7 +63,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $widgetArray
      * @throws \LogicException
      */
-    protected function processWidgetSubNode($widgetSubNode, &$widgetArray)
+    protected function processWidgetSubNode($widgetSubNode, $widgetArray)
     {
         switch ($widgetSubNode->nodeName) {
             case 'label':
@@ -109,6 +109,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     )
                 );
         }
+
+        return $widgetArray;
     }
 
     /**
