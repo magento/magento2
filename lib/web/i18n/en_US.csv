@@ -30,6 +30,7 @@ Submit,Submit
 "No marginal white space please","No marginal white space please"
 "Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx","Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx"
 "A positive or negative non-decimal number please","A positive or negative non-decimal number please"
+"A positive non-decimal number please","A positive non-decimal number please"
 "The specified vehicle identification number (VIN) is invalid.","The specified vehicle identification number (VIN) is invalid."
 "Please enter a correct date","Please enter a correct date"
 "Please enter a valid time, between 00:00 and 23:59","Please enter a valid time, between 00:00 and 23:59"
