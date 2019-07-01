@@ -20,12 +20,12 @@
             <group value="backend"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set web/cookie/cookie_domain --scope=website --scope-code=base testDomain.com" stepKey="changeDomainForMainWebsite"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="config:set web/cookie/cookie_domain --scope=website --scope-code=base testDomain.com" stepKey="changeDomainForMainWebsiteBeforeTestRun"/>
+            <magentoCLI command="cache:flush" stepKey="flushCacheBeforeTestRun"/>
         </before>
         <after>
-            <magentoCLI command="config:set web/cookie/cookie_domain --scope=website --scope-code=base ''" stepKey="changeDomainForMainWebsite"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="config:set web/cookie/cookie_domain --scope=website --scope-code=base ''" stepKey="changeDomainForMainWebsiteAfterTestComplete"/>
+            <magentoCLI command="cache:flush" stepKey="flushCacheAfterTestComplete"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
