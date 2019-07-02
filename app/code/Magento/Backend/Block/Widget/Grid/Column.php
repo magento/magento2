@@ -338,7 +338,7 @@ class Column extends Widget
         }
 
         $renderedValue = str_replace("\r\n", " > ", trim($renderedValue));
-        $renderedValue = str_replace("   ", "", $renderedValue);
+        $renderedValue = str_replace("   ", "", $renderedValue); 
 
         return $renderedValue;
     }
