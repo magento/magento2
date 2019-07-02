@@ -8,6 +8,10 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Class OrderCancelTest
+ * @package Magento\Sales\Service\V1
+ */
 class OrderCancelTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
