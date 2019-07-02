@@ -58,7 +58,7 @@
         <actionGroup ref="VerifyDiscountAmount" stepKey="verifyStorefront">
             <argument name="productUrl" value="{{_defaultProduct.urlKey}}.html"/>
             <argument name="quantity" value="2"/>
-            <argument name="expectedDiscount" value="-$20.00"/>
+            <argument name="expectedDiscount" value="-$10.00"/>
         </actionGroup>
     </test>
 </tests>
