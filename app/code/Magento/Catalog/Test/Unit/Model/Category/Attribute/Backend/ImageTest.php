@@ -8,6 +8,10 @@ namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
+/**
+ * Test for Magento\Catalog\Model\Category\Attribute\Backend\Image class.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -96,9 +100,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => $value
-        ]);
+        $object = new \Magento\Framework\DataObject(['test_attribute' => $value]);
 
         $model->beforeSave($object);
 
@@ -133,9 +135,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => $value
-        ]);
+        $object = new \Magento\Framework\DataObject(['test_attribute' => $value]);
 
         $model->beforeSave($object);
 
@@ -163,11 +163,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with('absolute/path/base/path/test123.jpg')
             ->willReturn(false);
 
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => [
-                ['name' => 'test123.jpg']
+        $object = new \Magento\Framework\DataObject(
+            [
+                'test_attribute' => [
+                    ['name' => 'test123.jpg'],
+                ],
             ]
-        ]);
+        );
 
         $model->beforeSave($object);
 
@@ -193,14 +195,16 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn('pub/media');
 
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => [
-                [
-                    'name' => '/test123.jpg',
-                    'url' => '/pub/media/wysiwyg/test123.jpg',
-                ]
+        $object = new \Magento\Framework\DataObject(
+            [
+                'test_attribute' => [
+                    [
+                        'name' => '/test123.jpg',
+                        'url' => '/pub/media/wysiwyg/test123.jpg',
+                    ],
+                ],
             ]
-        ]);
+        );
 
         $model->beforeSave($object);
 
@@ -225,17 +229,22 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($mediaDirectoryMock);
 
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => [
-                ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']
+        $object = new \Magento\Framework\DataObject(
+            [
+                'test_attribute' => [
+                    ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg'],
+                ],
             ]
-        ]);
+        );
 
         $model->beforeSave($object);
 
-        $this->assertEquals([
-            ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg']
-        ], $object->getData('_additional_data_test_attribute'));
+        $this->assertEquals(
+            [
+                ['name' => 'test123.jpg', 'tmp_name' => 'abc123', 'url' => 'http://www.example.com/test123.jpg'],
+            ],
+            $object->getData('_additional_data_test_attribute')
+        );
     }
 
     /**
@@ -246,9 +255,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class);
         $model->setAttribute($this->attribute);
 
-        $object = new \Magento\Framework\DataObject([
-            'test_attribute' => 'test123.jpg'
-        ]);
+        $object = new \Magento\Framework\DataObject(['test_attribute' => 'test123.jpg']);
 
         $model->beforeSave($object);
 
@@ -267,19 +274,26 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($class, $params = []) use ($imageUploaderMock) {
-                if ($class == \Magento\Catalog\CategoryImageUpload::class) {
-                    return $imageUploaderMock;
-                }
+            ->will(
+                $this->returnCallback(
+                    function ($class, $params = []) use ($imageUploaderMock) {
+                        if ($class == \Magento\Catalog\CategoryImageUpload::class) {
+                            return $imageUploaderMock;
+                        }
 
-                return $this->objectManager->get($class, $params);
-            }));
+                        return $this->objectManager->get($class, $params);
+                    }
+                )
+            );
 
-        $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category\Attribute\Backend\Image::class, [
-            'objectManager' => $objectManagerMock,
-            'logger' => $this->logger,
-            'filesystem' => $this->filesystem,
-        ]);
+        $model = $this->objectManager->getObject(
+            \Magento\Catalog\Model\Category\Attribute\Backend\Image::class,
+            [
+                'objectManager' => $objectManagerMock,
+                'logger' => $this->logger,
+                'filesystem' => $this->filesystem,
+            ]
+        );
         $this->objectManager->setBackwardCompatibleProperty($model, 'imageUploader', $this->imageUploader);
 
         return $model->setAttribute($this->attribute);
