@@ -201,13 +201,15 @@ class ImageUploader
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
 
-        $baseImagePath = $this->getFilePath($basePath, $imageName);
+        $baseImagePath = $this->getFilePath(
+            $basePath,
+            Uploader::getNewFileName(
+                $this->mediaDirectory->getAbsolutePath(
+                    $this->getFilePath($basePath, $imageName)
+                )
+            )
+        );
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
-
-        if ($this->mediaDirectory->isExist($baseImagePath)) {
-            $newImageName = Uploader::getNewFileName($this->mediaDirectory->getAbsolutePath($baseImagePath));
-            $baseImagePath = $this->getFilePath($basePath, $newImageName);
-        }
 
         try {
             $this->coreFileStorageDatabase->copyFile(
