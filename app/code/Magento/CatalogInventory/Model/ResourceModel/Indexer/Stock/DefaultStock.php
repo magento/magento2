@@ -248,8 +248,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         )->joinInner(
             ['mcpei' => $this->getTable('catalog_product_entity_int')],
             'e.' . $linkField . ' = mcpei.' . $linkField
-            . ' AND mcpei.attribute_id = ' . $this->_getAttribute('status')->getId()
-            . ' AND mcpei.value = ' . ProductStatus::STATUS_ENABLED,
+            . ' AND mcpei.attribute_id = ' . $this->_getAttribute('status')->getId(),
             []
         )->columns(
             ['qty' => $qtyExpr]
