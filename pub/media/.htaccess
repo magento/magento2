@@ -20,7 +20,12 @@ SetHandler default-handler
 ############################################
 ## enable rewrites
 
-    Options +FollowSymLinks
+    <IfVersion < 2.4>
+        Options +FollowSymLinks
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Options +SymLinksIfOwnerMatch
+    </IfVersion>
     RewriteEngine on
 
     ## you can put here your pub/media folder path relative to web root
