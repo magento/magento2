@@ -23,7 +23,7 @@ class Message implements MailMessageInterface
      *
      * @var string
      */
-    private $messageType = self::TYPE_TEXT;
+    private $messageType = Mime::TYPE_TEXT;
 
     /**
      * Initialize dependencies.
@@ -58,8 +58,8 @@ class Message implements MailMessageInterface
      */
     public function setBody($body)
     {
-        if (is_string($body) && $this->messageType === MailMessageInterface::TYPE_HTML) {
-            $body = self::createHtmlMimeFromString($body);
+        if (is_string($body)) {
+            $body = self::createMimeFromString($body, $this->messageType);
         }
         $this->zendMessage->setBody($body);
         return $this;
@@ -161,6 +161,10 @@ class Message implements MailMessageInterface
      *
      * @param string $htmlBody
      * @return \Zend\Mime\Message
+     *
+     * @deprecated All emails that Magento sends should be mime encoded. Therefore
+     * use generic function createMimeFromString
+     * @see createMimeFromString()
      */
     private function createHtmlMimeFromString($htmlBody)
     {
@@ -173,11 +177,28 @@ class Message implements MailMessageInterface
     }
 
     /**
+     * Create mime message from the string.
+     *
+     * @param string $body
+     * @param string $messageType
+     * @return \Zend\Mime\Message
+     */
+    private function createMimeFromString($body, $messageType)
+    {
+        $part = new Part($body);
+        $part->setCharset($this->zendMessage->getEncoding());
+        $part->setType($messageType);
+        $mimeMessage = new \Zend\Mime\Message();
+        $mimeMessage->addPart($part);
+        return $mimeMessage;
+    }
+
+    /**
      * @inheritdoc
      */
     public function setBodyHtml($html)
     {
-        $this->setMessageType(self::TYPE_HTML);
+        $this->setMessageType(Mime::TYPE_HTML);
         return $this->setBody($html);
     }
 
@@ -186,7 +207,7 @@ class Message implements MailMessageInterface
      */
     public function setBodyText($text)
     {
-        $this->setMessageType(self::TYPE_TEXT);
+        $this->setMessageType(Mime::TYPE_TEXT);
         return $this->setBody($text);
     }
 }
