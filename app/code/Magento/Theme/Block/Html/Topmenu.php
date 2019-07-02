@@ -13,6 +13,7 @@ use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\Registry;
 
 /**
  * Html page top menu block
@@ -56,11 +57,13 @@ class Topmenu extends Template implements IdentityInterface
         Template\Context $context,
         NodeFactory $nodeFactory,
         TreeFactory $treeFactory,
+        Registry $registry,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->nodeFactory = $nodeFactory;
         $this->treeFactory = $treeFactory;
+        $this->_registry = $registry;
     }
 
     /**
@@ -444,5 +447,17 @@ class Topmenu extends Template implements IdentityInterface
         } else {
             $child->setClass($currentClass . ' ' . $outermostClass);
         }
+    }
+    
+    /**
+     * Get cache key informative items
+     *
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        $keyInfo = parent::getCacheKeyInfo();
+        $keyInfo[] = $this->_registry->registry('current_category')->getEntityId();
+        return $keyInfo;
     }
 }
