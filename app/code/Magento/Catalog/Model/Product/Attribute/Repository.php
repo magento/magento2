@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product\Attribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 
 /**
  * Product attribute repository
@@ -187,9 +188,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     public function delete(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
         if (!$attribute->getIsUserDefined()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Cannot delete system defined attribute')
-            );
+            throw new StateException(__("The system attribute can't be deleted."));
         }
         $this->attributeResource->delete($attribute);
         return true;
