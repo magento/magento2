@@ -55,7 +55,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     /**
      * Retrieve visible in catalog ids array
      *
-     * @return string[]
+     * @return int[]
      */
     public function getVisibleInCatalogIds()
     {
@@ -65,7 +65,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     /**
      * Retrieve visible in search ids array
      *
-     * @return string[]
+     * @return int[]
      */
     public function getVisibleInSearchIds()
     {
@@ -75,7 +75,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     /**
      * Retrieve visible in site ids array
      *
-     * @return string[]
+     * @return int[]
      */
     public function getVisibleInSiteIds()
     {
