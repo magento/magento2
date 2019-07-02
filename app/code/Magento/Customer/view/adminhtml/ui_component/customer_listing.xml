@@ -263,9 +263,6 @@
         <column name="billing_city" sortOrder="210">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">City</label>
                 <visible>false</visible>
             </settings>
@@ -273,9 +270,6 @@
         <column name="billing_fax" sortOrder="220">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Fax</label>
                 <visible>false</visible>
             </settings>
@@ -283,9 +277,6 @@
         <column name="billing_vat_id" sortOrder="230">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">VAT Number</label>
                 <visible>false</visible>
             </settings>
@@ -293,9 +284,6 @@
         <column name="billing_company" sortOrder="240">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Company</label>
                 <visible>false</visible>
             </settings>
@@ -303,9 +291,6 @@
         <column name="billing_firstname" sortOrder="250">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Billing Firstname</label>
                 <visible>false</visible>
             </settings>
@@ -313,9 +298,6 @@
         <column name="billing_lastname" sortOrder="260">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Billing Lastname</label>
                 <visible>false</visible>
             </settings>
