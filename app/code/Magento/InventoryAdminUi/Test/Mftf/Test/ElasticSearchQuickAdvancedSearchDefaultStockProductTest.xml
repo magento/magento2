@@ -20,6 +20,7 @@
         
         <before>
             <!-- Assign Main Website to Default Stock -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockIndexPage"/>
             <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
             <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByKeyword">
@@ -47,8 +48,7 @@
                 <requiredEntity createDataKey="additionalSource"/>
             </createData>
             <!--Enable ElasticSearch as search engine.-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="ChooseElasticSearchAsSearchEngine" stepKey="chooseES5"/>
+            <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="enableElasticSearchAsSearchEngine"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchEnable"/>
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchEnable"/>
         </before>

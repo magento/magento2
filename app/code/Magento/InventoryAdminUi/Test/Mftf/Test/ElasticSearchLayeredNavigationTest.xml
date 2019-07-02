@@ -37,12 +37,12 @@
                 <requiredEntity createDataKey="additionalSource"/>
             </createData>
             <!--Enable ElasticSearch as search engine.-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="ChooseElasticSearchAsSearchEngine" stepKey="chooseES5"/>
+            <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="enableElasticSearchAsSearchEngine"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchEnable"/>
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchEnable"/>
         </before>
         <after>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <!--Disable created test source.-->
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
                 <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>

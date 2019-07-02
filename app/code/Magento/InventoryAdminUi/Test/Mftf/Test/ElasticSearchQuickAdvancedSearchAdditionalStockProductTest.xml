@@ -51,7 +51,7 @@
             <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProduct2Quantity"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedSimpleProduct2"/>
             <!--Enable ElasticSearch as search engine.-->
-            <actionGroup ref="ChooseElasticSearchAsSearchEngine" stepKey="chooseES5"/>
+            <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="enableElasticSearchAsSearchEngine"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchEnable"/>
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchEnable"/>
         </before>
