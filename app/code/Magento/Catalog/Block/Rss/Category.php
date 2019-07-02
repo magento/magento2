@@ -19,7 +19,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     /**
      * @var \Magento\Framework\Config\View
      */
-    protected $configView;
+    private $configView;
 	
 	/**
      * @var \Magento\Catalog\Model\CategoryFactory
