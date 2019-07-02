@@ -59,11 +59,14 @@ abstract class ProductImportExportBase extends TestCase
     public function getProductExporter(): ProductExporter
     {
         $sandboxDir = Bootstrap::getInstance()->getBootstrap()->getApplication()->getTempDir();
-        $this->exportFilePath = implode(DIRECTORY_SEPARATOR, [
-            $sandboxDir,
-            'var',
-            uniqid('test-export_', false) . '.csv'
-        ]);
+        $this->exportFilePath = implode(
+            DIRECTORY_SEPARATOR,
+            [
+                $sandboxDir,
+                'var',
+                uniqid('test-export_', false) . '.csv'
+            ]
+        );
         $writer = $this->objectManager->create(ExportCsv::class, ['destination' => $this->exportFilePath]);
         $productExporter = $this->objectManager->get(ProductExporter::class);
         $productExporter->setWriter($writer);
@@ -89,10 +92,12 @@ abstract class ProductImportExportBase extends TestCase
                 'directory' => $directory
             ]
         );
-        $productImporter->setParameters([
-            'behavior' => Import::BEHAVIOR_ADD_UPDATE,
-            'entity' => ProductModel::ENTITY
-        ]);
+        $productImporter->setParameters(
+            [
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'entity' => ProductModel::ENTITY
+            ]
+        );
         $productImporter->setSource($source);
 
         return $productImporter;
