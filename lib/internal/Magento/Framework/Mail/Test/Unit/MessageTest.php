@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
+/**
+ * test Magento\Framework\Mail\Message
+ */
 class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
