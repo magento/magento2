@@ -32,7 +32,7 @@
         </actionGroup>
         <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
-            <argument name="productQty" value="25"/>
+            <argument name="productQty" value="{{SimpleProduct_25.quantity}}"/>
         </actionGroup>
         <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod" />
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
