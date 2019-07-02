@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ElasticSearchQuickAdvancedSearchDefaultStockProductTest">
+        <annotations>
+            <stories value="Elasticsearch quick and advanced search default stock."/>
+            <title value="Elasticsearch quick and advanced search on default stock, simple product."/>
+            <description value="Quick and Advanced Catalog Search for Simple Product on Default stock with Elasticsearch enabled."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/441590/scenarios/2688359"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <!-- Assign Main Website to Default Stock -->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockIndexPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByKeyword">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickOnEditForDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannel"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+            <!--Create Simple Products.-->
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct2">
+                <field key="price">40.00</field>
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <!--Create additional source and stock.-->
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Enable ElasticSearch as search engine.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="ChooseElasticSearchAsSearchEngine" stepKey="chooseES5"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchEnable"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchEnable"/>
+        </before>
+        <after>
+            <!--Disable created test source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <!--Delete created products and stock.-->
+            <deleteData createDataKey="additionalStock" stepKey="deleteAdditionalStock"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <!--Revert ElasticSearch as search engine.-->
+            <actionGroup ref="ResetSearchEngineConfiguration" stepKey="resetCatalogSearchConfiguration"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchDisable"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchDisable"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+        <!--Quick search created product.-->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="navigateToStorefront"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchForProduct">
+            <argument name="phrase" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
+        <!--Verify searched product.-->
+        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="verifyFoundProduct">
+            <argument name="productName" value="$$simpleProduct1.name$$"/>
+            <argument name="productUrlKey" value="$$simpleProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Advanced search crated product.-->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="goToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameActionGroup" stepKey="searchSecondProduct">
+            <argument name="name" value="$$simpleProduct2.name$$"/>
+        </actionGroup>
+        <!--Verify searched product.-->
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="verifyProductCount"/>
+        <see userInput="$$simpleProduct2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="verifyProductName"/>
+    </test>
+</tests>
