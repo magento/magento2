@@ -8,6 +8,7 @@ namespace Magento\Catalog\Block\Rss;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Class Category
  * @package Magento\Catalog\Block\Rss
@@ -146,8 +147,8 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
                 $description,
                 $product->getProductUrl(),
                 $this->imageHelper->init($product, 'rss_thumbnail')->getUrl(),
-				isset($attributes['height']) ? $attributes['height'] : 75,
-				isset($attributes['width']) ? $attributes['width'] : 75,
+                isset($attributes['height']) ? $attributes['height'] : 75,
+                isset($attributes['width']) ? $attributes['width'] : 75,
                 $product->getDescription(),
                 $product->getAllowedPriceInRss() ? $this->renderPriceHtml($product) : ''
             );
