@@ -35,7 +35,9 @@ define([
         init: function (el, valueAccessor) {
             var config = valueAccessor(),
                 observable,
-                options = defaults;
+                options = {};
+
+            _.extend(options, defaults);
 
             if (typeof config === 'object') {
                 observable = config.storage;
@@ -61,8 +63,10 @@ define([
         update: function (element, valueAccessor) {
             var config = valueAccessor(),
                 observable,
-                options = defaults,
+                options = {},
                 newVal;
+
+            _.extend(options, defaults);
 
             if (typeof config === 'object') {
                 observable = config.storage;
