@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="WishListWithDisabledProductTest">
+        <annotations>
+            <title value="Wish List should not include disabled products"/>
+            <stories value="Customer wishlist"/>
+            <description value="Wish List should not include disabled products and pager should be absent"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="MAGETWO-99228"/>
+            <testCaseId value="MC-16050"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProductPage"/>
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" stepKey="checkProductInWishlist">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+        <openNewTab stepKey="openNewTab"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminSetProductDisabled" stepKey="disableProduct"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <closeTab stepKey="closeSecondTab"/>
+        <reloadPage stepKey="refreshPage"/>
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmpty" stepKey="checkProductIsAbsentInWishlistIsEmpty"/>
+    </test>
+</tests>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPrivacyPolicyTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Checks to see if privacy policy url is in the admin page and every sub page"/>
+            <title value="There should be a privacy policy url in the admin page and every sub page"/>
+            <description value="There should be a privacy policy url in the admin page and every sub page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-17787"/>
+            <group value="backend"/>
+            <group value="login"/>
+        </annotations>
+
+        <!-- Logging in Magento admin and checking for Privacy policy footer in dashboard -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <closeAdminNotification stepKey="closeAdminNotification"/>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkDashboard"/>
+
+        <!-- Checking for Privacy policy footer in salesOrderPage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesOrder">
+            <argument name="menuUiId" value="magento-sales-sales"/>
+            <argument name="submenuUiId" value="magento-sales-sales-order"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSalesOrder"/>
+
+        <!-- Checking for Privacy policy footer in catalogProductsPage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCatalogProducts">
+            <argument name="menuUiId" value="magento-catalog-catalog"/>
+            <argument name="submenuUiId" value="magento-catalog-catalog-products"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkCatalogProducts"/>
+
+        <!-- Checking for Privacy policy footer in customersAllCustomersPage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCustomersAllCustomers">
+            <argument name="menuUiId" value="magento-customer-customer"/>
+            <argument name="submenuUiId" value="magento-customer-customer-manage"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkCustomersAllCustomers"/>
+
+        <!-- Checking for Privacy policy footer in marketingCatalogPriceRulePage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingCatalogPriceRule">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-catalogrule-promo-catalog"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkMarketingCatalogPriceRule"/>
+
+        <!-- Checking for Privacy policy footer in contentBlocksPage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentBlocks">
+            <argument name="menuUiId" value="magento-backend-content"/>
+            <argument name="submenuUiId" value="magento-cms-cms-block"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkContentBlocks"/>
+
+        <!-- Checking for Privacy policy footer in reportSearcbTermsPage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsSearchTerms">
+            <argument name="menuUiId" value="magento-reports-report"/>
+            <argument name="submenuUiId" value="magento-search-report-search-term"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkReportsSearchTerms"/>
+
+        <!-- Checking for Privacy policy footer in storesAllStoresPage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresAllStores">
+            <argument name="menuUiId" value="magento-backend-stores"/>
+            <argument name="submenuUiId" value="magento-backend-system-store"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkStoresAllStores"/>
+
+        <!-- Checking for Privacy policy footer in systemImportPage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemImport">
+            <argument name="menuUiId" value="magento-backend-system"/>
+            <argument name="submenuUiId" value="magento-importexport-system-convert-import"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkSystemImport"/>
+
+        <!-- Checking for Privacy policy footer in findPartnersAndExtensionsPage -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToFindPartnersAndExtensions">
+            <argument name="menuUiId" value="magento-marketplace-partners"/>
+            <argument name="submenuUiId" value="magento-marketplace-partners"/>
+        </actionGroup>
+        <seeLink userInput="Privacy Policy" url="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf" stepKey="seePrivacyPolicyLinkFindPartnersAndExtensions"/>
+    </test>
+</tests>
+
+
