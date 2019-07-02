@@ -144,33 +144,26 @@ define([
          * @param {String} value
          */
         onValueChange: function (value) {
-            var dateFormat,
-                shiftedValue;
+            var shiftedValue;
 
             if (value) {
                 if (this.options.showsTime && !this.outputDateTimeToISO) {
-                    dateFormat = this.shiftedValue() ?
-                        this.outputDateTimeFormat :
-                        this.inputDateTimeFormat;
-
-                    value = moment(value, dateFormat).format(this.timezoneFormat);
+                    value = moment(value, this.outputDateFormat).format(this.timezoneFormat);
                 }
 
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    dateFormat = this.shiftedValue() ?
-                        this.outputDateFormat :
-                        this.inputDateFormat;
-
-                    shiftedValue = moment(value, dateFormat);
+                    shiftedValue = moment(value, this.outputDateFormat);
                 }
 
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
+            } else {
+                shiftedValue = '';
+            }
 
-                if (shiftedValue !== this.shiftedValue()) {
-                    this.shiftedValue(shiftedValue);
-                }
+            if (shiftedValue !== this.shiftedValue()) {
+                this.shiftedValue(shiftedValue);
             }
         },
 
