@@ -58,7 +58,7 @@ define([
          * @param {HTMLElement} element - Element, that binding is applied to
          * @param {Function} valueAccessor - Function that returns value, passed to binding
          */
-        update: function(element, valueAccessor) {
+        update: function (element, valueAccessor) {
             var config = valueAccessor(),
                 observable,
                 options = defaults,
