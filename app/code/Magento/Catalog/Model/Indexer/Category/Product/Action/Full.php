@@ -150,9 +150,9 @@ class Full extends AbstractAction
     /**
      * Refresh entities index
      *
-     * @return Full
+     * @return AbstractAction
      */
-    public function execute(): Full
+    public function execute(): AbstractAction
     {
         $this->createTables();
         $this->clearReplicaTables();
