@@ -8,7 +8,6 @@ namespace Magento\Catalog\Block\Rss;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-
 /**
  * Class Category
  * @package Magento\Catalog\Block\Rss
@@ -17,6 +16,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Category extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
     /**
+     * @var \Magento\Framework\Config\View
+     */
+    protected $configView;
+	
+	/**
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $categoryFactory;
@@ -117,6 +121,9 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $title = $category->getName();
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
 
+        $attributes = $this->getConfigView()
+                ->getMediaAttributes('Magento_Catalog', $this->imageHelper::MEDIA_TYPE_CONFIG_NODE, 'rss_thumbnail');
+				
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($this->rssModel->getProductCollection($category, $this->getStoreId()) as $product) {
             $product->setAllowedInRss(true);
@@ -130,7 +137,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
             $description = '
                     <table><tr>
-                        <td><a href="%s"><img src="%s" border="0" align="left" height="75" width="75"></a></td>
+                        <td><a href="%s"><img src="%s" border="0" align="left" height="%s" width="%s"></a></td>
                         <td  style="text-decoration:none;">%s %s</td>
                     </tr></table>
                 ';
@@ -139,6 +146,8 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
                 $description,
                 $product->getProductUrl(),
                 $this->imageHelper->init($product, 'rss_thumbnail')->getUrl(),
+				isset($attributes['height']) ? $attributes['height'] : 75,
+				isset($attributes['width']) ? $attributes['width'] : 75,
                 $product->getDescription(),
                 $product->getAllowedPriceInRss() ? $this->renderPriceHtml($product) : ''
             );
@@ -262,5 +271,18 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     public function isAuthRequired()
     {
         return false;
+    }
+	
+	/**
+     * Retrieve config view
+     *
+     * @return \Magento\Framework\Config\View
+     */
+    private function getConfigView()
+    {
+        if (!$this->configView) {
+            $this->configView = $this->_viewConfig->getViewConfig();
+        }
+        return $this->configView;
     }
 }
