@@ -36,4 +36,28 @@ class OrderCancelTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($result);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_state_hold.php
+     */
+    public function testOrderWithStateHoldedShouldNotBeCanceled()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $order = $objectManager->get(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/orders/' . $order->getId() . '/cancel',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'cancel',
+            ],
+        ];
+
+        $requestData = ['id' => $order->getId()];
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertFalse($result);
+    }
 }
