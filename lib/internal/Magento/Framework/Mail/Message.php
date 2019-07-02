@@ -157,26 +157,6 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * Create HTML mime message from the string.
-     *
-     * @param string $htmlBody
-     * @return \Zend\Mime\Message
-     *
-     * @deprecated All emails that Magento sends should be mime encoded. Therefore
-     * use generic function createMimeFromString
-     * @see createMimeFromString()
-     */
-    private function createHtmlMimeFromString($htmlBody)
-    {
-        $htmlPart = new Part($htmlBody);
-        $htmlPart->setCharset($this->zendMessage->getEncoding());
-        $htmlPart->setType(Mime::TYPE_HTML);
-        $mimeMessage = new \Zend\Mime\Message();
-        $mimeMessage->addPart($htmlPart);
-        return $mimeMessage;
-    }
-
-    /**
      * Create mime message from the string.
      *
      * @param string $body
