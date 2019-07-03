@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var Magento\Wishlist\Block\Catalog\Product\ProductList\Item\AddTo\Wishlist $block */
 ?>
-<?php if ($block->getWishlistHelper()->isAllow()): ?>
+<?php if ($block->getWishlistHelper()->isAllow()) : ?>
     <a href="#"
        class="action towishlist"
        title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>"

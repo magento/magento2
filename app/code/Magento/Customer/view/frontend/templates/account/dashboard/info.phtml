@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
 ?>
 <div class="block block-dashboard-info">
@@ -31,16 +29,16 @@
                 </a>
             </div>
         </div>
-        <?php if ($block->isNewsletterEnabled()): ?>
+        <?php if ($block->isNewsletterEnabled()) : ?>
             <div class="box box-newsletter">
                 <strong class="box-title">
                     <span><?= $block->escapeHtml(__('Newsletters')) ?></span>
                 </strong>
                 <div class="box-content">
                     <p>
-                        <?php if ($block->getIsSubscribed()): ?>
+                        <?php if ($block->getIsSubscribed()) : ?>
                             <?= $block->escapeHtml(__('You are subscribed to "General Subscription".')) ?>
-                        <?php else: ?>
+                        <?php else : ?>
                             <?= $block->escapeHtml(__('You aren\'t subscribed to our newsletter.')) ?>
                         <?php endif; ?>
                     </p>

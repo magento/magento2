@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser $block */
 ?>
 
@@ -43,7 +41,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
         this.setRootNode(root);
 
         if (firstLoad) {
-            <?php if ($block->getNodeClickListener()): ?>
+            <?php if ($block->getNodeClickListener()) : ?>
                 this.addListener('click', <?= /* @noEscape */ $block->getNodeClickListener() ?>.createDelegate(this));
             <?php endif; ?>
         }

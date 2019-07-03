@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Share\Wishlist $block */
 ?>
 
-<?php if ($block->hasWishlistItems()): ?>
+<?php if ($block->hasWishlistItems()) : ?>
     <form class="form shared wishlist" action="<?= $block->escapeUrl($block->getUrl('wishlist/index/update')) ?>" method="post">
         <div class="wishlist table-wrapper">
             <table class="table data wishlist" id="wishlist-table">
@@ -22,7 +20,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($block->getWishlistItems() as $item): ?>
+                <?php foreach ($block->getWishlistItems() as $item) : ?>
                     <?php
                     $product = $item->getProduct();
                     $isVisibleProduct = $product->isVisibleInSiteVisibility();
@@ -37,8 +35,8 @@
                                     <?= $block->escapeHtml($product->getName()) ?>
                                 </a>
                             </strong>
-                            <?php
-                                echo $block->getProductPriceHtml(
+                            <?=
+                                $block->getProductPriceHtml(
                                     $product,
                                     'wishlist_configured_price',
                                     \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
@@ -49,8 +47,8 @@
                         </td>
                         <td data-th="<?= $block->escapeHtmlAttr(__('Comment')) ?>" class="col comment"><?= /* @noEscape */ $block->getEscapedDescription($item) ?></td>
                         <td data-th="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>" class="col actions" data-role="add-to-links">
-                            <?php if ($product->isSaleable()): ?>
-                                <?php if ($isVisibleProduct): ?>
+                            <?php if ($product->isSaleable()) : ?>
+                                <?php if ($isVisibleProduct) : ?>
                                     <button type="button"
                                             title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
                                             data-post='<?= /* @noEscape */ $block->getSharedItemAddToCartUrl($item) ?>'
@@ -70,7 +68,7 @@
         </div>
 
         <div class="actions-toolbar">
-            <?php if ($block->isSaleable()):?>
+            <?php if ($block->isSaleable()) : ?>
                 <div class="primary">
                     <button type="button"
                             title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>"
@@ -87,6 +85,6 @@
             </div>
         </div>
     </form>
-<?php else: ?>
+<?php else : ?>
     <div class="message info empty"><div><?= $block->escapeHtml(__('Wish List is empty now.')) ?></div></div>
 <?php endif ?>
