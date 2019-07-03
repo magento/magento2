@@ -15,8 +15,8 @@
             <title value="Admin user can login after changing cookie domain on main website scope without changing cookie domain on default scope"/>
             <description value="Admin user can login after changing cookie domain on main website scope without changing cookie domain on default scope"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-17847"/>
-            <useCaseId value="MC-17275"/>
+            <testCaseId value="MC-17931"/>
+            <useCaseId value="MC-17292"/>
             <group value="backend"/>
         </annotations>
         <before>
