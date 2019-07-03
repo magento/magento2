@@ -158,10 +158,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->with('base/path/test123.jpg')
             ->willReturn('absolute/path/base/path/test123.jpg');
-        $mediaDirectoryMock->expects($this->once())
-            ->method('isExist')
-            ->with('absolute/path/base/path/test123.jpg')
-            ->willReturn(false);
 
         $object = new \Magento\Framework\DataObject(
             [
@@ -194,12 +190,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('getUri')
             ->with(DirectoryList::MEDIA)
             ->willReturn('pub/media');
+        $mediaDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->willReturn('/pub/media/wysiwyg/test123.jpg');
 
         $object = new \Magento\Framework\DataObject(
             [
                 'test_attribute' => [
                     [
-                        'name' => '/test123.jpg',
+                        'name' => 'test123.jpg',
                         'url' => '/pub/media/wysiwyg/test123.jpg',
                     ],
                 ],
@@ -208,7 +207,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals('/pub/media/wysiwyg/test123.jpg', $object->getTestAttribute());
+        $this->assertEquals('test123.jpg', $object->getTestAttribute());
         $this->assertEquals(
             [['name' => '/pub/media/wysiwyg/test123.jpg', 'url' => '/pub/media/wysiwyg/test123.jpg']],
             $object->getData('_additional_data_test_attribute')
