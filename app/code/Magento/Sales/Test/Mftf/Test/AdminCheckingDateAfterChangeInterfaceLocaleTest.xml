@@ -22,7 +22,7 @@
         </annotations>
         <before>
             <!--Deploy static content with French locale-->
-            <magentoCLI command="setup:static-content:deploy fr_FR" stepKey="deployStaticContentWithFrenchLocale"/>
+            <magentoCLI command="setup:static-content:deploy" arguments="fr_FR" stepKey="deployStaticContentWithFrenchLocale"/>
             <!--Create entities-->
             <createData entity="SimpleProduct3" stepKey="createProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -66,7 +66,7 @@
         </actionGroup>
 
         <!--Get date from "Purchase Date" column-->
-        <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInDefaultLocale"/>
+        <grabTextFrom selector="{{AdminDataGridTableSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInDefaultLocale"/>
 
         <!--Get month name in default locale (US)-->
         <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('en-US', {month: 'short'}))" stepKey="getMonthNameInUS"/>
@@ -88,7 +88,7 @@
         </actionGroup>
 
         <!--Get date from "Purchase Date" column after changing "Interface Locale"-->
-        <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInFrenchLocale"/>
+        <grabTextFrom selector="{{AdminDataGridTableSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInFrenchLocale"/>
 
         <!--Get month name in French-->
         <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('fr-FR', {month: 'short'}))" stepKey="getMonthNameInFrench"/>
