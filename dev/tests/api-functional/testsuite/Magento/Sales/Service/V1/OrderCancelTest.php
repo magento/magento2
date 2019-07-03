@@ -9,7 +9,7 @@ namespace Magento\Sales\Service\V1;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Canceling of the order, in different states
+ * Canceling of the order
  */
 class OrderCancelTest extends WebapiAbstract
 {
