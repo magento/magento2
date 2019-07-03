@@ -82,8 +82,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveFileFromTmp()
     {
-        $expectedFileName = 'magento_small_image_1.jpg';
-        $expectedFilePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . $expectedFileName;
+        $expectedFilePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . 'magento_small_image_1.jpg';
 
         $this->assertFileNotExists($this->mediaDirectory->getAbsolutePath($expectedFilePath));
 
