@@ -72,8 +72,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryRepository;
-	
-	/**
+    
+    /**
      * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewConfig;
@@ -120,7 +120,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
-		$this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\ConfigInterface::class)
+        $this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\ConfigInterface::class)
             ->getMockForAbstractClass();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
@@ -137,7 +137,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 'customerSession' => $this->customerSession,
                 'storeManager' => $this->storeManager,
                 'categoryRepository' => $this->categoryRepository,
-				'viewConfig' => $this->viewConfig,
+                'viewConfig' => $this->viewConfig,
             ]
         );
     }
@@ -152,12 +152,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('http://magento.com/category-name.html'));
 
         $this->categoryRepository->expects($this->once())->method('get')->will($this->returnValue($category));
-		
-		$configViewMock = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+        
+        $configViewMock = $this->getMockBuilder(\Magento\Framework\Config\View::class)
             ->disableOriginalConstructor()
             ->getMock();
-			
-		$this->viewConfig->expects($this->once())
+            
+        $this->viewConfig->expects($this->once())
             ->method('getViewConfig')
             ->willReturn($configViewMock);
 

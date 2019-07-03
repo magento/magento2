@@ -17,8 +17,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Category extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
    /**
-     * @var \Magento\Catalog\Model\CategoryFactory
-     */
+    * @var \Magento\Catalog\Model\CategoryFactory
+    */
     protected $categoryFactory;
 
     /**
@@ -95,9 +95,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         parent::__construct($context, $data);
     }
 
-    /**
-     * @return void
-     */
+
     protected function _construct()
     {
         $this->setCacheKey(
