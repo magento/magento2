@@ -7,7 +7,8 @@
 namespace Magento\Sales\Service\V1;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Sales\Model\Order\Interceptor;
+use Magento\Sales\Model\Order;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -28,27 +29,27 @@ class OrderCancelTest extends WebapiAbstract
      */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
      * Gets order by increment ID.
      *
      * @param string $incrementId
-     * @return Interceptor
+     * @return Order
      */
-    private function getOrder(string $incrementId): Interceptor
+    private function getOrder(string $incrementId): Order
     {
-        return $this->objectManager->get(\Magento\Sales\Model\Order::class)->loadByIncrementId($incrementId);
+        return $this->objectManager->create(Order::class)->loadByIncrementId($incrementId);
     }
 
     /**
      * Send API request for canceling the order
      *
-     * @param object $order
+     * @param Order $order
      * @return array|bool|float|int|string
      */
-    private function sendCancelRequest($order)
+    private function sendCancelRequest(Order $order)
     {
         $serviceInfo = [
             'rest' => [
