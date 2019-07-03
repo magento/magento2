@@ -44,8 +44,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         $this->imageUploader = $this->objectManager->create(
             \Magento\Catalog\Model\ImageUploader::class,
             [
-                'baseTmpPath' => $this->mediaDirectory->getRelativePath('catalog/tmp/category'),
-                'basePath' => $this->mediaDirectory->getRelativePath('catalog/category'),
+                'baseTmpPath' => 'catalog/tmp/category',
+                'basePath' => 'catalog/category',
                 'allowedExtensions' => ['jpg', 'jpeg', 'gif', 'png'],
                 'allowedMimeTypes' => ['image/jpg', 'image/jpeg', 'image/gif', 'image/png']
             ]
