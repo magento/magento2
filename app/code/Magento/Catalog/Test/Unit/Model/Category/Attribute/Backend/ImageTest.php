@@ -159,10 +159,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->with('base/path/test123.jpg')
             ->willReturn('absolute/path/base/path/test123.jpg');
-        $mediaDirectoryMock->expects($this->once())
-            ->method('isExist')
-            ->with('absolute/path/base/path/test123.jpg')
-            ->willReturn(false);
 
         $object = new \Magento\Framework\DataObject(
             [
