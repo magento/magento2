@@ -9,7 +9,7 @@ $code = $block->escapeHtml($block->getMethodCode());
 $ccExpMonth = $block->getInfoData('cc_exp_month');
 $ccExpYear = $block->getInfoData('cc_exp_year');
 $ccType = $block->getInfoData('cc_type');
-$content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
+$content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Checkout::cvv.png')) . '\" alt=\"' .
     $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" title=\"' .
     $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" />';
 ?>
