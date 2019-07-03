@@ -16,12 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class Category extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
-    /**
-     * @var \Magento\Framework\Config\View
-     */
-    private $configView;
-	
-	/**
+   /**
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $categoryFactory;
@@ -57,6 +52,16 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     protected $categoryRepository;
 
     /**
+     * @var \Magento\Framework\View\ConfigInterface
+     */
+    protected $viewConfig;
+
+    /**
+     * @var \Magento\Framework\Config\View
+     */
+    protected $configView;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Rss\Category $rssModel
@@ -64,6 +69,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -75,6 +81,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\Model\Session $customerSession,
         CategoryRepositoryInterface $categoryRepository,
+        \Magento\Framework\View\ConfigInterface $viewConfig,
         array $data = []
     ) {
         $this->imageHelper = $imageHelper;
@@ -84,6 +91,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $this->rssUrlBuilder = $rssUrlBuilder;
         $this->storeManager = $context->getStoreManager();
         $this->categoryRepository = $categoryRepository;
+        $this->viewConfig = $viewConfig;
         parent::__construct($context, $data);
     }
 
@@ -124,7 +132,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
         $attributes = $this->getConfigView()
                 ->getMediaAttributes('Magento_Catalog', $this->imageHelper::MEDIA_TYPE_CONFIG_NODE, 'rss_thumbnail');
-				
+
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($this->rssModel->getProductCollection($category, $this->getStoreId()) as $product) {
             $product->setAllowedInRss(true);
@@ -275,12 +283,14 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
+     * Retrieve config view
+     *
      * @return \Magento\Framework\Config\View
      */
-    private function getConfigView()
+    protected function getConfigView()
     {
         if (!$this->configView) {
-            $this->configView = $this->_viewConfig->getViewConfig();
+            $this->configView = $this->viewConfig->getViewConfig();
         }
         return $this->configView;
     }
