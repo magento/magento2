@@ -20,6 +20,10 @@
         <before>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1 "/>
             <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 1 "/>
+            <magentoCLI command="config:set catalog/frontend/grid_per_page_values 12,24,36" stepKey="setAllowedProductsPerPageValue"/>
+            <magentoCLI command="config:set catalog/frontend/grid_per_page 12" stepKey="setDefaultProductsPerPageValue"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct1"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct2"/>
