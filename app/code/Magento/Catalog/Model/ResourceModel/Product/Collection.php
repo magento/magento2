@@ -2068,7 +2068,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _applyZeroStoreProductLimitations()
     {
         $filters = $this->_productLimitationFilters;
-        $categories = $this->getChildrenCategories((int)$filters['category_id'], []);
+        $categories = $this->getChildrenCategories((int)$filters['category_id']);
 
         $conditions = [
             'cat_pro.product_id=e.entity_id',
@@ -2099,30 +2099,22 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get children categories.
      *
      * @param int $categoryId
-     * @param array $categories
      * @return array
      */
-    private function getChildrenCategories(int $categoryId, array $categories): array
+    private function getChildrenCategories(int $categoryId): array
     {
-        $categories[] = $categoryId;
+        $categoryIds[] = $categoryId;
 
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
         $categoryCollection = $this->categoryCollectionFactory->create();
-        $category = $categoryCollection
-            ->addAttributeToSelect('is_anchor')
+        $categories = $categoryCollection
             ->addAttributeToFilter('is_anchor', 1)
-            ->addIdFilter([$categoryId])
-            ->getFirstItem();
-        if ($category) {
+            ->addAttributeToFilter('path', ['like' => $categoryId . '/%'])->getItems();
+        foreach ($categories as $category) {
             $categoryChildren = $category->getChildren();
-            $categoryChildrenIds = explode(',', $categoryChildren);
-            foreach ($categoryChildrenIds as $categoryChildrenId) {
-                if ($categoryChildrenId) {
-                    $categories = $this->getChildrenCategories((int)$categoryChildrenId, $categories);
-                }
-            }
+            $categoryIds = array_merge($categoryIds, explode(',', $categoryChildren));
         }
-        return $categories;
+        return $categoryIds;
     }
 
     /**
