@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Model\Product;
 
@@ -201,12 +202,11 @@ class VariationHandler
 
         $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
         $postData['stock_data'] = array_diff_key((array)$parentProduct->getStockData(), array_flip($keysFilter));
-        if (!isset($postData['stock_data']['is_in_stock'])) {
-            $stockStatus = $parentProduct->getQuantityAndStockStatus();
-            if (isset($stockStatus['is_in_stock'])) {
-                $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
-            }
+        $stockStatus = $parentProduct->getQuantityAndStockStatus();
+        if (isset($stockStatus['is_in_stock'])) {
+            $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
         }
+
         $postData = $this->processMediaGallery($product, $postData);
         $postData['status'] = isset($postData['status'])
             ? $postData['status']
