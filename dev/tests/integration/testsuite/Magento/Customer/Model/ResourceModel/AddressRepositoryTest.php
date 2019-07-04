@@ -571,4 +571,20 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $repository = $this->objectManager->get(WebsiteRepositoryInterface::class);
         return $repository->get($code);
     }
+
+    /**
+     * Test for saving address with extra spaces in phone.
+     *
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
+     */
+    public function testSaveNewAddressWithExtraSpacesInPhone()
+    {
+        $proposedAddress = $this->_createSecondAddress()
+            ->setCustomerId(1)
+            ->setTelephone(' 123456 ');
+        $returnedAddress = $this->repository->save($proposedAddress);
+        $savedAddress = $this->repository->getById($returnedAddress->getId());
+        $this->assertEquals('123456', $savedAddress->getTelephone());
+    }
 }
