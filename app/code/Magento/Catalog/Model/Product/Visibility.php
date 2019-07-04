@@ -86,6 +86,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
      * Retrieve option array
      *
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getOptionArray()
     {
@@ -134,6 +135,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
         $options = self::getOptionArray();
         return isset($options[$optionId]) ? $options[$optionId] : null;
     }
+    //phpcs:enable Magento2.Functions.StaticFunction
 
     /**
      * Retrieve flat column definition
@@ -251,7 +253,7 @@ class Visibility extends \Magento\Framework\DataObject implements OptionSourceIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {
