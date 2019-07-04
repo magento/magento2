@@ -7,26 +7,70 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model;
 
-use Magento\TestFramework\Helper\Bootstrap;
-
 /**
  * TODO: test logging out sessions
- *
  */
 class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var \Magento\Backend\Model\Auth
+     */
+    private $auth;
+
+    /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    private $authSession;
+
+    /**
+     * @var \Magento\Security\Model\AdminSessionInfo
+     */
+    private $adminSessionInfo;
+
+    /**
+     * @var \Magento\Security\Model\UserExpirationManager
+     */
+    private $userExpirationManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
+            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
+        $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
+        $this->auth->setAuthStorage($this->authSession);
+        $this->adminSessionInfo = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
+        $this->userExpirationManager =
+            $this->objectManager->create(\Magento\Security\Model\UserExpirationManager::class);
+    }
+
+    /**
+     * Tear down
+     */
+    protected function tearDown()
+    {
+        $this->auth = null;
+        $this->authSession  = null;
+        $this->adminSessionInfo  = null;
+        $this->userExpirationManager = null;
+        $this->objectManager = null;
+    }
 
     /**
      * @magentoDataFixture Magento/Security/_files/expired_users.php
      */
     public function testUserIsExpired()
     {
+        static::markTestSkipped();
         $adminUserNameFromFixture = 'adminUserExpired';
-        $user = $this->getUserFromUserName($adminUserNameFromFixture);
-        /** @var \Magento\Security\Model\UserExpirationManager $userExpirationManager */
-        $userExpirationManager = Bootstrap::getObjectManager()
-            ->create(\Magento\Security\Model\UserExpirationManager::class);
-        static::assertTrue($userExpirationManager->userIsExpired($user));
+        $user = $this->loadUserByUsername($adminUserNameFromFixture);
+        static::assertTrue($this->userExpirationManager->userIsExpired($user));
     }
 
     /**
@@ -34,13 +78,19 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeactivateExpiredUsersWithExpiredUser()
     {
-        $adminUserNameFromFixture = 'adminUserExpired';
-
-        list($user, $token, $expiredUserModel) = $this->setupCronTests($adminUserNameFromFixture);
-
+        $adminUsernameFromFixture = 'adminUserNotExpired';
+        $this->loginUser($adminUsernameFromFixture);
+        $user = $this->loadUserByUsername($adminUsernameFromFixture);
+        $sessionId = $this->authSession->getSessionId();
+        $this->expireUser($user);
+        $this->userExpirationManager->deactivateExpiredUsers([$user->getId()]);
+        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $user->reload();
+        $userExpirationModel = $this->loadExpiredUserModelByUser($user);
         static::assertEquals(0, $user->getIsActive());
-        static::assertEquals(null, $token->getId());
-        static::assertNull($expiredUserModel->getId());
+        static::assertNull($userExpirationModel->getId());
+        static::assertEquals(AdminSessionInfo::LOGGED_OUT, (int)$this->adminSessionInfo->getStatus());
+        $this->auth->logout();
     }
 
     /**
@@ -48,96 +98,95 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeactivateExpiredUsersWithNonExpiredUser()
     {
-        $adminUserNameFromFixture = 'adminUserNotExpired';
-        // log them in
-        $adminToken = $this->createToken($adminUserNameFromFixture);
-
-        list($user, $token, $expiredUserModel) = $this->setupCronTests($adminUserNameFromFixture);
-
+        // TODO: login fails for the second test that tries to log a user in, doesn't matter which test
+        // it's trying to create a session for the user ID in the previous test
+        $adminUsernameFromFixture = 'adminUserNotExpired';
+        $this->loginUser($adminUsernameFromFixture);
+        $user = $this->loadUserByUsername($adminUsernameFromFixture);
+        $sessionId = $this->authSession->getSessionId();
+        $this->userExpirationManager->deactivateExpiredUsers([$user->getId()]);
+        $user->reload();
+        $userExpirationModel = $this->loadExpiredUserModelByUser($user);
+        $this->adminSessionInfo->load($sessionId, 'session_id');
         static::assertEquals(1, $user->getIsActive());
-        static::assertNotNull($token->getId());
-        static::assertEquals($expiredUserModel->getUserId(), $user->getId());
+        static::assertEquals($user->getId(), $userExpirationModel->getId());
+        static::assertEquals(AdminSessionInfo::LOGGED_IN, (int)$this->adminSessionInfo->getStatus());
+        $this->auth->logout();
     }
 
     /**
-     * @param string $adminUserNameFromFixture
-     * @return array
-     */
-    private function setupCronTests(string $adminUserNameFromFixture): array
-    {
-        // TODO: set the user expired after calling this
-        // TODO: use this to test the observer with exception:
-        // Magento\Framework\Exception\Plugin\AuthenticationException : The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.
-        //$adminToken = $this->createToken($adminUserNameFromFixture); // TODO: this logs the user in, which kicks off the deactivate call
-
-        /** @var \Magento\Security\Model\UserExpirationManager $job */
-        $userExpirationManager = Bootstrap::getObjectManager()
-            ->create(\Magento\Security\Model\UserExpirationManager::class);
-        $userExpirationManager->deactivateExpiredUsers();
-
-        /** @var \Magento\User\Model\User $user */
-        $user = $this->getUserFromUserName($adminUserNameFromFixture);
-
-        // this is for the API only
-        $oauthToken = $this->getOauthTokenByUser($user);
-        $expiredUserModel = $this->getExpiredUserModelByUser($user);
-
-        return [$user, $oauthToken, $expiredUserModel];
-    }
-
-    /**
-     * TODO: this calls user->login and throws an AuthenticationException
+     * Test deactivating without inputting a user.
      *
-     * @param string $adminUserNameFromFixture
-     * @return string
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @magentoDataFixture Magento/Security/_files/expired_users.php
      */
-    private function createToken(string $adminUserNameFromFixture): string
+    public function testDeactivateExpiredUsers()
     {
-        /** @var \Magento\Integration\Api\AdminTokenServiceInterface $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Api\AdminTokenServiceInterface::class);
-        $token = $tokenService->createAdminAccessToken(
-            $adminUserNameFromFixture,
+        static::markTestSkipped();
+        $notExpiredUser = $this->loadUserByUsername('adminUserNotExpired');
+        $expiredUser = $this->loadUserByUsername('adminUserExpired');
+        $this->userExpirationManager->deactivateExpiredUsers();
+        $notExpiredUserExpirationModel = $this->loadExpiredUserModelByUser($notExpiredUser);
+        $expiredUserExpirationModel = $this->loadExpiredUserModelByUser($expiredUser);
+
+        static::assertNotNull($notExpiredUserExpirationModel->getId());
+        static::assertNull($expiredUserExpirationModel->getId());
+        $notExpiredUser->reload();
+        $expiredUser->reload();
+        static::assertEquals($notExpiredUser->getIsActive(), 1);
+        static::assertEquals($expiredUser->getIsActive(), 0);
+    }
+
+    /**
+     * Login the given user and return a user model.
+     *
+     * @param string $username
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    private function loginUser(string $username)
+    {
+        $this->auth->login(
+            $username,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
-
-        return $token;
     }
 
     /**
-     * @param string $adminUserNameFromFixture
+     * @param $username
      * @return \Magento\User\Model\User
      */
-    private function getUserFromUserName(string $adminUserNameFromFixture): \Magento\User\Model\User
+    private function loadUserByUsername(string $username): \Magento\User\Model\User
     {
         /** @var \Magento\User\Model\User $user */
-        $user = Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
-        $user->loadByUsername($adminUserNameFromFixture);
+        $user = $this->objectManager->create(\Magento\User\Model\User::class);
+        $user->loadByUsername($username);
         return $user;
     }
 
     /**
+     * Expire the given user and return the UserExpiration model.
+     *
      * @param \Magento\User\Model\User $user
-     * @return \Magento\Integration\Model\Oauth\Token
+     * @throws \Exception
      */
-    private function getOauthTokenByUser(\Magento\User\Model\User $user): \Magento\Integration\Model\Oauth\Token
+    private function expireUser(\Magento\User\Model\User $user)
     {
-        /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
-        $tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
-        $oauthToken = $tokenModel->loadByAdminId($user->getId());
-        return $oauthToken;
+        $expireDate = new \DateTime();
+        $expireDate->modify('-10 days');
+        /** @var \Magento\Security\Model\UserExpiration $userExpiration */
+        $userExpiration = $this->objectManager->create(\Magento\Security\Model\UserExpiration::class);
+        $userExpiration->setId($user->getId())
+            ->setExpiresAt($expireDate->format('Y-m-d H:i:s'))
+            ->save();
     }
 
     /**
      * @param \Magento\User\Model\User $user
-     * @return UserExpiration
+     * @return \Magento\Security\Model\UserExpiration
      */
-    private function getExpiredUserModelByUser(\Magento\User\Model\User $user): \Magento\Security\Model\UserExpiration
+    private function loadExpiredUserModelByUser(\Magento\User\Model\User $user): \Magento\Security\Model\UserExpiration
     {
         /** @var \Magento\Security\Model\UserExpiration $expiredUserModel */
-        $expiredUserModel = Bootstrap::getObjectManager()->get(\Magento\Security\Model\UserExpiration::class);
+        $expiredUserModel = $this->objectManager->create(\Magento\Security\Model\UserExpiration::class);
         $expiredUserModel->load($user->getId());
         return $expiredUserModel;
     }

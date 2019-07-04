@@ -28,6 +28,8 @@ class UserValidationRules
     }
 
     /**
+     * Add the Expires At validator to user validation rules.
+     *
      * @param \Magento\User\Model\UserValidationRules $userValidationRules
      * @param \Magento\Framework\Validator\DataObject $result
      * @return \Magento\Framework\Validator\DataObject

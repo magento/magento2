@@ -38,18 +38,32 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Security/_files/expired_users.php
      */
-    public function testExpiredActiveUsersFilter()
+    public function testAddExpiredActiveUsersFilter()
     {
         /** @var \Magento\Security\Model\ResourceModel\UserExpiration\Collection $collectionModel */
         $collectionModel = $this->collectionModelFactory->create();
         $collectionModel->addActiveExpiredUsersFilter();
-        static::assertGreaterThanOrEqual(1, $collectionModel->getSize());
+        static::assertEquals(1, $collectionModel->getSize());
     }
 
     /**
      * @magentoDataFixture Magento/Security/_files/expired_users.php
      */
-    public function testGetExpiredRecordsForUser()
+    public function testAddUserIdsFilter()
+    {
+        $adminUserNameFromFixture = 'adminUserExpired';
+        $user = $this->objectManager->create(\Magento\User\Model\User::class);
+        $user->loadByUsername($adminUserNameFromFixture);
+
+        /** @var \Magento\Security\Model\ResourceModel\UserExpiration\Collection $collectionModel */
+        $collectionModel = $this->collectionModelFactory->create()->addUserIdsFilter([$user->getId()]);
+        static::assertEquals(1, $collectionModel->getSize());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Security/_files/expired_users.php
+     */
+    public function testAddExpiredRecordsForUserFilter()
     {
         $adminUserNameFromFixture = 'adminUserExpired';
         $user = $this->objectManager->create(\Magento\User\Model\User::class);
@@ -57,6 +71,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Security\Model\ResourceModel\UserExpiration\Collection $collectionModel */
         $collectionModel = $this->collectionModelFactory->create()->addExpiredRecordsForUserFilter($user->getId());
-        static::assertGreaterThanOrEqual(1, $collectionModel->getSize());
+        static::assertEquals(1, $collectionModel->getSize());
     }
 }

@@ -90,6 +90,7 @@ class UserExpirationManager
             $currentSessions = $this->adminSessionInfoCollectionFactory->create()
                 ->addFieldToFilter('user_id', ['in' => $expiredRecords->getAllIds()])
                 ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime());
+            /** @var \Magento\Security\Model\AdminSessionInfo $currentSession */
             $currentSessions->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT)
                 ->save();
         }
@@ -107,12 +108,14 @@ class UserExpirationManager
     /**
      * Check if the given user is expired.
      * // TODO: check users expired an hour ago (timezone stuff)
+     *
      * @param \Magento\User\Model\User $user
      * @return bool
      */
     public function userIsExpired(\Magento\User\Model\User $user): bool
     {
         $isExpired = false;
+        /** @var \Magento\Security\Model\UserExpiration $expiredRecord */
         $expiredRecord = $this->userExpirationCollectionFactory->create()
             ->addExpiredRecordsForUserFilter($user->getId())
             ->getFirstItem();

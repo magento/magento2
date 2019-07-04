@@ -142,6 +142,9 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test processing prolong with an expired user.
+     *
+     * @magentoDbIsolation enabled
      */
     public function testProcessProlongWithExpiredUser()
     {

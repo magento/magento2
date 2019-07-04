@@ -18,6 +18,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_idFieldName = 'user_id';
 
     /**
+     * Initialize collection
+     *
      * @return void
      */
     protected function _construct()
@@ -53,7 +55,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Filter collection by user id.
-     * @param array $userIds
+     *
+     * @param int[] $userIds
      * @return Collection
      */
     public function addUserIdsFilter($userIds = []): Collection
@@ -64,12 +67,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get any expired records for the given user.
      *
-     * @param $userId
+     * @param string $userId
      * @return Collection
      */
-    public function addExpiredRecordsForUserFilter($userId): Collection
+    public function addExpiredRecordsForUserFilter(string $userId): Collection
     {
         return $this->addActiveExpiredUsersFilter()
-            ->addFieldToFilter('main_table.user_id', $userId);
+            ->addFieldToFilter('main_table.user_id', (int)$userId);
     }
 }

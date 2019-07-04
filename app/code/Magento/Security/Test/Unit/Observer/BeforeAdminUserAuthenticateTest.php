@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Security\Test\Unit\Observer;
 
 /**
- * Test for \Magento\Security\Observer\BeforeAdminUserAuthenticate
+ * Test for \Magento\Security\Observer\AdminUserAuthenticateBefore
  *
  * @package Magento\Security\Test\Unit\Observer
  */
@@ -30,7 +30,7 @@ class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
     private $userMock;
 
     /**
-     * @var \Magento\Security\Observer\BeforeAdminUserAuthenticate
+     * @var \Magento\Security\Observer\AdminUserAuthenticateBefore
      */
     private $observer;
 
@@ -64,7 +64,7 @@ class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
         );
         $this->userMock = $this->createPartialMock(\Magento\User\Model\User::class, ['loadByUsername', 'getId']);
         $this->observer = $this->objectManager->getObject(
-            \Magento\Security\Observer\BeforeAdminUserAuthenticate::class,
+            \Magento\Security\Observer\AdminUserAuthenticateBefore::class,
             [
                 'userExpirationManager' => $this->userExpirationManagerMock,
                 'user' => $this->userMock,

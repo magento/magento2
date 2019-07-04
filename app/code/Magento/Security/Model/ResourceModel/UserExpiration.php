@@ -21,6 +21,8 @@ class UserExpiration extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
     protected $_isPkAutoIncrement = false;
 
     /**
+     * Define main table
+     *
      * @return void
      */
     protected function _construct()

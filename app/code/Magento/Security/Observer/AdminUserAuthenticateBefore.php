@@ -13,11 +13,11 @@ use Magento\Framework\Exception\Plugin\AuthenticationException;
 use Magento\Security\Model\UserExpirationManager;
 
 /**
- * Class BeforeAdminUserAuthenticate
+ * Check for expired users.
  *
  * @package Magento\Security\Observer
  */
-class BeforeAdminUserAuthenticate implements ObserverInterface
+class AdminUserAuthenticateBefore implements ObserverInterface
 {
     /**
      * @var UserExpirationManager
@@ -29,6 +29,12 @@ class BeforeAdminUserAuthenticate implements ObserverInterface
      */
     private $user;
 
+    /**
+     * AdminUserAuthenticateBefore constructor.
+     *
+     * @param UserExpirationManager $userExpirationManager
+     * @param \Magento\User\Model\User $user
+     */
     public function __construct(
         \Magento\Security\Model\UserExpirationManager $userExpirationManager,
         \Magento\User\Model\User $user
@@ -38,6 +44,8 @@ class BeforeAdminUserAuthenticate implements ObserverInterface
     }
 
     /**
+     * Check for expired user when logging in.
+     *
      * @param Observer $observer
      * @return void
      * @throws AuthenticationException

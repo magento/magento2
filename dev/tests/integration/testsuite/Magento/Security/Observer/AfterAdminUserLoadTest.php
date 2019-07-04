@@ -43,5 +43,4 @@ class AfterAdminUserLoadTest extends \PHPUnit\Framework\TestCase
         $loadedUser->load($userId);
         static::assertNull($loadedUser->getExpiresAt());
     }
-
 }

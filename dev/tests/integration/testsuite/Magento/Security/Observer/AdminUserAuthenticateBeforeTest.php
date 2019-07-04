@@ -10,9 +10,9 @@ namespace Magento\Security\Observer;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test for \Magento\Security\Observer\BeforeAdminUserAuthenticate
+ * Test for \Magento\Security\Observer\AdminUserAuthenticateBefore
  */
-class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
+class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

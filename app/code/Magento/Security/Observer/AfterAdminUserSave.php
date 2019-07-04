@@ -25,6 +25,12 @@ class AfterAdminUserSave implements ObserverInterface
      */
     private $userExpirationResource;
 
+    /**
+     * AfterAdminUserSave constructor.
+     *
+     * @param \Magento\Security\Model\UserExpirationFactory $userExpirationFactory
+     * @param \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
+     */
     public function __construct(
         \Magento\Security\Model\UserExpirationFactory $userExpirationFactory,
         \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
@@ -35,6 +41,8 @@ class AfterAdminUserSave implements ObserverInterface
     }
 
     /**
+     * Save user expiration.
+     *
      * @param Observer $observer
      * @return void
      */

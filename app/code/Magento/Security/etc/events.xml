@@ -14,6 +14,6 @@
         <observer name="add_user_expiration" instance="Magento\Security\Observer\AfterAdminUserLoad"/>
     </event>
     <event name="admin_user_authenticate_before">
-        <observer name="check_user_expiration" instance="Magento\Security\Observer\BeforeAdminUserAuthenticate"/>
+        <observer name="check_user_expiration" instance="Magento\Security\Observer\AdminUserAuthenticateBefore"/>
     </event>
 </config>
