@@ -11,6 +11,7 @@
     <section name="AdminSourceSelectionFormSection">
         <element name="sourceSelectionAlgorithmToggle" type="button" selector=".action-toggle.primary.save"/>
         <element name="selectSourcePriority" type="button" selector=".item[data-ui-id='source-selection-algorithms-button-item-0']"/>
+        <element name="selectDistancePriority" type="button" selector=".item[title='Distance Priority']"/>
         <element name="proceedToShipment" type="button" selector="#save[data-ui-id='save-button']"/>
         <element name="sourceSelection" type="select" selector="select[name='sourceCode']"/>
     </section>
