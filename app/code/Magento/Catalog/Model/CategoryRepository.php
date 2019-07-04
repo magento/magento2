@@ -13,6 +13,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
+ * Category repository
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface
@@ -70,7 +71,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
@@ -106,6 +107,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $parentCategory = $this->get($parentId, $storeId);
             $existingData['path'] = $parentCategory->getPath();
             $existingData['parent_id'] = $parentId;
+            $existingData['custom_apply_to_products'] = $existingData['custom_apply_to_products'] ?? 0;
+            $existingData['custom_use_parent_settings'] = $existingData['custom_use_parent_settings'] ?? 0;
         }
         $category->addData($existingData);
         try {
@@ -125,7 +128,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($categoryId, $storeId = null)
     {
@@ -146,7 +149,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
@@ -167,7 +170,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByIdentifier($categoryId)
     {
@@ -208,6 +211,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
+     * Get extensible data object converter
+     *
      * @return \Magento\Framework\Api\ExtensibleDataObjectConverter
      *
      * @deprecated 101.0.0
@@ -222,6 +227,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
+     * Get metadata pool
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
