@@ -62,8 +62,8 @@
                                            name="ship[<?= $block->escapeHtml($_index) ?>][<?= $block->escapeHtml($_item->getQuoteItemId()) ?>][qty]"
                                            value="<?= $block->escapeHtml($_item->getQty()) ?>"
                                            size="2"
-                                           class="input-text qty"
-                                           data-validate="{number: true}"/>
+                                           class="input-text qty required-entry"
+                                           data-validate="{number: true, required:true}"/>
                                 </div>
                             </div>
                         </td>
