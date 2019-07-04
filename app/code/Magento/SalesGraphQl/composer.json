@@ -5,10 +5,7 @@
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
-        "magento/module-customer-graph-ql": "*",
-        "magento/module-sales": "*"
-    },
-    "suggest": {
+        "magento/module-sales": "*",
         "magento/module-graph-ql": "*"
     },
     "license": [
