@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StrorefrontElasticsearchSearchInvalidValueTest">
+        <annotations>
+            <features value="Search"/>
+            <title value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
+            <description value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17906"/>
+            <useCaseId value="MC-15759"/>
+            <group value="search"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Enable Elasticsearch-->
+            <comment userInput="Enable Elasticsearch" stepKey="commentEnableElasticsearch"/>
+            <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="enableElasticsearch"/>
+            <!--Set Minimal Query Length-->
+            <comment userInput="Set Minimal Query Length" stepKey="commentSetMinQueryLength"/>
+            <magentoCLI command="config:set catalog/search/min_query_length 2" stepKey="setMinQueryLength"/>
+        </before>
+        <after>
+            <!--Set configs to default-->
+            <comment userInput="Set configs to default" stepKey="commentSetDefault"/>
+            <createData entity="SetMinQueryLengthToDefault" stepKey="setMinimumQueryLengthToDefault"/>
+            <createData entity="SetSearchEngineToDefault" stepKey="setSearchEngineToDefault"/>
+            <!--Delete create data-->
+            <comment userInput="Delete create data" stepKey="commentDeletedData"/>
+            <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
+                <argument name="ProductAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+            <waitForPageLoad stepKey="waitForAttributePageLoad"/>
+            <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{SimpleProduct.sku}}"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Create new searchable product attribute-->
+        <comment userInput="Create new searchable product attribute" stepKey="commentCreateAttribute"/>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+        <actionGroup ref="CreateSearchableProductAttribute" stepKey="createAttribute">
+            <argument name="attribute" value="textProductAttribute"/>
+        </actionGroup>
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <!--Assign attribute to the Default set-->
+        <comment userInput="Assign attribute to the Default set" stepKey="commentAssignToDefaultSet"/>
+        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{textProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+        <!--Create product and fill new attribute field-->
+        <comment userInput="Create product and fill new attribute field" stepKey="commentCreateProduct"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" userInput="searchable" stepKey="fillTheAttributeRequiredInputField"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <!--Assert search results on storefront-->
+        <comment userInput="Assert search results on storefront" stepKey="commentAssertSearchResult"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm">
+            <argument name="phrase" value="searchable"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForSecondSearchTerm">
+            <argument name="phrase" value="?;"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForSecondSearchTerm"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForThirdSearchTerm">
+            <argument name="phrase" value="?anythingcangobetween;"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForThirdSearchTerm"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForForthSearchTerm">
+            <argument name="phrase" value="? anything at all ;"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForForthSearchTerm"/>
+    </test>
+</tests>
