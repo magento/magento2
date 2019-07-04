@@ -9,7 +9,7 @@ namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Paypal\Model\Api\Nvp;
-use Magento\PaypalGraphQl\AbstractTest;
+use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -20,7 +20,7 @@ use Magento\Framework\UrlInterface;
  *
  * @magentoAppArea graphql
  */
-class PaypalExpressSetPaymentMethodTest extends AbstractTest
+class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
 {
     /**
      * @var Http
