@@ -38,6 +38,11 @@
                     <label>Limit Sending By</label>
                     <source_model>Magento\SendFriend\Model\Source\Checktype</source_model>
                 </field>
+                <field id="sent_store" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Email is sent from store</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If set to no then the email is sent from the customers email address</comment>
+                </field>
             </group>
         </section>
     </system>

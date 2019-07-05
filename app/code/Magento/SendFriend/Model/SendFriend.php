@@ -373,6 +373,20 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set the reply to email address
+     * 
+     * @param array $sender
+     * 
+     * @return void
+     */
+    public function setReplyTo($sender){
+        $this->_transportBuilder->setReplyTo(
+            $sender['email'],
+            $sender['name']
+        );
+    }
+
+    /**
      * Retrieve Sender Information Object
      *
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -427,6 +441,26 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     public function isExceedLimit()
     {
         return $this->getSentCount() >= $this->getMaxSendsToFriend();
+    }
+
+    /**
+     * Check if email should be sent from the store
+     *
+     * @return boolean
+     */
+    public function isSentFromStore()
+    {
+        return $this->_sendfriendData->isSentFromStore();
+    }
+
+    /**
+     * Gets the store email address
+     *
+     * @return string
+     */
+    public function getEmailFromStore()
+    {
+        return $this->_sendfriendData->getStoreEmail();
     }
 
     /**

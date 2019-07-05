@@ -101,6 +101,23 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
         $this->sendFriend->setRecipients($this->getRequest()->getPost('recipients'));
         $this->sendFriend->setProduct($product);
 
+        if ($this->sendFriend->isSentFromStore()){
+
+            // get the sender array
+            $sender = $this->getRequest()->getPost('sender');
+            
+            // set the reply to address to that of the sender
+            $this->sendFriend->setReplyTo(
+                $sender
+            );
+
+            // change the senders email to the email address of the store
+            $sender['email'] = $this->sendFriend->getEmailFromStore();
+
+            // set the sender to the new sender details
+            $this->sendFriend->setSender($sender);
+        }
+
         try {
             $validate = $this->sendFriend->validate();
 

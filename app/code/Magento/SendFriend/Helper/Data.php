@@ -18,6 +18,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_ENABLED = 'sendfriend/email/enabled';
 
+    const SENT_FROM_STORE = 'sendfriend/email/sent_store';
+
+    const STORE_EMAIL_ADDRESS = 'trans_email/ident_general/email';
+
     const XML_PATH_ALLOW_FOR_GUEST = 'sendfriend/email/allow_guest';
 
     const XML_PATH_MAX_RECIPIENTS = 'sendfriend/email/max_recipients';
@@ -44,6 +48,36 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Check if email should be sent from store
+     *
+     * @param int $store
+     * @return bool
+     */
+    public function isSentFromStore($store = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::SENT_FROM_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+    
+    /**
+     * Get the email address of the store
+     *
+     * @param int $store
+     * @return string
+     */
+    public function getStoreEmail($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::STORE_EMAIL_ADDRESS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

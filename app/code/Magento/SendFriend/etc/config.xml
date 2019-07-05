@@ -15,6 +15,7 @@
                 <max_recipients>5</max_recipients>
                 <max_per_hour>5</max_per_hour>
                 <check_by>0</check_by>
+                <sent_store>0</sent_store>
             </email>
         </sendfriend>
         <captcha translate="label">
