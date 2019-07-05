@@ -135,6 +135,36 @@
         <data key="username">admin_user_with_correct_password</data>
         <data key="password">123123123q</data>
     </entity>
+    <entity name="activeAdmin" type="user">
+        <data key="username" unique="suffix">AdminUser</data>
+        <data key="firstname" unique="suffix">FirstName</data>
+        <data key="lastname" unique="suffix">LastName</data>
+        <data key="email" unique="prefix">admin@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="interface_local_label">English (United States)</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="role">Administrators</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
+    <entity name="inactiveAdmin" type="user">
+        <data key="username" unique="suffix">AdminUser</data>
+        <data key="firstname" unique="suffix">FirstName</data>
+        <data key="lastname" unique="suffix">LastName</data>
+        <data key="email" unique="prefix">admin@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="interface_local_label">English (United States)</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="role">Administrators</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
 <!--
     Since User delete action is performed via POST request we created this entity to be able to delete it.
     Please use "AdminDeleteUserViaCurlActionGroup".
