@@ -197,7 +197,7 @@ define([
                 telephone: customer.phone,
                 regionCode: address.state
             };
-            
+
             billingAddress = createBillingAddress(billingAddress);
             quote.billingAddress(billingAddress);
         },
