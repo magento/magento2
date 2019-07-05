@@ -231,7 +231,7 @@ class MediaGalleryProcessor
     private function processMediaAttributes(ProductInterface $product, array $images): void
     {
         foreach ($images as $image) {
-            if (!isset($image['removed']) && !empty($image['types'])) {
+            if (empty($image['removed']) && !empty($image['types'])) {
                 $this->processor->setMediaAttribute($product, $image['types'], $image['file']);
             }
         }
