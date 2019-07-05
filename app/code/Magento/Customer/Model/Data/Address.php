@@ -119,7 +119,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      */
     public function getTelephone()
     {
-        return trim($this->_get(self::TELEPHONE));
+        return $this->_get(self::TELEPHONE);
     }
 
     /**
@@ -327,7 +327,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      */
     public function setTelephone($telephone)
     {
-        return $this->setData(self::TELEPHONE, $telephone);
+        return $this->setData(self::TELEPHONE, trim($telephone));
     }
 
     /**
