@@ -70,11 +70,11 @@ class Tree
     public function getRootNode($category = null)
     {
         if ($category !== null && $category->getId()) {
-            return $this->getNode($category);
+            $rootId = $category->getId();
+        } else {
+            $store = $this->storeManager->getStore();
+            $rootId = $store->getRootCategoryId();
         }
-
-        $store = $this->storeManager->getStore();
-        $rootId = $store->getRootCategoryId();
 
         $tree = $this->categoryTree->load(null);
         $this->prepareCollection();
