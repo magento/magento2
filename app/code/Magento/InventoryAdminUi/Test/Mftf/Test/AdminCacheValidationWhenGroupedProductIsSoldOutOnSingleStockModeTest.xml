@@ -44,18 +44,7 @@
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
 
-        <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToVirtualProductComment"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditVirtualProduct"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku">
-            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="$$virtualProduct.sku$$"/>
-        </actionGroup>
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumnsForVirtualProduct"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumnsVirtualProduct"/>
-        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openVirtualProductEditPage"/>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategoryForGroupedProduct"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct"/>
-
+        <!--Assign Category and Add Simple and Virtual products to the Grouped product -->
         <comment userInput="Assign category to created grouped product." stepKey="assignCategoryToGroupedProductComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditGroupedProduct"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findGroupedProductBySku">
@@ -86,23 +75,25 @@
         </actionGroup>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedGroupedProduct"/>
 
+        <!--Verify Grouped product presents on Category page on frontend-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPageOnStorefrontToSeeTheProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadCategoryPage"/>
+        <see userInput="{{GroupedProduct.name}}" stepKey="assertProductPresentOnCategoryPageOnStorefront"/>
+
+        <!--Create Order with Grouped product from Admin-->
         <comment userInput="Create order with grouped product from admin area." stepKey="createOrderWithGroupedProductComment"/>
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
             <argument name="customer" value="$$customer$$"/>
         </actionGroup>
-
-        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoadStore1"/>
-
         <comment userInput="Add Simple Grouped product to order." stepKey="addSimpleGroupedProductToOrderComment"/>
         <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductSimpleOptionToOrder">
             <argument name="product" value="GroupedProduct"/>
             <argument name="option" value="$$simpleProduct$$"/>
             <argument name="quantity" value="998"/>
         </actionGroup>
-
-        <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
-
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <comment userInput="Add Virtual Grouped product to order." stepKey="addVirtualGroupedProductToOrderComment"/>
         <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductVirtualOptionToOrder">
             <argument name="product" value="$$groupedProduct$$"/>
@@ -114,15 +105,15 @@
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
         <comment userInput="Submit order." stepKey="submitOrderComment"/>
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessageForShipping"/>
+        <grabTextFrom selector=".page-title" stepKey="grabTheOrderId"/>
 
-        <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage2"/>
-        <grabTextFrom selector=".page-title" stepKey="grabTheOrderId1"/>
-
+        <!--Admin create full Shipment -->
         <comment userInput="Admin - Ship order" stepKey="AdminShipOrder"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMask"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabTheOrderId1}" stepKey="searchOrderNum"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabTheOrderId}" stepKey="searchOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchShipping"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMask"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
@@ -131,10 +122,11 @@
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
 
+        <!--Admin create full Invoice-->
         <comment userInput="Admin - Process invoice for full order" stepKey="InvoiceFullOrder"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabTheOrderId1}" stepKey="searchOrderNumInvoice"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabTheOrderId}" stepKey="searchOrderNumInvoice"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskGridForInvoice"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
@@ -145,8 +137,9 @@
         <waitForPageLoad stepKey="waitForPageLoadSuccessMessage"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
 
+        <!--Verify Grouped product is not visible on Category page on frontend-->
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPageOnStorefrontToNotSeeTheProduct"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoadCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadCategoryPageWhenProductIsSold"/>
         <dontSee userInput="{{GroupedProduct.name}}" stepKey="assertProductNotPresentOnCategoryPageOnStorefront"/>
 
     </test>

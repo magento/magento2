@@ -44,18 +44,7 @@
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
 
-        <comment userInput="Assign category to created virtual product." stepKey="assignCategoryToVirtualProductComment"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditVirtualProduct"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySku">
-            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="value" value="$$virtualProduct.sku$$"/>
-        </actionGroup>
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="selectColumnsForVirtualProduct"/>
-        <click selector="{{AdminGridColumnsControls.reset}}" stepKey="clickOnResetToRestoreDefaultColumnsVirtualProduct"/>
-        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openVirtualProductEditPage"/>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$category.name$$]" requiredAction="true" stepKey="searchAndSelectCategoryForGroupedProduct"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedVirtualProduct"/>
-
+        <!--Assign Category and Add Simple and Virtual products to the Grouped product -->
         <comment userInput="Assign category to created grouped product." stepKey="assignCategoryToGroupedProductComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForEditGroupedProduct"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findGroupedProductBySku">
@@ -86,22 +75,19 @@
         </actionGroup>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedGroupedProduct"/>
 
+        <!--Create Order with Grouped product from Admin-->
         <comment userInput="Create order with grouped product from admin area." stepKey="createOrderWithGroupedProductComment"/>
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
             <argument name="customer" value="$$customer$$"/>
         </actionGroup>
-
         <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoadStore1"/>
-
         <comment userInput="Add Simple Grouped product to order." stepKey="addSimpleGroupedProductToOrderComment"/>
         <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductSimpleOptionToOrder">
             <argument name="product" value="GroupedProduct"/>
             <argument name="option" value="$$simpleProduct$$"/>
         </actionGroup>
-
         <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
-
         <comment userInput="Add Virtual Grouped product to order." stepKey="addVirtualGroupedProductToOrderComment"/>
         <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductVirtualOptionToOrder">
             <argument name="product" value="$$groupedProduct$$"/>
@@ -112,11 +98,10 @@
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
         <comment userInput="Submit order." stepKey="submitOrderComment"/>
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessageOrder"/>
 
-        <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage2"/>
-        <grabTextFrom selector=".page-title" stepKey="grabTheOrderId1"/>
-
+        <!--Verify Quantity of Simple product after Order placed-->
         <comment userInput="Check simple product quantity and salable quantity." stepKey="checkSimpleProductQuantityComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckSimpleProductQtyAfterPlaceOrder"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterPlaceOrder">
@@ -125,6 +110,7 @@
         </actionGroup>
         <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="997" stepKey="checkSimpleProductSalableQtyAfterPlaceOrder"/>
 
+        <!--Verify Quantity of Virtual product after Order placed-->
         <comment userInput="Check virtual product quantity and salable quantity." stepKey="checkVirtualProductQuantityComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckVirtualProductQtyAfterPlaceOrder"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterPlaceOrder">
