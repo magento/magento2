@@ -88,9 +88,7 @@ class FileUploaderDataResolver
         $file = $customerData[$attributeCode] ?? null;
 
         /** @var FileProcessor $fileProcessor */
-        $fileProcessor = $this->fileProcessorFactory->create([
-            'entityTypeCode' => $entityType->getEntityTypeCode(),
-        ]);
+        $fileProcessor = $this->fileProcessorFactory->create(['entityTypeCode' => $entityType->getEntityTypeCode()]);
 
         if (!empty($file)
             && $fileProcessor->isExist($file)
@@ -103,6 +101,7 @@ class FileUploaderDataResolver
                     'file' => $file,
                     'size' => null !== $stat ? $stat['size'] : 0,
                     'url' => $viewUrl ?? '',
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'name' => basename($file),
                     'type' => $fileProcessor->getMimeType($file),
                 ],
@@ -138,9 +137,12 @@ class FileUploaderDataResolver
 
             if (isset($config['validation']['file_extensions'])) {
                 $allowedExtensions = explode(',', $config['validation']['file_extensions']);
-                array_walk($allowedExtensions, function (&$value) {
-                    $value = strtolower(trim($value));
-                });
+                array_walk(
+                    $allowedExtensions,
+                    function (&$value) {
+                        $value = strtolower(trim($value));
+                    }
+                );
             }
 
             $allowedExtensions = implode(' ', $allowedExtensions);
@@ -149,6 +151,7 @@ class FileUploaderDataResolver
             $url = $this->getFileUploadUrl($entityTypeCode);
 
             $config = [
+                'dataType' => $this->getMetadataValue($config, 'dataType'),
                 'formElement' => 'fileUploader',
                 'componentType' => 'fileUploader',
                 'maxFileSize' => $maxFileSize,
