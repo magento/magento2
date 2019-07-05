@@ -376,10 +376,10 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * Set the reply to email address
      * 
      * @param array $sender
-     * 
      * @return void
      */
-    public function setReplyTo($sender){
+    public function setReplyTo($sender)
+    {
         $this->_transportBuilder->setReplyTo(
             $sender['email'],
             $sender['name']

@@ -101,7 +101,7 @@ class Sendmail extends \Magento\SendFriend\Controller\Product implements HttpPos
         $this->sendFriend->setRecipients($this->getRequest()->getPost('recipients'));
         $this->sendFriend->setProduct($product);
 
-        if ($this->sendFriend->isSentFromStore()){
+        if ($this->sendFriend->isSentFromStore()) {
 
             // get the sender array
             $sender = $this->getRequest()->getPost('sender');
