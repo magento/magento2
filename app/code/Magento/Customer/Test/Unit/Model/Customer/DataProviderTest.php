@@ -931,6 +931,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                         'arguments' => [
                             'data' => [
                                 'config' => [
+                                    'dataType' => 'frontend_input',
                                     'formElement' => 'fileUploader',
                                     'componentType' => 'fileUploader',
                                     'maxFileSize' => $maxFileSize,
