@@ -6,6 +6,8 @@
 namespace Magento\Ui\Component\Filters\Type;
 
 /**
+ * Class Search
+ *
  * @api
  * @since 100.0.2
  */
