@@ -44,8 +44,8 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
         $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
-        $this->auth->setAuthStorage($this->authSession);
         $this->adminSessionInfo = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
+        $this->auth->setAuthStorage($this->authSession);
         $this->userExpirationManager =
             $this->objectManager->create(\Magento\Security\Model\UserExpirationManager::class);
     }
@@ -67,7 +67,6 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testUserIsExpired()
     {
-        static::markTestSkipped();
         $adminUserNameFromFixture = 'adminUserExpired';
         $user = $this->loadUserByUsername($adminUserNameFromFixture);
         static::assertTrue($this->userExpirationManager->userIsExpired($user));
@@ -121,7 +120,6 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeactivateExpiredUsers()
     {
-        static::markTestSkipped();
         $notExpiredUser = $this->loadUserByUsername('adminUserNotExpired');
         $expiredUser = $this->loadUserByUsername('adminUserExpired');
         $this->userExpirationManager->deactivateExpiredUsers();

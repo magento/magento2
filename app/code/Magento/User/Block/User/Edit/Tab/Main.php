@@ -169,7 +169,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
         }
-        // TODO: use store time and convert to GMT
+
+        $dateFormat = $this->_localeDate->getDateFormat(
+            \IntlDateFormatter::MEDIUM
+        );
+        $timeFormat = $this->_localeDate->getTimeFormat(
+            \IntlDateFormatter::MEDIUM
+        );
         $baseFieldset->addField(
             'expires_at',
             'date',
@@ -177,8 +183,8 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'expires_at',
                 'label' => __('Expiration Date'),
                 'title' => __('Expiration Date'),
-                'date_format' => 'yyyy-MM-dd',
-                'time_format' => 'hh:mm:ss',
+                'date_format' => $dateFormat,
+                'time_format' => $timeFormat,
                 'class' => 'validate-date',
             ]
         );

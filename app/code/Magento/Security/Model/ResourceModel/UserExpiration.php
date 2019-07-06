@@ -21,6 +21,35 @@ class UserExpiration extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
     protected $_isPkAutoIncrement = false;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    private $timezone;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $dateTime;
+
+    /**
+     * UserExpiration constructor.
+     *
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param null $connectionName
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        $connectionName = null
+    ) {
+        parent::__construct($context, $connectionName);
+        $this->timezone = $timezone;
+        $this->dateTime = $dateTime;
+    }
+
+    /**
      * Define main table
      *
      * @return void
@@ -31,19 +60,34 @@ class UserExpiration extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
     }
 
     /**
-     * Perform actions before object save
+     * Convert to UTC time.
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $userExpiration
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $userExpiration)
     {
-        /** @var $object \Magento\Security\Model\UserExpiration */
-        if ($object->getExpiresAt() instanceof \DateTimeInterface) {
+        /** @var $userExpiration \Magento\Security\Model\UserExpiration */
+        $expiresAt = $userExpiration->getExpiresAt();
+        $utcValue = $this->dateTime->gmtDate('Y-m-d H:i:s', $expiresAt);
+        $userExpiration->setExpiresAt($utcValue);
 
-            // TODO: use this? need to check if we're ever passing in a \DateTimeInterface or if it's always a string
-            $object->setExpiresAt($object->getExpiresAt()->format('Y-m-d H:i:s'));
+        return $this;
+    }
+
+    /**
+     * Convert to store time.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $userExpiration
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @throws \Exception
+     */
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $userExpiration)
+    {
+        /** @var $userExpiration \Magento\Security\Model\UserExpiration */
+        if ($userExpiration->getExpiresAt()) {
+            $storeValue = $this->timezone->date($userExpiration->getExpiresAt());
+            $userExpiration->setExpiresAt($storeValue);
         }
 
         return $this;

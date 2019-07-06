@@ -10,7 +10,7 @@ namespace Magento\Security\Model;
 use Magento\Security\Model\ResourceModel\UserExpiration\Collection as ExpiredUsersCollection;
 
 /**
- * Class to handle expired admin users.
+ * Class to handle admin user expirations.
  */
 class UserExpirationManager
 {
@@ -107,7 +107,6 @@ class UserExpirationManager
 
     /**
      * Check if the given user is expired.
-     * // TODO: check users expired an hour ago (timezone stuff)
      *
      * @param \Magento\User\Model\User $user
      * @return bool

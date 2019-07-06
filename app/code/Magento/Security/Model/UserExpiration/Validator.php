@@ -16,6 +16,15 @@ use Magento\Framework\Validator\AbstractValidator;
  */
 class Validator extends AbstractValidator
 {
+    /**@var \Magento\Framework\Stdlib\DateTime\DateTime */
+    private $dateTime;
+
+    public function __construct(
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+    ) {
+
+        $this->dateTime = $dateTime;
+    }
 
     /**
      * Ensure that the given date is later than the current date.
@@ -31,9 +40,8 @@ class Validator extends AbstractValidator
         $expiresAt = $value;
         $label = 'Expiration date';
         if (\Zend_Validate::is($expiresAt, 'NotEmpty')) {
-            $currentTime = new \DateTime();
-            $expiresAt = new \DateTime($expiresAt);
-
+            $currentTime = $this->dateTime->gmtTimestamp();
+            $expiresAt = $this->dateTime->gmtTimestamp($value);
             if ($expiresAt < $currentTime) {
                 $messages['expires_at'] = __('"%1" must be later than the current date.', $label);
             }
