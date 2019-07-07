@@ -12,7 +12,11 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config" title="Configuration" translate="title" sortOrder="20">
-                            <resource id="Magento_Config::advanced" title="Advanced Section" translate="title" sortOrder="90" />
+                            <!--
+                            @deprecated Magento does not support custom disabling/enabling modules output since 2.2.0 version.
+                            Section 'Advanced Section' was disabled. This section will be removed from code in one release.
+                            -->
+                            <resource id="Magento_Config::advanced" title="Advanced Section" translate="title" sortOrder="90" disabled="true" />
                             <resource id="Magento_Config::config_admin" title="Advanced Admin Section" translate="title" sortOrder="100" />
                             <resource id="Magento_Config::config_design" title="Design Section" translate="title" sortOrder="40" />
                             <resource id="Magento_Config::config_general" title="General Section" translate="title" sortOrder="20" />
