@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Query;
 
 use GraphQL\Error\ClientAware;
-use Magento\Framework\GraphQl\Query\Resolver\ResolveLoggerInterface;
+use Magento\Framework\GraphQl\Query\Resolver\LoggerFactoryInterface;
 
 /**
  * @inheritDoc
@@ -21,17 +21,17 @@ class ErrorHandler implements ErrorHandlerInterface
     const CLIENT_LOG_FILE = 'var/log/graphql/client/exception.log';
 
     /**
-     * @var ResolveLoggerInterface
+     * @var LoggerFactoryInterface
      */
-    private $resolveLogger;
+    private $loggerFactory;
 
     /**
-     * @param ResolveLoggerInterface $resolveLogger
+     * @param LoggerFactoryInterface $loggerFactory
      */
     public function __construct(
-        ResolveLoggerInterface $resolveLogger
+        LoggerFactoryInterface $loggerFactory
     ) {
-        $this->resolveLogger = $resolveLogger;
+        $this->loggerFactory = $loggerFactory;
     }
 
     /**
@@ -41,7 +41,7 @@ class ErrorHandler implements ErrorHandlerInterface
     {
         return array_map(
             function (ClientAware $error) use ($formatter) {
-                $this->resolveLogger->execute($error)->error($error);
+                $this->loggerFactory->getLogger($error)->error($error);
 
                 return $formatter($error);
             },

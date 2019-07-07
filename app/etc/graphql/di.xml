@@ -7,12 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
-    <type name="Magento\Framework\GraphQl\Query\Resolver\ResolveLogger">
-        <arguments>
-            <argument name="clientLogger" xsi:type="object">GraphQLClientLogger</argument>
-            <argument name="serverLogger" xsi:type="object">GraphQLServerLogger</argument>
-        </arguments>
-    </type>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\LoggerFactoryInterface" type="Magento\Framework\GraphQl\Query\Resolver\LoggerFactory"/>
     <virtualType name="GraphQLClientLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -37,5 +32,4 @@
             <argument name="fileName" xsi:type="const">Magento\Framework\GraphQl\Query\ErrorHandler::SERVER_LOG_FILE</argument>
         </arguments>
     </virtualType>
-    <preference for="Magento\Framework\GraphQl\Query\Resolver\ResolveLoggerInterface" type="Magento\Framework\GraphQl\Query\Resolver\ResolveLogger"/>
 </config>

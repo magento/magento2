@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
  *
  * @api
  */
-interface ResolveLoggerInterface
+interface LoggerFactoryInterface
 {
     /**
      * Get logger to use for certain ClientAware exception
@@ -24,5 +24,5 @@ interface ResolveLoggerInterface
      *
      * @return LoggerInterface
      */
-    public function execute(ClientAware $clientAware): LoggerInterface;
+    public function getLogger(ClientAware $clientAware): LoggerInterface;
 }
