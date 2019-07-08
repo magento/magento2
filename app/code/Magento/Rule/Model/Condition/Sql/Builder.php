@@ -145,11 +145,8 @@ class Builder
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getMappedSqlCondition(
-        AbstractCondition $condition,
-        string $value = '',
-        bool $isDefaultStoreUsed = true
-    ): string {
+    protected function _getMappedSqlCondition(AbstractCondition $condition, string $value = ''): string
+    {
         $argument = $condition->getMappedSqlField();
 
         // If rule hasn't valid argument - create negative expression to prevent incorrect rule behavior.
@@ -241,6 +238,7 @@ class Builder
      * @param AbstractCollection $collection
      * @param Combine $combine
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function attachConditionToCollection(
         AbstractCollection $collection,
@@ -250,29 +248,45 @@ class Builder
         $this->_joinTablesToCollection($collection, $combine);
         $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
-            if (!empty($combine->getConditions())) {
-                $conditions = '';
-                $attributeField = '';
-                foreach ($combine->getConditions() as $condition) {
-                    if ($condition->getData('attribute') === \Magento\Catalog\Api\Data\ProductInterface::SKU) {
-                        $conditions = $condition->getData('value');
-                        $attributeField = $condition->getMappedSqlField();
-                    }
-                }
+            $collection->getSelect()->where($whereExpression);
+            $this->buildConditions($collection, $combine);
+        }
+    }
 
-                $collection->getSelect()->where($whereExpression);
-
-                if (!empty($conditions) && !empty($attributeField)) {
-                    $conditions = explode(',', $conditions);
-                    foreach ($conditions as &$condition) {
-                        $condition = "'" . trim($condition) . "'";
-                    }
-                    $conditions = implode(', ', $conditions);
-                    $collection->getSelect()->order("FIELD($attributeField, $conditions)");
+    /**
+     * Build sql conditions from combination.
+     *
+     * @param AbstractCollection $collection
+     * @param Combine $combine
+     * @return void
+     */
+    private function buildConditions(AbstractCollection $collection, Combine $combine) : void
+    {
+        if (!empty($combine->getConditions())) {
+            $conditions = '';
+            $attributeField = '';
+            foreach ($combine->getConditions() as $condition) {
+                if ($condition->getData('attribute') === \Magento\Catalog\Api\Data\ProductInterface::SKU) {
+                    $conditions = $condition->getData('value');
+                    $attributeField = $condition->getMappedSqlField();
                 }
-            } else {
-                // Select ::where method adds braces even on empty expression
-                $collection->getSelect()->where($whereExpression);
+            }
+
+            if (!empty($conditions) && !empty($attributeField)) {
+                $conditions = explode(',', $conditions);
+                foreach ($conditions as &$condition) {
+                    $condition = trim($condition);
+                }
+                $conditions = implode(', ', $conditions);
+                $collection->getSelect()->order(
+                    $this->_connection->quoteInto(
+                        "FIELD(?, ?)",
+                        [
+                            $attributeField,
+                            $conditions
+                        ]
+                    )
+                );
             }
         }
     }
