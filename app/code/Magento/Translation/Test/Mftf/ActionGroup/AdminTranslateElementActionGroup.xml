@@ -19,6 +19,7 @@
         <waitForPageLoad stepKey="waitForLoadWindow"/>
 
         <seeElement selector="{{InlineTranslationModeSection.popUpTranslate}}" stepKey="seeTranslateForm"/>
+        <clearField selector="{{InlineTranslationModeSection.inputCustomTranslate}}" stepKey="clearField"/>
         <fillField userInput="{{translateText}}" selector="{{InlineTranslationModeSection.inputCustomTranslate}}" stepKey="addTranslate"/>
         <click selector="{{InlineTranslationModeSection.buttonSubmit}}" stepKey="clickSubmitButton"/>
     </actionGroup>
