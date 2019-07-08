@@ -253,7 +253,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getNodesUrl()
     {
-        return $this->getUrl('catalog/category/jsonTree');
+        return $this->getUrl('catalog/category/tree');
     }
 
     /**
