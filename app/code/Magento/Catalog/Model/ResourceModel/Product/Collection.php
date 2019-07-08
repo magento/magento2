@@ -2108,8 +2108,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
         $categoryCollection = $this->categoryCollectionFactory->create();
         $categories = $categoryCollection
-            ->addAttributeToFilter('is_anchor', 1)
-            ->addAttributeToFilter('path', ['like' => $categoryId . '/%'])->getItems();
+            ->addAttributeToFilter(
+                ['is_anchor', 'path'],
+                [1, ['like' => $categoryId . '/%']]
+            )->getItems();
         foreach ($categories as $category) {
             $categoryChildren = $category->getChildren();
             $categoryIds = array_merge($categoryIds, explode(',', $categoryChildren));
