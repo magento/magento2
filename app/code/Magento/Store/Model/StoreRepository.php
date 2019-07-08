@@ -73,7 +73,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
         if ($store->getId() === null) {
             throw new NoSuchEntityException(
-                __("The store that was requested wasn't found. Verify the store and try again.")
+                __("The store with code $code that was requested wasn't found. Verify the store and try again.")
             );
         }
         $this->entities[$code] = $store;
@@ -110,7 +110,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 
         if ($store->getId() === null) {
             throw new NoSuchEntityException(
-                __("The store that was requested wasn't found. Verify the store and try again.")
+                __("The store with id $id that was requested wasn't found. Verify the store and try again.")
             );
         }
 
