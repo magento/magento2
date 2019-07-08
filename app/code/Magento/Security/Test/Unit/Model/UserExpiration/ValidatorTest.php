@@ -22,16 +22,33 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $validator;
 
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $dateTimeMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->validator = $objectManager->getObject(\Magento\Security\Model\UserExpiration\Validator::class);
+        $this->dateTimeMock =
+            $this->createPartialMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, ['gmtTimestamp']);
+        $this->validator = $objectManager->getObject(
+            \Magento\Security\Model\UserExpiration\Validator::class,
+            ['dateTime' => $this->dateTimeMock]
+        );
     }
 
     public function testWithPastDate()
     {
+        $currentTime = '1562447687';
+        $expireTime = '1561324487';
         $testDate = new \DateTime();
         $testDate->modify('-10 days');
+        $this->dateTimeMock->expects(static::exactly(2))->method('gmtTimestamp')
+            ->willReturnOnConsecutiveCalls(
+                $currentTime,
+                $expireTime
+            );
         static::assertFalse($this->validator->isValid($testDate->format('Y-m-d H:i:s')));
         static::assertContains(
             '"Expiration date" must be later than the current date.',
@@ -41,8 +58,15 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testWithFutureDate()
     {
+        $currentTime = '1562447687';
+        $expireTime = '1563290841';
         $testDate = new \DateTime();
         $testDate->modify('+10 days');
+        $this->dateTimeMock->expects(static::exactly(2))->method('gmtTimestamp')
+            ->willReturnOnConsecutiveCalls(
+                $currentTime,
+                $expireTime
+            );
         static::assertTrue($this->validator->isValid($testDate->format('Y-m-d H:i:s')));
         static::assertEquals([], $this->validator->getMessages());
     }
