@@ -643,6 +643,9 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         $escaper->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $escaper = $objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
         $constructArguments = $objectManager->getConstructArguments(
             \Magento\Sitemap\Model\Sitemap::class,
             [
@@ -652,7 +655,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 'cmsFactory' => $cmsFactory,
                 'storeManager' => $this->storeManagerMock,
                 'sitemapData' => $this->_helperMockSitemap,
-                'filesystem' => $this->_filesystemMock
+                'filesystem' => $this->_filesystemMock,
+                'escaper' => $escaper
             ]
         );
         $constructArguments['resource'] = null;

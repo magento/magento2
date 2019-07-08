@@ -82,7 +82,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $errors = array_merge($errors, $result);
         }
 
-        $result = $this->_validateInputRule($value);
+        $result = $this->_validateInputRule(trim($value));
         if ($result !== true) {
             $errors = array_merge($errors, $result);
         }

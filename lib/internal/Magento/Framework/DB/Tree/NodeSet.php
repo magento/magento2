@@ -9,7 +9,7 @@ namespace Magento\Framework\DB\Tree;
  * TODO implements iterators
  *
  */
-class NodeSet implements \Iterator
+class NodeSet implements \Iterator, \Countable
 {
     /**
      * @var Node[]

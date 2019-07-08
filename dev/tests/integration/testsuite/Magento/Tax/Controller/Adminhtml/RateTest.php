@@ -16,7 +16,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testAjaxSaveAction($postData, $expectedData)
     {
-        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setPostValue($postData)->setMethod('POST');
 
         $this->dispatch('backend/tax/rate/ajaxSave');
 
@@ -84,7 +84,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testAjaxSaveActionInvalidData($postData, $expectedData)
     {
-        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setPostValue($postData)->setMethod('POST');
 
         $this->dispatch('backend/tax/rate/ajaxSave');
 
