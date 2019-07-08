@@ -36,7 +36,7 @@ use Magento\Framework\UrlInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractTest extends TestCase
+abstract class PaypalExpressAbstractTest extends TestCase
 {
     /**
      * @var AbstractApi|MockObject
