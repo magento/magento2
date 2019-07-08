@@ -75,7 +75,7 @@ class GetStockItemData implements GetStockItemDataInterface
                     GetStockItemDataInterface::QUANTITY => 'qty',
                     GetStockItemDataInterface::IS_SALABLE => 'stock_status',
                 ]
-            )->where('product_id' . ' = ?', $productId);
+            )->where('product_id = ?', $productId);
         } else {
             $stockItemTableName = $this->stockIndexTableNameResolver->execute($stockId);
             $select->from(
