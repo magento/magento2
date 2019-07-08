@@ -6,6 +6,8 @@
 namespace Magento\Ui\Component;
 
 /**
+ * Mass action UI component.
+ *
  * @api
  * @since 100.0.2
  */
@@ -21,7 +23,7 @@ class MassAction extends AbstractComponent
         $config = $this->getConfiguration();
 
         foreach ($this->getChildComponents() as $actionComponent) {
-            $config['actions'][] = $actionComponent->getConfiguration();
+            $config['actions'][] = array_merge($actionComponent->getConfiguration(), ['__disableTmpl' => true]);
         }
 
         $origConfig = $this->getConfiguration();

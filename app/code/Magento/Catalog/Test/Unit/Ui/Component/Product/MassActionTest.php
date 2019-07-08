@@ -117,6 +117,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                     'type' => 'first_action',
                     'label' => 'First Action',
                     'url' => '/module/controller/firstAction',
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -136,6 +137,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'url' => '/module/controller/secondSubAction2',
                         ],
                     ],
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -155,6 +157,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'url' => '/module/controller/disable',
                         ],
                     ],
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -174,6 +177,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'url' => '/module/controller/disable',
                         ],
                     ],
+                    '__disableTmpl' => true
                 ],
                 false,
                 false,
@@ -184,6 +188,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                     'type' => 'delete',
                     'label' => 'First Action',
                     'url' => '/module/controller/delete',
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -192,6 +197,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                     'type' => 'delete',
                     'label' => 'First Action',
                     'url' => '/module/controller/delete',
+                    '__disableTmpl' => true
                 ],
                 false,
                 false,
@@ -202,6 +208,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                     'type' => 'delete',
                     'label' => 'First Action',
                     'url' => '/module/controller/attributes',
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -210,6 +217,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                     'type' => 'delete',
                     'label' => 'First Action',
                     'url' => '/module/controller/attributes',
+                    '__disableTmpl' => true
                 ],
                 false,
                 false,
