@@ -53,7 +53,9 @@ define([
                     responseText: ''
                 }, messageContainer);
                 expect(messageContainer.addErrorMessage)
-                    .toHaveBeenCalledWith('Something went wrong with your request. Please try again later.');
+                    .toHaveBeenCalledWith({
+                        message: 'Something went wrong with your request. Please try again later.'
+                    });
             });
 
             it('check on failed status', function () {
