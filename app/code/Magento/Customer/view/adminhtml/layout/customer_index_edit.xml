@@ -15,5 +15,8 @@
         <referenceContainer name="content">
             <uiComponent name="customer_form"/>
         </referenceContainer>
+        <referenceContainer name="after.body.start">
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" name="after.body.start.product_composite_configure" template="Magento_Catalog::catalog/product/composite/configure.phtml"/>
+        </referenceContainer>
     </body>
 </page>
