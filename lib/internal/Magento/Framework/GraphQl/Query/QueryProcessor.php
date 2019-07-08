@@ -69,7 +69,7 @@ class QueryProcessor
             $operationName
         )->toArray(
             $this->exceptionFormatter->shouldShowDetail() ?
-                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE : true
+                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE : false
         );
     }
 }
