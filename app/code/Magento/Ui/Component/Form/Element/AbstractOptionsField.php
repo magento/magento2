@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class AbstractOptionsField
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.1.0
  */
