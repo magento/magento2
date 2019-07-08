@@ -173,7 +173,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
         if (is_string($storeId)) {
-            $storeId = intval($storeId);
+            $storeId = (int) $storeId;
         }
 
         if ($storeId) {
@@ -699,8 +699,20 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             $this->getTable('catalog_category_product'),
             ['product_id', 'position']
         )->where(
-            'category_id = :category_id'
+            "{$this->getTable('catalog_category_product')}.category_id = ?",
+            $category->getId()
         );
+        $websiteId = $category->getStore()->getWebsiteId();
+        if ($websiteId) {
+            $select->join(
+                ['product_website' => $this->getTable('catalog_product_website')],
+                "product_website.product_id = {$this->getTable('catalog_category_product')}.product_id",
+                []
+            )->where(
+                'product_website.website_id = ?',
+                $websiteId
+            );
+        }
         $bind = ['category_id' => (int)$category->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);

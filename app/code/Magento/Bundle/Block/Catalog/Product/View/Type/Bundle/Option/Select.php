@@ -16,5 +16,5 @@ class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Opti
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/view/type/bundle/option/select.phtml';
+    protected $_template = 'Magento_Bundle::catalog/product/view/type/bundle/option/select.phtml';
 }

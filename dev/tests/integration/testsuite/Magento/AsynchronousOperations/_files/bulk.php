@@ -18,33 +18,38 @@ $bulks = [
     'not_started' => [
         'uuid' => 'bulk-uuid-1',
         'user_id' => 1,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN,
         'description' => 'Bulk Description',
         'operation_count' => 1,
     ],
     'in_progress_success' => [
         'uuid' => 'bulk-uuid-2',
         'user_id' => 1,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN,
         'description' => 'Bulk Description',
         'operation_count' => 3,
     ],
     'in_progress_failed' => [
         'uuid' => 'bulk-uuid-3',
         'user_id' => 1,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN,
         'description' => 'Bulk Description',
         'operation_count' => 2,
     ],
     'finish_success' => [
         'uuid' => 'bulk-uuid-4',
         'user_id' => 1,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN,
         'description' => 'Bulk Description',
         'operation_count' => 1,
     ],
     'finish_failed' => [
         'uuid' => 'bulk-uuid-5',
         'user_id' => 1,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN,
         'description' => 'Bulk Description',
         'operation_count' => 2,
-    ]
+    ],
 ];
 // Only processed operations are saved into database (i.e. operations that are not in 'open' state)
 $operations = [
@@ -88,11 +93,10 @@ $operations = [
         'error_code' => 2222,
         'result_message' => 'Entity with ID=4 does not exist',
     ],
-
 ];
 
-$bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `description`, `operation_count`)"
-    . " VALUES (:uuid, :user_id, :description, :operation_count);";
+$bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `user_type`, `description`, `operation_count`)"
+    . " VALUES (:uuid, :user_id, :user_type, :description, :operation_count);";
 foreach ($bulks as $bulk) {
     $connection->query($bulkQuery, $bulk);
 }

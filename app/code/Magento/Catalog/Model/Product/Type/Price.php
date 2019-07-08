@@ -11,12 +11,14 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Product type price model
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Price
@@ -184,6 +186,8 @@ class Price
     }
 
     /**
+     * Retrieve final price for child product
+     *
      * @param Product $product
      * @param float $productQty
      * @param Product $childProduct
@@ -428,6 +432,8 @@ class Price
     }
 
     /**
+     * Retrieve customer group id from product
+     *
      * @param Product $product
      * @return int
      */
@@ -453,7 +459,7 @@ class Price
             $product->getSpecialPrice(),
             $product->getSpecialFromDate(),
             $product->getSpecialToDate(),
-            $product->getStore()
+            WebsiteInterface::ADMIN_CODE
         );
     }
 
@@ -474,14 +480,15 @@ class Price
      *
      * @param   float $qty
      * @param   Product $product
+     *
      * @return  array|float
      */
-    public function getFormatedTierPrice($qty, $product)
+    public function getFormattedTierPrice($qty, $product)
     {
         $price = $product->getTierPrice($qty);
         if (is_array($price)) {
             foreach (array_keys($price) as $index) {
-                $price[$index]['formated_price'] = $this->priceCurrency->convertAndFormat(
+                $price[$index]['formatted_price'] = $this->priceCurrency->convertAndFormat(
                     $price[$index]['website_price']
                 );
             }
@@ -493,14 +500,44 @@ class Price
     }
 
     /**
+     * Get formatted by currency tier price
+     *
+     * @param   float $qty
+     * @param   Product $product
+     *
+     * @return  array|float
+     *
+     * @deprecated
+     * @see getFormattedTierPrice()
+     */
+    public function getFormatedTierPrice($qty, $product)
+    {
+        return $this->getFormattedTierPrice($qty, $product);
+    }
+
+    /**
+     * Get formatted by currency product price
+     *
+     * @param   Product $product
+     * @return  array|float
+     */
+    public function getFormattedPrice($product)
+    {
+        return $this->priceCurrency->format($product->getFinalPrice());
+    }
+
+    /**
      * Get formatted by currency product price
      *
      * @param   Product $product
      * @return  array || float
+     *
+     * @deprecated
+     * @see getFormattedPrice()
      */
     public function getFormatedPrice($product)
     {
-        return $this->priceCurrency->format($product->getFinalPrice());
+        return $this->getFormattedPrice($product);
     }
 
     /**
@@ -570,7 +607,7 @@ class Price
             $specialPrice,
             $specialPriceFrom,
             $specialPriceTo,
-            $sId
+            WebsiteInterface::ADMIN_CODE
         );
 
         if ($rulePrice === false) {

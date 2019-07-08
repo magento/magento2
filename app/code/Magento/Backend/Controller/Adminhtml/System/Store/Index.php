@@ -6,12 +6,13 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Index returns Stores page
  */
-class Index extends \Magento\Backend\Controller\Adminhtml\System\Store
+class Index extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpGetActionInterface
 {
     /**
      * Returns Stores page

@@ -11,7 +11,7 @@
             data-bind="
                 checked: allSelected(),
                 attr: {id: ++ko.uid},
-                event: { change: toggleSelectAll },
+                event: { change: togglePage },
                 css: { '_indeterminate': indetermine },
                 enable: totalRecords">
         <label attr="for: ko.uid"/>

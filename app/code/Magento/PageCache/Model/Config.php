@@ -113,7 +113,6 @@ class Config
      *
      * @return int
      * @api
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getType()
     {
@@ -125,7 +124,6 @@ class Config
      *
      * @return int
      * @api
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getTtl()
     {
@@ -255,7 +253,6 @@ class Config
      *
      * @return bool
      * @api
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function isEnabled()
     {

@@ -55,6 +55,10 @@
             }
         }
 
+        .label {
+            .lib-visually-hidden();
+        }
+
         .field-tooltip-action {
             .lib-icon-font(
                 @checkout-tooltip-icon__content,
@@ -64,6 +68,10 @@
                 @_icon-font-color-hover: @checkout-tooltip-icon__hover__color,
                 @_icon-font-color-active: false
             );
+
+            &:before { 
+                padding-left : 1px;  
+            }
 
             &:focus {
                 ._keyfocus & {
@@ -137,10 +145,42 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break >= @screen__m) {
     .field-tooltip {
         .field-tooltip-content {
+            .lib-css(right, @checkout-tooltip-content-mobile__right);
+            .lib-css(top, @checkout-tooltip-content-mobile__top);
+            left: auto;
             &:extend(.abs-checkout-tooltip-content-position-top-mobile all);
         }
+    }
+}
+
+//
+//  Tablet
+//  _____________________________________________
+
+@media only screen and (max-width: @screen__m) {
+    .field-tooltip .field-tooltip-content {
+        left: auto;
+        right: -10px;
+        top: 40px;
+    }
+    .field-tooltip .field-tooltip-content::before,
+    .field-tooltip .field-tooltip-content::after {
+        border: 10px solid transparent;
+        height: 0;
+        left: auto;
+        margin-top: -21px;
+        right: 10px;
+        top: 0;
+        width: 0;
+    }
+    .field-tooltip .field-tooltip-content::before {
+        .lib-css(border-bottom-color, @checkout-tooltip-content__border-color);
+    }
+    .field-tooltip .field-tooltip-content::after {
+        .lib-css(border-bottom-color, @checkout-tooltip-content__background-color);
+        top: 1px;
     }
 }

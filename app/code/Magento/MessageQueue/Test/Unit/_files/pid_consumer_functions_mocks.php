@@ -5,6 +5,10 @@
  */
 namespace Magento\MessageQueue\Model\Cron\ConsumersRunner;
 
+/**
+ * @param $pid
+ * @return bool|int
+ */
 function posix_getpgid($pid)
 {
     if ($pid === 11111) {
@@ -14,6 +18,11 @@ function posix_getpgid($pid)
     return false;
 }
 
+/**
+ * @param $command
+ * @param array|null $output
+ * @param null $return_var
+ */
 function exec($command, array &$output = null, &$return_var = null)
 {
     $output = ['PID TTY TIME CMD'];

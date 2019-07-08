@@ -12,7 +12,6 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\Helper\Filter as FilterHelper;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
-use Magento\Framework\EntityManager\EntityManager;
 use Magento\Search\Api\SearchInterface;
 
 /**
@@ -46,30 +45,41 @@ class Search
     private $metadataPool;
 
     /**
+     * @var \Magento\Search\Model\Search\PageSizeProvider
+     */
+    private $pageSizeProvider;
+
+    /**
      * @param SearchInterface $search
      * @param FilterHelper $filterHelper
      * @param Filter $filterQuery
      * @param SearchResultFactory $searchResultFactory
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param \Magento\Search\Model\Search\PageSizeProvider $pageSize
      */
     public function __construct(
         SearchInterface $search,
         FilterHelper $filterHelper,
         Filter $filterQuery,
         SearchResultFactory $searchResultFactory,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        \Magento\Search\Model\Search\PageSizeProvider $pageSize
     ) {
         $this->search = $search;
         $this->filterHelper = $filterHelper;
         $this->filterQuery = $filterQuery;
         $this->searchResultFactory = $searchResultFactory;
         $this->metadataPool = $metadataPool;
+        $this->pageSizeProvider = $pageSize;
     }
 
     /**
      * Return results of full text catalog search of given term, and will return filtered results if filter is specified
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param ResolveInfo $info
      * @return SearchResult
+     * @throws \Exception
      */
     public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info) : SearchResult
     {
@@ -79,7 +89,8 @@ class Search
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
         // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
-        $searchCriteria->setPageSize(PHP_INT_MAX);
+        $pageSize = $this->pageSizeProvider->getMaxPageSize();
+        $searchCriteria->setPageSize($pageSize);
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
 
@@ -133,7 +144,7 @@ class Search
         $offset = $length * ($searchCriteria->getCurrentPage() - 1);
 
         if ($searchCriteria->getPageSize()) {
-            $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize()) - 1;
+            $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize());
         } else {
             $maxPages = 0;
         }

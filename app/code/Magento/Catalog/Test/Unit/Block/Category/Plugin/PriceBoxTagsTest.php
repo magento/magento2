@@ -17,6 +17,11 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
     private $priceCurrencyInterface;
 
     /**
+     * @var \Magento\Directory\Model\Currency | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $currency;
+
+    /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $timezoneInterface;
@@ -46,6 +51,9 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyInterface = $this->getMockBuilder(
             \Magento\Framework\Pricing\PriceCurrencyInterface::class
         )->getMock();
+        $this->currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->timezoneInterface = $this->getMockBuilder(
             \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
         )->getMock();
@@ -82,7 +90,7 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
     public function testAfterGetCacheKey()
     {
         $date = date('Ymd');
-        $currencySymbol = '$';
+        $currencyCode = 'USD';
         $result = 'result_string';
         $billingAddress = ['billing_address'];
         $shippingAddress = ['shipping_address'];
@@ -95,7 +103,7 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
             '-',
             [
                 $result,
-                $currencySymbol,
+                $currencyCode,
                 $date,
                 $scopeId,
                 $customerGroupId,
@@ -104,7 +112,8 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
         );
         $priceBox = $this->getMockBuilder(\Magento\Framework\Pricing\Render\PriceBox::class)
             ->disableOriginalConstructor()->getMock();
-        $this->priceCurrencyInterface->expects($this->once())->method('getCurrencySymbol')->willReturn($currencySymbol);
+        $this->priceCurrencyInterface->expects($this->once())->method('getCurrency')->willReturn($this->currency);
+        $this->currency->expects($this->once())->method('getCode')->willReturn($currencyCode);
         $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMock();
         $this->scopeResolverInterface->expects($this->any())->method('getScope')->willReturn($scope);
         $scope->expects($this->any())->method('getId')->willReturn($scopeId);

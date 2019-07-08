@@ -30,7 +30,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     /**
      * @var string
      */
-    protected $_template = 'search_data.phtml';
+    protected $_template = 'Magento_AdvancedSearch::search_data.phtml';
 
     /**
      * @param Template\Context $context

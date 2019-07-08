@@ -20,6 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Bundle
+ *
  * @package Magento\BundleImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -349,6 +350,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Deprecated method for retrieving mapping between skus and products.
+     *
      * @deprecated Misspelled method
      * @see retrieveProductsByCachedSkus
      */
@@ -411,6 +414,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->populateExistingOptions();
                     $this->insertOptions();
                     $this->insertSelections();
+                    $this->insertParentChildRelations();
                     $this->clear();
                 }
             }
@@ -599,6 +603,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
 
     /**
      * Populate array for insert option values
+     *
      * @param array $optionIds
      * @return array
      */
@@ -655,6 +660,32 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         }
 
         $this->relationsDataSaver->saveSelections($selections);
+
+        return $this;
+    }
+
+    /**
+     * Insert parent/child product relations
+     *
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     */
+    private function insertParentChildRelations()
+    {
+        foreach ($this->_cachedOptions as $productId => $options) {
+            $childIds = [];
+            foreach ($options as $option) {
+                foreach ($option['selections'] as $selection) {
+                    if (!isset($selection['parent_product_id'])) {
+                        if (!isset($this->_cachedSkuToProducts[$selection['sku']])) {
+                            continue;
+                        }
+                        $childIds[] = $this->_cachedSkuToProducts[$selection['sku']];
+                    }
+                }
+
+                $this->relationsDataSaver->saveProductRelations($productId, $childIds);
+            }
+        }
 
         return $this;
     }
@@ -752,7 +783,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     private function getStoreIdByCode(string $storeCode): int
     {
-        if (!isset($this->storeIdToCode[$storeCode])) {
+        if (!isset($this->storeCodeToId[$storeCode])) {
             /** @var $store \Magento\Store\Model\Store */
             foreach ($this->storeManager->getStores() as $store) {
                 $this->storeCodeToId[$store->getCode()] = $store->getId();

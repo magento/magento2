@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CaptchaFormsDisplayingActionGroup">
+        <click selector="{{CaptchaFormsDisplayingSection.store}}" stepKey="ClickToGoStores"/>
+        <waitForPageLoad stepKey="waitForStoresLoaded"/>
+        <click selector="{{CaptchaFormsDisplayingSection.config}}" stepKey="ClickToGoConfiguration"/>
+        <waitForPageLoad stepKey="waitForConfigurationsLoaded"/>
+        <scrollTo selector="{{CaptchaFormsDisplayingSection.customer}}" x="0" y="-80" stepKey="ScrollToCustomers"/>
+        <click selector="{{CaptchaFormsDisplayingSection.customer}}" stepKey="ClickToCustomers"/>
+        <waitForPageLoad stepKey="waitForCustomerConfigurationsLoaded"/>
+        <click selector="{{CaptchaFormsDisplayingSection.customerConfig}}" stepKey="ClickToGoCustomerConfiguration"/>
+        <scrollTo selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="scrollToCaptcha"/>
+        <conditionalClick selector="{{CaptchaFormsDisplayingSection.captcha}}" dependentSelector="{{CaptchaFormsDisplayingSection.dependent}}" visible="false" stepKey="ClickToOpenCaptcha"/>
+    </actionGroup>
+</actionGroups>

@@ -118,6 +118,9 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->getItemAttributes($type));
     }
 
+    /**
+     * @return array
+     */
     public function getItemAttributesDataProvider()
     {
         return [

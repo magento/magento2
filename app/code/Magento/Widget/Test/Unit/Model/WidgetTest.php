@@ -32,6 +32,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
      */
     private $conditionsHelper;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->dataStorageMock = $this->getMockBuilder(\Magento\Widget\Model\Config\Data::class)
@@ -55,6 +58,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Unit test for getWidget
+     */
     public function testGetWidgets()
     {
         $expected = ['val1', 'val2'];
@@ -65,6 +71,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * Unit test for getWidgetsWithFilter
+     */
     public function testGetWidgetsWithFilter()
     {
         $configFile = __DIR__ . '/_files/mappedConfigArrayAll.php';
@@ -78,6 +87,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * Unit test for getWidgetsWithUnknownFilter
+     */
     public function testGetWidgetsWithUnknownFilter()
     {
         $configFile = __DIR__ . '/_files/mappedConfigArrayAll.php';
@@ -90,6 +102,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * Unit test for getWidgetByClassType
+     */
     public function testGetWidgetByClassType()
     {
         $widgetOne = ['@' => ['type' => 'type1']];
@@ -101,6 +116,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->widget->getWidgetByClassType('type2'));
     }
 
+    /**
+     * Unit test for getConfigAsObject
+     */
     public function testGetConfigAsObject()
     {
         $configFile = __DIR__ . '/_files/mappedConfigArrayAll.php';
@@ -135,6 +153,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($supportedContainersExpected, $resultObject->getSupportedContainers());
     }
 
+    /**
+     * Unit test for getConfigAsObjectWidgetNoFound
+     */
     public function testGetConfigAsObjectWidgetNoFound()
     {
         $this->dataStorageMock->expects($this->once())
@@ -146,6 +167,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([], $resultObject->getData());
     }
 
+    /**
+     * Unit test for getWidgetDeclaration
+     */
     public function testGetWidgetDeclaration()
     {
         $mathRandomMock = $this->createPartialMock(\Magento\Framework\Math\Random::class, ['getRandomString']);
@@ -168,20 +192,23 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             'show_pager' => '1',
             'products_per_page' => '5',
             'products_count' => '10',
-            'template' => 'product/widget/content/grid.phtml',
+            'template' => 'Magento_CatalogWidget::product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
 
         $this->conditionsHelper->expects($this->once())->method('encode')->with($conditions)
             ->willReturn('encoded-conditions-string');
         $this->escaperMock->expects($this->atLeastOnce())
-            ->method('escapeQuote')
+            ->method('escapeHtmlAttr')
             ->willReturnMap([
                 ['my "widget"', false, 'my &quot;widget&quot;'],
                 ['1', false, '1'],
                 ['5', false, '5'],
                 ['10', false, '10'],
-                ['product/widget/content/grid.phtml', false, 'product/widget/content/grid.phtml'],
+                ['Magento_CatalogWidget::product/widget/content/grid.phtml',
+                 false,
+                 'Magento_CatalogWidget::product/widget/content/grid.phtml'
+                ],
                 ['encoded-conditions-string', false, 'encoded-conditions-string'],
             ]);
 
@@ -197,9 +224,11 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('title="my &quot;widget&quot;"', $result);
         $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
         $this->assertContains('page_var_name="pasdf"', $result);
-        $this->assertContains('type_name=""}}', $result);
     }
 
+    /**
+     * Unit test for getWidgetDeclarationWithZeroValueParam
+     */
     public function testGetWidgetDeclarationWithZeroValueParam()
     {
         $mathRandomMock = $this->createPartialMock(\Magento\Framework\Math\Random::class, ['getRandomString']);
@@ -226,7 +255,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             'show_pager' => '1',
             'products_per_page' => '5',
             'products_count' => '0',
-            'template' => 'product/widget/content/grid.phtml',
+            'template' => 'Magento_CatalogWidget::product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
 
@@ -245,7 +274,6 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('page_var_name="pasdf"', $result);
-        $this->assertContains('type_name=""}}', $result);
         $this->assertContains('products_count=""', $result);
     }
 }

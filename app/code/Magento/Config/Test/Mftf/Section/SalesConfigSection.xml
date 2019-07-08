@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="SalesConfigSection">
+        <element name="TaxClassesTab" type="button" selector="#tax_classes-head"/>
+        <element name="CheckIfTaxClassesTabExpand" type="button" selector="#tax_classes-head:not(.open)"/>
+        <element name="ShippingTaxClass" type="select" selector="#tax_classes_shipping_tax_class"/>
+        <element name="EnableTaxClassForShipping" type="checkbox" selector="#tax_classes_shipping_tax_class_inherit"/>
+    </section>
+</sections>

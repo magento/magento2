@@ -34,7 +34,8 @@ define([
         var id,
             type,
             ampersandPosition,
-            vimeoRegex;
+            vimeoRegex,
+            useYoutubeNocookie = false;
 
         /**
          * Get youtube ID
@@ -68,9 +69,13 @@ define([
                 id = _getYoutubeId(id);
                 type = 'youtube';
             }
-        } else if (href.host.match(/youtube\.com|youtu\.be/)) {
+        } else if (href.host.match(/youtube\.com|youtu\.be|youtube-nocookie.com/)) {
             id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
             type = 'youtube';
+
+            if (href.host.match(/youtube-nocookie.com/)) {
+                useYoutubeNocookie = true;
+            }
         } else if (href.host.match(/vimeo\.com/)) {
             type = 'vimeo';
             vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
@@ -85,7 +90,7 @@ define([
         }
 
         return id ? {
-            id: id, type: type, s: href.search.replace(/^\?/, '')
+            id: id, type: type, s: href.search.replace(/^\?/, ''), useYoutubeNocookie: useYoutubeNocookie
         } : false;
     }
 
@@ -172,12 +177,14 @@ define([
          * @private
          */
         clearEvents: function () {
-            this.fotoramaItem.off(
-                'fotorama:show.' + this.PV +
-                ' fotorama:showend.' + this.PV +
-                ' fotorama:fullscreenenter.' + this.PV +
-                ' fotorama:fullscreenexit.' + this.PV
-            );
+            if (this.fotoramaItem !== undefined) {
+                this.fotoramaItem.off(
+                    'fotorama:show.' + this.PV +
+                    ' fotorama:showend.' + this.PV +
+                    ' fotorama:fullscreenenter.' + this.PV +
+                    ' fotorama:fullscreenexit.' + this.PV
+                );
+            }
         },
 
         /**
@@ -281,6 +288,7 @@ define([
                     tmpVideoData.id = dataUrl.id;
                     tmpVideoData.provider = dataUrl.type;
                     tmpVideoData.videoUrl = tmpInputData.videoUrl;
+                    tmpVideoData.useYoutubeNocookie = dataUrl.useYoutubeNocookie;
                 }
 
                 videoData.push(tmpVideoData);
@@ -442,7 +450,7 @@ define([
                 scriptTag = document.getElementsByTagName('script')[0];
 
             element.async = true;
-            element.src = 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js';
+            element.src = 'https://f.vimeocdn.com/js/froogaloop2.min.js';
 
             /**
              * Vimeo js framework on load callback.
@@ -629,6 +637,8 @@ define([
                 videoData.provider +
                 '" data-code="' +
                 videoData.id +
+                '"  data-youtubenocookie="' +
+                videoData.useYoutubeNocookie +
                 '" data-width="100%" data-height="100%"></div>'
             );
         },

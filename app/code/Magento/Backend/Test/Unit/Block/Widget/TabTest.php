@@ -34,6 +34,9 @@ class TabTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $object->{$method}());
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [

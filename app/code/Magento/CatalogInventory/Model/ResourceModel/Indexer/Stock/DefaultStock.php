@@ -18,6 +18,10 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
+ *
+ * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
+ * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {

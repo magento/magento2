@@ -1,14 +1,20 @@
 <?php
 /**
- * Catalog product copier. Creates product duplicate
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 
+/**
+ * Catalog product copier.
+ *
+ * Creates product duplicate.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Copier
 {
     /**
@@ -49,7 +55,7 @@ class Copier
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      */
-    public function copy(\Magento\Catalog\Model\Product $product)
+    public function copy(Product $product)
     {
         $product->getWebsiteIds();
         $product->getCategoryIds();
@@ -70,21 +76,9 @@ class Copier
         $duplicate->setUpdatedAt(null);
         $duplicate->setId(null);
         $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
-
         $this->copyConstructor->build($product, $duplicate);
-        $isDuplicateSaved = false;
-        do {
-            $urlKey = $duplicate->getUrlKey();
-            $urlKey = preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
-                ? $matches[1] . '-' . ($matches[2] + 1)
-                : $urlKey . '-1';
-            $duplicate->setUrlKey($urlKey);
-            try {
-                $duplicate->save();
-                $isDuplicateSaved = true;
-            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            }
-        } while (!$isDuplicateSaved);
+        $this->setDefaultUrl($product, $duplicate);
+        $this->setStoresUrl($product, $duplicate);
         $this->getOptionRepository()->duplicate($product, $duplicate);
         $product->getResource()->duplicate(
             $product->getData($metadata->getLinkField()),
@@ -94,6 +88,83 @@ class Copier
     }
 
     /**
+     * Set default URL.
+     *
+     * @param Product $product
+     * @param Product $duplicate
+     * @return void
+     */
+    private function setDefaultUrl(Product $product, Product $duplicate) : void
+    {
+        $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+        $resource = $product->getResource();
+        $attribute = $resource->getAttribute('url_key');
+        $productId = $product->getId();
+        $urlKey = $resource->getAttributeRawValue($productId, 'url_key', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
+        do {
+            $urlKey = $this->modifyUrl($urlKey);
+            $duplicate->setUrlKey($urlKey);
+        } while (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $duplicate));
+        $duplicate->setData('url_path', null);
+        $duplicate->save();
+    }
+
+    /**
+     * Set URL for each store.
+     *
+     * @param Product $product
+     * @param Product $duplicate
+     * @return void
+     */
+    private function setStoresUrl(Product $product, Product $duplicate) : void
+    {
+        $storeIds = $duplicate->getStoreIds();
+        $productId = $product->getId();
+        $productResource = $product->getResource();
+        $defaultUrlKey = $productResource->getAttributeRawValue(
+            $productId,
+            'url_key',
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        );
+        $duplicate->setData('save_rewrites_history', false);
+        foreach ($storeIds as $storeId) {
+            $isDuplicateSaved = false;
+            $duplicate->setStoreId($storeId);
+            $urlKey = $productResource->getAttributeRawValue($productId, 'url_key', $storeId);
+            if ($urlKey === $defaultUrlKey) {
+                continue;
+            }
+            do {
+                $urlKey = $this->modifyUrl($urlKey);
+                $duplicate->setUrlKey($urlKey);
+                $duplicate->setData('url_path', null);
+                try {
+                    $duplicate->save();
+                    $isDuplicateSaved = true;
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                }
+            } while (!$isDuplicateSaved);
+        }
+        $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+    }
+
+    /**
+     * Modify URL key.
+     *
+     * @param string $urlKey
+     * @return string
+     */
+    private function modifyUrl(string $urlKey) : string
+    {
+        return preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
+                    ? $matches[1] . '-' . ($matches[2] + 1)
+                    : $urlKey . '-1';
+    }
+
+    /**
+     * Returns product option repository.
+     *
      * @return Option\Repository
      * @deprecated 101.0.0
      */
@@ -107,6 +178,8 @@ class Copier
     }
 
     /**
+     * Returns metadata pool.
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      * @deprecated 101.0.0
      */

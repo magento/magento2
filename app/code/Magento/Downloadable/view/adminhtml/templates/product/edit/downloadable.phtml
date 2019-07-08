@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// @deprecated
 ?>
 
 <?php
@@ -113,7 +112,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
             this.idName = idName;
             this.config = config;
             uploaderTemplate = new Template(this.uploaderText, this.uploaderSyntax);
-            <?php if (!$block->isReadonly()):?>
+            <?php if (!$block->isReadonly()) :?>
             Element.insert(
                 elmContainer,
                 {'top' : uploaderTemplate.evaluate({
@@ -203,8 +202,8 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 });
 </script>
 
-<div data-tab-type="tab_content_downloadableInfo" id="<?= /* @escapeNotVerified */ $block->getId() ?>_content"
-    <?= /* @escapeNotVerified */ $block->getUiId('tab', 'content', $block->getId()) ?>
+<div data-tab-type="tab_content_downloadableInfo" id="<?= $block->escapeHtmlAttr($block->getId()) ?>_content"
+    <?= $block->escapeHtml($block->getUiId('tab', 'content', $block->getId())) ?>
 >
 <div id="alert_messages_block"><?= $block->getMessageHtml() ?></div>
 <div class="admin__field admin__field-option admin__field-is-downloaodable">
@@ -220,11 +219,11 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 <div style="display:none">
     <div id="custom-advice-container"></div>
 </div>
-<?php if ($block->isReadonly()): ?>
+<?php if ($block->isReadonly()) : ?>
     <script>
         require(['prototype'], function(){
 
-        $(<?= /* @escapeNotVerified */  $block->getContentTabId() ?>).select('input', 'select', 'textarea', 'button').each(function (item){
+        $(<?= /* @noEscape */ $block->getContentTabId() ?>).select('input', 'select', 'textarea', 'button').each(function (item){
             item.disabled = true;
             if (item.tagName.toLowerCase() == 'button') {
                 item.addClassName('disabled');

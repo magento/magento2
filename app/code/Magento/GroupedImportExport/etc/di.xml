@@ -9,7 +9,7 @@
     <type name="Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite">
         <arguments>
             <argument name="customizers" xsi:type="array">
-                <item name="gropedProduct" xsi:type="string">Magento\GroupedImportExport\Model\Export\RowCustomizer</item>
+                <item name="groupedProduct" xsi:type="string">Magento\GroupedImportExport\Model\Export\RowCustomizer</item>
             </argument>
         </arguments>
     </type>

@@ -160,7 +160,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Do request to shipment
+     * Do request to shipment.
+     *
      * Implementation must be in overridden method
      *
      * @param Request $request
@@ -173,7 +174,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Do return of shipment
+     * Do return of shipment.
+     *
      * Implementation must be in overridden method
      *
      * @param Request $request
@@ -275,6 +277,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
+     * Validate request for available ship countries.
+     *
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -329,9 +333,22 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return $this|bool|\Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         return $this;
+    }
+
+    /**
+     * Processing additional validation to check is carrier applicable.
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|bool|\Magento\Framework\DataObject
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    {
+        return $this->processAdditionalValidation($request);
     }
 
     /**
@@ -387,6 +404,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
+     * Allows free shipping when all product items have free shipping.
+     *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -394,6 +413,9 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     protected function _updateFreeMethodQuote($request)
     {
+        if (!$request->getFreeShipping()) {
+            return;
+        }
         if ($request->getFreeMethodWeight() == $request->getPackageWeight() || !$request->hasFreeMethodWeight()) {
             return;
         }
@@ -435,6 +457,12 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                     }
                 }
             }
+        } else {
+            /**
+             * if we can apply free shipping for all order we should force price
+             * to $0.00 for shipping with out sending second request to carrier
+             */
+            $price = 0;
         }
 
         /**
@@ -509,10 +537,10 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Sets the number of boxes for shipping
+     * Gets the average weight of each box available for shipping
      *
-     * @param int $weight in some measure
-     * @return int
+     * @param float $weight in some measure
+     * @return float
      */
     public function getTotalNumOfBoxes($weight)
     {
@@ -523,7 +551,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         $maxPackageWeight = $this->getConfigData('max_package_weight');
         if ($weight > $maxPackageWeight && $maxPackageWeight != 0) {
             $this->_numBoxes = ceil($weight / $maxPackageWeight);
-            $weight = $weight / $this->_numBoxes;
+            $weight = (float)$weight / $this->_numBoxes;
         }
 
         return $weight;
@@ -649,7 +677,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Recursive replace sensitive xml nodes values by specified mask
+     * Recursive replace sensitive xml nodes values by specified mask.
+     *
      * @param \SimpleXMLElement $xml
      * @return void
      */

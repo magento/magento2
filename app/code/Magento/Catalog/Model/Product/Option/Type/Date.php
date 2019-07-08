@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  * Catalog product option date type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -102,11 +103,11 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $this->setUserValue(
                 [
                     'date' => isset($value['date']) ? $value['date'] : '',
-                    'year' => isset($value['year']) ? intval($value['year']) : 0,
-                    'month' => isset($value['month']) ? intval($value['month']) : 0,
-                    'day' => isset($value['day']) ? intval($value['day']) : 0,
-                    'hour' => isset($value['hour']) ? intval($value['hour']) : 0,
-                    'minute' => isset($value['minute']) ? intval($value['minute']) : 0,
+                    'year' => isset($value['year']) ? (int) $value['year'] : 0,
+                    'month' => isset($value['month']) ? (int) $value['month'] : 0,
+                    'day' => isset($value['day']) ? (int) $value['day'] : 0,
+                    'hour' => isset($value['hour']) ? (int) $value['hour'] : 0,
+                    'minute' => isset($value['minute']) ? (int) $value['minute'] : 0,
                     'day_part' => isset($value['day_part']) ? $value['day_part'] : '',
                     'date_internal' => isset($value['date_internal']) ? $value['date_internal'] : '',
                 ]
@@ -147,7 +148,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function prepareForCart()
     {
         if ($this->getIsValid() && $this->getUserValue() !== null) {
-            $option = $this->getOption();
             $value = $this->getUserValue();
 
             if (isset($value['date_internal']) && $value['date_internal'] != '') {

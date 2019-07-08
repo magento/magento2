@@ -38,7 +38,7 @@ class SwaggerUiPage
      *
      * @var string
      */
-    protected $titleSelector = '.info_title';
+    protected $titleSelector = '.title';
 
     /**
      * Constructor
@@ -97,14 +97,14 @@ class SwaggerUiPage
         /**
          * Selector for service
          */
-        $serviceSelector = 'a#endpointListTogger_%s';
+        $serviceSelector = '#operations-tag-%s';
         /**
          * Selector for endpoint
          */
-        $endpointSelector = 'ul#%s_endpoint_list';
+        $endpointSelector = '//H4[@id=\'operations-tag-%s\']/following-sibling::DIV';
         $serviceSelector = sprintf($serviceSelector, $serviceName);
         $endpointSelector = sprintf($endpointSelector, $serviceName);
-        if (!$this->isElementVisible($endpointSelector)) {
+        if (!$this->isElementVisible($endpointSelector, Locator::SELECTOR_XPATH)) {
             $this->browser->find($serviceSelector, Locator::SELECTOR_CSS)->click();
         }
     }
@@ -120,16 +120,12 @@ class SwaggerUiPage
         /**
          * Selector for service
          */
-        $serviceSelector = 'a#endpointListTogger_%s';
+        $serviceSelector = '#operations-tag-%s';
         /**
          * Selector for endpoint
          */
-        $endpointSelector = 'ul#%s_endpoint_list';
         $serviceSelector = sprintf($serviceSelector, $serviceName);
-        $endpointSelector = sprintf($endpointSelector, $serviceName);
-        if ($this->isElementVisible($endpointSelector)) {
-            $this->browser->find($serviceSelector, Locator::SELECTOR_CSS)->click();
-        }
+        $this->browser->find($serviceSelector, Locator::SELECTOR_CSS)->click();
     }
 
     /**
@@ -145,16 +141,12 @@ class SwaggerUiPage
         /**
          * Selector for endpoint href
          */
-        $endpointRefSelector = 'a[href$="%s%s"]';
+        $endpointRefSelector = '#operations-%s-%s%s > div';
         /**
          * Selector for operation
          */
-        $operationSelector = 'div[id$="%s%s_content"]';
-        $endpointRefSelector = sprintf($endpointRefSelector, $serviceName, $endpoint);
-        $operationSelector = sprintf($operationSelector, $serviceName, $endpoint);
-        if (!$this->isElementVisible($operationSelector)) {
-            $this->browser->find($endpointRefSelector, Locator::SELECTOR_CSS)->click();
-        }
+        $endpointRefSelector = sprintf($endpointRefSelector, $serviceName, $serviceName, $endpoint);
+        $this->browser->find($endpointRefSelector, Locator::SELECTOR_CSS)->click();
     }
 
     /**
@@ -167,19 +159,17 @@ class SwaggerUiPage
     public function closeEndpointContent($serviceName, $endpoint)
     {
         $this->expandServiceContent($serviceName);
+
         /**
          * Selector for endpoint href
          */
-        $endpointRefSelector = 'a[href$="%s%s"]';
+        $endpointRefSelector = '#operations-%s-%s%s > div';
+
         /**
          * Selector for operation
          */
-        $operationSelector = 'div[id$="%s%s_content"]';
-        $endpointRefSelector = sprintf($endpointRefSelector, $serviceName, $endpoint);
-        $operationSelector = sprintf($operationSelector, $serviceName, $endpoint);
-        if ($this->isElementVisible($operationSelector)) {
-            $this->browser->find($endpointRefSelector, Locator::SELECTOR_CSS)->click();
-        }
+        $endpointRefSelector = sprintf($endpointRefSelector, $serviceName, $serviceName, $endpoint);
+        $this->browser->find($endpointRefSelector, Locator::SELECTOR_CSS)->click();
     }
 
     /**

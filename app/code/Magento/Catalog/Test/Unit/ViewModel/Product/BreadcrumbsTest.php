@@ -41,7 +41,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->catalogHelper = $this->getMockBuilder(CatalogHelper::class)
             ->setMethods(['getProduct'])
@@ -53,11 +53,14 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $escaper = $this->getObjectManager()->getObject(\Magento\Framework\Escaper::class);
+
         $this->viewModel = $this->getObjectManager()->getObject(
             Breadcrumbs::class,
             [
                 'catalogData' => $this->catalogHelper,
                 'scopeConfig' => $this->scopeConfig,
+                'escaper' => $escaper
             ]
         );
     }
@@ -65,7 +68,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testGetCategoryUrlSuffix()
+    public function testGetCategoryUrlSuffix() : void
     {
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
@@ -78,7 +81,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testIsCategoryUsedInProductUrl()
+    public function testIsCategoryUsedInProductUrl() : void
     {
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -95,7 +98,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedName
      * @return void
      */
-    public function testGetProductName($product, string $expectedName)
+    public function testGetProductName($product, string $expectedName) : void
     {
         $this->catalogHelper->expects($this->atLeastOnce())
             ->method('getProduct')
@@ -107,7 +110,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function productDataProvider()
+    public function productDataProvider() : array
     {
         return [
             [$this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test']]), 'Test'],
@@ -116,9 +119,62 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider productJsonEncodeDataProvider
+     *
+     * @param Product|null $product
+     * @param string $expectedJson
+     * @return void
+     */
+    public function testGetJsonConfiguration($product, string $expectedJson) : void
+    {
+        $this->catalogHelper->expects($this->atLeastOnce())
+            ->method('getProduct')
+            ->willReturn($product);
+
+        $this->scopeConfig->expects($this->any())
+            ->method('isSetFlag')
+            ->with('catalog/seo/product_use_categories', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->willReturn(false);
+
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with('catalog/seo/category_url_suffix', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->willReturn('."html');
+
+        $this->assertEquals($expectedJson, $this->viewModel->getJsonConfiguration());
+    }
+
+    /**
+     * @return array
+     */
+    public function productJsonEncodeDataProvider() : array
+    {
+        return [
+            [
+                $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test ™']]),
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test \u2122"}}',
+            ],
+            [
+                $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test "']]),
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &quot;"}}',
+            ],
+            [
+                $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test <b>x</b>']]),
+                '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":'
+                . '"Test &lt;b&gt;x&lt;\/b&gt;"}}',
+            ],
+            [
+                $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test \'abc\'']]),
+                '{"breadcrumbs":'
+                . '{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
+            ],
+        ];
+    }
+
+    /**
      * @return ObjectManager
      */
-    private function getObjectManager()
+    private function getObjectManager() : ObjectManager
     {
         if (null === $this->objectManager) {
             $this->objectManager = new ObjectManager($this);

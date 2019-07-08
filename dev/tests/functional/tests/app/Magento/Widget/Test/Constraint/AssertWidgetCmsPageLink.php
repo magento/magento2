@@ -18,7 +18,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertWidgetCmsPageLink extends AbstractConstraint
 {
     /**
-     * Assert that created widget displayed on frontent on Home page and on Advanced Search and
+     * Assert that created widget displayed on frontend on Home page and on Advanced Search and
      * after click on widget link on frontend system redirects you to cms page.
      *
      * @param CmsIndex $cmsIndex

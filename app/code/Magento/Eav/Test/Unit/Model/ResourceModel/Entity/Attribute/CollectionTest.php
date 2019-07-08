@@ -150,8 +150,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('group')->with('entity_attribute.attribute_id')
             ->willReturnSelf();
 
-        $this->selectMock->expects($this->atLeastOnce())->method('having')->with('count = ' . count($setIds))
-            ->willReturnSelf();
+        $this->selectMock->expects($this->atLeastOnce())->method('having')
+            ->with(new \Zend_Db_Expr('COUNT(*)') . ' = ' . count($setIds))->willReturnSelf();
 
         $this->model->setInAllAttributeSetsFilter($setIds);
     }

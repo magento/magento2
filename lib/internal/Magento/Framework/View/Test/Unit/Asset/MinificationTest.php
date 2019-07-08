@@ -195,6 +195,8 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test dev/js/minify_exclude system value as array
+     *
      * @return void
      */
     public function testGetExcludes()
@@ -212,5 +214,39 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->minification->getExcludes('js'));
         /** check cache: */
         $this->assertEquals($expected, $this->minification->getExcludes('js'));
+    }
+
+    /**
+     * Test dev/js/minify_exclude system value backward compatibility when value was a string
+     *
+     * @param string $value
+     * @param array $expectedValue
+     * @return void
+     *
+     * @dataProvider getExcludesTinyMceAsStringDataProvider
+     */
+    public function testGetExcludesTinyMceAsString(string $value, array $expectedValue)
+    {
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with('dev/js/minify_exclude')
+            ->willReturn($value);
+
+        $this->assertEquals($expectedValue, $this->minification->getExcludes('js'));
+        /** check cache: */
+        $this->assertEquals($expectedValue, $this->minification->getExcludes('js'));
+    }
+
+    /**
+     * @return array
+     */
+    public function getExcludesTinyMceAsStringDataProvider()
+    {
+        return [
+            ["/tiny_mce/  \n  /tiny_mce2/", ['/tiny_mce/', '/tiny_mce2/']],
+            ['/tiny_mce/', ['/tiny_mce/']],
+            [' /tiny_mce/', ['/tiny_mce/']],
+        ];
     }
 }

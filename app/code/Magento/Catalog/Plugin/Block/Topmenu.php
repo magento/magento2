@@ -15,6 +15,11 @@ use Magento\Framework\Data\Tree\Node;
 class Topmenu
 {
     /**
+     * Cache tag for menu block
+     */
+    private $cacheTag = "top_menu";
+
+    /**
      * Catalog category
      *
      * @var \Magento\Catalog\Helper\Category
@@ -22,7 +27,7 @@ class Topmenu
     protected $catalogCategory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory
      */
     private $collectionFactory;
 
@@ -40,13 +45,13 @@ class Topmenu
      * Initialize dependencies.
      *
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
         \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver
     ) {
@@ -119,6 +124,7 @@ class Topmenu
         $subject->addIdentity(Category::CACHE_TAG);
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
         $storeId = $this->storeManager->getStore()->getId();
+        $currentCategory = $this->getCurrentCategory();
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection = $this->getCategoryTree($storeId, $rootId);
         $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
@@ -127,6 +133,9 @@ class Topmenu
                 continue;
             }
             $subject->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
+        }
+        if ($currentCategory) {
+            $subject->addIdentity($this->cacheTag . '_' . Category::CACHE_TAG . '_' . $currentCategory->getId());
         }
     }
 
@@ -162,6 +171,7 @@ class Topmenu
             'url' => $this->catalogCategory->getCategoryUrl($category),
             'has_active' => in_array((string)$category->getId(), explode('/', $currentCategory->getPath()), true),
             'is_active' => $category->getId() == $currentCategory->getId(),
+            'is_category' => true,
             'is_parent_active' => $isParentActive
         ];
     }

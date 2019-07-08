@@ -21,19 +21,19 @@ class Country implements \Magento\Framework\Option\ArrayInterface
     protected $_countryCollection;
 
     /**
+     * Options array
+     *
+     * @var array
+     */
+    protected $_options;
+
+    /**
      * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
      */
     public function __construct(\Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection)
     {
         $this->_countryCollection = $countryCollection;
     }
-
-    /**
-     * Options array
-     *
-     * @var array
-     */
-    protected $_options;
 
     /**
      * Return options array

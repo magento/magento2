@@ -16,7 +16,16 @@
         </div>
         <?php endif;?>
     </div>
-    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?= $block->escapeHtmlAttr(__('Preview')) ?>" width="100%"></iframe>
+    <iframe
+            name="preview_iframe"
+            id="preview_iframe"
+            frameborder="0"
+            title="<?= $block->escapeHtmlAttr(__('Preview')) ?>"
+            width="100%"
+            sandbox="allow-forms allow-pointer-lock allow-scripts"
+    >
+
+    </iframe>
     <?= $block->getChildHtml('preview_form') ?>
 </div>
 

@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Backend\Block\Cache\Permissions|null $permissions */
 $permissions = $block->getData('permissions');
 ?>
-<?php if ($permissions && $permissions->hasAccessToAdditionalActions()): ?>
+<?php if ($permissions && $permissions->hasAccessToAdditionalActions()) : ?>
     <div class="additional-cache-management">
-        <?php if ($permissions->hasAccessToFlushCatalogImages()): ?>
-            <h2>
-                <span><?= $block->escapeHtml(__('Additional Cache Management')); ?></span>
-            </h2>
+        <h2>
+            <span><?= $block->escapeHtml(__('Additional Cache Management')); ?></span>
+        </h2>
+        <?php if ($permissions->hasAccessToFlushCatalogImages()) : ?>
             <p>
                 <button onclick="setLocation('<?= $block->escapeJs($block->getCleanImagesUrl()); ?>')" type="button">
                     <?= $block->escapeHtml(__('Flush Catalog Images Cache')); ?>
@@ -22,7 +20,7 @@ $permissions = $block->getData('permissions');
                 <span><?= $block->escapeHtml(__('Pregenerated product images files')); ?></span>
             </p>
         <?php endif; ?>
-        <?php if ($permissions->hasAccessToFlushJsCss()): ?>
+        <?php if ($permissions->hasAccessToFlushJsCss()) : ?>
             <p>
                 <button onclick="setLocation('<?= $block->escapeJs($block->getCleanMediaUrl()); ?>')" type="button">
                     <?= $block->escapeHtml(__('Flush JavaScript/CSS Cache')); ?>
@@ -30,7 +28,7 @@ $permissions = $block->getData('permissions');
                 <span><?= $block->escapeHtml(__('Themes JavaScript and CSS files combined to one file')) ?></span>
             </p>
         <?php endif; ?>
-        <?php if (!$block->isInProductionMode() && $permissions->hasAccessToFlushStaticFiles()): ?>
+        <?php if (!$block->isInProductionMode() && $permissions->hasAccessToFlushStaticFiles()) : ?>
             <p>
                 <button onclick="setLocation('<?= $block->escapeJs($block->getCleanStaticFilesUrl()); ?>')" type="button">
                     <?= $block->escapeHtml(__('Flush Static Files Cache')); ?>

@@ -15,6 +15,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Webapi\Model\Config\Converter;
 
+/**
+ * Class for accessing to Webapi_Async configuration.
+ */
 class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
 {
     /**
@@ -55,7 +58,7 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getServices()
     {
@@ -73,26 +76,30 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTopicName($routeUrl, $httpMethod)
     {
         $services = $this->getServices();
-        $topicName = $this->generateTopicNameByRouteData(
+        $lookupKey = $this->generateLookupKeyByRouteData(
             $routeUrl,
             $httpMethod
         );
 
-        if (array_key_exists($topicName, $services) === false) {
+        if (array_key_exists($lookupKey, $services) === false) {
             throw new LocalizedException(
-                __('WebapiAsync config for "%topicName" does not exist.', ['topicName' => $topicName])
+                __('WebapiAsync config for "%lookupKey" does not exist.', ['lookupKey' => $lookupKey])
             );
         }
 
-        return $services[$topicName][self::SERVICE_PARAM_KEY_TOPIC];
+        return $services[$lookupKey][self::SERVICE_PARAM_KEY_TOPIC];
     }
 
     /**
+     * Generate topic data for all defined services
+     *
+     * Topic data is indexed by a lookup key that is derived from route data
+     *
      * @return array
      */
     private function generateTopicsDataFromWebapiConfig()
@@ -105,11 +112,18 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
                     $serviceInterface = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
                     $serviceMethod = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD];
 
-                    $topicName = $this->generateTopicNameByRouteData(
+                    $lookupKey = $this->generateLookupKeyByRouteData(
                         $routeUrl,
                         $httpMethod
                     );
-                    $services[$topicName] = [
+
+                    $topicName = $this->generateTopicNameFromService(
+                        $serviceInterface,
+                        $serviceMethod,
+                        $httpMethod
+                    );
+
+                    $services[$lookupKey] = [
                         self::SERVICE_PARAM_KEY_INTERFACE => $serviceInterface,
                         self::SERVICE_PARAM_KEY_METHOD    => $serviceMethod,
                         self::SERVICE_PARAM_KEY_TOPIC     => $topicName,
@@ -122,7 +136,7 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
     }
 
     /**
-     * Generate topic name based on service type and method name.
+     * Generate lookup key name based on route and method
      *
      * Perform the following conversion:
      * self::TOPIC_PREFIX + /V1/products + POST => async.V1.products.POST
@@ -131,19 +145,39 @@ class Config implements \Magento\AsynchronousOperations\Model\ConfigInterface
      * @param string $httpMethod
      * @return string
      */
-    private function generateTopicNameByRouteData($routeUrl, $httpMethod)
+    private function generateLookupKeyByRouteData($routeUrl, $httpMethod)
     {
-        return self::TOPIC_PREFIX . $this->generateTopicName($routeUrl, $httpMethod, '/', false);
+        return self::TOPIC_PREFIX . $this->generateKey($routeUrl, $httpMethod, '/', false);
     }
 
     /**
+     * Generate topic name based on service type and method name.
+     *
+     * Perform the following conversion:
+     * self::TOPIC_PREFIX + Magento\Catalog\Api\ProductRepositoryInterface + save + POST
+     *   => async.magento.catalog.api.productrepositoryinterface.save.POST
+     *
+     * @param string $serviceInterface
+     * @param string $serviceMethod
+     * @param string $httpMethod
+     * @return string
+     */
+    private function generateTopicNameFromService($serviceInterface, $serviceMethod, $httpMethod)
+    {
+        $typeName = strtolower(sprintf('%s.%s', $serviceInterface, $serviceMethod));
+        return strtolower(self::TOPIC_PREFIX . $this->generateKey($typeName, $httpMethod, '\\', false));
+    }
+
+    /**
+     * Join and simplify input type and method into a string that can be used as an array key
+     *
      * @param string $typeName
      * @param string $methodName
      * @param string $delimiter
      * @param bool $lcfirst
      * @return string
      */
-    private function generateTopicName($typeName, $methodName, $delimiter = '\\', $lcfirst = true)
+    private function generateKey($typeName, $methodName, $delimiter = '\\', $lcfirst = true)
     {
         $parts = explode($delimiter, ltrim($typeName, $delimiter));
         foreach ($parts as &$part) {

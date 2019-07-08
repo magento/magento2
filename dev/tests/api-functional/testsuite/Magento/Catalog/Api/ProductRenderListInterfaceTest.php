@@ -25,7 +25,6 @@ class ProductRenderListInterfaceTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_special_price.php
      * @dataProvider productRenderInfoProvider
      * @param array $expectedRenderInfo
-     * @param string $ids
      * @return void
      */
     public function testGetList(array $expectedRenderInfo)

@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+/**
+ * Collection test
+ */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -50,6 +53,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->processor->getIndexer()->setScheduled(true);
         $this->assertTrue($this->processor->getIndexer()->isScheduled());
+
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
@@ -81,7 +85,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $product = reset($items);
         $this->assertCount(2, $items);
         $this->assertEquals(15, $product->getPrice());
-        $this->processor->getIndexer()->reindexList([1]);
 
         $this->processor->getIndexer()->setScheduled(false);
     }
@@ -128,6 +131,42 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
+     *
+     * @dataProvider addAttributeToSortDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_non_saleable_product.php
+     * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
+     * @magentoAppIsolation enabled
+     * @magentoAppArea frontend
+     */
+    public function testAddAttributeToSort(string $productSku, string $order)
+    {
+        /** @var Collection $productCollection */
+        $this->collection->addAttributeToSort('is_saleable', $order);
+        self::assertEquals(2, $this->collection->count());
+        self::assertSame($productSku, $this->collection->getFirstItem()->getSku());
+    }
+
+    /**
+     * Provide test data for testAddAttributeToSort().
+     *
+     * @return array
+     */
+    public function addAttributeToSortDataProvider()
+    {
+        return [
+            [
+                'product_sku' => 'simple_saleable',
+                'order' => Collection::SORT_ORDER_DESC,
+            ],
+            [
+                'product_sku' => 'simple_not_saleable',
+                'order' => Collection::SORT_ORDER_ASC,
+            ]
+        ];
+    }
+
+    /**
      * Checks a case if table for join specified as an array.
      *
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -145,6 +184,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $productTable = $this->collection->getTable('catalog_product_entity');
         $urlRewriteTable = $this->collection->getTable('url_rewrite');
 
+        // phpcs:ignore
         $expected = 'SELECT `e`.*, `alias`.`request_path` FROM `' . $productTable . '` AS `e`'
             . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
             . ' AND (alias.entity_type = \'product\')';
@@ -153,18 +193,26 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Checks that a collection uses the correct join when filtering by null.
-     *
-     * This actually affects AbstractCollection, but inheritance yada yada.
-     *
-     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDbIsolation enabled
      */
-    public function testFilterByNull()
+    public function testAddAttributeToFilterAffectsGetSize(): void
     {
-        $this->collection->addAttributeToFilter([['attribute' => 'special_price', 'null' => true]]);
-        $productCount = $this->collection->count();
+        $this->assertEquals(10, $this->collection->getSize());
+        $this->collection->addAttributeToFilter('sku', 'Product1');
+        $this->assertEquals(1, $this->collection->getSize());
+    }
 
-        $this->assertEquals(1, $productCount, 'Product with null special_price not found');
+    /**
+     * Add tier price attribute filter to collection
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     */
+    public function testAddAttributeTierPriceToFilter(): void
+    {
+        $this->assertEquals(11, $this->collection->getSize());
+        $this->collection->addAttributeToFilter('tier_price', ['gt' => 0]);
+        $this->assertEquals(1, $this->collection->getSize());
     }
 }

@@ -8,20 +8,21 @@
 /** @var $block \Magento\Swatches\Block\Product\Renderer\Listing\Configurable */
 $productId = $block->getProduct()->getId();
 ?>
-<div class="swatch-opt-<?= /* @escapeNotVerified */ $productId ?>"
-     data-role="swatch-option-<?= /* @escapeNotVerified */ $productId ?>"></div>
+<div class="swatch-opt-<?= $block->escapeHtmlAttr($productId) ?>"
+     data-role="swatch-option-<?= $block->escapeHtmlAttr($productId) ?>"></div>
 
 <script type="text/x-magento-init">
     {
-        "[data-role=swatch-option-<?= /* @escapeNotVerified */ $productId ?>]": {
+        "[data-role=swatch-option-<?= $block->escapeJs($productId) ?>]": {
             "Magento_Swatches/js/swatch-renderer": {
                 "selectorProduct": ".product-item-details",
                 "onlySwatches": true,
                 "enableControlLabel": false,
-                "numberToShow": <?= /* @escapeNotVerified */ $block->getNumberSwatchesPerProduct(); ?>,
-                "jsonConfig": <?= /* @escapeNotVerified */ $block->getJsonConfig(); ?>,
-                "jsonSwatchConfig": <?= /* @escapeNotVerified */ $block->getJsonSwatchConfig(); ?>,
-                "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>"
+                "numberToShow": <?=  $block->escapeJs($block->getNumberSwatchesPerProduct()) ?>,
+                "jsonConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                "jsonSwatchConfig": <?= /* @noEscape */ $block->getJsonSwatchConfig() ?>,
+                "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
+                "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>
             }
         }
     }
@@ -29,11 +30,11 @@ $productId = $block->getProduct()->getId();
 
 <script type="text/x-magento-init">
     {
-        "[data-role=priceBox][data-price-box=product-id-<?= /* @escapeNotVerified */ $productId ?>]": {
+        "[data-role=priceBox][data-price-box=product-id-<?= $block->escapeJs($productId) ?>]": {
             "priceBox": {
                 "priceConfig": {
-                    "priceFormat": <?= /* @escapeNotVerified */ $block->getPriceFormatJson(); ?>,
-                    "prices": <?= /* @escapeNotVerified */ $block->getPricesJson(); ?>
+                    "priceFormat": <?= /* @noEscape */ $block->getPriceFormatJson(); ?>,
+                    "prices": <?= /* @noEscape */ $block->getPricesJson(); ?>
                 }
             }
         }

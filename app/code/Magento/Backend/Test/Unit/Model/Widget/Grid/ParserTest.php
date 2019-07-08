@@ -58,6 +58,9 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->isOperation($operation));
     }
 
+    /**
+     * @return array
+     */
     public function isOperationDataProvider()
     {
         return [

@@ -45,7 +45,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict = false)
     {
@@ -106,6 +106,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param bool $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     private function create(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
     {
@@ -144,6 +145,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroupInterface $synonymGroupToMerge
      * @param array $matchingGroupIds
      * @return array
+     * @throws \Exception
      */
     private function merge(SynonymGroupInterface $synonymGroupToMerge, array $matchingGroupIds)
     {
@@ -182,6 +184,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param bool $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     private function update(
         SynonymGroup $oldSynonymGroup,

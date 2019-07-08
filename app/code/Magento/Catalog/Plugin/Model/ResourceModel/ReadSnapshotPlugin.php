@@ -58,7 +58,9 @@ class ReadSnapshotPlugin
         $globalAttributes = [];
         $attributesMap = [];
         $eavEntityType = $metadata->getEavEntityType();
-        $attributes = (null === $eavEntityType) ? [] : $this->config->getEntityAttributes($eavEntityType);
+        $attributes = null === $eavEntityType
+            ? []
+            : $this->config->getEntityAttributes($eavEntityType, new \Magento\Framework\DataObject($entityData));
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         foreach ($attributes as $attribute) {

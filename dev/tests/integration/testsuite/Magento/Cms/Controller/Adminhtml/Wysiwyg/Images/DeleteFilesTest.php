@@ -64,6 +64,10 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
         copy($fixtureDir . '/' . $this->fileName, $filePath);
+        $path = $this->fullDirectoryPath . '/.htaccess';
+        if (!$this->mediaDirectory->isFile($path)) {
+            $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
+        }
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::class);
     }
 
@@ -88,6 +92,26 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check that htaccess file couldn't be removed via
+     * \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::execute method
+     *
+     * @return void
+     */
+    public function testDeleteHtaccess()
+    {
+        $this->model->getRequest()->setMethod('POST')
+            ->setPostValue('files', [$this->imagesHelper->idEncode('.htaccess')]);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
+        $this->model->execute();
+
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . '.htaccess')
+            )
+        );
+    }
+
+    /**
      * Execute method with traversal file path to check that there is no ability to remove file which is not
      * under media directory.
      *
@@ -101,11 +125,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
-        $this->assertTrue(
-            $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $fileName)
-            )
-        );
+        $this->assertFileExists($this->fullDirectoryPath . $fileName);
     }
 
     /**

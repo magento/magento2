@@ -38,6 +38,9 @@ class PayloadValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $this->model->validatePayload($type));
     }
 
+    /**
+     * @return array
+     */
     public function validatePayLoadDataProvider()
     {
         return [
@@ -61,6 +64,9 @@ class PayloadValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith($errorMessage, $this->model->validatePayload($type));
     }
 
+    /**
+     * @return array
+     */
     public function validatePayLoadNegativeCasesDataProvider()
     {
         return [

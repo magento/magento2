@@ -221,6 +221,9 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         return $elementMock;
     }
 
+    /**
+     * @return array
+     */
     public function emptyElementDataProvider()
     {
         return [
@@ -389,6 +392,9 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($paths, $this->_model->getFieldPathsByAttribute($attributeName, $attributeValue));
     }
 
+    /**
+     * @return array
+     */
     public function getFieldPathsByAttributeDataProvider()
     {
         return [
@@ -412,6 +418,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
                 'field_2'
             ],
             'field_3' => [
+                'field_3',
                 'field_3'
             ],
             'field_3_1' => [

@@ -65,6 +65,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
      */
     private $mailMock;
 
+    /**
+     * test setup
+     */
     protected function setUp()
     {
         $this->mailMock = $this->getMockBuilder(MailInterface::class)->getMockForAbstractClass();
@@ -78,7 +81,7 @@ class PostTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->requestStub = $this->createPartialMock(
             \Magento\Framework\App\Request\Http::class,
-            ['getPostValue', 'getParams', 'getParam']
+            ['getPostValue', 'getParams', 'getParam', 'isPost']
         );
         $this->redirectResultMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
         $this->redirectResultMock->method('setPath')->willReturnSelf();
@@ -120,6 +123,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * testExecuteEmptyPost
+     */
     public function testExecuteEmptyPost()
     {
         $this->stubRequestPostData([]);
@@ -127,6 +133,8 @@ class PostTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param array $postData
+     * @param bool $exceptionExpected
      * @dataProvider postDataProvider
      */
     public function testExecutePostValidation($postData, $exceptionExpected)
@@ -144,6 +152,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $this->controller->execute();
     }
 
+    /**
+     * @return array
+     */
     public function postDataProvider()
     {
         return [
@@ -156,6 +167,9 @@ class PostTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * testExecuteValidPost
+     */
     public function testExecuteValidPost()
     {
         $post = ['name' => 'Name', 'comment' => 'Comment', 'email' => 'valid@mail.com', 'hideit' => null];
@@ -174,6 +188,10 @@ class PostTest extends \PHPUnit\Framework\TestCase
      */
     private function stubRequestPostData($post)
     {
+        $this->requestStub
+             ->expects($this->once())
+             ->method('isPost')
+             ->willReturn(!empty($post));
         $this->requestStub->method('getPostValue')->willReturn($post);
         $this->requestStub->method('getParams')->willReturn($post);
         $this->requestStub->method('getParam')->willReturnCallback(

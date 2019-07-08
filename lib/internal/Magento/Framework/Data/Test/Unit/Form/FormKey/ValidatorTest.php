@@ -50,6 +50,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->validate($this->_requestMock));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [

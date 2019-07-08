@@ -15,13 +15,14 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method string getTitle()
  * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
  * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string $value)
+ * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string|array $value)
  * @method int getSortOrder()
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
@@ -95,6 +96,16 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @var string[]
      */
     protected $_relatedCacheTypes;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Type
+     */
+    protected $_productType;
+
+    /**
+     * @var \Magento\Widget\Model\Config\Reader
+     */
+    protected $_reader;
 
     /**
      * @var \Magento\Framework\Escaper
@@ -329,6 +340,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Setter
+     *
      * Prepare widget type
      *
      * @param string $type
@@ -342,6 +354,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Prepare widget type
      *
      * @return string
@@ -353,6 +366,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter.
+     *
      * If not set return default
      *
      * @return string
@@ -368,6 +382,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Explode to array if string setted
      *
      * @return array
@@ -382,6 +397,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Unserialize if serialized string setted
      *
      * @return array

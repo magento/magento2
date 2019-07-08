@@ -20,6 +20,11 @@ class CompareProducts implements SectionSourceInterface
     protected $productUrl;
 
     /**
+     * @var \Magento\Catalog\Helper\Output
+     */
+    private $outputHelper;
+
+    /**
      * @param \Magento\Catalog\Helper\Product\Compare $helper
      * @param \Magento\Catalog\Model\Product\Url $productUrl
      * @param \Magento\Catalog\Helper\Output $outputHelper
@@ -54,6 +59,7 @@ class CompareProducts implements SectionSourceInterface
     protected function getItems()
     {
         $items = [];
+        /** @var \Magento\Catalog\Model\Product $item */
         foreach ($this->helper->getItemCollection() as $item) {
             $items[] = [
                 'id' => $item->getId(),

@@ -19,6 +19,9 @@ use Magento\Quote\Model\ShippingFactory;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Class ShippingInformationManagement
+ *
+ * @package Magento\Checkout\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInformationManagementInterface
@@ -99,8 +102,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
-     * @param CartExtensionFactory|null $cartExtensionFactory,
-     * @param ShippingAssignmentFactory|null $shippingAssignmentFactory,
+     * @param CartExtensionFactory|null $cartExtensionFactory
+     * @param ShippingAssignmentFactory|null $shippingAssignmentFactory
      * @param ShippingFactory|null $shippingFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -136,7 +139,14 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     }
 
     /**
-     * {@inheritDoc}
+     * Save address information.
+     *
+     * @param int $cartId
+     * @param \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
+     * @return \Magento\Checkout\Api\Data\PaymentDetailsInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
      */
     public function saveAddressInformation(
         $cartId,
@@ -149,6 +159,10 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         if (!$address->getCustomerAddressId()) {
             $address->setCustomerAddressId(null);
+        }
+
+        if ($billingAddress && !$billingAddress->getCustomerAddressId()) {
+            $billingAddress->setCustomerAddressId(null);
         }
 
         if (!$address->getCountryId()) {
@@ -177,7 +191,9 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         $shippingAddress = $quote->getShippingAddress();
 
-        if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())) {
+        if (!$quote->getIsVirtual()
+            && !$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())
+        ) {
             throw new NoSuchEntityException(
                 __('Carrier with such method not found: %1, %2', $carrierCode, $methodCode)
             );
@@ -208,6 +224,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     }
 
     /**
+     * Prepare shipping assignment.
+     *
      * @param CartInterface $quote
      * @param AddressInterface $address
      * @param string $method

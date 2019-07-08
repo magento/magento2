@@ -6,18 +6,23 @@
 namespace Magento\AdvancedSearch\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver as TableResolver;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * @api
  * @since 100.1.0
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Index extends AbstractDb
 {
@@ -39,24 +44,38 @@ class Index extends AbstractDb
     private $tableResolver;
 
     /**
+     * @var DimensionCollectionFactory|null
+     */
+    private $dimensionCollectionFactory;
+
+    /**
+     * @var int|null
+     */
+    private $websiteId;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @param TableResolver|null $tableResolver
+     * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
         $connectionName = null,
-        TableResolver $tableResolver = null
+        TableResolver $tableResolver = null,
+        DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         parent::__construct($context, $connectionName);
         $this->storeManager = $storeManager;
         $this->metadataPool = $metadataPool;
-        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(TableResolver::class);
+        $this->tableResolver = $tableResolver ?: ObjectManager::getInstance()->get(IndexScopeResolverInterface::class);
+        $this->dimensionCollectionFactory = $dimensionCollectionFactory
+            ?: ObjectManager::getInstance()->get(DimensionCollectionFactory::class);
     }
 
     /**
@@ -78,18 +97,27 @@ class Index extends AbstractDb
     protected function _getCatalogProductPriceData($productIds = null)
     {
         $connection = $this->getConnection();
+        $catalogProductIndexPriceSelect = [];
 
-        $select = $connection->select()->from(
-            $this->getTable('catalog_product_index_price'),
-            ['entity_id', 'customer_group_id', 'website_id', 'min_price']
-        );
-
-        if ($productIds) {
-            $select->where('entity_id IN (?)', $productIds);
+        foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
+            if (!isset($dimensions[WebsiteDimensionProvider::DIMENSION_NAME]) ||
+                $this->websiteId === null ||
+                $dimensions[WebsiteDimensionProvider::DIMENSION_NAME]->getValue() === $this->websiteId) {
+                $select = $connection->select()->from(
+                    $this->tableResolver->resolve('catalog_product_index_price', $dimensions),
+                    ['entity_id', 'customer_group_id', 'website_id', 'min_price']
+                );
+                if ($productIds) {
+                    $select->where('entity_id IN (?)', $productIds);
+                }
+                $catalogProductIndexPriceSelect[] = $select;
+            }
         }
 
+        $catalogProductIndexPriceUnionSelect = $connection->select()->union($catalogProductIndexPriceSelect);
+
         $result = [];
-        foreach ($connection->fetchAll($select) as $row) {
+        foreach ($connection->fetchAll($catalogProductIndexPriceUnionSelect) as $row) {
             $result[$row['website_id']][$row['entity_id']][$row['customer_group_id']] = round($row['min_price'], 2);
         }
 
@@ -106,9 +134,12 @@ class Index extends AbstractDb
      */
     public function getPriceIndexData($productIds, $storeId)
     {
-        $priceProductsIndexData = $this->_getCatalogProductPriceData($productIds);
-
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+
+        $this->websiteId = $websiteId;
+        $priceProductsIndexData = $this->_getCatalogProductPriceData($productIds);
+        $this->websiteId = null;
+
         if (!isset($priceProductsIndexData[$websiteId])) {
             return [];
         }

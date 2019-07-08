@@ -149,8 +149,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $httpHost string
-     * @param $url string
+     * @param string $httpHost
+     * @param string $url
      * @dataProvider getCurrentUrlProvider
      */
     public function testGetCurrentUrl($httpHost, $url)
@@ -163,6 +163,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($url, $model->getCurrentUrl());
     }
 
+    /**
+     * @return array
+     */
     public function getCurrentUrlProvider()
     {
         return [
@@ -337,6 +340,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/catalog/product/view/', $model->getUrl('catalog', ['_use_rewrite' => 1]));
     }
 
+    /**
+     * @return array
+     */
     public function getUrlDataProvider()
     {
         return [
@@ -429,7 +435,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $url
+     * @param string $inputUrl
      * @dataProvider getRebuiltUrlDataProvider
      */
     public function testGetRebuiltUrl($inputUrl, $outputUrl)
@@ -497,6 +503,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('http://example.com/?foo=bar', $model->getRedirectUrl('http://example.com/'));
     }
 
+    /**
+     * @return array
+     */
     public function getRebuiltUrlDataProvider()
     {
         return [
@@ -558,6 +567,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $model->isOwnOriginUrl());
     }
 
+    /**
+     * @return array
+     */
     public function isOwnOriginUrlDataProvider()
     {
         return [
@@ -607,6 +619,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('http://localhost/', $model->getConfigData($key));
     }
 
+    /**
+     * @return array
+     */
     public function getConfigDataDataProvider()
     {
         return [
@@ -712,6 +727,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function sessionUrlVarWithMatchedHostsAndBaseUrlDataProvider()
     {
         return [

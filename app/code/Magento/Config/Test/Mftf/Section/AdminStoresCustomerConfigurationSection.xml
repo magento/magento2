@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminStoresCustomerConfigurationSection">
+        <element name="createNewAccOpt" type="button" selector="#customer_create_account-head"/>
+        <element name="enableAutoAssignCustomerGroup" type="button" selector="#customer_create_account_auto_group_assign"/>
+        <element name="groupForValidVATIdIntraUnion" type="select" selector="#customer_create_account_viv_intra_union_group"/>
+    </section>
+</sections>

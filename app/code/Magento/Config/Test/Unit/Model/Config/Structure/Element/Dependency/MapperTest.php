@@ -150,6 +150,9 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function getDependenciesDataProvider()
     {
         return [[true], [false]];

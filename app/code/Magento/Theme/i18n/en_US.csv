@@ -96,6 +96,7 @@ Phrase,Phrase
 testMessage,testMessage
 Edit,Edit
 "We found no files.","We found no files."
+"thumbnail","thumbnail"
 "Browse Files","Browse Files"
 Scope:,Scope:
 Remove,Remove
@@ -185,3 +186,7 @@ Settings,Settings
 "2 columns with left bar","2 columns with left bar"
 "2 columns with right bar","2 columns with right bar"
 "3 columns","3 columns"
+ID,ID
+View,View
+Action,Action
+"Display Report Bugs Link","Display Report Bugs Link"

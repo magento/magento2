@@ -57,10 +57,14 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
         $linkedProductOneMock = $this->createMock(Product::class);
         $linkedProductTwoMock = $this->createMock(Product::class);
         $linkedProductThreeMock = $this->createMock(Product::class);
+        $linkedProductFourMock = $this->createMock(Product::class);
+        $linkedProductFiveMock = $this->createMock(Product::class);
 
         $linkedProductOneMock->expects($this->once())->method('getId')->willReturn(1);
         $linkedProductTwoMock->expects($this->once())->method('getId')->willReturn(2);
         $linkedProductThreeMock->expects($this->once())->method('getId')->willReturn(3);
+        $linkedProductFourMock->expects($this->once())->method('getId')->willReturn(4);
+        $linkedProductFiveMock->expects($this->once())->method('getId')->willReturn(5);
 
         $this->converterPoolMock->expects($this->once())
             ->method('getConverter')
@@ -71,9 +75,11 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
             [$linkedProductOneMock, ['name' => 'Product One', 'position' => 10]],
             [$linkedProductTwoMock, ['name' => 'Product Two', 'position' => 2]],
             [$linkedProductThreeMock, ['name' => 'Product Three', 'position' => 2]],
+            [$linkedProductFourMock, ['name' => 'Product Four', 'position' => null]],
+            [$linkedProductFiveMock, ['name' => 'Product Five']],
         ];
 
-        $this->converterMock->expects($this->exactly(3))->method('convert')->willReturnMap($map);
+        $this->converterMock->expects($this->exactly(5))->method('convert')->willReturnMap($map);
 
         $this->providerMock->expects($this->once())
             ->method('getLinkedProducts')
@@ -82,14 +88,18 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
                 [
                     $linkedProductOneMock,
                     $linkedProductTwoMock,
-                    $linkedProductThreeMock
+                    $linkedProductThreeMock,
+                    $linkedProductFourMock,
+                    $linkedProductFiveMock,
                 ]
             );
 
         $expectedResult = [
-            2 => ['name' => 'Product Two', 'position' => 2],
-            3 => ['name' => 'Product Three', 'position' => 2],
-            10 => ['name' => 'Product One', 'position' => 10],
+            0 => ['name' => 'Product Four', 'position' => 0],
+            1 => ['name' => 'Product Five', 'position' => 0],
+            2 => ['name' => 'Product Three', 'position' => 2],
+            3 => ['name' => 'Product Two', 'position' => 2],
+            4 => ['name' => 'Product One', 'position' => 10],
         ];
 
         $actualResult = $this->model->getCollection($this->productMock, 'crosssell');

@@ -62,6 +62,9 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $this->entryPoint->launch()->getCode());
     }
 
+    /**
+     * @return array
+     */
     public function executeProvider()
     {
         return [

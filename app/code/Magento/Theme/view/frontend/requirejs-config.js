@@ -28,7 +28,8 @@ var config = {
             'popupWindow':            'mage/popup-window',
             'validation':             'mage/validation/validation',
             'welcome':                'Magento_Theme/js/view/welcome',
-            'breadcrumbs':            'Magento_Theme/js/view/breadcrumbs'
+            'breadcrumbs':            'Magento_Theme/js/view/breadcrumbs',
+            'criticalCssLoader':      'Magento_Theme/js/view/critical-css-loader'
         }
     },
     paths: {
@@ -44,6 +45,9 @@ var config = {
         mixins: {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Theme/js/view/add-home-breadcrumb': true
+            },
+            'jquery/jquery-ui': {
+                'jquery/patches/jquery-ui': true
             }
         }
     }

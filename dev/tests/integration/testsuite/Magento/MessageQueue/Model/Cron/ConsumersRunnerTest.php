@@ -110,19 +110,6 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Checks that pid files are created
-     *
-     * @return void
-     */
-    public function testCheckThatPidFilesWasCreated()
-    {
-        $this->consumersRunner->run();
-        foreach ($this->consumerConfig->getConsumers() as $consumer) {
-            $this->waitConsumerPidFile($consumer->getName());
-        }
-    }
-
-    /**
      * Tests running of specific consumer and his re-running when it is working
      *
      * @return void
@@ -130,7 +117,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     public function testSpecificConsumerAndRerun()
     {
         $specificConsumer = 'quoteItemCleaner';
-        $pidFilePath = $specificConsumer . ConsumersRunner::PID_FILE_EXT;
+        $pidFilePath = $this->getPidFileName($specificConsumer);
         $config = $this->config;
         $config['cron_consumers_runner'] = ['consumers' => [$specificConsumer], 'max_messages' => 0];
 
@@ -186,23 +173,6 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $consumerName
-     * @return void
-     */
-    private function waitConsumerPidFile($consumerName)
-    {
-        $pidFileFullPath = $this->getPidFileFullPath($consumerName);
-        $i = 0;
-        do {
-            sleep(1);
-        } while (!file_exists($pidFileFullPath) && ($i++ < 60));
-
-        if (!file_exists($pidFileFullPath)) {
-            $this->fail($consumerName . ' pid file does not exist.');
-        }
-    }
-
-    /**
      * @return array
      */
     private function loadConfig()
@@ -228,7 +198,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     private function getPidFileFullPath($consumerName)
     {
         $directoryList = $this->objectManager->get(DirectoryList::class);
-        return $directoryList->getPath(DirectoryList::VAR_DIR) . '/' . $consumerName . ConsumersRunner::PID_FILE_EXT;
+        return $directoryList->getPath(DirectoryList::VAR_DIR) . '/' . $this->getPidFileName($consumerName);
     }
 
     /**
@@ -239,7 +209,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $consumerName = $consumer->getName();
             $pidFileFullPath = $this->getPidFileFullPath($consumerName);
-            $pidFilePath = $consumerName . ConsumersRunner::PID_FILE_EXT;
+            $pidFilePath = $this->getPidFileName($consumerName);
             $pid = $this->pid->getPid($pidFilePath);
 
             if ($pid && $this->pid->isRun($pidFilePath)) {
@@ -257,5 +227,16 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         );
         $this->writeConfig($this->config);
         $this->appConfig->reinit();
+    }
+
+    /**
+     * @param string $consumerName The consumers name
+     * @return string The name to file with PID
+     */
+    private function getPidFileName($consumerName)
+    {
+        $sanitizedHostname = preg_replace('/[^a-z0-9]/i', '', gethostname());
+
+        return $consumerName . '-' . $sanitizedHostname . ConsumersRunner::PID_FILE_EXT;
     }
 }

@@ -80,8 +80,10 @@ class VaultDetailsHandlerTest extends TestCase
 
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->setMethods(['__wakeup', 'getExtensionAttributes'])
             ->getMock();
+
+        $this->payment->expects(self::any())->method('getExtensionAttributes')->willReturn($this->paymentExtension);
 
         $config = $this->getConfigMock();
 

@@ -28,6 +28,11 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     protected $themeCollection;
 
     /**
+     * @var array
+     */
+    private $configFiles = [];
+
+    /**
      * @param \Magento\Framework\View\PageLayout\ConfigFactory $configFactory
      * @param \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
@@ -44,7 +49,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     }
 
     /**
-     * @return \Magento\Framework\View\PageLayout\Config
+     * @inheritdoc
      */
     public function getPageLayoutsConfig()
     {
@@ -52,15 +57,20 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     }
 
     /**
+     * Retrieve configuration files.
+     *
      * @return array
      */
     protected function getConfigFiles()
     {
-        $configFiles = [];
-        foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
-            $configFiles = array_merge($configFiles, $this->fileCollector->getFilesContent($theme, 'layouts.xml'));
+        if (!$this->configFiles) {
+            $configFiles = [];
+            foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
+                $configFiles[] = $this->fileCollector->getFilesContent($theme, 'layouts.xml');
+            }
+            $this->configFiles = array_merge(...$configFiles);
         }
 
-        return $configFiles;
+        return $this->configFiles;
     }
 }

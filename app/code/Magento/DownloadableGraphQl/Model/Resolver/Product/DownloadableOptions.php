@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
@@ -16,14 +18,12 @@ use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollecti
 use Magento\Framework\Data\Collection;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\EnumLookup;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Format for downloadable product types
+ * @inheritdoc
  *
- * {@inheritdoc}
+ * Format for downloadable product types
  */
 class DownloadableOptions implements ResolverInterface
 {
@@ -48,35 +48,35 @@ class DownloadableOptions implements ResolverInterface
     private $linkCollection;
 
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @param EnumLookup $enumLookup
      * @param DownloadableHelper $downloadableHelper
      * @param SampleCollection $sampleCollection
      * @param LinkCollection $linkCollection
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
         EnumLookup $enumLookup,
         DownloadableHelper $downloadableHelper,
         SampleCollection $sampleCollection,
-        LinkCollection $linkCollection,
-        ValueFactory $valueFactory
+        LinkCollection $linkCollection
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
         $this->sampleCollection = $sampleCollection;
         $this->linkCollection = $linkCollection;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
+     * @inheritdoc
+     *
      * Add downloadable options to configurable types
      *
-     * {@inheritdoc}
+     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @throws \Exception
+     * @return null|array
      */
     public function resolve(
         Field $field,
@@ -84,12 +84,9 @@ class DownloadableOptions implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         /** @var Product $product */
@@ -113,11 +110,7 @@ class DownloadableOptions implements ResolverInterface
             }
         }
 
-        $result = function () use ($data) {
-            return $data;
-        };
-
-        return $this->valueFactory->create($result);
+        return $data;
     }
 
     /**

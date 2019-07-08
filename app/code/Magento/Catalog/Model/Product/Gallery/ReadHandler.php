@@ -47,6 +47,8 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
+     * Execute read handler for catalog product gallery
+     *
      * @param Product $entity
      * @param array $arguments
      * @return object
@@ -55,9 +57,6 @@ class ReadHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        $value = [];
-        $value['images'] = [];
-
         $mediaEntries = $this->resourceModel->loadProductGalleryByAttributeId(
             $entity,
             $this->getAttribute()->getAttributeId()
@@ -72,6 +71,8 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
+     * Add media data to product
+     *
      * @param Product $product
      * @param array $mediaEntries
      * @return void
@@ -79,40 +80,18 @@ class ReadHandler implements ExtensionInterface
      */
     public function addMediaDataToProduct(Product $product, array $mediaEntries)
     {
-        $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = [];
-        $value['images'] = [];
-        $value['values'] = [];
-
-        foreach ($mediaEntries as $mediaEntry) {
-            $mediaEntry = $this->substituteNullsWithDefaultValues($mediaEntry);
-            $value['images'][$mediaEntry['value_id']] = $mediaEntry;
-        }
-        $product->setData($attrCode, $value);
+        $product->setData(
+            $this->getAttribute()->getAttributeCode(),
+            [
+                'images' => array_column($mediaEntries, null, 'value_id'),
+                'values' => []
+            ]
+        );
     }
 
     /**
-     * @param array $rawData
-     * @return array
-     */
-    private function substituteNullsWithDefaultValues(array $rawData)
-    {
-        $processedData = [];
-        foreach ($rawData as $key => $rawValue) {
-            if (null !== $rawValue) {
-                $processedValue = $rawValue;
-            } elseif (isset($rawData[$key . '_default'])) {
-                $processedValue = $rawData[$key . '_default'];
-            } else {
-                $processedValue = null;
-            }
-            $processedData[$key] = $processedValue;
-        }
-
-        return $processedData;
-    }
-
-    /**
+     * Get attribute
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -126,6 +105,8 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
+     * Find default value
+     *
      * @param string $key
      * @param string[] &$image
      * @return string

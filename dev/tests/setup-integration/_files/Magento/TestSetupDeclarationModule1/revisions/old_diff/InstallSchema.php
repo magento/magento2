@@ -97,16 +97,21 @@ class InstallSchema implements InstallSchemaInterface
                 'Boolean'
             )
             ->addIndex(
-                'some_unique_key',
+                $installer->getIdxName($installer->getTable('test_table'), ['smallint', 'bigint']),
                 ['smallint', 'bigint'],
                 ['type' => \Magento\Framework\DB\Adapter\Pdo\Mysql::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
-                'speedup_index',
+                $installer->getIdxName($installer->getTable('test_table'), ['bigint']),
                 ['bigint']
             )
             ->addForeignKey(
-                'some_foreign_key',
+                $installer->getFkName(
+                    $installer->getTable('test_table'),
+                    'smallint',
+                    $installer->getTable('reference_table'),
+                    'smallint_ref'
+                ),
                 'smallint',
                 $installer->getTable('reference_table'),
                 'smallint_ref',

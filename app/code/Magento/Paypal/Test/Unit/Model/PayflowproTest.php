@@ -179,6 +179,9 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($paymentExpected->getData(), $payment->getData());
     }
 
+    /**
+     * @return array
+     */
     public function setTransStatusDataProvider()
     {
         return [
@@ -575,6 +578,40 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Zend_Http_Client_Exception());
 
         $this->payflowpro->postRequest($request, $config);
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Payflowpro::addRequestOrderInfo
+     */
+    public function testAddRequestOrderInfo()
+    {
+        $orderData = [
+            'id' => 1,
+            'increment_id' => '0000001'
+        ];
+        $data = [
+            'ponum' => $orderData['id'],
+            'custref' => $orderData['increment_id'],
+            'invnum' => $orderData['increment_id'],
+            'comment1' => $orderData['increment_id']
+        ];
+        $expectedData = new DataObject($data);
+        $actualData = new DataObject();
+
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getIncrementId', 'getId'])
+            ->getMock();
+        $orderMock->expects(static::once())
+            ->method('getId')
+            ->willReturn($orderData['id']);
+        $orderMock->expects(static::atLeastOnce())
+            ->method('getIncrementId')
+            ->willReturn($orderData['increment_id']);
+
+        $this->payflowpro->addRequestOrderInfo($actualData, $orderMock);
+
+        $this->assertEquals($expectedData, $actualData);
     }
 
     /**

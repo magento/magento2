@@ -93,7 +93,7 @@ return [
                         'tinyint_ref' => 'tinyint_ref',
                     ],
                     'type' => 'primary',
-                    'name' => 'tinyint_primary',
+                    'referenceId' => 'tinyint_primary',
                 ],
             ],
             'name' => 'reference_table',
@@ -120,12 +120,12 @@ return [
                 ],
             ],
             'constraint' => [
-                'unique_null_key' => [
+                'AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE' => [
                     'column' => [
                         'int_auto_increment_with_nullable' => 'int_auto_increment_with_nullable',
                     ],
                     'type' => 'unique',
-                    'name' => 'unique_null_key',
+                    'referenceId' => 'AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE',
                 ],
             ],
             'name' => 'auto_increment_test',
@@ -225,17 +225,17 @@ return [
                 ],
             ],
             'constraint' => [
-                'some_unique_key' => [
+                'TEST_TABLE_UNIQUE' => [
                     'column' => [
                         'smallint' => 'smallint',
                         'bigint' => 'bigint',
                     ],
                     'type' => 'unique',
-                    'name' => 'some_unique_key',
+                    'referenceId' => 'TEST_TABLE_UNIQUE',
                 ],
-                'some_foreign_key' => [
+                'TEST_TABLE_TINYINT_REFERENCE' => [
                     'type' => 'foreign',
-                    'name' => 'some_foreign_key',
+                    'referenceId' => 'TEST_TABLE_TINYINT_REFERENCE',
                     'column' => 'tinyint',
                     'table' => 'test_table',
                     'referenceTable' => 'reference_table',
@@ -244,12 +244,12 @@ return [
                 ],
             ],
             'index' => [
-                'speedup_index' => [
+                'TEST_TABLE_INDEX' => [
                     'column' => [
                         'tinyint' => 'tinyint',
                         'bigint' => 'bigint',
                     ],
-                    'name' => 'speedup_index',
+                    'referenceId' => 'TEST_TABLE_INDEX',
                     'indexType' => 'btree',
                 ],
             ],

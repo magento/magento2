@@ -12,26 +12,24 @@
     <div class="gift-options-content">
         <fieldset class="fieldset">
             <div class="field field-to">
-                <label for="gift-message-whole-to" class="label">
+                <label data-bind="attr: {for: 'gift-message-whole-to-' + index }" class="label">
                     <span data-bind="i18n: 'To:'"></span>
                 </label>
                 <div class="control">
                     <input type="text"
-                           id="gift-message-whole-to"
                            class="input-text"
-                           data-bind="value: getObservable('recipient')">
+                           data-bind="value: getObservable('recipient'), attr: { id: 'gift-message-whole-to-' + index }">
                 </div>
             </div>
 
             <div class="field field-from">
-                <label for="gift-message-whole-from" class="label">
+                <label data-bind="attr: {for: 'gift-message-whole-from-' + index }" class="label">
                     <span data-bind="i18n: 'From:'"></span>
                 </label>
                 <div class="control">
                     <input type="text"
-                           id="gift-message-whole-from"
                            class="input-text"
-                           data-bind="value: getObservable('sender')">
+                           data-bind="value: getObservable('sender'), attr: { id: 'gift-message-whole-from-' + index }">
                 </div>
             </div>
             <div class="field text">
@@ -46,7 +44,6 @@
                 </div>
             </div>
         </fieldset>
-
     </div>
 </div>
 <!-- /ko -->

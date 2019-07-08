@@ -71,7 +71,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getVars($module)
     {
         $this->initData();
-        return isset($this->data['vars'][$module]) ? $this->data['vars'][$module] : [];
+        return $this->data['vars'][$module] ?? [];
     }
 
     /**
@@ -110,7 +110,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getMediaEntities($module, $mediaType)
     {
         $this->initData();
-        return isset($this->data['media'][$module][$mediaType]) ? $this->data['media'][$module][$mediaType] : [];
+        return $this->data['media'][$module][$mediaType] ?? [];
     }
 
     /**
@@ -124,9 +124,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getMediaAttributes($module, $mediaType, $mediaId)
     {
         $this->initData();
-        return isset($this->data['media'][$module][$mediaType][$mediaId])
-            ? $this->data['media'][$module][$mediaType][$mediaId]
-            : [];
+        return $this->data['media'][$module][$mediaType][$mediaId] ?? [];
     }
 
     /**
@@ -163,7 +161,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getExcludedFiles()
     {
         $items = $this->getItems();
-        return isset($items['file']) ? $items['file'] : [];
+        return $items['file'] ?? [];
     }
 
     /**
@@ -174,7 +172,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     public function getExcludedDir()
     {
         $items = $this->getItems();
-        return isset($items['directory']) ? $items['directory'] : [];
+        return $items['directory'] ?? [];
     }
 
     /**
@@ -185,7 +183,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     protected function getItems()
     {
         $this->initData();
-        return isset($this->data['exclude']) ? $this->data['exclude'] : [];
+        return $this->data['exclude'] ?? [];
     }
 
     /**

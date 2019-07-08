@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\Model\ResourceModel;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -12,6 +13,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 
 /**
  * Elasticsearch index resource model
@@ -47,6 +49,8 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Config $eavConfig
      * @param null $connectionName
+     * @param TableResolver|null $tableResolver
+     * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
@@ -56,7 +60,9 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository,
         Config $eavConfig,
-        $connectionName = null
+        $connectionName = null,
+        TableResolver $tableResolver = null,
+        DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
@@ -65,7 +71,9 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
             $context,
             $storeManager,
             $metadataPool,
-            $connectionName
+            $connectionName,
+            $tableResolver,
+            $dimensionCollectionFactory
         );
     }
 

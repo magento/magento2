@@ -29,7 +29,7 @@ class Addresses extends Tab
      *
      * @var string
      */
-    protected $addNewAddress = '.address-list-actions .add';
+    protected $addNewAddress = '.add-new-address-button';
 
     /**
      * Selector for address block.
@@ -48,13 +48,6 @@ class Addresses extends Tab
     protected $deleteAddress = '.action-delete';
 
     /**
-     * Accept button selector.
-     *
-     * @var string
-     */
-    private $confirmModal = '.confirm._show[data-role=modal]';
-
-    /**
      * Open customer address.
      *
      * @var string
@@ -67,6 +60,20 @@ class Addresses extends Tab
      * @var string
      */
     protected $loader = '//ancestor::body/div[@data-role="loader"]';
+
+    /**
+     * Customer address modal window.
+     *
+     * @var string
+     */
+    private $customerAddressModalForm = '.customer_form_areas_address_address_customer_address_update_modal';
+
+    /**
+     * Customer addresses list grid.
+     *
+     * @var string
+     */
+    private $customerAddressesGrid = '.customer_form_areas_address_address_customer_address_listing';
 
     /**
      * Object Manager.
@@ -107,9 +114,11 @@ class Addresses extends Tab
     public function fillAddresses($address)
     {
         $addresses = is_array($address) ? $address : [$address];
+        $customerAddressForm = $this->getCustomerAddressModalForm();
         foreach ($addresses as $address) {
             $this->addNewAddress();
-            $this->setFieldsData($address->getData(), $this->_rootElement);
+            $customerAddressForm->fillAddressData($address);
+            $customerAddressForm->saveAddress();
         }
 
         return $this;
@@ -136,8 +145,9 @@ class Addresses extends Tab
 
             if (!$this->isVisibleCustomerAddress($addressNumber)) {
                 $this->addNewAddress();
+            } else {
+                $this->openCustomerAddress($addressNumber);
             }
-            $this->openCustomerAddress($addressNumber);
 
             $defaultAddress = ['default_billing' => 'No', 'default_shipping' => 'No'];
             $addressData = $address->getData();
@@ -146,9 +156,10 @@ class Addresses extends Tab
                     $defaultAddress[$key] = $value;
                 }
             }
-            $this->_fill($this->dataMapping($defaultAddress));
-
-            $this->setFieldsData(array_diff($addressData, $defaultAddress), $this->_rootElement);
+            $customerAddressForm = $this->getCustomerAddressModalForm();
+            $customerAddressForm->setFieldsData($this->dataMapping($defaultAddress));
+            $customerAddressForm->setFieldsData(array_diff($addressData, $defaultAddress));
+            $customerAddressForm->saveAddress();
         }
 
         return $this;
@@ -168,6 +179,10 @@ class Addresses extends Tab
 
         foreach ($addresses as $addressNumber => $address) {
             $hasData = (null !== $address) && $address->hasData();
+            $customerAddressesGrid = $this->getCustomerAddressesGrid();
+            if ($hasData) {
+                $customerAddressesGrid->search($address->getData());
+            }
             $isVisibleCustomerAddress = $this->isVisibleCustomerAddress($addressNumber);
 
             if ($hasData && !$isVisibleCustomerAddress) {
@@ -177,12 +192,34 @@ class Addresses extends Tab
             if (!$hasData && !$isVisibleCustomerAddress) {
                 $data[$addressNumber] = [];
             } else {
-                $this->openCustomerAddress($addressNumber);
-                $data[$addressNumber] = $this->getData($address, $this->_rootElement);
+                $customerAddressesGrid->openFirstRow();
+                $data[$addressNumber] = $this->getCustomerAddressModalForm()
+                    ->getData($address, $this->browser->find($this->customerAddressModalForm));
+                $this->getCustomerAddressModalForm()->clickCancelButton();
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Get data from Customer addresses.
+     *
+     * @param FixtureInterface|FixtureInterface[]|null $address
+     * @return array|null
+     * @throws \Exception
+     */
+    public function getAddressFromFirstRow($address = null)
+    {
+        $customerAddressesGrid = $this->getCustomerAddressesGrid();
+        $customerAddressesGrid->resetFilter();
+        $customerAddressesGrid->openFirstRow();
+        if ($this->getCustomerAddressModalForm()->isVisible()) {
+            $address = $this->getCustomerAddressModalForm()
+                ->getData($address, $this->browser->find($this->customerAddressModalForm));
+        }
+
+        return $address;
     }
 
     /**
@@ -206,6 +243,7 @@ class Addresses extends Tab
     protected function addNewAddress()
     {
         $this->_rootElement->find($this->addNewAddress)->click();
+        $this->waitForElementVisible($this->customerAddressModalForm);
     }
 
     /**
@@ -216,31 +254,24 @@ class Addresses extends Tab
      */
     protected function openCustomerAddress($addressNumber)
     {
-        $addressTab = $this->_rootElement->find(
-            sprintf($this->customerAddress, $addressNumber),
-            Locator::SELECTOR_XPATH
-        );
-
-        if (!$addressTab->isVisible()) {
+        $customerAddressesGrid = $this->getCustomerAddressesGrid();
+        if (!$customerAddressesGrid->getFirstRow()->isVisible()) {
             throw new \Exception("Can't open customer address #{$addressNumber}");
         }
-        $addressTab->click();
+        $customerAddressesGrid->openFirstRow();
     }
 
     /**
      * Check is visible customer address.
      *
-     * @param int $addressNumber
      * @return bool
      */
-    protected function isVisibleCustomerAddress($addressNumber)
+    protected function isVisibleCustomerAddress()
     {
-        $addressTab = $this->_rootElement->find(
-            sprintf($this->customerAddress, $addressNumber),
-            Locator::SELECTOR_XPATH
-        );
+        $customerAddressesGrid = $this->getCustomerAddressesGrid();
+        $customerAddressesGrid->isFirstRowVisible();
 
-        return $addressTab->isVisible();
+        return $customerAddressesGrid->isFirstRowVisible();
     }
 
     /**
@@ -279,24 +310,43 @@ class Addresses extends Tab
      */
     public function deleteCustomerAddress(Address $addressToDelete)
     {
-        $addressRenderer = $this->objectManager->create(
-            \Magento\Customer\Test\Block\Address\Renderer::class,
-            ['address' => $addressToDelete, 'type' => 'html']
-        );
-        $addressToDelete = $addressRenderer->render();
-
-        $dataList = explode("\n", $addressToDelete);
-        $dataList = implode("') and contains(.,'", $dataList);
-
-        $this->_rootElement
-            ->find(sprintf($this->addressSelector, $dataList), Locator::SELECTOR_XPATH)
-            ->find($this->deleteAddress)->click();
-
-        $element = $this->browser->find($this->confirmModal);
-        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
-        $modal->acceptAlert();
+        $customerAddressesGrid = $this->getCustomerAddressesGrid();
+        $customerAddressesGrid->deleteCustomerAddress($addressToDelete->getData());
 
         return $this;
+    }
+
+    /**
+     * Get new/update customer address modal form.
+     *
+     * @return \Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses\AddressForm
+     */
+    public function getCustomerAddressModalForm()
+    {
+        return $this->blockFactory->create(
+            \Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses\AddressForm::class,
+            ['element' => $this->browser->find($this->customerAddressModalForm)]
+        );
+    }
+
+    /**
+     * Get customer addresses grid.
+     *
+     * @return \Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses\AddressesGrid
+     */
+    public function getCustomerAddressesGrid()
+    {
+        return $this->blockFactory->create(
+            \Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses\AddressesGrid::class,
+            ['element' => $this->browser->find($this->customerAddressesGrid)]
+        );
+    }
+
+    /**
+     * Wait for addresses grid rendering
+     */
+    public function waitForAddressesGrid()
+    {
+        $this->waitForElementVisible($this->customerAddressesGrid);
     }
 }

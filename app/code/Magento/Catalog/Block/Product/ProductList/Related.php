@@ -46,7 +46,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     protected $_checkoutCart;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -55,7 +55,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
      * @param \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -63,7 +63,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
         \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_checkoutCart = $checkoutCart;
@@ -77,11 +77,13 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Prepare data
+     *
      * @return $this
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
 
         $this->_itemCollection = $product->getRelatedProductCollection()->addAttributeToSelect(
@@ -103,6 +105,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Before to html handler
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -112,6 +116,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get collection items
+     *
      * @return Collection
      */
     public function getItems()

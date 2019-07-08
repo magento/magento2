@@ -5,6 +5,9 @@
  */
 namespace Magento\Paypal\Controller\Transparent;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\LayoutFactory;
@@ -14,11 +17,15 @@ use Magento\Payment\Block\Transparent\Iframe;
 use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
+use Magento\Sales\Api\PaymentFailuresInterface;
+use Magento\Framework\Session\Generic as Session;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
- * Class Response
+ * Class for requesting the response result form the paypal controller.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Response extends \Magento\Framework\App\Action\Action
+class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * Core registry
@@ -48,6 +55,16 @@ class Response extends \Magento\Framework\App\Action\Action
     private $transparent;
 
     /**
+     * @var PaymentFailuresInterface
+     */
+    private $paymentFailures;
+
+    /**
+     * @var Session
+     */
+    private $sessionTransparent;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -56,6 +73,8 @@ class Response extends \Magento\Framework\App\Action\Action
      * @param ResponseValidator $responseValidator
      * @param LayoutFactory $resultLayoutFactory
      * @param Transparent $transparent
+     * @param Session|null $sessionTransparent
+     * @param PaymentFailuresInterface|null $paymentFailures
      */
     public function __construct(
         Context $context,
@@ -63,7 +82,9 @@ class Response extends \Magento\Framework\App\Action\Action
         Transaction $transaction,
         ResponseValidator $responseValidator,
         LayoutFactory $resultLayoutFactory,
-        Transparent $transparent
+        Transparent $transparent,
+        Session $sessionTransparent = null,
+        PaymentFailuresInterface $paymentFailures = null
     ) {
         parent::__construct($context);
         $this->coreRegistry = $coreRegistry;
@@ -71,9 +92,30 @@ class Response extends \Magento\Framework\App\Action\Action
         $this->responseValidator = $responseValidator;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->transparent = $transparent;
+        $this->sessionTransparent = $sessionTransparent ?: $this->_objectManager->get(Session::class);
+        $this->paymentFailures = $paymentFailures ?: $this->_objectManager->get(PaymentFailuresInterface::class);
     }
 
     /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+
+    /**
+     * Saves the payment in quote
+     *
      * @return ResultInterface
      */
     public function execute()
@@ -82,10 +124,11 @@ class Response extends \Magento\Framework\App\Action\Action
         try {
             $response = $this->transaction->getResponseObject($this->getRequest()->getPostValue());
             $this->responseValidator->validate($response, $this->transparent);
-            $this->transaction->savePaymentInQuote($response);
+            $this->transaction->savePaymentInQuote($response, (int)$this->sessionTransparent->getQuoteId());
         } catch (LocalizedException $exception) {
             $parameters['error'] = true;
             $parameters['error_msg'] = $exception->getMessage();
+            $this->paymentFailures->handle((int)$this->sessionTransparent->getQuoteId(), $parameters['error_msg']);
         }
 
         $this->coreRegistry->register(Iframe::REGISTRY_KEY, $parameters);

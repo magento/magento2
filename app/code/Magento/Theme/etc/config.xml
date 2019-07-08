@@ -46,6 +46,7 @@ Disallow: /*SID=
             </header>
             <footer translate="copyright">
                 <copyright>Copyright &#169; 2013-present Magento, Inc. All rights reserved.</copyright>
+                <report_bugs>1</report_bugs>
             </footer>
         </design>
         <theme>
@@ -65,6 +66,12 @@ Disallow: /*SID=
             <static>
                 <sign>1</sign>
             </static>
+            <js>
+                <move_inline_to_bottom>0</move_inline_to_bottom>
+            </js>
+            <css>
+                <use_css_critical_path>0</use_css_critical_path>
+            </css>
         </dev>
     </default>
 </config>

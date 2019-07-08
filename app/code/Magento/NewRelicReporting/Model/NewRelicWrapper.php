@@ -21,7 +21,7 @@ class NewRelicWrapper
      */
     public function addCustomParameter($param, $value)
     {
-        if (extension_loaded('newrelic')) {
+        if ($this->isExtensionInstalled()) {
             newrelic_add_custom_parameter($param, $value);
             return true;
         }
@@ -31,13 +31,39 @@ class NewRelicWrapper
     /**
      * Wrapper for 'newrelic_notice_error' function
      *
-     * @param  Exception $exception
+     * @param  \Exception $exception
      * @return void
      */
     public function reportError($exception)
     {
-        if (extension_loaded('newrelic')) {
+        if ($this->isExtensionInstalled()) {
             newrelic_notice_error($exception->getMessage(), $exception);
+        }
+    }
+
+    /**
+     * Wrapper for 'newrelic_set_appname'
+     *
+     * @param string $appName
+     * @return void
+     */
+    public function setAppName(string $appName)
+    {
+        if ($this->isExtensionInstalled()) {
+            newrelic_set_appname($appName);
+        }
+    }
+
+    /**
+     * Wrapper for 'newrelic_name_transaction'
+     *
+     * @param string $transactionName
+     * @return void
+     */
+    public function setTransactionName(string $transactionName): void
+    {
+        if ($this->isExtensionInstalled()) {
+            newrelic_name_transaction($transactionName);
         }
     }
 

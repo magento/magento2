@@ -78,6 +78,9 @@ class AclRetrieverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return AclRetriever
+     */
     protected function createAclRetriever()
     {
         $this->roleMock = $this->createPartialMock(\Magento\Authorization\Model\Role::class, ['getId', '__wakeup']);

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ProductOptionValueDropdown1" type="product_option_value">
+        <data key="title">OptionValueDropDown1</data>
+        <data key="sort_order">1</data>
+        <data key="price">0.01</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueDropdown2" type="product_option_value">
+        <data key="title">OptionValueDropDown2</data>
+        <data key="sort_order">2</data>
+        <data key="price">0.01</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionValueRadioButtons1" type="product_option_value">
+        <data key="title">OptionValueRadioButtons1</data>
+        <data key="sort_order">1</data>
+        <data key="price">99.99</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueRadioButtons2" type="product_option_value">
+        <data key="title">OptionValueRadioButtons2</data>
+        <data key="sort_order">2</data>
+        <data key="price">99.99</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionValueDropdown3" type="product_option_value">
+        <data key="title">OptionValueDropDown3</data>
+        <data key="sort_order">2</data>
+        <data key="price">10</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionValueRadioButtons4" type="product_option_value">
+        <data key="title">OptionValueRadioButtons4</data>
+        <data key="sort_order">1</data>
+        <data key="price">9.99</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueRadioButtons3" type="product_option_value">
+        <data key="title">OptionValueRadioButtons3</data>
+        <data key="sort_order">3</data>
+        <data key="price">10</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueCheckbox" type="product_option_value">
+        <data key="title">OptionValueCheckbox</data>
+        <data key="sort_order">1</data>
+        <data key="price">123</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionValueMultiSelect1" type="product_option_value">
+        <data key="title">OptionValueMultiSelect1</data>
+        <data key="sort_order">1</data>
+        <data key="price">1</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueMultiSelect2" type="product_option_value">
+        <data key="title">OptionValueMultiSelect2</data>
+        <data key="sort_order">2</data>
+        <data key="price">2</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueDropdownLongTitle1" type="product_option_value">
+        <data key="title">Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionValueDropdownLongTitle2" type="product_option_value">
+        <data key="title">Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj22222Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj22222</data>
+        <data key="sort_order">2</data>
+        <data key="price">20</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionPercentPriceValueDropdown" type="product_option_value">
+        <data key="title">40 Percent</data>
+        <data key="sort_order">0</data>
+        <data key="price">40</data>
+        <data key="price_type">percent</data>
+        <data key="sku">sku_drop_down_row_1</data>
+    </entity>
+    <entity name="ProductOptionValueWithSkuDropdown1" type="product_option_value">
+        <data key="title">ProductOptionValueWithSkuDropdown1</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="price_type">fixed</data>
+        <data key="sku">product_option_value_sku_dropdown_1_</data>
+    </entity>
+    <entity name="ProductOptionValueWithSkuDropdown2" type="product_option_value">
+        <data key="title">ProductOptionValueWithSkuDropdown2</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="price_type">fixed</data>
+        <data key="sku">product_option_value_sku_dropdown_2_</data>
+    </entity>
+</entities>

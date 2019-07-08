@@ -60,6 +60,9 @@ class LocaleQuantityProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->processor->process($qty));
     }
 
+    /**
+     * @return array
+     */
     public function processDataProvider()
     {
         return [

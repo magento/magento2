@@ -37,6 +37,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ],
         ];
 
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
         $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
@@ -64,6 +65,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ],
         ];
 
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
         $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);

@@ -56,8 +56,9 @@ define([
 
             // Clear Summary box
             this.element.html('');
-
-            $.each(this.cache.currentElement.selected, $.proxy(this._renderOption, this));
+            this.cache.currentElement.positions.forEach(function (optionId) {
+                this._renderOption(optionId, this.cache.currentElement.selected[optionId]);
+            }, this);
             this.element
                 .parents(this.options.bundleSummaryContainer)
                 .toggleClass('empty', !this.cache.currentElementCount); // Zero elements equal '.empty' container

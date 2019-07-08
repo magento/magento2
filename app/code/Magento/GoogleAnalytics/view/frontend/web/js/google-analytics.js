@@ -53,7 +53,7 @@ define([
             }
 
             // Process orders data
-            if (config.ordersTrackingData.length) {
+            if (config.ordersTrackingData.hasOwnProperty('currency')) {
                 ga('require', 'ec', 'ec.js');
 
                 ga('set', 'currencyCode', config.ordersTrackingData.currency);

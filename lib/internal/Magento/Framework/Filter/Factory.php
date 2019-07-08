@@ -32,6 +32,7 @@ class Factory extends AbstractFactory
         'decrypt' => \Magento\Framework\Filter\Decrypt::class,
         'translit' => \Magento\Framework\Filter\Translit::class,
         'translitUrl' => \Magento\Framework\Filter\TranslitUrl::class,
+        'truncateFilter' => \Magento\Framework\Filter\TruncateFilter::class,
     ];
 
     /**

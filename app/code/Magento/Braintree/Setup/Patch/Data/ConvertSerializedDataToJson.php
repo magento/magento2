@@ -12,7 +12,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Convert data fro php native serialized data to JSON.
+ * Convert data from php native serialized data to JSON.
  */
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
 {

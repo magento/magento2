@@ -12,6 +12,9 @@ use Magento\Framework\Search\Request\Query\Filter;
 
 /**
  * Class is responsible for checking if fulltext search is required for search query
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class FullTextSearchCheck
 {
@@ -22,7 +25,7 @@ class FullTextSearchCheck
      * to join catalog_eav_attribute table to search query or not
      *
      * In case when the $query does not requires full text search
-     * - we can skipp joining catalog_eav_attribute table because it becomes excessive
+     * - we can skip joining catalog_eav_attribute table because it becomes excessive
      *
      * @param QueryInterface $query
      * @return bool
@@ -34,6 +37,8 @@ class FullTextSearchCheck
     }
 
     /**
+     * Process query
+     *
      * @param QueryInterface $query
      * @return bool
      * @throws \InvalidArgumentException
@@ -59,6 +64,8 @@ class FullTextSearchCheck
     }
 
     /**
+     * Process boolean query
+     *
      * @param BoolExpression $query
      * @return bool
      * @throws \InvalidArgumentException
@@ -87,6 +94,8 @@ class FullTextSearchCheck
     }
 
     /**
+     * Process filter query
+     *
      * @param Filter $query
      * @return bool
      * @throws \InvalidArgumentException

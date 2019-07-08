@@ -106,6 +106,9 @@ class UseConfigSettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->useConfigSettings->getData('config'));
     }
 
+    /**
+     * @return array
+     */
     public function prepareSourceDataProvider()
     {
         return [

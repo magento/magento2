@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
@@ -14,6 +16,7 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class Create extends \Magento\Backend\App\Action
 {
@@ -38,6 +41,7 @@ abstract class Create extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Action\Context $context,
@@ -47,7 +51,6 @@ abstract class Create extends \Magento\Backend\App\Action
         ForwardFactory $resultForwardFactory
     ) {
         parent::__construct($context);
-        $productHelper->setSkipSaleableCheck(true);
         $this->escaper = $escaper;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
@@ -317,7 +320,7 @@ abstract class Create extends \Magento\Backend\App\Action
                 }
             }
             if (!$isApplyDiscount) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __(
                         '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
                         $this->escaper->escapeHtml($couponCode)
@@ -325,14 +328,14 @@ abstract class Create extends \Magento\Backend\App\Action
                 );
             } else {
                 if ($this->_getQuote()->getCouponCode() !== $couponCode) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             'The "%1" coupon code isn\'t valid. Verify the code and try again.',
                             $this->escaper->escapeHtml($couponCode)
                         )
                     );
                 } else {
-                    $this->messageManager->addSuccess(__('The coupon code has been accepted.'));
+                    $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
                 }
             }
         }
@@ -362,6 +365,8 @@ abstract class Create extends \Magento\Backend\App\Action
     }
 
     /**
+     * Reload quote
+     *
      * @return $this
      */
     protected function _reloadQuote()

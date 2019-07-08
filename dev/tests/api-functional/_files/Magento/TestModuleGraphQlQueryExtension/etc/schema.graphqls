@@ -4,3 +4,7 @@
 type Item {
     integer_list: [Int] @resolver(class: "Magento\\TestModuleGraphQlQueryExtension\\Model\\Resolver\\IntegerList")
 }
+
+type MutationItem {
+    integer_list: [Int] @resolver(class: "Magento\\TestModuleGraphQlQueryExtension\\Model\\Resolver\\IntegerList")
+}

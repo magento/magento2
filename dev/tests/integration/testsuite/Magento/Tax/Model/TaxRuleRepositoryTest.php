@@ -109,7 +109,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
      * @expectedExceptionMessage No such entity with taxRuleId = 9999
      * @magentoDbIsolation enabled
      */
-    public function testSaveThrowsExceptionIdTargetTaxRulDoesNotExist()
+    public function testSaveThrowsExceptionIdIfTargetTaxRuleDoesNotExist()
     {
         $taxRuleDataObject = $this->taxRuleFactory->create();
         $taxRuleDataObject->setId(9999)

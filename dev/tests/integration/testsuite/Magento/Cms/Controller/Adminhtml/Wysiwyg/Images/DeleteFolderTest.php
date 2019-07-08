@@ -66,6 +66,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
             $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $directoryName)
         );
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
+        $this->model->getRequest()->setMethod('POST');
         $this->model->execute();
 
         $this->assertFalse(
@@ -112,11 +113,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
         $this->model->execute();
 
-        $this->assertTrue(
-            $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . $directoryName)
-            )
-        );
+        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
     }
 
     /**

@@ -13,5 +13,5 @@ $item = $block->getItem();
 $product = $item->getProduct();
 ?>
 <a class="product-item-photo" tabindex="-1" href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?= $block->escapeHtmlAttr($product->getName()) ?>">
-    <?= $block->getImage($product, 'wishlist_thumbnail')->toHtml() ?>
+    <?= $block->getImage($block->getProductForThumbnail($item), 'wishlist_thumbnail')->toHtml() ?>
 </a>

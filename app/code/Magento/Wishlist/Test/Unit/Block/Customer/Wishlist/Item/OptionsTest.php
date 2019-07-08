@@ -114,6 +114,9 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->block->getConfiguredOptions());
     }
 
+    /**
+     * @return array
+     */
     public function getConfiguredOptionsDataProvider()
     {
         return [

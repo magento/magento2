@@ -8,11 +8,13 @@ namespace Magento\UrlRewrite\Controller;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Framework\App\Response\Http as HttpResponse;
 
+/**
+ * Class to test Match corresponding URL Rewrite
+ */
 class UrlRewriteTest extends AbstractController
 {
     /**
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
-     * @magentoAppIsolation enabled
      *
      * @covers \Magento\UrlRewrite\Controller\Router::match
      * @covers \Magento\UrlRewrite\Model\Storage\DbStorage::doFindOneByData
@@ -32,16 +34,21 @@ class UrlRewriteTest extends AbstractController
         /** @var HttpResponse $response */
         $response = $this->getResponse();
         $code = $response->getHttpResponseCode();
-        $location = $response->getHeader('Location')->getFieldValue();
-
         $this->assertEquals($expectedCode, $code, 'Invalid response code');
-        $this->assertStringEndsWith(
-            $redirect,
-            $location,
-            'Invalid location header'
-        );
+
+        if ($expectedCode !== 200) {
+            $location = $response->getHeader('Location')->getFieldValue();
+            $this->assertStringEndsWith(
+                $redirect,
+                $location,
+                'Invalid location header'
+            );
+        }
     }
 
+    /**
+     * @return array
+     */
     public function requestDataProvider()
     {
         return [
@@ -69,11 +76,10 @@ class UrlRewriteTest extends AbstractController
                 'request' => '/page-similar/',
                 'redirect' => '/page-b',
             ],
-            'Use Case #7: Rewrite during stores switching' => [
-                'request' => '/page-c-on-2nd-store'
-                    . '?___store=default&___from_store=fixture_second_store',
-                'redirect' => '/page-c-on-1st-store',
-                'expectedCode' => 302
+            'Use Case #7: Request with query params' => [
+                'request' => '/enable-cookies/?test-param',
+                'redirect' => '',
+                200,
             ],
         ];
     }

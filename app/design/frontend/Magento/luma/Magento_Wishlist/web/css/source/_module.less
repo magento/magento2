@@ -8,6 +8,24 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    .toolbar {
+        &.wishlist-toolbar {
+            .limiter {
+                float: right;
+            }
+            .main .pages {
+                display: inline-block;
+                position: relative;
+                z-index: 0;
+            }
+            .toolbar-amount,
+            .limiter {
+                display: inline-block;
+                z-index: 1;
+            }
+        }
+    }
+
     .form.wishlist.items {
         .actions-toolbar {
             &:extend(.abs-reset-left-margin all);
@@ -164,6 +182,30 @@
             }
         }
     }
+    .products-grid.wishlist {
+        .product-item-actions { 
+            .action {
+                &.edit,
+                &.delete {
+                    .lib-icon-font(
+                    @icon-edit,
+                    @_icon-font-size: 18px,
+                    @_icon-font-line-height: 20px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-color: @minicart-icons-color,
+                    @_icon-font-color-hover: @primary__color,
+                    @_icon-font-color-active: @minicart-icons-color
+                    );
+                }
+
+                &.delete {
+                    .lib-icon-font-symbol(
+                    @_icon-font-content: @icon-trash
+                    );
+                }
+            }
+        }
+    }
 }
 
 //
@@ -185,11 +227,11 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .products-grid.wishlist {
         margin-bottom: @indent__l;
-        margin-right: -@indent__s;
+        margin-right: 0;
 
         .product {
             &-item {
-                padding: @indent__base @indent__s @indent__base @indent__base;
+                padding: @indent__base 0 @indent__base 0;
                 position: relative;
 
                 &-photo {
@@ -203,6 +245,7 @@
 
                 &-actions {
                     display: block;
+                    float: left;
 
                     .action {
                         margin-right: 15px;
@@ -210,15 +253,7 @@
                         &:last-child {
                             margin-right: 0;
                         }
-
-                        &.edit {
-                            float: left;
-                        }
-
-                        &.delete {
-                            float: right;
-                        }
-
+                        
                         &.edit,
                         &.delete {
                             margin-top: 7px;
@@ -277,6 +312,9 @@
             @_icon-font-color-hover: @primary__color,
             @_icon-font-color-active: @minicart-icons-color
             );
+            &:before {
+                overflow: visible;
+            }
         }
     }
 }
@@ -357,9 +395,7 @@
             width: auto;
         }
     }
-}
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .wishlist-index-index {
         .product-item-inner {
             @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);

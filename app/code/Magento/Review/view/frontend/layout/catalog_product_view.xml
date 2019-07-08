@@ -9,7 +9,7 @@
     <update handle="review_product_form_component"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Cookie\Block\RequireCookie" name="require-cookie" template="Magento_Cookie::require_cookie.phtml">
+            <block class="Magento\Cookie\Block\RequireCookie" name="require-cookie" template="Magento_Cookie::require_cookie.phtml" ifconfig="catalog/review/active">
                 <arguments>
                     <argument name="triggers" xsi:type="array">
                         <item name="submitReviewButton" xsi:type="string">.review .action.submit</item>
@@ -18,8 +18,11 @@
             </block>
         </referenceContainer>
         <referenceBlock name="product.info.details">
-            <block class="Magento\Review\Block\Product\Review" name="reviews.tab" as="reviews" template="Magento_Review::review.phtml" group="detailed_info">
-                <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
+            <block class="Magento\Review\Block\Product\Review" name="reviews.tab" as="reviews" template="Magento_Review::review.phtml" group="detailed_info" ifconfig="catalog/review/active">
+                <arguments>
+                    <argument name="sort_order" xsi:type="string">30</argument>
+                </arguments>
+                <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form" ifconfig="catalog/review/active">
                     <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
                 </block>
             </block>

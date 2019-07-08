@@ -39,7 +39,7 @@ class Website
     public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $website)
     {
         foreach ($website->getStoreIds() as $storeId) {
-            $this->tableMaintainer->dropTablesForStore($storeId);
+            $this->tableMaintainer->dropTablesForStore((int)$storeId);
         }
         return $objectResource;
     }

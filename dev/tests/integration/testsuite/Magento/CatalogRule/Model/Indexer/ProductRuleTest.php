@@ -67,7 +67,7 @@ class ProductRuleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             7.5,
             $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()),
-            "Catalog price rule doesn't apply to to product with visibility value \"Not Visibility Individually\""
+            "Catalog price rule doesn't apply to product with visibility value \"Not Visibility Individually\""
         );
     }
 }

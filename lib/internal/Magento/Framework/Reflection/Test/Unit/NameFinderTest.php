@@ -7,7 +7,6 @@
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Zend\Code\Reflection\ClassReflection;
-use Magento\Framework\Exception\SerializationException;
 
 /**
  * NameFinder Unit Test

@@ -114,5 +114,6 @@ class Scopes implements ConfigTypeInterface
     public function clean()
     {
         $this->data = null;
+        $this->idCodeMap = [];
     }
 }

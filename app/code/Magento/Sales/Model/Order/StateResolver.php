@@ -39,7 +39,7 @@ class StateResolver implements OrderStateResolverInterface
     {
         /** @var $order Order|OrderInterface */
         $forceCreditmemo = in_array(self::FORCED_CREDITMEMO, $arguments);
-        if (floatval($order->getTotalRefunded()) || !$order->getTotalRefunded() && $forceCreditmemo) {
+        if ((float)$order->getTotalRefunded() || !$order->getTotalRefunded() && $forceCreditmemo) {
             return true;
         }
         return false;

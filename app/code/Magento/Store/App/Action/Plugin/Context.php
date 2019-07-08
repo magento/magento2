@@ -9,10 +9,8 @@ namespace Magento\Store\App\Action\Plugin;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\Phrase;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\RequestInterface;
@@ -80,7 +78,7 @@ class Context
 
         /** @var string|array|null $storeCode */
         $storeCode = $request->getParam(
-            StoreResolverInterface::PARAM_NAME,
+            \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
         if (is_array($storeCode)) {
@@ -106,7 +104,7 @@ class Context
     /**
      * Take action in case of invalid store requested.
      *
-     * @param \Throwable|null  $previousException
+     * @param \Throwable|null $previousException
      * @return void
      * @throws NotFoundException
      */

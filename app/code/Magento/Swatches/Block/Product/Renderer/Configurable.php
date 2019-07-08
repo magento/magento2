@@ -48,6 +48,16 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
 
     /**
+     * Name of swatch image for json config
+     */
+    const SWATCH_IMAGE_NAME = 'swatchImage';
+
+    /**
+     * Name of swatch thumbnail for json config
+     */
+    const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
+
+    /**
      * @var Product
      */
     protected $product;
@@ -172,6 +182,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
                     $attributeDataArray
                 );
             }
+            if (isset($attributeDataArray['additional_data'])) {
+                $config[$attributeId]['additional_data'] = $attributeDataArray['additional_data'];
+            }
         }
 
         return $this->jsonEncoder->encode($config);
@@ -179,6 +192,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
 
     /**
      * Get number of swatches from config to show on product listing.
+     *
      * Other swatches can be shown after click button 'Show more'
      *
      * @return string
@@ -218,6 +232,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Get swatch attributes data.
+     *
      * @return array
      */
     protected function getSwatchAttributesData()
@@ -226,6 +242,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Init isProductHasSwatchAttribute.
+     *
      * @deprecated 100.1.5 Method isProductHasSwatchAttribute() is used instead of this.
      *
      * @codeCoverageIgnore
@@ -354,6 +372,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Get swatch product image.
+     *
      * @param Product $childProduct
      * @param string $imageType
      * @return string
@@ -374,6 +394,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Check if product have image.
+     *
      * @param Product $product
      * @param string $imageType
      * @return bool
@@ -384,6 +406,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Get configurable options ids.
+     *
      * @param array $attributeData
      * @return array
      * @since 100.0.3
@@ -443,8 +467,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * @inheritDoc
      * @deprecated 100.1.5 Now is used _toHtml() directly
-     * @return string
      */
     protected function getHtmlOutput()
     {
@@ -452,6 +476,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Get media callback url.
+     *
      * @return string
      */
     public function getMediaCallback()
@@ -472,5 +498,23 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         } else {
             return [];
         }
+    }
+
+    /**
+     * Get Swatch image size config data.
+     *
+     * @return string
+     */
+    public function getJsonSwatchSizeConfig()
+    {
+        $imageConfig = $this->swatchMediaHelper->getImageConfig();
+        $sizeConfig = [];
+
+        $sizeConfig[self::SWATCH_IMAGE_NAME]['width'] = $imageConfig[Swatch::SWATCH_IMAGE_NAME]['width'];
+        $sizeConfig[self::SWATCH_IMAGE_NAME]['height'] = $imageConfig[Swatch::SWATCH_IMAGE_NAME]['height'];
+        $sizeConfig[self::SWATCH_THUMBNAIL_NAME]['height'] = $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['height'];
+        $sizeConfig[self::SWATCH_THUMBNAIL_NAME]['width'] = $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['width'];
+
+        return $this->jsonEncoder->encode($sizeConfig);
     }
 }

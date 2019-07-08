@@ -46,6 +46,7 @@ class Category implements ConfigInterface
             'sortOrder' => 30,
             'missingValuePlaceholder' => __('Category with ID: %s doesn\'t exist'),
             'isDisplayMissingValuePlaceholder' => true,
+            'isRemoveSelectedIcon' => true,
         ];
     }
 }

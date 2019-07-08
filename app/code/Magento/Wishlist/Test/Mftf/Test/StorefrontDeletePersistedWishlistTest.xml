@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDeletePersistedWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Delete a persist wishlist for a customer"/>
+            <title value="Customer should be able to delete a persistent wishlist"/>
+            <description value="Customer should be able to delete a persistent wishlist"/>
+            <severity value="AVERAGE"/>
+            <group value="wishlist"/>
+            <testCaseId value="MC-4110"/>
+            <skip>
+                <issueId value="MQE-1145"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="product" entity="SimpleProduct" >
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData stepKey="customer" entity="Simple_US_Customer"/>
+            <createData stepKey="wishlist" entity="Wishlist">
+                <requiredEntity createDataKey="customer"/>
+                <requiredEntity createDataKey="product"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+            <deleteData stepKey="deleteProduct" createDataKey="product"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
+        <fillField  stepKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+        <waitForElementVisible stepKey="waitForButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+        <see stepKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <waitForPageLoad stepKey="15"/>
+        <amOnPage stepKey="amOnWishlist" url="{{StorefrontCustomerWishlistPage.url}}"/>
+        <see stepKey="seeWishlist" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
+        <moveMouseOver stepKey="mouseOver" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
+        <waitForElementVisible stepKey="waitForRemoveButton" selector="{{StorefrontCustomerWishlistSection.removeWishlistButton}}"/>
+        <click stepKey="clickRemove" selector="{{StorefrontCustomerWishlistSection.removeWishlistButton}}"/>
+        <see stepKey="seeEmptyWishlist" userInput="You have no items in your wish list" selector="{{StorefrontCustomerWishlistSection.emptyWishlistText}}"/>
+    </test>
+</tests>

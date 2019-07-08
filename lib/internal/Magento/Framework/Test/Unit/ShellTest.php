@@ -83,6 +83,9 @@ class ShellTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         // backtick symbol (`) has to be replaced with environment-dependent quote character

@@ -10,6 +10,9 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 
 use Psr\Log\LoggerInterface as Logger;
 
+/**
+ * Process config for Wysiwyg.
+ */
 class CompositeConfigProcessor implements WysiwygConfigDataProcessorInterface
 {
     /**
@@ -24,6 +27,7 @@ class CompositeConfigProcessor implements WysiwygConfigDataProcessorInterface
 
     /**
      * CompositeConfigProcessor constructor.
+     * @param Logger $logger
      * @param array $eavWysiwygDataProcessors
      */
     public function __construct(Logger $logger, array $eavWysiwygDataProcessors)
@@ -33,7 +37,7 @@ class CompositeConfigProcessor implements WysiwygConfigDataProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {

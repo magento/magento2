@@ -41,6 +41,9 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $res);
     }
 
+    /**
+     * @return array
+     */
     public function convertDataProvider()
     {
         return [

@@ -343,7 +343,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'product' => [
                         '_all' => [
                             'enabled' => true,
-                            'type' => 'text'
+                            'type' => 'text',
                         ],
                         'properties' => [
                             'name' => [
@@ -356,7 +356,8 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match' => 'price_*',
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type' => 'float'
+                                        'type' => 'float',
+                                        'store' => true,
                                     ],
                                 ],
                             ],
@@ -366,7 +367,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'text',
-                                        'index' => 'no'
+                                        'index' => false,
                                     ],
                                 ],
                             ],
@@ -375,7 +376,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match' => 'position_*',
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type' => 'int'
+                                        'type' => 'int',
                                     ],
                                 ],
                             ],
@@ -409,7 +410,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'product' => [
                         '_all' => [
                             'enabled' => true,
-                            'type' => 'text'
+                            'type' => 'text',
                         ],
                         'properties' => [
                             'name' => [
@@ -422,7 +423,8 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match' => 'price_*',
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type' => 'float'
+                                        'type' => 'float',
+                                        'store' => true,
                                     ],
                                 ],
                             ],
@@ -432,7 +434,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'text',
-                                        'index' => 'no',
+                                        'index' => false,
                                     ],
                                 ],
                             ],
@@ -441,7 +443,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match' => 'position_*',
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type' => 'int'
+                                        'type' => 'int',
                                     ],
                                 ],
                             ],

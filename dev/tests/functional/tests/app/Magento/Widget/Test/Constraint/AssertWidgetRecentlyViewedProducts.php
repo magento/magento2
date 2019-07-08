@@ -16,7 +16,7 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that that widget with type Recently Viewed Products is present on category page
+ * Check that widget with type Recently Viewed Products is present on category page
  */
 class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
 {

@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\BundleGraphQl\Model\Resolver\Options;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
@@ -19,29 +19,28 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  */
 class Label implements ResolverInterface
 {
-
     /**
      * @var ValueFactory
      */
     private $valueFactory;
 
     /**
-     * @var Product
+     * @var ProductDataProvider
      */
     private $product;
 
     /**
      * @param ValueFactory $valueFactory
-     * @param Product $product
+     * @param ProductDataProvider $product
      */
-    public function __construct(ValueFactory $valueFactory, Product $product)
+    public function __construct(ValueFactory $valueFactory, ProductDataProvider $product)
     {
         $this->valueFactory = $valueFactory;
         $this->product = $product;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -49,12 +48,9 @@ class Label implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['sku'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new LocalizedException(__('"sku" value should be specified'));
         }
 
         $this->product->addProductSku($value['sku']);

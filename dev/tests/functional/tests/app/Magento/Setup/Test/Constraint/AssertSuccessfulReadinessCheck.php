@@ -67,11 +67,13 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
             $setupWizard->getReadiness()->getDependencyCheck(),
             'Dependency check is incorrect.'
         );
-        \PHPUnit\Framework\Assert::assertContains(
-            self::PHP_VERSION_MESSAGE,
-            $setupWizard->getReadiness()->getPhpVersionCheck(),
-            'PHP version is incorrect.'
-        );
+        if ($setupWizard->getReadiness()->isPhpVersionCheckVisible()) {
+            \PHPUnit\Framework\Assert::assertContains(
+                self::PHP_VERSION_MESSAGE,
+                $setupWizard->getReadiness()->getPhpVersionCheck(),
+                'PHP version is incorrect.'
+            );
+        }
         \PHPUnit\Framework\Assert::assertContains(
             self::PHP_SETTING_REGEXP,
             $setupWizard->getReadiness()->getSettingsCheck(),

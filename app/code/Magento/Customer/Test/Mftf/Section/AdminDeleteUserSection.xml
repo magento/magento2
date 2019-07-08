@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminDeleteUserSection">
+        <element name="theUser" selector="//td[contains(text(), 'John')]" type="button"/>
+        <element name="password" selector="#user_current_password" type="input"/>
+        <element name="delete" selector="//button/span[contains(text(), 'Delete User')]" type="button"/>
+        <element name="confirm" selector="//*[@class='action-primary action-accept']" type="button"/>
+    </section>
+</sections>

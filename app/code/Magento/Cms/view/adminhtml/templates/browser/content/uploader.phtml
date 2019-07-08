@@ -17,6 +17,13 @@ foreach ($filters as $media_type) {
     }, $media_type['files']));
 }
 
+$resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
+    ? "{action: 'resize', maxWidth: "
+        . $block->escapeHtml($block->getImageUploadMaxWidth())
+        . ", maxHeight: "
+        . $block->escapeHtml($block->getImageUploadMaxHeight())
+        . "}"
+    : "{action: 'resize'}";
 ?>
 
 <div id="<?= $block->getHtmlId() ?>" class="uploader">
@@ -145,11 +152,9 @@ require([
             action: 'load',
             fileTypes: /^image\/(gif|jpeg|png)$/,
             maxFileSize: <?= (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
-        }, {
-            action: 'resize',
-            maxWidth: <?= (float) \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
-            maxHeight: <?= (float) \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
-        }, {
+        },
+        <?= /* @noEscape */ $resizeConfig ?>,
+        {
             action: 'save'
         }]
     });

@@ -6,6 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Noroute;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SimpleTaxRate" type="taxRate">
+        <data key="code" unique="suffix">TaxRate</data>
+    </entity>
+    <entity name="defaultTaxRate" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_postcode">*</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">10</data>
+    </entity>
+    <entity name="US_CA_Rate_1" type="taxRate">
+        <data key="id">1</data>
+        <data key="code">US-CA-*-Rate 1</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.2500</data>
+    </entity>
+    <entity name="US_NY_Rate_1" type="taxRate">
+        <data key="code">US-NY-*-Rate 1</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.3750</data>
+        <data key="id">2</data>
+    </entity>
+    <entity name="taxRate_US_NY_8_1" type="taxRate">
+        <data key="code" unique="suffix">US-NY-*-</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_region_id">43</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.1</data>
+    </entity>
+    <entity name="taxRateCustomRateUS" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_region">California</data>
+        <data key="tax_postcode">90001</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">100.0000</data>
+    </entity>
+    <entity name="defaultTaxRateWithZipRange" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_region">California</data>
+        <data key="zip_is_range">1</data>
+        <data key="zip_from">90001</data>
+        <data key="zip_to">96162</data>
+        <data key="rate">15.05</data>
+    </entity>
+    <entity name="TaxRateWithFixedZipUtah" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">58</data>
+        <data key="tax_region">Utah</data>
+        <data key="zip_is_range">0</data>
+        <data key="tax_postcode">84001</data>
+        <data key="rate">20</data>
+    </entity>
+    <entity name="defaultTaxRateWithLargeRate" type="taxRate">
+        <data key="code" unique="suffix">TaxRate</data>
+        <data key="tax_country_id">GB</data>
+        <data key="tax_country">United Kingdom</data>
+        <data key="tax_postcode">*</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">777</data>
+    </entity>
+    <entity name="taxRateCustomRateCanada" type="taxRate">
+        <data key="code" unique="suffix">TaxRate</data>
+        <data key="tax_country_id">CA</data>
+        <data key="tax_country">Canada</data>
+        <data key="tax_region_id">*</data>
+        <data key="tax_postcode">180</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">25</data>
+    </entity>
+    <entity name="taxRateCustomRateUK" type="taxRate">
+        <data key="code" unique="suffix">TaxRate</data>
+        <data key="tax_country_id">GB</data>
+        <data key="tax_country">United Kingdom</data>
+        <data key="zip_is_range">1</data>
+        <data key="zip_from">1</data>
+        <data key="zip_to">7800935</data>
+        <data key="rate">12.99</data>
+    </entity>
+    <entity name="taxRateCustomRateFrance" type="taxRate">
+        <data key="code" unique="suffix">TaxRate</data>
+        <data key="tax_country_id">FR</data>
+        <data key="tax_country">France</data>
+        <data key="tax_region_id">277</data>
+        <data key="tax_region">Val-d'Oise</data>
+        <data key="tax_postcode">*</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">0.1</data>
+    </entity>
+    <entity name="taxRateForPensylvannia" extends="defaultTaxRate">
+        <data key="tax_region_id">51</data>
+        <data key="rate">6</data>
+    </entity>
+    <entity name="USFullTaxRate" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_postcode">*</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">10</data>
+    </entity>
+</entities>

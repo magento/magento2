@@ -18,7 +18,7 @@ class Selector extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'selector.phtml';
+    protected $_template = 'Magento_UrlRewrite::selector.phtml';
 
     /**
      * Set block template and get available modes

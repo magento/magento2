@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Catalog image helper
@@ -14,7 +15,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
-class Image extends AbstractHelper
+class Image extends AbstractHelper implements ArgumentInterface
 {
     /**
      * Media config node
@@ -298,6 +299,7 @@ class Image extends AbstractHelper
      *
      * @param int $quality
      * @return $this
+     * @deprecated
      */
     public function setQuality($quality)
     {
@@ -406,7 +408,8 @@ class Image extends AbstractHelper
 
     /**
      * Add watermark to image
-     * size param in format 100x200
+     *
+     * Size param in format 100x200
      *
      * @param string $fileName
      * @param string $position
@@ -533,6 +536,8 @@ class Image extends AbstractHelper
     }
 
     /**
+     * Save changes
+     *
      * @return $this
      */
     public function save()
@@ -553,6 +558,8 @@ class Image extends AbstractHelper
     }
 
     /**
+     * Getter for placeholder url
+     *
      * @param null|string $placeholder
      * @return string
      */
@@ -655,7 +662,8 @@ class Image extends AbstractHelper
 
     /**
      * Set watermark size
-     * param size in format 100x200
+     *
+     * Param size in format 100x200
      *
      * @param string $size
      * @return $this
@@ -757,7 +765,7 @@ class Image extends AbstractHelper
     protected function parseSize($string)
     {
         $size = explode('x', strtolower($string));
-        if (sizeof($size) == 2) {
+        if (count($size) == 2) {
             return ['width' => $size[0] > 0 ? $size[0] : null, 'height' => $size[1] > 0 ? $size[1] : null];
         }
         return false;
@@ -859,7 +867,7 @@ class Image extends AbstractHelper
      */
     protected function getAttribute($name)
     {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+        return $this->attributes[$name] ?? null;
     }
 
     /**

@@ -22,119 +22,119 @@
                 comment="Store Id"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer Id"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="base_discount_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Canceled"/>
-        <column xsi:type="decimal" name="base_discount_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Invoiced"/>
-        <column xsi:type="decimal" name="base_discount_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Refunded"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Amount"/>
-        <column xsi:type="decimal" name="base_shipping_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Canceled"/>
-        <column xsi:type="decimal" name="base_shipping_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Invoiced"/>
-        <column xsi:type="decimal" name="base_shipping_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Refunded"/>
-        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="base_shipping_tax_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Refunded"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="base_subtotal_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Canceled"/>
-        <column xsi:type="decimal" name="base_subtotal_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Invoiced"/>
-        <column xsi:type="decimal" name="base_subtotal_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Refunded"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="base_tax_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Canceled"/>
-        <column xsi:type="decimal" name="base_tax_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Invoiced"/>
-        <column xsi:type="decimal" name="base_tax_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Refunded"/>
-        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Global Rate"/>
-        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Order Rate"/>
-        <column xsi:type="decimal" name="base_total_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Canceled"/>
-        <column xsi:type="decimal" name="base_total_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Invoiced"/>
-        <column xsi:type="decimal" name="base_total_invoiced_cost" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_total_invoiced_cost" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Total Invoiced Cost"/>
-        <column xsi:type="decimal" name="base_total_offline_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_total_offline_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Total Offline Refunded"/>
-        <column xsi:type="decimal" name="base_total_online_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_total_online_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Total Online Refunded"/>
-        <column xsi:type="decimal" name="base_total_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Paid"/>
         <column xsi:type="decimal" name="base_total_qty_ordered" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Total Qty Ordered"/>
-        <column xsi:type="decimal" name="base_total_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Refunded"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
-        <column xsi:type="decimal" name="discount_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Canceled"/>
-        <column xsi:type="decimal" name="discount_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Invoiced"/>
-        <column xsi:type="decimal" name="discount_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Refunded"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="shipping_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Canceled"/>
-        <column xsi:type="decimal" name="shipping_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Invoiced"/>
-        <column xsi:type="decimal" name="shipping_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Refunded"/>
-        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="shipping_tax_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_tax_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping Tax Refunded"/>
         <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Store To Base Rate"/>
         <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Store To Order Rate"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="subtotal_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Canceled"/>
-        <column xsi:type="decimal" name="subtotal_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Invoiced"/>
-        <column xsi:type="decimal" name="subtotal_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Refunded"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
-        <column xsi:type="decimal" name="tax_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Canceled"/>
-        <column xsi:type="decimal" name="tax_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Invoiced"/>
-        <column xsi:type="decimal" name="tax_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Refunded"/>
-        <column xsi:type="decimal" name="total_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Canceled"/>
-        <column xsi:type="decimal" name="total_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Invoiced"/>
-        <column xsi:type="decimal" name="total_offline_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_offline_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Total Offline Refunded"/>
-        <column xsi:type="decimal" name="total_online_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_online_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Total Online Refunded"/>
-        <column xsi:type="decimal" name="total_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Paid"/>
         <column xsi:type="decimal" name="total_qty_ordered" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Total Qty Ordered"/>
-        <column xsi:type="decimal" name="total_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Refunded"/>
         <column xsi:type="smallint" name="can_ship_partially" padding="5" unsigned="true" nullable="true"
                 identity="false" comment="Can Ship Partially"/>
@@ -163,27 +163,27 @@
                 comment="Quote Id"/>
         <column xsi:type="int" name="shipping_address_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Shipping Address Id"/>
-        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Negative"/>
-        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Positive"/>
-        <column xsi:type="decimal" name="base_adjustment_negative" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_adjustment_negative" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Adjustment Negative"/>
-        <column xsi:type="decimal" name="base_adjustment_positive" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_adjustment_positive" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Adjustment Positive"/>
-        <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Discount Amount"/>
-        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="base_total_due" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_due" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Due"/>
-        <column xsi:type="decimal" name="payment_authorization_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="payment_authorization_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Payment Authorization Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping Discount Amount"/>
-        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="total_due" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_due" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Due"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Weight"/>
@@ -219,7 +219,7 @@
         <column xsi:type="varchar" name="remote_ip" nullable="true" length="45" comment="Remote Ip"/>
         <column xsi:type="varchar" name="shipping_method" nullable="true" length="120"/>
         <column xsi:type="varchar" name="store_currency_code" nullable="true" length="3" comment="Store Currency Code"/>
-        <column xsi:type="varchar" name="store_name" nullable="true" length="32" comment="Store Name"/>
+        <column xsi:type="varchar" name="store_name" nullable="true" length="255" comment="Store Name"/>
         <column xsi:type="varchar" name="x_forwarded_for" nullable="true" length="32" comment="X Forwarded For"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -230,68 +230,68 @@
                 identity="false" default="0" comment="Total Item Count"/>
         <column xsi:type="int" name="customer_gender" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Customer Gender"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Invoiced"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_invoiced" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_invoiced" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Invoiced"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Refunded"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_refunded" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_refunded" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Refunded"/>
-        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
         <column xsi:type="varchar" name="coupon_rule_name" nullable="true" length="255"
                 comment="Coupon Sales Rule Name"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="sales_order"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="sales_order"
                     column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
                     onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" name="SALES_ORDER_STORE_ID_STORE_STORE_ID" table="sales_order" column="store_id"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STORE_ID_STORE_STORE_ID" table="sales_order" column="store_id"
                     referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_ORDER_INCREMENT_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_ORDER_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SALES_ORDER_STATUS" indexType="btree">
+        <index referenceId="SALES_ORDER_STATUS" indexType="btree">
             <column name="status"/>
         </index>
-        <index name="SALES_ORDER_STATE" indexType="btree">
+        <index referenceId="SALES_ORDER_STATE" indexType="btree">
             <column name="state"/>
         </index>
-        <index name="SALES_ORDER_STORE_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_ORDER_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_ORDER_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_ORDER_CUSTOMER_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_CUSTOMER_ID" indexType="btree">
             <column name="customer_id"/>
         </index>
-        <index name="SALES_ORDER_EXT_ORDER_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_EXT_ORDER_ID" indexType="btree">
             <column name="ext_order_id"/>
         </index>
-        <index name="SALES_ORDER_QUOTE_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
-        <index name="SALES_ORDER_UPDATED_AT" indexType="btree">
+        <index referenceId="SALES_ORDER_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
-        <index name="SALES_ORDER_SEND_EMAIL" indexType="btree">
+        <index referenceId="SALES_ORDER_SEND_EMAIL" indexType="btree">
             <column name="send_email"/>
         </index>
-        <index name="SALES_ORDER_EMAIL_SENT" indexType="btree">
+        <index referenceId="SALES_ORDER_EMAIL_SENT" indexType="btree">
             <column name="email_sent"/>
         </index>
     </table>
@@ -304,13 +304,13 @@
         <column xsi:type="varchar" name="store_name" nullable="true" length="255" comment="Store Name"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer Id"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <column xsi:type="decimal" name="base_total_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Paid"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
-        <column xsi:type="decimal" name="total_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Paid"/>
         <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment Id"/>
         <column xsi:type="varchar" name="base_currency_code" nullable="true" length="3" comment="Base Currency Code"/>
@@ -326,55 +326,55 @@
                 comment="Shipping Method Name"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="255" comment="Customer Email"/>
         <column xsi:type="varchar" name="customer_group" nullable="true" length="255" comment="Customer Group"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping and handling amount"/>
         <column xsi:type="varchar" name="customer_name" nullable="true" length="255" comment="Customer Name"/>
         <column xsi:type="varchar" name="payment_method" nullable="true" length="255" comment="Payment Method"/>
-        <column xsi:type="decimal" name="total_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Refunded"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="SALES_ORDER_GRID_INCREMENT_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_ORDER_GRID_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SALES_ORDER_GRID_STATUS" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_STATUS" indexType="btree">
             <column name="status"/>
         </index>
-        <index name="SALES_ORDER_GRID_STORE_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_ORDER_GRID_BASE_GRAND_TOTAL" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_BASE_GRAND_TOTAL" indexType="btree">
             <column name="base_grand_total"/>
         </index>
-        <index name="SALES_ORDER_GRID_BASE_TOTAL_PAID" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_BASE_TOTAL_PAID" indexType="btree">
             <column name="base_total_paid"/>
         </index>
-        <index name="SALES_ORDER_GRID_GRAND_TOTAL" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_GRAND_TOTAL" indexType="btree">
             <column name="grand_total"/>
         </index>
-        <index name="SALES_ORDER_GRID_TOTAL_PAID" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_TOTAL_PAID" indexType="btree">
             <column name="total_paid"/>
         </index>
-        <index name="SALES_ORDER_GRID_SHIPPING_NAME" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_SHIPPING_NAME" indexType="btree">
             <column name="shipping_name"/>
         </index>
-        <index name="SALES_ORDER_GRID_BILLING_NAME" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_BILLING_NAME" indexType="btree">
             <column name="billing_name"/>
         </index>
-        <index name="SALES_ORDER_GRID_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_ORDER_GRID_CUSTOMER_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_CUSTOMER_ID" indexType="btree">
             <column name="customer_id"/>
         </index>
-        <index name="SALES_ORDER_GRID_UPDATED_AT" indexType="btree">
+        <index referenceId="SALES_ORDER_GRID_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
-        <index name="FTI_65B9E9925EC58F0C7C2E2F6379C233E7" indexType="fulltext">
+        <index referenceId="FTI_65B9E9925EC58F0C7C2E2F6379C233E7" indexType="fulltext">
             <column name="increment_id"/>
             <column name="billing_name"/>
             <column name="shipping_name"/>
@@ -419,13 +419,13 @@
         <column xsi:type="text" name="vat_request_date" nullable="true" comment="Vat Request Date"/>
         <column xsi:type="smallint" name="vat_request_success" padding="6" unsigned="false" nullable="true"
                 identity="false" comment="Vat Request Success"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_ADDRESS_PARENT_ID_SALES_ORDER_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_ADDRESS_PARENT_ID_SALES_ORDER_ENTITY_ID"
                     table="sales_order_address" column="parent_id" referenceTable="sales_order"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_ORDER_ADDRESS_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_ADDRESS_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
     </table>
@@ -444,16 +444,16 @@
                 comment="Created At"/>
         <column xsi:type="varchar" name="entity_name" nullable="true" length="32"
                 comment="Shows what entity history is bind to."/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_STATUS_HISTORY_PARENT_ID_SALES_ORDER_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STATUS_HISTORY_PARENT_ID_SALES_ORDER_ENTITY_ID"
                     table="sales_order_status_history" column="parent_id" referenceTable="sales_order"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_ORDER_STATUS_HISTORY_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_STATUS_HISTORY_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
-        <index name="SALES_ORDER_STATUS_HISTORY_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_ORDER_STATUS_HISTORY_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
     </table>
@@ -513,90 +513,90 @@
                 comment="Base Original Price"/>
         <column xsi:type="decimal" name="tax_percent" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Tax Percent"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Tax Amount"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="tax_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Tax Invoiced"/>
-        <column xsi:type="decimal" name="base_tax_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Base Tax Invoiced"/>
         <column xsi:type="decimal" name="discount_percent" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Discount Percent"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Discount Amount"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="discount_invoiced" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_invoiced" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Discount Invoiced"/>
-        <column xsi:type="decimal" name="base_discount_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Base Discount Invoiced"/>
-        <column xsi:type="decimal" name="amount_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 default="0" comment="Amount Refunded"/>
-        <column xsi:type="decimal" name="base_amount_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" default="0" comment="Base Amount Refunded"/>
-        <column xsi:type="decimal" name="row_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Row Total"/>
-        <column xsi:type="decimal" name="base_row_total" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_row_total" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Row Total"/>
-        <column xsi:type="decimal" name="row_invoiced" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="row_invoiced" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Row Invoiced"/>
-        <column xsi:type="decimal" name="base_row_invoiced" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_row_invoiced" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Base Row Invoiced"/>
         <column xsi:type="decimal" name="row_weight" scale="4" precision="12" unsigned="false" nullable="true"
                 default="0" comment="Row Weight"/>
-        <column xsi:type="decimal" name="base_tax_before_discount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_tax_before_discount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Tax Before Discount"/>
-        <column xsi:type="decimal" name="tax_before_discount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_before_discount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Before Discount"/>
         <column xsi:type="varchar" name="ext_order_item_id" nullable="true" length="255" comment="Ext Order Item Id"/>
         <column xsi:type="smallint" name="locked_do_invoice" padding="5" unsigned="true" nullable="true"
                 identity="false" comment="Locked Do Invoice"/>
         <column xsi:type="smallint" name="locked_do_ship" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Locked Do Ship"/>
-        <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Price Incl Tax"/>
-        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Price Incl Tax"/>
-        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total Incl Tax"/>
-        <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_row_total_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Row Total Incl Tax"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_invoiced" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_invoiced" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Invoiced"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_invoiced" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_invoiced" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Invoiced"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Refunded"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_refunded" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_refunded" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Refunded"/>
         <column xsi:type="decimal" name="tax_canceled" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Tax Canceled"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Canceled"/>
-        <column xsi:type="decimal" name="tax_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Refunded"/>
-        <column xsi:type="decimal" name="base_tax_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Refunded"/>
-        <column xsi:type="decimal" name="discount_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Refunded"/>
-        <column xsi:type="decimal" name="base_discount_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Refunded"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_ITEM_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_order_item"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_ITEM_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_order_item"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SALES_ORDER_ITEM_STORE_ID_STORE_STORE_ID" table="sales_order_item"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_ITEM_STORE_ID_STORE_STORE_ID" table="sales_order_item"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <index name="SALES_ORDER_ITEM_ORDER_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_ITEM_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
-        <index name="SALES_ORDER_ITEM_STORE_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_ITEM_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -605,41 +605,41 @@
                 comment="Entity Id"/>
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Parent Id"/>
-        <column xsi:type="decimal" name="base_shipping_captured" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_captured" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Captured"/>
-        <column xsi:type="decimal" name="shipping_captured" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_captured" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Captured"/>
-        <column xsi:type="decimal" name="amount_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Refunded"/>
-        <column xsi:type="decimal" name="base_amount_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_amount_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Amount Paid"/>
-        <column xsi:type="decimal" name="amount_canceled" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_canceled" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Canceled"/>
-        <column xsi:type="decimal" name="base_amount_authorized" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_authorized" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Authorized"/>
-        <column xsi:type="decimal" name="base_amount_paid_online" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_paid_online" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Paid Online"/>
-        <column xsi:type="decimal" name="base_amount_refunded_online" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_refunded_online" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Refunded Online"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Amount"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="amount_paid" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_paid" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Paid"/>
-        <column xsi:type="decimal" name="amount_authorized" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_authorized" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Authorized"/>
-        <column xsi:type="decimal" name="base_amount_ordered" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_amount_ordered" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Amount Ordered"/>
-        <column xsi:type="decimal" name="base_shipping_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Refunded"/>
-        <column xsi:type="decimal" name="shipping_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Refunded"/>
-        <column xsi:type="decimal" name="base_amount_refunded" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_refunded" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Refunded"/>
-        <column xsi:type="decimal" name="amount_ordered" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount_ordered" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount Ordered"/>
-        <column xsi:type="decimal" name="base_amount_canceled" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_amount_canceled" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Amount Canceled"/>
         <column xsi:type="int" name="quote_payment_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Quote Payment Id"/>
@@ -663,7 +663,7 @@
         <column xsi:type="varchar" name="cc_ss_start_month" nullable="true" length="128" comment="Cc Ss Start Month"/>
         <column xsi:type="varchar" name="echeck_account_type" nullable="true" length="255"
                 comment="Echeck Account Type"/>
-        <column xsi:type="varchar" name="last_trans_id" nullable="true" length="32" comment="Last Trans Id"/>
+        <column xsi:type="varchar" name="last_trans_id" nullable="true" length="255" comment="Last Trans Id"/>
         <column xsi:type="varchar" name="cc_cid_status" nullable="true" length="32" comment="Cc Cid Status"/>
         <column xsi:type="varchar" name="cc_owner" nullable="true" length="128" comment="Cc Owner"/>
         <column xsi:type="varchar" name="cc_type" nullable="true" length="32" comment="Cc Type"/>
@@ -684,13 +684,13 @@
         <column xsi:type="varchar" name="cc_trans_id" nullable="true" length="32" comment="Cc Trans Id"/>
         <column xsi:type="varchar" name="address_status" nullable="true" length="32" comment="Address Status"/>
         <column xsi:type="text" name="additional_information" nullable="true" comment="Additional Information"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_PAYMENT_PARENT_ID_SALES_ORDER_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_PAYMENT_PARENT_ID_SALES_ORDER_ENTITY_ID"
                     table="sales_order_payment" column="parent_id" referenceTable="sales_order"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_ORDER_PAYMENT_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_PAYMENT_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
     </table>
@@ -727,36 +727,36 @@
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
         <column xsi:type="smallint" name="customer_note_notify" padding="5" unsigned="true" nullable="true"
                 identity="false" comment="Customer Note Notify"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_SHIPMENT_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_shipment"
+        <constraint xsi:type="foreign" referenceId="SALES_SHIPMENT_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_shipment"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SALES_SHIPMENT_STORE_ID_STORE_STORE_ID" table="sales_shipment"
+        <constraint xsi:type="foreign" referenceId="SALES_SHIPMENT_STORE_ID_STORE_STORE_ID" table="sales_shipment"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_SHIPMENT_INCREMENT_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_SHIPMENT_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SALES_SHIPMENT_STORE_ID" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_SHIPMENT_TOTAL_QTY" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_TOTAL_QTY" indexType="btree">
             <column name="total_qty"/>
         </index>
-        <index name="SALES_SHIPMENT_ORDER_ID" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
-        <index name="SALES_SHIPMENT_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_SHIPMENT_UPDATED_AT" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
-        <index name="SALES_SHIPMENT_SEND_EMAIL" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_SEND_EMAIL" indexType="btree">
             <column name="send_email"/>
         </index>
-        <index name="SALES_SHIPMENT_EMAIL_SENT" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_EMAIL_SENT" indexType="btree">
             <column name="email_sent"/>
         </index>
     </table>
@@ -769,7 +769,7 @@
         <column xsi:type="varchar" name="order_increment_id" nullable="false" length="32" comment="Order Increment Id"/>
         <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Order Id"/>
-        <column xsi:type="timestamp" name="order_created_at" on_update="true" nullable="true"
+        <column xsi:type="timestamp" name="order_created_at" on_update="true" nullable="false"
                 default="CURRENT_TIMESTAMP" comment="Order Increment Id"/>
         <column xsi:type="varchar" name="customer_name" nullable="false" length="128" comment="Customer Name"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"
@@ -788,44 +788,44 @@
                 comment="Shipping Method Name"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="SALES_SHIPMENT_GRID_INCREMENT_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_SHIPMENT_GRID_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SALES_SHIPMENT_GRID_STORE_ID" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_TOTAL_QTY" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_TOTAL_QTY" indexType="btree">
             <column name="total_qty"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_ORDER_INCREMENT_ID" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_ORDER_INCREMENT_ID" indexType="btree">
             <column name="order_increment_id"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_SHIPMENT_STATUS" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_SHIPMENT_STATUS" indexType="btree">
             <column name="shipment_status"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_ORDER_STATUS" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_ORDER_STATUS" indexType="btree">
             <column name="order_status"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_UPDATED_AT" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_ORDER_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_ORDER_CREATED_AT" indexType="btree">
             <column name="order_created_at"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_SHIPPING_NAME" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_SHIPPING_NAME" indexType="btree">
             <column name="shipping_name"/>
         </index>
-        <index name="SALES_SHIPMENT_GRID_BILLING_NAME" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_GRID_BILLING_NAME" indexType="btree">
             <column name="billing_name"/>
         </index>
-        <index name="FTI_086B40C8955F167B8EA76653437879B4" indexType="fulltext">
+        <index referenceId="FTI_086B40C8955F167B8EA76653437879B4" indexType="fulltext">
             <column name="increment_id"/>
             <column name="order_increment_id"/>
             <column name="shipping_name"/>
@@ -840,9 +840,9 @@
                 comment="Entity Id"/>
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Parent Id"/>
-        <column xsi:type="decimal" name="row_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Price"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Weight"/>
@@ -855,13 +855,13 @@
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
         <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_SHIPMENT_ITEM_PARENT_ID_SALES_SHIPMENT_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_SHIPMENT_ITEM_PARENT_ID_SALES_SHIPMENT_ENTITY_ID"
                     table="sales_shipment_item" column="parent_id" referenceTable="sales_shipment"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_SHIPMENT_ITEM_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_ITEM_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
     </table>
@@ -883,19 +883,19 @@
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_SHIPMENT_TRACK_PARENT_ID_SALES_SHIPMENT_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_SHIPMENT_TRACK_PARENT_ID_SALES_SHIPMENT_ENTITY_ID"
                     table="sales_shipment_track" column="parent_id" referenceTable="sales_shipment"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_SHIPMENT_TRACK_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_TRACK_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
-        <index name="SALES_SHIPMENT_TRACK_ORDER_ID" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_TRACK_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
-        <index name="SALES_SHIPMENT_TRACK_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_TRACK_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
     </table>
@@ -911,16 +911,16 @@
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_SHIPMENT_COMMENT_PARENT_ID_SALES_SHIPMENT_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_SHIPMENT_COMMENT_PARENT_ID_SALES_SHIPMENT_ENTITY_ID"
                     table="sales_shipment_comment" column="parent_id" referenceTable="sales_shipment"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_SHIPMENT_COMMENT_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_COMMENT_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_SHIPMENT_COMMENT_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_SHIPMENT_COMMENT_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
     </table>
@@ -929,43 +929,43 @@
                 comment="Entity Id"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Store Id"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Store To Order Rate"/>
-        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Order Rate"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Store To Base Rate"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Amount"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Total Qty"/>
-        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Global Rate"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
         <column xsi:type="int" name="billing_address_id" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Billing Address Id"/>
@@ -994,58 +994,58 @@
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_total_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_total_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Total Refunded"/>
         <column xsi:type="varchar" name="discount_description" nullable="true" length="255"
                 comment="Discount Description"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
         <column xsi:type="smallint" name="customer_note_notify" padding="5" unsigned="true" nullable="true"
                 identity="false" comment="Customer Note Notify"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_INVOICE_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_invoice"
+        <constraint xsi:type="foreign" referenceId="SALES_INVOICE_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_invoice"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SALES_INVOICE_STORE_ID_STORE_STORE_ID" table="sales_invoice"
+        <constraint xsi:type="foreign" referenceId="SALES_INVOICE_STORE_ID_STORE_STORE_ID" table="sales_invoice"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_INVOICE_INCREMENT_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_INVOICE_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SALES_INVOICE_STORE_ID" indexType="btree">
+        <index referenceId="SALES_INVOICE_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_INVOICE_GRAND_TOTAL" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRAND_TOTAL" indexType="btree">
             <column name="grand_total"/>
         </index>
-        <index name="SALES_INVOICE_ORDER_ID" indexType="btree">
+        <index referenceId="SALES_INVOICE_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
-        <index name="SALES_INVOICE_STATE" indexType="btree">
+        <index referenceId="SALES_INVOICE_STATE" indexType="btree">
             <column name="state"/>
         </index>
-        <index name="SALES_INVOICE_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_INVOICE_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_INVOICE_UPDATED_AT" indexType="btree">
+        <index referenceId="SALES_INVOICE_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
-        <index name="SALES_INVOICE_SEND_EMAIL" indexType="btree">
+        <index referenceId="SALES_INVOICE_SEND_EMAIL" indexType="btree">
             <column name="send_email"/>
         </index>
-        <index name="SALES_INVOICE_EMAIL_SENT" indexType="btree">
+        <index referenceId="SALES_INVOICE_EMAIL_SENT" indexType="btree">
             <column name="email_sent"/>
         </index>
     </table>
@@ -1077,51 +1077,51 @@
         <column xsi:type="varchar" name="shipping_address" nullable="true" length="255" comment="Shipping Address"/>
         <column xsi:type="varchar" name="shipping_information" nullable="true" length="255"
                 comment="Shipping Method Name"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping and handling amount"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated At"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="SALES_INVOICE_GRID_INCREMENT_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_INVOICE_GRID_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SALES_INVOICE_GRID_STORE_ID" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_INVOICE_GRID_GRAND_TOTAL" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_GRAND_TOTAL" indexType="btree">
             <column name="grand_total"/>
         </index>
-        <index name="SALES_INVOICE_GRID_ORDER_ID" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
-        <index name="SALES_INVOICE_GRID_STATE" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_STATE" indexType="btree">
             <column name="state"/>
         </index>
-        <index name="SALES_INVOICE_GRID_ORDER_INCREMENT_ID" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_ORDER_INCREMENT_ID" indexType="btree">
             <column name="order_increment_id"/>
         </index>
-        <index name="SALES_INVOICE_GRID_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_INVOICE_GRID_UPDATED_AT" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
-        <index name="SALES_INVOICE_GRID_ORDER_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_ORDER_CREATED_AT" indexType="btree">
             <column name="order_created_at"/>
         </index>
-        <index name="SALES_INVOICE_GRID_BILLING_NAME" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_BILLING_NAME" indexType="btree">
             <column name="billing_name"/>
         </index>
-        <index name="FTI_95D9C924DD6A8734EB8B5D01D60F90DE" indexType="fulltext">
+        <index referenceId="FTI_95D9C924DD6A8734EB8B5D01D60F90DE" indexType="fulltext">
             <column name="increment_id"/>
             <column name="order_increment_id"/>
             <column name="billing_name"/>
@@ -1130,7 +1130,7 @@
             <column name="customer_name"/>
             <column name="customer_email"/>
         </index>
-        <index name="SALES_INVOICE_GRID_BASE_GRAND_TOTAL" indexType="btree">
+        <index referenceId="SALES_INVOICE_GRID_BASE_GRAND_TOTAL" indexType="btree">
             <column name="base_grand_total"/>
         </index>
     </table>
@@ -1143,11 +1143,11 @@
                 comment="Base Price"/>
         <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
-        <column xsi:type="decimal" name="base_row_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_row_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Row Total"/>
         <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
-        <column xsi:type="decimal" name="row_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="row_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Row Total"/>
         <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
@@ -1180,13 +1180,13 @@
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
         <column xsi:type="text" name="tax_ratio" nullable="true"
                 comment="Ratio of tax invoiced over tax of the order item"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_INVOICE_ITEM_PARENT_ID_SALES_INVOICE_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_INVOICE_ITEM_PARENT_ID_SALES_INVOICE_ENTITY_ID"
                     table="sales_invoice_item" column="parent_id" referenceTable="sales_invoice"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_INVOICE_ITEM_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_INVOICE_ITEM_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
     </table>
@@ -1202,16 +1202,16 @@
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_INVOICE_COMMENT_PARENT_ID_SALES_INVOICE_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_INVOICE_COMMENT_PARENT_ID_SALES_INVOICE_ENTITY_ID"
                     table="sales_invoice_comment" column="parent_id" referenceTable="sales_invoice"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_INVOICE_COMMENT_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_INVOICE_COMMENT_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_INVOICE_COMMENT_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_INVOICE_COMMENT_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
     </table>
@@ -1220,53 +1220,53 @@
                 comment="Entity Id"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Store Id"/>
-        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Positive"/>
-        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_tax_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="store_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Store To Order Rate"/>
-        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Discount Amount"/>
-        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_order_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Order Rate"/>
-        <column xsi:type="decimal" name="grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Grand Total"/>
-        <column xsi:type="decimal" name="base_adjustment_negative" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_adjustment_negative" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Adjustment Negative"/>
-        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_subtotal_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Amount"/>
-        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal Incl Tax"/>
-        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Negative"/>
-        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Amount"/>
-        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Store To Base Rate"/>
-        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base To Global Rate"/>
-        <column xsi:type="decimal" name="base_adjustment" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_adjustment" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Adjustment"/>
-        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Subtotal"/>
-        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Discount Amount"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="adjustment" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
-        <column xsi:type="decimal" name="base_adjustment_positive" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_adjustment_positive" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Adjustment Positive"/>
-        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Tax Amount"/>
-        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Tax Amount"/>
-        <column xsi:type="decimal" name="tax_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tax_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Tax Amount"/>
         <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Order Id"/>
@@ -1295,56 +1295,56 @@
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="discount_tax_compensation_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="12"
+        <column xsi:type="decimal" name="shipping_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="12"
+        <column xsi:type="decimal" name="base_shipping_discount_tax_compensation_amnt" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Shipping Discount Tax Compensation Amount"/>
-        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="shipping_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Shipping Incl Tax"/>
-        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
         <column xsi:type="varchar" name="discount_description" nullable="true" length="255"
                 comment="Discount Description"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
         <column xsi:type="smallint" name="customer_note_notify" padding="5" unsigned="true" nullable="true"
                 identity="false" comment="Customer Note Notify"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_CREDITMEMO_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_creditmemo"
+        <constraint xsi:type="foreign" referenceId="SALES_CREDITMEMO_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_creditmemo"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SALES_CREDITMEMO_STORE_ID_STORE_STORE_ID" table="sales_creditmemo"
+        <constraint xsi:type="foreign" referenceId="SALES_CREDITMEMO_STORE_ID_STORE_STORE_ID" table="sales_creditmemo"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_CREDITMEMO_INCREMENT_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_CREDITMEMO_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SALES_CREDITMEMO_STORE_ID" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_CREDITMEMO_ORDER_ID" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
-        <index name="SALES_CREDITMEMO_CREDITMEMO_STATUS" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_CREDITMEMO_STATUS" indexType="btree">
             <column name="creditmemo_status"/>
         </index>
-        <index name="SALES_CREDITMEMO_STATE" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_STATE" indexType="btree">
             <column name="state"/>
         </index>
-        <index name="SALES_CREDITMEMO_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_CREDITMEMO_UPDATED_AT" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
-        <index name="SALES_CREDITMEMO_SEND_EMAIL" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_SEND_EMAIL" indexType="btree">
             <column name="send_email"/>
         </index>
-        <index name="SALES_CREDITMEMO_EMAIL_SENT" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_EMAIL_SENT" indexType="btree">
             <column name="email_sent"/>
         </index>
     </table>
@@ -1362,7 +1362,7 @@
         <column xsi:type="varchar" name="billing_name" nullable="true" length="255" comment="Billing Name"/>
         <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="true" identity="false"
                 comment="Status"/>
-        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Grand Total"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="32" comment="Order Status"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
@@ -1376,57 +1376,57 @@
         <column xsi:type="varchar" name="payment_method" nullable="true" length="32" comment="Payment Method"/>
         <column xsi:type="varchar" name="shipping_information" nullable="true" length="255"
                 comment="Shipping Method Name"/>
-        <column xsi:type="decimal" name="subtotal" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Subtotal"/>
-        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="shipping_and_handling" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping and handling amount"/>
-        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_positive" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Positive"/>
-        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="adjustment_negative" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Adjustment Negative"/>
-        <column xsi:type="decimal" name="order_base_grand_total" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="order_base_grand_total" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Order Grand Total"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="SALES_CREDITMEMO_GRID_INCREMENT_ID_STORE_ID">
+        <constraint xsi:type="unique" referenceId="SALES_CREDITMEMO_GRID_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
             <column name="store_id"/>
         </constraint>
-        <index name="SALES_CREDITMEMO_GRID_ORDER_INCREMENT_ID" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_ORDER_INCREMENT_ID" indexType="btree">
             <column name="order_increment_id"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_UPDATED_AT" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_ORDER_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_ORDER_CREATED_AT" indexType="btree">
             <column name="order_created_at"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_STATE" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_STATE" indexType="btree">
             <column name="state"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_BILLING_NAME" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_BILLING_NAME" indexType="btree">
             <column name="billing_name"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_ORDER_STATUS" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_ORDER_STATUS" indexType="btree">
             <column name="order_status"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_BASE_GRAND_TOTAL" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_BASE_GRAND_TOTAL" indexType="btree">
             <column name="base_grand_total"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_STORE_ID" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_ORDER_BASE_GRAND_TOTAL" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_ORDER_BASE_GRAND_TOTAL" indexType="btree">
             <column name="order_base_grand_total"/>
         </index>
-        <index name="SALES_CREDITMEMO_GRID_ORDER_ID" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_GRID_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
-        <index name="FTI_32B7BA885941A8254EE84AE650ABDC86" indexType="fulltext">
+        <index referenceId="FTI_32B7BA885941A8254EE84AE650ABDC86" indexType="fulltext">
             <column name="increment_id"/>
             <column name="order_increment_id"/>
             <column name="billing_name"/>
@@ -1482,13 +1482,13 @@
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
         <column xsi:type="text" name="tax_ratio" nullable="true"
                 comment="Ratio of tax in the creditmemo item over tax of the order item"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_CREDITMEMO_ITEM_PARENT_ID_SALES_CREDITMEMO_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_CREDITMEMO_ITEM_PARENT_ID_SALES_CREDITMEMO_ENTITY_ID"
                     table="sales_creditmemo_item" column="parent_id" referenceTable="sales_creditmemo"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_CREDITMEMO_ITEM_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_ITEM_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
     </table>
@@ -1504,16 +1504,16 @@
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_CREDITMEMO_COMMENT_PARENT_ID_SALES_CREDITMEMO_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_CREDITMEMO_COMMENT_PARENT_ID_SALES_CREDITMEMO_ENTITY_ID"
                     table="sales_creditmemo_comment" column="parent_id" referenceTable="sales_creditmemo"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="SALES_CREDITMEMO_COMMENT_CREATED_AT" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_COMMENT_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="SALES_CREDITMEMO_COMMENT_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_CREDITMEMO_COMMENT_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
     </table>
@@ -1533,18 +1533,18 @@
                 comment="Invoiced Captured"/>
         <column xsi:type="decimal" name="invoiced_not_captured" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Invoiced Not Captured"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_INVOICED_AGGREGATED_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_INVOICED_AGGREGATED_STORE_ID_STORE_STORE_ID"
                     table="sales_invoiced_aggregated" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_INVOICED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS">
+        <constraint xsi:type="unique" referenceId="SALES_INVOICED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS">
             <column name="period"/>
             <column name="store_id"/>
             <column name="order_status"/>
         </constraint>
-        <index name="SALES_INVOICED_AGGREGATED_STORE_ID" indexType="btree">
+        <index referenceId="SALES_INVOICED_AGGREGATED_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -1565,18 +1565,18 @@
                 comment="Invoiced Captured"/>
         <column xsi:type="decimal" name="invoiced_not_captured" scale="4" precision="12" unsigned="false"
                 nullable="true" comment="Invoiced Not Captured"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_INVOICED_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_INVOICED_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID"
                     table="sales_invoiced_aggregated_order" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_INVOICED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS">
+        <constraint xsi:type="unique" referenceId="SALES_INVOICED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS">
             <column name="period"/>
             <column name="store_id"/>
             <column name="order_status"/>
         </constraint>
-        <index name="SALES_INVOICED_AGGREGATED_ORDER_STORE_ID" indexType="btree">
+        <index referenceId="SALES_INVOICED_AGGREGATED_ORDER_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -1593,44 +1593,44 @@
                 default="0" comment="Total Qty Ordered"/>
         <column xsi:type="decimal" name="total_qty_invoiced" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Total Qty Invoiced"/>
-        <column xsi:type="decimal" name="total_income_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_income_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Income Amount"/>
-        <column xsi:type="decimal" name="total_revenue_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_revenue_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Revenue Amount"/>
-        <column xsi:type="decimal" name="total_profit_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_profit_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Profit Amount"/>
-        <column xsi:type="decimal" name="total_invoiced_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_invoiced_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Invoiced Amount"/>
-        <column xsi:type="decimal" name="total_canceled_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_canceled_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Canceled Amount"/>
-        <column xsi:type="decimal" name="total_paid_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_paid_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Paid Amount"/>
-        <column xsi:type="decimal" name="total_refunded_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_refunded_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Refunded Amount"/>
-        <column xsi:type="decimal" name="total_tax_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_tax_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Tax Amount"/>
-        <column xsi:type="decimal" name="total_tax_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_tax_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Tax Amount Actual"/>
-        <column xsi:type="decimal" name="total_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Shipping Amount"/>
-        <column xsi:type="decimal" name="total_shipping_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Shipping Amount Actual"/>
-        <column xsi:type="decimal" name="total_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Discount Amount"/>
-        <column xsi:type="decimal" name="total_discount_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_discount_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Discount Amount Actual"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_AGGREGATED_CREATED_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_AGGREGATED_CREATED_STORE_ID_STORE_STORE_ID"
                     table="sales_order_aggregated_created" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_ORDER_AGGREGATED_CREATED_PERIOD_STORE_ID_ORDER_STATUS">
+        <constraint xsi:type="unique" referenceId="SALES_ORDER_AGGREGATED_CREATED_PERIOD_STORE_ID_ORDER_STATUS">
             <column name="period"/>
             <column name="store_id"/>
             <column name="order_status"/>
         </constraint>
-        <index name="SALES_ORDER_AGGREGATED_CREATED_STORE_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_AGGREGATED_CREATED_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -1647,44 +1647,44 @@
                 default="0" comment="Total Qty Ordered"/>
         <column xsi:type="decimal" name="total_qty_invoiced" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Total Qty Invoiced"/>
-        <column xsi:type="decimal" name="total_income_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_income_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Income Amount"/>
-        <column xsi:type="decimal" name="total_revenue_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_revenue_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Revenue Amount"/>
-        <column xsi:type="decimal" name="total_profit_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_profit_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Profit Amount"/>
-        <column xsi:type="decimal" name="total_invoiced_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_invoiced_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Invoiced Amount"/>
-        <column xsi:type="decimal" name="total_canceled_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_canceled_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Canceled Amount"/>
-        <column xsi:type="decimal" name="total_paid_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_paid_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Paid Amount"/>
-        <column xsi:type="decimal" name="total_refunded_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_refunded_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Refunded Amount"/>
-        <column xsi:type="decimal" name="total_tax_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="total_tax_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Total Tax Amount"/>
-        <column xsi:type="decimal" name="total_tax_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_tax_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Tax Amount Actual"/>
-        <column xsi:type="decimal" name="total_shipping_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Shipping Amount"/>
-        <column xsi:type="decimal" name="total_shipping_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Shipping Amount Actual"/>
-        <column xsi:type="decimal" name="total_discount_amount" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Discount Amount"/>
-        <column xsi:type="decimal" name="total_discount_amount_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_discount_amount_actual" scale="4" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Total Discount Amount Actual"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID"
                     table="sales_order_aggregated_updated" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_ORDER_AGGREGATED_UPDATED_PERIOD_STORE_ID_ORDER_STATUS">
+        <constraint xsi:type="unique" referenceId="SALES_ORDER_AGGREGATED_UPDATED_PERIOD_STORE_ID_ORDER_STATUS">
             <column name="period"/>
             <column name="store_id"/>
             <column name="order_status"/>
         </constraint>
-        <index name="SALES_ORDER_AGGREGATED_UPDATED_STORE_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_AGGREGATED_UPDATED_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -1705,27 +1705,27 @@
         <column xsi:type="blob" name="additional_information" nullable="true" comment="Additional Information"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="transaction_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_PAYMENT_TRANSACTION_ORDER_ID_SALES_ORDER_ENTITY_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_PAYMENT_TRANSACTION_ORDER_ID_SALES_ORDER_ENTITY_ID"
                     table="sales_payment_transaction" column="order_id" referenceTable="sales_order"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="FK_B99FF1A06402D725EBDB0F3A7ECD47A2" table="sales_payment_transaction"
+        <constraint xsi:type="foreign" referenceId="FK_B99FF1A06402D725EBDB0F3A7ECD47A2" table="sales_payment_transaction"
                     column="parent_id" referenceTable="sales_payment_transaction" referenceColumn="transaction_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SALES_PAYMENT_TRANSACTION_PAYMENT_ID_SALES_ORDER_PAYMENT_ENTT_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_PAYMENT_TRANSACTION_PAYMENT_ID_SALES_ORDER_PAYMENT_ENTT_ID"
                     table="sales_payment_transaction" column="payment_id" referenceTable="sales_order_payment"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="SALES_PAYMENT_TRANSACTION_ORDER_ID_PAYMENT_ID_TXN_ID">
+        <constraint xsi:type="unique" referenceId="SALES_PAYMENT_TRANSACTION_ORDER_ID_PAYMENT_ID_TXN_ID">
             <column name="order_id"/>
             <column name="payment_id"/>
             <column name="txn_id"/>
         </constraint>
-        <index name="SALES_PAYMENT_TRANSACTION_PARENT_ID" indexType="btree">
+        <index referenceId="SALES_PAYMENT_TRANSACTION_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
-        <index name="SALES_PAYMENT_TRANSACTION_PAYMENT_ID" indexType="btree">
+        <index referenceId="SALES_PAYMENT_TRANSACTION_PAYMENT_ID" indexType="btree">
             <column name="payment_id"/>
         </index>
     </table>
@@ -1737,24 +1737,24 @@
         <column xsi:type="varchar" name="order_status" nullable="false" length="50" comment="Order Status"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
-        <column xsi:type="decimal" name="refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Refunded"/>
-        <column xsi:type="decimal" name="online_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="online_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Online Refunded"/>
-        <column xsi:type="decimal" name="offline_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="offline_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Offline Refunded"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_REFUNDED_AGGREGATED_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_REFUNDED_AGGREGATED_STORE_ID_STORE_STORE_ID"
                     table="sales_refunded_aggregated" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_REFUNDED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS">
+        <constraint xsi:type="unique" referenceId="SALES_REFUNDED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS">
             <column name="period"/>
             <column name="store_id"/>
             <column name="order_status"/>
         </constraint>
-        <index name="SALES_REFUNDED_AGGREGATED_STORE_ID" indexType="btree">
+        <index referenceId="SALES_REFUNDED_AGGREGATED_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -1767,24 +1767,24 @@
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
-        <column xsi:type="decimal" name="refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Refunded"/>
-        <column xsi:type="decimal" name="online_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="online_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Online Refunded"/>
-        <column xsi:type="decimal" name="offline_refunded" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="offline_refunded" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Offline Refunded"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID"
                     table="sales_refunded_aggregated_order" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_REFUNDED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS">
+        <constraint xsi:type="unique" referenceId="SALES_REFUNDED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS">
             <column name="period"/>
             <column name="store_id"/>
             <column name="order_status"/>
         </constraint>
-        <index name="SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID" indexType="btree">
+        <index referenceId="SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -1798,23 +1798,23 @@
                 comment="Shipping Description"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
-        <column xsi:type="decimal" name="total_shipping" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_shipping" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Shipping"/>
-        <column xsi:type="decimal" name="total_shipping_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_actual" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Total Shipping Actual"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_SHIPPING_AGGREGATED_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_SHIPPING_AGGREGATED_STORE_ID_STORE_STORE_ID"
                     table="sales_shipping_aggregated" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SALES_SHPP_AGGRED_PERIOD_STORE_ID_ORDER_STS_SHPP_DESCRIPTION">
+        <constraint xsi:type="unique" referenceId="SALES_SHPP_AGGRED_PERIOD_STORE_ID_ORDER_STS_SHPP_DESCRIPTION">
             <column name="period"/>
             <column name="store_id"/>
             <column name="order_status"/>
             <column name="shipping_description"/>
         </constraint>
-        <index name="SALES_SHIPPING_AGGREGATED_STORE_ID" indexType="btree">
+        <index referenceId="SALES_SHIPPING_AGGREGATED_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -1829,23 +1829,23 @@
                 comment="Shipping Description"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Orders Count"/>
-        <column xsi:type="decimal" name="total_shipping" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="total_shipping" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Total Shipping"/>
-        <column xsi:type="decimal" name="total_shipping_actual" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="total_shipping_actual" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Total Shipping Actual"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID"
                     table="sales_shipping_aggregated_order" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="UNQ_C05FAE47282EEA68654D0924E946761F">
+        <constraint xsi:type="unique" referenceId="UNQ_C05FAE47282EEA68654D0924E946761F">
             <column name="period"/>
             <column name="store_id"/>
             <column name="order_status"/>
             <column name="shipping_description"/>
         </constraint>
-        <index name="SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID" indexType="btree">
+        <index referenceId="SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -1864,21 +1864,21 @@
                 default="0" comment="Qty Ordered"/>
         <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID_STORE_STORE_ID"
                     table="sales_bestsellers_aggregated_daily" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="SALES_BESTSELLERS_AGGREGATED_DAILY_PERIOD_STORE_ID_PRODUCT_ID">
+        <constraint xsi:type="unique" referenceId="SALES_BESTSELLERS_AGGREGATED_DAILY_PERIOD_STORE_ID_PRODUCT_ID">
             <column name="period"/>
             <column name="store_id"/>
             <column name="product_id"/>
         </constraint>
-        <index name="SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID" indexType="btree">
+        <index referenceId="SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID" indexType="btree">
+        <index referenceId="SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
     </table>
@@ -1897,21 +1897,21 @@
                 default="0" comment="Qty Ordered"/>
         <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_BESTSELLERS_AGGREGATED_MONTHLY_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_BESTSELLERS_AGGREGATED_MONTHLY_STORE_ID_STORE_STORE_ID"
                     table="sales_bestsellers_aggregated_monthly" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="SALES_BESTSELLERS_AGGREGATED_MONTHLY_PERIOD_STORE_ID_PRODUCT_ID">
+        <constraint xsi:type="unique" referenceId="SALES_BESTSELLERS_AGGREGATED_MONTHLY_PERIOD_STORE_ID_PRODUCT_ID">
             <column name="period"/>
             <column name="store_id"/>
             <column name="product_id"/>
         </constraint>
-        <index name="SALES_BESTSELLERS_AGGREGATED_MONTHLY_STORE_ID" indexType="btree">
+        <index referenceId="SALES_BESTSELLERS_AGGREGATED_MONTHLY_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_BESTSELLERS_AGGREGATED_MONTHLY_PRODUCT_ID" indexType="btree">
+        <index referenceId="SALES_BESTSELLERS_AGGREGATED_MONTHLY_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
     </table>
@@ -1930,21 +1930,21 @@
                 default="0" comment="Qty Ordered"/>
         <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_BESTSELLERS_AGGREGATED_YEARLY_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_BESTSELLERS_AGGREGATED_YEARLY_STORE_ID_STORE_STORE_ID"
                     table="sales_bestsellers_aggregated_yearly" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="SALES_BESTSELLERS_AGGREGATED_YEARLY_PERIOD_STORE_ID_PRODUCT_ID">
+        <constraint xsi:type="unique" referenceId="SALES_BESTSELLERS_AGGREGATED_YEARLY_PERIOD_STORE_ID_PRODUCT_ID">
             <column name="period"/>
             <column name="store_id"/>
             <column name="product_id"/>
         </constraint>
-        <index name="SALES_BESTSELLERS_AGGREGATED_YEARLY_STORE_ID" indexType="btree">
+        <index referenceId="SALES_BESTSELLERS_AGGREGATED_YEARLY_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="SALES_BESTSELLERS_AGGREGATED_YEARLY_PRODUCT_ID" indexType="btree">
+        <index referenceId="SALES_BESTSELLERS_AGGREGATED_YEARLY_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
     </table>
@@ -1957,22 +1957,22 @@
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
         <column xsi:type="decimal" name="percent" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Percent"/>
-        <column xsi:type="decimal" name="amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Amount"/>
         <column xsi:type="int" name="priority" padding="11" unsigned="false" nullable="false" identity="false"
                 comment="Priority"/>
         <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false"
                 comment="Position"/>
-        <column xsi:type="decimal" name="base_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Amount"/>
         <column xsi:type="smallint" name="process" padding="6" unsigned="false" nullable="false" identity="false"
                 comment="Process"/>
-        <column xsi:type="decimal" name="base_real_amount" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_real_amount" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Real Amount"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tax_id"/>
         </constraint>
-        <index name="SALES_ORDER_TAX_ORDER_ID_PRIORITY_POSITION" indexType="btree">
+        <index referenceId="SALES_ORDER_TAX_ORDER_ID_PRIORITY_POSITION" indexType="btree">
             <column name="order_id"/>
             <column name="priority"/>
             <column name="position"/>
@@ -1987,42 +1987,42 @@
                 comment="Item Id"/>
         <column xsi:type="decimal" name="tax_percent" scale="4" precision="12" unsigned="false" nullable="false"
                 comment="Real Tax Percent For Item"/>
-        <column xsi:type="decimal" name="amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Tax amount for the item and tax rate"/>
-        <column xsi:type="decimal" name="base_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="base_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Base tax amount for the item and tax rate"/>
-        <column xsi:type="decimal" name="real_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="real_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Real tax amount for the item and tax rate"/>
-        <column xsi:type="decimal" name="real_base_amount" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="real_base_amount" scale="4" precision="20" unsigned="false" nullable="false"
                 comment="Real base tax amount for the item and tax rate"/>
         <column xsi:type="int" name="associated_item_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Id of the associated item"/>
         <column xsi:type="varchar" name="taxable_item_type" nullable="false" length="32"
                 comment="Type of the taxable item"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tax_item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_TAX_ITEM_ASSOCIATED_ITEM_ID_SALES_ORDER_ITEM_ITEM_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_TAX_ITEM_ASSOCIATED_ITEM_ID_SALES_ORDER_ITEM_ITEM_ID"
                     table="sales_order_tax_item" column="associated_item_id" referenceTable="sales_order_item"
                     referenceColumn="item_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SALES_ORDER_TAX_ITEM_TAX_ID_SALES_ORDER_TAX_TAX_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_TAX_ITEM_TAX_ID_SALES_ORDER_TAX_TAX_ID"
                     table="sales_order_tax_item" column="tax_id" referenceTable="sales_order_tax"
                     referenceColumn="tax_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SALES_ORDER_TAX_ITEM_ITEM_ID_SALES_ORDER_ITEM_ITEM_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_TAX_ITEM_ITEM_ID_SALES_ORDER_ITEM_ITEM_ID"
                     table="sales_order_tax_item" column="item_id" referenceTable="sales_order_item"
                     referenceColumn="item_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="SALES_ORDER_TAX_ITEM_TAX_ID_ITEM_ID">
+        <constraint xsi:type="unique" referenceId="SALES_ORDER_TAX_ITEM_TAX_ID_ITEM_ID">
             <column name="tax_id"/>
             <column name="item_id"/>
         </constraint>
-        <index name="SALES_ORDER_TAX_ITEM_ITEM_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_TAX_ITEM_ITEM_ID" indexType="btree">
             <column name="item_id"/>
         </index>
     </table>
     <table name="sales_order_status" resource="sales" engine="innodb" comment="Sales Order Status Table">
         <column xsi:type="varchar" name="status" nullable="false" length="32" comment="Status"/>
         <column xsi:type="varchar" name="label" nullable="false" length="128" comment="Label"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="status"/>
         </constraint>
     </table>
@@ -2033,11 +2033,11 @@
                 default="0" comment="Is Default"/>
         <column xsi:type="smallint" name="visible_on_front" padding="5" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Visible on front"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="status"/>
             <column name="state"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_STATUS_STATE_STATUS_SALES_ORDER_STATUS_STATUS"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STATUS_STATE_STATUS_SALES_ORDER_STATUS_STATUS"
                     table="sales_order_status_state" column="status" referenceTable="sales_order_status"
                     referenceColumn="status" onDelete="CASCADE"/>
     </table>
@@ -2046,17 +2046,17 @@
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Store Id"/>
         <column xsi:type="varchar" name="label" nullable="false" length="128" comment="Label"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="status"/>
             <column name="store_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SALES_ORDER_STATUS_LABEL_STATUS_SALES_ORDER_STATUS_STATUS"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STATUS_LABEL_STATUS_SALES_ORDER_STATUS_STATUS"
                     table="sales_order_status_label" column="status" referenceTable="sales_order_status"
                     referenceColumn="status" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="SALES_ORDER_STATUS_LABEL_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STATUS_LABEL_STORE_ID_STORE_STORE_ID"
                     table="sales_order_status_label" column="store_id" referenceTable="store" referenceColumn="store_id"
                     onDelete="CASCADE"/>
-        <index name="SALES_ORDER_STATUS_LABEL_STORE_ID" indexType="btree">
+        <index referenceId="SALES_ORDER_STATUS_LABEL_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>

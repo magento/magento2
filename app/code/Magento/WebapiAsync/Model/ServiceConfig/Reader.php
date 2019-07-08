@@ -20,6 +20,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      */
     protected $_idAttributes = [
         '/services/service' => ['class', 'method'],
+        '/services/route'   => ['url', 'method']
     ];
 
     /**

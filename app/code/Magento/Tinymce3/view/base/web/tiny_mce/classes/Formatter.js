@@ -445,7 +445,7 @@
 					childCount = getChildCount(node);
 
 					// Remove empty nodes but only if there is multiple wrappers and they are not block
-					// elements so never remove single <h1></h1> since that would remove the currrent empty block element where the caret is at
+					// elements so never remove single <h1></h1> since that would remove the current empty block element where the caret is at
 					if ((newWrappers.length > 1 || !isBlock(node)) && childCount === 0) {
 						dom.remove(node, 1);
 						return;
@@ -1856,7 +1856,7 @@
 				}
 			};
 
-			// Applies formatting to the caret postion
+			// Applies formatting to the caret position
 			function applyCaretFormat() {
 				var rng, caretContainer, textNode, offset, bookmark, container, text;
 
@@ -1970,7 +1970,7 @@
 					node.appendChild(dom.doc.createTextNode(invisibleChar));
 					node = node.firstChild;
 
-					// Insert caret container after the formated node
+					// Insert caret container after the formatted node
 					dom.insertAfter(caretContainer, formatNode);
 
 					// Move selection to text node
