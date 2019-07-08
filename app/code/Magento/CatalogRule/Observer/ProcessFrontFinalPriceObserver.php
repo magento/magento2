@@ -3,10 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Catalog Price rules observer model
- */
 namespace Magento\CatalogRule\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -16,7 +14,13 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Observer for applying catalog rules on product for frontend area
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class ProcessFrontFinalPriceObserver implements ObserverInterface
 {
     /**
@@ -45,24 +49,33 @@ class ProcessFrontFinalPriceObserver implements ObserverInterface
     protected $rulePricesStorage;
 
     /**
+     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
+     */
+    private $ruleDateFormatter;
+
+    /**
      * @param RulePricesStorage $rulePricesStorage
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param StoreManagerInterface $storeManager
      * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
+     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
         \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory,
         StoreManagerInterface $storeManager,
         TimezoneInterface $localeDate,
-        CustomerModelSession $customerSession
+        CustomerModelSession $customerSession,
+        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
     ) {
         $this->rulePricesStorage = $rulePricesStorage;
         $this->resourceRuleFactory = $resourceRuleFactory;
         $this->storeManager = $storeManager;
         $this->localeDate = $localeDate;
         $this->customerSession = $customerSession;
+        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -80,7 +93,7 @@ class ProcessFrontFinalPriceObserver implements ObserverInterface
         if ($observer->hasDate()) {
             $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = $this->localeDate->scopeDate($storeId);
+            $date = $this->ruleDateFormatter->getDate($storeId);
         }
 
         if ($observer->hasWebsiteId()) {

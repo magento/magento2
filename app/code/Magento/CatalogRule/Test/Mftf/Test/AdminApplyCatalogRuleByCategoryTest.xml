@@ -16,9 +16,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-74"/>
             <group value="CatalogRule"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategoryOne"/>

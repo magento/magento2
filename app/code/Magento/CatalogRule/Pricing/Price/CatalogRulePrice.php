@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Pricing\Price;
 
@@ -19,6 +20,8 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * Class CatalogRulePrice
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterface
 {
@@ -54,14 +57,20 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
     private $ruleResource;
 
     /**
+     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
+     */
+    private $ruleDateFormatter;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param Calculator $calculator
-     * @param RuleFactory $catalogRuleResourceFactory
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param TimezoneInterface $dateTime
      * @param StoreManager $storeManager
      * @param Session $customerSession
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param RuleFactory $catalogRuleResourceFactory
+     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         Product $saleableItem,
@@ -71,13 +80,16 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
         TimezoneInterface $dateTime,
         StoreManager $storeManager,
         Session $customerSession,
-        RuleFactory $catalogRuleResourceFactory
+        RuleFactory $catalogRuleResourceFactory,
+        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->dateTime = $dateTime;
         $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
         $this->resourceRuleFactory = $catalogRuleResourceFactory;
+        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -93,7 +105,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
             } else {
                 $this->value = $this->getRuleResource()
                     ->getRulePrice(
-                        $this->dateTime->scopeDate($this->storeManager->getStore()->getId()),
+                        $this->ruleDateFormatter->getDate($this->storeManager->getStore()->getId()),
                         $this->storeManager->getStore()->getWebsiteId(),
                         $this->customerSession->getCustomerGroupId(),
                         $this->product->getId()
@@ -109,6 +121,8 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
     }
 
     /**
+     * Retrieve rule resource
+     *
      * @return Rule
      * @deprecated 100.1.1
      */

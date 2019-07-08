@@ -64,7 +64,7 @@ class EavAttributeCondition implements CustomConditionInterface
                 ->select()
                 ->from(
                     [Collection::MAIN_TABLE_ALIAS => $entityResourceModel->getEntityTable()],
-                    Collection::MAIN_TABLE_ALIAS . '.' . $entityResourceModel->getEntityIdField()
+                    Collection::MAIN_TABLE_ALIAS . '.' . $entityResourceModel->getLinkField()
                 )->joinLeft(
                     [$tableAlias => $attribute->getBackendTable()],
                     $tableAlias . '.' . $attribute->getEntityIdField() . '=' . Collection::MAIN_TABLE_ALIAS .
