@@ -26,7 +26,7 @@ define([
         initConfig: function () {
             this._super();
 
-            this.dateFormat = utils.normalizeDate(this.dateFormat);
+            this.dateFormat = utils.normalizeDate(this.dateFormat ? this.dateFormat : this.options.dateFormat);
 
             return this;
         },
