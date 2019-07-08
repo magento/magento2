@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\DataObject;
-use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -27,9 +25,9 @@ class AddSimpleProductToCart
     private $arrayManager;
 
     /**
-     * @var DataObjectFactory
+     * @var CreateBuyRequest
      */
-    private $dataObjectFactory;
+    private $createBuyRequest;
 
     /**
      * @var ProductRepositoryInterface
@@ -37,18 +35,15 @@ class AddSimpleProductToCart
     private $productRepository;
 
     /**
-     * @param ArrayManager $arrayManager
-     * @param DataObjectFactory $dataObjectFactory
      * @param ProductRepositoryInterface $productRepository
+     * @param CreateBuyRequest $createBuyRequest
      */
     public function __construct(
-        ArrayManager $arrayManager,
-        DataObjectFactory $dataObjectFactory,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        CreateBuyRequest $createBuyRequest
     ) {
-        $this->arrayManager = $arrayManager;
-        $this->dataObjectFactory = $dataObjectFactory;
         $this->productRepository = $productRepository;
+        $this->createBuyRequest = $createBuyRequest;
     }
 
     /**
@@ -65,7 +60,7 @@ class AddSimpleProductToCart
     {
         $sku = $this->extractSku($cartItemData);
         $quantity = $this->extractQuantity($cartItemData);
-        $customizableOptions = $this->extractCustomizableOptions($cartItemData);
+        $customizableOptions = $cartItemData['customizable_options'] ?? [];
 
         try {
             $product = $this->productRepository->get($sku);
@@ -75,7 +70,7 @@ class AddSimpleProductToCart
 
         try {
             $linksData = $this->extractDownloadableLinks($product, $cartItemData);
-            $result = $cart->addProduct($product, $this->createBuyRequest($quantity, $customizableOptions, $linksData));
+            $result = $cart->addProduct($product, $this->createBuyRequest->execute($quantity, $customizableOptions, $linksData));
         } catch (\Exception $e) {
             throw new GraphQlInputException(
                 __(
