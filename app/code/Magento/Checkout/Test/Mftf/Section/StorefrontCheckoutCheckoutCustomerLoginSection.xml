@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCheckoutCheckoutCustomerLoginSection">
+        <element name="email" type="input" selector="form[data-role='email-with-possible-login'] input[name='username']"/>
+        <element name="emailErrorMessage" type="text" selector="#customer-email-error"/>
+        <element name="emailTooltipButton" type="button" selector="#customer-email-fieldset .field-tooltip-action"/>
+    </section>
+</sections>

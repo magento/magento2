@@ -128,4 +128,14 @@
         <click selector="{{CheckoutPaymentSection.placeOrderNoWait}}" stepKey="clickPlaceOrder"/>
         <waitForText selector="{{StorefrontMessagesSection.errorMessage}}" userInput="{{errorMessage}}" time="30" stepKey="seeShippingMethodError"/>
     </actionGroup>
+
+    <!-- Check shipping method in checkout -->
+    <actionGroup name="CheckShippingMethodInCheckoutActionGroup">
+        <arguments>
+            <argument name="shippingMethod"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <seeElement selector="{{CheckoutPaymentSection.isPaymentSection}}" stepKey="assertPaymentSection"/>
+        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="assertshippingMethodInformation"/>
+    </actionGroup>
 </actionGroups>

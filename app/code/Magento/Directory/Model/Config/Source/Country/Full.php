@@ -16,10 +16,9 @@ namespace Magento\Directory\Model\Config\Source\Country;
 class Full extends \Magento\Directory\Model\Config\Source\Country implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @param bool $isMultiselect
-     * @return array
+     * @inheritDoc
      */
-    public function toOptionArray($isMultiselect = false)
+    public function toOptionArray($isMultiselect = false, $foregroundCountries = '')
     {
         return parent::toOptionArray(true);
     }

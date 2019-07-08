@@ -9,5 +9,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCacheManagementSection">
         <element name="FlushMagentoCache" type="button" selector="#flush_magento"/>
+        <element name="configurationCheckbox" type="checkbox" selector="input[value='config']"/>
+        <element name="pageCacheCheckbox" type="checkbox" selector="input[value='full_page']"/>
+        <element name="massActionSelect" type="select" selector="#cache_grid_massaction-form #cache_grid_massaction-select"/>
+        <element name="massActionSubmit" type="button" selector="#cache_grid_massaction-form button"/>
     </section>
 </sections>

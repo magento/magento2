@@ -13,6 +13,9 @@ use Magento\Review\Model\RatingFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Review grid.
+ */
 class ReviewGrid extends ProductController
 {
     /**
@@ -39,6 +42,8 @@ class ReviewGrid extends ProductController
     }
 
     /**
+     * Execute action.
+     *
      * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
@@ -48,5 +53,14 @@ class ReviewGrid extends ProductController
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
         $resultRaw->setContents($layout->createBlock(\Magento\Review\Block\Adminhtml\Grid::class)->toHtml());
         return $resultRaw;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Review::reviews_all')
+            || $this->_authorization->isAllowed('Magento_Review::pending');
     }
 }

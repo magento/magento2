@@ -76,7 +76,7 @@ class AddToCart implements ObserverInterface
             $wishlistIds = [$singleWishlistId];
         }
 
-        if (count($wishlistIds) && $request->getParam('wishlist_next')) {
+        if (is_array($wishlistIds) && count($wishlistIds) && $request->getParam('wishlist_next')) {
             $wishlistId = array_shift($wishlistIds);
 
             if ($this->customerSession->isLoggedIn()) {

@@ -321,6 +321,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Retrieve CSS processor
+     *
      * @deprecated 100.1.2
      * @return Css\Processor
      */
@@ -333,6 +335,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Retrieve pub directory
+     *
      * @deprecated 100.1.2
      * @param string $dirType
      * @return ReadInterface
@@ -523,6 +527,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Retrieve store URL directive
+     *
      * Support url and direct_url properties
      *
      * @param string[] $construction
@@ -607,7 +612,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
-
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $text = stripslashes($matches[2]);
 
         $params = [];
@@ -683,7 +688,7 @@ class Filter extends \Magento\Framework\Filter\Template
                     $callback = $modifier;
                 }
                 array_unshift($params, $value);
-                $value = call_user_func_array($callback, $params);
+                $value = $callback(...$params);
             }
         }
         return $value;
@@ -700,7 +705,7 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         switch ($type) {
             case 'html':
-                return htmlspecialchars($value, ENT_QUOTES);
+                return $this->_escaper->escapeHtml($value);
 
             case 'htmlentities':
                 return htmlentities($value, ENT_QUOTES);
@@ -950,6 +955,7 @@ class Filter extends \Magento\Framework\Filter\Template
             }
         } catch (ContentProcessorException $exception) {
             $css = $exception->getMessage();
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
             $css = '';
         }
@@ -958,6 +964,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Apply Inline CSS
+     *
      * Merge HTML and CSS and return HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
      * in order to support all email clients.
      *
