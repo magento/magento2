@@ -66,7 +66,7 @@ class GetAllowedCustomerAttributes
      * Get allowed customer attributes
      *
      * @param array $attributeKeys
-     * @param $addRequiredAttributes
+     * @param bool $addRequiredAttributes
      *
      * @throws GraphQlInputException
      *

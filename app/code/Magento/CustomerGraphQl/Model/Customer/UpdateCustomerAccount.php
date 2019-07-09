@@ -113,7 +113,6 @@ class UpdateCustomerAccount
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()), $exception);
         }
 
-
         $this->saveCustomer->execute($customer);
 
         if (isset($data['is_subscribed'])) {

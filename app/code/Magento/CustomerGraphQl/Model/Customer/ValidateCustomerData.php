@@ -35,7 +35,7 @@ class ValidateCustomerData
      * Validate customer data
      *
      * @param array $customerData
-     * @param $addRequiredAttributes
+     * @param bool $addRequiredAttributes
      *
      * @return void
      *
