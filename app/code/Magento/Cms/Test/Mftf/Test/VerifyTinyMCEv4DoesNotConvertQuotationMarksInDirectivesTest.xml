@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyTinyMceV4DoesNotConvertQuotationMarksInDirectivesTest">
+        <annotations>
+            <features value="Cms"/>
+            <group value="Cms"/>
+            <title value="Magento WYSIWYG editor inserting quot; in directives when being disabled."/>
+            <description value="If you disable the WYSIWYG editor and enter any URL with quotations in directive, enable the editor and re-disable the editor, you will see that the quotes have been converted to quot;"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17574"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        </before>
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" stepKey="fillFieldContentHeading"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+        <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="turnWysiwygOff" />
+        <wait time="1" stepKey="waitForTurnWysiwygOff" />
+        <fillField selector="#cms_page_form_content" userInput="&lt;p&gt;&lt;img src=&quot;{{media url=&quot;wysiwyg/collection/collection-eco.jpg&quot;}}&quot;&gt;&lt;/p&gt;" stepKey="fillEditorWithSampleText"/>
+        <grabValueFrom selector="#cms_page_form_content" stepKey="saveBeforeText"/>
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="toggleWysiwygOn" />
+        <wait time="1" stepKey="waitForToggleOn" />
+        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="toggleWysiwygOff" />
+        <wait time="1" stepKey="waitForToggleOff" />
+        <grabValueFrom selector="#cms_page_form_content" stepKey="saveAfterText"/>
+        <assertEquals message="Making sure text with directives will remain unchanged after toggling TinyMCE4 on and off" stepKey="assertEquals">
+            <expectedResult type="variable">$saveBeforeText</expectedResult>
+            <actualResult type="variable">$saveAfterText</actualResult>
+        </assertEquals>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>
