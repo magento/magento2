@@ -169,19 +169,9 @@ class SetPaymentMethodTest extends GraphQlAbstract
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
-        $nonceResult = $this->getNonceCommand->execute(
-            [
-                'customer_id' => 1,
-                'public_hash' => 'braintree_public_hash',
-            ]
-        );
-        $nonce = $nonceResult->get()['paymentMethodNonce'];
-
         $setPaymentQuery = $this->getSetPaymentBraintreeVaultQuery(
             $maskedQuoteId,
-            'braintree_public_hash',
-            $nonce,
-            true
+            'braintree_public_hash'
         );
         $setPaymentResponse = $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
 
@@ -243,17 +233,12 @@ QUERY;
     /**
      * @param string $maskedQuoteId
      * @param string $publicHash
-     * @param string $nonce
-     * @param bool $saveInVault
      * @return string
      */
     private function getSetPaymentBraintreeVaultQuery(
         string $maskedQuoteId,
-        string $publicHash,
-        string $nonce,
-        bool $saveInVault = false
+        string $publicHash
     ): string {
-        $saveInVault = json_encode($saveInVault);
         return <<<QUERY
 mutation {
   setPaymentMethodOnCart(input:{
@@ -261,8 +246,6 @@ mutation {
     payment_method:{
       code:"braintree_cc_vault"
       braintree_cc_vault:{
-        is_active_payment_token_enabler:{$saveInVault}
-        payment_method_nonce:"{$nonce}"
         public_hash:"{$publicHash}"
       }
     }

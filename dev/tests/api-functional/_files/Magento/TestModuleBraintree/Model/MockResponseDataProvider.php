@@ -32,10 +32,26 @@ class MockResponseDataProvider
      * Create mock sale response for testing
      *
      * @param array $attributes
-     * @return \Braintree\Instance
+     * @return \Braintree\Result\Error|\Braintree\Result\Successful
      */
-    public function generateMockSaleResponse(array $attributes): \Braintree\Instance
+    public function generateMockSaleResponse(array $attributes)
     {
+        if (empty($attributes['paymentMethodNonce'])) {
+            return new \Braintree\Result\Error(
+                [
+                    'errors' => [
+                        [
+                            'errorData' => [
+                                'code' => 2019,
+                                'message' => 'Your transaction has been declined.'
+                            ]
+                        ]
+                    ],
+                    'transaction' => $this->createTransaction($attributes)->jsonSerialize(),
+                ]
+            );
+        }
+
         $transaction = $this->createTransaction($attributes);
 
         return new \Braintree\Result\Successful([$transaction]);

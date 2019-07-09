@@ -17,8 +17,6 @@ input BraintreeInput {
 }
 
 input BraintreeCcVaultInput {
-    payment_method_nonce: String!
     public_hash: String!
-    is_active_payment_token_enabler: Boolean!
     device_data: String
 }

@@ -66,6 +66,7 @@ class BraintreeAdapter extends \Magento\Braintree\Model\Adapter\BraintreeAdapter
     /**
      * @param array $params
      * @return string|\Braintree\Result\Error
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function generate(array $params = [])
     {
