@@ -140,7 +140,6 @@ mutation {
 }
 QUERY;
 
-
         /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
         $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
         $customerToken = $tokenModel->createCustomerToken(1)->getToken();

@@ -183,7 +183,6 @@ mutation {
 }
 QUERY;
 
-
         $expectedExceptionMessage = "Invalid URL 'not/a/url'.";
 
         $response = $this->graphQlRequest->send($query);
