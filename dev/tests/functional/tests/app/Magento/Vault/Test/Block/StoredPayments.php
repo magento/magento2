@@ -26,6 +26,13 @@ class StoredPayments extends Block
     private $deleteStoredPayment = '.delete';
 
     /**
+     * Content in popup modal window.
+     *
+     * @var string
+     */
+    private $popupModalContent = '.modal-content';
+
+    /**
      * Delete saved credit card.
      *
      * @param ElementInterface $creditCard
@@ -33,8 +40,10 @@ class StoredPayments extends Block
     public function deleteCreditCard(ElementInterface $creditCard)
     {
         $creditCard->click();
+        $this->waitForElementVisible($this->popupModalContent);
         $this->browser->selectWindow();
         $this->browser->find($this->deleteButton, Locator::SELECTOR_XPATH)->click();
+        $this->waitForElementNotVisible($this->popupModalContent);
         $this->browser->selectWindow();
     }
 

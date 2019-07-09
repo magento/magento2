@@ -64,4 +64,21 @@
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url('$grabOrderId')}}" stepKey="seeViewOrderPageInvoice"/>
     </actionGroup>
+
+    <!--Filter invoices by order id -->
+    <actionGroup name="filterInvoiceGridByOrderId">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+        <amOnPage url="{{InvoicesPage.url}}" stepKey="navigateToInvoicesGridPage"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{InvoicesGridSection.filter}}" stepKey="clickFilter"/>
+        <fillField selector="{{InvoicesFiltersSection.orderNum}}" userInput="{{orderId}}" stepKey="fillOrderIdForFilter"/>
+        <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickApplyFilters"/>
+    </actionGroup>
+
+    <!--Filter invoices by order id -->
+    <actionGroup name="openInvoiceByOrderId" extends="filterInvoiceGridByOrderId">
+        <click selector="{{InvoicesGridSection.firstRow}}" stepKey="clickToOpenInvoice"/>
+    </actionGroup>
 </actionGroups>

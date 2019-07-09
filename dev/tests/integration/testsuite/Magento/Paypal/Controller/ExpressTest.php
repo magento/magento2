@@ -235,6 +235,8 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testPlaceOrderZeroGrandTotal()
     {
+        /** @var \Magento\Framework\Escaper $escaper */
+        $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Escaper::class);
         /** @var Quote $quote */
         $quote = $this->_objectManager->create(Quote::class);
         $quote->load('test01', 'reserved_order_id');
@@ -254,10 +256,9 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages(
             $this->equalTo(
                 [
-                    htmlspecialchars(
+                    $escaper->escapeHtml(
                         (string)__('PayPal can\'t process orders with a zero balance due. '
-                        . 'To finish your purchase, please go through the standard checkout process.'),
-                        ENT_QUOTES
+                        . 'To finish your purchase, please go through the standard checkout process.')
                     )
                 ]
             ),
