@@ -21,4 +21,15 @@
         <!-- @TODO: MAGETWO-80272 Move to Magento_Checkout -->
         <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
     </actionGroup>
+
+    <!-- Check configurable product out of stock on the category page -->
+    <actionGroup name="StorefrontCheckCategoryOutOfStockConfigurableProduct">
+        <arguments>
+            <argument name="product" type="entity"/>
+        </arguments>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductStockUnavailable}}" stepKey="AssertOutOfStock"/>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart" />
+    </actionGroup>
 </actionGroups>

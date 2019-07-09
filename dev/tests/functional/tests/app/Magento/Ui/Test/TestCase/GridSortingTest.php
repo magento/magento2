@@ -89,6 +89,7 @@ class GridSortingTest extends Injectable
         $page->open();
         /** @var DataGrid $gridBlock */
         $gridBlock = $page->$gridRetriever();
+        $gridBlock->waitFilterToLoad();
         $gridBlock->resetFilter();
 
         $sortingResults = [];

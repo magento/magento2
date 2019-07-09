@@ -180,9 +180,9 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             }
 
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
-            $filePath = $this->_directory->getRelativePath($filePath . $fileName);
+            $relativePath = $this->_directory->getRelativePath($filePath . $fileName);
             $this->_directory->writeFile(
-                $filePath,
+                $relativePath,
                 $read->readAll()
             );
         }

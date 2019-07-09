@@ -24,4 +24,24 @@
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
         <see userInput="You saved the store." stepKey="seeSavedMessage" />
     </actionGroup>
+
+    <actionGroup name="AdminAddCustomWebSiteToStoreGroup">
+        <arguments>
+            <argument name="storeGroup" defaultValue="customStoreGroup"/>
+            <argument name="website" defaultValue="customWebsite"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeGroup.name}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <see userInput="{{storeGroup.name}}" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="verifyThatCorrectStoreGroupFound"/>
+        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <waitForPageLoad stepKey="waitForStoreGroupPageLoad" />
+        <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website.name}}" stepKey="selectWebsite" />
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="chooseRootCategory" />
+        <click selector="{{AdminNewStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup" />
+        <conditionalClick selector="{{AdminNewStoreGroupSection.acceptNewStoreGroupCreation}}" dependentSelector="{{AdminNewStoreGroupSection.acceptNewStoreGroupCreation}}" visible="true" stepKey="clickAcceptNewStoreGroupCreationButton"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
+        <see userInput="You saved the store." stepKey="seeSavedMessage" />
+    </actionGroup>
 </actionGroups>

@@ -78,7 +78,7 @@
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save" />
     </type>
-    <virtualType name="\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory" type="\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">\Magento\Catalog\Ui\DataProvider\Product\ProductCollection</argument>
         </arguments>

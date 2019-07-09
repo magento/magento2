@@ -14,7 +14,8 @@
         <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
 
         <!--Trigger SEO drop down-->
-        <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.seoDependent}}" visible="false" stepKey="OpenDropDownIfClosed"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="moveToSEOSection"/>
+        <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.urlKey}}" visible="false" stepKey="openDropDownIfClosed"/>
         <waitForPageLoad stepKey="WaitForDropDownSEO"/>
 
         <!--Fill URL input-->

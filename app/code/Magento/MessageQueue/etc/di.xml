@@ -13,6 +13,9 @@
     <preference for="Magento\Framework\MessageQueue\EnvelopeInterface" type="Magento\Framework\MessageQueue\Envelope"/>
     <preference for="Magento\Framework\MessageQueue\ConsumerInterface" type="Magento\Framework\MessageQueue\Consumer"/>
     <preference for="Magento\Framework\MessageQueue\MergedMessageInterface" type="Magento\Framework\MessageQueue\MergedMessage"/>
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface" type="Magento\MessageQueue\Model\PoisonPillCompare"/>
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface" type="Magento\MessageQueue\Model\ResourceModel\PoisonPill"/>
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface" type="Magento\MessageQueue\Model\ResourceModel\PoisonPill"/>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">

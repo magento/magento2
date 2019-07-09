@@ -124,20 +124,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $requestSchema,
                 $responseSchema
             );
+            $isSynchronous = $this->extractTopicIsSynchronous($topicNode);
             if ($serviceMethod) {
                 $output[$topicName] = $this->reflectionGenerator->generateTopicConfigForServiceMethod(
                     $topicName,
                     $serviceMethod[ConfigParser::TYPE_NAME],
                     $serviceMethod[ConfigParser::METHOD_NAME],
-                    $handlers
+                    $handlers,
+                    $isSynchronous
                 );
             } elseif ($requestSchema && $responseSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
-                    Config::TOPIC_IS_SYNCHRONOUS => true,
+                    Config::TOPIC_IS_SYNCHRONOUS => $isSynchronous,
                     Config::TOPIC_REQUEST => $requestSchema,
                     Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_CLASS,
-                    Config::TOPIC_RESPONSE => $responseSchema,
+                    Config::TOPIC_RESPONSE => ($isSynchronous) ? $responseSchema: null,
                     Config::TOPIC_HANDLERS => $handlers
                 ];
             } elseif ($requestSchema) {
@@ -257,5 +259,21 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $parsedServiceMethod[ConfigParser::METHOD_NAME]
         );
         return $parsedServiceMethod;
+    }
+
+    /**
+     * Extract is_synchronous topic value.
+     *
+     * @param \DOMNode $topicNode
+     * @return bool
+     */
+    private function extractTopicIsSynchronous($topicNode): bool
+    {
+        $attributeName = Config::TOPIC_IS_SYNCHRONOUS;
+        $topicAttributes = $topicNode->attributes;
+        if (!$topicAttributes->getNamedItem($attributeName)) {
+            return true;
+        }
+        return $this->booleanUtils->toBoolean($topicAttributes->getNamedItem($attributeName)->nodeValue);
     }
 }

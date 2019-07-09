@@ -91,6 +91,10 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $name = $params['name'];
         }
 
+        if (isset($this->_storeId) && !isset($params['store_id'])) {
+            $params['store_id'] = $this->_storeId;
+        }
+
         // validate required parameter type or id
         if (!empty($params['type'])) {
             $type = $params['type'];

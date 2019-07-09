@@ -8,11 +8,13 @@ namespace Magento\UrlRewrite\Controller;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Framework\App\Response\Http as HttpResponse;
 
+/**
+ * Class to test Match corresponding URL Rewrite
+ */
 class UrlRewriteTest extends AbstractController
 {
     /**
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
-     * @magentoAppIsolation enabled
      *
      * @covers \Magento\UrlRewrite\Controller\Router::match
      * @covers \Magento\UrlRewrite\Model\Storage\DbStorage::doFindOneByData
@@ -32,14 +34,16 @@ class UrlRewriteTest extends AbstractController
         /** @var HttpResponse $response */
         $response = $this->getResponse();
         $code = $response->getHttpResponseCode();
-        $location = $response->getHeader('Location')->getFieldValue();
-
         $this->assertEquals($expectedCode, $code, 'Invalid response code');
-        $this->assertStringEndsWith(
-            $redirect,
-            $location,
-            'Invalid location header'
-        );
+
+        if ($expectedCode !== 200) {
+            $location = $response->getHeader('Location')->getFieldValue();
+            $this->assertStringEndsWith(
+                $redirect,
+                $location,
+                'Invalid location header'
+            );
+        }
     }
 
     /**
@@ -71,6 +75,11 @@ class UrlRewriteTest extends AbstractController
             'Use Case #6: Rewrite: page-similar/ --(301)--> page-b; Request: page-similar/ --(301)--> page-b' => [
                 'request' => '/page-similar/',
                 'redirect' => '/page-b',
+            ],
+            'Use Case #7: Request with query params' => [
+                'request' => '/enable-cookies/?test-param',
+                'redirect' => '',
+                200,
             ],
         ];
     }

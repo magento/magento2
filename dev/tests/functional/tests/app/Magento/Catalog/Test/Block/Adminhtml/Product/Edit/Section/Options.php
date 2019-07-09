@@ -403,4 +403,21 @@ class Options extends Section
     {
         return $this->_rootElement->getElements($this->hintMessage);
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _fill(array $fields, SimpleElement $element = null)
+    {
+        $context = ($element === null) ? $this->_rootElement : $element;
+        foreach ($fields as $name => $field) {
+            $element = $this->getElement($context, $field);
+            if (!$element->isDisabled()) {
+                $element->getContext()->hover();
+                $element->setValue($field['value']);
+            } else {
+                throw new \Exception("Unable to set value to field '$name' as it's disabled.");
+            }
+        }
+    }
 }

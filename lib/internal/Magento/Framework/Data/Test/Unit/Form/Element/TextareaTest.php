@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Tests for \Magento\Framework\Data\Form\Element\Textarea
- */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+/**
+ * Tests for \Magento\Framework\Data\Form\Element\Textarea class.
+ */
 class TextareaTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -76,6 +76,7 @@ class TextareaTest extends \PHPUnit\Framework\TestCase
                     'rows',
                     'cols',
                     'readonly',
+                    'maxlength',
                     'disabled',
                     'onkeyup',
                     'tabindex',

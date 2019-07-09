@@ -6,12 +6,18 @@
 
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\StringUtils;
+
+/**
+ * Eav text attribute model test
+ */
 class TextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Attribute\Data\Text
      */
-    protected $_model;
+    private $model;
 
     /**
      * {@inheritDoc}
@@ -21,10 +27,10 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $locale = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $helper = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $helper = new StringUtils;
 
-        $this->_model = new \Magento\Eav\Model\Attribute\Data\Text($locale, $logger, $localeResolver, $helper);
-        $this->_model->setAttribute(
+        $this->model = new \Magento\Eav\Model\Attribute\Data\Text($locale, $logger, $localeResolver, $helper);
+        $this->model->setAttribute(
             $this->createAttribute(
                 [
                     'store_label' => 'Test',
@@ -41,7 +47,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown()
     {
-        $this->_model = null;
+        $this->model = null;
     }
 
     /**
@@ -51,7 +57,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
     {
         $inputValue = '0';
         $expectedResult = true;
-        $this->assertEquals($expectedResult, $this->_model->validateValue($inputValue));
+        self::assertEquals($expectedResult, $this->model->validateValue($inputValue));
     }
 
     /**
@@ -61,8 +67,8 @@ class TextTest extends \PHPUnit\Framework\TestCase
     {
         $inputValue = 0;
         $expectedResult = ['"Test" is a required value.'];
-        $result = $this->_model->validateValue($inputValue);
-        $this->assertEquals($expectedResult, [(string)$result[0]]);
+        $result = $this->model->validateValue($inputValue);
+        self::assertEquals($expectedResult, [(string)$result[0]]);
     }
 
     /**
@@ -79,12 +85,107 @@ class TextTest extends \PHPUnit\Framework\TestCase
         ];
 
         $defaultAttributeData['validate_rules']['min_text_length'] = 2;
-        $this->_model->setAttribute($this->createAttribute($defaultAttributeData));
-        $this->assertEquals($expectedResult, $this->_model->validateValue('t'));
+        $this->model->setAttribute($this->createAttribute($defaultAttributeData));
+        self::assertEquals($expectedResult, $this->model->validateValue('t'));
 
         $defaultAttributeData['validate_rules']['max_text_length'] = 3;
-        $this->_model->setAttribute($this->createAttribute($defaultAttributeData));
-        $this->assertEquals($expectedResult, $this->_model->validateValue('test'));
+        $this->model->setAttribute($this->createAttribute($defaultAttributeData));
+        self::assertEquals($expectedResult, $this->model->validateValue('test'));
+    }
+
+    /**
+     * Test of alphanumeric validation.
+     *
+     * @param {String} $value - provided value
+     * @param {Boolean|Array} $expectedResult - validation result
+     * @return void
+     * @throws LocalizedException
+     * @dataProvider alphanumDataProvider
+     */
+    public function testAlphanumericValidation($value, $expectedResult): void
+    {
+        $defaultAttributeData = [
+            'store_label' => 'Test',
+            'attribute_code' => 'test',
+            'is_required' => 1,
+            'validate_rules' => [
+                'min_text_length' => 0,
+                'max_text_length' => 10,
+                'input_validation' => 'alphanumeric'
+            ],
+        ];
+
+        $this->model->setAttribute($this->createAttribute($defaultAttributeData));
+        self::assertEquals($expectedResult, $this->model->validateValue($value));
+    }
+
+    /**
+     * Provides possible input values.
+     *
+     * @return array
+     */
+    public function alphanumDataProvider(): array
+    {
+        return [
+            ['QazWsx', true],
+            ['QazWsx123', true],
+            ['QazWsx 123',
+                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+            ],
+            ['QazWsx_123',
+                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+            ],
+            ['QazWsx12345', [
+                __('"%1" length must be equal or less than %2 characters.', 'Test', 10)]
+            ],
+            [' 12345 ', true],
+        ];
+    }
+
+    /**
+     * Test of alphanumeric validation with spaces.
+     *
+     * @param {String} $value - provided value
+     * @param {Boolean|Array} $expectedResult - validation result
+     * @return void
+     * @throws LocalizedException
+     * @dataProvider alphanumWithSpacesDataProvider
+     */
+    public function testAlphanumericValidationWithSpaces($value, $expectedResult): void
+    {
+        $defaultAttributeData = [
+            'store_label' => 'Test',
+            'attribute_code' => 'test',
+            'is_required' => 1,
+            'validate_rules' => [
+                'min_text_length' => 0,
+                'max_text_length' => 10,
+                'input_validation' => 'alphanum-with-spaces'
+            ],
+        ];
+
+        $this->model->setAttribute($this->createAttribute($defaultAttributeData));
+        self::assertEquals($expectedResult, $this->model->validateValue($value));
+    }
+
+    /**
+     * Provides possible input values.
+     *
+     * @return array
+     */
+    public function alphanumWithSpacesDataProvider(): array
+    {
+        return [
+            ['QazWsx', true],
+            ['QazWsx123', true],
+            ['QazWsx 123', true],
+            ['QazWsx_123',
+                [\Zend_Validate_Alnum::NOT_ALNUM => '"Test" contains non-alphabetic or non-numeric characters.']
+            ],
+            ['QazWsx12345', [
+                __('"%1" length must be equal or less than %2 characters.', 'Test', 10)]
+            ],
+        ];
     }
 
     /**
