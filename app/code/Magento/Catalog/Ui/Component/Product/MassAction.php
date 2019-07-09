@@ -12,6 +12,9 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\AbstractComponent;
 
+/**
+ * Class MassAction
+ */
 class MassAction extends AbstractComponent
 {
     const NAME = 'massaction';
@@ -40,7 +43,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare() : void
     {
@@ -49,7 +52,7 @@ class MassAction extends AbstractComponent
         foreach ($this->getChildComponents() as $actionComponent) {
             $actionType = $actionComponent->getConfiguration()['type'];
             if ($this->isActionAllowed($actionType)) {
-                $config['actions'][] = $actionComponent->getConfiguration();
+                $config['actions'][] = array_merge($actionComponent->getConfiguration(), ['__disableTmpl' => true]);
             }
         }
         $origConfig = $this->getConfiguration();
@@ -64,7 +67,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getComponentName() : string
     {
