@@ -23,6 +23,9 @@
                 </if>
             </ifnot>
         </if>
+        <if args="typeof element === 'string'">
+            <text args="element"/>
+        </if><br/>
     </each>
 
     <button visible="!isAddressSameAsShipping()"
