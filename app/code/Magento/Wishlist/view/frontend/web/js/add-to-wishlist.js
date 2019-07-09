@@ -107,17 +107,20 @@ define([
          */
         _updateAddToWishlistButton: function (dataToAdd, sku) {
             var parentClass = '',
+                wishlistBtn = '[data-action="add-to-wishlist"]',
                 addToWishlistBtn = '',
+                WishlistForm = '',
                 params = '',
                 self = this;
 
             if (sku !== '') {
+                WishlistFormSelector = 'form[data-product-sku="' + sku + '"]';
                 parentClass = $('body').hasClass('catalog-product-view') ?
                                 '.product-info-main' :
                                 '.product-item-actions';
-                addToWishlistBtn = $('form[data-product-sku="' + sku + '"]')
+                addToWishlistBtn = $(WishlistFormSelector)
                                     .closest(parentClass)
-                                    .find('[data-action="add-to-wishlist"]');
+                                    .find(wishlistBtn);
 
                 params = addToWishlistBtn.data('post');
 
@@ -132,7 +135,7 @@ define([
                 });
                 addToWishlistBtn.data('post', params);
             } else {
-                $('[data-action="add-to-wishlist"]').each(function (index, element) {
+                $(wishlistBtn).each(function (index, element) {
                     params = $(element).data('post');
 
                     if (!params) {
