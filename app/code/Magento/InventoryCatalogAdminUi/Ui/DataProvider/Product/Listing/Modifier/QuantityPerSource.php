@@ -146,16 +146,19 @@ class QuantityPerSource extends AbstractModifier
             return $meta;
         }
 
-        $meta = array_replace_recursive($meta, [
-            'product_columns' => [
-                'children' => [
-                    'quantity_per_source' => $this->getQuantityPerSourceMeta(),
-                    'qty' => [
-                        'arguments' => null,
+        $meta = array_replace_recursive(
+            $meta,
+            [
+                'product_columns' => [
+                    'children' => [
+                        'quantity_per_source' => $this->getQuantityPerSourceMeta(),
+                        'qty' => [
+                            'arguments' => null,
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]
+        );
         return $meta;
     }
 
