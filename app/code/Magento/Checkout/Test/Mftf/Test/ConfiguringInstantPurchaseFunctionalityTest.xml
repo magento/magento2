@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6436"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MQE-1576"/>
+            </skip>
         </annotations>
         <before>
             <!-- Configure Braintree Vault-enabled payment method -->

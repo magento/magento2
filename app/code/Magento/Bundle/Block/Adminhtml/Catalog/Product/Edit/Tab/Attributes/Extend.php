@@ -7,7 +7,7 @@
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
 /**
- * Bundle Extended Attribures Block.
+ * Bundle Extended Attributes Block.
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
