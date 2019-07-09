@@ -89,14 +89,28 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
             [
                 ['name' => 'itemName', 'config' => []],
                 [['itemName' => '', 'entity_id' => 1]],
-                [['itemName' => ['view' => ['href' => 'url', 'label' => __('View')]], 'entity_id' => 1]],
+                [
+                    [
+                        'itemName' => [
+                            'view' => ['href' => 'url', 'label' => __('View'), '__disableTmpl' => true]
+                        ],
+                        'entity_id' => 1
+                    ]
+                ],
                 '#',
                 ['entity_id' => 1]
             ],
             [
                 ['name' => 'itemName', 'config' => ['viewUrlPath' => 'url_path', 'urlEntityParamName' => 'order_id']],
                 [['itemName' => '', 'entity_id' => 2]],
-                [['itemName' => ['view' => ['href' => 'url', 'label' => __('View')]], 'entity_id' => 2]],
+                [
+                    [
+                        'itemName' => [
+                            'view' => ['href' => 'url', 'label' => __('View'), '__disableTmpl' => true]
+                        ],
+                        'entity_id' => 2
+                    ]
+                ],
                 'url_path',
                 ['order_id' => 2]
             ]
