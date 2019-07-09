@@ -109,16 +109,16 @@ define([
             var parentClass = '',
                 wishlistBtn = '[data-action="add-to-wishlist"]',
                 addToWishlistBtn = '',
-                WishlistForm = '',
+                wishlistForm = '',
                 params = '',
                 self = this;
 
             if (sku !== '') {
-                WishlistFormSelector = 'form[data-product-sku="' + sku + '"]';
+                wishlistForm = 'form[data-product-sku="' + sku + '"]';
                 parentClass = $('body').hasClass('catalog-product-view') ?
                                 '.product-info-main' :
                                 '.product-item-actions';
-                addToWishlistBtn = $(WishlistFormSelector)
+                addToWishlistBtn = $(wishlistForm)
                                     .closest(parentClass)
                                     .find(wishlistBtn);
 
