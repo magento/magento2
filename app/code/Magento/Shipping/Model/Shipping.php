@@ -272,8 +272,7 @@ class Shipping implements RateCollectorInterface
      */
     private function prepareCarrier(string $carrierCode, RateRequest $request): AbstractCarrier
     {
-        /* @var AbstractCarrier $carrier */
-        $carrier = $this->_carrierFactory->createIfActive($carrierCode, $request->getStoreId());
+        $carrier = $this->_carrierFactory->create($carrierCode, $request->getStoreId());
         if (!$carrier) {
             throw new \RuntimeException('Failed to initialize carrier');
         }
