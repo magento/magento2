@@ -47,6 +47,7 @@ class Coupon extends SalesBlockForm
      * @param ConfigFactory $orderConfig
      * @param RuleFactory $reportRule
      * @param array $data
+     * @param array $itemSortLimit
      */
     public function __construct(
         Context $context,
@@ -54,10 +55,11 @@ class Coupon extends SalesBlockForm
         FormFactory $formFactory,
         ConfigFactory $orderConfig,
         RuleFactory $reportRule,
-        array $data = []
+        array $data = [],
+        array $itemSortLimit = []
     ) {
         $this->_reportRule = $reportRule;
-        parent::__construct($context, $registry, $formFactory, $orderConfig, $data, []);
+        parent::__construct($context, $registry, $formFactory, $orderConfig, $data, $itemSortLimit);
     }
 
     /**
@@ -73,7 +75,7 @@ class Coupon extends SalesBlockForm
         /** @var Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
 
-        if (is_object($fieldset) && $fieldset instanceof Fieldset) {
+        if ($fieldset instanceof Fieldset) {
             $fieldset->addField(
                 'price_rule_type',
                 'select',

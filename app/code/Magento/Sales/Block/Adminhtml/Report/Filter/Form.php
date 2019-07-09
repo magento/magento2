@@ -75,7 +75,7 @@ class Form extends ReportsBlockFilterForm
         /** @var Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
 
-        if (is_object($fieldset) && $fieldset instanceof Fieldset) {
+        if ($fieldset instanceof Fieldset) {
             $statuses = $this->_orderConfig->create()->getStatuses();
             $values = [];
             foreach ($statuses as $code => $label) {
