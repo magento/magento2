@@ -93,6 +93,8 @@ class QuantityPerSource extends AbstractModifier
     }
 
     /**
+     * Add qty per source to the items.
+     *
      * @param array $dataItems
      * @return array
      */
@@ -126,6 +128,7 @@ class QuantityPerSource extends AbstractModifier
                 $qty = (float)$sourceItem->getQuantity();
                 $dataItems[$itemsBySkus[$sku]]['quantity_per_source'][] = [
                     'source_name' => $source->getName(),
+                    'source_code' => $source->getSourceCode(),
                     'qty' => $qty,
                 ];
             }
@@ -143,20 +146,25 @@ class QuantityPerSource extends AbstractModifier
             return $meta;
         }
 
-        $meta = array_replace_recursive($meta, [
-            'product_columns' => [
-                'children' => [
-                    'quantity_per_source' => $this->getQuantityPerSourceMeta(),
-                    'qty' => [
-                        'arguments' => null,
+        $meta = array_replace_recursive(
+            $meta,
+            [
+                'product_columns' => [
+                    'children' => [
+                        'quantity_per_source' => $this->getQuantityPerSourceMeta(),
+                        'qty' => [
+                            'arguments' => null,
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]
+        );
         return $meta;
     }
 
     /**
+     * Qty per source metadata for rendering.
+     *
      * @return array
      */
     private function getQuantityPerSourceMeta(): array
