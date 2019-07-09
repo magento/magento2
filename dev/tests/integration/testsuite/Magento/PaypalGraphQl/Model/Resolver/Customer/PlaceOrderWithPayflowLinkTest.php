@@ -185,7 +185,6 @@ QUERY;
         $customerToken = $tokenModel->createCustomerToken(1)->getToken();
 
         $requestHeaders = [
-            'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $customerToken
         ];

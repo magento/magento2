@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
-use Magento\Framework\App\Request\Http;
+use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Webapi\Request;
 
 /**
  * End to end place order test using payflowpro via graphql endpoint for customer
@@ -24,9 +22,9 @@ use Magento\Framework\Webapi\Request;
 class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
 {
     /**
-     * @var Http
+     * @var GraphQlRequest
      */
-    private $request;
+    private $graphQlRequest;
 
     /**
      * @var SerializerInterface
@@ -42,13 +40,9 @@ class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
     {
         parent::setUp();
 
-        $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**
@@ -146,22 +140,16 @@ mutation {
 }
 QUERY;
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
 
         /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
         $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
         $customerToken = $tokenModel->createCustomerToken(1)->getToken();
 
-        $webApiRequest = $this->objectManager->get(Request::class);
-        $webApiRequest->getHeaders()
-            ->addHeaderLine('Content-Type', 'application/json')
-            ->addHeaderLine('Accept', 'application/json')
-            ->addHeaderLine('Authorization', 'Bearer ' . $customerToken);
-        $this->request->setHeaders($webApiRequest->getHeaders());
-
+        $requestHeaders = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $customerToken
+        ];
         $paypalResponse = new DataObject(
             [
                 'result' => '0',
@@ -205,7 +193,7 @@ QUERY;
                 )
             );
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query, [], '', $requestHeaders);
         $responseData = $this->json->unserialize($response->getContent());
 
         $this->assertArrayHasKey('data', $responseData);

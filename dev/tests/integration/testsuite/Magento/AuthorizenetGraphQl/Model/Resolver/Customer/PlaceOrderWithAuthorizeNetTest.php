@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetGraphQl\Model\Resolver\Customer;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Framework\Webapi\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
@@ -33,8 +31,6 @@ use Zend_Http_Response;
  */
 class PlaceOrderWithAuthorizeNetTest extends TestCase
 {
-    const CONTENT_TYPE = 'application/json';
-
     /** @var  ObjectManager */
     private $objectManager;
 
@@ -44,8 +40,8 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     /** @var SerializerInterface */
     private $jsonSerializer;
 
-    /** @var Http */
-    private $request;
+    /** @var GraphQlRequest */
+    private $graphQlRequest;
 
     /** @var ZendClient|MockObject|InvocationMocker */
     private $clientMock;
@@ -63,7 +59,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->request = $this->objectManager->get(Http::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
         $this->clientMock = $this->createMock(ZendClient::class);
@@ -126,23 +122,12 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     }
 }
 QUERY;
-        $postData = [
-            'query' => $query,
-            'variables' => null,
-            'operationName' => null
-        ];
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($this->jsonSerializer->serialize($postData));
-        $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-        $bearerCustomerToken = 'Bearer ' . $customerToken;
-        $webApiRequest = $this->objectManager->get(Request::class);
-        $webApiRequest->getHeaders()->addHeaderLine('Content-Type', 'application/json')
-            ->addHeaderLine('Accept', 'application/json')
-            ->addHeaderLine('Authorization', $bearerCustomerToken);
-        $this->request->setHeaders($webApiRequest->getHeaders());
-        $graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
 
+        $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+        $requestHeaders = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $customerToken
+        ];
         // phpcs:ignore Magento2.Security.IncludeFile
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize_customer.php';
         // phpcs:ignore Magento2.Security.IncludeFile
@@ -153,7 +138,7 @@ QUERY;
 
         $this->responseMock->method('getBody')->willReturn(json_encode($authorizeResponse));
 
-        $response = $graphql->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query, [], '', $requestHeaders);
         $responseData = $this->jsonSerializer->unserialize($response->getContent());
 
         $this->assertArrayNotHasKey('errors', $responseData, 'Response has errors');
@@ -178,6 +163,5 @@ QUERY;
     protected function tearDown()
     {
         $this->objectManager->removeSharedInstance(ZendClientFactory::class);
-        parent::tearDown();
     }
 }

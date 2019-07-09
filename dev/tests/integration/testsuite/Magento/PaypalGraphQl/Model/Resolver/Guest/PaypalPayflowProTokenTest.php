@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
@@ -22,9 +22,9 @@ use Magento\Framework\DataObject;
 class PaypalPayflowProTokenTest extends PaypalPayflowProAbstractTest
 {
     /**
-     * @var Http
+     * @var GraphQlRequest
      */
-    private $request;
+    private $graphQlRequest;
 
     /**
      * @var SerializerInterface
@@ -40,9 +40,9 @@ class PaypalPayflowProTokenTest extends PaypalPayflowProAbstractTest
     {
         parent::setUp();
 
-        $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**
@@ -66,14 +66,6 @@ class PaypalPayflowProTokenTest extends PaypalPayflowProAbstractTest
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
         $query = $this->getCreatePayflowTokenMutation($cartId);
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
         $paypalResponse = new DataObject(
             [
                 'result' => '0',
@@ -85,11 +77,10 @@ class PaypalPayflowProTokenTest extends PaypalPayflowProAbstractTest
         );
 
         $this->gatewayMock
-            ->expects($this->any())
             ->method('postRequest')
             ->willReturn($paypalResponse);
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('data', $responseData);
         $this->assertArrayHasKey('createPayflowProToken', $responseData['data']);
@@ -137,17 +128,9 @@ mutation {
 }
 QUERY;
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
         $expectedExceptionMessage = "Invalid URL 'not/a/url'.";
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
