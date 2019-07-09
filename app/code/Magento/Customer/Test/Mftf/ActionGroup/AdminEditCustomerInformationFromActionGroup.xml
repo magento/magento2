@@ -25,12 +25,4 @@
         <waitForPageLoad stepKey="wait"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
     </actionGroup>
-    <actionGroup name="adminSetCustomerInactive">
-        <click selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" stepKey="goToAccountInformation"/>
-        <waitForElementVisible selector="{{AdminCustomerAccountInformationSection.statusInactive}}" stepKey="waitForElement"/>
-        <click selector="{{AdminCustomerAccountInformationSection.statusInactive}}" stepKey="clickInactive"/>
-        <click selector="{{AdminCustomerMainActionsSection.saveAndContinue}}" stepKey="saveAndContinue"/>
-        <waitForPageLoad stepKey="waitForSaving"/>
-        <see userInput="You saved the customer." stepKey="seeSuccessMessage"/>
-    </actionGroup>
 </actionGroups>

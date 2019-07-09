@@ -17,8 +17,4 @@
         <element name="customerEditLinkByEmail" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//a[@class='action-menu-item']" parameterized="true" timeout="30"/>
         <element name="customerGroupByEmail" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//div[text()='{{customerGroup}}']" parameterized="true"/>
     </section>
-    <section name="AdminCustomerGridInformationSection">
-        <element name="status" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//div[contains(text(), '{{status}}')]" parameterized="true" timeout="30"/>
-        <element name="associatedCompany" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//div[contains(text(), '{{companyName}}')]" parameterized="true" timeout="30/"/>
-    </section>
 </sections>
