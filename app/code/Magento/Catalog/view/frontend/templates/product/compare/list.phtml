@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable PSR2.ControlStructures.SwitchDeclaration
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
 
 /* @var $block \Magento\Catalog\Block\Product\Compare\ListCompare */
 ?>
 <?php $total = $block->getItems()->getSize() ?>
-<?php if ($total): ?>
-    <a href="#" class="action print hidden-print" title="<?= /* @escapeNotVerified */ __('Print This Page') ?>">
-        <span><?= /* @escapeNotVerified */ __('Print This Page') ?></span>
+<?php if ($total) :?>
+    <a href="#" class="action print hidden-print" title="<?= $block->escapeHtmlAttr(__('Print This Page')) ?>">
+        <span><?= $block->escapeHtml(__('Print This Page')) ?></span>
     </a>
         <div class="table-wrapper comparison">
             <table class="data table table-comparison" id="product-comparison"
@@ -21,19 +23,19 @@
                     "selectors":{
                         "productAddToCartSelector":"button.action.tocart"}
                 }}'>
-                <caption class="table-caption"><?= /* @escapeNotVerified */ __('Compare Products') ?></caption>
+                <caption class="table-caption"><?= $block->escapeHtml(__('Compare Products')) ?></caption>
                 <thead>
                 <tr>
                     <?php $index = 0 ?>
-                    <?php foreach ($block->getItems() as $item): ?>
-                        <?php if ($index++ == 0): ?>
-                            <th scope="row" class="cell label remove"><span><?= /* @escapeNotVerified */ __('Remove Product') ?></span></th>
+                    <?php foreach ($block->getItems() as $item) :?>
+                        <?php if ($index++ == 0) :?>
+                            <th scope="row" class="cell label remove"><span><?= $block->escapeHtml(__('Remove Product')) ?></span></th>
                         <?php endif; ?>
                         <td class="cell remove product hidden-print">
-                            <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
-                            <a href="#" data-post='<?= /* @escapeNotVerified */ $compareHelper->getPostDataRemove($item) ?>'
-                               class="action delete" title="<?= /* @escapeNotVerified */ __('Remove Product') ?>">
-                                <span><?= /* @escapeNotVerified */ __('Remove Product') ?></span>
+                            <?php $compareHelper = $this->helper(Magento\Catalog\Helper\Product\Compare::class);?>
+                            <a href="#" data-post='<?= /* @noEscape */ $compareHelper->getPostDataRemove($item) ?>'
+                               class="action delete" title="<?= $block->escapeHtmlAttr(__('Remove Product')) ?>">
+                                <span><?= $block->escapeHtml(__('Remove Product')) ?></span>
                             </a>
                         </td>
                     <?php endforeach; ?>
@@ -42,44 +44,54 @@
                 <tbody>
                 <tr>
                     <?php $index = 0; ?>
-                    <?php $helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
+                    <?php $helper = $this->helper(Magento\Catalog\Helper\Output::class); ?>
                     <?php /** @var $item \Magento\Catalog\Model\Product */ ?>
-                    <?php foreach ($block->getItems() as $item): ?>
-                        <?php if ($index++ == 0): ?>
-                            <th scope="row" class="cell label product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                    <?php foreach ($block->getItems() as $item) :?>
+                        <?php if ($index++ == 0) :?>
+                            <th scope="row" class="cell label product">
+                                <span><?= $block->escapeHtml(__('Product')) ?></span>
+                            </th>
                         <?php endif; ?>
-                        <td data-th="<?= $block->escapeHtml(__('Product')) ?>" class="cell product info">
-                            <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $block->getProductUrl($item) ?>" title="<?= /* @escapeNotVerified */ $block->stripTags($item->getName(), null, true) ?>">
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Product')) ?>" class="cell product info">
+                            <a class="product-item-photo"
+                               href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>"
+                               title="<?= /* @noEscape */ $block->stripTags($item->getName(), null, true) ?>">
                                 <?= $block->getImage($item, 'product_comparison_list')->toHtml() ?>
                             </a>
                             <strong class="product-item-name">
-                                <a href="<?= /* @escapeNotVerified */ $block->getProductUrl($item) ?>" title="<?= /* @escapeNotVerified */ $block->stripTags($item->getName(), null, true) ?>">
-                                    <?= /* @escapeNotVerified */ $helper->productAttribute($item, $item->getName(), 'name') ?>
+                                <a href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>"
+                                   title="<?= /* @noEscape */ $block->stripTags($item->getName(), null, true) ?>">
+                                    <?= /* @noEscape */ $helper->productAttribute($item, $item->getName(), 'name') ?>
                                 </a>
                             </strong>
                             <?= $block->getReviewsSummaryHtml($item, 'short') ?>
-                            <?= /* @escapeNotVerified */ $block->getProductPrice($item, '-compare-list-top') ?>
+                            <?= /* @noEscape */ $block->getProductPrice($item, '-compare-list-top') ?>
                             <div class="product-item-actions hidden-print">
                                 <div class="actions-primary">
-                                    <?php if ($item->isSaleable()): ?>
-                                        <form data-role="tocart-form" action="<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToCartUrl($item) ?>" method="post">
+                                    <?php if ($item->isSaleable()) :?>
+                                        <form data-role="tocart-form"
+                                              action="<?= $block->escapeUrl($this->helper(Magento\Catalog\Helper\Product\Compare::class)->getAddToCartUrl($item)) ?>"
+                                              method="post">
                                             <?= $block->getBlockHtml('formkey') ?>
                                             <button type="submit" class="action tocart primary">
-                                                <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         </form>
-                                    <?php else: ?>
-                                        <?php if ($item->getIsSalable()): ?>
-                                            <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
-                                        <?php else: ?>
-                                            <div class="stock unavailable"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></div>
+                                    <?php else :?>
+                                        <?php if ($item->getIsSalable()) :?>
+                                            <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                                        <?php else :?>
+                                            <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
-                                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+                                <?php if ($this->helper(Magento\Wishlist\Helper\Data::class)->isAllow()) :?>
                                     <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
-                                        <a href="#" data-post='<?= /* @escapeNotVerified */ $block->getAddToWishlistParams($item) ?>' class="action towishlist" data-action="add-to-wishlist">
-                                            <span><?= /* @escapeNotVerified */ __('Add to Wish List') ?></span>
+                                        <a href="#"
+                                           data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>'
+                                           class="action towishlist"
+                                           data-action="add-to-wishlist">
+                                            <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                                         </a>
                                     </div>
                                 <?php endif; ?>
@@ -89,12 +101,12 @@
                 </tr>
                 </tbody>
                 <tbody>
-                <?php foreach ($block->getAttributes() as $attribute): ?>
+                <?php foreach ($block->getAttributes() as $attribute) :?>
                     <?php $index = 0; ?>
-                    <?php if ($block->hasAttributeValueForProducts($attribute)): ?>
+                    <?php if ($block->hasAttributeValueForProducts($attribute)) :?>
                          <tr>
-                            <?php foreach ($block->getItems() as $item): ?>
-                                <?php if ($index++ == 0): ?>
+                            <?php foreach ($block->getItems() as $item) :?>
+                                <?php if ($index++ == 0) :?>
                                     <th scope="row" class="cell label">
                                         <span class="attribute label">
                                             <?= $block->escapeHtml($attribute->getStoreLabel() ? $attribute->getStoreLabel() : __($attribute->getFrontendLabel())) ?>
@@ -105,21 +117,21 @@
                                     <div class="attribute value">
                                         <?php switch ($attribute->getAttributeCode()) {
                                             case "price": ?>
-                                                <?php
-                                                    /* @escapeNotVerified */ echo $block->getProductPrice(
-                                                        $item,
-                                                        '-compare-list-' . $attribute->getCode()
-                                                    )
+                                                <?=
+                                                /* @noEscape */ $block->getProductPrice(
+                                                    $item,
+                                                    '-compare-list-' . $attribute->getCode()
+                                                )
                                                 ?>
                                                 <?php break;
                                             case "small_image": ?>
                                                 <?php $block->getImage($item, 'product_small_image')->toHtml(); ?>
                                                 <?php break;
-                                            default: ?>
-                                                <?php if (is_string($block->getProductAttributeValue($item, $attribute))): ?>
-                                                    <?= /* @escapeNotVerified */ $helper->productAttribute($item, $block->getProductAttributeValue($item, $attribute), $attribute->getAttributeCode()) ?>
+                                            default :?>
+                                                <?php if (is_string($block->getProductAttributeValue($item, $attribute))) :?>
+                                                    <?= /* @noEscape */ $helper->productAttribute($item, $block->getProductAttributeValue($item, $attribute), $attribute->getAttributeCode()) ?>
                                                 <?php endif; ?>
-                                            <?php break;
+                                                <?php break;
                                         } ?>
                                     </div>
                                 </td>
@@ -130,7 +142,7 @@
                 </tbody>
             </table>
         </div>
-        <?php if (!$block->isRedirectToCartEnabled()) : ?>
+        <?php if (!$block->isRedirectToCartEnabled()) :?>
             <script type="text/x-magento-init">
             {
                 "[data-role=tocart-form]": {
@@ -139,6 +151,6 @@
             }
             </script>
         <?php endif; ?>
-<?php else: ?>
-    <div class="message info empty"><div><?= /* @escapeNotVerified */ __('You have no items to compare.') ?></div></div>
+<?php else :?>
+    <div class="message info empty"><div><?= $block->escapeHtml(__('You have no items to compare.')) ?></div></div>
 <?php endif; ?>

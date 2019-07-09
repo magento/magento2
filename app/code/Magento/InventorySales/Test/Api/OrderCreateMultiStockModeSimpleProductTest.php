@@ -35,6 +35,7 @@ class OrderCreateMultiStockModeSimpleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -63,6 +64,7 @@ class OrderCreateMultiStockModeSimpleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -91,6 +93,7 @@ class OrderCreateMultiStockModeSimpleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -122,6 +125,7 @@ class OrderCreateMultiStockModeSimpleProductTest extends OrderPlacementBase
         $this->setShippingAndBillingInformation();
         $orderId = $this->submitPaymentInformation();
         $this->verifyCreatedOrder($orderId);
+        $this->cancelOrder($orderId);
     }
 
     /**
@@ -138,5 +142,6 @@ class OrderCreateMultiStockModeSimpleProductTest extends OrderPlacementBase
         $this->assertEquals('simple', $order['items'][0]['product_type']);
         $this->assertEquals('SKU-1', $order['items'][0]['sku']);
         $this->assertEquals(10, $order['items'][0]['price']);
+        $this->cancelOrder($orderId);
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssignWebsiteToStockActionGroup">
+        <arguments>
+            <argument name="stockName" type="string"/>
+            <argument name="websiteName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockIndexPage"/>
+        <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{stockName}}" stepKey="fillKeywordSearchField"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
+        <click selector="{{AdminGridRow.editByValue(stockName)}}" stepKey="clickOnEditStock"/>
+        <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+        <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="{{websiteName}}" stepKey="selectWebsiteAsSalesChannel"/>
+        <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveStock"/>
+    </actionGroup>
+</actionGroups>
+
