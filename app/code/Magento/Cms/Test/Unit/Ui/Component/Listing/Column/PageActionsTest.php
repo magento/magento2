@@ -86,7 +86,6 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->with($title)
             ->willReturn($title);
-
         // Configure mocks and object data
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
@@ -108,7 +107,6 @@ class PageActionsTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             );
-
         $model->setName($name);
         $items = $model->prepareDataSource($items);
         // Run test
