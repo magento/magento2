@@ -125,7 +125,7 @@ abstract class EntityAbstract extends AbstractDb
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\AbstractModel $object */
-        if ($object instanceof EntityInterface && $object->getEntityId() == null) {
+        if ($object instanceof EntityInterface && $object->getEntityId() == null && $object->getIncrementId() == null) {
             $store = $object->getStore();
             $storeId = $store->getId();
             if ($storeId === null) {
