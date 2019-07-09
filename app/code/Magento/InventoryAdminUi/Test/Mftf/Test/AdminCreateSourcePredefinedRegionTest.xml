@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSourcePredefinedRegionTest">
+        <annotations>
+            <stories value="Create Source With Predefined Region"/>
+            <title value="Source With Predefined Region Created by Admin User"/>
+            <description value="Verify, Source Grid displays country and region correctly when specified predefined region."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910317/scenarios/1640994"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+
+        <after>
+            <!--Disable created source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="FullSource1.source_code"/>
+            </actionGroup>
+
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+        <!--Create Source with predefined State/Province value.-->
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceListPage"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickAddNewSource"/>
+        <waitForLoadingMaskToDisappear stepKey="waitLoadingMaskToAddNewSource" />
+        <fillField userInput="{{FullSource1.name}}" selector="{{AdminEditSourceGeneralSection.name}}" stepKey="fillSourceName"/>
+        <fillField userInput="{{FullSource1.source_code}}" selector="{{AdminEditSourceGeneralSection.code}}" stepKey="fillSourceCode"/>
+        <checkOption selector="{{AdminEditSourceGeneralSection.isEnabled}}" stepKey="enableSource"/>
+        <conditionalClick selector="{{AdminEditSourceAddressDataSection.closed}}" dependentSelector="{{AdminEditSourceAddressDataSection.opened}}" visible="false" stepKey="openSourceAddressTab"/>
+        <waitForPageLoad time="5" stepKey="waitForAddressTabIsOpened"/>
+        <selectOption userInput="{{FullSource1.country}}" selector="{{AdminEditSourceAddressDataSection.country}}" stepKey="selectSourceCountry"/>
+        <selectOption userInput="{{FullSource1.stateProvince}}" selector="{{AdminEditSourceAddressDataSection.state}}" stepKey="selectStateProvince"/>
+        <fillField userInput="{{FullSource1.postcode}}" selector="{{AdminEditSourceAddressDataSection.postcode}}" stepKey="fillPostCode"/>
+        <click selector="{{AdminGridMainControls.saveArrow}}" stepKey="openSaveOptions"/>
+        <click selector="{{AdminGridMainControls.saveAndClose}}" stepKey="saveCreatedSource"/>
+
+        <!--Verify State on Source Grid.-->
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openSourceGridColumnOptions"/>
+        <checkOption selector="{{AdminDataGridHeaderSection.columnCheckbox('State/Province')}}" stepKey="addStateProvinceColumnToSourceGrid"/>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeSourceGridColumnOptions"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="findCreatedSource">
+            <argument name="keyword" value="FullSource1.name"/>
+        </actionGroup>
+        <see userInput="{{FullSource1.stateProvince}}" selector="{{AdminGridRow.rowOne}}" stepKey="verifyStateProvinceDisplayedCorrectly"/>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openSourceGridColumnOptionsToRevertGridColumns"/>
+        <uncheckOption selector="{{AdminDataGridHeaderSection.columnCheckbox('State/Province')}}" stepKey="removeStateProvinceColumnToSourceGrid"/>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeSourceGridColumnOptionsAfterRevertGridColumns"/>
+    </test>
+</tests>

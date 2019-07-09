@@ -119,6 +119,48 @@
         <data key="postcode">QC G2E 6J5</data>
         <data key="use_default_carrier_config">1</data>
     </entity>
+    <entity name="USSource" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test US Source 1 </data>
+        <data key="source_code" unique="suffix">test_us_source_1_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test US Source for distance based algorithm.</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">100</data>
+        <data key="contact_name">First Last</data>
+        <data key="email" unique="prefix">test@test.com</data>
+        <data key="phone">123-456-7890</data>
+        <data key="fax">123-456-7890</data>
+        <data key="country">United States</data>
+        <data key="country_id">US</data>
+        <data key="stateProvince">Texas</data>
+        <data key="region_id">57</data>
+        <data key="city">Austin</data>
+        <data key="street">700 San Jacinto Blvd</data>
+        <data key="postcode">78701</data>
+    </entity>
+    <entity name="UASource" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test UA Source 1 </data>
+        <data key="source_code" unique="suffix">test_ua_source_1_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test UA Source for distance based algorithm.</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">100</data>
+        <data key="contact_name">First Last</data>
+        <data key="email" unique="prefix">test@test.com</data>
+        <data key="phone">123-456-7890</data>
+        <data key="fax">123-456-7890</data>
+        <data key="country">Ukraine</data>
+        <data key="country_id">UA</data>
+        <data key="stateProvince">Kyivska</data>
+        <data key="region_id">57</data>
+        <data key="city">Kyiv</data>
+        <data key="street">Peremohy Ave, 37</data>
+        <data key="postcode">03056</data>
+    </entity>
     <!-- This entity shouldn't be used in tests as it will fail test AdminManageSourceGridColumnsSortingTest -->
     <!-- The reason: source can't be deleted, only disabled-->
     <entity name="SourceForColumnsSortingOrderTestOnly" type="source">

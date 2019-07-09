@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCannotEditExistingSourceCodeInGrid">
+        <annotations>
+            <stories value="Existing Source Code is Not Editable in Source Grid"/>
+            <title value="Admin User Cannot Change Existing Source Code in Source Grid."/>
+            <description value="Verify, existing Source Code is not editable in Source Grid."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910317/scenarios/1495755"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test source.-->
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+
+        <after>
+            <!--Disable created test source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+        </after>
+
+        <!--Verify Test Source code is not editable in Source Grid.-->
+        <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceListPage"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="findCreatedSource">
+            <argument name="keyword" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.rowOne}}" stepKey="clickToEditSourceInGrid"/>
+        <executeInSelenium function="function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) {
+            $element = $webdriver->findElement(\Facebook\WebDriver\WebDriverBy::xpath('(//span[@class=\'data-grid-cell-content\'][text()=\'Code\'])/../../../..//div[@class=\'data-grid-cell-content\']'));
+            $ableToEditSourceCode = true;
+            try {
+                $element->sendKeys('test value');
+            } catch (\Exception $e) {
+                $ableToEditSourceCode = false;
+            }
+
+            if ($ableToEditSourceCode) {
+                throw new \Exception('There is ability to edit source code.');
+            }
+        }" stepKey="verifySourceCodeIsNotEditable"/>
+    </test>
+</tests>
