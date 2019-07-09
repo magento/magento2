@@ -6,15 +6,13 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\Config;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Model\ResourceModel\Store\Collection;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\StoreRepository;
-use Magento\Framework\App\Config;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -76,7 +74,9 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
+     * phpcs:disable Magento2.Files.LineLength
+     * @expectedExceptionMessage The store with code some_code that was requested wasn't found. Verify the store and try again.
+     * phpcs:enable Magento2.Files.LineLength
      */
     public function testGetWithException()
     {
@@ -128,7 +128,7 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
+     * @expectedExceptionMessage The store with id 1 that was requested wasn't found. Verify the store and try again.
      */
     public function testGetByIdWithException()
     {
@@ -162,14 +162,16 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn(2);
         $this->appConfigMock->expects($this->once())
             ->method('get')
-            ->willReturn([
+            ->willReturn(
                 [
-                    'code' => 'some_code'
-                ],
-                [
-                    'code' => 'some_code_2'
+                    [
+                        'code' => 'some_code'
+                    ],
+                    [
+                        'code' => 'some_code_2'
+                    ]
                 ]
-            ]);
+            );
         $this->storeFactory->expects($this->at(0))
             ->method('create')
             ->willReturn($storeMock1);
