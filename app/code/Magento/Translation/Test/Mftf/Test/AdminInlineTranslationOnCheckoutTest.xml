@@ -391,9 +391,6 @@
         <!-- Check translate Progress Bar Review & Payments-->
         <see userInput="Translated" selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="seeTranslateProgressBarReviewAndPayments"/>
 
-        <!-- Check translate title "Payment Method"-->
-        <see userInput="Translated" selector="{{InlineTranslationModeCheckoutSection.titlePayment}}" stepKey="seeTranslateTitlePayment"/>
-
         <!-- Check translate text for checkbox "My billing and shipping address are the same" -->
         <see userInput="Translated" selector="{{InlineTranslationModeCheckoutSection.checkboxSameBillingAddress}}" stepKey="seeTranslateCheckboxSameBillingAddress"/>
 
