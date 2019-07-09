@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bdca80b8af472ba7ea3ee9ab94d3385f",
+    "content-hash": "b043af6c49a6e74687a7200ae5f8ca4d",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -55,20 +55,17 @@
         },
         {
             "name": "colinmollenhour/cache-backend-file",
-            "version": "1.4",
+            "version": "v1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_File.git",
-                "reference": "51251b80a817790eb624fbe2afc882c14f3c4fb0"
+                "reference": "03c7d4c0f43b2de1b559a3527d18ff697d306544"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_File/zipball/51251b80a817790eb624fbe2afc882c14f3c4fb0",
-                "reference": "51251b80a817790eb624fbe2afc882c14f3c4fb0",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_File/zipball/03c7d4c0f43b2de1b559a3527d18ff697d306544",
+                "reference": "03c7d4c0f43b2de1b559a3527d18ff697d306544",
                 "shasum": ""
-            },
-            "require": {
-                "magento-hackathon/magento-composer-installer": "*"
             },
             "type": "magento-module",
             "autoload": {
@@ -87,20 +84,20 @@
             ],
             "description": "The stock Zend_Cache_Backend_File backend has extremely poor performance for cleaning by tags making it become unusable as the number of cached items increases. This backend makes many changes resulting in a huge performance boost, especially for tag cleaning.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_File",
-            "time": "2016-05-02T16:24:47+00:00"
+            "time": "2019-04-18T21:54:31+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.10.4",
+            "version": "1.10.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "6bf0a4b7a3f8dc4a6255fad5b6e42213253d9972"
+                "reference": "0ea3e4bf924242f8d03155761bf540c90a2db2d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/6bf0a4b7a3f8dc4a6255fad5b6e42213253d9972",
-                "reference": "6bf0a4b7a3f8dc4a6255fad5b6e42213253d9972",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/0ea3e4bf924242f8d03155761bf540c90a2db2d7",
+                "reference": "0ea3e4bf924242f8d03155761bf540c90a2db2d7",
                 "shasum": ""
             },
             "require": {
@@ -123,7 +120,7 @@
             ],
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
-            "time": "2017-10-05T20:50:44+00:00"
+            "time": "2019-02-18T18:59:51+00:00"
         },
         {
             "name": "colinmollenhour/credis",
@@ -167,21 +164,21 @@
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
-            "version": "v1.3.4",
+            "version": "v1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
-                "reference": "6f005b2c3755e4a96ddad821e2ea15d66fb314ae"
+                "reference": "9f69f5c1be512d5ff168e731e7fa29ab2905d847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/6f005b2c3755e4a96ddad821e2ea15d66fb314ae",
-                "reference": "6f005b2c3755e4a96ddad821e2ea15d66fb314ae",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/9f69f5c1be512d5ff168e731e7fa29ab2905d847",
+                "reference": "9f69f5c1be512d5ff168e731e7fa29ab2905d847",
                 "shasum": ""
             },
             "require": {
                 "colinmollenhour/credis": "~1.6",
-                "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0"
+                "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0|~7.2.0"
             },
             "type": "library",
             "autoload": {
@@ -200,7 +197,7 @@
             ],
             "description": "A Redis-based session handler with optimistic locking",
             "homepage": "https://github.com/colinmollenhour/php-redis-session-abstract",
-            "time": "2017-03-22T16:13:03+00:00"
+            "time": "2018-01-08T14:53:13+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -556,21 +553,21 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.2.0",
+            "version": "1.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "130753af2b755f1967e253deb661225942bb302c"
+                "reference": "6b406bc65690c1b28be9255249507e1c6572d815"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/130753af2b755f1967e253deb661225942bb302c",
-                "reference": "130753af2b755f1967e253deb661225942bb302c",
+                "url": "https://api.github.com/repos/magento/composer/zipball/6b406bc65690c1b28be9255249507e1c6572d815",
+                "reference": "6b406bc65690c1b28be9255249507e1c6572d815",
                 "shasum": ""
             },
             "require": {
                 "composer/composer": "1.4.1",
-                "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0",
+                "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0|~7.2.0",
                 "symfony/console": "~2.3, !=2.7.0"
             },
             "require-dev": {
@@ -582,13 +579,16 @@
                     "Magento\\Composer\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2017-04-24T09:57:02+00:00"
+            "support": {
+                "source": "https://github.com/magento/composer/tree/1.2",
+                "issues": "https://github.com/magento/composer/issues"
+            },
+            "time": "2019-05-21T16:03:27+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -671,16 +671,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.13.1",
+            "version": "1.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "e2693f047bb7ccb8affa8f72ea40269f4c9f4fbf"
+                "reference": "4df018254c70b5b998b00a8cb1a30760f831ff0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/e2693f047bb7ccb8affa8f72ea40269f4c9f4fbf",
-                "reference": "e2693f047bb7ccb8affa8f72ea40269f4c9f4fbf",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/4df018254c70b5b998b00a8cb1a30760f831ff0d",
+                "reference": "4df018254c70b5b998b00a8cb1a30760f831ff0d",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +714,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2017-06-21T14:56:23+00:00"
+            "time": "2018-08-09T15:03:40+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -978,6 +978,55 @@
                 "pre-processing"
             ],
             "time": "2018-12-10T10:36:30+00:00"
+        },
+        {
+            "name": "phpseclib/mcrypt_compat",
+            "version": "1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpseclib/mcrypt_compat.git",
+                "reference": "f74c7b1897b62f08f268184b8bb98d9d9ab723b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpseclib/mcrypt_compat/zipball/f74c7b1897b62f08f268184b8bb98d9d9ab723b0",
+                "reference": "f74c7b1897b62f08f268184b8bb98d9d9ab723b0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "phpseclib/phpseclib": ">=2.0.11 <3.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0"
+            },
+            "suggest": {
+                "ext-openssl": "Will enable faster cryptographic operations"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/mcrypt.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Wigginton",
+                    "email": "terrafrost@php.net",
+                    "homepage": "http://phpseclib.sourceforge.net"
+                }
+            ],
+            "description": "PHP 7.1 polyfill for the mcrypt extension from PHP <= 7.0",
+            "keywords": [
+                "cryptograpy",
+                "encryption",
+                "mcrypt"
+            ],
+            "time": "2018-08-22T03:11:43+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2609,6 +2658,67 @@
                 "zf2"
             ],
             "time": "2017-12-12T17:48:56+00:00"
+        },
+        {
+            "name": "zendframework/zend-feed",
+            "version": "2.10.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-feed.git",
+                "reference": "6641f4cf3f4586c63f83fd70b6d19966025c8888"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-feed/zipball/6641f4cf3f4586c63f83fd70b6d19966025c8888",
+                "reference": "6641f4cf3f4586c63f83fd70b6d19966025c8888",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "zendframework/zend-escaper": "^2.5.2",
+                "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7.23 || ^6.4.3",
+                "psr/http-message": "^1.0.1",
+                "zendframework/zend-cache": "^2.7.2",
+                "zendframework/zend-coding-standard": "~1.0.0",
+                "zendframework/zend-db": "^2.8.2",
+                "zendframework/zend-http": "^2.7",
+                "zendframework/zend-servicemanager": "^2.7.8 || ^3.3",
+                "zendframework/zend-validator": "^2.10.1"
+            },
+            "suggest": {
+                "psr/http-message": "PSR-7 ^1.0.1, if you wish to use Zend\\Feed\\Reader\\Http\\Psr7ResponseDecorator",
+                "zendframework/zend-cache": "Zend\\Cache component, for optionally caching feeds between requests",
+                "zendframework/zend-db": "Zend\\Db component, for use with PubSubHubbub",
+                "zendframework/zend-http": "Zend\\Http for PubSubHubbub, and optionally for use with Zend\\Feed\\Reader",
+                "zendframework/zend-servicemanager": "Zend\\ServiceManager component, for easily extending ExtensionManager implementations",
+                "zendframework/zend-validator": "Zend\\Validator component, for validating email addresses used in Atom feeds and entries when using the Writer subcomponent"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.10.x-dev",
+                    "dev-develop": "2.11.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Feed\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "provides functionality for consuming RSS and Atom feeds",
+            "keywords": [
+                "ZendFramework",
+                "feed",
+                "zf"
+            ],
+            "time": "2018-08-01T13:53:20+00:00"
         },
         {
             "name": "zendframework/zend-filter",
@@ -9077,22 +9187,29 @@
             "time": "2018-12-25T11:19:39+00:00"
         }
     ],
-    "aliases": [],
-    "minimum-stability": "stable",
+    "aliases": [
+        {
+            "alias": "1.2.1",
+            "alias_normalized": "1.2.1.0",
+            "version": "1.2.9999999.9999999-dev",
+            "package": "magento/composer"
+        }
+    ],
+    "minimum-stability": "dev",
     "stability-flags": {
+        "magento/composer": 20,
         "phpmd/phpmd": 0
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.0.13|~7.1.0",
+        "php": "~7.0.13|~7.1.0|~7.2.0",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-simplexml": "*",
-        "ext-mcrypt": "*",
         "ext-bcmath": "*",
         "ext-hash": "*",
         "ext-curl": "*",

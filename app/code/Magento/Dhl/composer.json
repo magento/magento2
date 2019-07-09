@@ -2,7 +2,7 @@
     "name": "magento/module-dhl",
     "description": "N/A",
     "require": {
-        "php": "~7.0.13|~7.1.0",
+        "php": "~7.0.13|~7.1.0|~7.2.0",
         "magento/module-config": "101.0.*",
         "magento/module-store": "100.2.*",
         "magento/module-shipping": "100.2.*",

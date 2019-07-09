@@ -138,8 +138,6 @@ class SessionManager implements SessionManagerInterface
             SessionStartChecker::class
         );
 
-        // Enable session.use_only_cookies
-        ini_set('session.use_only_cookies', '1');
         $this->start();
     }
 
@@ -573,7 +571,7 @@ class SessionManager implements SessionManagerInterface
     {
         foreach (array_keys($this->_getHosts()) as $host) {
             // Delete cookies with the same name for parent domains
-            if (strpos($this->sessionConfig->getCookieDomain(), $host) > 0) {
+            if ($this->sessionConfig->getCookieDomain() !== $host) {
                 $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
                 $metadata->setPath($this->sessionConfig->getCookiePath());
                 $metadata->setDomain($host);
@@ -613,6 +611,14 @@ class SessionManager implements SessionManagerInterface
      */
     private function initIniOptions()
     {
+        $result = ini_set('session.use_only_cookies', '1');
+        if ($result === false) {
+            $error = error_get_last();
+            throw new \InvalidArgumentException(
+                sprintf('Failed to set ini option session.use_only_cookies to value 1. %s', $error['message'])
+            );
+        }
+
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
             if ($option === 'session.save_handler') {
                 continue;
