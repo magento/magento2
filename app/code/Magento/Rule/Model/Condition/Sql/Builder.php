@@ -145,8 +145,11 @@ class Builder
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getMappedSqlCondition(AbstractCondition $condition, string $value = ''): string
-    {
+    protected function _getMappedSqlCondition(
+        AbstractCondition $condition,
+        string $value = '',
+        bool $isDefaultStoreUsed = true
+    ): string {
         $argument = $condition->getMappedSqlField();
 
         // If rule hasn't valid argument - prevent incorrect rule behavior.
