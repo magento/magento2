@@ -62,4 +62,13 @@ class BraintreeAdapter extends \Magento\Braintree\Model\Adapter\BraintreeAdapter
     {
         return $this->mockResponseDataProvider->generateMockSaleResponse($attributes);
     }
+
+    /**
+     * @param array $params
+     * @return string|\Braintree\Result\Error
+     */
+    public function generate(array $params = [])
+    {
+        return $this->mockResponseDataProvider->generateMockClientToken();
+    }
 }

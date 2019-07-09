@@ -55,6 +55,16 @@ class MockResponseDataProvider
     }
 
     /**
+     * Create mock client token
+     *
+     * @return string
+     */
+    public function generateMockClientToken(): string
+    {
+        return $this->random->getRandomString(32);
+    }
+
+    /**
      * Create Braintree transaction from provided request attributes
      *
      * @param array $attributes
