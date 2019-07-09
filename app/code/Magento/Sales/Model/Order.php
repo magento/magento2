@@ -1968,7 +1968,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCustomerName()
     {
         if ($this->getCustomerFirstname()) {
-            $customerName = $this->getCustomerPrefix() . ' ' . $this->getCustomerFirstname() . ' ' . $this->getCustomerMiddlename() . ' ' . $this->getCustomerLastname() . ' ' . $this->getCustomerSuffix();
+            $customerName = $this->getCustomerPrefix() . ' ' . $this->getCustomerFirstname()
+            . ' ' . $this->getCustomerMiddlename() . ' ' . $this->getCustomerLastname()
+            . ' ' . $this->getCustomerSuffix();
         } else {
             $customerName = (string)__('Guest');
         }
