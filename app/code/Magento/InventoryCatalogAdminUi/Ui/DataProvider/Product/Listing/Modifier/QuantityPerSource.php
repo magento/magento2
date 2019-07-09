@@ -93,6 +93,8 @@ class QuantityPerSource extends AbstractModifier
     }
 
     /**
+     * Add qty per source to the items.
+     *
      * @param array $dataItems
      * @return array
      */
@@ -158,6 +160,8 @@ class QuantityPerSource extends AbstractModifier
     }
 
     /**
+     * Qty per source metadata for rendering.
+     *
      * @return array
      */
     private function getQuantityPerSourceMeta(): array
