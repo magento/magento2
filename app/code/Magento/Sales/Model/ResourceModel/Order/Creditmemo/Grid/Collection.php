@@ -41,9 +41,8 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
      */
     protected function _renderFiltersBefore()
     {
-        $joinTable = $this->getTable('sales_order_grid');
         $this->getSelect()->join(
-            $joinTable.' as cgf',
+            ['cgf' => $this->getTable('sales_order_grid')]
             'main_table.order_id = cgf.entity_id',
             [
                 'order_currency_code'=>'order_currency_code'
