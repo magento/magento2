@@ -18,6 +18,14 @@
         <allowedSelectionTypes>
             <type name="some_name" />
         </allowedSelectionTypes>
+        <priceModel instance="instance_name_with_digits_123" />
+        <indexerModel instance="instance_name_with_digits_123" />
+        <stockIndexerModel instance="instance_name_with_digits_123"/>
+    </type>
+    <type label="some_label" name="some_name3" modelInstance="model_name">
+        <allowedSelectionTypes>
+            <type name="some_name" />
+        </allowedSelectionTypes>
         <priceModel instance="instance_name" />
         <indexerModel instance="instance_name" />
         <stockIndexerModel instance="instance_name"/>
@@ -25,5 +33,6 @@
     <composableTypes>
         <type name="some_name"/>
         <type name="some_name2"/>
+        <type name="some_name3"/>
     </composableTypes>
 </config>

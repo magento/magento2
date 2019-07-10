@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate
 
 /** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 
 $_item = $block->getItem();
 ?>
-<?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
+<?php $_incl = $this->helper(Magento\Checkout\Helper\Data::class)->getSubtotalInclTax($_item); ?>
 <span class="cart-price">
-    <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
+    <?= $block->escapeHtml(
+        $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_incl),
+        ['span']
+    ) ?>
 </span>

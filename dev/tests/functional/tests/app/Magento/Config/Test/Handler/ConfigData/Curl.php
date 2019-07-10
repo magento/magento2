@@ -123,9 +123,9 @@ class Curl extends AbstractCurl implements ConfigDataInterface
      */
     protected function applyConfigSettings(array $data, $section)
     {
-        $url = $this->getUrl($section);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
+        $url = $this->getUrl($section);
         $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();

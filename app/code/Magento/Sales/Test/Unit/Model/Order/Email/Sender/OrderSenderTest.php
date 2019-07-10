@@ -64,7 +64,7 @@ class OrderSenderTest extends AbstractSenderTest
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -72,7 +72,7 @@ class OrderSenderTest extends AbstractSenderTest
             ->willReturn($configValue);
 
         if (!$configValue || $forceSyncMode) {
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
@@ -118,7 +118,7 @@ class OrderSenderTest extends AbstractSenderTest
 
                     $this->orderMock->expects($this->once())
                         ->method('setEmailSent')
-                        ->with(true);
+                        ->with($emailSendingResult);
 
                     $this->orderResourceMock->expects($this->once())
                         ->method('saveAttribute')
@@ -210,7 +210,7 @@ class OrderSenderTest extends AbstractSenderTest
             ->with('sales_email/general/async_sending')
             ->willReturn(false);
 
-        $this->identityContainerMock->expects($this->once())
+        $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(true);
 

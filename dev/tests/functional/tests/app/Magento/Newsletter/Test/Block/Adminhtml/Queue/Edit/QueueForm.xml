@@ -11,7 +11,7 @@
             <selector>input[name='start_at']</selector>
         </queue_start_at>
         <stores>
-            <selector>select[name="stores[]"]</selector>
+            <selector>select[name="stores[0]"]</selector>
             <input>multiselectgrouplist</input>
         </stores>
         <newsletter_subject>

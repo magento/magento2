@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckSimpleProductCartItemDisplayWithDefaultLimitationTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Add 10 SimpleProducts to the cart and check cart display with default display limit"/>
+            <description value="Add 10 SimpleProducts to the cart and check cart display with default display limit"/>
+            <testCaseId value="MC-14723"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
+            <!--Create  simple product-->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">20.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct3">
+                <field key="price">30.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct4">
+                <field key="price">40.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct5">
+                <field key="price">50.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct6">
+                <field key="price">60.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct7">
+                <field key="price">70.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct8">
+                <field key="price">80.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct9">
+                <field key="price">90.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct10">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct11">
+                <field key="price">110.00</field>
+            </createData>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteProduct4"/>
+            <deleteData createDataKey="simpleProduct5" stepKey="deleteProduct5"/>
+            <deleteData createDataKey="simpleProduct6" stepKey="deleteProduct6"/>
+            <deleteData createDataKey="simpleProduct7" stepKey="deleteProduct7"/>
+            <deleteData createDataKey="simpleProduct8" stepKey="deleteProduct8"/>
+            <deleteData createDataKey="simpleProduct9" stepKey="deleteProduct9"/>
+            <deleteData createDataKey="simpleProduct10" stepKey="deleteProduct10"/>
+            <deleteData createDataKey="simpleProduct11" stepKey="deleteProduct11"/>
+        </after>
+
+        <!-- Open Product1 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+
+        <!-- Add Product1 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+            <argument name="productName" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product2 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct2PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+
+        <!-- Add Product2 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct2ToTheCart">
+            <argument name="productName" value="$$simpleProduct2.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product3 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct3PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct3$$"/>
+        </actionGroup>
+
+        <!-- Add Product3 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct3ToTheCart">
+            <argument name="productName" value="$$simpleProduct3.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product4 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct4PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct4$$"/>
+        </actionGroup>
+
+        <!-- Add Product4 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct4ToTheCart">
+            <argument name="productName" value="$$simpleProduct4.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product5 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct5PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct5$$"/>
+        </actionGroup>
+
+        <!-- Add Product5 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct5ToTheCart">
+            <argument name="productName" value="$$simpleProduct5.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product6 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct6PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct6$$"/>
+        </actionGroup>
+
+        <!-- Add Product6 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct6ToTheCart">
+            <argument name="productName" value="$$simpleProduct6.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product7 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct7PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct7$$"/>
+        </actionGroup>
+
+        <!-- Add Product7 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct7ToTheCart">
+            <argument name="productName" value="$$simpleProduct7.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product8 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct8PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct8$$"/>
+        </actionGroup>
+
+        <!-- Add Product8 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct8ToTheCart">
+            <argument name="productName" value="$$simpleProduct8.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product9 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct9PageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct9$$"/>
+        </actionGroup>
+
+        <!-- Add Product9 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct9ToTheCart">
+            <argument name="productName" value="$$simpleProduct9.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product10 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPage10AndVerifyProduct">
+            <argument name="product" value="$$simpleProduct10$$"/>
+        </actionGroup>
+
+        <!-- Add Product10 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct10ToTheCart">
+            <argument name="productName" value="$$simpleProduct10.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product11 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPage11AndVerifyProduct">
+            <argument name="product" value="$$simpleProduct11$$"/>
+        </actionGroup>
+
+        <!-- Add Product11 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct11ToTheCart">
+            <argument name="productName" value="$$simpleProduct11.name$$"/>
+        </actionGroup>
+
+        <!-- Open Mini Cart -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
+
+        <!-- Assert Product Count in Mini Cart -->
+        <actionGroup ref="StorefrontAssertMiniCartItemCountActionGroup" stepKey="assertProductCountAndTextInMiniCart">
+            <argument name="productCount" value="11"/>
+            <argument name="productCountText" value="10 of 11 Items in Cart"/>
+        </actionGroup>
+
+        <!-- Assert Product1 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct11MiniCart">
+            <argument name="productName" value="$$simpleProduct1.name$$"/>
+            <argument name="productPrice" value="$10.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product2 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct2MiniCart">
+            <argument name="productName" value="$$simpleProduct2.name$$"/>
+            <argument name="productPrice" value="$20.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product3 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
+            <argument name="productName" value="$$simpleProduct3.name$$"/>
+            <argument name="productPrice" value="$30.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product4 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct4MiniCart">
+            <argument name="productName" value="$$simpleProduct4.name$$"/>
+            <argument name="productPrice" value="$40.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product5 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct5MiniCart">
+            <argument name="productName" value="$$simpleProduct5.name$$"/>
+            <argument name="productPrice" value="$50.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product6 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct6MiniCart">
+            <argument name="productName" value="$$simpleProduct6.name$$"/>
+            <argument name="productPrice" value="$60.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product7 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct7MiniCart">
+            <argument name="productName" value="$$simpleProduct7.name$$"/>
+            <argument name="productPrice" value="$70.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product8 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct8MiniCart">
+            <argument name="productName" value="$$simpleProduct8.name$$"/>
+            <argument name="productPrice" value="$80.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product9 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct9MiniCart">
+            <argument name="productName" value="$$simpleProduct9.name$$"/>
+            <argument name="productPrice" value="$90.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product10 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct10MiniCart">
+            <argument name="productName" value="$$simpleProduct10.name$$"/>
+            <argument name="productPrice" value="$100.00"/>
+            <argument name="cartSubtotal" value="$660.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Order Summary -->
+        <actionGroup ref="StorefrontCheckoutAndAssertOrderSummaryDisplayActionGroup" stepKey="AssertItemsCountInOrderSummary">
+            <argument name="itemsText" value="10 of 11 Items in Cart"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeViewAndEditLinkInOrderSummary">
+            <argument name="selector" value="{{StorefrontMinicartSection.viewAndEditCart}}"/>
+        </actionGroup>
+
+        <!-- Click and open order summary tab-->
+        <conditionalClick selector="{{CheckoutOrderSummarySection.miniCartTab}}" dependentSelector="{{CheckoutOrderSummarySection.miniCartTabClosed}}" visible="true" stepKey="clickOnOrderSummaryTab"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Assert Shipping Page -->
+        <actionGroup ref="StorefrontAssertShippingAddressPageDisplayActionGroup" stepKey="assertShippingPageDisplay"/>
+
+        <!-- Assert Product2 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct2InOrderSummary">
+            <argument name="productName" value="$$simpleProduct2.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$20.00"/>
+        </actionGroup>
+
+        <!-- Assert Product3 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct3InOrderSummary">
+            <argument name="productName" value="$$simpleProduct3.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$30.00"/>
+        </actionGroup>
+
+        <!-- Assert Product4 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct4InOrderSummary">
+            <argument name="productName" value="$$simpleProduct4.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$40.00"/>
+        </actionGroup>
+
+        <!-- Assert Product5 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct5InOrderSummary">
+            <argument name="productName" value="$$simpleProduct5.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$50.00"/>
+        </actionGroup>
+
+        <!-- Assert Product6 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct6InOrderSummary">
+            <argument name="productName" value="$$simpleProduct6.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$60.00"/>
+        </actionGroup>
+
+        <!-- Assert Product7 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct7InOrderSummary">
+            <argument name="productName" value="$$simpleProduct7.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$70.00"/>
+        </actionGroup>
+
+        <!-- Assert Product8 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct8InOrderSummary">
+            <argument name="productName" value="$$simpleProduct8.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$80.00"/>
+        </actionGroup>
+
+        <!-- Assert Product9 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct9InOrderSummary">
+            <argument name="productName" value="$$simpleProduct9.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$90.00"/>
+        </actionGroup>
+
+        <!-- Assert Product10 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct10InOrderSummary">
+            <argument name="productName" value="$$simpleProduct10.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$100.00"/>
+        </actionGroup>
+
+        <!-- Assert Product11 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct11InOrderSummary">
+            <argument name="productName" value="$$simpleProduct11.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$110.00"/>
+        </actionGroup>
+    </test>
+</tests>

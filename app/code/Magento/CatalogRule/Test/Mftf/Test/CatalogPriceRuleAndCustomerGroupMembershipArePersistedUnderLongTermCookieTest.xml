@@ -64,7 +64,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" userInput="$$createProduct.price$$" stepKey="checkPriceSimpleProduct"/>
 
-        <!--Login to storfront from customer and check price-->
+        <!--Login to storefront from customer and check price-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>

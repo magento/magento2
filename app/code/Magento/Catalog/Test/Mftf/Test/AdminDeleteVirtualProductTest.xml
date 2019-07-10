@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteVirtualProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Delete products"/>
+            <title value="Delete Virtual Product"/>
+            <description value="Admin should be able to delete a virtual product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11014"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="defaultVirtualProduct" stepKey="createVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProductFilteredBySkuAndName">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+        </actionGroup>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
+        <!--Verify product on product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.name$$)}}" stepKey="amOnVirtualProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
+        <!-- Search for the product by sku -->
+        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createVirtualProduct.sku$$" stepKey="fillSearchBarByProductSku"/>
+        <waitForPageLoad stepKey="waitForSearchButton"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForSearchResults"/>
+        <!-- Should not see any search results -->
+        <dontSee userInput="$$createVirtualProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
+        <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>
+        <!-- Go to the category page that we created in the before block -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <!-- Should not see the product -->
+        <dontSee userInput="$$createVirtualProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
+        <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
+    </test>
+</tests>

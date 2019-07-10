@@ -271,23 +271,6 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Return the base total amount minus discount.
-     *
-     * @param OrderItem|InvoiceItem|CreditmemoItem $item
-     * @return mixed
-     */
-    public function getBaseTotalAmount($item)
-    {
-        $baseTotalAmount = $item->getBaseRowTotal()
-            + $item->getBaseTaxAmount()
-            + $item->getBaseDiscountTaxCompensationAmount()
-            + $item->getBaseWeeeTaxAppliedAmount()
-            - $item->getBaseDiscountAmount();
-
-        return $baseTotalAmount;
-    }
-
-    /**
      * Return HTML for item total after discount
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
