@@ -1969,10 +1969,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         if ($this->getCustomerFirstname()) {
             $customerName = preg_replace(
-                '/\s+/', ' ', trim(
+                '/\s+/',
+                ' ',
+                trim(
                     $this->getCustomerPrefix() . ' ' . $this->getCustomerFirstname() .
-                    ' ' . $this->getCustomerMiddlename() . ' ' .
-                    $this->getCustomerLastname() . ' ' . $this->getCustomerSuffix()
+                        ' ' . $this->getCustomerMiddlename() . ' ' .
+                        $this->getCustomerLastname() . ' ' . $this->getCustomerSuffix()
                 )
             );
         } else {
