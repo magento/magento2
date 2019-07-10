@@ -16,9 +16,12 @@ use Magento\Framework\Api\Filter;
 class FulltextFilter implements FilterApplierInterface
 {
     /**
-     * Patterns using in preg_replace for emails
+     * Patterns using in preg_replace
      */
-    private const EMAIL_REPLACE_PATTERNS = ['/@/', '/\./'];
+    private $patterns = [
+        '/[@\.]/' => '\_',
+        '/([+\-><\(\)~*]+)/' => ' ',
+    ];
 
     /**
      * Returns list of columns from fulltext index (doesn't support more then one FTI per table)
@@ -75,8 +78,7 @@ class FulltextFilter implements FilterApplierInterface
      */
     private function escapeAgainstValue(string $value): string
     {
-        $value = preg_replace('/([+\-><\(\)~*]+)/', ' ', $value);
-        return preg_replace(self::EMAIL_REPLACE_PATTERNS, '\_', $value);
+        return preg_replace(array_keys($this->patterns), array_values($this->patterns), $value);
     }
 
     /**
