@@ -10,8 +10,8 @@
     <body>
         <referenceBlock name="customer_account_navigation">
             <block class="Magento\Customer\Block\Account\SortLinkInterface"
-                   ifconfig="braintree_section/braintree/active"
-                   name="customer-account-navigation-my-credit-cards-link"ifconfig="payment/braintree/active"
+                   name="customer-account-navigation-my-credit-cards-link"
+                   ifconfig="payment/braintree/active"
             >
                 <arguments>
                     <argument name="path" xsi:type="string">vault/cards/listaction</argument>

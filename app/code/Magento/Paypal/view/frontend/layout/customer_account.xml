@@ -9,7 +9,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="customer_account_navigation">
-            <block class="Magento\Paypal\Block\Customer\Account\BillingAgreementsLink"
+            <block class="Magento\Paypal\Block\Customer\Account\BillingAgreementsLinkInterface"
                    name="customer-account-navigation-billing-agreements-link"
                    ifconfig="payment/paypal_express/active"
             >

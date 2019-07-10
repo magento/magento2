@@ -176,4 +176,7 @@
             </argument>
         </arguments>
     </type>
+
+    <preference for="Magento\Paypal\Block\Customer\Account\BillingAgreementsLinkInterface"
+                type="Magento\Paypal\Block\Customer\Account\BillingAgreementsLink"/>
 </config>
