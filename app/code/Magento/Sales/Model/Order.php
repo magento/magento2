@@ -1503,7 +1503,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get item by quote item id
      *
      * @param mixed $quoteItemId
-     * @return  \Magento\Framework\DataObject|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function getItemByQuoteItemId($quoteItemId)
     {
@@ -1968,11 +1968,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCustomerName()
     {
         if ($this->getCustomerFirstname()) {
-            $customerName = preg_replace('/\s+/', ' ', trim(
-                $this->getCustomerPrefix() . ' ' . $this->getCustomerFirstname() .
-                ' ' . $this->getCustomerMiddlename() . ' ' .
-                $this->getCustomerLastname() . ' ' . $this->getCustomerSuffix()
-            ));
+            $customerName = preg_replace(
+                '/\s+/', ' ', trim(
+                    $this->getCustomerPrefix() . ' ' . $this->getCustomerFirstname() .
+                    ' ' . $this->getCustomerMiddlename() . ' ' .
+                    $this->getCustomerLastname() . ' ' . $this->getCustomerSuffix()
+                )
+            );
         } else {
             $customerName = (string)__('Guest');
         }
