@@ -52,6 +52,11 @@ class Config
     /**
      * XML path to Varnish 5 config template path
      */
+    const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
+
+    /**
+     * XML path to Varnish 5 config template path
+     */
     const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
 
     /**
@@ -145,8 +150,16 @@ class Config
             self::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-
-        $version = $vclTemplatePath === self::VARNISH_5_CONFIGURATION_PATH ? 5 : 4;
+        switch ($vclTemplatePath) {
+            case self::VARNISH_6_CONFIGURATION_PATH:
+                $version = 6;
+                break;
+            case self::VARNISH_5_CONFIGURATION_PATH:
+                $version = 5;
+                break;
+            default:
+                $version = 4;
+        }
         $sslOffloadedHeader = $this->_scopeConfig->getValue(
             \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER
         );

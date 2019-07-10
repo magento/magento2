@@ -18,6 +18,11 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
     /**
      * XML path to Varnish 5 config template path
      */
+    const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
+
+    /**
+     * XML path to Varnish 5 config template path
+     */
     const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
 
     /**
@@ -36,11 +41,17 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
     const VARNISH_SUPPORTED_VERSION_5 = '5';
 
     /**
+     *
+     */
+    const VARNISH_SUPPORTED_VERSION_6 = '6';
+
+    /**
      * @var array
      */
     private $supportedVarnishVersions = [
         self::VARNISH_SUPPORTED_VERSION_4 => self::VARNISH_4_CONFIGURATION_PATH,
         self::VARNISH_SUPPORTED_VERSION_5 => self::VARNISH_5_CONFIGURATION_PATH,
+        self::VARNISH_SUPPORTED_VERSION_6 => self::VARNISH_6_CONFIGURATION_PATH,
     ];
 
     /**
