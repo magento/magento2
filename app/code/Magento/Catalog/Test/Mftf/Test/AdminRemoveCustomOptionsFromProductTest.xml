@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveCustomOptionsFromProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create product with custom options"/>
+            <title value="Remove custom options from product"/>
+            <description value="Remove custom options from product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-11512"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <updateData entity="ProductWithTextFieldAndAreaAndFileOptions" createDataKey="createProduct" stepKey="updateProductWithOptions">
+                <requiredEntity createDataKey="createProduct"/>
+            </updateData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProductWithOptions"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductFilter"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <!-- Edit Simple Product -->
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProduct"/>
+        <!-- See 3 options are present -->
+        <actionGroup ref="AdminAssertProductCustomOptionVisible" stepKey="assertCustomOptionsField">
+            <argument name="option" value="ProductOptionField"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductCustomOptionVisible" stepKey="assertCustomOptionsArea">
+            <argument name="option" value="ProductOptionArea"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductCustomOptionVisible" stepKey="assertCustomOptionsFile">
+            <argument name="option" value="ProductOptionFile"/>
+        </actionGroup>
+        <!-- Click delete "Area" and "File" options -->
+        <actionGroup ref="AdminDeleteProductCustomOption" stepKey="deleteCustomOptionArea">
+            <argument name="option" value="ProductOptionArea"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteProductCustomOption" stepKey="deleteCustomOptionFile">
+            <argument name="option" value="ProductOptionFile"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductCustomOptionVisible" stepKey="assertVisibleCustomOptionField">
+            <argument name="option" value="ProductOptionField"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!-- See only "Field option" left Also we shouldn't see any other options -->
+        <actionGroup ref="AdminAssertProductCustomOptionVisible" stepKey="assertVisibleSecondCustomOptionField">
+            <argument name="option" value="ProductOptionField"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductHasNoCustomOption" stepKey="assertNoCustomOptionsFile">
+            <argument name="option" value="ProductOptionFileSecond"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductHasNoCustomOption" stepKey="assertNoCustomOptionsField">
+            <argument name="option" value="ProductOptionFieldSecond"/>
+        </actionGroup>
+        <!-- Click Add option "File" -->
+        <actionGroup ref="AddProductCustomOptionFile" stepKey="createAddOptionFile">
+            <argument name="option" value="ProductOptionFileSecond"/>
+        </actionGroup>
+        <!-- Click Add option "Field" -->
+        <actionGroup ref="AddProductCustomOptionField" stepKey="createCustomOptionField">
+            <argument name="option" value="ProductOptionFieldSecond"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductWithNewlyAddedOptions"/>
+        <!-- See 3 options are present -->
+        <actionGroup ref="AdminAssertProductCustomOptionVisible" stepKey="assertPresentCustomOptionField">
+            <argument name="option" value="ProductOptionField"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductCustomOptionVisible" stepKey="assertPresenceOfFileOption">
+            <argument name="option" value="ProductOptionFileSecond"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductCustomOptionVisible" stepKey="assertPresenceOfFieldOption">
+            <argument name="option" value="ProductOptionFieldSecond"/>
+        </actionGroup>
+        <!-- Delete All options and See no more options present on the page -->
+        <actionGroup ref="AdminDeleteAllProductCustomOptions" stepKey="deleteAllCustomOptions"/>
+        <!-- Product successfully saved and it has no options -->
+        <actionGroup ref="saveProductForm" stepKey="saveProductWithoutCustomOptions"/>
+        <actionGroup ref="AdminAssertProductHasNoCustomOptions" stepKey="assertNoCustomOptions"/>
+    </test>
+</tests>

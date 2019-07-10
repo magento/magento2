@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRenameMainWebsite">
+        <annotations>
+            <stories value="Rename Main Website."/>
+            <title value="Admin User Rename 'Main Website' In Admin Area."/>
+            <description value="Verify, renamed Main Website remains assigned to default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908778/scenarios/1954442"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional source and stock.-->
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <!--Assign Main Website as Sales Channel to Default Stock.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Rollback Main Website Name.-->
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="moveToAdminSystemStorePageToRestoreMainWebsiteName"/>
+            <click selector="{{AdminStoresGridSection.websiteName(_defaultWebsite.name)}}" stepKey="moveToWebsiteEditPageToRestoreWebsiteName"/>
+            <waitForPageLoad stepKey="waitForWebsiteFormPageToOpenToRestoreMainWebsiteName"/>
+            <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{_defaultWebsite.name}}" stepKey="restoreMainWebsiteName"/>
+            <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveMainWebsite"/>
+            <!--Disable created additional source and delete created additional stock.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <deleteData stepKey="deleteAdditionalStock" createDataKey="additionalStock"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+
+        <!--Rename Main Website.-->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="moveToAdminSystemStorePage"/>
+        <click selector="{{AdminStoresGridSection.websiteName(_defaultWebsite.name)}}" stepKey="moveToWebsiteEditPage"/>
+        <waitForPageLoad stepKey="waitForWebsiteFormPageToOpen"/>
+        <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="Main Website Edited" stepKey="enterNewWebsiteName"/>
+        <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite" />
+        <!--Verify Default Stock still assigned to Main Website.-->
+        <amOnPage url="{{AdminManageStockPage.url}}" stepKey="moveToStockGridStorePage"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="findDefaultStock">
+            <argument name="keyword" value="_defaultStock.name"/>
+        </actionGroup>
+        <see userInput="Main Website Edited (base)" selector="{{AdminGridRow.rowOne}}" stepKey="VerifySalesChannelForDefaultStock"/>
+    </test>
+</tests>

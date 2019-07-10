@@ -5,14 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
-<!-- Test XML Example -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStoreFrontendActionGroup">
         <arguments>
             <argument name="customStore" type="string"/>
-            <argument name="storeView1" type="string"/>
-            <argument name="storeView2" type="string"/>
+            <!-- defaultValue is blank so that it can be used in cases where there is only one store view -->
+            <argument name="storeView1" type="string" defaultValue=""/>
+            <argument name="storeView2" type="string" defaultValue=""/>
         </arguments>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
