@@ -255,4 +255,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="configurable" xsi:type="object"> Magento\ConfigurableProduct\Model\Inventory\ParentItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
