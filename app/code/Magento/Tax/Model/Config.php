@@ -845,7 +845,7 @@ class Config
                 case self::DISPLAY_TYPE_BOTH:
                     return self::PRICE_CONVERSION_MINUS;
                 case self::DISPLAY_TYPE_INCLUDING_TAX:
-                    $res = false;
+                    $res = true;
                     break;
                 default:
                     break;
