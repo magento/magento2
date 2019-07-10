@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateActiveHtmlTermEntityTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Checkout agreements"/>
+            <title value="Create active HTML checkout agreement"/>
+            <description value="Admin should be able to create active HTML checkout agreement"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value=""/>
+            <group value="checkoutAgreements"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
+            <createData entity="SimpleTwo" stepKey="createdProduct"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+            <deleteData createDataKey="createdProduct" stepKey="deletedProduct"/>
+            <actionGroup ref="DeleteTerm" stepKey="deleteTerm">
+                <argument name="term" value="activeHtmlTerm"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="CreateNewTerm" stepKey="createTerm">
+            <argument name="term" value="activeHtmlTerm"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTermInGrid" stepKey="assertTermInGrid">
+            <argument name="termName" value="{{activeHtmlTerm.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertTermInCheckout" stepKey="assertTermInCheckout">
+            <argument name="termCheckboxText" value="{{activeHtmlTerm.checkboxText}}"/>
+            <argument name="product" value="$$createdProduct$$"/>
+        </actionGroup>
+    </test>
+</tests>

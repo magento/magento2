@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertTermInCheckout">
+        <arguments>
+            <argument name="termCheckboxText" type="string"/>
+            <argument name="product" defaultValue="SimpleTwo"/>
+        </arguments>
+
+        <!--Add product to cart-->
+        <amOnPage url="{{StorefrontProductPage.url(product.custom_attributes[url_key])}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
+        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProductAddedMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+
+        <!--Go to Checkout-->
+        <waitForElementNotVisible selector="{{StorefrontMinicartSection.emptyCart}}" stepKey="waitUpdateQuantity"/>
+        <wait time="5" stepKey="waitMinicartRendering"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+
+        <!--Process steps-->
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask1"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('')}}" stepKey="selectShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+
+        <!--Check if agreement is present on checkout and select it-->
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{termCheckboxText}}" stepKey="seeTermInCheckout"/>
+        <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" userInput="{{termCheckboxText}}" stepKey="checkAgreement"/>
+
+        <!--Checkout select Check/Money Order payment-->
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+
+        <!--See success messages-->
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
+    </actionGroup>
+</actionGroups>
