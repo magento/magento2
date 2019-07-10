@@ -34,6 +34,4 @@
         <plugin name="widget-layout-update-plugin"
                 type="Magento\Widget\Model\ResourceModel\Layout\Plugin" sortOrder="10"/>
     </type>
-    <preference for="Magento\Widget\Api\DeleteWidgetInstanceByIdInterface"
-                type="Magento\Widget\Model\DeleteWidgetInstanceById" />
 </config>

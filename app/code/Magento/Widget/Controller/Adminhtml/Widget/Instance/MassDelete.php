@@ -4,6 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
 use Magento\Backend\App\Action;
@@ -14,7 +16,7 @@ use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Widget\Model\DeleteWidgetInstanceById;
+use Magento\Widget\Model\DeleteWidgetById;
 
 /**
  * Class MassDelete
@@ -29,20 +31,20 @@ class MassDelete extends Action implements HttpPostActionInterface
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * @var DeleteWidgetInstanceById
+     * @var DeleteWidgetById
      */
-    private $deleteWidgetInstanceById;
+    private $deleteWidgetById;
 
     /**
      * @param Context $context
-     * @param DeleteWidgetInstanceById $deleteWidgetInstanceById
+     * @param DeleteWidgetById $deleteWidgetById
      */
     public function __construct(
         Context $context,
-        DeleteWidgetInstanceById $deleteWidgetInstanceById
+        DeleteWidgetById $deleteWidgetById
     ) {
         parent::__construct($context);
-        $this->deleteWidgetInstanceById = $deleteWidgetInstanceById;
+        $this->deleteWidgetById = $deleteWidgetById;
     }
 
     /**
@@ -51,7 +53,7 @@ class MassDelete extends Action implements HttpPostActionInterface
      * @return Redirect
      * @throws \Exception
      */
-    public function execute()
+    public function execute(): Redirect
     {
         $deletedInstances = 0;
         $notDeletedInstances = [];
@@ -69,7 +71,7 @@ class MassDelete extends Action implements HttpPostActionInterface
 
         foreach ($instanceIds as $instanceId) {
             try {
-                $this->deleteWidgetInstanceById->execute((int) $instanceId);
+                $this->deleteWidgetById->execute((int) $instanceId);
                 $deletedInstances++;
             } catch (NoSuchEntityException $e) {
                 $notDeletedInstances[] = $instanceId;
@@ -96,7 +98,7 @@ class MassDelete extends Action implements HttpPostActionInterface
     /**
      * @return array
      */
-    private function getInstanceIds()
+    private function getInstanceIds(): array
     {
         $instanceIds = $this->getRequest()->getParam('delete');
 
@@ -110,7 +112,7 @@ class MassDelete extends Action implements HttpPostActionInterface
     /**
      * @return ResultInterface|RedirectInterface
      */
-    private function getResultPage()
+    private function getResultPage(): ?ResultInterface
     {
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
     }

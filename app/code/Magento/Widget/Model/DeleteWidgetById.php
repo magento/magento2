@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Widget\Model;
 
@@ -12,9 +13,9 @@ use Magento\Widget\Model\Widget\InstanceFactory as WidgetInstanceFactory;
 use Magento\Widget\Model\Widget\Instance as WidgetInstance;
 
 /**
- * Class DeleteWidgetInstanceById
+ * Class DeleteWidgetById
  */
-class DeleteWidgetInstanceById
+class DeleteWidgetById
 {
     /**
      * @var InstanceResourceModel
@@ -57,7 +58,7 @@ class DeleteWidgetInstanceById
      * @return WidgetInstance
      * @throws NoSuchEntityException
      */
-    private function getWidgetById(int $instanceId)
+    private function getWidgetById(int $instanceId): WidgetInstance
     {
         /** @var WidgetInstance $widgetInstance */
         $widgetInstance = $this->instanceFactory->create();
