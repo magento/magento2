@@ -49,8 +49,9 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
+
     /**
-     * @var \Zend\Uri\UriInterface|null
+     * @var \Zend\Uri\Uri|null
      */
     private $uri;
 
@@ -63,7 +64,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Zend\Uri\UriInterface|null $uri
+     * @param \Zend\Uri\Uri|null $uri
      * @param bool $canUseSessionIdInParam
      */
     public function __construct(
@@ -73,7 +74,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Zend\Uri\UriInterface $uri = null,
+        \Zend\Uri\Uri $uri = null,
         $canUseSessionIdInParam = true
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;

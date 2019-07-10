@@ -11,6 +11,8 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Theme wysiwyg storage model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Storage
 {
