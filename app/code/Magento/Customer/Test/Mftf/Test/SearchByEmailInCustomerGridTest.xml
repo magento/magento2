@@ -10,7 +10,7 @@
     <test name="SearchByEmailInCustomerGridTest">
         <annotations>
             <features value="Customer"/>
-            <stories value="Customer Search email searching"/>
+            <stories value="Customer grid search"/>
             <title value="Admin customer grid email searching"/>
             <description value="Admin customer grid searching by email in keyword"/>
             <severity value="MAJOR"/>
@@ -19,12 +19,8 @@
             <group value="customer"/>
         </annotations>
         <before>
-            <createData entity="Simple_US_Customer" stepKey="createFirstCustomer">
-                <field key="email">test1@example.com</field>
-            </createData>
-            <createData entity="Simple_US_Customer" stepKey="createSecondCustomer">
-                <field key="email">test2@example.com</field>
-            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="createSecondCustomer"/>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
