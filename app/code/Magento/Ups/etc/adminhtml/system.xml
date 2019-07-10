@@ -13,6 +13,9 @@
                 <field id="access_license_number" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Access License Number</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="carriers/ups/active">1</field>
+                    </depends>
                 </field>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled for Checkout</label>
@@ -84,6 +87,9 @@
                 <field id="password" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Password</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="carriers/ups/active">1</field>
+                    </depends>
                 </field>
                 <field id="pickup" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Pickup Method</label>
@@ -113,6 +119,9 @@
                 <field id="username" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>User ID</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="carriers/ups/active">1</field>
+                    </depends>
                 </field>
                 <field id="negotiated_active" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enable Negotiated Rates</label>

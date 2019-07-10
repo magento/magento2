@@ -14,11 +14,14 @@
             <argument name="orderId" type="string"/>
         </arguments>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
-        <waitForPageLoad stepKey="waitForOrderGridLoad"/>
+        <waitForPageLoad stepKey="waitForOrdersPage"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <waitForPageLoad stepKey="waitForClearFilters"/>
         <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
+        <waitForPageLoad stepKey="waitForClickFilters"/>
         <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="{{orderId}}" stepKey="fillOrderIdFilter"/>
         <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForApplyFilters"/>
     </actionGroup>
 
     <!--Filter order grid by the billing name field-->
@@ -73,5 +76,10 @@
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToGridOrdersPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+    </actionGroup>
+
+    <actionGroup name="OpenOrderById" extends="filterOrderGridById">
+        <click selector="{{AdminDataGridTableSection.firstRow}}" after="clickOrderApplyFilters" stepKey="openOrderViewPage"/>
+        <waitForPageLoad after="openOrderViewPage" stepKey="waitForOrderViewPageOpened"/>
     </actionGroup>
 </actionGroups>

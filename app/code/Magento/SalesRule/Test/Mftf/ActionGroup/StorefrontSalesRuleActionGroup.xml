@@ -32,8 +32,8 @@
     <!-- Check applied discount in cart summary -->
     <actionGroup name="StorefrontCheckCouponAppliedActionGroup">
         <arguments>
-            <argument name="rule"/>
-            <argument name="discount" type="string"/>
+            <argument name="rule" />
+            <argument name="discount" type="string" />
         </arguments>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="waitForDiscountTotal"/>
         <see userInput="{{rule.store_labels[1][store_label]}}" selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="assertDiscountLabel"/>
@@ -51,6 +51,7 @@
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>

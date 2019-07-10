@@ -87,7 +87,7 @@ class SynonymReader extends AbstractDb
     {
         $matchQuery = $this->fullTextSelect->getMatchQuery(
             ['synonyms' => 'synonyms'],
-            $phrase,
+            $this->escapePhrase($phrase),
             Fulltext::FULLTEXT_MODE_BOOLEAN
         );
         $query = $this->getConnection()->select()->from(
@@ -95,6 +95,18 @@ class SynonymReader extends AbstractDb
         )->where($matchQuery);
 
         return $this->getConnection()->fetchAll($query);
+    }
+
+    /**
+     * Cut trailing plus or minus sign, and @ symbol, using of which causes InnoDB to report a syntax error.
+     *
+     * @see https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html
+     * @param string $phrase
+     * @return string
+     */
+    private function escapePhrase(string $phrase): string
+    {
+        return preg_replace('/@+|[@+-]+$|[<>]/', '', $phrase);
     }
 
     /**

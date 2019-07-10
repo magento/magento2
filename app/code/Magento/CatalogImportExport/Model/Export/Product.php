@@ -351,6 +351,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * Product constructor.
+     *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -443,8 +444,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if ($pathSize > 1) {
                 $path = [];
                 for ($i = 1; $i < $pathSize; $i++) {
-                    $name = $collection->getItemById($structure[$i])->getName();
-                    $path[] = $this->quoteCategoryDelimiter($name);
+                    $childCategory = $collection->getItemById($structure[$i]);
+                    if ($childCategory) {
+                        $name = $childCategory->getName();
+                        $path[] = $this->quoteCategoryDelimiter($name);
+                    }
                 }
                 $this->_rootCategories[$category->getId()] = array_shift($path);
                 if ($pathSize > 2) {
@@ -672,8 +676,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Update data row with information about categories. Return true, if data row was updated
      *
-     * @param array &$dataRow
-     * @param array &$rowCategories
+     * @param array $dataRow
+     * @param array $rowCategories
      * @param int $productId
      * @return bool
      */
@@ -839,6 +843,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     public function export()
     {
         //Execution time may be very long
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
 
         $writer = $this->getWriter();
@@ -941,15 +946,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function loadCollection(): array
     {
         $data = [];
-
         $collection = $this->_getEntityCollection();
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
+            $collection->setOrder('entity_id', 'asc');
+            $this->_prepareEntityCollection($collection);
             $collection->setStoreId($storeId);
+            $collection->load();
             foreach ($collection as $itemId => $item) {
                 $data[$itemId][$storeId] = $item;
             }
+            $collection->clear();
         }
-        $collection->clear();
 
         return $data;
     }
@@ -960,6 +967,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function collectRawData()
     {
@@ -1054,6 +1062,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         return $data;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Wrap values with double quotes if "Fields Enclosure" option is enabled

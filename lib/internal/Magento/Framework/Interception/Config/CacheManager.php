@@ -98,7 +98,7 @@ class CacheManager
      */
     public function clean(string $key)
     {
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$key]);
+        $this->cache->remove($key);
     }
 
     /**

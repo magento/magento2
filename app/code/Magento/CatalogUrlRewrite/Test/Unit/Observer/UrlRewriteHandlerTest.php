@@ -138,8 +138,14 @@ class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
             ->willReturn(1);
         $category->expects($this->any())
             ->method('getData')
-            ->with('save_rewrites_history')
-            ->willReturn(true);
+            ->withConsecutive(
+                [$this->equalTo('save_rewrites_history')],
+                [$this->equalTo('initial_setup_flag')]
+            )
+            ->willReturnOnConsecutiveCalls(
+                true,
+                null
+            );
 
         /* @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject $childCategory1 */
         $childCategory1 = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
@@ -175,6 +181,7 @@ class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('addIdFilter')
             ->willReturnSelf();
         $productCollection->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addStoreFilter')->willReturnSelf();
         $productCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
         $iterator = new \ArrayIterator([]);
         $productCollection->expects($this->any())->method('getIterator')->will($this->returnValue($iterator));

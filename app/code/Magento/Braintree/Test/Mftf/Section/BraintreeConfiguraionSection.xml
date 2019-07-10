@@ -5,6 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="BraintreeConfiguraionSection">
@@ -30,6 +31,5 @@
         <element name="actionAuthorize" type="text" selector="//select[@id='payment_us_braintree_section_braintree_braintree_paypal_payment_action']/option[text()='Authorize']"/>
         <element name="save" type="button" selector="//span[text()='Save Config']"/>
         <element name="successfulMessage" type="text" selector="//*[@data-ui-id='messages-message-success']"/>
-
     </section>
 </sections>

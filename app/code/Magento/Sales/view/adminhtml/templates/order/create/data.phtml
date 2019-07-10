@@ -4,16 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Data $block */
 ?>
 <div class="page-create-order">
     <script>
     require(["Magento_Sales/order/create/form"], function(){
-        order.setCurrencySymbol('<?= /* @escapeNotVerified */ $block->getCurrencySymbol($block->getCurrentCurrencyCode()) ?>')
+        order.setCurrencySymbol('<?= $block->escapeJs($block->getCurrencySymbol($block->getCurrentCurrencyCode())) ?>')
     });
 </script>
-    <div class="order-details<?php if ($block->getCustomerId()): ?> order-details-existing-customer<?php endif; ?>">
+    <div class="order-details<?php if ($block->getCustomerId()) : ?> order-details-existing-customer<?php endif; ?>">
 
         <div id="order-additional_area" style="display: none" class="admin__page-section order-additional-area">
             <?= $block->getChildHtml('additional_area') ?>
@@ -35,7 +34,7 @@
 
         <section id="order-addresses" class="admin__page-section order-addresses">
             <div class="admin__page-section-title">
-                <span class="title"><?= /* @escapeNotVerified */ __('Address Information') ?></span>
+                <span class="title"><?= $block->escapeHtml(__('Address Information')) ?></span>
             </div>
             <div class="admin__page-section-content">
                 <div id="order-billing_address" class="admin__page-section-item order-billing-address">
@@ -47,19 +46,21 @@
             </div>
         </section>
 
-        <section id="shipping-methods" class="admin__page-section order-methods">
-            <div id="order-shipping_method" class="admin__page-section-item order-shipping-method">
-                <?= $block->getChildHtml('shipping_method') ?>
+        <section id="order-methods" class="admin__page-section order-methods">
+            <div class="admin__page-section-title">
+                <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Information')) ?></span>
+            </div>
+            <div class="admin__page-section-content">
+                <div id="order-billing_method" class="admin__page-section-item order-billing-method">
+                    <?= $block->getChildHtml('billing_method') ?>
+                </div>
+                <div id="order-shipping_method" class="admin__page-section-item order-shipping-method">
+                    <?= $block->getChildHtml('shipping_method') ?>
+                </div>
             </div>
         </section>
 
-        <section id="payment-methods" class="admin__page-section payment-methods">
-            <div id="order-billing_method" class="admin__page-section-item order-billing-method">
-                <?= $block->getChildHtml('billing_method') ?>
-            </div>
-        </section>
-
-        <?php if ($block->getChildBlock('card_validation')): ?>
+        <?php if ($block->getChildBlock('card_validation')) : ?>
         <section id="order-card_validation" class="admin__page-section order-card-validation">
             <?= $block->getChildHtml('card_validation') ?>
         </section>
@@ -69,11 +70,11 @@
 
         <section class="admin__page-section order-summary">
             <div class="admin__page-section-title">
-                <span class="title"><?= /* @escapeNotVerified */ __('Order Total') ?></span>
+                <span class="title"><?= $block->escapeHtml(__('Order Total')) ?></span>
             </div>
             <div class="admin__page-section-content">
                 <fieldset class="admin__fieldset order-history" id="order-comment">
-                    <legend class="admin__legend"><span><?= /* @escapeNotVerified */ __('Order History') ?></span></legend>
+                    <legend class="admin__legend"><span><?= $block->escapeHtml(__('Order History')) ?></span></legend>
                     <br>
                     <?= $block->getChildHtml('comment') ?>
                 </fieldset>
@@ -84,19 +85,19 @@
         </section>
     </div>
 
-    <?php if ($block->getCustomerId()): ?>
+    <?php if ($block->getCustomerId()) : ?>
         <div class="order-sidebar">
             <div class="store-switcher order-currency">
                 <label class="admin__field-label" for="currency_switcher">
-                    <?= /* @escapeNotVerified */ __('Order Currency:') ?>
+                    <?= $block->escapeHtml(__('Order Currency:')) ?>
                 </label>
                 <select id="currency_switcher"
                         class="admin__control-select"
                         name="order[currency]"
                         onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
-                    <?php foreach ($block->getAvailableCurrencies() as $_code): ?>
-                        <option value="<?= /* @escapeNotVerified */ $_code ?>"<?php if ($_code == $block->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?= /* @escapeNotVerified */ $block->getCurrencySymbol($_code) ?>">
-                            <?= /* @escapeNotVerified */ $block->getCurrencyName($_code) ?>
+                    <?php foreach ($block->getAvailableCurrencies() as $_code) : ?>
+                        <option value="<?= $block->escapeHtmlAttr($_code) ?>"<?php if ($_code == $block->getCurrentCurrencyCode()) : ?> selected="selected"<?php endif; ?> symbol="<?= $block->escapeHtmlAttr($block->getCurrencySymbol($_code)) ?>">
+                            <?= $block->escapeHtml($block->getCurrencyName($_code)) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -106,5 +107,4 @@
             </div>
         </div>
     <?php endif; ?>
-
 </div>

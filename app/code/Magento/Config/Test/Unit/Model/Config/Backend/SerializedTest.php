@@ -9,7 +9,11 @@ use Magento\Config\Model\Config\Backend\Serialized;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Class SerializedTest
+ */
 class SerializedTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Config\Model\Config\Backend\Serialized */
@@ -18,14 +22,20 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
     /** @var Json|\PHPUnit_Framework_MockObject_MockObject */
     private $serializerMock;
 
+    /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $loggerMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $contextMock = $this->createMock(Context::class);
         $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $contextMock->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
+        $contextMock->method('getLogger')
+            ->willReturn($this->loggerMock);
         $this->serializedConfig = $objectManager->getObject(
             Serialized::class,
             [
@@ -70,6 +80,20 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
                 ['string array']
             ]
         ];
+    }
+
+    public function testAfterLoadWithException()
+    {
+        $value = '{"key":';
+        $expected = false;
+        $this->serializedConfig->setValue($value);
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->willThrowException(new \Exception());
+        $this->loggerMock->expects($this->once())
+            ->method('critical');
+        $this->serializedConfig->afterLoad();
+        $this->assertEquals($expected, $this->serializedConfig->getValue());
     }
 
     /**

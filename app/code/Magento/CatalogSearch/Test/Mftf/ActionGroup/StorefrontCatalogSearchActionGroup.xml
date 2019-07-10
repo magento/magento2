@@ -11,15 +11,66 @@
     <!-- Quick search the phrase and check if the result page contains correct information -->
     <actionGroup name="StorefrontCheckQuickSearchActionGroup">
         <arguments>
-            <argument name="phrase"/>
+            <argument name="phrase" />
         </arguments>
-        <submitForm selector="#search_mini_form" parameterArray="['q' => '{{phrase}}']" stepKey="fillQuickSearch" />
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{phrase}}]" stepKey="fillQuickSearch" />
         <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
         <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
         <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
         <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
     </actionGroup>
 
+    <!-- Quick search the phrase and check if the result page contains correct information, usable with type="string" -->
+    <actionGroup name="StorefrontCheckQuickSearchStringActionGroup">
+        <arguments>
+            <argument name="phrase" type="string"/>
+        </arguments>
+        <fillField stepKey="fillInput" selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{phrase}}"/>
+        <submitForm selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" parameterArray="[]" stepKey="submitQuickSearch" />
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
+        <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
+        <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
+        <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
+    </actionGroup>
+
+    <!-- Opens product from QuickSearch and performs assertions-->
+    <actionGroup name="StorefrontOpenProductFromQuickSearch">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productUrlKey" type="string"/>
+        </arguments>
+        <click stepKey="openProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
+        <waitForPageLoad stepKey="waitForProductLoad"/>
+        <seeInCurrentUrl url="{{productUrlKey}}" stepKey="checkUrl"/>
+        <see stepKey="checkName" selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{productName}}"/>
+    </actionGroup>
+
+    <!-- Adds product from Quicksearch page and perform assertions-->
+    <actionGroup name="StorefrontAddToCartFromQuickSearch">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <moveMouseOver stepKey="hoverOverProduct" selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}} {{StorefrontQuickSearchResultsSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchCheckProductNameInGrid">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="index" type="string"/>
+        </arguments>
+        <see selector="{{StorefrontQuickSearchResultsSection.productByIndex(index)}}" userInput="{{productName}}" stepKey="seeProductName"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchCheckProductNameNotInGrid">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <dontSee selector="{{StorefrontQuickSearchResultsSection.allResults}}" userInput="{{productName}}" stepKey="dontSeeProductName"/>
+    </actionGroup>
+    
     <!-- Open advanced search page -->
     <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">
         <click selector="{{StorefrontFooterSection.AdvancedSearch}}" stepKey="clickAdvancedSearchLink" />
@@ -48,7 +99,7 @@
     <!-- Go to store's advanced catalog search page -->
     <actionGroup name="GoToStoreViewAdvancedCatalogSearchActionGroup">
         <amOnPage url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="90" stepKey="waitForPageLoad"/>
     </actionGroup>
 
     <!-- Storefront advanced catalog search by product name -->
@@ -115,5 +166,10 @@
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.Description}}" userInput="{{description}}" stepKey="fillDescription"/>
         <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <!-- Asserts that search results do not contain any results-->
+    <actionGroup name="StorefrontCheckSearchIsEmpty">
+        <see stepKey="checkEmpty" selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="Your search returned no results"/>
     </actionGroup>
 </actionGroups>

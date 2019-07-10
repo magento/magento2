@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCustomerWithPrefixTest">
+        <annotations>
+            <stories value="Create customer"/>
+            <title value="Create customer, with prefix"/>
+            <description value="Login as admin and create a customer with name prefix and suffix"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5308"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open New Customer Page  and create a customer with Prefix and Suffix-->
+        <amOnPage url="{{AdminNewCustomerPage.url}}" stepKey="navigateToNewCustomerPage"/>
+        <waitForPageLoad stepKey="waitToCustomerPageLoad"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="Wholesale" stepKey="fillCustomerGroup"/>
+        <fillField selector="{{AdminCustomerAccountInformationSection.namePrefix}}" userInput="{{CustomerEntityOne.prefix}}" stepKey="fillNamePrefix"/>
+        <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
+        <fillField selector="{{AdminCustomerAccountInformationSection.nameSuffix}}" userInput="{{CustomerEntityOne.suffix}}" stepKey="fillNameSuffix"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
+        <fillField userInput="{{CustomerEntityOne.dob}}" selector="{{AdminCustomerAccountInformationSection.dateOfBirth}}" stepKey="fillDateOfBirth"/>
+        <selectOption userInput="Male" selector="{{AdminCustomerAccountInformationSection.gender}}" stepKey="fillGender"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+        <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+        <reloadPage stepKey="reloadPage"/>
+
+        <!--Filter the customer From grid-->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail">
+            <argument name="email" value="{{CustomerEntityOne.email}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Assert Customer in grid -->
+        <see userInput="{{CustomerEntityOne.prefix}} {{CustomerEntityOne.firstname}} {{CustomerEntityOne.lastname}} {{CustomerEntityOne.suffix}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertFirstName"/>
+        <see userInput="Wholesale" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertCustomerGroup"/>
+        <see userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
+        <see userInput="Jan 1, 1970" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertDateOfBirth"/>
+        <see userInput="Male" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertGender"/>
+
+        <!--Assert Customer Form -->
+        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton1"/>
+        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad1"/>
+        <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
+        <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.namePrefix}}" userInput="{{CustomerEntityOne.prefix}}" stepKey="seeCustomerNamePrefix"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="seeCustomerFirstName"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="seeCustomerLastName"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.nameSuffix}}" userInput="{{CustomerEntityOne.suffix}}" stepKey="seeCustomerNameSuffix"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeCustomerEmail"/>
+    </test>
+</tests>

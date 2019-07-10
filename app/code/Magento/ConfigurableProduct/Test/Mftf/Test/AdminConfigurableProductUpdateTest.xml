@@ -17,6 +17,9 @@
             <testCaseId value="MC-88"/>
             <group value="ConfigurableProduct"/>
             <severity value="AVERAGE"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
 
         <before>
@@ -57,7 +60,13 @@
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToggleDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="MFTF automation!" stepKey="fillDescription"/>
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="clickSave"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 3 record(s) were updated." stepKey="seeSaveSuccess"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSaveSuccess"/>
+
+        <!-- Run cron twice -->
+        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitFormToReload1"/>
 
         <!-- Check storefront for description -->
         <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoProduct1"/>
