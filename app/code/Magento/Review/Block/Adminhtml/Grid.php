@@ -18,6 +18,9 @@
  */
 namespace Magento\Review\Block\Adminhtml;
 
+/**
+ * Class Grid creates grid for product reviews
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
