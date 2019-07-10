@@ -152,13 +152,13 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
                                 <column xmlns:xsi="xsi" xsi:type="integer" name="first_column" nullable="1" 
                                     unsigned="0"/>
                                 <column xmlns:xsi="xsi" xsi:type="date" name="second_column" nullable="0"/>
-                                <constraint xmlns:xsi="xsi" xsi:type="foreign" name="some_foreign_constraint" 
+                                <constraint xmlns:xsi="xsi" xsi:type="foreign" referenceId="some_foreign_constraint" 
                                     referenceTable="table" referenceColumn="column" 
                                     table="first_table" column="first_column"/>
-                                <constraint xmlns:xsi="xsi" xsi:type="primary" name="PRIMARY">
+                                <constraint xmlns:xsi="xsi" xsi:type="primary" referenceId="PRIMARY">
                                     <column name="second_column"/>
                                 </constraint>
-                                <index name="TEST_INDEX" indexType="btree">
+                                <index referenceId="TEST_INDEX" indexType="btree">
                                     <column name="first_column"/>
                                 </index>
                             </table>

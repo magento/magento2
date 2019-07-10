@@ -45,6 +45,8 @@ class AddProductsToCart
      * @param Quote $cart
      * @param array $cartItems
      * @throws GraphQlInputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
     public function execute(Quote $cart, array $cartItems): void
     {

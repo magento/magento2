@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Option\ArrayInterface;
-use Magento\Framework\Exception\InputException;
 
 /**
  * Data collection
@@ -235,20 +235,12 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Get current collection page
      *
      * @param  int $displacement
-     * @throws \Magento\Framework\Exception\InputException
      * @return int
      */
     public function getCurPage($displacement = 0)
     {
         if ($this->_curPage + $displacement < 1) {
             return 1;
-        } elseif ($this->_curPage > $this->getLastPageNumber() && $displacement === 0) {
-            throw new InputException(
-                __(
-                    'currentPage value %1 specified is greater than the %2 page(s) available.',
-                    [$this->_curPage, $this->getLastPageNumber()]
-                )
-            );
         } elseif ($this->_curPage + $displacement > $this->getLastPageNumber()) {
             return $this->getLastPageNumber();
         } else {
@@ -400,7 +392,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Adding item to item array
      *
-     * @param   \Magento\Framework\DataObject $item
+     * @param \Magento\Framework\DataObject $item
      * @return $this
      * @throws \Exception
      */
@@ -410,6 +402,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception(
                     'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
@@ -461,7 +454,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Remove item from collection by item key
      *
-     * @param   mixed $key
+     * @param mixed $key
      * @return $this
      */
     public function removeItemByKey($key)
@@ -492,6 +485,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         $this->_setIsLoaded(false);
         $this->_items = [];
+        $this->_totalRecords = null;
         return $this;
     }
 
@@ -548,8 +542,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Setting data for all collection items
      *
-     * @param   mixed $key
-     * @param   mixed $value
+     * @param mixed $key
+     * @param mixed $value
      * @return $this
      */
     public function setDataToAll($key, $value = null)
@@ -569,7 +563,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set current page
      *
-     * @param   int $page
+     * @param int $page
      * @return $this
      */
     public function setCurPage($page)
@@ -581,7 +575,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set collection page size
      *
-     * @param   int $size
+     * @param int $size
      * @return $this
      */
     public function setPageSize($size)
@@ -593,8 +587,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set select order
      *
-     * @param   string $field
-     * @param   string $direction
+     * @param string $field
+     * @param string $direction
      * @return $this
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
@@ -606,7 +600,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set collection item class name
      *
-     * @param  string $className
+     * @param string $className
      * @return $this
      * @throws \InvalidArgumentException
      */
@@ -895,9 +889,14 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return string[]
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff(
             $properties,
@@ -913,9 +912,14 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return void
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_entityFactory = $objectManager->get(EntityFactoryInterface::class);
     }

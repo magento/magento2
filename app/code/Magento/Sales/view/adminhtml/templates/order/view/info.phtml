@@ -7,9 +7,6 @@
 /**
  * @var \Magento\Sales\Block\Adminhtml\Order\View\Info $block
  */
-
-// @codingStandardsIgnoreFile
-
 $order = $block->getOrder();
 
 $orderAdminDate = $block->formatDate(
@@ -38,10 +35,10 @@ $customerUrl = $block->getCustomerViewUrl();
             <?php $confirmationEmailStatusMessage = $order->getEmailSent() ? __('The order confirmation email was sent') : __('The order confirmation email is not sent'); ?>
             <div class="admin__page-section-item-title">
                 <span class="title">
-                    <?php if ($block->getNoUseOrderLink()): ?>
+                    <?php if ($block->getNoUseOrderLink()) : ?>
                         <?= $block->escapeHtml(__('Order # %1', $order->getRealOrderId())) ?> (<span><?= $block->escapeHtml($confirmationEmailStatusMessage) ?></span>)
-                    <?php else: ?>
-                        <a href="<?= $block->escapeHtml($block->getViewUrl($order->getId())) ?>"><?= $block->escapeHtml(__('Order # %1', $order->getRealOrderId())) ?></a>
+                    <?php else : ?>
+                        <a href="<?= $block->escapeUrl($block->getViewUrl($order->getId())) ?>"><?= $block->escapeHtml(__('Order # %1', $order->getRealOrderId())) ?></a>
                         <span>(<?= $block->escapeHtml($confirmationEmailStatusMessage) ?>)</span>
                     <?php endif; ?>
                 </span>
@@ -52,7 +49,7 @@ $customerUrl = $block->getCustomerViewUrl();
                     <th><?= $block->escapeHtml(__('Order Date')) ?></th>
                     <td><?= $block->escapeHtml($orderAdminDate) ?></td>
                 </tr>
-                <?php if ($orderAdminDate != $orderStoreDate):?>
+                <?php if ($orderAdminDate != $orderStoreDate) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Order Date (%1)', $block->getTimezoneForStore($order->getStore()))) ?></th>
                         <td><?= $block->escapeHtml($orderStoreDate) ?></td>
@@ -63,48 +60,48 @@ $customerUrl = $block->getCustomerViewUrl();
                     <td><span id="order_status"><?= $block->escapeHtml($order->getStatusLabel()) ?></span></td>
                 </tr>
                 <?= $block->getChildHtml() ?>
-                <?php if ($block->isSingleStoreMode() == false):?>
+                <?php if ($block->isSingleStoreMode() == false) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Purchased From')) ?></th>
                         <td><?= $block->escapeHtml($block->getOrderStoreName(), ['br']) ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($order->getRelationChildId()): ?>
+                <?php if ($order->getRelationChildId()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Link to the New Order')) ?></th>
                         <td>
-                            <a href="<?= $block->escapeHtml($block->getViewUrl($order->getRelationChildId())) ?>">
+                            <a href="<?= $block->escapeUrl($block->getViewUrl($order->getRelationChildId())) ?>">
                                 <?= $block->escapeHtml($order->getRelationChildRealId()) ?>
                             </a>
                         </td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($order->getRelationParentId()): ?>
+                <?php if ($order->getRelationParentId()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Link to the Previous Order')) ?></th>
                         <td>
-                            <a href="<?= $block->escapeHtml($block->getViewUrl($order->getRelationParentId())) ?>">
+                            <a href="<?= $block->escapeUrl($block->getViewUrl($order->getRelationParentId())) ?>">
                                 <?= $block->escapeHtml($order->getRelationParentRealId()) ?>
                             </a>
                         </td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($order->getRemoteIp() && $block->shouldDisplayCustomerIp()): ?>
+                <?php if ($order->getRemoteIp() && $block->shouldDisplayCustomerIp()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Placed from IP')) ?></th>
-                        <td><?= $block->escapeHtml($order->getRemoteIp()); echo $order->getXForwardedFor() ? ' (' . $block->escapeHtml($order->getXForwardedFor()) . ')' : ''; ?></td>
+                        <td><?= $block->escapeHtml($order->getRemoteIp()); ?><?= $order->getXForwardedFor() ? ' (' . $block->escapeHtml($order->getXForwardedFor()) . ')' : ''; ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($order->getGlobalCurrencyCode() != $order->getBaseCurrencyCode()): ?>
+                <?php if ($order->getGlobalCurrencyCode() != $order->getBaseCurrencyCode()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('%1 / %2 rate:', $order->getGlobalCurrencyCode(), $order->getBaseCurrencyCode())) ?></th>
                         <td><?= $block->escapeHtml($order->getBaseToGlobalRate()) ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()): ?>
+                <?php if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('%1 / %2 rate:', $order->getOrderCurrencyCode(), $order->getBaseCurrencyCode())) ?></th>
-                        <th><?= $block->escapeHtml($order->getBaseToOrderRate()) ?></th>
+                        <td><?= $block->escapeHtml($order->getBaseToOrderRate()) ?></td>
                     </tr>
                 <?php endif; ?>
             </table>
@@ -128,18 +125,18 @@ $customerUrl = $block->getCustomerViewUrl();
                     <tr>
                         <th><?= $block->escapeHtml(__('Customer Name')) ?></th>
                         <td>
-                            <?php if ($customerUrl): ?>
+                            <?php if ($customerUrl) : ?>
                                 <a href="<?= $block->escapeUrl($customerUrl) ?>" target="_blank">
                                     <span><?= $block->escapeHtml($order->getCustomerName()) ?></span>
                                 </a>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <?= $block->escapeHtml($order->getCustomerName()) ?>
                             <?php endif; ?>
                         </td>
                     </tr>
                     <tr>
                         <th><?= $block->escapeHtml(__('Email')) ?></th>
-                        <td><a href="mailto:<?php echo $block->escapeHtml($order->getCustomerEmail()) ?>"><?php echo $block->escapeHtml($order->getCustomerEmail()) ?></a></td>
+                        <td><a href="mailto:<?= $block->escapeHtmlAttr($order->getCustomerEmail()) ?>"><?= $block->escapeHtml($order->getCustomerEmail()) ?></a></td>
                     </tr>
                     <?php if ($groupName = $block->getCustomerGroupName()) : ?>
                         <tr>
@@ -147,7 +144,7 @@ $customerUrl = $block->getCustomerViewUrl();
                             <td><?= $block->escapeHtml($groupName) ?></td>
                         </tr>
                     <?php endif; ?>
-                    <?php foreach ($block->getCustomerAccountData() as $data):?>
+                    <?php foreach ($block->getCustomerAccountData() as $data) : ?>
                         <tr>
                             <th><?= $block->escapeHtml($data['label']) ?></th>
                             <td><?= $block->escapeHtml($data['value'], ['br']) ?></td>
@@ -173,7 +170,7 @@ $customerUrl = $block->getCustomerViewUrl();
             </div>
             <address class="admin__page-section-item-content"><?= /* @noEscape */ $block->getFormattedAddress($order->getBillingAddress()); ?></address>
         </div>
-        <?php if (!$block->getOrder()->getIsVirtual()): ?>
+        <?php if (!$block->getOrder()->getIsVirtual()) : ?>
             <div class="admin__page-section-item order-shipping-address">
                 <?php /* Shipping Address */ ?>
                 <div class="admin__page-section-item-title">

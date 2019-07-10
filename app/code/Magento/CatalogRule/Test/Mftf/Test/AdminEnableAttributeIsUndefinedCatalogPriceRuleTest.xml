@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEnableAttributeIsUndefinedCatalogPriceRuleTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Catalog price rule"/>
+            <title value="Enable 'is undefined' condition to Scope Catalog Price rules by custom product attribute"/>
+            <description value="Enable 'is undefined' condition to Scope Catalog Price rules by custom product attribute"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13654"/>
+            <useCaseId value="MC-10971"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+
+            <createData entity="ApiCategory" stepKey="createFirstCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
+                <requiredEntity createDataKey="createFirstCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createFirstCategory"/>
+            </createData>
+            <createData entity="productYesNoAttribute" stepKey="createProductAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+
+            <createData entity="SimpleSubCategory" stepKey="createSecondCategory"/>
+            <createData entity="SimpleProduct3" stepKey="createThirdProduct">
+                <requiredEntity createDataKey="createSecondCategory"/>
+            </createData>
+            <createData entity="SimpleProduct4" stepKey="createForthProduct">
+                <requiredEntity createDataKey="createSecondCategory"/>
+            </createData>
+            <createData entity="productDropDownAttribute" stepKey="createSecondProductAttribute">
+                <field key="scope">website</field>
+            </createData>
+        </before>
+        <after>
+
+            <!--Delete created data-->
+            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+                <argument name="name" value="{{CatalogRuleWithAllCustomerGroups.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+            <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCategory"/>
+            <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
+            <deleteData createDataKey="createForthProduct" stepKey="deleteForthProduct"/>
+            <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
+            <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create catalog price rule-->
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <actionGroup ref="createCatalogPriceRule" stepKey="createCatalogPriceRule">
+            <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
+        </actionGroup>
+        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition">
+            <argument name="attributeName" value="$$createProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="targetValue" value="is"/>
+            <argument name="targetSelectValue" value="is undefined"/>
+        </actionGroup>
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!--Check Catalog Price Rule for first product-->
+        <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToFirstProductPage"/>
+        <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabFirstProductUpdatedPrice"/>
+        <assertEquals expected='$110.70' expectedType="string" actual="($grabFirstProductUpdatedPrice)" stepKey="assertFirstProductUpdatedPrice"/>
+
+        <!--Check Catalog Price Rule for second product-->
+        <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSecondProductPage"/>
+        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabSecondProductUpdatedPrice"/>
+        <assertEquals expected='$110.70' expectedType="string" actual="($grabFirstProductUpdatedPrice)" stepKey="assertSecondProductUpdatedPrice"/>
+
+        <!--Delete previous attribute and Catalog Price Rule-->
+        <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
+        <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+            <argument name="name" value="{{CatalogRuleWithAllCustomerGroups.name}}"/>
+            <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+        </actionGroup>
+
+        <!--Add new attribute to Default set-->
+        <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle1">
+            <requiredEntity createDataKey="createSecondProductAttribute"/>
+        </createData>
+
+        <!--Create new Catalog Price Rule-->
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage1"/>
+        <actionGroup ref="createCatalogPriceRule" stepKey="createCatalogPriceRule1">
+            <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
+        </actionGroup>
+        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectCustomerGroup1"/>
+        <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition1">
+            <argument name="attributeName" value="$$createSecondProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="targetValue" value="is"/>
+            <argument name="targetSelectValue" value="is undefined"/>
+        </actionGroup>
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+
+        <!--Check Catalog Price Rule for third product-->
+        <amOnPage url="{{StorefrontProductPage.url($$createThirdProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToThirdProductPage"/>
+        <waitForPageLoad stepKey="waitForThirdProductPageLoad"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabThirdProductUpdatedPrice"/>
+        <assertEquals expected='$110.70' expectedType="string" actual="($grabThirdProductUpdatedPrice)" stepKey="assertThirdProductUpdatedPrice"/>
+
+        <!--Check Catalog Price Rule for forth product-->
+        <amOnPage url="{{StorefrontProductPage.url($$createForthProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToForthProductPage"/>
+        <waitForPageLoad stepKey="waitForForthProductPageLoad"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabForthProductUpdatedPrice"/>
+        <assertEquals expected='$110.70' expectedType="string" actual="($grabForthProductUpdatedPrice)" stepKey="assertForthProductUpdatedPrice"/>
+    </test>
+</tests>
