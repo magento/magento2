@@ -141,6 +141,7 @@ class Storage extends \Magento\Framework\DataObject
      * @var \Psr\Log\LoggerInterface|null
      */
     private $logger;
+
     /**
      * @var \Magento\Framework\Filesystem\DriverInterface
      */
@@ -172,8 +173,6 @@ class Storage extends \Magento\Framework\DataObject
      * @param array $dirs
      * @param array $data
      * @param \Magento\Framework\Filesystem\DriverInterface $file
-     * @param \Magento\Framework\Filesystem\Io\File|null $ioFile
-     *
      * @param \Magento\Framework\Filesystem\Io\File|null $ioFile
      *
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -216,10 +215,8 @@ class Storage extends \Magento\Framework\DataObject
         $this->_resizeParameters = $resizeParameters;
         $this->_extensions = $extensions;
         $this->_dirs = $dirs;
-        $this->file = $file ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\DriverInterface::class);
-        $this->ioFile = $ioFile ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Filesystem\Io\File::class
-        );
+        $this->file = $file ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Driver\File::class);
+        $this->ioFile = $ioFile ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Io\File::class);
         parent::__construct($data);
     }
 
