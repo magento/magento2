@@ -236,7 +236,6 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      */
     public function testPartialShipOrderWithTwoBundleShippedSeparatelyContainsSameSimple()
     {
-        /** @var Order $order */
         $order = $this->getOrder('order_bundle_separately_shipped');
 
         $requestData = [
@@ -246,7 +245,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'comment' => 'Test Comment',
                 'is_visible_on_front' => 1,
             ],
-            'tracks' => []
+            'tracks' => [],
         ];
 
         $shippedItemId = null;
@@ -274,7 +273,6 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         $this->assertEquals(1, $shipment->getTotalQty());
 
-        /** @var Order $existingOrder */
         $order = $this->getOrder('order_bundle_separately_shipped');
 
         foreach ($order->getAllItems() as $item) {

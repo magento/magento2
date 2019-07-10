@@ -5,21 +5,26 @@
  */
 declare(strict_types=1);
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
 
-/** @var \Magento\Framework\Registry $registry */
-$registry = $objectManager->get(\Magento\Framework\Registry::class);
+$objectManager = Bootstrap::getObjectManager();
+
+/** @var Registry $registry */
+$registry = $objectManager->get(Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 try {
     $productRepository->deleteById('bundle-product-separate-shipping-1');
     $productRepository->deleteById('bundle-product-separate-shipping-2');
-} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+} catch (NoSuchEntityException $exception) {
     // When DbIsolation is used products can be already removed by rollback main transaction
 }
 

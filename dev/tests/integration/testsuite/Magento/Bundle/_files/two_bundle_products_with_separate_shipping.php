@@ -5,31 +5,44 @@
  */
 declare(strict_types=1);
 
+use Magento\Bundle\Api\Data\LinkInterfaceFactory;
+use Magento\Bundle\Api\Data\OptionInterfaceFactory;
+use Magento\Bundle\Model\Product\Price as BundlePrice;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type as BundleProductType;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+
 require __DIR__ . '/multiple_products.php';
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = Bootstrap::getObjectManager();
 
-/** @var \Magento\Catalog\Model\ProductRepository $productRepository */
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-/** @var \Magento\Catalog\Model\ProductFactory $productFactory */
-$productFactory = $objectManager->create(\Magento\Catalog\Model\ProductFactory::class);
-/** @var \Magento\Bundle\Api\Data\OptionInterfaceFactory $bundleOptionFactory */
-$bundleOptionFactory = $objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class);
-/** @var \Magento\Bundle\Api\Data\LinkInterfaceFactory $bundleLinkFactory */
-$bundleLinkFactory = $objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 
-/** @var $bundleProduct \Magento\Catalog\Model\Product */
+/** @var ProductFactory $productFactory */
+$productFactory = $objectManager->create(ProductFactory::class);
+
+/** @var OptionInterfaceFactory $bundleOptionFactory */
+$bundleOptionFactory = $objectManager->create(OptionInterfaceFactory::class);
+
+/** @var LinkInterfaceFactory $bundleLinkFactory */
+$bundleLinkFactory = $objectManager->create(LinkInterfaceFactory::class);
+
 $bundleProduct = $productFactory->create();
-$bundleProduct->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
-    ->setAttributeSetId(4)
+$attributeSetId = $bundleProduct->getDefaultAttributeSetId();
+$bundleProduct->setTypeId(BundleProductType::TYPE_BUNDLE)
+    ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Bundle Product With Separate Items Shipping')
     ->setSku('bundle-product-separate-shipping-1')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setVisibility(Visibility::VISIBILITY_BOTH)
+    ->setStatus(Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setPriceView(1)
-    ->setPriceType(1)
+    ->setPriceType(BundlePrice::PRICE_TYPE_FIXED)
     ->setPrice(10.0)
     ->setShipmentType(1)
     ->setBundleOptionsData(

@@ -5,23 +5,35 @@
  */
 declare(strict_types=1);
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+use Magento\Bundle\Model\Option;
+use Magento\Bundle\Model\Product\Type as BundleProductType;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Checkout\Model\Cart;
+use Magento\Checkout\Model\Session;
+use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Payment;
+use Magento\Quote\Model\QuoteManagement;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/two_bundle_products_with_separate_shipping.php';
 $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
 
-$billingAddress = $objectManager->create(\Magento\Quote\Model\Quote\Address::class, ['data' => $addressData]);
+$objectManager = Bootstrap::getObjectManager();
+$billingAddress = $objectManager->create(Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
-$shippingAddress->setId(null)->setAddressType('shipping')->setShippingMethod('flatrate_flatrate');
+$shippingAddress->setId(null)
+    ->setAddressType('shipping')
+    ->setShippingMethod('flatrate_flatrate');
 
-/** @var \Magento\Quote\Model\Quote\Payment $payment */
-$payment = $objectManager->create(\Magento\Quote\Model\Quote\Payment::class);
+/** @var Payment $payment */
+$payment = $objectManager->create(Payment::class);
 $payment->setMethod('checkmo');
 
-/** @var \Magento\Catalog\Model\ProductRepository $productRepository */
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 
 $bundleProduct = $productRepository->get('bundle-product-separate-shipping-1');
 $bundleProduct2 = $productRepository->get('bundle-product-separate-shipping-2');
@@ -30,12 +42,12 @@ $selectionProducts = [
     $bundleProduct2->getId() => [11, 13],
 ];
 
-/** @var $cart \Magento\Checkout\Model\Cart */
-$cart = $objectManager->create(\Magento\Checkout\Model\Cart::class);
+/** @var Cart $cart */
+$cart = $objectManager->create(Cart::class);
 
 foreach ([$bundleProduct, $bundleProduct2] as $product) {
 
-    /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
+    /** @var BundleProductType $typeInstance */
     $typeInstance = $product->getTypeInstance();
     $typeInstance->setStoreFilter($product->getStoreId(), $product);
     $optionCollection = $typeInstance->getOptionsCollection($product);
@@ -43,8 +55,9 @@ foreach ([$bundleProduct, $bundleProduct2] as $product) {
     $bundleOptions = [];
     $bundleOptionsQty = [];
     $optionsData = [];
+
+    /** @var Option $option */
     foreach ($optionCollection as $option) {
-        /** @var $option \Magento\Bundle\Model\Option */
         $selectionsCollection = $typeInstance->getSelectionsCollection([$option->getId()], $product);
         $selectionIds = $selectionProducts[$product->getId()];
         $selectionsCollection->addIdFilter($selectionIds);
@@ -73,12 +86,12 @@ $cart->getQuote()
     ->setReservedOrderId('order_bundle_separately_shipped')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
-    ->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST)
+    ->setCheckoutMethod(CartManagementInterface::METHOD_GUEST)
     ->setPayment($payment);
 $cart->save();
 
-/** @var \Magento\Quote\Model\QuoteManagement $quoteManager */
-$quoteManager = $objectManager->get(\Magento\Quote\Model\QuoteManagement::class);
+/** @var QuoteManagement $quoteManager */
+$quoteManager = $objectManager->get(QuoteManagement::class);
 $orderId = $quoteManager->placeOrder($cart->getQuote()->getId());
 
-$objectManager->removeSharedInstance(\Magento\Checkout\Model\Session::class);
+$objectManager->removeSharedInstance(Session::class);
