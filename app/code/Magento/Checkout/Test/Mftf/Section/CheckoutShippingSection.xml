@@ -41,5 +41,6 @@
         <element name="shipHereButton" type="button" selector="//div[text()='{{street}}']/button[@class='action action-select-shipping-item']" parameterized="true" timeout="30"/>
         <element name="textFieldAttrRequireMessage" type="text" selector="//input[@name='custom_attributes[{{attribute}}]']/ancestor::div[contains(@class, 'control')]/div/span" parameterized="true" timeout="30"/>
         <element name="textFieldAttribute" type="input" selector="[name*='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
+        <element name="changeAddressButton" type="button" selector="//button[@class='action action-additional'][contains(@data-bind,'openAddressSelection')]"/>
     </section>
 </sections>
