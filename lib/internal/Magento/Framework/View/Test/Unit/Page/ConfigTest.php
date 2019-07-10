@@ -377,26 +377,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Framework\View\Page\Config::class, $this->model->addRss($title, $href));
     }
 
-    /**
-     * Testing case for getting meta asset URL with URL in content
-     */
-    public function testGetMetaAssetUrlWithUrlInContent()
-    {
-        $this->assetRepo->expects($this->never())->method('getUrl');
-        $this->assertEquals('http://test.com/image.png', $this->model->getMetaAssetUrl('http://test.com/image.png'));
-    }
-
-    /**
-     * Testing case for getting meta asset URL without URL in content
-     */
-    public function testGetMetaAssetUrlWithoutUrlInContent()
-    {
-        $this->assetRepo->expects($this->once())->method('getUrl')->with('image.png')->will(
-            $this->returnValue('http://test.com/image.png')
-        );
-        $this->assertEquals('http://test.com/image.png', $this->model->getMetaAssetUrl('image.png'));
-    }
-
     public function testAddBodyClass()
     {
         $className = 'test class';

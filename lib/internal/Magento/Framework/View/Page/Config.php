@@ -138,11 +138,6 @@ class Config
     ];
 
     /**
-     * @var array
-     */
-    private $additionalMetaAssets = ['msapplication-TileImage'];
-
-    /**
      * @var \Magento\Framework\App\State
      */
     private $areaResolver;
@@ -554,31 +549,6 @@ class Config
             implode(' ', $bodyClasses)
         );
         return $this;
-    }
-
-    /**
-     * Retrieve the additional meta assets
-     *
-     * @return array
-     */
-    public function getAdditionalMetaAssets()
-    {
-        return $this->additionalMetaAssets;
-    }
-
-    /**
-     * Adjust metadata content url
-     *
-     * @param string $content
-     * @return string $content
-     */
-    public function getMetaAssetUrl($content)
-    {
-        if (!parse_url($content, PHP_URL_SCHEME)) {
-            return $this->assetRepo->getUrl($content);
-        }
-
-        return $content;
     }
 
     /**
