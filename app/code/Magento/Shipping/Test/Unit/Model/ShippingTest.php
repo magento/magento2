@@ -18,6 +18,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\Store;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * @see Shipping
+ */
 class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -108,12 +111,14 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->stockItemData->expects($this->atLeastOnce())->method('getQtyIncrements')
             ->will($this->returnValue(0.5));
         $this->carrier->method('getConfigData')
-            ->willReturnCallback(function ($key) {
-                $configData = [
-                    'max_package_weight' => 10,
-                ];
-                return isset($configData[$key]) ? $configData[$key] : 0;
-            });
+            ->willReturnCallback(
+                function ($key) {
+                    $configData = [
+                        'max_package_weight' => 10,
+                    ];
+                    return isset($configData[$key]) ? $configData[$key] : 0;
+                }
+            );
 
         $this->shipping->composePackagesForCarrier($this->carrier, $request);
     }
