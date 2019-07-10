@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div data-bind="attr: test.value"></div>
+<p>Test</p>
+<span data-bind="html: testError()"></span>
+<div data-bind="
+    attr : tst,
+    html: test.getSomething().value.error()
+"></div>
+<p data-bind="html: '<b>Some html</b>'"></p>
+<div data-bind="html: valueUnsanitizedHtml"></div>
+<div data-bind="attr: testhtml, html: valueUnsanitizedHtml()"></div>
+<p data-bind="other_html: bind, html: bind_stuff()"></p>
