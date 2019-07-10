@@ -9,7 +9,6 @@ namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -22,11 +21,6 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
  */
 class PaypalExpressTokenTest extends PaypalExpressAbstractTest
 {
-    /**
-     * @var  GraphQlRequest
-     */
-    private $graphQlRequest;
-
     /**
      * @var SerializerInterface
      */
@@ -43,7 +37,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
 
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**

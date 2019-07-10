@@ -7,13 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
-use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -23,11 +20,6 @@ use Magento\Framework\UrlInterface;
  */
 class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
 {
-    /**
-     * @var GraphQlRequest
-     */
-    private $graphQlRequest;
-
     /**
      * @var SerializerInterface
      */
@@ -44,7 +36,6 @@ class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
 
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**
@@ -53,6 +44,7 @@ class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
      * @param string $paymentMethod
      * @return void
      * @dataProvider getPaypalCodesProvider
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php

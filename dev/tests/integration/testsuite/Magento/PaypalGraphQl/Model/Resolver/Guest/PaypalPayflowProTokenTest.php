@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
@@ -21,11 +20,6 @@ use Magento\Framework\DataObject;
  */
 class PaypalPayflowProTokenTest extends PaypalPayflowProAbstractTest
 {
-    /**
-     * @var GraphQlRequest
-     */
-    private $graphQlRequest;
-
     /**
      * @var SerializerInterface
      */
@@ -42,13 +36,13 @@ class PaypalPayflowProTokenTest extends PaypalPayflowProAbstractTest
 
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**
      * Test create paypal token for guest
      *
      * @return void
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php

@@ -26,13 +26,13 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
     /** @var SerializerInterface */
     private $jsonSerializer;
 
-    /** @var  CustomerTokenServiceInterface */
+    /** @var CustomerTokenServiceInterface */
     private $customerTokenService;
 
     /** @var GraphQlRequest */

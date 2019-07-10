@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\GraphQl\Service\GraphQlRequest;
@@ -16,9 +15,7 @@ use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
-use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Quote\Model\Quote\PaymentFactory;
 use PHPUnit\Framework\TestCase;
 use Zend_Http_Response;
 
@@ -27,14 +24,13 @@ use Zend_Http_Response;
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderWithAuthorizeNetTest extends TestCase
 {
-    /** @var  ObjectManager */
+    /** @var ObjectManager */
     private $objectManager;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
     /** @var SerializerInterface */
@@ -49,15 +45,10 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     /** @var Zend_Http_Response */
     protected $responseMock;
 
-    /** @var  PaymentFactory */
-    private $paymentFactory;
-
     protected function setUp() : void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->request = $this->objectManager->get(Http::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
         $this->clientMock = $this->createMock(ZendClient::class);
@@ -69,8 +60,6 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
         $clientFactoryMock = $this->createMock(ZendClientFactory::class);
         $clientFactoryMock->method('create')
             ->willReturn($this->clientMock);
-        /** @var PaymentDataObjectFactory $paymentFactory */
-        $this->paymentFactory = $this->objectManager->get(PaymentDataObjectFactory::class);
         $this->objectManager->addSharedInstance($clientFactoryMock, ZendClientFactory::class);
     }
 

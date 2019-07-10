@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
-use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
@@ -21,11 +20,6 @@ use Magento\Framework\DataObject;
  */
 class PaypalPayflowProSetPaymentMethodTest extends PaypalPayflowProAbstractTest
 {
-    /**
-     * @var GraphQlRequest
-     */
-    private $graphQlRequest;
-
     /**
      * @var SerializerInterface
      */
@@ -42,7 +36,6 @@ class PaypalPayflowProSetPaymentMethodTest extends PaypalPayflowProAbstractTest
 
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**

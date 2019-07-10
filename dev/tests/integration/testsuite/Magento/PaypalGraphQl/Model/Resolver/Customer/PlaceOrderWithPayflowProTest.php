@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
-use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
@@ -21,11 +20,6 @@ use Magento\Framework\DataObject;
  */
 class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
 {
-    /**
-     * @var GraphQlRequest
-     */
-    private $graphQlRequest;
-
     /**
      * @var SerializerInterface
      */
@@ -42,13 +36,13 @@ class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
 
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     /**
      * Test end to end test to process a paypal payflow pro order
      *
      * @return void
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php

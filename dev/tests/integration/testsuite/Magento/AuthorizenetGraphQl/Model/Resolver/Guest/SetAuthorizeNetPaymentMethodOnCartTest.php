@@ -26,7 +26,7 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
     /** @var ObjectManager */
     private $objectManager;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
     /** @var SerializerInterface */
