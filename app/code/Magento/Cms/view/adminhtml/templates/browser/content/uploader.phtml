@@ -8,7 +8,7 @@
 
 $filters = $block->getConfig()->getFilters() ?? [];
 $allowedExtensions = [];
-$blockHtmlId = $block->escapeHtml($block->getHtmlId());
+$blockHtmlId = $block->getHtmlId();
 
 foreach ($filters as $media_type) {
     $allowedExtensions = array_merge($allowedExtensions, array_map(function ($fileExt) {

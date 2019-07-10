@@ -22,7 +22,7 @@
             "categoryTree": {
                 "data": <?= /* @noEscape */
                 $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getTreeArray()); ?>,
-                "url": "<?= $block->escapeUrl($block->getLoadTreeUrl()); ?>"
+                "url": "<?= $block->escapeJs($block->escapeUrl($block->getLoadTreeUrl())); ?>"
             }
         }
     }
