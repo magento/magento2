@@ -93,7 +93,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     protected $mediaDirectoryWrite;
 
     /**
-     * @var \Magento\Framework\Filesystem\Io\File|null
+     * @var \Magento\Framework\Filesystem\Io\File
      */
     protected $file;
 
@@ -265,7 +265,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return sprintf(
             "%s/%s",
-            $this->getFile()->getPathInfo($path)['dirname'],
+            $this->file->getPathInfo($path)['dirname'],
             \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY
         );
     }
@@ -288,7 +288,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         return sprintf(
             "%s/%s",
             $this->getThumbnailDirectory($imagePath),
-            $this->getFile()->getPathInfo($imageName)['basename']
+            $this->file->getPathInfo($imageName)['basename']
         );
     }
 
@@ -318,8 +318,8 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAllowedExtensionsByType()
     {
         return $this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
-                ? ['ttf', 'otf', 'eot', 'svg', 'woff']
-                : ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
+            ? ['ttf', 'otf', 'eot', 'svg', 'woff']
+            : ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
     }
 
     /**
@@ -343,15 +343,5 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function getSession()
     {
         return $this->_session;
-    }
-
-    /**
-     * Get io file.
-     *
-     * @return \Magento\Framework\Filesystem\Io\File|null
-     */
-    public function getFile()
-    {
-        return $this->file;
     }
 }

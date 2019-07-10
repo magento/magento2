@@ -82,14 +82,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 'getShortFilename',
                 'getSession',
                 'convertPathToId',
-                'getRequestParams',
-                'getFile'
+                'getRequestParams'
             ]
         );
 
-        $this->_helperStorage->expects($this->any())
-            ->method('getFile')
-            ->will($this->returnValue($file));
+        $reflection = new \ReflectionClass($this->_helperStorage);
+        $reflection_property = $reflection->getProperty('file');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($this->_helperStorage, $file);
 
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_imageFactory = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
