@@ -600,14 +600,14 @@ class Customer extends AbstractCustomer
                 $isFieldNotSetAndCustomerDoesNotExist =
                     !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
                 $isFieldSetAndTrimmedValueIsEmpty
-                    = isset($rowData[$attributeCode]) && '' === trim($rowData[$attributeCode]);
+                    = isset($rowData[$attributeCode]) && '' === trim((string)$rowData[$attributeCode]);
 
                 if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                     continue;
                 }
 
-                if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                if (isset($rowData[$attributeCode]) && strlen((string)$rowData[$attributeCode])) {
                     if ($attributeParams['type'] == 'select' && empty($rowData[$attributeCode])) {
                         continue;
                     }

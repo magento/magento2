@@ -133,7 +133,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $updatedCustomer->getCreatedAt(),
             'Creation date must be changed'
         );
-        $this->assertNotEquals(
+        $this->assertEquals(
             $existingCustomer->getGender(),
             $updatedCustomer->getGender(),
             'Gender must be changed'

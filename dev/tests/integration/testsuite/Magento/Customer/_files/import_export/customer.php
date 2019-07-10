@@ -30,7 +30,7 @@ $customer->setWebsiteId(
 )->setLastname(
     'Alston'
 )->setGender(
-    2
+    '2'
 );
 $customer->isObjectNew(true);
 
