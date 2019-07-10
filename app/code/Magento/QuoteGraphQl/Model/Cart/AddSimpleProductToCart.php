@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -19,11 +19,6 @@ use Magento\Quote\Model\Quote;
  */
 class AddSimpleProductToCart
 {
-    /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
     /**
      * @var CreateBuyRequest
      */
@@ -51,10 +46,8 @@ class AddSimpleProductToCart
      *
      * @param Quote $cart
      * @param array $cartItemData
-     * @return void
-     * @throws GraphQlNoSuchEntityException
      * @throws GraphQlInputException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws GraphQlNoSuchEntityException
      */
     public function execute(Quote $cart, array $cartItemData): void
     {
@@ -70,8 +63,11 @@ class AddSimpleProductToCart
 
         try {
             $linksData = $this->extractDownloadableLinks($product, $cartItemData);
-            $result = $cart->addProduct($product, $this->createBuyRequest->execute($quantity, $customizableOptions, $linksData));
-        } catch (\Exception $e) {
+            $result = $cart->addProduct(
+                $product,
+                $this->createBuyRequest->execute($quantity, $customizableOptions, $linksData)
+            );
+        } catch (Exception $e) {
             throw new GraphQlInputException(
                 __(
                     'Could not add the product with SKU %sku to the shopping cart: %message',
@@ -123,29 +119,8 @@ class AddSimpleProductToCart
     }
 
     /**
-     * Extract Customizable Options from cart item data
+     * Extracts product links IDs
      *
-     * @param array $cartItemData
-     * @return array
-     */
-    private function extractCustomizableOptions(array $cartItemData): array
-    {
-        if (!isset($cartItemData['customizable_options']) || empty($cartItemData['customizable_options'])) {
-            return [];
-        }
-
-        $customizableOptionsData = [];
-        foreach ($cartItemData['customizable_options'] as $customizableOption) {
-            if (isset($customizableOption['value_string'])) {
-                $customizableOptionsData[$customizableOption['id']] = $this->convertCustomOptionValue(
-                    $customizableOption['value_string']
-                );
-            }
-        }
-        return $customizableOptionsData;
-    }
-
-    /**
      * @param $product
      * @param array $cartItemData
      * @return array
@@ -154,36 +129,12 @@ class AddSimpleProductToCart
     {
         $linksData = [];
 
-        if ($product->getLinksPurchasedSeparately()) {
-            $downloadableLinks = $this->arrayManager->get('downloadable_product_links', $cartItemData, []);
+        if ($product->getLinksPurchasedSeparately() && isset($cartItemData['downloadable_product_links'])) {
+            $downloadableLinks = $cartItemData['downloadable_product_links'];
             $linksData = array_unique(array_column($downloadableLinks, 'link_id'));
         }
 
         return $linksData;
-    }
-
-    /**
-     * Format GraphQl input data to a shape that buy request has
-     *
-     * @param float $quantity
-     * @param array $customOptions
-     * @param array $downloadableLinks
-     * @return DataObject
-     */
-    private function createBuyRequest(float $quantity, array $customOptions, array $downloadableLinks): DataObject
-    {
-        $dataArray = [
-            'data' => [
-                'qty' => $quantity,
-                'options' => $customOptions,
-            ],
-        ];
-
-        if ($downloadableLinks > 0) {
-            $dataArray['data']['links'] = $downloadableLinks;
-        }
-
-        return $this->dataObjectFactory->create($dataArray);
     }
 
     /**

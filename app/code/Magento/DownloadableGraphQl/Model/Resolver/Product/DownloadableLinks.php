@@ -5,22 +5,26 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver;
+namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
+use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\LinkFactory;
-use Magento\Downloadable\Model\SampleFactory;
 use Magento\Framework\Data\Collection;
-use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 /**
- * @inheritdoc
+ * Resolver fetches downloadable product links and formats it according to the GraphQL schema.
  */
 class DownloadableLinks implements ResolverInterface
 {
@@ -40,31 +44,31 @@ class DownloadableLinks implements ResolverInterface
     private $linkFactory;
 
     /**
-     * @var SampleFactory
-     */
-    private $sampleFactory;
-
-    /**
+     * DownloadableLinks constructor.
      *
      * @param EnumLookup $enumLookup
      * @param DownloadableHelper $downloadableHelper
      * @param LinkFactory $linkFactory
-     * @param SampleFactory $sampleFactory
      */
     public function __construct(
         EnumLookup $enumLookup,
         DownloadableHelper $downloadableHelper,
-        LinkFactory $linkFactory,
-        SampleFactory $sampleFactory
+        LinkFactory $linkFactory
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
         $this->linkFactory = $linkFactory;
-        $this->sampleFactory = $sampleFactory;
     }
 
     /**
-     * @inheritdoc
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return array|Value|mixed|null
+     * @throws GraphQlInputException
+     * @throws LocalizedException
      */
     public function resolve(
         Field $field,
@@ -83,34 +87,33 @@ class DownloadableLinks implements ResolverInterface
         /** @var Product $product */
         $product = $quoteItem->getProduct();
 
-        $data = null;
-        if (in_array($product->getTypeId(), ['downloadable', 'virtual'])) {
-            if ($field->getName() === 'downloadable_product_links') {
-                $links = $this->linkFactory->create()->getResourceCollection();
-                $links->addTitleToResult($product->getStoreId())
-                    ->addPriceToResult($product->getStore()->getWebsiteId())
-                    ->addProductToFilter($product->getId());
+        if (!in_array($product->getTypeId(), ['downloadable', 'virtual'])) {
+            throw new GraphQlInputException(
+                __('Wrong product type. Links are available for Downloadable and Virtual product types')
+            );
+        }
 
-                if ($product->getLinksPurchasedSeparately() == true) {
-                    $selectedLinksIds = explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue());
-                    if (count($selectedLinksIds) > 0) {
-                        $links->addFieldToFilter('main_table.link_id', ['in' => $selectedLinksIds]);
-                    }
-                }
+        if ($field->getName() != 'downloadable_product_links') {
+            throw new GraphQlInputException(
+                __('Incorrect field name. Use "downloadable_product_links" to retrieve links')
+            );
+        }
 
-                $data = $this->formatLinks(
-                    $links
-                );
-            } elseif ($field->getName() === 'downloadable_product_samples') {
-                $samples = $this->sampleFactory->create()->getResourceCollection();
-                $samples->addTitleToResult($product->getStoreId())
-                    ->addProductToFilter($product->getId());
+        $links = $this->linkFactory->create()->getResourceCollection();
+        $links->addTitleToResult($product->getStoreId())
+            ->addPriceToResult($product->getStore()->getWebsiteId())
+            ->addProductToFilter($product->getId());
 
-                $data = $this->formatSamples(
-                    $samples
-                );
+        if ($product->getLinksPurchasedSeparately() == true) {
+            $selectedLinksIds = explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue());
+            if (count($selectedLinksIds) > 0) {
+                $links->addFieldToFilter('main_table.link_id', ['in' => $selectedLinksIds]);
             }
         }
+
+        $data = $this->formatLinks(
+            $links
+        );
 
         return $data;
     }
@@ -120,12 +123,13 @@ class DownloadableLinks implements ResolverInterface
      *
      * @param Collection $links
      * @return array
+     * @throws RuntimeException
      */
     private function formatLinks(Collection $links) : array
     {
         $resultData = [];
         foreach ($links as $linkKey => $link) {
-            /** @var \Magento\Downloadable\Model\Link $link */
+            /** @var Link $link */
             $resultData[$linkKey]['id'] = $link->getId();
             $resultData[$linkKey]['title'] = $link->getTitle();
             $resultData[$linkKey]['sort_order'] = $link->getSortOrder();
@@ -147,28 +151,6 @@ class DownloadableLinks implements ResolverInterface
 
             $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
             $resultData[$linkKey]['sample_url'] = $link->getSampleUrl();
-        }
-        return $resultData;
-    }
-
-    /**
-     * Format links from collection as array
-     *
-     * @param Collection $samples
-     * @return array
-     */
-    private function formatSamples(Collection $samples) : array
-    {
-        $resultData = [];
-        foreach ($samples as $sampleKey => $sample) {
-            /** @var \Magento\Downloadable\Model\Sample $sample */
-            $resultData[$sampleKey]['id'] = $sample->getId();
-            $resultData[$sampleKey]['title'] = $sample->getTitle();
-            $resultData[$sampleKey]['sort_order'] = $sample->getSortOrder();
-            $resultData[$sampleKey]['sample_type']
-                = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $sample->getSampleType());
-            $resultData[$sampleKey]['sample_file'] = $sample->getSampleFile();
-            $resultData[$sampleKey]['sample_url'] = $sample->getSampleUrl();
         }
         return $resultData;
     }

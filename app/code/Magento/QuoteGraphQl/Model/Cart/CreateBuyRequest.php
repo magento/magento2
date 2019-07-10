@@ -55,7 +55,7 @@ class CreateBuyRequest
             ],
         ];
 
-        if ($downloadableLinks > 0) {
+        if (count($downloadableLinks) > 0) {
             $dataArray['data']['links'] = $downloadableLinks;
         }
 
