@@ -137,20 +137,4 @@ class AddSimpleProductToCart
 
         return $linksData;
     }
-
-    /**
-     * Convert custom options vakue
-     *
-     * @param string $value
-     * @return string|array
-     */
-    private function convertCustomOptionValue(string $value)
-    {
-        $value = trim($value);
-        if (substr($value, 0, 1) === "[" &&
-            substr($value, strlen($value) - 1, 1) === "]") {
-            return explode(',', substr($value, 1, -1));
-        }
-        return $value;
-    }
 }
