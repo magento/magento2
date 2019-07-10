@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
@@ -23,27 +23,19 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     private $quoteAddressFactory;
 
     /**
-     * @var GetCustomer
-     */
-    private $getCustomer;
-
-    /**
      * @var AssignShippingAddressToCart
      */
     private $assignShippingAddressToCart;
 
     /**
      * @param QuoteAddressFactory $quoteAddressFactory
-     * @param GetCustomer $getCustomer
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      */
     public function __construct(
         QuoteAddressFactory $quoteAddressFactory,
-        GetCustomer $getCustomer,
         AssignShippingAddressToCart $assignShippingAddressToCart
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
-        $this->getCustomer = $getCustomer;
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
     }
 
@@ -74,12 +66,16 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         }
 
         if (null === $customerAddressId) {
+            $addressInput['country_code'] = strtoupper($addressInput['country_code']);
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
-            $customer = $this->getCustomer->execute($context);
+            if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+                throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+            }
+
             $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
                 (int)$customerAddressId,
-                (int)$customer->getId()
+                $context->getUserId()
             );
         }
 
