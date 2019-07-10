@@ -22,11 +22,13 @@ $product
     ->setPrice(10)
     ->setVisibility(ProductVisibility::VISIBILITY_BOTH)
     ->setStatus(ProductStatus::STATUS_ENABLED)
-    ->setStockData([
-        'qty'          => 100,
-        'is_in_stock'  => 1,
-        'manage_stock' => 1,
-    ]);
+    ->setStockData(
+        [
+            'qty' => 100,
+            'is_in_stock' => 1,
+            'manage_stock' => 1,
+            ]
+    );
 
 /**
  * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkFactory1

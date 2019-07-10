@@ -61,6 +61,8 @@ class DownloadableLinks implements ResolverInterface
     }
 
     /**
+     * Fetches downloadable product links and formats it according to the GraphQL schema.
+     *
      * @param Field $field
      * @param ContextInterface $context
      * @param ResolveInfo $info

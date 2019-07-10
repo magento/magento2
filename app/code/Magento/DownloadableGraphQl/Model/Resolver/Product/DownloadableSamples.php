@@ -52,6 +52,8 @@ class DownloadableSamples implements ResolverInterface
     }
 
     /**
+     * Fetches downloadable product samples and formats it according to the GraphQL schema.
+     *
      * @param Field $field
      * @param ContextInterface $context
      * @param ResolveInfo $info

@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -121,11 +122,11 @@ class AddSimpleProductToCart
     /**
      * Extracts product links IDs
      *
-     * @param $product
+     * @param ProductInterface $product
      * @param array $cartItemData
      * @return array
      */
-    private function extractDownloadableLinks($product, array $cartItemData): array
+    private function extractDownloadableLinks(ProductInterface $product, array $cartItemData): array
     {
         $linksData = [];
 

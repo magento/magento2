@@ -17,7 +17,12 @@ $productRepository = Bootstrap::getObjectManager()
     ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 try {
-    $product = $productRepository->get('graphql-downloadable-product-without-purchased-separately-links', false, null, true);
+    $product = $productRepository->get(
+        'graphql-downloadable-product-without-purchased-separately-links',
+        false,
+        null,
+        true
+    );
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
 }
