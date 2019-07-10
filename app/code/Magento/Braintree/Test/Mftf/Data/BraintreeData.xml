@@ -78,46 +78,26 @@
         <data key="value">0</data>
     </entity>
 
-    <entity name="SandboxBraintreeConfig" type="braintree_config_state">
-        <requiredEntity type="title">EnabledTitle</requiredEntity>
-        <requiredEntity type="payment_action">AuthorizePaymentAction</requiredEntity>
-        <requiredEntity type="environment">SandboxEnvironment</requiredEntity>
-        <requiredEntity type="merchant_id">EnabledMerchantId</requiredEntity>
-        <requiredEntity type="public_key">EnabledPublicKey</requiredEntity>
-        <requiredEntity type="private_key">EnabledPrivateKey</requiredEntity>
-        <requiredEntity type="active">EnabledActive</requiredEntity>
-        <requiredEntity type="merchant_account_id">EnabledMerchantAccountId</requiredEntity>
+    <entity name="CustomBraintreeConfigurationData" type="custom_braintree_config_state">
+        <requiredEntity type="braintree_cc_vault_active">BraintreeValuteActive</requiredEntity>
+        <requiredEntity type="active">EnableSolution</requiredEntity>
     </entity>
-    <entity name="EnabledTitle" type="title">
-        <data key="value">Credit Card (Braintree)</data>
-    </entity>
-    <entity name="AuthorizePaymentAction" type="payment_action">
-        <data key="value">authorize</data>
-    </entity>
-    <entity name="SandboxEnvironment" type="environment">
-        <data key="value">sandbox</data>
-    </entity>
-    <entity name="EnabledMerchantId" type="merchant_id">
-        <data key="value">d4pdjhxgjfrsmzbf</data>
-    </entity>
-    <entity name="EnabledPublicKey" type="public_key">
-        <data key="value">m7q4wmh43xrgyrst</data>
-    </entity>
-    <entity name="EnabledPrivateKey" type="private_key">
-        <data key="value">67de364080b1b4e2492d7a3de413a572</data>
-    </entity>
-    <entity name="EnabledActive" type="active">
+    <entity name="BraintreeValuteActive" type="braintree_cc_vault_active">
         <data key="value">1</data>
     </entity>
-    <entity name="EnabledMerchantAccountId" type="merchant_account_id">
-        <data key="value">Magneto</data>
+    <entity name="EnableSolution" type="active">
+        <data key="value">1</data>
     </entity>
 
-    <entity name="SandboxBraintreeWithPaypalConfig" extends="SandboxBraintreeConfig">
-        <requiredEntity type="active_braintree_paypal">EnableActiveBraintreePaypal</requiredEntity>
+    <entity name="RollBackCustomBraintreeConfigurationData" type="custom_braintree_config_state">
+        <requiredEntity type="braintree_cc_vault_active">DefaultBraintreeValuteActive</requiredEntity>
+        <requiredEntity type="active">DefaultEnableSolution</requiredEntity>
     </entity>
-    <entity name="EnableActiveBraintreePaypal" type="active_braintree_paypal">
-        <data key="value">1</data>
+    <entity name="DefaultBraintreeValuteActive" type="braintree_cc_vault_active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultEnableSolution" type="active">
+        <data key="value">0</data>
     </entity>
 
     <entity name="BraintreeCard" type="creditCard">
