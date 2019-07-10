@@ -152,6 +152,12 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                 }
             }
         }
+        array_walk(
+            $options,
+            function (&$item) {
+                $item['__disableTmpl'] = true;
+            }
+        );
         return $options;
     }
 
