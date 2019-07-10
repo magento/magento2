@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model;
 
 use Magento\Directory\Model\Currency;
@@ -366,8 +365,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         ProductOption $productOption = null,
         OrderItemRepositoryInterface $itemRepository = null,
         SearchCriteriaBuilder $searchCriteriaBuilder = null
-    )
-    {
+    ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
         $this->productRepository = $productRepository;
@@ -656,8 +654,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         if ($this->canUnhold() || $this->isPaymentReview() ||
-            $this->isCanceled() || $this->getState() === self::STATE_CLOSED
-        ) {
+            $this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
             return false;
         }
 
@@ -708,12 +705,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $hasDueAmount = $this->canInvoice() && ($checkAmtTotalPaid);
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
-            true : (count($this->getCreditmemosCollection()) > 0);
+             true : (count($this->getCreditmemosCollection()) > 0);
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if (($hasDueAmount || $paidAmtIsRefunded) ||
             (!$checkAmtTotalPaid &&
-                abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)
-        ) {
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
             return false;
         }
         return true;
@@ -791,8 +787,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
         foreach ($this->getAllItems() as $item) {
             if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() &&
-                !$item->getLockedDoShip() && !$this->isRefunded($item)
-            ) {
+                !$item->getLockedDoShip() && !$this->isRefunded($item)) {
                 return true;
             }
         }
@@ -1116,7 +1111,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         return $this->addCommentToStatusHistory($comment, $status, false);
     }
-
+    
     /**
      * Add a comment to order status history.
      *
@@ -1508,7 +1503,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get item by quote item id
      *
      * @param mixed $quoteItemId
-     * @return \Magento\Framework\DataObject|null
+     * @return  \Magento\Framework\DataObject|null
      */
     public function getItemByQuoteItemId($quoteItemId)
     {
@@ -1973,9 +1968,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCustomerName()
     {
         if ($this->getCustomerFirstname()) {
-            $customerName = preg_replace('/\s+/', ' ', trim($this->getCustomerPrefix() . ' '
-                . $this->getCustomerFirstname() . ' ' . $this->getCustomerMiddlename() . ' '
-                . $this->getCustomerLastname() . ' ' . $this->getCustomerSuffix()));
+            $customerName = preg_replace('/\s+/', ' ', trim(
+                $this->getCustomerPrefix() . ' ' . $this->getCustomerFirstname() .
+                ' ' . $this->getCustomerMiddlename() . ' ' .
+                $this->getCustomerLastname() . ' ' . $this->getCustomerSuffix()
+            ));
         } else {
             $customerName = (string)__('Guest');
         }
