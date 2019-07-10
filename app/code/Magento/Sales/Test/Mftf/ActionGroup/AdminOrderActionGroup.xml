@@ -418,6 +418,7 @@
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
         <waitForPageLoad stepKey="waitForProductsListForOrder"/>
         <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
+        <waitForPageLoad stepKey="waitForClickProduct"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addSelectedProductToOrder"/>
         <waitForPageLoad stepKey="waitForProductAddedInOrder"/>
         <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
@@ -425,6 +426,7 @@
         <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
         <waitForPageLoad stepKey="waitForShippingMethodsThickened"/>
         <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForSubmitOrder"/>
         <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
 </actionGroups>
