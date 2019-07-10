@@ -2,7 +2,7 @@
     "name": "magento/module-configurable-product-sales",
     "description": "N/A",
     "require": {
-        "php": "~7.0.13|~7.1.0",
+        "php": "~7.0.13|~7.1.0|~7.2.0",
         "magento/module-catalog": "102.0.*",
         "magento/module-sales": "101.0.*",
         "magento/module-store": "100.2.*",

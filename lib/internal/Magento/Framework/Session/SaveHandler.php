@@ -21,6 +21,8 @@ class SaveHandler implements SaveHandlerInterface
     protected $saveHandlerAdapter;
 
     /**
+     * Constructor
+     *
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param ConfigInterface $sessionConfig
      * @param string $default
