@@ -76,7 +76,6 @@ class ImageFactory
     private function getStringCustomAttributes(array $attributes): string
     {
         $result = [];
-        $attributes = (is_null($attributes)) ? [] : $attributes;
         foreach ($attributes as $name => $value) {
             if ($name != 'class') {
                 $result[] = $name . '="' . $value . '"';
@@ -161,6 +160,7 @@ class ImageFactory
             );
         }
 
+        $attributes = (is_null($attributes)) ? [] : $attributes;
         $data = [
             'data' => [
                 'template' => 'Magento_Catalog::product/image_with_borders.phtml',
