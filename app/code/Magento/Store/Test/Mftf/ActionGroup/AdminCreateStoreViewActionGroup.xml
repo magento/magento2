@@ -8,6 +8,7 @@
 <!-- Test XML Example -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
     <actionGroup name="AdminCreateStoreViewActionGroup">
         <arguments>
             <argument name="StoreGroup" defaultValue="_defaultStoreGroup"/>
@@ -25,20 +26,22 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete" />
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal" />
-        <waitForPageLoad stepKey="waitForStorePageLoad" />
-        <waitForElementNotVisible selector="{{AdminNewStoreViewActionsSection.loadingMask}}" stepKey="waitForElementVisible"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForPageReload"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the store view." stepKey="seeSavedMessage" />
     </actionGroup>
+
+    <actionGroup name="AdminCreateStoreViewWithoutCheckActionGroup" extends="AdminCreateStoreViewActionGroup">
+        <remove keyForRemoval="waitForPageReload"/>
+        <remove keyForRemoval="seeSavedMessage"/>
+    </actionGroup>
+
     <!--Save the Store view-->
     <actionGroup name="AdminCreateStoreViewActionSaveGroup">
         <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload2"/>
         <see userInput="You saved the store view." stepKey="seeSavedMessage" />
     </actionGroup>
-    <!--Save the same Store view code for code validation-->
-    <actionGroup name="AdminCreateStoreViewCodeUniquenessActionGroup">
-        <waitForLoadingMaskToDisappear stepKey="waitForForm"/>
-        <see userInput="Store with the same code already exists." stepKey="seeMessage" />
-    </actionGroup>
+
     <actionGroup name="navigateToAdminContentManagementPage">
         <amOnPage url="{{AdminContentManagementPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>

@@ -21,6 +21,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
 use Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\Grouped;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Catalog\Model\Product;
+use Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped as GroupedProducts;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 
 /**
  * Class GroupedTest
@@ -82,23 +85,38 @@ class GroupedTest extends AbstractModifierTest
      */
     protected $storeMock;
 
+    /**
+     * @var GroupedProducts|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $groupedProductsMock;
+
+    /**
+     * @var ProductLinkInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productLinkFactoryMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
+        $this->productMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getId', 'getTypeId'])
-            ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::PRODUCT_ID);
         $this->productMock->expects($this->any())
             ->method('getTypeId')
             ->willReturn(GroupedProductType::TYPE_CODE);
-        $this->linkedProductMock = $this->getMockBuilder(ProductInterface::class)
+        $this->linkedProductMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getId', 'getName', 'getPrice'])
-            ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->linkedProductMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::LINKED_PRODUCT_ID);
@@ -135,7 +153,7 @@ class GroupedTest extends AbstractModifierTest
         $this->linkRepositoryMock->expects($this->any())
             ->method('getList')
             ->with($this->productMock)
-            ->willReturn([$this->linkMock]);
+            ->willReturn([$this->linkedProductMock]);
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->setMethods(['get'])
             ->getMockForAbstractClass();
@@ -155,7 +173,7 @@ class GroupedTest extends AbstractModifierTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function createModel()
     {
@@ -169,6 +187,16 @@ class GroupedTest extends AbstractModifierTest
             ->setMethods(['init', 'getUrl'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->groupedProductsMock = $this->getMockBuilder(GroupedProducts::class)
+            ->setMethods(['getLinkedProducts'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productLinkFactoryMock = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->imageHelperMock->expects($this->any())
             ->method('init')
             ->willReturn($this->imageHelperMock);
@@ -189,16 +217,23 @@ class GroupedTest extends AbstractModifierTest
             'localeCurrency' => $this->currencyMock,
             'imageHelper' => $this->imageHelperMock,
             'attributeSetRepository' => $this->attributeSetRepositoryMock,
+            'groupedProducts' => $this->groupedProductsMock,
+            'productLinkFactory' => $this->productLinkFactoryMock,
         ]);
     }
 
+    /**
+     * Assert array has key
+     *
+     * @return void
+     */
     public function testModifyMeta()
     {
         $this->assertArrayHasKey(Grouped::GROUP_GROUPED, $this->getModel()->modifyMeta([]));
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function testModifyData()
     {
@@ -226,6 +261,42 @@ class GroupedTest extends AbstractModifierTest
                 ],
             ],
         ];
-        $this->assertSame($expectedData, $this->getModel()->modifyData([]));
+        $model = $this->getModel();
+        $linkedProductMock = $this->getMockBuilder(Product::class)
+            ->setMethods(['getId', 'getName', 'getPrice', 'getSku', 'getImage', 'getPosition', 'getQty'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $linkedProductMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(self::LINKED_PRODUCT_ID);
+        $linkedProductMock->expects($this->once())
+            ->method('getName')
+            ->willReturn(self::LINKED_PRODUCT_NAME);
+        $linkedProductMock->expects($this->once())
+            ->method('getPrice')
+            ->willReturn(self::LINKED_PRODUCT_PRICE);
+        $linkedProductMock->expects($this->once())
+            ->method('getSku')
+            ->willReturn(self::LINKED_PRODUCT_SKU);
+        $linkedProductMock->expects($this->once())
+            ->method('getImage')
+            ->willReturn('');
+        $linkedProductMock->expects($this->exactly(2))
+            ->method('getPosition')
+            ->willReturn(self::LINKED_PRODUCT_POSITION);
+        $linkedProductMock->expects($this->once())
+            ->method('getQty')
+            ->willReturn(self::LINKED_PRODUCT_QTY);
+        $this->groupedProductsMock->expects($this->once())
+            ->method('getLinkedProducts')
+            ->willReturn([$linkedProductMock]);
+        $linkMock = $this->getMockBuilder(ProductLinkInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->productLinkFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($linkMock);
+
+        $this->assertSame($expectedData, $model->modifyData([]));
     }
 }

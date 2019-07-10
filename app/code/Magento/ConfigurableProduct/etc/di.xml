@@ -248,4 +248,18 @@
     <type name="Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector">
         <plugin name="apply_tax_class_id" type="Magento\ConfigurableProduct\Plugin\Tax\Model\Sales\Total\Quote\CommonTaxCollector" />
     </type>
+    <type name="Magento\Eav\Model\Entity\Attribute\Group">
+        <arguments>
+            <argument name="reservedSystemNames" xsi:type="array">
+                <item name="configurable" xsi:type="string">configurable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="configurable" xsi:type="object"> Magento\ConfigurableProduct\Model\Inventory\ParentItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

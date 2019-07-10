@@ -51,16 +51,16 @@ class UpdateCartItemsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testUpdateCartItemQty()
+    public function testUpdateCartItemQuantity()
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
-        $qty = 2;
+        $quantity = 2;
 
-        $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
-        $response = $this->graphQlQuery($query);
+        $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
+        $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('updateCartItems', $response);
         $this->assertArrayHasKey('cart', $response['updateCartItems']);
@@ -69,7 +69,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $item = current($responseCart['items']);
 
         $this->assertEquals($itemId, $item['id']);
-        $this->assertEquals($qty, $item['qty']);
+        $this->assertEquals($quantity, $item['quantity']);
     }
 
     /**
@@ -81,10 +81,10 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->quoteResource->load($quote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
-        $qty = 0;
+        $quantity = 0;
 
-        $query = $this->getQuery($maskedQuoteId, $itemId, $qty);
-        $response = $this->graphQlQuery($query);
+        $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
+        $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('updateCartItems', $response);
         $this->assertArrayHasKey('cart', $response['updateCartItems']);
@@ -100,7 +100,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
     public function testUpdateItemInNonExistentCart()
     {
         $query = $this->getQuery('non_existent_masked_id', 1, 2);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -116,7 +116,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->expectExceptionMessage("Could not find cart item with id: {$notExistentItemId}.");
 
         $query = $this->getQuery($maskedQuoteId, $notExistentItemId, 2);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -142,7 +142,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->expectExceptionMessage("Could not find cart item with id: {$secondQuoteItemId}.");
 
         $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId, 2);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -158,7 +158,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->expectExceptionMessage("The current user cannot perform operations on cart \"$customerQuoteMaskedId\"");
 
         $query = $this->getQuery($customerQuoteMaskedId, $customerQuoteItemId, 2);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -180,13 +180,13 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -210,14 +210,14 @@ mutation {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }
 }
 QUERY;
         $this->expectExceptionMessage($message);
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -244,10 +244,10 @@ QUERY;
     /**
      * @param string $maskedQuoteId
      * @param int $itemId
-     * @param float $qty
+     * @param float $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, int $itemId, float $qty): string
+    private function getQuery(string $maskedQuoteId, int $itemId, float $quantity): string
     {
         return <<<QUERY
 mutation {
@@ -256,14 +256,14 @@ mutation {
     cart_items: [
       {
         cart_item_id: {$itemId}
-        quantity: {$qty}
+        quantity: {$quantity}
       }
     ]
   }) {
     cart {
       items {
         id
-        qty
+        quantity
       }
     }
   }

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -16,6 +17,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 
+/**
+ * Test loading of category tree
+ */
 class CategoryTest extends GraphQlAbstract
 {
     /**
@@ -23,9 +27,15 @@ class CategoryTest extends GraphQlAbstract
      */
     private $objectManager;
 
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
     }
 
     /**
@@ -106,6 +116,42 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
+    public function testCategoriesTreeWithDisabledCategory()
+    {
+        $category = $this->categoryRepository->get(3);
+        $category->setIsActive(false);
+        $this->categoryRepository->save($category);
+
+        $rootCategoryId = 2;
+        $query = <<<QUERY
+{
+  category(id: {$rootCategoryId}) {
+      id
+      name
+      level
+      description
+      children {
+        id
+        name
+        productImagePreview: products(pageSize: 1) {
+            items {
+                id
+                } 
+            }
+      }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('category', $response);
+        $this->assertArrayHasKey('children', $response['category']);
+        $this->assertSame(6, count($response['category']['children']));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
     public function testGetCategoryById()
     {
         $categoryId = 13;
@@ -120,6 +166,25 @@ QUERY;
         $response = $this->graphQlQuery($query);
         self::assertEquals('Category 1.2', $response['category']['name']);
         self::assertEquals(13, $response['category']['id']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Category doesn't exist
+     */
+    public function testGetDisabledCategory()
+    {
+        $categoryId = 8;
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+      id
+      name
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
     }
 
     public function testNonExistentCategoryWithProductCount()
@@ -301,6 +366,7 @@ QUERY;
         $this->assertAttributes($response['category']['products']['items'][0]);
         $this->assertWebsites($firstProduct, $response['category']['products']['items'][0]['websites']);
     }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */

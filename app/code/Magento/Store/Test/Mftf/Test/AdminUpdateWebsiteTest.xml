@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateWebsiteTest">
+        <annotations>
+            <stories value="Update Website"/>
+            <title value="Update Website and Verify Store Form"/>
+            <description value="Test log in to Stores and Update Website Test"/>
+            <testCaseId value="MC-14301"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{updateCustomWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Search created custom website in grid-->
+        <actionGroup ref="AssertWebsiteInGrid" stepKey="seeWebsiteInGrid">
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <click selector="{{AdminStoresGridSection.websiteName(customWebsite.name)}}" stepKey="clickWebsiteFirstRowInGrid"/>
+        <waitForPageLoad stepKey="waitForWebsiteFormPageToOpen"/>
+        <!--Update website name and website code as per data created and verify AssertWebsiteSuccessSaveMessage-->
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+            <argument name="newWebsiteName" value="{{updateCustomWebsite.name}}"/>
+            <argument name="websiteCode" value="{{updateCustomWebsite.code}}"/>
+        </actionGroup>
+
+        <!--Search updated custom website(from above step) in grid and verify AssertWebsiteInGrid-->
+        <actionGroup ref="AssertWebsiteInGrid" stepKey="seeUpdatedWebsiteInGrid">
+            <argument name="websiteName" value="{{updateCustomWebsite.name}}"/>
+        </actionGroup>
+
+        <!--Verify updated website name and updated websitecode on website form (AssertWebsiteForm and AssertWebsiteOnStoreForm)-->
+        <actionGroup ref="AssertWebsiteForm" stepKey="seeUpdatedWebsiteForm">
+            <argument name="websiteName" value="{{updateCustomWebsite.name}}"/>
+            <argument name="websiteCode" value="{{updateCustomWebsite.code}}"/>
+        </actionGroup>
+    </test>
+</tests>
