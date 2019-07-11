@@ -7,12 +7,12 @@ define([
            'jquery',
            'Magento_Checkout/js/model/postcode-validator',
            'mage/translate',
-           'uiRegistry',
+           'uiRegistry'
        ], function (
     $,
     postcodeValidator,
     $t,
-    uiRegistry,
+    uiRegistry
 ) {
     'use strict';
 
