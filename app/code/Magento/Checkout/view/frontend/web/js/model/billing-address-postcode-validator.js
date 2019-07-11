@@ -23,7 +23,6 @@ define([
         validateZipCodeTimeout: 0,
         validateDelay: 2000,
 
-
         /**
          * Perform postponed binding for fieldset elements
          *
