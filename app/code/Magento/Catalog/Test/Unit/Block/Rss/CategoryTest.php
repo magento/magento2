@@ -77,6 +77,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewConfig;
+    
+    /**
+     * @var \Magento\Framework\Config\View
+     */
+    protected $configView;
 
     /**
      * @var array
