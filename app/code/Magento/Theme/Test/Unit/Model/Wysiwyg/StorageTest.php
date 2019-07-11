@@ -9,6 +9,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Wysiwyg;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**

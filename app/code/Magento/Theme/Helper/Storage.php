@@ -18,6 +18,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
