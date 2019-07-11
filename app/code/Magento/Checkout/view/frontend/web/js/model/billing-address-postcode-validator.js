@@ -18,7 +18,6 @@ define([
 
     var postcodeElementName = 'postcode';
 
-
     return {
         validateZipCodeTimeout: 0,
         validateDelay: 2000,
