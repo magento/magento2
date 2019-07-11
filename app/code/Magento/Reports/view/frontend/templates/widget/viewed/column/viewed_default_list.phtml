@@ -9,10 +9,6 @@
  */
 
 /**
- * @codingStandardsIgnoreFile
- */
-
-/**
  * @var $block \Magento\Reports\Block\Product\Viewed
  */
 ?>
@@ -54,7 +50,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                 <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
                                    title="<?= $block->escapeHtmlAttr($block->stripTags($_product->getName(), null, true)) ?>"
                                    class="product-item-link">
-                                    <?= $block->escapeHtml($this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name')) ?>
+                                    <?= $block->escapeHtml($this->helper(\Magento\Catalog\Helper\Output::class)->productAttribute($_product, $_product->getName(), 'name')) ?>
                                 </a>
                             </strong>
                             <?= /* @noEscape */ $block->getProductPriceHtml(
@@ -76,7 +72,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                         </button>
                                     <?php else : ?>
                                         <?php
-                                            $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+                                            $postDataHelper = $this->helper(\Magento\Framework\Data\Helper\PostHelper::class);
                                             $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
                                         ?>
                                         <button type="button" class="action tocart primary" data-post='<?= /* @noEscape */ $postData ?>'>

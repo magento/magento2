@@ -4,26 +4,24 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Form\Edit $block */
 ?>
 <form class="form form-edit-account" action="<?= $block->escapeUrl($block->getUrl('customer/account/editPost')) ?>" method="post" id="form-validate" enctype="multipart/form-data" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>" autocomplete="off">
     <fieldset class="fieldset info">
         <?= $block->getBlockHtml('formkey') ?>
         <legend class="legend"><span><?= $block->escapeHtml(__('Account Information')) ?></span></legend><br>
-        <?= $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')->setObject($block->getCustomer())->toHtml() ?>
+        <?= $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Name::class)->setObject($block->getCustomer())->toHtml() ?>
 
-        <?php $_dob = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob') ?>
-        <?php $_taxvat = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Taxvat') ?>
-        <?php $_gender = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Gender') ?>
-        <?php if ($_dob->isEnabled()): ?>
+        <?php $_dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
+        <?php $_taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
+        <?php $_gender = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Gender::class) ?>
+        <?php if ($_dob->isEnabled()) : ?>
             <?= $_dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
         <?php endif ?>
-        <?php if ($_taxvat->isEnabled()): ?>
+        <?php if ($_taxvat->isEnabled()) : ?>
             <?= $_taxvat->setTaxvat($block->getCustomer()->getTaxvat())->toHtml() ?>
         <?php endif ?>
-        <?php if ($_gender->isEnabled()): ?>
+        <?php if ($_gender->isEnabled()) : ?>
             <?= $_gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
         <?php endif ?>
         <div class="field choice">
@@ -31,7 +29,7 @@
             <label class="label" for="change-email"><span><?= $block->escapeHtml(__('Change Email')) ?></span></label>
         </div>
         <div class="field choice">
-            <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1" title="<?= $block->escapeHtmlAttr(__('Change Password')) ?>"<?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1" title="<?= $block->escapeHtmlAttr(__('Change Password')) ?>"<?php if ($block->getChangePassword()) : ?> checked="checked"<?php endif; ?> class="checkbox" />
             <label class="label" for="change-password"><span><?= $block->escapeHtml(__('Change Password')) ?></span></label>
         </div>
     </fieldset>
@@ -97,7 +95,7 @@
         var ignore = <?= /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null' ?>;
         
         dataForm.mage('validation', {
-        <?php if ($_dob->isEnabled()): ?>
+        <?php if ($_dob->isEnabled()) : ?>
             errorPlacement: function(error, element) {
                 if (element.prop('id').search('full') !== -1) {
                     var dobElement = $(element).parents('.customer-dob'),
@@ -111,7 +109,7 @@
                 }
             },
             ignore: ':hidden:not(' + ignore + ')'
-        <?php else: ?>
+        <?php else : ?>
             ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
         <?php endif ?>
         });

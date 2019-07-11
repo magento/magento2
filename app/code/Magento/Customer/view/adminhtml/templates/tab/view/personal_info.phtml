@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo $block */
 
 $lastLoginDateAdmin = $block->getLastLoginDate();
@@ -25,7 +23,7 @@ $createDateStore = $block->getStoreCreateDate();
             <th><?= $block->escapeHtml(__('Last Logged In:')) ?></th>
             <td><?= $block->escapeHtml($lastLoginDateAdmin) ?> (<?= $block->escapeHtml($block->getCurrentStatus()) ?>)</td>
         </tr>
-        <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
+        <?php if ($lastLoginDateAdmin != $lastLoginDateStore) : ?>
         <tr>
             <th><?= $block->escapeHtml(__('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone())) ?></th>
             <td><?= $block->escapeHtml($lastLoginDateStore) ?> (<?= $block->escapeHtml($block->getCurrentStatus()) ?>)</td>
@@ -43,7 +41,7 @@ $createDateStore = $block->getStoreCreateDate();
             <th><?= $block->escapeHtml(__('Account Created:')) ?></th>
             <td><?= $block->escapeHtml($createDateAdmin) ?></td>
         </tr>
-        <?php if ($createDateAdmin != $createDateStore): ?>
+        <?php if ($createDateAdmin != $createDateStore) : ?>
             <tr>
                 <th><?= $block->escapeHtml(__('Account Created on (%1):', $block->getStoreCreateDateTimezone())) ?></th>
                 <td><?= $block->escapeHtml($createDateStore) ?></td>

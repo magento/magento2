@@ -6,7 +6,7 @@
 ?>
 <?php if ($block->getCustomerId()) :?>
     <span>
-        <a <?= /* @escapeNotVerified */ $block->getLinkAttributes()?>><?= $block->escapeHtml(__('Not you?'));?></a>
+        <a <?= /* @noEscape */ $block->getLinkAttributes()?>><?= $block->escapeHtml(__('Not you?'));?></a>
     </span>
 <?php endif;?>
 <script type="application/javascript">

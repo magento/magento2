@@ -3,15 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 ?>
 <?php /** @var $block Magento\Signifyd\Block\Adminhtml\CaseInfo */ ?>
 <?php
-
-    if ($block->isEmptyCase()) {
-        return '';
-    }
+if ($block->isEmptyCase()) {
+    return '';
+}
 ?>
 <section class="admin__page-section order-case-info">
     <div class="admin__page-section-title">

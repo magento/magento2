@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @see \Magento\Paypal\Block\Express\Review\Details
  * @var \Magento\Paypal\Block\Express\Review\Details $block
@@ -21,7 +20,7 @@
             <th class="col subtotal" scope="col"><?= $block->escapeHtml(__('Subtotal')) ?></th>
         </tr>
         </thead>
-            <?php foreach ($block->getItems() as $item): ?>
+            <?php foreach ($block->getItems() as $item) : ?>
                 <?= $block->getItemHtml($item) ?>
             <?php endforeach ?>
         <tfoot class="opc-block-summary">

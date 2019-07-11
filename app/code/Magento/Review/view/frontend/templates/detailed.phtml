@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Review\Block\Rating\Entity\Detailed $block */
 ?>
-<?php if (!empty($collection) && $collection->getSize()): ?>
+<?php if (!empty($collection) && $collection->getSize()) : ?>
     <div class="table-wrapper">
         <table class="data table ratings review summary">
             <caption class="table-caption"><?= $block->escapeHtml(__('Ratings Review Summary')) ?></caption>
             <tbody>
-            <?php foreach ($collection as $_rating): ?>
-                <?php if ($_rating->getSummary()): ?>
+            <?php foreach ($collection as $_rating) : ?>
+                <?php if ($_rating->getSummary()) : ?>
                     <tr>
                         <th class="label" scope="row"><?= $block->escapeHtml(__($_rating->getRatingCode())) ?></th>
                         <td class="value">
