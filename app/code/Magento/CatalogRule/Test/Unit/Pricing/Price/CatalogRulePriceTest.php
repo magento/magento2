@@ -170,7 +170,7 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
         $coreWebsiteId = 1;
         $productId = 1;
         $customerGroupId = 1;
-        $dateTime = time();
+        $dateTime = new \DateTime();
 
         $catalogRulePrice = 55.12;
         $convertedPrice = 45.34;
