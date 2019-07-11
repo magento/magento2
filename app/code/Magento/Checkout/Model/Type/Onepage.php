@@ -335,7 +335,7 @@ class Onepage
          * instead of just loading from sales/quote_address
          */
         $customer = $customerSession->getCustomerDataObject();
-        if ($customer) {
+        if ($customer && empty($this->_checkoutSession->getQuote()->getShippingAddress()->getAddressId())) {
             $quote->assignCustomer($customer);
         }
         return $this;
