@@ -241,6 +241,39 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer_subscribe.php
+     * @throws \Exception
+     */
+    public function testCreateCustomerSubscribed()
+    {
+        $newFirstname = 'Richard';
+        $newLastname = 'Rowe';
+        $newEmail = 'new_customer@example.com';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            firstname: "{$newFirstname}"
+            lastname: "{$newLastname}"
+            email: "{$newEmail}"
+            is_subscribed: true
+        }
+    ) {
+        customer {
+            email
+            is_subscribed
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($query);
+
+        $this->assertEquals(false, $response['createCustomer']['customer']['is_subscribed']);
+    }
+
     public function tearDown()
     {
         $newEmail = 'new_customer@example.com';
