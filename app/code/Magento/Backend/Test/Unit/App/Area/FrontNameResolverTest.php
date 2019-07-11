@@ -142,24 +142,32 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
         $urlParts = [];
         $this->uri->expects($this->once())
             ->method('parse')
-            ->willReturnCallback(function ($url) use (&$urlParts) {
-                $urlParts = parse_url($url);
-            });
+            ->willReturnCallback(
+                function ($url) use (&$urlParts) {
+                    $urlParts = parse_url($url);
+                }
+            );
         $this->uri->expects($this->once())
             ->method('getScheme')
-            ->willReturnCallback(function () use (&$urlParts) {
-                return array_key_exists('scheme', $urlParts) ? $urlParts['scheme'] : '';
-            });
+            ->willReturnCallback(
+                function () use (&$urlParts) {
+                    return array_key_exists('scheme', $urlParts) ? $urlParts['scheme'] : '';
+                }
+            );
         $this->uri->expects($this->once())
             ->method('getHost')
-            ->willReturnCallback(function () use (&$urlParts) {
-                return array_key_exists('host', $urlParts) ? $urlParts['host'] : '';
-            });
+            ->willReturnCallback(
+                function () use (&$urlParts) {
+                    return array_key_exists('host', $urlParts) ? $urlParts['host'] : '';
+                }
+            );
         $this->uri->expects($this->once())
             ->method('getPort')
-            ->willReturnCallback(function () use (&$urlParts) {
-                return array_key_exists('port', $urlParts) ? $urlParts['port'] : '';
-            });
+            ->willReturnCallback(
+                function () use (&$urlParts) {
+                    return array_key_exists('port', $urlParts) ? $urlParts['port'] : '';
+                }
+            );
 
         $this->assertEquals($this->model->isHostBackend(), $expectedValue);
     }
