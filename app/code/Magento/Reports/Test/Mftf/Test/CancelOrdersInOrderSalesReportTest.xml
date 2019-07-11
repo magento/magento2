@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95960"/>
             <useCaseId value="MAGETWO-95823"/>
-            <skip>
-                <issueId value="MC-17274"/>
-            </skip>
         </annotations>
 
         <before>
@@ -69,6 +66,7 @@
 
         <!-- Generate Order report for statuses  -->
         <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage1"/>
+        <waitForPageLoad stepKey="waitForOrdersReportPageLoad1"/>
         <!-- Get date -->
         <generateDate stepKey="generateEndDate" date="+0 day" format="m/d/Y"/>
         <generateDate stepKey="generateStartDate" date="-1 day" format="m/d/Y"/>
@@ -81,6 +79,7 @@
         <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersSpecified"/>
         <!-- Generate Order report -->
         <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage2"/>
+        <waitForPageLoad stepKey="waitForOrdersReportPageLoad2"/>
         <!-- Get date -->
         <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportAfterCancelOrder">
             <argument name="orderFromDate" value="$generateStartDate"/>

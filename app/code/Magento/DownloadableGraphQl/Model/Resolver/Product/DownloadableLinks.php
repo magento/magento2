@@ -21,6 +21,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\UrlInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 /**
@@ -44,20 +45,28 @@ class DownloadableLinks implements ResolverInterface
     private $linkFactory;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * DownloadableLinks constructor.
      *
      * @param EnumLookup $enumLookup
      * @param DownloadableHelper $downloadableHelper
      * @param LinkFactory $linkFactory
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
         EnumLookup $enumLookup,
         DownloadableHelper $downloadableHelper,
-        LinkFactory $linkFactory
+        LinkFactory $linkFactory,
+        UrlInterface $urlBuilder
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
         $this->linkFactory = $linkFactory;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -156,7 +165,10 @@ class DownloadableLinks implements ResolverInterface
             }
 
             $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
-            $resultData[$linkKey]['sample_url'] = $link->getSampleUrl();
+            $resultData[$linkKey]['sample_url'] = $this->urlBuilder->getUrl(
+                'downloadable/download/linkSample',
+                ['link_id' => $link->getId()]
+            );
         }
         return $resultData;
     }
