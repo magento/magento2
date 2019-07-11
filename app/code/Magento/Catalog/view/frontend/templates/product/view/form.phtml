@@ -30,11 +30,17 @@
         <?php else :?>
             <?php if ($_product->isSaleable() && $block->getOptionsContainer() == 'container1') :?>
                 <?= $block->getChildChildHtml('options_container') ?>
+            <?php elseif($_product->getTypeId() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE &&
+                $block->getOptionsContainer() == 'container1') :?>
+                    <?= $block->getChildChildHtml('options_container') ?>
             <?php endif;?>
         <?php endif; ?>
 
         <?php if ($_product->isSaleable() && $block->hasOptions() && $block->getOptionsContainer() == 'container2') :?>
             <?= $block->getChildChildHtml('options_container') ?>
+        <?php elseif($_product->getTypeId() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE &&
+            $block->hasOptions() && $block->getOptionsContainer() == 'container2') :?>
+                <?= $block->getChildChildHtml('options_container') ?>
         <?php endif;?>
         <?= $block->getChildHtml('form_bottom') ?>
     </form>

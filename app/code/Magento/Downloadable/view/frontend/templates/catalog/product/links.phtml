@@ -6,7 +6,7 @@
 ?>
 <?php /* @var $block \Magento\Downloadable\Block\Catalog\Product\Links */ ?>
 <?php $_linksPurchasedSeparately = $block->getLinksPurchasedSeparately(); ?>
-<?php if ($block->getProduct()->isSaleable() && $block->hasLinks()) :?>
+<?php if ($block->hasLinks()) :?>
     <?php $_links = $block->getLinks(); ?>
     <?php $_linksLength = 0; ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
