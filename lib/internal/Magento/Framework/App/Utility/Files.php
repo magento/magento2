@@ -615,6 +615,7 @@ class Files
                 $params[$key] = $incomingParams[$key];
             }
         }
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $cacheKey = md5($location . '|' . implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
@@ -768,6 +769,7 @@ class Files
                 $params[$key] = $incomingParams[$key];
             }
         }
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $cacheKey = md5(implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
