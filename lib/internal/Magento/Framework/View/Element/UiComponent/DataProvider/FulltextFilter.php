@@ -16,9 +16,9 @@ use Magento\Framework\Api\Filter;
 class FulltextFilter implements FilterApplierInterface
 {
     /**
-     * Patterns using in preg_replace
+     * Patterns using for escaping special characters in escapeAgainstValue method
      */
-    private $patterns = [
+    private $escapePatterns = [
         '/[@\.]/' => '\_',
         '/([+\-><\(\)~*]+)/' => ' ',
     ];
@@ -78,7 +78,7 @@ class FulltextFilter implements FilterApplierInterface
      */
     private function escapeAgainstValue(string $value): string
     {
-        return preg_replace(array_keys($this->patterns), array_values($this->patterns), $value);
+        return preg_replace(array_keys($this->escapePatterns), array_values($this->escapePatterns), $value);
     }
 
     /**
