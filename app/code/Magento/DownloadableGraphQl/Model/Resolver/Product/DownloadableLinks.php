@@ -127,7 +127,7 @@ class DownloadableLinks implements ResolverInterface
      * @return array
      * @throws RuntimeException
      */
-    private function formatLinks(Collection $links) : array
+    private function formatLinks(Collection $links): array
     {
         $resultData = [];
         foreach ($links as $linkKey => $link) {
@@ -142,13 +142,17 @@ class DownloadableLinks implements ResolverInterface
             $linkType = $link->getLinkType();
 
             if ($linkType !== null) {
-                $resultData[$linkKey]['link_type']
-                    = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $linkType);
+                $resultData[$linkKey]['link_type'] = $this->enumLookup->getEnumValueFromField(
+                    'DownloadableFileTypeEnum',
+                    $linkType
+                );
             }
 
             if ($sampleType !== null) {
-                $resultData[$linkKey]['sample_type']
-                    = $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $sampleType);
+                $resultData[$linkKey]['sample_type'] = $this->enumLookup->getEnumValueFromField(
+                    'DownloadableFileTypeEnum',
+                    $sampleType
+                );
             }
 
             $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
