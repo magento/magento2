@@ -48,7 +48,6 @@ class ScopeTreeProvider implements ScopeTreeProviderInterface
 
     /**
      * @inheritdoc
-     * @return array
      */
     public function get()
     {
