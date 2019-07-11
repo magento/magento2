@@ -16,7 +16,7 @@ use Magento\Framework\Api\Filter;
 class FulltextFilter implements FilterApplierInterface
 {
     /**
-     * Patterns using for escaping special characters in escapeAgainstValue method
+     * Patterns using for escaping special characters
      */
     private $escapePatterns = [
         '/[@\.]/' => '\_',
