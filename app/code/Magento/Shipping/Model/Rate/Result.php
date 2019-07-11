@@ -7,6 +7,7 @@ namespace Magento\Shipping\Model\Rate;
 
 /**
  * Class Result
+ *
  * Container for Rates
  *
  * @api
@@ -17,7 +18,7 @@ class Result
     /**
      * Shipping method rates
      *
-     * @var array
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult[]
      */
     protected $_rates = [];
 
