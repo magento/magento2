@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerSidebarSection">
-        <element name="sidebarTab" type="text" selector="//div[@id='block-collapsible-nav']//a[text()='{{tabName}}']" parameterized="true"/>
+        <element name="sidebarTab" type="text" selector="//div[@id='block-collapsible-nav']//a[text()='{{tabName}}']" parameterized="true" timeout="60"/>
         <element name="sidebarCurrentTab" type="text" selector="//div[@id='block-collapsible-nav']//*[contains(text(), '{{var}}')]" parameterized="true"/>
     </section>
 </sections>
