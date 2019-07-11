@@ -70,7 +70,7 @@ class NameValidatorTest extends TestCase
             ->with(
                 [
                     'errors' => [
-                        __('"%field" can not contain invalid characters.', ['field' => SourceInterface::NAME])
+                        __('Validation Failed')
                     ]
                 ]
             )

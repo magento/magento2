@@ -114,7 +114,7 @@ class CodeValidatorTest extends TestCase
             ->with(
                 [
                     'errors' => [
-                        __('"%field" can not contain invalid characters.', ['field' => SourceInterface::SOURCE_CODE])
+                        __('Validation Failed')
                     ]
                 ]
             )
