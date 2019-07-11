@@ -14,6 +14,9 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test class for CodeValidator
+ */
 class CodeValidatorTest extends TestCase
 {
 
@@ -45,9 +48,13 @@ class CodeValidatorTest extends TestCase
             ->method('create')
             ->with(['errors' => [__('"%field" can not be empty.', ['field' => SourceInterface::SOURCE_CODE])]])
             ->willReturn($emptyValidatorResult);
-        $this->codeValidator = (new ObjectManager($this))->getObject(CodeValidator::class, [
-            'validationResultFactory' => $this->validationResultFactory
-        ]);
+
+        $this->codeValidator = (new ObjectManager($this))->getObject(
+            CodeValidator::class,
+            [
+                'validationResultFactory' => $this->validationResultFactory
+            ]
+        );
 
         $this->source->expects($this->once())
             ->method('getSourceCode')
@@ -60,13 +67,18 @@ class CodeValidatorTest extends TestCase
         $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
         $this->validationResultFactory->expects($this->once())
             ->method('create')
-            ->with([
-                'errors' => [__('"%field" can not contain whitespaces.', ['field' => SourceInterface::SOURCE_CODE])]
-            ])
+            ->with(
+                [
+                    'errors' => [__('"%field" can not contain whitespaces.', ['field' => SourceInterface::SOURCE_CODE])]
+                ]
+            )
             ->willReturn($emptyValidatorResult);
-        $this->codeValidator = (new ObjectManager($this))->getObject(CodeValidator::class, [
-            'validationResultFactory' => $this->validationResultFactory
-        ]);
+        $this->codeValidator = (new ObjectManager($this))->getObject(
+            CodeValidator::class,
+            [
+                'validationResultFactory' => $this->validationResultFactory
+            ]
+        );
         $this->source->expects($this->once())
             ->method('getSourceCode')
             ->willReturn(' source code ');
@@ -79,9 +91,12 @@ class CodeValidatorTest extends TestCase
         $this->validationResultFactory->expects($this->once())
             ->method('create')
             ->willReturn($emptyValidatorResult);
-        $this->codeValidator = (new ObjectManager($this))->getObject(CodeValidator::class, [
-            'validationResultFactory' => $this->validationResultFactory
-        ]);
+        $this->codeValidator = (new ObjectManager($this))->getObject(
+            CodeValidator::class,
+            [
+                'validationResultFactory' => $this->validationResultFactory
+            ]
+        );
         $this->source->expects($this->once())
             ->method('getSourceCode')
             ->willReturn(' source_code ');
@@ -96,13 +111,20 @@ class CodeValidatorTest extends TestCase
         $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
         $this->validationResultFactory->expects($this->once())
             ->method('create')
-            ->with([
-                'errors' => [__('"%field" can not contain invalid characters.', ['field' => SourceInterface::SOURCE_CODE])]
-            ])
+            ->with(
+                [
+                    'errors' => [
+                        __('"%field" can not contain invalid characters.', ['field' => SourceInterface::SOURCE_CODE])
+                    ]
+                ]
+            )
             ->willReturn($emptyValidatorResult);
-        $this->codeValidator = (new ObjectManager($this))->getObject(CodeValidator::class, [
-            'validationResultFactory' => $this->validationResultFactory
-        ]);
+        $this->codeValidator = (new ObjectManager($this))->getObject(
+            CodeValidator::class,
+            [
+                'validationResultFactory' => $this->validationResultFactory
+            ]
+        );
         $this->source->expects($this->once())
             ->method('getSourceCode')
             ->willReturn('${}');

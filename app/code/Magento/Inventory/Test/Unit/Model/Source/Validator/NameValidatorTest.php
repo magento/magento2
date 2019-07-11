@@ -13,6 +13,9 @@ use Magento\Inventory\Model\Source\Validator\NameValidator;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test class for NameValidator
+ */
 class NameValidatorTest extends TestCase
 {
     /**
@@ -41,13 +44,18 @@ class NameValidatorTest extends TestCase
         $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
         $this->validationResultFactory->expects($this->once())
             ->method('create')
-            ->with([
-                'errors' => [__('"%field" can not be empty.', ['field' => SourceInterface::NAME])]
-            ])
+            ->with(
+                [
+                    'errors' => [__('"%field" can not be empty.', ['field' => SourceInterface::NAME])]
+                ]
+            )
             ->willReturn($emptyValidatorResult);
-        $this->nameValidator = (new ObjectManager($this))->getObject(NameValidator::class, [
-            'validationResultFactory' => $this->validationResultFactory
-        ]);
+        $this->nameValidator = (new ObjectManager($this))->getObject(
+            NameValidator::class,
+            [
+                'validationResultFactory' => $this->validationResultFactory
+            ]
+        );
         $this->source->expects($this->once())
             ->method('getName')
             ->willReturn('');
@@ -59,15 +67,20 @@ class NameValidatorTest extends TestCase
         $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
         $this->validationResultFactory->expects($this->once())
             ->method('create')
-            ->with([
-                'errors' => [
-                    __('"%field" can not contain invalid characters.', ['field' => SourceInterface::NAME])
+            ->with(
+                [
+                    'errors' => [
+                        __('"%field" can not contain invalid characters.', ['field' => SourceInterface::NAME])
+                    ]
                 ]
-            ])
+            )
             ->willReturn($emptyValidatorResult);
-        $this->nameValidator = (new ObjectManager($this))->getObject(NameValidator::class, [
-            'validationResultFactory' => $this->validationResultFactory
-        ]);
+        $this->nameValidator = (new ObjectManager($this))->getObject(
+            NameValidator::class,
+            [
+                'validationResultFactory' => $this->validationResultFactory
+            ]
+        );
         $this->source->expects($this->once())
             ->method('getName')
             ->willReturn('${}');
@@ -80,9 +93,12 @@ class NameValidatorTest extends TestCase
         $this->validationResultFactory->expects($this->once())
             ->method('create')
             ->willReturn($emptyValidatorResult);
-        $this->nameValidator = (new ObjectManager($this))->getObject(NameValidator::class, [
-            'validationResultFactory' => $this->validationResultFactory
-        ]);
+        $this->nameValidator = (new ObjectManager($this))->getObject(
+            NameValidator::class,
+            [
+                'validationResultFactory' => $this->validationResultFactory
+            ]
+        );
         $this->source->expects($this->once())
             ->method('getName')
             ->willReturn('testname');
