@@ -29,6 +29,7 @@ define([
          */
         initFields: function (formPath) {
             var self = this;
+
             uiRegistry.async(formPath + '.' + postcodeElementName)(self.bindHandler.bind(self));
         },
 
