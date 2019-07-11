@@ -9,6 +9,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Design\Theme\ThemePackage;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\Filesystem\Glob;
 
@@ -147,6 +148,7 @@ class Files
     public static function init()
     {
         if (!self::$_instance) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow.FoundDirectThrow
             throw new \Exception('Instance is not set yet.');
         }
         return self::$_instance;
@@ -590,6 +592,8 @@ class Files
     }
 
     /**
+     * Collect layout files
+     *
      * @param string $location
      * @param array $incomingParams
      * @param bool $asDataSet
@@ -611,6 +615,7 @@ class Files
                 $params[$key] = $incomingParams[$key];
             }
         }
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $cacheKey = md5($location . '|' . implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
@@ -712,6 +717,8 @@ class Files
     }
 
     /**
+     * Parse theme layout files
+     *
      * @param array $themeFiles
      * @param string $currentThemePath
      * @param ThemePackage $theme
@@ -762,6 +769,7 @@ class Files
                 $params[$key] = $incomingParams[$key];
             }
         }
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $cacheKey = md5(implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
@@ -840,6 +848,8 @@ class Files
     }
 
     /**
+     * Returns list of all theme paths
+     *
      * @param string $area
      * @param string $module
      * @param string $subFolder
