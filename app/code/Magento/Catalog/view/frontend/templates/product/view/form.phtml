@@ -6,8 +6,6 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
-use Magento\Downloadable\Model\Product\Type;
-
 /**
  * Product view template
  *
@@ -32,7 +30,7 @@ use Magento\Downloadable\Model\Product\Type;
         <?php else :?>
             <?php if ($_product->isSaleable() && $block->getOptionsContainer() == 'container1') :?>
                 <?= $block->getChildChildHtml('options_container') ?>
-            <?php elseif ($_product->getTypeId() == Type::TYPE_DOWNLOADABLE &&
+            <?php elseif ($_product->getTypeId() == 'downloadable' &&
                 $block->getOptionsContainer() == 'container1') :?>
                     <?= $block->getChildChildHtml('options_container') ?>
             <?php endif;?>
@@ -40,7 +38,7 @@ use Magento\Downloadable\Model\Product\Type;
 
         <?php if ($_product->isSaleable() && $block->hasOptions() && $block->getOptionsContainer() == 'container2') :?>
             <?= $block->getChildChildHtml('options_container') ?>
-        <?php elseif ($_product->getTypeId() == Type::TYPE_DOWNLOADABLE &&
+        <?php elseif ($_product->getTypeId() == 'downloadable' &&
             $block->hasOptions() && $block->getOptionsContainer() == 'container2') :?>
                 <?= $block->getChildChildHtml('options_container') ?>
         <?php endif;?>
