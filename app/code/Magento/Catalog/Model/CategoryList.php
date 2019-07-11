@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryListInterface;
@@ -50,7 +53,7 @@ class CategoryList implements CategoryListInterface
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CategorySearchResultsInterfaceFactory $categorySearchResultsFactory
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         CollectionFactory $categoryCollectionFactory,
@@ -74,12 +77,13 @@ class CategoryList implements CategoryListInterface
         /** @var Collection $collection */
         $collection = $this->categoryCollectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
-
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         $items = [];
-        foreach ($collection->getAllIds() as $id) {
-            $items[] = $this->categoryRepository->get($id);
+        foreach ($collection->getData() as $categoryData) {
+            $items[] = $this->categoryRepository->get(
+                $categoryData[$collection->getEntity()->getIdFieldName()]
+            );
         }
 
         /** @var CategorySearchResultsInterface $searchResult */
