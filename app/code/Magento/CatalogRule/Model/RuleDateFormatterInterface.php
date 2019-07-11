@@ -15,16 +15,16 @@ interface RuleDateFormatterInterface
     /**
      * Create \DateTime object with date converted to scope timezone for catalog rule
      *
-     * @param   mixed $scope Information about scope
-     * @return  \DateTime
+     * @param mixed $scope Information about scope
+     * @return \DateTime
      */
-    public function getDate($scope = null);
+    public function getDate($scope = null): \DateTime;
 
     /**
-     * Get scope timestamp  for catalog rule
+     * Get scope timestamp for catalog rule
      *
-     * @param   mixed $scope Information about scope
-     * @return  int
+     * @param mixed $scope Information about scope
+     * @return int
      */
-    public function getTimeStamp($scope = null);
+    public function getTimeStamp($scope = null): int;
 }

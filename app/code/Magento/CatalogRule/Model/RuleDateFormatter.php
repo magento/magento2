@@ -28,7 +28,7 @@ class RuleDateFormatter implements \Magento\CatalogRule\Model\RuleDateFormatterI
     /**
      * @inheritdoc
      */
-    public function getDate($scope = null)
+    public function getDate($scope = null): \DateTime
     {
         return $this->localeDate->scopeDate($scope, null, true);
     }
@@ -36,7 +36,7 @@ class RuleDateFormatter implements \Magento\CatalogRule\Model\RuleDateFormatterI
     /**
      * @inheritdoc
      */
-    public function getTimeStamp($scope = null)
+    public function getTimeStamp($scope = null): int
     {
         return $this->localeDate->scopeTimeStamp($scope);
     }
