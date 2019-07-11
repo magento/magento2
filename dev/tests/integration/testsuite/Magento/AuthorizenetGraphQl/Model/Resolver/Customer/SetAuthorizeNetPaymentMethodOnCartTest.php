@@ -19,7 +19,6 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
 {
