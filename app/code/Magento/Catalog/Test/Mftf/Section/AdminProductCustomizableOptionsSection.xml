@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductCustomizableOptionsSection">
-        <element name="checkIfCustomizableOptionsTabOpen" type="text" selector="//span[text()='Customizable Options']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
+        <element name="checkIfCustomizableOptionsTabOpen" type="text" selector="//span[text()='Customizable Options']/parent::strong/parent::*[@data-state-collapsible='closed']" timeout="30"/>
         <element name="customizableOptions" type="text" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Customizable Options']"/>
         <element name="useDefaultOptionTitle" type="text" selector="[data-index='options'] tr.data-row [data-index='title'] [name^='options_use_default']"/>
         <element name="useDefaultOptionTitleByIndex" type="text" selector="[data-index='options'] [data-index='values'] tr[data-repeat-index='{{var1}}'] [name^='options_use_default']" parameterized="true"/>
@@ -23,8 +23,8 @@
         <element name="customOption" type="block" selector="[data-index='options'] tbody tr.data-row"/>
         <element name="customOptionButtonDelete" type="button" selector="[data-index='options'] [data-index='delete_button']"/>
 
-        <element name="optionTypeDropDown" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//div[contains(@class, 'action-select-wrap')]" parameterized="true" />
-        <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//*[contains(., '{{optionValue}}')]" parameterized="true" />
+        <element name="optionTypeDropDown" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//div[contains(@class, 'action-select-wrap')]" parameterized="true" timeout="30"/>
+        <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//*[contains(., '{{optionValue}}')]" parameterized="true" timeout="30"/>
         <element name="checkSelect" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Type']/parent::label/parent::div/parent::div//div[@data-role='selected-option']" parameterized="true"/>
         <element name="checkOptionType" type="select" selector="//span[text()='{{optionTitle}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='{{optionType}}']" parameterized="true"/>
         <element name="checkDropDown" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='Drop-down']" parameterized="true"/>
