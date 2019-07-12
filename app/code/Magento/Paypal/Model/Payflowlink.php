@@ -425,6 +425,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         $request->setCreatesecuretoken('Y')
             ->setSecuretokenid($this->mathRandom->getUniqueHash())
             ->setTrxtype($this->_getTrxTokenType());
+        $request = $this->updateRequestReturnUrls($request, $payment);
 
         $order = $payment->getOrder();
         $request->setAmt(sprintf('%.2F', $order->getBaseTotalDue()))
@@ -440,8 +441,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     }
 
     /**
-     * Get store id from response if exists
-     * or default
+     * Get store id from response if exists or default
      *
      * @return int
      */
@@ -464,7 +464,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         /** @var \Magento\Paypal\Model\Payflow\Request $request */
         $request = $this->_requestFactory->create();
         $cscEditable = $this->getConfigData('csc_editable');
-
         $data = parent::buildBasicRequest();
 
         $request->setData($data->getData());
@@ -514,6 +513,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 
     /**
      * If response is failed throw exception
+     *
      * Set token data in payment object
      *
      * @param \Magento\Framework\DataObject $response
@@ -558,6 +558,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     protected function _generateSecureSilentPostHash($payment)
     {
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $secureHash = md5($this->mathRandom->getRandomString(10));
         $payment->setAdditionalInformation($this->_secureSilentPostHashKey, $secureHash);
         return $secureHash;
@@ -599,5 +600,31 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         }
 
         return $websiteUrl . 'paypal/' . $this->_callbackController . '/' . $actionName;
+    }
+
+    /**
+     * Update the redirect urls on the request if they are set on the payment
+     *
+     * @param \Magento\Paypal\Model\Payflow\Request $request
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return \Magento\Paypal\Model\Payflow\Request
+     */
+    private function updateRequestReturnUrls(
+        \Magento\Paypal\Model\Payflow\Request $request,
+        \Magento\Sales\Model\Order\Payment $payment
+    ): \Magento\Paypal\Model\Payflow\Request {
+        $paymentData = $payment->getAdditionalInformation();
+
+        if (!empty($paymentData['cancel_url'])) {
+            $request->setCancelurl($paymentData['cancel_url']);
+        }
+        if (!empty($paymentData['return_url'])) {
+            $request->setReturnurl($paymentData['return_url']);
+        }
+        if (!empty($paymentData['error_url'])) {
+            $request->setErrorurl($paymentData['error_url']);
+        }
+
+        return $request;
     }
 }
