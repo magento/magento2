@@ -16,6 +16,8 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Update customer account data
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - https://jira.corp.magento.com/browse/MC-18152
  */
 class UpdateCustomerAccount
 {
