@@ -20,10 +20,6 @@
         <before>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1 "/>
             <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 1 "/>
-            <magentoCLI command="config:set catalog/frontend/grid_per_page_values 12,24,36" stepKey="setAllowedProductsPerPageValue"/>
-            <magentoCLI command="config:set catalog/frontend/grid_per_page 12" stepKey="setDefaultProductsPerPageValue"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct1"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct2"/>
@@ -93,16 +89,24 @@
             <deleteData createDataKey="simpleProduct30" stepKey="deleteSimpleProduct30"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
+       <!--Verify default number of products displayed in the grid view-->
+        <comment userInput="Verify default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigPagePage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad" />
+        <conditionalClick selector="{{AdminCatalogStorefrontConfigSection.sectionHeader}}" dependentSelector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" visible="false" stepKey="openCatalogConfigStorefrontSection"/>
+        <waitForElementVisible selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" stepKey="waitForSectionOpen"/>
+        <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" userInput="12,24,36" stepKey="seeDefaultValueAllowedNumberProductsPerPage"/>
+        <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageDefaultValue}}" userInput="12" stepKey="seeDefaultValueProductPerPage"/>
         <!--Open Category Page and select created category-->
+        <comment userInput="Open Category Page and select created category" stepKey="commentOpenCategoryPage"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <waitForPageLoad stepKey="waitForPageToLoad0"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoaded2"/>
-
         <!--Select Products-->
+        <comment userInput="Select Products" stepKey="commentSelectProducts"/>
         <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
         <waitForPageLoad stepKey="waitForProductsToLoad"/>
@@ -110,7 +114,6 @@
         <waitForElementVisible selector="{{CatalogProductsSection.resetFilter}}" time="30" stepKey="waitForResetButtonToVisible"/>
         <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
-
         <selectOption selector="{{AdminProductGridFilterSection.productPerPage}}" userInput="30" stepKey="selectPagePerView"/>
         <wait stepKey="waitFroPageToLoad1" time="30"/>
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="pagi"  stepKey="selectProduct1"/>
@@ -122,35 +125,35 @@
         <waitForPageLoad stepKey="waitForCategorySaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
-
         <!--Open Category Store Front Page-->
+        <comment userInput="Open Category Store Front Page" stepKey="commentOpenCategoryOnStorefront"/>
         <amOnPage url="{{_defaultCategory.name}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
-
         <!--Select 12 items per page and verify number of products displayed in each page -->
+        <comment userInput="Select 12 items per page and verify number of products displayed in each page" stepKey="comment12ItemsPerPage"/>
         <conditionalClick selector="{{StorefrontCategoryTopToolbarSection.gridMode}}" visible="true" dependentSelector="{{StorefrontCategoryTopToolbarSection.gridMode}}" stepKey="seeProductGridIsActive"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToBottomToolbarSection"/>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="12" stepKey="selectPerPageOption"/>
-
         <!--Verify number of products displayed in First Page -->
+        <comment userInput="Verify number of products displayed in First Page" stepKey="commentVerifyNumberOfProducts"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="12" stepKey="seeNumberOfProductsInFirstPage"/>
-
         <!--Verify number of products displayed in Second Page -->
+        <comment userInput="Verify number of products displayed in Second Page" stepKey="commentVerifyNumberOfProductsSecondPage"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad4"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="12" stepKey="seeNumberOfProductsInSecondPage"/>
-
         <!--Verify number of products displayed in third  Page -->
+        <comment userInput="Verify number of products displayed in third Page" stepKey="commentVerifyNumberOfProductsThirdPage"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton1"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="6" stepKey="seeNumberOfProductsInThirdPage"/>
-
         <!--Change Pages using Previous Page selector and verify number of products displayed in each page-->
+        <comment userInput="Change Pages using Previous Page selector and verify number of products displayed in each page" stepKey="commentVerifyProductsOnEachPage"/>
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="scrollToPreviousPage"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="clickOnPreviousPage1"/>
         <waitForPageLoad stepKey="waitForPageToLoad5"/>
@@ -159,26 +162,26 @@
         <click selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="clickOnPreviousPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad6"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="12" stepKey="seeNumberOfProductsInFirstPage1"/>
-
         <!--Select Pages by using page Number and verify number of products displayed-->
+        <comment userInput="Select Pages by using page Number and verify number of products displayed" stepKey="commentSelectPagesAndVerify"/>
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToPreviousPage2"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('2')}}" stepKey="clickOnPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad7"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="12" stepKey="seeNumberOfProductsInSecondPage2"/>
-
         <!--Select Third Page using page number-->
+        <comment userInput="Select Third Page using page number" stepKey="commentSelectThirdPage"/>
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToPreviousPage3"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('3')}}" stepKey="clickOnThirdPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad8"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="6" stepKey="seeNumberOfProductsInThirdPage2"/>
-
         <!--Select First Page using page number-->
+        <comment userInput="Select First Page using page number" stepKey="commentSelectFirstPage"/>
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.previousPage}}" stepKey="scrollToPreviousPage4"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('1')}}" stepKey="clickOnFirstPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad9"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="12" stepKey="seeNumberOfProductsFirstPage2"/>
-
         <!--Select 24 items per page and verify number of products displayed in each page -->
+        <comment userInput="Select 24 items per page and verify number of products displayed in each page" stepKey="commentSelect24ItemsPerPage"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToPerPage"/>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="24" stepKey="selectPerPageOption1"/>
         <waitForPageLoad stepKey="waitForPageToLoad10"/>
@@ -187,13 +190,13 @@
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad11"/>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="6" stepKey="seeNumberOfProductsInSecondPage3"/>
-
         <!--Select First Page using page number-->
+        <comment userInput="Select First Page using page number" stepKey="commentSelectFirstPageSecondTime"/>
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('1')}}" stepKey="scrollToPreviousPage5"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.pageNumber('1')}}" stepKey="clickOnFirstPage2"/>
         <waitForPageLoad stepKey="waitForPageToLoad13"/>
-
         <!--Select 36 items per page  and verify number of products displayed in each page -->
+        <comment userInput="Select 36 items per page and verify number of products displayed in each page" stepKey="commentSelect36ItemsPerPage"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToPerPage4"/>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="36" stepKey="selectPerPageOption2"/>
         <waitForPageLoad stepKey="waitForPageToLoad12"/>
