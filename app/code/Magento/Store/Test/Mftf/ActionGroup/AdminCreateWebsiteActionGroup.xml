@@ -8,8 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Admin creates new custom website -->
     <actionGroup name="AdminCreateWebsiteActionGroup">
+        <!-- Admin creates new custom website -->
         <annotations>
             <description>Goes to the Admin Website creation page. Fills in the provided Website Name and Code. Clicks on Save. Validates that the Success Message is present and correct.</description>
         </annotations>
@@ -29,8 +29,8 @@
         <see userInput="You saved the website." stepKey="seeSavedMessage"/>
     </actionGroup>
 
-    <!--Get Website_id-->
     <actionGroup name="AdminGetWebsiteIdActionGroup">
+        <!--Get Website_id-->
         <annotations>
             <description>Goes to the Admin Stores grid page. Filters the grid for the provided Website. Grabs the Website ID from the URL.</description>
         </annotations>

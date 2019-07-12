@@ -8,8 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Admin creates new Store group -->
     <actionGroup name="AdminCreateNewStoreGroupActionGroup">
+        <!-- Admin creates new Store group -->
         <annotations>
             <description>Goes to the Admin Stores creation page. Fills in the provided Details (Website, Store Group Name and Store Group Code). Clicks on Save. Validates that the Success Message is present and correct.</description>
         </annotations>

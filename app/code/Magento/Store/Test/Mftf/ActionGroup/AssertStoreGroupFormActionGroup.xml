@@ -8,8 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Admin creates new Store group -->
     <actionGroup name="AssertStoreGroupFormActionGroup">
+        <!-- Admin creates new Store group -->
         <annotations>
             <description>Clicks on the 1st row of the Admin Store grid page. Validates that the provided Website, Store Group Name/Code and Root Category are present and correct.</description>
         </annotations>

@@ -11,7 +11,7 @@ The Magento 2 development team or community maintainers will review all issues a
 During the review we might require clarifications from the contributor.
 If there is no response from the contributor within two weeks, the pull request will be closed.
 
-For more detialed information on contribution please read our [beginners guide](https://github.com/magento/magento2/wiki/Getting-Started).
+For more detailed information on contribution please read our [beginners guide](https://github.com/magento/magento2/wiki/Getting-Started).
 
 ## Contribution requirements
 
