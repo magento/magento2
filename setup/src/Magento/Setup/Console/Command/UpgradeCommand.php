@@ -87,6 +87,7 @@ class UpgradeCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            $resultCode = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
@@ -97,15 +98,11 @@ class UpgradeCommand extends AbstractSetupCommand
                 $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
                 $arrayInput = new ArrayInput([]);
                 $arrayInput->setInteractive($input->isInteractive());
-                $result = $importConfigCommand->run($arrayInput, $output);
-                if ($result === \Magento\Framework\Console\Cli::RETURN_FAILURE) {
-                    throw new \Magento\Framework\Exception\RuntimeException(
-                        __('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME)
-                    );
-                }
+                $resultCode = $importConfigCommand->run($arrayInput, $output);
             }
 
-            if (!$keepGenerated && $this->appState->getMode() === AppState::MODE_PRODUCTION) {
+            if ($resultCode !== \Magento\Framework\Console\Cli::RETURN_FAILURE
+                && !$keepGenerated && $this->appState->getMode() === AppState::MODE_PRODUCTION) {
                 $output->writeln(
                     '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
                 );
@@ -115,6 +112,6 @@ class UpgradeCommand extends AbstractSetupCommand
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        return $resultCode;
     }
 }
