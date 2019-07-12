@@ -40,6 +40,8 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
+        <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+
         <!-- Create new virtual product -->
         <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createVirtualProduct">
             <argument name="productType" value="virtual"/>
@@ -52,10 +54,8 @@
 
         <!-- Set Content to the product -->
         <actionGroup ref="expandAdminProductSection" stepKey="openContentTab"/>
-        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtnForLongDescription"/>
-        <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{ApiProductDescription.value}}" stepKey="setLongDescription"/>
-        <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtnForShortDescription"/>
-        <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{ApiProductShortDescription.value}}" stepKey="setShortDescription"/>
+        <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{ApiProductDescription.value}}" stepKey="fillLongDescription"/>
+        <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{ApiProductShortDescription.value}}" stepKey="fillShortDescription"/>
 
         <!-- Add two related products -->
         <actionGroup ref="addRelatedProductBySku" stepKey="addFirstRelatedProduct">
@@ -117,9 +117,7 @@
 
         <!-- Edit Content to the product -->
         <actionGroup ref="expandAdminProductSection" stepKey="openContentSettingsTab"/>
-        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtnLongDescription" />
         <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="EDIT ~ {{ApiProductDescription.value}} ~ EDIT" stepKey="editLongDescription"/>
-        <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtnShortDescription"/>
         <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="EDIT ~ {{ApiProductShortDescription.value}} ~ EDIT" stepKey="editShortDescription"/>
 
         <!-- Edit product Search Engine Optimization settings -->
@@ -183,5 +181,7 @@
         <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
             <argument name="websiteName" value="$createWebsite.website[name]$"/>
         </actionGroup>
+
+        <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
     </test>
 </tests>
