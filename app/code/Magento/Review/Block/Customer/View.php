@@ -92,6 +92,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Initialize review id
      *
      * @return void
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _construct()
     {
