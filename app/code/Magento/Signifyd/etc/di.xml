@@ -68,6 +68,9 @@
             <argument name="converter" xsi:type="object">Magento\Signifyd\Model\PaymentMethodMapper\XmlToArrayConfigConverter</argument>
             <argument name="schemaLocator" xsi:type="object">PaymentMapperSchemaLocator</argument>
             <argument name="fileName" xsi:type="string">signifyd_payment_mapping.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/payment_method_list/payment_method" xsi:type="string">name</item>
+            </argument>
         </arguments>
     </virtualType>
     <virtualType name="PaymentMethodConfigData" type="Magento\Framework\Config\Data">
