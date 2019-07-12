@@ -16,7 +16,6 @@ use Magento\GroupedCatalogInventory\Plugin\OutOfStockFilter;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 
 /**

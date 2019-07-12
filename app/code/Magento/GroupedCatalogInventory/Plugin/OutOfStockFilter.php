@@ -50,9 +50,8 @@ class OutOfStockFilter
         // Only remove out-of-stock products if no quantities were specified
         if (is_array($result) && !empty($result) && !$buyRequest->getData('super_group')) {
             foreach ($result as $index => $cartItem) {
-                $prodId = $cartItem->getId();
-                $productStockStatus = $this->stockRegistry->getProductStockStatus($prodId);
-                if ($productStockStatus == StockStatusInterface::STATUS_OUT_OF_STOCK) {
+                $productStockStatus = $this->stockRegistry->getProductStockStatus($cartItem->getId());
+                if ($productStockStatus === StockStatusInterface::STATUS_OUT_OF_STOCK) {
                     unset($result[$index]);
                 }
             }
