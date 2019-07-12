@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 /**
  * Product initialization helper
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
+namespace Magento\ConfigurableProduct\Plugin\Product\Initialization;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -13,28 +14,34 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Class CleanConfigurationTmpImages
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPCS.Magento2.Files.LineLength.MaxExceeded)
  */
 class CleanConfigurationTmpImages
 {
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $fileStorageDb;
+    private $fileStorageDb;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
      */
-    protected $mediaConfig;
+    private $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    protected $mediaDirectory;
+    private $mediaDirectory;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    protected $request;
+    private $request;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serialize;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
@@ -47,11 +54,13 @@ class CleanConfigurationTmpImages
         \Magento\Framework\App\RequestInterface $request,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Serialize\SerializerInterface $serialize
     ) {
         $this->request = $request;
         $this->fileStorageDb = $fileStorageDb;
         $this->mediaConfig = $mediaConfig;
+        $this->serialize = $serialize;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
@@ -70,12 +79,12 @@ class CleanConfigurationTmpImages
     ) {
 
         $configurations = $this->getConfigurations();
-        foreach ($configurations as $variationId => $simpleProductData) {
+        foreach ($configurations as $simpleProductData) {
             if (!isset($simpleProductData['media_gallery']['images'])) {
                 continue;
             }
 
-            foreach ($simpleProductData['media_gallery']['images'] as $imageId => $image) {
+            foreach ($simpleProductData['media_gallery']['images'] as $image) {
                 $file = $this->getFilenameFromTmp($image['file']);
                 if ($this->fileStorageDb->checkDbUsage()) {
                     $filename = $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaShortUrl($file));
@@ -96,9 +105,9 @@ class CleanConfigurationTmpImages
      * @param string $file
      * @return string
      */
-    protected function getFilenameFromTmp($file)
+    private function getFilenameFromTmp($file)
     {
-        return strrpos($file, '.tmp') == strlen($file) - 4 ? substr($file, 0, strlen($file) - 4) : $file;
+        return strrpos($file, '.tmp') === strlen($file) - 4 ? substr($file, 0, strlen($file) - 4) : $file;
     }
 
     /**
@@ -106,12 +115,12 @@ class CleanConfigurationTmpImages
      *
      * @return array
      */
-    protected function getConfigurations()
+    private function getConfigurations()
     {
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', "[]");
-        if (isset($configurableMatrix) && $configurableMatrix != "") {
-            $configurableMatrix = json_decode($configurableMatrix, true);
+        if (isset($configurableMatrix) && $configurableMatrix !== "") {
+            $configurableMatrix = $this->serialize->unserialize($configurableMatrix);
 
             foreach ($configurableMatrix as $item) {
                 if (empty($item['was_changed']) && empty($item['newProduct'])) {

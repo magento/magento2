@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
+namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Product\Initialization;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper as ProductInitializationHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
-use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\CleanConfigurationTmpImages;
+use Magento\ConfigurableProduct\Plugin\Product\Initialization\CleanConfigurationTmpImages;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
@@ -18,6 +18,7 @@ use Magento\MediaStorage\Helper\File\Storage\Database as FileStorage;
 /**
  * Class CleanConfigurationTmpImagesTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPCS.Magento2.Files.LineLength.MaxExceeded)
  * @package Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin
  */
 class CleanConfigurationTmpImagesTest extends \PHPUnit\Framework\TestCase
