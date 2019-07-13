@@ -193,8 +193,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                     'store' => $this->_storeManager->getStore()->getId(),
                 ]
-            )->setFrom(
-                $sender
+            )->setFromByScope(
+                'general'
+            )->setReplyTo(
+                $sender['email'],
+                $sender['name']
             )->setTemplateVars(
                 [
                     'name' => $name,
