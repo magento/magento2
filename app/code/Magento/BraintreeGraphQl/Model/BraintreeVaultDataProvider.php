@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\BraintreeGraphQl\Model;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
-use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Format Braintree input into value expected when setting payment method
@@ -18,20 +18,6 @@ class BraintreeVaultDataProvider implements AdditionalDataProviderInterface
     private const PATH_ADDITIONAL_DATA = 'braintree_cc_vault';
 
     /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
-    /**
-     * @param ArrayManager $arrayManager
-     */
-    public function __construct(
-        ArrayManager $arrayManager
-    ) {
-        $this->arrayManager = $arrayManager;
-    }
-
-    /**
      * Format Braintree input into value expected when setting payment method
      *
      * @param array $args
@@ -39,6 +25,12 @@ class BraintreeVaultDataProvider implements AdditionalDataProviderInterface
      */
     public function getData(array $args): array
     {
-        return $this->arrayManager->get(static::PATH_ADDITIONAL_DATA, $args) ?? [];
+        if (!isset($args[static::PATH_ADDITIONAL_DATA])) {
+            throw new GraphQlInputException(
+                __('Required parameter "braintree_cc_vault" for "payment_method" is missing.')
+            );
+        }
+
+        return $args[static::PATH_ADDITIONAL_DATA];
     }
 }

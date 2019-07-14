@@ -53,7 +53,9 @@ class SetVaultPaymentNonce
         \Magento\Quote\Model\Quote $quote,
         array $paymentData
     ): array {
-        if ($paymentData['code'] !== ConfigProvider::CC_VAULT_CODE) {
+        if ($paymentData['code'] !== ConfigProvider::CC_VAULT_CODE
+            || !isset($paymentData[ConfigProvider::CC_VAULT_CODE])
+        ) {
             return [$quote, $paymentData];
         }
 

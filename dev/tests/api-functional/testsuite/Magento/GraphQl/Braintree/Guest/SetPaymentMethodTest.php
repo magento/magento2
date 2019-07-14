@@ -68,13 +68,14 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
+     * @dataProvider dataProviderTestPlaceOrder
      */
-    public function testPlaceOrder()
+    public function testPlaceOrder(string $nonce)
     {
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
-        $setPaymentQuery = $this->getSetPaymentBraintreeQuery($maskedQuoteId);
+        $setPaymentQuery = $this->getSetPaymentBraintreeQuery($maskedQuoteId, $nonce);
         $setPaymentResponse = $this->graphQlMutation($setPaymentQuery);
 
         $this->assertSetPaymentMethodResponse($setPaymentResponse, 'braintree');
@@ -83,6 +84,41 @@ class SetPaymentMethodTest extends GraphQlAbstract
         $placeOrderResponse = $this->graphQlMutation($placeOrderQuery);
 
         $this->assertPlaceOrderResponse($placeOrderResponse, $reservedOrderId);
+    }
+
+    /**
+     * Data provider for testPlaceOrder
+     *
+     * @return array
+     */
+    public function dataProviderTestPlaceOrder(): array
+    {
+        return [
+            ['fake-valid-nonce'],
+            ['fake-apple-pay-visa-nonce'],
+        ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
+     * @expectedException \Exception
+     */
+    public function testSetPaymentMethodInvalidInput()
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
+        $setPaymentQuery = $this->getSetPaymentBraintreeQueryInvalidInput($maskedQuoteId);
+        $this->expectExceptionMessage("Required parameter \"braintree\" for \"payment_method\" is missing.");
+        $this->graphQlMutation($setPaymentQuery);
     }
 
     private function assertPlaceOrderResponse(array $response, string $reservedOrderId): void
@@ -106,7 +142,7 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getSetPaymentBraintreeQuery(string $maskedQuoteId): string
+    private function getSetPaymentBraintreeQuery(string $maskedQuoteId, string $nonce): string
     {
         return <<<QUERY
 mutation {
@@ -118,6 +154,30 @@ mutation {
         is_active_payment_token_enabler:false
         payment_method_nonce:"fake-valid-nonce"
       }
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getSetPaymentBraintreeQueryInvalidInput(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"braintree"
     }
   }) {
     cart {
