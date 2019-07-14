@@ -42,11 +42,6 @@ class Generator extends AbstractSchemaGenerator
     const ARRAY_SIGNIFIER = '[0]';
 
     /**
-     * Wrapper node for XML requests
-     */
-    private XML_SCHEMA_PARAMWRAPPER = 'request';
-
-    /**
      * Swagger factory instance.
      *
      * @var SwaggerFactory
@@ -883,7 +878,7 @@ class Generator extends AbstractSchemaGenerator
             $bodySchema['xml'] = [];
         }
         if (!isset($bodySchema['xml']['name']) || empty($bodySchema['xml']['name'])) {
-            $bodySchema['xml']['name'] = self::XML_SCHEMA_PARAMWRAPPER;
+            $bodySchema['xml']['name'] = 'request';
         }
 
         return $bodySchema;
