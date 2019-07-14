@@ -110,7 +110,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getRssData()
     {
@@ -225,7 +225,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function isAllowed()
     {
@@ -236,7 +236,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
-     * @return array
+     * @return arraygetFeeds
      */
     public function getFeeds()
     {
@@ -274,8 +274,9 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         return $result;
     }
 
+
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function isAuthRequired()
     {

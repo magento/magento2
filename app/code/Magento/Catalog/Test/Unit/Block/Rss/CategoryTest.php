@@ -167,15 +167,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($configViewMock);
 
         $product = $this->getMockBuilder(\Magento\catalog\Model\Product::class)
-            ->setMethods([
-                '__sleep',
-                '__wakeup',
-                'getName',
-                'getAllowedInRss',
-                'getProductUrl',
-                'getDescription',
-                'getAllowedPriceInRss',
-            ])->disableOriginalConstructor()->getMock();
+            ->setMethods(['__sleep', '__wakeup', 'getName', 'getAllowedInRss', 'getProductUrl', 'getDescription', 'getAllowedPriceInRss',])->disableOriginalConstructor()->getMock();
         $product->expects($this->once())->method('getName')->will($this->returnValue('Product Name'));
         $product->expects($this->once())->method('getAllowedInRss')->will($this->returnValue(true));
         $product->expects($this->exactly(2))->method('getProductUrl')
