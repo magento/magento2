@@ -155,7 +155,7 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
                     'link' => $this->_storeManager->getStore()->getBaseUrl()
                 ]
             );
-            $breadcrumbsBlock->addCrumb('cms_page', ['label' => $page->getTitle(), 'title' => $page->getTitle()]);
+            $breadcrumbsBlock->addCrumb('cms_page', ['label' => __($page->getTitle()), 'title' => __($page->getTitle())]);
         }
     }
 
