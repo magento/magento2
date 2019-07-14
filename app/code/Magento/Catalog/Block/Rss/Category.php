@@ -94,8 +94,10 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $this->viewConfig = $viewConfig;
         parent::__construct($context, $data);
     }
-
-
+	
+	/**
+     * @return void
+     */
     protected function _construct()
     {
         $this->setCacheKey(
