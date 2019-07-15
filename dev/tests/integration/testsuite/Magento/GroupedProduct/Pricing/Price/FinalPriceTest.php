@@ -41,9 +41,11 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
 
         /** @var $simpleProduct \Magento\Catalog\Api\Data\ProductInterface */
         $simpleProduct = $productRepository->get('simple');
-        $simpleProduct->setTierPrices([
-            $tierPrice
-        ]);
+        $simpleProduct->setTierPrices(
+            [
+                $tierPrice
+            ]
+        );
         $productRepository->save($simpleProduct);
 
         /** @var $product \Magento\Catalog\Model\Product */

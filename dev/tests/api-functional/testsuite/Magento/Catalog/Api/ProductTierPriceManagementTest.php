@@ -9,6 +9,11 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Class ProductTierPriceManagementTest
+ *
+ * @package Magento\Catalog\Api
+ */
 class ProductTierPriceManagementTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
