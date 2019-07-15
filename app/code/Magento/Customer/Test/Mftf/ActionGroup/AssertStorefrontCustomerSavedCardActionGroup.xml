@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCustomerSavedCardActionGroup">
+        <arguments>
+            <argument name="card" type="entity" defaultValue="StoredPaymentMethods"/>
+        </arguments>
+        <see selector="{{StorefrontCustomerStoredPaymentMethodsSection.cardNumber}}" userInput="{{card.cardNumberEnding}}" stepKey="verifyCardNumber"/>
+        <see selector="{{StorefrontCustomerStoredPaymentMethodsSection.expirationDate}}" userInput="{{card.cardExpire}}" stepKey="verifyCardExpire"/>
+    </actionGroup>
+</actionGroups>
