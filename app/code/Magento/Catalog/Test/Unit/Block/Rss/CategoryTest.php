@@ -167,7 +167,15 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($configViewMock);
 
         $product = $this->getMockBuilder(\Magento\catalog\Model\Product::class)
-            ->setMethods(['__sleep', '__wakeup', 'getName', 'getAllowedInRss', 'getProductUrl', 'getDescription', 'getAllowedPriceInRss',])->disableOriginalConstructor()->getMock();
+            ->setMethods([
+                '__sleep',
+                '__wakeup',
+                'getName',
+                'getAllowedInRss',
+                'getProductUrl',
+                'getDescription',
+                'getAllowedPriceInRss'
+            ])->disableOriginalConstructor()->getMock();
         $product->expects($this->once())->method('getName')->will($this->returnValue('Product Name'));
         $product->expects($this->once())->method('getAllowedInRss')->will($this->returnValue(true));
         $product->expects($this->exactly(2))->method('getProductUrl')
@@ -232,17 +240,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 'addAttributeToSort',
                 'load',
                 'addAttributeToFilter',
-                'getIterator',
-            ])->disableOriginalConstructor()->getMock();
+                'getIterator'])->disableOriginalConstructor()->getMock();
         $collection->expects($this->once())->method('addIdFilter')->will($this->returnSelf());
         $collection->expects($this->exactly(3))->method('addAttributeToSelect')->will($this->returnSelf());
         $collection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
         $collection->expects($this->once())->method('addAttributeToFilter')->will($this->returnSelf());
         $collection->expects($this->once())->method('load')->will($this->returnSelf());
-        $collection->expects($this->once())->method('getIterator')->will($this->returnValue(
-            new \ArrayIterator([$category])
-        ));
-
+        $collection->expects($this->once())->method('getIterator')->will($this->returnValue(new \ArrayIterator([$category])));
         $category->expects($this->once())->method('getId')->will($this->returnValue(1));
         $category->expects($this->once())->method('getName')->will($this->returnValue('Category Name'));
         $category->expects($this->once())->method('getResourceCollection')->will($this->returnValue($collection));

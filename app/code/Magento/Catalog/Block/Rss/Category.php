@@ -94,7 +94,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $this->viewConfig = $viewConfig;
         parent::__construct($context, $data);
     }
-	
+    
 	/**
      * @return void
      */
@@ -205,6 +205,8 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
+     * Get current Store Id
+     *
      * @return int
      */
     protected function getStoreId()
@@ -217,6 +219,8 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
+     * Cache lifetime for RSS feed
+     *
      * @return int
      */
     public function getCacheLifetime()
@@ -225,6 +229,8 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
+     * Retrieve rss feed enable for category page
+     *
      * @return bool
      */
     public function isAllowed()
@@ -236,7 +242,8 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
-     * @return arraygetFeeds
+     * Get category feed collection
+     * @return array
      */
     public function getFeeds()
     {
@@ -274,8 +281,9 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         return $result;
     }
 
-
     /**
+     * Check isAuthRequired Required
+     *
      * @return bool
      */
     public function isAuthRequired()
