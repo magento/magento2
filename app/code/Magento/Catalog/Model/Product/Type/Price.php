@@ -499,15 +499,12 @@ class Price
         return $price;
     }
 
-
     /**
      * Get formatted by currency tier price
      *
      * @param float $qty
-     * @param $product
-     *
+     * @param Product $product
      * @return array|float
-     *
      * @deprecated
      * @see getFormattedTierPrice()
      */
