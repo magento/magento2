@@ -77,7 +77,8 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
         }
         $paymentData = $args['input']['payment_method'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         if ((int)$context->getUserId() === 0) {
             if (!$cart->getCustomerEmail()) {
