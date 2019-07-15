@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
+    <!-- Skip by MQE-1576 -->
     <actionGroup name="ConfigureBraintree">
         <!-- GoTo ConfigureBraintree fields -->
         <click stepKey="clickOnSTORES" selector="{{AdminMenuSection.stores}}"/>
