@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class Category
+ * 
  * @package Magento\Catalog\Block\Rss
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
