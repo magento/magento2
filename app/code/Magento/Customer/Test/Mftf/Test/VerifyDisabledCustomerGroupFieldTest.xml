@@ -27,6 +27,7 @@
         <!-- 2. Navigate to Customers > Customer Groups -->
         <amOnPage url="{{AdminCustomerGroupPage.url}}" stepKey="amOnCustomerGroupPage" />
         <waitForPageLoad stepKey="waitForCustomerGroupsPageLoad" />
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearFilters"/>
 
         <!-- 3. Select system Customer Group specified in data set from grid -->
         <click selector="{{AdminCustomerGroupMainSection.editButtonByCustomerGroupCode(NotLoggedInCustomerGroup.code)}}" stepKey="clickOnEditCustomerGroup" />

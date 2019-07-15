@@ -56,7 +56,7 @@
         <assertNotEmpty actual="$getSecondOrderId" stepKey="assertSecondOrderIdIsNotEmpty" after="getSecondOrderId"/>
 
         <!-- Create CreditMemo for second Order -->
-       <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/>
+        <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/>
 
         <!-- Navigate to backend: Go to Sales > Orders -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrderPage"/>

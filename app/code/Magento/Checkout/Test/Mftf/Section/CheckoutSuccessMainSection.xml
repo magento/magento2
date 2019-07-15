@@ -18,5 +18,6 @@
         <element name="continueShoppingButton" type="button" selector=".action.primary.continue" timeout="30"/>
         <element name="createAnAccount" type="button" selector="[data-bind*=&quot;i18n: 'Create an Account'&quot;]" timeout="30"/>
         <element name="printLink" type="button" selector=".print" timeout="30"/>
+        <element name="orderNumberWithoutLink" type="text" selector="//div[contains(@class, 'checkout-success')]//p/span"/>
     </section>
 </sections>
