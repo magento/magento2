@@ -39,7 +39,7 @@ class CleanConfigurationTmpImages
     private $request;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Serialize
      */
     private $serialize;
 
@@ -48,6 +48,8 @@ class CleanConfigurationTmpImages
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Serialize\Serializer\Serialize $serialize
+     *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -55,7 +57,7 @@ class CleanConfigurationTmpImages
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Serialize\SerializerInterface $serialize
+        \Magento\Framework\Serialize\Serializer\Serialize $serialize
     ) {
         $this->request = $request;
         $this->fileStorageDb = $fileStorageDb;
@@ -71,6 +73,7 @@ class CleanConfigurationTmpImages
      * @param \Magento\Catalog\Model\Product $configurableProduct
      *
      * @return \Magento\Catalog\Model\Product
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterInitialize(
