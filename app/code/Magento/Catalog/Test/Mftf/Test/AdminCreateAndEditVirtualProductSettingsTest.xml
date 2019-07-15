@@ -53,7 +53,8 @@
         </actionGroup>
 
         <!-- Set Content to the product -->
-        <actionGroup ref="expandAdminProductSection" stepKey="openContentTab"/>
+        <scrollTo selector="{{AdminProductContentSection.sectionHeader}}" x="0" y="-100" stepKey="scrollToContent"/>
+        <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openContentDropDown"/>
         <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{ApiProductDescription.value}}" stepKey="fillLongDescription"/>
         <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{ApiProductShortDescription.value}}" stepKey="fillShortDescription"/>
 
@@ -116,7 +117,8 @@
         </actionGroup>
 
         <!-- Edit Content to the product -->
-        <actionGroup ref="expandAdminProductSection" stepKey="openContentSettingsTab"/>
+        <scrollTo selector="{{AdminProductContentSection.sectionHeader}}" x="0" y="-100" stepKey="scrollToContentTab"/>
+        <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openContentTab"/>
         <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="EDIT ~ {{ApiProductDescription.value}} ~ EDIT" stepKey="editLongDescription"/>
         <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="EDIT ~ {{ApiProductShortDescription.value}} ~ EDIT" stepKey="editShortDescription"/>
 
