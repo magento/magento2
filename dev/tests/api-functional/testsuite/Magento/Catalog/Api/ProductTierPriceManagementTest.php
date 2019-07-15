@@ -34,12 +34,12 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
 
-        $tearPriceList = $this->_webApiCall(
+        $tierPriceList = $this->_webApiCall(
             $serviceInfo,
             ['sku' => $productSku, 'customerGroupId' => $customerGroupId]
         );
 
-        $this->assertCount($count, $tearPriceList);
+        $this->assertCount($count, $tierPriceList);
         if ($count) {
             $this->assertEquals($value, $tearPriceList[0]['value']);
             $this->assertEquals($qty, $tearPriceList[0]['qty']);

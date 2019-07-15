@@ -54,7 +54,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $websiteValidator;
 
     /**
-     * @var AdvancedPricing\Validator\TearPrice |\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator\TierPrice |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $tierPriceValidator;
 

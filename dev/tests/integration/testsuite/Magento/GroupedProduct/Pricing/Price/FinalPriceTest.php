@@ -29,7 +29,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
      * @magentoAppIsolation enabled
      */
-    public function testFinalPriceWithTearPrice()
+    public function testFinalPriceWithTierPrice()
     {
         $productRepository = Bootstrap::getObjectManager()
             ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
