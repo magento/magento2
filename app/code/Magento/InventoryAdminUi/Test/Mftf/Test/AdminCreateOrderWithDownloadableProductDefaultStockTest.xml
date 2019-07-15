@@ -20,6 +20,7 @@
         </annotations>
 
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
             <createData entity="FullSource1" stepKey="customSource"/>
             <createData entity="BasicMsiStock1" stepKey="customStock"/>
@@ -50,6 +51,7 @@
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
                 <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
             </actionGroup>
