@@ -134,6 +134,7 @@ define([
             }
 
             if (!this.isAmountAvailable(totalAmount) || !this.isCountryAvailable(billingAddress.countryId)) {
+                self.state = $.Deferred();
                 self.state.resolve();
 
                 return self.state.promise();
