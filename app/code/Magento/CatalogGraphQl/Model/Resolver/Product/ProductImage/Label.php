@@ -13,7 +13,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Returns product's image label
@@ -26,20 +25,12 @@ class Label implements ResolverInterface
     private $productResource;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param ProductResourceModel $productResource
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        ProductResourceModel $productResource,
-        StoreManagerInterface $storeManager
+        ProductResourceModel $productResource
     ) {
         $this->productResource = $productResource;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -65,15 +56,16 @@ class Label implements ResolverInterface
         $imageType = $value['image_type'];
         $imagePath = $product->getData($imageType);
         $productId = (int)$product->getEntityId();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         // null if image is not set
         if (null === $imagePath) {
-            return $this->getAttributeValue($productId, 'name');
+            return $this->getAttributeValue($productId, 'name', $storeId);
         }
 
-        $imageLabel = $this->getAttributeValue($productId, $imageType . '_label');
+        $imageLabel = $this->getAttributeValue($productId, $imageType . '_label', $storeId);
         if (null === $imageLabel) {
-            $imageLabel = $this->getAttributeValue($productId, 'name');
+            $imageLabel = $this->getAttributeValue($productId, 'name', $storeId);
         }
 
         return $imageLabel;
@@ -84,12 +76,11 @@ class Label implements ResolverInterface
      *
      * @param int $productId
      * @param string $attributeCode
+     * @param int $storeId
      * @return null|string Null if attribute value is not exists
      */
-    private function getAttributeValue(int $productId, string $attributeCode): ?string
+    private function getAttributeValue(int $productId, string $attributeCode, int $storeId): ?string
     {
-        $storeId = $this->storeManager->getStore()->getId();
-
         $value = $this->productResource->getAttributeRawValue($productId, $attributeCode, $storeId);
         return is_array($value) && empty($value) ? null : $value;
     }
