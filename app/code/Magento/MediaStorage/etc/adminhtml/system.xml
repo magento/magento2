@@ -24,7 +24,7 @@
                 </field>
                 <field id="synchronize" translate="label comment" type="button" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
                     <frontend_model>Magento\MediaStorage\Block\System\Config\System\Storage\Media\Synchronize</frontend_model>
-                    <comment>After selecting a new media storage location, press the Synchronize button to transfer all media to that location. Media will not be available in the new location until the synchronization process is complete. Remember to "Save Config" following change of mode and synchronization.</comment>
+                    <comment>After selecting a new media storage location, press the Synchronize button to transfer all media to that location and then "Save Config". Media will not be available in the new location until the synchronization process is complete.</comment>
                 </field>
                 <field id="configuration_update_time" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Environment Update Time</label>
