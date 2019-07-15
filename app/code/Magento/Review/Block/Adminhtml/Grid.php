@@ -176,7 +176,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'datetime',
                 'filter_index' => 'rt.created_at',
                 'index' => 'review_created_at',
-                'header_css_class' => 'col-date',
+                'header_css_class' => 'col-date col-date-min-width',
                 'column_css_class' => 'col-date'
             ]
         );
