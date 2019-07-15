@@ -13,20 +13,18 @@
     <a if="address().telephone" attr="'href': 'tel:' + address().telephone" text="address().telephone"></a><br/>
 
     <each args="data: address().customAttributes, as: 'element'">
-        <each args="data: Object.keys(element), as: 'attribute'">
-            <if args="typeof element[attribute] === 'object'">
-                <if args="element[attribute].label">
-                    <text args="element[attribute].label"/>
-                </if>
-                <ifnot args="element[attribute].label">
-                    <if args="element[attribute].value">
-                        <text args="element[attribute].value"/>
-                    </if>
-                </ifnot>
+        <if args="typeof element === 'object'">
+            <if args="element.label">
+                <text args="element.label"/>
             </if>
-            <if args="typeof element[attribute] === 'string'">
-                <text args="element[attribute]"/>
-            </if><br/>
-        </each>
+            <ifnot args="element.label">
+                <if args="element.value">
+                    <text args="element.value"/>
+                </if>
+            </ifnot>
+        </if>
+        <if args="typeof element === 'string'">
+            <text args="element"/>
+        </if><br/>
     </each>
 </if>
