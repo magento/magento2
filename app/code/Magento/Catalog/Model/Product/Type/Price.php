@@ -502,7 +502,7 @@ class Price
     /**
      * Get formatted by currency tier price
      *
-     * @param   float $qty
+     * @param   float   $qty
      * @param   Product $product
      *
      * @return  array|float

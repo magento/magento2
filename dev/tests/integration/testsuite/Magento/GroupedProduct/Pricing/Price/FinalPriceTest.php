@@ -9,6 +9,11 @@ namespace Magento\GroupedProduct\Pricing\Price;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class FinalPriceTest
+ * 
+ * @package Magento\GroupedProduct\Pricing\Price
+ */
 class FinalPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
