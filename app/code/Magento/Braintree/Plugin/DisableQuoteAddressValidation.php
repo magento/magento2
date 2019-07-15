@@ -7,53 +7,37 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Plugin;
 
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\QuoteManagement;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Model\Quote;
 
 /**
- * Plugin for CartManagementInterface to disable quote address validation
+ * Plugin for QuoteManagement to disable quote address validation
  */
 class DisableQuoteAddressValidation
 {
     /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
-
-    /**
-     * @param CartRepositoryInterface $quoteRepository
-     */
-    public function __construct(
-        CartRepositoryInterface $quoteRepository
-    ) {
-        $this->quoteRepository = $quoteRepository;
-    }
-
-    /**
-     * Disable quote address validation before place order
+     * Disable quote address validation before submit order
      *
-     * @param CartManagementInterface $subject
-     * @param \Closure $proceed
-     * @param int $cartId
-     * @param PaymentInterface|null $payment
-     * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param QuoteManagement $subject
+     * @param Quote $quote
+     * @param array $orderData
+     * @return array
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundPlaceOrder(
-        CartManagementInterface $subject,
-        \Closure $proceed,
-        int $cartId,
-        PaymentInterface $payment = null
+    public function beforeSubmit(
+        QuoteManagement $subject,
+        Quote $quote,
+        $orderData = []
     ) {
-        $quote = $this->quoteRepository->get($cartId);
         if ($quote->getPayment()->getMethod() == 'braintree_paypal' &&
             $quote->getCheckoutMethod() == CartManagementInterface::METHOD_GUEST) {
             $billingAddress = $quote->getBillingAddress();
             $billingAddress->setShouldIgnoreValidation(true);
             $quote->setBillingAddress($billingAddress);
         }
-        return $proceed($cartId, $payment);
+        return [$quote, $orderData];
     }
 }
