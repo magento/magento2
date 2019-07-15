@@ -274,25 +274,10 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
             $lastVersionId = (int) $this->getState()->getVersionId();
             $action = $this->actionFactory->get($this->getActionClass());
 
+            $this->executeAction($action, $lastVersionId, $currentVersionId);
+
             try {
                 $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
-
-                $versionBatchSize = self::$maxVersionQueryBatch;
-                $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
-                    ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
-                    : self::DEFAULT_BATCH_SIZE;
-
-                for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $versionBatchSize) {
-                    // Don't go past the current version for atomicy.
-                    $versionTo = min($currentVersionId, $versionFrom + $versionBatchSize);
-                    $ids = array_map('intval', $this->getChangelog()->getList($versionFrom, $versionTo));
-
-                    // We run the actual indexer in batches.  Chunked AFTER loading to avoid duplicates in separate chunks.
-                    $chunks = array_chunk($ids, $batchSize);
-                    foreach ($chunks as $ids) {
-                        $action->execute($ids);
-                    }
-                }
 
                 $this->getState()->loadByView($this->getId());
                 $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
@@ -313,6 +298,35 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
                     );
                 }
                 throw $exception;
+            }
+        }
+    }
+
+    /**
+     * Execute action from last version to current version, by batches
+     *
+     * @param ActionInterface $action
+     * @param int $lastVersionId
+     * @param int $currentVersionId
+     * @return void
+     * @throws \Exception
+     */
+    private function executeAction(ActionInterface $action, int $lastVersionId, int $currentVersionId)
+    {
+        $versionBatchSize = self::$maxVersionQueryBatch;
+        $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
+            ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
+            : self::DEFAULT_BATCH_SIZE;
+
+        for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $versionBatchSize) {
+            // Don't go past the current version for atomicy.
+            $versionTo = min($currentVersionId, $versionFrom + $versionBatchSize);
+            $ids = array_map('intval', $this->getChangelog()->getList($versionFrom, $versionTo));
+
+            // We run the actual indexer in batches.  Chunked AFTER loading to avoid duplicates in separate chunks.
+            $chunks = array_chunk($ids, $batchSize);
+            foreach ($chunks as $ids) {
+                $action->execute($ids);
             }
         }
     }
