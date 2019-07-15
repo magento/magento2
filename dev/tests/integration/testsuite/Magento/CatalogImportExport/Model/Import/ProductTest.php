@@ -26,6 +26,7 @@ use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
+use Magento\ImportExport\Model\Import\Source\Csv;
 
 /**
  * Class ProductTest
@@ -36,6 +37,7 @@ use Psr\Log\LoggerInterface;
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * phpcs:disable Generic.PHP.NoSilencedErrors, Generic.Metrics.NestingLevel, Magento2.Functions.StaticFunction
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
@@ -1647,6 +1649,35 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithoutChangingUrlKeys()
+    {
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_without_url_key_column.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->assertEquals('url-key', $productRepository->get('simple1')->getUrlKey());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
@@ -2170,7 +2201,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     *
      */
     public function testImportDataChangeAttributeSet()
     {
@@ -2188,7 +2218,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
         $errors = $this->_model->setParameters(
             [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => \Magento\Catalog\Model\Product::ENTITY
             ]
         )->setSource(

@@ -12,7 +12,7 @@
         <strategy>css selector</strategy>
         <fields>
             <stores>
-                <selector>[name="stores[]"]</selector>
+                <selector>[name="stores[0]"]</selector>
                 <input>multiselectgrouplist</input>
             </stores>
             <is_active>
