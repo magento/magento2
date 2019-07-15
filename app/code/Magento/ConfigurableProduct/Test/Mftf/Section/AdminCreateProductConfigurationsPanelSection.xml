@@ -41,6 +41,9 @@
         <element name="attribute3" type="input" selector="#apply-single-price-input-2"/>
 
         <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
+        <element name="applyUniqueQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-inventory-radio']" timeout="30"/>
+        <element name="selectQuantity" type="select" selector="#apply-single-price-input-qty" timeout="30"/>
+        <element name="applyUniqueQuantity" type="input" selector="//*[text()='{{option}}']/ancestor::div[contains(@class, 'admin__field _required')]//input[contains(@id, 'apply-qty-input')]" parameterized="true"/>
         <element name="applyUniqueImagesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-images-radio']" timeout="30"/>
         <element name="applyUniquePricesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']" timeout="30"/>
         <element name="selectImagesButton" type="select" selector="#apply-images-attributes" timeout="30"/>
