@@ -160,7 +160,7 @@ class ImageFactory
             );
         }
 
-        $attributes = (is_null($attributes)) ? [] : $attributes;
+        $attributes = $attributes === null ? [] : $attributes;
         $data = [
             'data' => [
                 'template' => 'Magento_Catalog::product/image_with_borders.phtml',
