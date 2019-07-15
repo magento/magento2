@@ -58,5 +58,7 @@
         <element name="bankTransfer" type="radio" selector="#banktransfer"/>
         <element name="billingAddressNotSameBankTransferCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-banktransfer"/>
         <element name="billingAddressSelectShared" type="select" selector=".checkout-billing-address select[name='billing_address_id']"/>
+        <element name="discount" type="block" selector="tr.totals.discount"/>
+        <element name="discountPrice" type="text" selector=".discount .price"/>
     </section>
 </sections>

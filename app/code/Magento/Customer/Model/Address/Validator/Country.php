@@ -9,6 +9,8 @@ use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\ValidatorInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -17,7 +19,7 @@ use Magento\Store\Model\ScopeInterface;
 class Country implements ValidatorInterface
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -34,17 +36,17 @@ class Country implements ValidatorInterface
     /**
      * @param Data $directoryData
      * @param AllowedCountries $allowedCountriesReader
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
         Data $directoryData,
         AllowedCountries $allowedCountriesReader,
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
         $this->directoryData = $directoryData;
         $this->allowedCountriesReader = $allowedCountriesReader;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 
