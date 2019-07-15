@@ -143,14 +143,19 @@ class UrlRewriteHandler
         if ($category->getChangedProductIds()) {
             $this->generateChangedProductUrls($mergeDataProvider, $category, $storeId, $saveRewriteHistory);
         } else {
-            $mergeDataProvider->merge(
-                $this->getCategoryProductsUrlRewrites(
-                    $category,
-                    $storeId,
-                    $saveRewriteHistory,
-                    $category->getEntityId()
-                )
-            );
+            $categoryStoreIds = $this->getCategoryStoreIds($category);
+
+            foreach ($categoryStoreIds as $categoryStoreId) {
+                $this->isSkippedProduct[$category->getEntityId()] = [];
+                $mergeDataProvider->merge(
+                    $this->getCategoryProductsUrlRewrites(
+                        $category,
+                        $categoryStoreId,
+                        $saveRewriteHistory,
+                        $category->getEntityId()
+                    )
+                );
+            }
         }
 
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
@@ -241,7 +246,7 @@ class UrlRewriteHandler
         $productCollection = $this->productCollectionFactory->create();
 
         $productCollection->addCategoriesFilter(['eq' => [$category->getEntityId()]])
-            ->setStoreId($storeId)
+            ->addStoreFilter($storeId)
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('visibility')
             ->addAttributeToSelect('url_key')
@@ -292,7 +297,7 @@ class UrlRewriteHandler
             /* @var Collection $collection */
             $collection = $this->productCollectionFactory->create()
                 ->setStoreId($categoryStoreId)
-                ->addIdFilter($category->getAffectedProductIds())
+                ->addIdFilter($category->getChangedProductIds())
                 ->addAttributeToSelect('visibility')
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')

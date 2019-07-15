@@ -51,7 +51,7 @@ class CreateCustomer implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['input']) || !is_array($args['input']) || empty($args['input'])) {
+        if (empty($args['input']) || !is_array($args['input'])) {
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
