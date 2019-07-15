@@ -15,11 +15,10 @@
             'domReady!'
         ], function(AuthorizenetAcceptjs, $) {
             var config = <?= /* @noEscape */ $block->getPaymentConfig() ?>,
-                payment,
                 form = $('#payment_form_<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($block->getMethodCode())) ?>');
 
             config.active = form.length > 0 && !form.is(':hidden');
-            payment = new AuthorizenetAcceptjs(config);
+            new AuthorizenetAcceptjs(config);
         });
     //]]>
 </script>
