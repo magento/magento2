@@ -94,8 +94,10 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $this->viewConfig = $viewConfig;
         parent::__construct($context, $data);
     }
-    
+
 	/**
+     * Set Block cache key
+     *
      * @return void
      */
     protected function _construct()
@@ -110,6 +112,8 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     }
 
     /**
+     * Get info about category by category id
+     *
      * @return array
      */
     public function getRssData()
@@ -243,6 +247,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
     /**
      * Get category feed collection
+     *
      * @return array
      */
     public function getFeeds()

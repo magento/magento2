@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Block\Rss;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -72,12 +73,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryRepository;
-    
+
     /**
      * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewConfig;
-    
+
     /**
      * @var \Magento\Framework\Config\View
      */
@@ -157,11 +158,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('http://magento.com/category-name.html'));
 
         $this->categoryRepository->expects($this->once())->method('get')->will($this->returnValue($category));
-        
+
         $configViewMock = $this->getMockBuilder(\Magento\Framework\Config\View::class)
             ->disableOriginalConstructor()
             ->getMock();
-            
+
         $this->viewConfig->expects($this->once())
             ->method('getViewConfig')
             ->willReturn($configViewMock);
@@ -174,8 +175,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 'getAllowedInRss',
                 'getProductUrl',
                 'getDescription',
-                'getAllowedPriceInRss'
-            ])->disableOriginalConstructor()->getMock();
+                'getAllowedPriceInRss'])->disableOriginalConstructor()->getMock();
         $product->expects($this->once())->method('getName')->will($this->returnValue('Product Name'));
         $product->expects($this->once())->method('getAllowedInRss')->will($this->returnValue(true));
         $product->expects($this->exactly(2))->method('getProductUrl')
@@ -246,7 +246,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
         $collection->expects($this->once())->method('addAttributeToFilter')->will($this->returnSelf());
         $collection->expects($this->once())->method('load')->will($this->returnSelf());
-        $collection->expects($this->once())->method('getIterator')->will($this->returnValue(new \ArrayIterator([$category])));
+        $collection->expects($this->once())->method('getIterator')
+                   ->will($this->returnValue(new \ArrayIterator([$category])));
         $category->expects($this->once())->method('getId')->will($this->returnValue(1));
         $category->expects($this->once())->method('getName')->will($this->returnValue('Category Name'));
         $category->expects($this->once())->method('getResourceCollection')->will($this->returnValue($collection));
@@ -267,9 +268,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->will($this->returnValue('http://magento.com/category-name.html'));
-        $feeds = ['group' => 'Categories', 'feeds' => [
-            ['label' => 'Category Name', 'link' => 'http://magento.com/category-name.html'],
-        ]];
+        $feeds = [
+            'group' => 'Categories',
+            'feeds' => [
+                ['label' => 'Category Name', 'link' => 'http://magento.com/category-name.html'],
+            ]
+        ];
         $this->assertEquals($feeds, $this->block->getFeeds());
     }
 }
