@@ -25,6 +25,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_customerId = 0;
 
     /**
+     * Catalog compare list id Filter.
+     *
+     * @var int
+     */
+    private $catalogCompareListId = 0;
+
+    /**
      * Visitor Filter
      *
      * @var int
@@ -169,6 +176,36 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set catalog compare list id filter to collection.
+     *
+     * @param int $catalogCompareListId
+     * @return $this
+     */
+    public function setCatalogCompareListId($catalogCompareListId)
+    {
+        $this->catalogCompareListId = (int)$catalogCompareListId;
+        $this->_addJoinToSelect();
+
+        return $this;
+    }
+
+    /**
+     * Set catalog compare list id filter and customer filter to collection.
+     *
+     * @param int $catalogCompareListId
+     * @param int $customerId
+     * @return $this
+     */
+    public function setCatalogCompareListIdAndCustomerId($catalogCompareListId, $customerId)
+    {
+        $this->catalogCompareListId = (int)$catalogCompareListId;
+        $this->_customerId = (int)$customerId;
+        $this->_addJoinToSelect();
+
+        return $this;
+    }
+
+    /**
      * Retrieve customer filter applied to collection
      *
      * @return int
@@ -189,12 +226,36 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Retrieve catalog_compare_list_id filter applied to collection.
+     *
+     * @return int
+     */
+    public function getCatalogCompareListId()
+    {
+        return $this->catalogCompareListId;
+    }
+
+    /**
      * Retrieve condition for join filters
      *
      * @return array
      */
     public function getConditionForJoin()
     {
+        if ($this->getCatalogCompareListId() && $this->getCustomerId()) {
+            return [
+                'customer_id' => $this->getCustomerId(),
+                'catalog_compare_list_id' => $this->getCatalogCompareListId(),
+            ];
+        }
+
+        if ($this->getCatalogCompareListId()) {
+            return [
+                'catalog_compare_list_id' => $this->getCatalogCompareListId(),
+                'customer_id' => ['null' => true],
+            ];
+        }
+
         if ($this->getCustomerId()) {
             return ['customer_id' => $this->getCustomerId()];
         }
@@ -221,7 +282,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 'customer_id' => 'customer_id',
                 'visitor_id' => 'visitor_id',
                 'item_store_id' => 'store_id',
-                'catalog_compare_item_id' => 'catalog_compare_item_id'
+                'catalog_compare_item_id' => 'catalog_compare_item_id',
+                'catalog_compare_list_id' => 'catalog_compare_list_id'
             ],
             $this->getConditionForJoin()
         );

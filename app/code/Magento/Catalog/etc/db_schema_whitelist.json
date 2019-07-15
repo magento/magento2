@@ -322,6 +322,22 @@
             "CATALOG_COMPARE_ITEM_STORE_ID_STORE_STORE_ID": true
         }
     },
+    "catalog_compare_list": {
+        "column": {
+            "list_id": true,
+            "hashed_id": true,
+            "customer_id": true
+        },
+        "index": {
+            "CATALOG_COMPARE_LIST_LIST_ID": true,
+            "CATALOG_COMPARE_LIST_HASHED_ID": true,
+            "CATALOG_COMPARE_LIST_CUSTOMER_ID_HASHED_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CATALOG_COMPARE_LIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    },
     "catalog_product_website": {
         "column": {
             "product_id": true,

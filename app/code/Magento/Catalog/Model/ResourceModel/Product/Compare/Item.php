@@ -41,8 +41,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($object->getCustomerId()) {
             $select->where('customer_id = ?', (int)$object->getCustomerId());
-        } else {
+        } elseif($object->getVisitorId()) {
             $select->where('visitor_id = ?', (int)$object->getVisitorId());
+        }
+
+        if ($object->getCatalogCompareListId()) {
+            $select->where('catalog_compare_list_id = ?', (int)$object->getCatalogCompareListId());
         }
 
         $data = $connection->fetchRow($select);

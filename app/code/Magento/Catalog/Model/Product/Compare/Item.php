@@ -12,6 +12,8 @@ use Magento\Catalog\Model\Product;
  *
  * @api
  * @method \Magento\Catalog\Model\Product\Compare\Item setVisitorId(int $value)
+ * @method int getCatalogCompareListId()
+ * @method \Magento\Catalog\Model\Product\Compare\Item setCatalogCompareListId(int $value)
  * @method \Magento\Catalog\Model\Product\Compare\Item setCustomerId(int $value)
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Compare\Item setProductId(int $value)

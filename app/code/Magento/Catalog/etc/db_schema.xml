@@ -542,6 +542,8 @@
                 default="0" comment="Product ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
+        <column xsi:type="int" name="catalog_compare_list_id" padding="10" unsigned="true" nullable="false"
+                identity="false" default="0" comment="List ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="catalog_compare_item_id"/>
         </constraint>
@@ -566,6 +568,29 @@
         </index>
         <index referenceId="CATALOG_COMPARE_ITEM_STORE_ID" indexType="btree">
             <column name="store_id"/>
+        </index>
+    </table>
+    <table name="catalog_compare_list" resource="default" engine="innodb" comment="Catalog Compare List with hash Table">
+        <column xsi:type="int" name="list_id" padding="10" unsigned="true" nullable="false"
+                identity="true" comment="Compare List ID"/>
+        <column xsi:type="varchar" name="hashed_id" nullable="true" length="32" comment="Hashed ID"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Customer ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="list_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_LIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="catalog_compare_list" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="CATALOG_COMPARE_LIST_LIST_ID" indexType="btree">
+            <column name="list_id"/>
+        </index>
+        <index referenceId="CATALOG_COMPARE_LIST_HASHED_ID" indexType="btree">
+            <column name="hashed_id"/>
+        </index>
+        <index referenceId="CATALOG_COMPARE_LIST_CUSTOMER_ID_HASHED_ID" indexType="btree">
+            <column name="customer_id"/>
+            <column name="hashed_id"/>
         </index>
     </table>
     <table name="catalog_product_website" resource="default" engine="innodb"
