@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3245"/>
             <group value="Catalog"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <!-- Create related products -->
