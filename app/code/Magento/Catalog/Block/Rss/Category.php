@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class Category
  * @package Magento\Catalog\Block\Rss
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
