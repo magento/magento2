@@ -43,6 +43,7 @@ define([
              * (this.options.showsTime == false).
              *
              * @type {String}
+             * @deprecated
              */
             inputDateTimeFormat: 'y-MM-dd h:mm',
 
@@ -65,6 +66,7 @@ define([
              * (this.options.showsTime == true, this.options.outputDateTimeToISO == false)
              *
              * @type {String}
+             * @deprecated
              */
             outputDateTimeFormat: '',
 
@@ -73,6 +75,7 @@ define([
              *
              * Used only in datetime picker mode
              * (this.options.showsTime == false)
+             * @deprecated
              */
             outputDateTimeToISO: true,
 
@@ -144,33 +147,25 @@ define([
          * @param {String} value
          */
         onValueChange: function (value) {
-            var dateFormat,
-                shiftedValue;
+            var shiftedValue;
 
             if (value) {
-                if (this.options.showsTime && !this.outputDateTimeToISO) {
-                    dateFormat = this.shiftedValue() ?
-                        this.outputDateTimeFormat :
-                        this.inputDateTimeFormat;
-
-                    value = moment(value, dateFormat).format(this.timezoneFormat);
-                }
-
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    dateFormat = this.shiftedValue() ?
-                        this.outputDateFormat :
-                        this.inputDateFormat;
-
-                    shiftedValue = moment(value, dateFormat);
+                    shiftedValue = moment(value, this.outputDateFormat);
                 }
 
+                if (!shiftedValue.isValid()) {
+                    shiftedValue = moment(value, this.inputDateFormat);
+                }
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
+            } else {
+                shiftedValue = '';
+            }
 
-                if (shiftedValue !== this.shiftedValue()) {
-                    this.shiftedValue(shiftedValue);
-                }
+            if (shiftedValue !== this.shiftedValue()) {
+                this.shiftedValue(shiftedValue);
             }
         },
 
@@ -183,7 +178,6 @@ define([
         onShiftedValueChange: function (shiftedValue) {
             var value,
                 formattedValue,
-                formattedValueUTC,
                 momentValue;
 
             if (shiftedValue) {
@@ -191,11 +185,7 @@ define([
 
                 if (this.options.showsTime) {
                     formattedValue = moment(momentValue).format(this.timezoneFormat);
-                    formattedValueUTC = moment.tz(formattedValue, this.storeTimeZone).tz('UTC');
-
-                    value = this.outputDateTimeToISO ?
-                        formattedValueUTC.toISOString() :
-                        formattedValueUTC.format(this.outputDateTimeFormat);
+                    value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
                     value = momentValue.format(this.outputDateFormat);
                 }
@@ -227,8 +217,8 @@ define([
 
             this.inputDateFormat = utils.convertToMomentFormat(this.inputDateFormat);
             this.outputDateFormat = utils.convertToMomentFormat(this.outputDateFormat);
+
             this.validationParams.dateFormat = this.outputDateFormat;
-            this.outputDateTimeFormat = this.options.outputDateTimeFormat || this.pickerDateTimeFormat;
         }
     });
 });
