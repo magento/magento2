@@ -95,7 +95,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         parent::__construct($context, $data);
     }
 
-	/**
+    /**
      * Set Block cache key
      *
      * @return void
