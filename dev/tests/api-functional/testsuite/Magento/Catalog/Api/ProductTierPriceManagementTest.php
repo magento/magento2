@@ -46,8 +46,8 @@ class ProductTierPriceManagementTest extends WebapiAbstract
 
         $this->assertCount($count, $tierPriceList);
         if ($count) {
-            $this->assertEquals($value, $tearPriceList[0]['value']);
-            $this->assertEquals($qty, $tearPriceList[0]['qty']);
+            $this->assertEquals($value, $tierPriceList[0]['value']);
+            $this->assertEquals($qty, $tierPriceList[0]['qty']);
         }
     }
 
