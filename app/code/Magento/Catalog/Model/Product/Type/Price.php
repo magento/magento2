@@ -527,8 +527,8 @@ class Price
     /**
      * Get formatted by currency product price
      *
-     * @param   Product $product
-     * @return  array || float
+     * @param Product $product
+     * @return array|float
      *
      * @deprecated
      * @see getFormattedPrice()
