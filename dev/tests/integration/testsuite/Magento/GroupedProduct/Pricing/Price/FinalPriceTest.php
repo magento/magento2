@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class FinalPriceTest
- * 
+ *
  * @package Magento\GroupedProduct\Pricing\Price
  */
 class FinalPriceTest extends \PHPUnit\Framework\TestCase
