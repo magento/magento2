@@ -26,4 +26,5 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\MediaStorage\Api\StorageInterface" type="Magento\MediaStorage\Model\File\Storage"/>
 </config>

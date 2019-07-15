@@ -9,6 +9,7 @@ namespace Magento\MediaStorage\Model\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractModel;
+use Magento\MediaStorage\Api\StorageInterface;
 
 /**
  * Class Storage
@@ -17,26 +18,8 @@ use Magento\Framework\Model\AbstractModel;
  * @api
  * @since 100.0.2
  */
-class Storage extends AbstractModel
+class Storage extends AbstractModel implements StorageInterface
 {
-    /**
-     * Storage systems ids
-     */
-    const STORAGE_MEDIA_FILE_SYSTEM = 0;
-
-    const STORAGE_MEDIA_DATABASE = 1;
-
-    /**
-     * Config paths for storing storage configuration
-     */
-    const XML_PATH_STORAGE_MEDIA = 'system/media_storage_configuration/media_storage';
-
-    const XML_PATH_STORAGE_MEDIA_DATABASE = 'system/media_storage_configuration/media_database';
-
-    const XML_PATH_MEDIA_RESOURCE_WHITELIST = 'system/media_storage_configuration/allowed_resources';
-
-    const XML_PATH_MEDIA_UPDATE_TIME = 'system/media_storage_configuration/configuration_update_time';
-
     /**
      * Prefix of model events names
      *
@@ -148,6 +131,7 @@ class Storage extends AbstractModel
      * Return synchronize process status flag
      *
      * @return \Magento\MediaStorage\Model\File\Storage\Flag
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSyncFlag()
     {
@@ -199,10 +183,11 @@ class Storage extends AbstractModel
      *  connection  => string
      * )
      *
-     * @param  array $storage
+     * @param array $storage
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function synchronize($storage)
     {
