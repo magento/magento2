@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Implementation of the @magentoDataFixture DocBlock annotation
- */
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use PHPUnit\Framework\Exception;
 
+/**
+ * Implementation of the @magentoDataFixture DocBlock annotation.
+ */
 class DataFixture
 {
     /**
@@ -126,6 +127,8 @@ class DataFixture
                 $fixtureMethod = [get_class($test), $fixture];
                 if (is_callable($fixtureMethod)) {
                     $result[] = $fixtureMethod;
+                } elseif ($this->isModuleAnnotation($fixture)) {
+                    $result[] = $this->getModulePath($fixture);
                 } else {
                     $result[] = $this->_fixtureBaseDir . '/' . $fixture;
                 }
@@ -135,6 +138,49 @@ class DataFixture
     }
 
     /**
+     * Check is the Annotation like Magento_InventoryApi::Test/_files/products.php
+     *
+     * @param string $fixture
+     * @return bool
+     */
+    private function isModuleAnnotation(string $fixture)
+    {
+        return (strpos($fixture, '::') !== false);
+    }
+
+    /**
+     * Resolve the Fixture
+     *
+     * @param string $fixture
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    private function getModulePath(string $fixture)
+    {
+        $fixturePathParts = explode('::', $fixture, 2);
+        $moduleName = $fixturePathParts[0];
+        $fixtureFile = $fixturePathParts[1];
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var ComponentRegistrar $componentRegistrar */
+        $componentRegistrar = $objectManager->get(ComponentRegistrar::class);
+        $modulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+
+        if ($modulePath === null) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Can\'t find registered Module with name %1 .', [$moduleName])
+            );
+        }
+
+        return $modulePath . '/' . $fixtureFile;
+    }
+
+    /**
+     * Get method annotations.
+     *
+     * Overwrites class-defined annotations.
+     *
      * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
