@@ -6,10 +6,10 @@
 // @codingStandardsIgnoreFile
 ?>
 <button class="scalable" type="button" id="<?= $block->getHtmlId() ?>" data-mage-init='{"testConnection":{
-    "url": "<?= /* @escapeNotVerified */ $block->getAjaxUrl() ?>",
+    "url": "<?= $block->escapeUrl($block->getAjaxUrl()) ?>",
     "elementId": "<?= $block->getHtmlId() ?>",
-    "successText": "<?= /* @escapeNotVerified */ __('Successful! Test again?') ?>",
-    "failedText": "<?= /* @escapeNotVerified */ __('Connection failed! Test again?') ?>",
-    "fieldMapping": "<?= /* @escapeNotVerified */ $block->getFieldMapping() ?>"}, "validation": {}}'>
-    <span><span><span id="<?= $block->getHtmlId() ?>_result"><?= $block->escapeHtml($block->getButtonLabel()) ?></span></span></span>
+    "successText": "<?= $block->escapeHtmlAttr(__('Successful! Test again?')) ?>",
+    "failedText": "<?= $block->escapeHtmlAttr(__('Connection failed! Test again?')) ?>",
+    "fieldMapping": "<?= /* @noEscape */ $block->getFieldMapping() ?>"}, "validation": {}}'>
+    <span id="<?= $block->getHtmlId() ?>_result"><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
 </button>

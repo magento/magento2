@@ -119,7 +119,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Product\OptionFactory $productOptionFactory
@@ -153,7 +153,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -348,9 +348,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     private function getTotalRecordsResolver(SearchResultInterface $searchResult): TotalRecordsResolverInterface
     {
-        return $this->totalRecordsResolverFactory->create([
+        return $this->totalRecordsResolverFactory->create(
+            [
             'searchResult' => $searchResult,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -360,14 +362,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     private function getSearchCriteriaResolver(): SearchCriteriaResolverInterface
     {
-        return $this->searchCriteriaResolverFactory->create([
+        return $this->searchCriteriaResolverFactory->create(
+            [
             'builder' => $this->getSearchCriteriaBuilder(),
             'collection' => $this,
             'searchRequestName' => $this->searchRequestName,
             'currentPage' => $this->_curPage,
             'size' => $this->getPageSize(),
             'orders' => $this->searchOrders,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -378,12 +382,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     private function getSearchResultApplier(SearchResultInterface $searchResult): SearchResultApplierInterface
     {
-        return $this->searchResultApplierFactory->create([
+        return $this->searchResultApplierFactory->create(
+            [
             'collection' => $this,
             'searchResult' => $searchResult,
             /** This variable sets by serOrder method, but doesn't have a getter method. */
             'orders' => $this->_orders
-        ]);
+            ]
+        );
     }
 
     /**

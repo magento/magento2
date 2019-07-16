@@ -20,6 +20,7 @@
         <element name="reorder" type="button" selector="#order_reorder" timeout="30"/>
         <element name="edit" type="button" selector="#order_edit" timeout="30"/>
         <element name="modalOk" type="button" selector=".action-accept"/>
+        <element name="unhold" type="button" selector="#order-view-unhold-button" timeout="30"/>
         <element name="invoiceBtn" type="button" selector="//button[@title='Invoice']"/>
         <element name="shipBtn" type="button" selector="//button[@title='Ship']"/>
         <element name="shipmentsTab" type="button" selector="#sales_order_view_tabs_order_shipments"/>

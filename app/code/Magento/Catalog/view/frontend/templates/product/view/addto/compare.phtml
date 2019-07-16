@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Catalog\Block\Product\View\Addto\Compare */
 ?>
 
 <?php $viewModel = $block->getData('addToCompareViewModel'); ?>
-<?php if ($viewModel->isAvailableForCompare($block->getProduct())): ?>
-<a href="#" data-post='<?= /* @escapeNotVerified */ $block->getPostDataParams() ?>'
+<?php if ($viewModel->isAvailableForCompare($block->getProduct())) :?>
+<a href="#" data-post='<?= /* @noEscape */ $block->getPostDataParams() ?>'
         data-role="add-to-links"
-        class="action tocompare"><span><?= /* @escapeNotVerified */ __('Add to Compare') ?></span></a>
+        class="action tocompare"><span><?= $block->escapeHtml(__('Add to Compare')) ?></span></a>
 <?php endif; ?>
 

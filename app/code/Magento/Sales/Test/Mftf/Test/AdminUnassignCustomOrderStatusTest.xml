@@ -40,7 +40,7 @@
             <argument name="status" value="{{defaultOrderStatus.status}}"/>
             <argument name="label" value="{{defaultOrderStatus.label}}"/>
         </actionGroup>
-        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateButton}}" stepKey="clickAssignStatusToStateButton"/>
+        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusToStateButton"/>
         <waitForPageLoad stepKey="waitForAssignOrderStatusToStateLoad"/>
         <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.label}}" stepKey="selectOrderStatus"/>
         <waitForPageLoad stepKey="waitForOrderStatusLoad"/>

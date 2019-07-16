@@ -14,7 +14,7 @@
             <title value="Url-rewrites for product in anchor categories"/>
             <description value="For a product with category that has parent anchor categories, the rewrites is created when the category/product is saved."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-69826"/>
+            <testCaseId value="MC-16568"/>
             <group value="urlRewrite"/>
         </annotations>
 
@@ -32,6 +32,9 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="simpleSubCategory3"/>
             </createData>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites-->
+            <comment userInput="Enable config to generate category/product URL Rewrites " stepKey="commentEnableConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -41,7 +44,6 @@
         <!-- Steps -->
         <!-- 1. Log in to Admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
         <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
@@ -75,5 +77,205 @@
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue5"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue6"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue7"/>
+    </test>
+
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOff">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Url-rewrites for product in anchor categories"/>
+            <title value="Url-rewrites for product in anchor categories with configuration turned off"/>
+            <description value="For a product with category that has parent anchor categories, the rewrites is created when the category/product is saved."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6844"/>
+            <group value="urlRewrite"/>
+        </annotations>
+
+        <!-- Preconditions-->
+        <!-- Create 3 categories -->
+        <before>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
+            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+
+            <createData entity="SimpleSubCategory" stepKey="simpleSubCategory1"/>
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory2">
+                <requiredEntity createDataKey="simpleSubCategory1"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory3">
+                <requiredEntity createDataKey="simpleSubCategory2"/>
+            </createData>
+            <!-- Create Simple product 1 and assign it to Category 3 -->
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="simpleSubCategory3"/>
+            </createData>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
+            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleSubCategory1" stepKey="deletesimpleSubCategory1"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
+        </after>
+        <!-- Steps -->
+        <!-- 1. Log in to Admin -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue3"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue4"/>
+
+        <!-- 3. Edit Category 1 for DEFAULT Store View: -->
+        <actionGroup ref="switchCategoryStoreView" stepKey="switchStoreView">
+            <argument name="Store" value="_defaultStore.name"/>
+            <argument name="CatName" value="$$simpleSubCategory1.name$$"/>
+        </actionGroup>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection2"/>
+        <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}"  stepKey="uncheckRedirect2"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="$simpleSubCategory1.custom_attributes[url_key]$-new" stepKey="changeURLKey"/>
+        <checkOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}"  stepKey="checkUrlKeyRedirect"/>
+        <!-- 4. Save Category 1 -->
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaved"/>
+
+        <!-- 5. Open Marketing - SEO & Search - URL Rewrites -->
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue1"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue2"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue3"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue4"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue5"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue6"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue7"/>
+
+        <amOnPage url="/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName"/>
+
+        <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName2"/>
+        <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage3"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName3"/>
+        <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage4"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName4"/>
+
+        <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage5"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName5"/>
+        <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage6"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName6"/>
+        <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage7"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName7"/>
+    </test>
+
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreView" extends="AdminUrlRewritesForProductInAnchorCategoriesTest">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Url-rewrites for product in anchor categories for all store views"/>
+            <title value="Url-rewrites for product in anchor categories for all store views"/>
+            <description value="Verify that Saving category do not delete UrlRewrites for subcategories and all products in them."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16681"/>
+            <group value="urlRewrite"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="createSimpleProduct"/>
+            <!-- Create Simple product 1 and assign it to all the threee categories above -->
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct" after="simpleSubCategory3">
+                <requiredEntity createDataKey="simpleSubCategory1"/>
+                <requiredEntity createDataKey="simpleSubCategory2"/>
+                <requiredEntity createDataKey="simpleSubCategory3"/>
+            </createData>
+        </before>
+        <remove keyForRemoval="switchStoreView"/>
+        <!-- 3. Edit Category 1 for All store view: -->
+        <actionGroup ref="navigateToCreatedCategory" stepKey="goToCategoryPage" after="seeValue4">
+            <argument name="Category" value="$$simpleSubCategory1$$"/>
+        </actionGroup>
+        <remove keyForRemoval="uncheckRedirect2"/>
+    </test>
+
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestAllStoreViewWithConfigurationTurnedOff" extends="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOff">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Url-rewrites for product in anchor categories for all store views"/>
+            <title value="Url-rewrites for product in anchor categories for all store views with configuration turned off"/>
+            <description value="Url-rewrites for product in anchor categories for all store views with configuration turned off"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6964"/>
+            <group value="urlRewrite"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="createSimpleProduct"/>
+            <!-- Create Simple product 1 and assign it to all the threee categories above -->
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct" after="simpleSubCategory3">
+                <requiredEntity createDataKey="simpleSubCategory1"/>
+                <requiredEntity createDataKey="simpleSubCategory2"/>
+                <requiredEntity createDataKey="simpleSubCategory3"/>
+            </createData>
+        </before>
+        <remove keyForRemoval="switchStoreView"/>
+        <!-- 3. Edit Category 1 for All store view: -->
+        <actionGroup ref="navigateToCreatedCategory" stepKey="goToCategoryPage" after="seeValue4">
+            <argument name="Category" value="$$simpleSubCategory1$$"/>
+        </actionGroup>
+        <remove keyForRemoval="uncheckRedirect2"/>
+    </test>
+
+    <test name="AdminUrlRewritesForProductsWithConfigurationTurnedOff">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="No Url-rewrites for product if configuration to generate url rewrite for Generate 'category/product' URL Rewrites is enabled "/>
+            <title value="No auto generated of request path for simple product when assigned to subCategory"/>
+            <description value="No auto generated of request path when SEO configuration to Generate url rewrite for Generate 'category/product' URL Rewrites is set to No"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94803"/>
+            <group value="urlRewrite"/>
+        </annotations>
+        <before>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
+            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleSubCategory1"/>
+            <!-- Create Simple product 1 and assign it to Category 1 -->
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="simpleSubCategory1"/>
+            </createData>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
+            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig" />
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleSubCategory1" stepKey="deletesimpleSubCategory1"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
+            <!--Flush cache-->
+            <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
+        </after>
+        <!-- 1. Log in to Admin -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
+        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName5"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton5"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeProducturl"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="dontSeeCategoryProducturlKey"/>
+        <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName"/>
     </test>
 </tests>
