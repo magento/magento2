@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
 
 use Magento\Framework\Serialize\Serializer\Json;
@@ -7,9 +12,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Magento\Downloadable\Controller\Adminhtml\Downloadable\File
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
  * @magentoAppArea adminhtml
+ *
+ * phpcs:disable Magento2.Functions.DiscouragedFunction
+ * phpcs:disable Magento2.Security.Superglobal
  */
 class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -89,5 +95,26 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ['sample.php5'],
             ['sample.php7'],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testUploadWrongUploadType(): void
+    {
+        $postData = [
+            'type' => [
+                'tmp_name' => 'test.txt',
+                'name' => 'result.txt',
+            ],
+        ];
+        $this->getRequest()->setPostValue($postData);
+
+        $this->getRequest()->setMethod('POST');
+        $this->dispatch('backend/admin/downloadable_file/upload');
+        $body = $this->getResponse()->getBody();
+        $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
+        $this->assertEquals('Upload type can not be determined.', $result['error']);
+        $this->assertEquals(0, $result['errorcode']);
     }
 }
