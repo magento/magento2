@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetProductDesignSettingsActionGroup">
+        <arguments>
+            <argument name="designSettings" defaultValue="simpleBlankDesign"/>
+        </arguments>
+        <click selector="{{ProductDesignSection.DesignTab}}" stepKey="clickDesignTab"/>
+        <waitForPageLoad stepKey="waitForTabOpen"/>
+        <selectOption selector="{{ProductDesignSection.LayoutDropdown}}" userInput="{{designSettings.page_layout}}" stepKey="setLayout"/>
+        <selectOption selector="{{ProductDesignSection.productOptionsContainer}}" userInput="{{designSettings.options_container}}" stepKey="setDisplayProductOptions"/>
+    </actionGroup>
+</actionGroups>
