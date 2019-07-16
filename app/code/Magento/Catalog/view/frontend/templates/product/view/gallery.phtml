@@ -12,6 +12,16 @@
 ?>
 
 <?php
+// If block argument "gallery_options" is not set in xml layout file, then fallback
+// to an instance of \Magento\Catalog\Block\Product\View\GalleryOptions class manually
+if ($block->getGalleryOptions() === null) {
+    $block->setData(
+        'gallery_options',
+        \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Block\Product\View\GalleryOptions::class)
+    );
+}
+
 $images = $block->getGalleryImages()->getItems();
 $mainImage = current(array_filter($images, function ($img) use ($block) {
     return $block->isMainImage($img);
@@ -45,7 +55,7 @@ $mainImageData = $mainImage ?
                 "data": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
                 "options": <?= /* @noEscape */ $block->getGalleryOptions()->getOptionsJson() ?>,
                 "fullscreen": <?= /* @noEscape */ $block->getGalleryOptions()->getFSOptionsJson() ?>,
-                 "breakpoints": <?= /* @noEscape */ $block->getBreakpoints() ?>
+                "breakpoints": <?= /* @noEscape */ $block->getBreakpoints() ?>
             }
         }
     }
