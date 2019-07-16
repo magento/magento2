@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed;
 
-use Magento\Config\Model\Config\Reader;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Config\Model\Placeholder\PlaceholderFactory;
+use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Config\Model\Placeholder\PlaceholderInterface;
-use Magento\Config\Model\Placeholder\PlaceholderFactory;
 
 /**
  * Test class for checking settings that defined in config file
@@ -75,8 +75,15 @@ class SettingCheckerTest extends \PHPUnit\Framework\TestCase
      * @param bool $expectedResult
      * @dataProvider isReadonlyDataProvider
      */
-    public function testIsReadonly($path, $scope, $scopeCode, $confValue, array $variables, array $configMap, $expectedResult)
-    {
+    public function testIsReadonly(
+        $path,
+        $scope,
+        $scopeCode,
+        $confValue,
+        array $variables,
+        array $configMap,
+        $expectedResult
+    ) {
         $this->placeholderMock->expects($this->any())
             ->method('isApplicable')
             ->willReturn(true);
