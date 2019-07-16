@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OfflineDistanceBasedSelectionAlgorithmCustomStockTestTwoItemsDeduction">
+        <annotations>
+            <stories value="Offline Distance based source Selection Algorithm with simple product on custom stock with two items to deduct."/>
+            <title value="Offline Distance Based Source Selection Algorithm with simple product on custom stock with two items to deduct."/>
+            <description value="Check, 'Offline Distance Based Source Selection Algorithm' select corrects source for simple product on custom stock with two items to deduct."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/790998/scenarios/2665793"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Enable "Manage Stock", set distance based algorithm to offline and download tables.-->
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStock"/>
+            <magentoCLI command="config:set cataloginventory/source_selection_distance_based/provider offline" stepKey="setSelectionAlgorithm"/>
+            <magentoCLI command="inventory-geonames:import us ua" stepKey="downloadTables"/>
+            <!--Create Category and Simple Product.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <!--Create US Sources and UA Source.-->
+            <createData entity="FullSource1" stepKey="USSource1"/>
+            <createData entity="USSource" stepKey="USSource2"/>
+            <createData entity="UASource" stepKey="UASource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <createData entity="SourceStockLinked1" stepKey="usSource1StockLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="USSource1"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="usSource2StockLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="USSource2"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="uaSource1StockLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="UASource1"/>
+            </createData>
+            <!--Create Customer.-->
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+            <!--Assign sources to product.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUSSource1ToCreatedProduct">
+                <argument name="sourceCode" value="$$USSource1.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="5" stepKey="setUSSource1Quantity"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUSSource2ToCreatedProduct">
+                <argument name="sourceCode" value="$$USSource2.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('2')}}" userInput="5" stepKey="setUSSource2Quantity"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUASource1ToCreatedProduct">
+                <argument name="sourceCode" value="$$UASource1.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('3')}}" userInput="5" stepKey="setUASource1Quantity"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedSimpleProduct"/>
+        </before>
+        <after>
+            <!--Disable created sources.-->
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterUSSource1BySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$USSource1.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$USSource1.source[source_code]$$)}}" stepKey="clickEditUSSource1"/>
+            <waitForPageLoad time="30" stepKey="waitForUSSource1EditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableUSSource1"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseUSSource1"/>
+
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterUSSource2BySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$USSource2.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$USSource2.source[source_code]$$)}}" stepKey="clickEditUSSource2"/>
+            <waitForPageLoad time="30" stepKey="waitForUSSource2EditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableUSSource2"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseUSSource2"/>
+
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterUASource1BySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$UASource1.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$UASource1.source[source_code]$$)}}" stepKey="clickEditUASource1"/>
+            <waitForPageLoad time="30" stepKey="waitForUASource1EditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableUASource1"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseUASource1"/>
+            <!--Assign Main Website to Default Stock.-->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Remove category, product, customer and additional stock.-->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteAdditionalStock"/>
+        </after>
+        <!--Login Customer.-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!--Add Product to Cart.-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="quantity" value="10"/>
+            <argument name="checkQuantity" value="1"/>
+        </actionGroup>
+        <!--Place Order.-->
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectShippingMethod"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="navigateToSecondCheckoutStep"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+
+        <!--Create Shipment-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
+
+        <!--Verify Distance Based Source Selection Algorithm.-->
+        <click selector="{{AdminSourceSelectionFormSection.sourceSelectionAlgorithmToggle}}" stepKey="openSourceSelectionAlgorithmList"/>
+        <click selector="{{AdminSourceSelectionFormSection.selectDistancePriority}}" stepKey="selectDistancePriorityAlgorithm"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+
+        <!--Verify Distance Based Algorithm applied correctly.-->
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowProductSku('0')}}" userInput="$$simpleProduct.sku$$" stepKey="checkProductSku"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowQtyToShip('0')}}" userInput="10" stepKey="checkQtyToShip"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','0')}}" userInput="$$USSource2.source[name]$$" stepKey="checkUSSource2Name"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','0')}}" userInput="5" stepKey="checkUSSource2Qty"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','1')}}" userInput="$$USSource1.source[name]$$" stepKey="checkUSSource1Name"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','1')}}" userInput="5" stepKey="checkUSSource1Qty"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','2')}}" userInput="$$UASource1.source[name]$$" stepKey="checkSourceName"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','2')}}" userInput="0" stepKey="checkUASource1Qty"/>
+        <!--Select first source and proceed to shipment.-->
+        <selectOption selector="{{AdminSourceSelectionFormSection.sourceSelection}}" userInput="$$USSource2.source[name]$$" stepKey="selectUSSource2ToCreateShipment"/>
+        <click selector="{{AdminSourceSelectionFormSection.proceedToShipment}}" stepKey="createShipment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Pending" stepKey="seeShipmentOrderStatusForUSSource2"/>
+        <actionGroup ref="verifyBasicShipmentInformation" stepKey="checkBasicShipmentOrderInfoForUSSource2">
+            <argument name="customer" value="$$customer$$"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInShipmentItems" stepKey="checkProductInShipmentForUSSource2">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <see selector="{{AdminShipmentInventorySection.sourceList}}" userInput="$$USSource2.source[name]$$" stepKey="checkSourceNameOnShipmentPageForUSSource2"/>
+        <!--Submit and verify shipment.-->
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipmentForUSSource2"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShippingForUSSource2"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkShipmentCreateSuccessMessageForUSSource2"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="checkOrderStatusForUSSource2"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 5" stepKey="checkShippedQuantityForUSSource2"/>
+        <!--Select second source and proceed to shipment.-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipForUSSource1"/>
+        <selectOption selector="{{AdminSourceSelectionFormSection.sourceSelection}}" userInput="$$USSource1.source[name]$$" stepKey="selectUSSource1ToCreateShipment"/>
+        <click selector="{{AdminSourceSelectionFormSection.proceedToShipment}}" stepKey="createShipmentForUSSource1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadForUSSource1"/>
+        <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatusForUSSource1"/>
+        <actionGroup ref="verifyBasicShipmentInformation" stepKey="checkBasicShipmentOrderInfoForUSSource1">
+            <argument name="customer" value="$$customer$$"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="seeProductInShipmentItems" stepKey="checkProductInShipmentForUSSource1">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <see selector="{{AdminShipmentInventorySection.sourceList}}" userInput="$$USSource1.source[name]$$" stepKey="checkSourceNameOnShipmentPageForUSSource1"/>
+        <!--Submit and verify shipment.-->
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipmentForUSSource1"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShippingForUSSource1"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkShipmentCreateSuccessMessageForUSSource1"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="checkOrderStatusForUSSource1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 10" stepKey="checkShippedQuantityForUSSource1"/>
+        <!--Verify product quantity.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterCreateShipment"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterCreateShipment">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$USSource2.source[name]$$)}}" userInput="0" stepKey="checkUSSource2QtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$USSource1.source[name]$$)}}" userInput="0" stepKey="checkUSSource1QtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$UASource1.source[name]$$)}}" userInput="5" stepKey="checkUASource1QtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}" userInput="5" stepKey="checkSalableQtyAfterCreateShipment"/>
+    </test>
+</tests>

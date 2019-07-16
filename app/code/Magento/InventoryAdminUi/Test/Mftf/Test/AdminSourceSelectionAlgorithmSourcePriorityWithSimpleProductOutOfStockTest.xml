@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSourceSelectionAlgorithmSourcePriorityWithSimpleProductOutOfStockTest">
+        <annotations>
+            <stories value="Source Selection Algorithm with 'Out of Stock' status."/>
+            <title value="Source Selection Algorithm 'Source priority' with 'Out of Stock' status."/>
+            <description value="Admin should be able to use source selection Algorithm 'Source priority' for source deduction in Shipment for order with Simple product with 'Out of Stock' status on some sources."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/790998/scenarios/2680731"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStock"/>
+            <!--Create additional Stock and sources-->
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="additionalSource1"/>
+            <createData entity="FullSource2" stepKey="additionalSource2"/>
+            <createData entity="FullSource3" stepKey="additionalSource3"/>
+            <createData entity="FullSource4" stepKey="additionalSource4"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource1"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock2">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource2"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock3">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource3"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock4">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource4"/>
+            </createData>
+            <!--Create additional category, product and customer.-->
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <!--Disable created sources.-->
+            <amOnPage url="{{AdminManageSourcePage.url}}" stepKey="navigateToSourceList"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+            <waitForPageLoad stepKey="waitForSourceGrid" time="30"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSource1BySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$additionalSource1.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$additionalSource1.source[source_code]$$)}}" stepKey="clickEditSource1"/>
+            <waitForPageLoad time="30" stepKey="waitForSource1EditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableSource1"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSource1"/>
+
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSource2BySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$additionalSource2.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$additionalSource2.source[source_code]$$)}}" stepKey="clickEditSource2"/>
+            <waitForPageLoad time="30" stepKey="waitForSource2EditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableSource2"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSource2"/>
+
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSource3BySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$additionalSource3.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$additionalSource3.source[source_code]$$)}}" stepKey="clickEditSource3"/>
+            <waitForPageLoad time="30" stepKey="waitForSource3EditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableSource3"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSource3"/>
+
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="filterSource4BySourceCode">
+                <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+                <argument name="value" value="$$additionalSource4.source[source_code]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$additionalSource4.source[source_code]$$)}}" stepKey="clickEditSource4"/>
+            <waitForPageLoad time="30" stepKey="waitForSource4EditPageLoad"/>
+            <click selector="{{AdminEditSourceGeneralSection.isEnabledLabel}}" stepKey="disableSource4"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSource4"/>
+            <!--Assign Main Website to Default Stock.-->
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Remove category, product, customer and additional stock.-->
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteAdditionalStock"/>
+        </after>
+        <!--Assign sources to products.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct.product[sku]$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$additionalSource1.source[source_code]$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct2">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$additionalSource2.source[source_code]$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct3">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$additionalSource3.source[source_code]$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct4">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$additionalSource4.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('3')}}" userInput="100" stepKey="fillCustomSource4QtyField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('4')}}" userInput="100" stepKey="fillCustomSource5QtyField"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseSimpleProduct"/>
+        <waitForPageLoad stepKey="waitForSimpleProductGidPageLoad"/>
+        <!--Customer login.-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!--Add product to cart.-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory.name$$)}}" stepKey="navigateToCategory"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($$simpleProduct.name$$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="50" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" stepKey="clickCheckMoneyOrderPayment" />
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--Create shipment.-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
+        <!--Create shipment.-->
+        <click selector="{{AdminSourceSelectionFormSection.sourceSelectionAlgorithmToggle}}" stepKey="openSourceSelectionAlgorithmList"/>
+        <click selector="{{AdminSourceSelectionFormSection.selectSourcePriority}}" stepKey="selectSourcePriorityAlgorithm"/>
+        <wait time="30" stepKey="waiting" />
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowProductSku('0')}}" userInput="$$simpleProduct.sku$$" stepKey="checkProductSku"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowQtyToShip('0')}}" userInput="50" stepKey="checkQtyToShip"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','0')}}" userInput="$$additionalSource1.source[name]$$" stepKey="checkCustomSource1Name"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','0')}}" userInput="0" stepKey="checkCustomSource1Qty"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','1')}}" userInput="$$additionalSource2.source[name]$$" stepKey="checkCustomSource2Name"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','1')}}" userInput="0" stepKey="checkCustomSource2Qty"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','2')}}" userInput="$$additionalSource3.source[name]$$" stepKey="checkCustomSource3Name"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','2')}}" userInput="50" stepKey="checkCustomSource3Qty"/>
+        <see selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesName('0','3')}}" userInput="$$additionalSource4.source[name]$$" stepKey="checkCustomSource4Name"/>
+        <seeInField selector="{{AdminSourceSelectionOrderedItemsGrid.rowAvailableSourcesQtyToDeduct('0','3')}}" userInput="0" stepKey="checkCustomSource4Qty"/>
+        <selectOption selector="{{AdminSourceSelectionFormSection.sourceSelection}}" userInput="$$additionalSource3.source[name]$$" stepKey="selectSourceToCreateShipment"/>
+        <click selector="{{AdminSourceSelectionFormSection.proceedToShipment}}" stepKey="createShipment"/>
+        <waitForPageLoad stepKey="waitForOrderPageLoad" time="30"/>
+        <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderStatus"/>
+        <actionGroup ref="seeProductInShipmentItems" stepKey="checkProductInShipment">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <see selector="{{AdminShipmentInventorySection.sourceList}}" userInput="$$additionalSource3.source[name]$$" stepKey="checkSourceNameOnShipmentPage"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <!--Verify order.-->
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShipping"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkShipmentCreateSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="checkOrderStatus"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 5" stepKey="checkShippedQuantity"/>
+        <!--Verify product.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterCreateShipment"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterCreateShipment">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource3.source[name]$$)}}" userInput="50" stepKey="checkCustomSource3QtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource4.source[name]$$)}}" userInput="100" stepKey="checkCustomSource4QtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource1.source[name]$$)}}" userInput="0" stepKey="checkCustomSource1QtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource2.source[name]$$)}}" userInput="0" stepKey="checkCustomSource2QtyAfterCreateShipment"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}" userInput="150" stepKey="checkSalableQtyAfterCreateShipment"/>
+    </test>
+</tests>

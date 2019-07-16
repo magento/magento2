@@ -34,6 +34,7 @@
         <element name="country" type="select" selector="select[name='general[country_id]']" timeout="10"/>
         <element name="province" type="input" selector="input[name='general[region]']"/>
         <element name="state" type="select" selector="select[name='general[region_id]']"/>
+        <element name="state_manual" type="input" selector="input[name='general[region]']"/>
         <element name="city" type="input" selector="input[name='general[city]']"/>
         <element name="street" type="input" selector="input[name='general[street]']"/>
         <element name="postcode" type="input" selector="input[name='general[postcode]']"/>
