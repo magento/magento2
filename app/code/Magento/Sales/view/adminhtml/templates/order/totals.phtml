@@ -4,59 +4,58 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/* @var \Magento\Sales\Block\Adminhtml\Order\Totals $block */
 ?>
 <table class="data-table admin__table-secondary order-subtotal-table">
-    <?php $_totals = $block->getTotals('footer')?>
+    <?php $_totals = $block->getTotals('footer') ?>
 
-    <?php if ($_totals):?>
+    <?php if ($_totals) : ?>
         <tfoot>
-            <?php foreach ($block->getTotals('footer') as $_code => $_total): ?>
-                <?php if ($_total->getBlockName()): ?>
+            <?php foreach ($block->getTotals('footer') as $_code => $_total) : ?>
+                <?php if ($_total->getBlockName()) : ?>
                     <?= $block->getChildHtml($_total->getBlockName(), false) ?>
-                <?php else:?>
-                <tr class="col-<?= /* @escapeNotVerified */ $_code ?>">
-                    <td <?= /* @escapeNotVerified */ $block->getLabelProperties() ?> class="label">
+                <?php else : ?>
+                <tr class="col-<?= $block->escapeHtmlAttr($_code) ?>">
+                    <td <?= /* @noEscape */ $block->getLabelProperties() ?> class="label">
                         <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
                     </td>
-                    <td <?= /* @escapeNotVerified */ $block->getValueProperties() ?>>
-                        <strong><?= /* @escapeNotVerified */ $block->formatValue($_total) ?></strong>
+                    <td <?= /* @noEscape */ $block->getValueProperties() ?>>
+                        <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
                     </td>
                 </tr>
-                <?php endif?>
-            <?php endforeach?>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </tfoot>
-    <?php endif?>
+    <?php endif; ?>
 
     <?php $_totals = $block->getTotals('')?>
-    <?php if ($_totals):?>
+    <?php if ($_totals) : ?>
         <tbody>
-            <?php foreach ($_totals as $_code => $_total): ?>
-                <?php if ($_total->getBlockName()): ?>
+            <?php foreach ($_totals as $_code => $_total) : ?>
+                <?php if ($_total->getBlockName()) : ?>
                     <?= $block->getChildHtml($_total->getBlockName(), false) ?>
-                <?php else:?>
-                    <tr class="col-<?= /* @escapeNotVerified */ $_code ?>">
-                        <td <?= /* @escapeNotVerified */ $block->getLabelProperties() ?> class="label">
-                            <?php if ($_total->getStrong()):?>
+                <?php else : ?>
+                    <tr class="col-<?= $block->escapeHtmlAttr($_code) ?>">
+                        <td <?= /* @noEscape */ $block->getLabelProperties() ?> class="label">
+                            <?php if ($_total->getStrong()) : ?>
                             <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
-                            <?php else:?>
+                            <?php else : ?>
                             <?= $block->escapeHtml($_total->getLabel()) ?>
                             <?php endif?>
                         </td>
 
-                        <?php if ($_total->getStrong()):?>
-                            <td <?= /* @escapeNotVerified */ $block->getValueProperties() ?>>
-                                <strong><?= /* @escapeNotVerified */ $block->formatValue($_total) ?></strong>
+                        <?php if ($_total->getStrong()) : ?>
+                            <td <?= /* @noEscape */ $block->getValueProperties() ?>>
+                                <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
                             </td>
-                        <?php else:?>
-                            <td <?= /* @escapeNotVerified */ $block->getValueProperties() ?>>
-                                <span><?= /* @escapeNotVerified */ $block->formatValue($_total) ?></span>
+                        <?php else : ?>
+                            <td <?= /* @noEscape */ $block->getValueProperties() ?>>
+                                <span><?= /* @noEscape */ $block->formatValue($_total) ?></span>
                             </td>
-                        <?php endif?>
+                        <?php endif; ?>
                     </tr>
-                <?php endif?>
-            <?php endforeach?>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </tbody>
-    <?php endif?>
+    <?php endif; ?>
 </table>

@@ -14,7 +14,7 @@
             <stories value="OnePageCheckout within Offline Payment Methods"/>
             <title value="OnePageCheckout as customer using new address test"/>
             <description value="Checkout as customer using new address"/>
-            <severity value="CRITICAl"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="MC-14740"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>

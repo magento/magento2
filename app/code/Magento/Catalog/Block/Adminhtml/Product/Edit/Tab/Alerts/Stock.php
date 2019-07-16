@@ -19,7 +19,7 @@ class Stock extends Extended
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -32,14 +32,14 @@ class Stock extends Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ProductAlert\Model\StockFactory $stockFactory
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ProductAlert\Model\StockFactory $stockFactory,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_stockFactory = $stockFactory;
@@ -48,6 +48,8 @@ class Stock extends Extended
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -63,6 +65,8 @@ class Stock extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -80,6 +84,8 @@ class Stock extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -103,6 +109,8 @@ class Stock extends Extended
     }
 
     /**
+     * Get grid url.
+     *
      * @return string
      */
     public function getGridUrl()

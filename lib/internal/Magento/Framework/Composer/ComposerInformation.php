@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Composer;
 
 use Composer\Package\Link;
@@ -126,6 +127,7 @@ class ComposerInformation
         }
 
         if (!isset($requiredPhpVersion)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Cannot find php version requirement in \'composer.lock\' file');
         }
         return $requiredPhpVersion;
@@ -148,7 +150,6 @@ class ComposerInformation
             /** @var CompletePackageInterface $package */
             foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
-                $requires = array_merge($requires, array_keys($package->getDevRequires()));
                 $allPlatformReqs = array_merge($allPlatformReqs, $requires);
             }
         }
@@ -301,6 +302,8 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve magento packages types.
+     *
      * @return array
      */
     public function getPackagesTypes()
@@ -309,6 +312,8 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve magento packages requirements.
+     *
      * @param string $name
      * @param string $version
      * @return array

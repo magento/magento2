@@ -1,10 +1,8 @@
 <?php
 /**
-* Copyright © Magento, Inc. All rights reserved.
-* See COPYING.txt for license details.
-*/
-
-// @codingStandardsIgnoreFile
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 /** @var $block \Magento\Framework\View\Element\Template */
 $parentBlock = $block->getParentBlock();
@@ -22,9 +20,13 @@ $track = $block->getData('track');
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($track->getProgressdetail() as $detail): ?>
-            <?php $detailDate = (!empty($detail['deliverydate']) ? $parentBlock->formatDeliveryDate($detail['deliverydate'] . ' ' . $detail['deliverytime']) : ''); ?>
-            <?php $detailTime = (!empty($detail['deliverytime']) ? $parentBlock->formatDeliveryTime($detail['deliverytime'], $detail['deliverydate']) : ''); ?>
+        <?php foreach ($track->getProgressdetail() as $detail) : ?>
+            <?php $detailDate = (!empty($detail['deliverydate']) ?
+                $parentBlock->formatDeliveryDate($detail['deliverydate'] . ' ' . $detail['deliverytime']) :
+                ''); ?>
+            <?php $detailTime = (!empty($detail['deliverytime']) ?
+                $parentBlock->formatDeliveryTime($detail['deliverytime'], $detail['deliverydate']) :
+                ''); ?>
             <tr>
                 <td data-th="<?= $block->escapeHtml(__('Location')) ?>" class="col location">
                     <?= (!empty($detail['deliverylocation']) ? $block->escapeHtml($detail['deliverylocation']) : '') ?>

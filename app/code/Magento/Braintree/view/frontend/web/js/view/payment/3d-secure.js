@@ -7,17 +7,57 @@
 
 define([
     'jquery',
+    'braintree3DSecure',
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
-    'mage/translate'
-], function ($, braintree, quote, $t) {
+    'mage/translate',
+    'Magento_Ui/js/modal/modal',
+    'Magento_Checkout/js/model/full-screen-loader'
+], function (
+    $,
+    braintree3DSecure,
+    braintreeAdapter,
+    quote,
+    $t,
+    Modal,
+    fullScreenLoader
+) {
     'use strict';
 
     return {
         config: null,
+        modal: null,
+        threeDSecureInstance: null,
+        state: null,
 
         /**
-         * Set 3d secure config
+         * Initializes component
+         */
+        initialize: function () {
+            var self = this,
+                promise = $.Deferred();
+
+            self.state = $.Deferred();
+            braintreeAdapter.getApiClient()
+                .then(function (clientInstance) {
+                    return braintree3DSecure.create({
+                        client: clientInstance
+                    });
+                })
+                .then(function (threeDSecureInstance) {
+                    self.threeDSecureInstance = threeDSecureInstance;
+                    promise.resolve(self.threeDSecureInstance);
+                })
+                .catch(function (err) {
+                    promise.reject(err);
+                });
+
+            return promise.promise();
+        },
+
+        /**
+         * Sets 3D Secure config
+         *
          * @param {Object} config
          */
         setConfig: function (config) {
@@ -26,7 +66,8 @@ define([
         },
 
         /**
-         * Get code
+         * Gets code
+         *
          * @returns {String}
          */
         getCode: function () {
@@ -34,54 +75,114 @@ define([
         },
 
         /**
-         * Validate Braintree payment nonce
+         * Validates 3D Secure
+         *
          * @param {Object} context
          * @returns {Object}
          */
         validate: function (context) {
-            var client = braintree.getApiClient(),
-                state = $.Deferred(),
+            var self = this,
                 totalAmount = quote.totals()['base_grand_total'],
-                billingAddress = quote.billingAddress();
+                billingAddress = quote.billingAddress(),
+                options = {
+                    amount: totalAmount,
+                    nonce: context.paymentPayload.nonce,
 
-            if (!this.isAmountAvailable(totalAmount) || !this.isCountryAvailable(billingAddress.countryId)) {
-                state.resolve();
+                    /**
+                     * Adds iframe to page
+                     * @param {Object} err
+                     * @param {Object} iframe
+                     */
+                    addFrame: function (err, iframe) {
+                        self.createModal($(iframe));
+                        fullScreenLoader.stopLoader();
+                        self.modal.openModal();
+                    },
 
-                return state.promise();
-            }
-
-            client.verify3DS({
-                amount: totalAmount,
-                creditCard: context.paymentMethodNonce
-            }, function (error, response) {
-                var liability;
-
-                if (error) {
-                    state.reject(error.message);
-
-                    return;
-                }
-
-                liability = {
-                    shifted: response.verificationDetails.liabilityShifted,
-                    shiftPossible: response.verificationDetails.liabilityShiftPossible
+                    /**
+                     * Removes iframe from page
+                     */
+                    removeFrame: function () {
+                        self.modal.closeModal();
+                    }
                 };
 
-                if (liability.shifted || !liability.shifted && !liability.shiftPossible) {
-                    context.paymentMethodNonce = response.nonce;
-                    state.resolve();
-                } else {
-                    state.reject($t('Please try again with another form of payment.'));
-                }
-            });
+            if (!this.isAmountAvailable(totalAmount) || !this.isCountryAvailable(billingAddress.countryId)) {
+                self.state.resolve();
 
-            return state.promise();
+                return self.state.promise();
+            }
+
+            fullScreenLoader.startLoader();
+            this.initialize()
+                .then(function () {
+                    self.threeDSecureInstance.verifyCard(options, function (err, payload) {
+                        if (err) {
+                            self.state.reject(err.message);
+
+                            return;
+                        }
+
+                        // `liabilityShifted` indicates that 3DS worked and authentication succeeded
+                        // if `liabilityShifted` and `liabilityShiftPossible` are false - card is ineligible for 3DS
+                        if (payload.liabilityShifted || !payload.liabilityShifted && !payload.liabilityShiftPossible) {
+                            context.paymentPayload.nonce = payload.nonce;
+                            self.state.resolve();
+                        } else {
+                            self.state.reject($t('Please try again with another form of payment.'));
+                        }
+                    });
+                })
+                .fail(function () {
+                    fullScreenLoader.stopLoader();
+                    self.state.reject($t('Please try again with another form of payment.'));
+                });
+
+            return self.state.promise();
         },
 
         /**
-         * Check minimal amount for 3d secure activation
+         * Creates modal window
+         *
+         * @param {Object} $context
+         * @private
+         */
+        createModal: function ($context) {
+            var self = this,
+                options = {
+                    clickableOverlay: false,
+                    buttons: [],
+                    modalCloseBtnHandler: self.cancelFlow.bind(self),
+                    keyEventHandlers: {
+                        escapeKey: self.cancelFlow.bind(self)
+                    }
+                };
+
+            // adjust iframe styles
+            $context.attr('width', '100%');
+            self.modal = Modal(options, $context);
+        },
+
+        /**
+         * Cancels 3D Secure flow
+         *
+         * @private
+         */
+        cancelFlow: function () {
+            var self = this;
+
+            self.threeDSecureInstance.cancelVerifyCard(function () {
+                self.modal.closeModal();
+                self.state.reject();
+            });
+        },
+
+        /**
+         * Checks minimal amount for 3D Secure activation
+         *
          * @param {Number} amount
          * @returns {Boolean}
+         * @private
          */
         isAmountAvailable: function (amount) {
             amount = parseFloat(amount);
@@ -90,9 +191,11 @@ define([
         },
 
         /**
-         * Check if current country is available for 3d secure
+         * Checks if current country is available for 3D Secure
+         *
          * @param {String} countryId
          * @returns {Boolean}
+         * @private
          */
         isCountryAvailable: function (countryId) {
             var key,

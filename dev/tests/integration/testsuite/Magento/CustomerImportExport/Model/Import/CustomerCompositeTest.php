@@ -8,6 +8,9 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
+/**
+ * Test for CustomerComposite import class
+ */
 class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
@@ -129,6 +132,9 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      * @param string $sourceFile
      * @param array $dataBefore
      * @param array $dataAfter
+     * @param int $updatedItemsCount
+     * @param int $createdItemsCount
+     * @param int $deletedItemsCount
      * @param array $errors
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers_for_address_import.php
@@ -136,8 +142,16 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider importDataDataProvider
      */
-    public function testImportData($behavior, $sourceFile, array $dataBefore, array $dataAfter, array $errors = [])
-    {
+    public function testImportData(
+        $behavior,
+        $sourceFile,
+        array $dataBefore,
+        array $dataAfter,
+        $updatedItemsCount,
+        $createdItemsCount,
+        $deletedItemsCount,
+        array $errors = []
+    ) {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         // set entity adapter parameters
@@ -173,6 +187,9 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 
         // import data
         $this->_entityAdapter->importData();
+        $this->assertSame($updatedItemsCount, $this->_entityAdapter->getUpdatedItemsCount());
+        $this->assertSame($createdItemsCount, $this->_entityAdapter->getCreatedItemsCount());
+        $this->assertSame($deletedItemsCount, $this->_entityAdapter->getDeletedItemsCount());
 
         // assert data after import
         $this->_assertCustomerData($dataAfter);
@@ -192,6 +209,10 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
                 '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
                 '$dataBefore' => $this->_beforeImport,
                 '$dataAfter' => [],
+                '$updatedItemsCount' => 0,
+                '$createdItemsCount' => 0,
+                '$deletedItemsCount' => 1,
+                '$errors' => [],
             ],
         ];
 
@@ -200,6 +221,9 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
             '$dataBefore' => $this->_beforeImport,
             '$dataAfter' => $this->_afterImport,
+            '$updatedItemsCount' => 1,
+            '$createdItemsCount' => 3,
+            '$deletedItemsCount' => 0,
             '$errors' => [],
         ];
 
