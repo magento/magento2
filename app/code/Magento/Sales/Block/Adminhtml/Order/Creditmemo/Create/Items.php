@@ -56,7 +56,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         $this->addChild(
             'update_button',
             \Magento\Backend\Block\Widget\Button::class,
-            ['label' => __('Update Qty\'s'), 'class' => 'update-button', 'onclick' => $onclick]
+            ['label' => __('Update Qty\'s'), 'class' => 'update-button secondary', 'onclick' => $onclick]
         );
         $this->addChild(
             'update_totals_button',
