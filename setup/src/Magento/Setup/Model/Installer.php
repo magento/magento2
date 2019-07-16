@@ -1201,6 +1201,17 @@ class Installer
     }
 
     /**
+     * Get the modules config as Magento sees it
+     *
+     * @return array
+     * @throws \LogicException
+     */
+    public function getModulesConfig()
+    {
+        return $this->createModulesConfig([], true);
+    }
+
+    /**
      * Uninstall Magento application
      *
      * @return void
