@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigPaymentsSectionState">
         <annotations>
             <description value="Other Payment Methods section in Admin expanded by default"/>
@@ -15,12 +15,11 @@
             <testCaseId value="MAGETWO-91464"/>
         </annotations>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <seeElement selector="{{OtherPaymentsConfigSection.expandedTab}}" stepKey="seeSectionExpanded"/>
     </test>
 </tests>
