@@ -9,21 +9,19 @@ namespace Magento\Inventory\Test\Unit\Model\Source\Validator;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\Source\Validator\CodeValidator;
+use Magento\Inventory\Model\Source\Validator\NameValidator;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for CodeValidator
+ * Test class for NameValidator
  */
-class CodeValidatorTest extends TestCase
+class NameValidatorTest extends TestCase
 {
-
     /**
-     * @var CodeValidator
+     * @var NameValidator
      */
-    private $codeValidator;
+    private $nameValidator;
 
     /**
      * @var SourceInterface |\PHPUnit_Framework_MockObject_MockObject
@@ -41,72 +39,30 @@ class CodeValidatorTest extends TestCase
         $this->source = $this->getMockBuilder(SourceInterface::class)->getMock();
     }
 
-    public function testValidateCodeNotEmpty()
-    {
-        $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
-        $this->validationResultFactory->expects($this->once())
-            ->method('create')
-            ->with(['errors' => [__('"%field" can not be empty.', ['field' => SourceInterface::SOURCE_CODE])]])
-            ->willReturn($emptyValidatorResult);
-
-        $this->codeValidator = (new ObjectManager($this))->getObject(
-            CodeValidator::class,
-            [
-                'validationResultFactory' => $this->validationResultFactory
-            ]
-        );
-
-        $this->source->expects($this->once())
-            ->method('getSourceCode')
-            ->willReturn('  ');
-        $this->codeValidator->validate($this->source);
-    }
-
-    public function testValidateCodeNotWithWhiteSpaces()
+    public function testValidateNameNotEmpty()
     {
         $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
         $this->validationResultFactory->expects($this->once())
             ->method('create')
             ->with(
                 [
-                    'errors' => [__('"%field" can not contain whitespaces.', ['field' => SourceInterface::SOURCE_CODE])]
+                    'errors' => [__('"%field" can not be empty.', ['field' => SourceInterface::NAME])]
                 ]
             )
             ->willReturn($emptyValidatorResult);
-        $this->codeValidator = (new ObjectManager($this))->getObject(
-            CodeValidator::class,
+        $this->nameValidator = (new ObjectManager($this))->getObject(
+            NameValidator::class,
             [
                 'validationResultFactory' => $this->validationResultFactory
             ]
         );
         $this->source->expects($this->once())
-            ->method('getSourceCode')
-            ->willReturn(' source code ');
-        $this->codeValidator->validate($this->source);
+            ->method('getName')
+            ->willReturn('');
+        $this->nameValidator->validate($this->source);
     }
 
-    public function testValidateCodeSuccessfully()
-    {
-        $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
-        $this->validationResultFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($emptyValidatorResult);
-        $this->codeValidator = (new ObjectManager($this))->getObject(
-            CodeValidator::class,
-            [
-                'validationResultFactory' => $this->validationResultFactory
-            ]
-        );
-        $this->source->expects($this->once())
-            ->method('getSourceCode')
-            ->willReturn(' source_code ');
-
-        $result = $this->codeValidator->validate($this->source);
-        $errors = $result->getErrors();
-        $this->assertCount(0, $errors);
-    }
-
-    public function testValidateCodeNotWithInvalidCharacters()
+    public function testValidateNameNotWithInvalidCharacters()
     {
         $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
         $this->validationResultFactory->expects($this->once())
@@ -119,15 +75,36 @@ class CodeValidatorTest extends TestCase
                 ]
             )
             ->willReturn($emptyValidatorResult);
-        $this->codeValidator = (new ObjectManager($this))->getObject(
-            CodeValidator::class,
+        $this->nameValidator = (new ObjectManager($this))->getObject(
+            NameValidator::class,
             [
                 'validationResultFactory' => $this->validationResultFactory
             ]
         );
         $this->source->expects($this->once())
-            ->method('getSourceCode')
+            ->method('getName')
             ->willReturn('${}');
-        $this->codeValidator->validate($this->source);
+        $this->nameValidator->validate($this->source);
+    }
+
+    public function testValidateNameSuccessfully()
+    {
+        $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
+        $this->validationResultFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($emptyValidatorResult);
+        $this->nameValidator = (new ObjectManager($this))->getObject(
+            NameValidator::class,
+            [
+                'validationResultFactory' => $this->validationResultFactory
+            ]
+        );
+        $this->source->expects($this->once())
+            ->method('getName')
+            ->willReturn('testname');
+
+        $result = $this->nameValidator->validate($this->source);
+        $errors = $result->getErrors();
+        $this->assertCount(0, $errors);
     }
 }
