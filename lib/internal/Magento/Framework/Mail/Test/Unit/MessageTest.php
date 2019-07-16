@@ -5,44 +5,40 @@
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
+/**
+ * test Magento\Framework\Mail\Message
+ */
 class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mail\Message
+     * @var \Magento\Framework\Mail\Message
      */
-    protected $_messageMock;
+    protected $message;
 
     protected function setUp()
     {
-        $this->_messageMock = $this->createPartialMock(
-            \Magento\Framework\Mail\Message::class,
-            ['setBody', 'setMessageType']
-        );
+        $this->message = new \Magento\Framework\Mail\Message();
     }
 
     public function testSetBodyHtml()
     {
-        $this->_messageMock->expects($this->once())
-            ->method('setMessageType')
-            ->with('text/html');
+        $this->message->setBodyHtml('body');
 
-        $this->_messageMock->expects($this->once())
-            ->method('setBody')
-            ->with('body');
-
-        $this->_messageMock->setBodyHtml('body');
+        $part = $this->message->getBody()->getParts()[0];
+        $this->assertEquals('text/html', $part->getType());
+        $this->assertEquals('8bit', $part->getEncoding());
+        $this->assertEquals('utf-8', $part->getCharset());
+        $this->assertEquals('body', $part->getContent());
     }
 
     public function testSetBodyText()
     {
-        $this->_messageMock->expects($this->once())
-            ->method('setMessageType')
-            ->with('text/plain');
+        $this->message->setBodyText('body');
 
-        $this->_messageMock->expects($this->once())
-            ->method('setBody')
-            ->with('body');
-
-        $this->_messageMock->setBodyText('body');
+        $part = $this->message->getBody()->getParts()[0];
+        $this->assertEquals('text/plain', $part->getType());
+        $this->assertEquals('8bit', $part->getEncoding());
+        $this->assertEquals('utf-8', $part->getCharset());
+        $this->assertEquals('body', $part->getContent());
     }
 }

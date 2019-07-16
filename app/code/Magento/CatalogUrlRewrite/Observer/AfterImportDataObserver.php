@@ -255,11 +255,8 @@ class AfterImportDataObserver implements ObserverInterface
     protected function _populateForUrlGeneration($rowData)
     {
         $newSku = $this->import->getNewSku($rowData[ImportProduct::COL_SKU]);
-        if (empty($newSku) || !isset($newSku['entity_id'])) {
-            return null;
-        }
-        if ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
-            && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE])) {
+        $oldSku = $this->import->getOldSku();
+        if (!$this->isNeedToPopulateForUrlGeneration($rowData, $newSku, $oldSku)) {
             return null;
         }
         $rowData['entity_id'] = $newSku['entity_id'];
@@ -290,6 +287,27 @@ class AfterImportDataObserver implements ObserverInterface
             $this->addProductToImport($product, $product->getStoreId());
         }
         return $this;
+    }
+
+    /**
+     * Check is need to populate data for url generation
+     *
+     * @param array $rowData
+     * @param array $newSku
+     * @param array $oldSku
+     * @return bool
+     */
+    private function isNeedToPopulateForUrlGeneration($rowData, $newSku, $oldSku): bool
+    {
+        if ((empty($newSku) || !isset($newSku['entity_id']))
+            || ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
+                && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE]))
+            || (array_key_exists($rowData[ImportProduct::COL_SKU], $oldSku)
+                && !isset($rowData[self::URL_KEY_ATTRIBUTE_CODE])
+                && $this->import->getBehavior() === ImportExport::BEHAVIOR_APPEND)) {
+            return false;
+        }
+        return true;
     }
 
     /**
