@@ -5,8 +5,6 @@
 
 define([
     'jquery',
-    'jquery-ui-modules/widget',
-    'jquery-ui-modules/core',
     'jquery/validate',
     'mage/translate'
 ], function ($) {

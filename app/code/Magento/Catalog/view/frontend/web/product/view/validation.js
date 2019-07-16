@@ -10,7 +10,6 @@
         define([
             'jquery',
             'jquery-ui-modules/widget',
-            'jquery-ui-modules/core',
             'mage/validation/validation'
         ], factory);
     } else {

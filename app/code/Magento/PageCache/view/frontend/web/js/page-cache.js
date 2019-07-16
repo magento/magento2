@@ -8,7 +8,6 @@ define([
     'domReady',
     'consoleLogger',
     'jquery-ui-modules/widget',
-    'jquery-ui-modules/core',
     'mage/cookies'
 ], function ($, domReady, consoleLogger) {
     'use strict';

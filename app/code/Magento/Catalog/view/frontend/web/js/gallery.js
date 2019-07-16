@@ -9,8 +9,7 @@
     if (typeof define === 'function' && define.amd) {
         define([
             'jquery',
-            'jquery-ui-modules/widget',
-            'jquery-ui-modules/core'
+            'jquery-ui-modules/widget'
         ], factory);
     } else {
         factory(jQuery);

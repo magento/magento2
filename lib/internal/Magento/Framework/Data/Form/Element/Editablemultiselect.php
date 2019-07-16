@@ -77,9 +77,7 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
         $html .= "
                 <script type='text/javascript'>
                 require([
-                    'jquery',
-                    'jquery-ui-modules/widget',
-                    'jquery-ui-modules/core'
+                    'jquery'
                 ], function( $ ){
 
                     function isResolved(){

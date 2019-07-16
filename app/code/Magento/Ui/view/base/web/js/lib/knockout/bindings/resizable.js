@@ -8,8 +8,7 @@ define([
     'Magento_Ui/js/lib/view/utils/async',
     'uiRegistry',
     'underscore',
-    '../template/renderer',
-    'jquery/ui'
+    '../template/renderer'
 ], function (ko, $, async, registry, _, renderer) {
     'use strict';
 

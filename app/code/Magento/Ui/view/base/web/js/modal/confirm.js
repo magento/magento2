@@ -11,7 +11,6 @@ define([
     'underscore',
     'mage/translate',
     'jquery-ui-modules/widget',
-    'jquery-ui-modules/core',
     'Magento_Ui/js/modal/modal'
 ], function ($, _, $t) {
     'use strict';
