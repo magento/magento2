@@ -15,7 +15,7 @@ class CurrencyConverterApi extends AbstractImport
      * @var string
      */
     const CURRENCY_CONVERTER_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}'
-    .'&compact=ultra&apiKey={{ACCESS_KEY}}'; //@codingStandardsIgnoreLine
+    . '&compact=ultra&apiKey={{ACCESS_KEY}}'; //@codingStandardsIgnoreLine
 
     /**
      * Http Client Factory
@@ -28,11 +28,6 @@ class CurrencyConverterApi extends AbstractImport
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfig;
-
-    /**
-     * @var string
-     */
-    private $accessKey;
 
     /**
      * Initialize dependencies
@@ -55,12 +50,15 @@ class CurrencyConverterApi extends AbstractImport
      */
     public function fetchRates()
     {
-        $this->accessKey = $this->scopeConfig->getValue(
+        $data = [];
+        $accessKey = $this->scopeConfig->getValue(
             'currency/currencyconverterapi/api_key',
             ScopeInterface::SCOPE_STORE
         );
-
-        $data = [];
+        if (empty($accessKey)) {
+            $this->_messages[] = __('No API Key was specified or an invalid API Key was specified.');
+            return $data;
+        }
         $currencies = $this->_getCurrencyCodes();
         $defaultCurrencies = $this->_getDefaultCurrencyCodes();
 
@@ -68,7 +66,7 @@ class CurrencyConverterApi extends AbstractImport
             if (!isset($data[$currencyFrom])) {
                 $data[$currencyFrom] = [];
             }
-            $data = $this->convertBatch($data, $currencyFrom, $currencies);
+            $data = $this->convertBatch($data, $currencyFrom, $currencies, $accessKey);
             ksort($data[$currencyFrom]);
         }
         return $data;
@@ -77,19 +75,20 @@ class CurrencyConverterApi extends AbstractImport
     /**
      * Return currencies convert rates in batch mode
      *
+     * @param string $accessKey
      * @param array $data
      * @param string $currencyFrom
      * @param array $currenciesTo
      * @return array
      */
-    private function convertBatch($data, $currencyFrom, $currenciesTo)
+    private function convertBatch($data, $currencyFrom, $currenciesTo, $accessKey)
     {
         foreach ($currenciesTo as $to) {
             set_time_limit(0);
             try {
                 $url = str_replace(
                     ['{{ACCESS_KEY}}', '{{CURRENCY_FROM}}', '{{CURRENCY_TO}}'],
-                    [$this->accessKey, $currencyFrom, $to],
+                    [$accessKey, $currencyFrom, $to],
                     self::CURRENCY_CONVERTER_URL
                 );
 
@@ -179,7 +178,7 @@ class CurrencyConverterApi extends AbstractImport
 
             return false;
         }
-        if (empty($response[$currencyFrom.'_'.$currenciesTo])) {
+        if (empty($response[$currencyFrom . '_' . $currenciesTo])) {
             $this->_messages[] = __('We can\'t retrieve a rate for %1.', $currenciesTo);
 
             return false;
