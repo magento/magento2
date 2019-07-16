@@ -57,7 +57,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Prepare layout.
-     * Add files to use dialog windows
+     *
+     * Add files to use dialog windows.
      *
      * @return $this
      */
