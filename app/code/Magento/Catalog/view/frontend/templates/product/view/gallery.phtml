@@ -9,6 +9,17 @@
  *
  * @var $block \Magento\Catalog\Block\Product\View\Gallery
  */
+
+// If block argument "gallery_options" is not set in xml layout file, then fallback
+// to an instance of \Magento\Catalog\Block\Product\View\GalleryOptions class manually
+if ($block->getGalleryOptions() === null) {
+    $block->setData(
+            'gallery_options',
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Block\Product\View\GalleryOptions::class)
+    );
+}
+
 ?>
 <div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">
     <div data-role="loader" class="loading-mask">
