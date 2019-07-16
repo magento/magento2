@@ -349,15 +349,14 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
             $confirmation = $this->getRequest()->getParam('password_confirmation');
             $redirectUrl = $this->session->getBeforeAuthUrl();
             $this->checkPasswordConfirmation($password, $confirmation);
+
+            $extensionAttributes = $customer->getExtensionAttributes();
+            $extensionAttributes->setIsSubscribed($this->getRequest()->getParam('is_subscribed', false));
+            $customer->setExtensionAttributes($extensionAttributes);
+
             $customer = $this->accountManagement
                 ->createAccount($customer, $password, $redirectUrl);
 
-            if ($this->getRequest()->getParam('is_subscribed', false)) {
-                $extensionAttributes = $customer->getExtensionAttributes();
-                $extensionAttributes->setIsSubscribed(true);
-                $customer->setExtensionAttributes($extensionAttributes);
-                $this->customerRepository->save($customer);
-            }
             $this->_eventManager->dispatch(
                 'customer_register_success',
                 ['account_controller' => $this, 'customer' => $customer]
