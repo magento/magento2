@@ -261,8 +261,13 @@ class TransportBuilder
      */
     public function getTransport()
     {
-        $this->prepareMessage();
-        $mailTransport = $this->mailTransportFactory->create(['message' => clone $this->message]);
+        try {
+            $this->prepareMessage();
+            $mailTransport = $this->mailTransportFactory->create(['message' => clone $this->message]);
+        } catch (LocalizedException $e) {
+            $this->reset();
+            throw $e;
+        }
         $this->reset();
 
         return $mailTransport;
