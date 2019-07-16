@@ -14,23 +14,13 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Newsletter\Model\Config;
 
 /**
  * Create customer account resolver
  */
 class CreateCustomer implements ResolverInterface
 {
-    /**
-     * Configuration path to newsletter active setting
-     */
-    const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
     /**
      * @var ExtractCustomerData
      */
@@ -42,18 +32,23 @@ class CreateCustomer implements ResolverInterface
     private $createCustomerAccount;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * CreateCustomer constructor.
      *
      * @param ExtractCustomerData $extractCustomerData
      * @param CreateCustomerAccount $createCustomerAccount
-     * @param ScopeConfigInterface $scopeConfig
+     * @param Config $config
      */
     public function __construct(
         ExtractCustomerData $extractCustomerData,
         CreateCustomerAccount $createCustomerAccount,
-        ScopeConfigInterface $scopeConfig
+        Config $config
     ) {
-        $this->scopeConfig = $scopeConfig;
+        $this->config = $config;
         $this->extractCustomerData = $extractCustomerData;
         $this->createCustomerAccount = $createCustomerAccount;
     }
@@ -72,11 +67,7 @@ class CreateCustomer implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
-        if (!$this->scopeConfig->getValue(
-            self::XML_PATH_NEWSLETTER_ACTIVE,
-            ScopeInterface::SCOPE_STORE
-        )
-        ) {
+        if (!$this->config->isActive()) {
             $args['input']['is_subscribed'] = false;
         }
 
