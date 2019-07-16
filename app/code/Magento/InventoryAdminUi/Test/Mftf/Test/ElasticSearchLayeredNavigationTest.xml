@@ -16,12 +16,20 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
-            <skip>
-                <issueId value="https://github.com/magento/inventory/issues/2370"/>
-            </skip>
         </annotations>
         
         <before>
+            <!-- Assign Main Website to Default Stock -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockIndexPage"/>
+            <waitForPageLoad time="30" stepKey="waitForStockGridPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByKeyword">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickOnEditForDefaultStock"/>
+            <waitForPageLoad time="30" stepKey="waitForStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannel"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
             <!--Create Simple Products.-->
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct1">
@@ -45,7 +53,6 @@
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchEnable"/>
         </before>
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <!--Disable created test source.-->
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
                 <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
