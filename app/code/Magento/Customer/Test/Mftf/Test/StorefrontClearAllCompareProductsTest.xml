@@ -20,6 +20,7 @@
         </annotations>
         
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create Simple Customer -->
             <createData entity="Simple_US_Customer_CA" stepKey="createSimpleCustomer1"/>
 
@@ -94,6 +95,7 @@
             <deleteData createDataKey="createBundleProduct1" stepKey="deleteBundleProduct1"/>
             <deleteData createDataKey="createGroupedProduct1" stepKey="deleteGroupedProduct1"/>
             <deleteData createDataKey="createDownloadableProduct1" stepKey="deleteDownloadableProduct1"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer1">

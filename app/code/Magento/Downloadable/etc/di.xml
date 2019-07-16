@@ -164,4 +164,13 @@
             <argument name="connectionName" xsi:type="string">indexer</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="addDomainsCommand" xsi:type="object">Magento\Downloadable\Console\Command\DomainsAddCommand</item>
+                <item name="removeDomainsCommand" xsi:type="object">Magento\Downloadable\Console\Command\DomainsRemoveCommand</item>
+                <item name="showDomainsCommand" xsi:type="object">Magento\Downloadable\Console\Command\DomainsShowCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

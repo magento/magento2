@@ -12,12 +12,23 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Url\Validator as UrlValidator;
+use Magento\Downloadable\Model\Url\DomainValidator;
 
 /**
  * Class to validate Link Content.
  */
 class ContentValidator
 {
+    /**
+     * @var DomainValidator
+     */
+    private $domainValidator;
+
+    /**
+     * @var File
+     */
+    private $fileHelper;
+
     /**
      * @var FileContentValidator
      */
@@ -29,23 +40,21 @@ class ContentValidator
     protected $urlValidator;
 
     /**
-     * @var File
-     */
-    private $fileHelper;
-
-    /**
      * @param FileContentValidator $fileContentValidator
      * @param UrlValidator $urlValidator
      * @param File|null $fileHelper
+     * @param DomainValidator|null $domainValidator
      */
     public function __construct(
         FileContentValidator $fileContentValidator,
         UrlValidator $urlValidator,
-        File $fileHelper = null
+        File $fileHelper = null,
+        DomainValidator $domainValidator = null
     ) {
         $this->fileContentValidator = $fileContentValidator;
         $this->urlValidator = $urlValidator;
         $this->fileHelper = $fileHelper ?? ObjectManager::getInstance()->get(File::class);
+        $this->domainValidator = $domainValidator ?? ObjectManager::getInstance()->get(DomainValidator::class);
     }
 
     /**
@@ -91,7 +100,9 @@ class ContentValidator
     protected function validateLinkResource(LinkInterface $link)
     {
         if ($link->getLinkType() === 'url') {
-            if (!$this->urlValidator->isValid($link->getLinkUrl())) {
+            if (!$this->urlValidator->isValid($link->getLinkUrl())
+                || !$this->domainValidator->isValid($link->getLinkUrl())
+            ) {
                 throw new InputException(__('Link URL must have valid format.'));
             }
         } elseif ($link->getLinkFileContent()) {
@@ -113,7 +124,9 @@ class ContentValidator
     protected function validateSampleResource(LinkInterface $link)
     {
         if ($link->getSampleType() === 'url') {
-            if (!$this->urlValidator->isValid($link->getSampleUrl())) {
+            if (!$this->urlValidator->isValid($link->getSampleUrl())
+                || !$this->domainValidator->isValid($link->getSampleUrl())
+            ) {
                 throw new InputException(__('Sample URL must have valid format.'));
             }
         } elseif ($link->getSampleFileContent()) {

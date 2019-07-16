@@ -25,6 +25,7 @@
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
         </before>
         <after>
             <!-- Delete category -->
@@ -40,6 +41,7 @@
 
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
         </after>
 
         <!-- Create store view -->

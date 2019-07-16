@@ -9,6 +9,8 @@ namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Downloadable\Console\Command\DomainsAddCommand;
+use Magento\Downloadable\Console\Command\DomainsRemoveCommand;
 use Magento\Downloadable\Model\Link;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
@@ -22,6 +24,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @magentoAppIsolation enabled
@@ -54,6 +57,34 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 10
         ],
     ];
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var DomainsAddCommand $domainsAddCommand */
+        $domainsAddCommand = $objectManager->get(DomainsAddCommand::class);
+        $command = new CommandTester($domainsAddCommand);
+        $command->execute([DomainsAddCommand::INPUT_KEY_DOMAINS => ['example.com']]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+         /** @var DomainsRemoveCommand $domainsRemoveCommand */
+        $domainsRemoveCommand = $objectManager->get(DomainsRemoveCommand::class);
+        $command = new CommandTester($domainsRemoveCommand);
+        $command->execute([DomainsRemoveCommand::INPUT_KEY_DOMAINS => ['example.com']]);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
@@ -607,6 +638,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testProductWithMediaGallery()
     {
         $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        // @codingStandardsIgnoreLine
         $encodedImage = base64_encode(file_get_contents($testImagePath));
         //create a product with media gallery
         $filename1 = 'tiny1' . time() . '.jpg';
@@ -731,11 +763,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function updateProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
+            foreach ($product['custom_attributes'] as &$customAttribute) {
+                if ($customAttribute['attribute_code'] == 'category_ids'
+                    && !is_array($customAttribute['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $customAttribute['value'] = [""];
                 }
             }
         }
@@ -1152,11 +1184,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function saveProduct($product, $storeCode = null)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
+            foreach ($product['custom_attributes'] as &$customAttribute) {
+                if ($customAttribute['attribute_code'] == 'category_ids'
+                    && !is_array($customAttribute['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $customAttribute['value'] = [""];
                 }
             }
         }

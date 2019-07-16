@@ -18,6 +18,7 @@
         </annotations>
 
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
             <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
             <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
             <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
@@ -32,6 +33,7 @@
         <after>
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteProduct"/>
             <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
         </after>
 
         <!-- Open Downloadable Product page -->

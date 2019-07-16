@@ -7,8 +7,11 @@
 namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Downloadable\Console\Command\DomainsAddCommand;
+use Magento\Downloadable\Console\Command\DomainsRemoveCommand;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class ProductRepositoryTest for testing ProductRepository interface with Downloadable Product
@@ -27,7 +30,15 @@ class ProductRepositoryTest extends WebapiAbstract
 
     protected function setUp()
     {
+        parent::setUp();
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var DomainsAddCommand $domainsAddCommand */
+        $domainsAddCommand = $objectManager->get(DomainsAddCommand::class);
+        $command = new CommandTester($domainsAddCommand);
+        $command->execute([DomainsAddCommand::INPUT_KEY_DOMAINS => ['www.example.com']]);
     }
 
     /**
@@ -37,6 +48,13 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         $this->deleteProductBySku(self::PRODUCT_SKU);
         parent::tearDown();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var DomainsRemoveCommand $domainsRemoveCommand */
+        $domainsRemoveCommand = $objectManager->get(DomainsRemoveCommand::class);
+        $command = new CommandTester($domainsRemoveCommand);
+        $command->execute([DomainsRemoveCommand::INPUT_KEY_DOMAINS => ['www.example.com']]);
     }
 
     protected function getLinkData()

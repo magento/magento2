@@ -118,3 +118,4 @@ Downloads,Downloads
 "Use Content-Disposition","Use Content-Disposition"
 "Disable Guest Checkout if Cart Contains Downloadable Items","Disable Guest Checkout if Cart Contains Downloadable Items"
 "Guest checkout will only work with shareable.","Guest checkout will only work with shareable."
+"Host ""%value"" is not allowed.","Host ""%value"" is not allowed."

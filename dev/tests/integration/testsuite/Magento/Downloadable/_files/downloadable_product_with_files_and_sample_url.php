@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+
+use Magento\Downloadable\Console\Command\DomainsAddCommand;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+/** @var DomainsAddCommand $domainsAddCommand */
+$domainsAddCommand = $objectManager->get(DomainsAddCommand::class);
+$command = new \Symfony\Component\Console\Tester\CommandTester($domainsAddCommand);
+$command->execute([DomainsAddCommand::INPUT_KEY_DOMAINS => ['example.com', 'sampleurl.com']]);
 
 /**
  * @var \Magento\Catalog\Model\Product $product
@@ -74,6 +80,7 @@ $linkData = [
  */
 $sampleContent = $objectManager->create(\Magento\Downloadable\Api\Data\File\ContentInterfaceFactory::class)->create();
 $sampleContent->setFileData(
+    // @codingStandardsIgnoreLine
     base64_encode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'test_image.jpg'))
 );
 $sampleContent->setName('jellyfish_1_3.jpg');
@@ -92,10 +99,10 @@ $sampleLink->setSortOrder(2);
  */
 $content = $objectManager->create(\Magento\Downloadable\Api\Data\File\ContentInterfaceFactory::class)->create();
 $content->setFileData(
+    // @codingStandardsIgnoreLine
     base64_encode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'test_image.jpg'))
 );
 $content->setName('jellyfish_2_4.jpg');
-//$content->setName('');
 $sampleLink->setLinkFileContent($content);
 $links[] = $sampleLink;
 
@@ -146,6 +153,7 @@ foreach ($downloadableData['sample'] as $sampleData) {
             \Magento\Downloadable\Api\Data\File\ContentInterfaceFactory::class
         )->create();
         $content->setFileData(
+            // @codingStandardsIgnoreLine
             base64_encode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'test_image.jpg'))
         );
         $content->setName('jellyfish_1_4.jpg');
