@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -20,11 +19,6 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
  */
 class PaypalPayflowProTokenExceptionTest extends PaypalPayflowProAbstractTest
 {
-    /**
-     * @var Http
-     */
-    private $request;
-
     /**
      * @var SerializerInterface
      */
@@ -39,7 +33,6 @@ class PaypalPayflowProTokenExceptionTest extends PaypalPayflowProAbstractTest
     {
         parent::setUp();
 
-        $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
     }
@@ -58,8 +51,6 @@ class PaypalPayflowProTokenExceptionTest extends PaypalPayflowProAbstractTest
      */
     public function testResolveWithPaypalError(): void
     {
-        $this->objectManager->removeSharedInstance(Gateway::class);
-
         $this->enablePaymentMethod('payflowpro');
 
         $reservedQuoteId = 'test_quote';
@@ -68,23 +59,14 @@ class PaypalPayflowProTokenExceptionTest extends PaypalPayflowProAbstractTest
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
         $query = $this->getCreatePayflowTokenMutation($cartId);
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
         $expectedExceptionMessage = "Payment Gateway is unreachable at the moment. Please use another payment option.";
         $expectedException = new \Zend_Http_Client_Exception($expectedExceptionMessage);
 
         $this->gatewayMock
-            ->expects($this->any())
             ->method('postRequest')
             ->willThrowException($expectedException);
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('createPayflowProToken', $responseData['data']);
         $this->assertEmpty($responseData['data']['createPayflowProToken']);
