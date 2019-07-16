@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -13,7 +10,7 @@
  */
 ?>
 <?= $block->getBeforeHtml() ?>
-<button <?= /* @escapeNotVerified */ $block->getAttributesHtml(), $block->getUiId() ?>>
-    <span><?= /* @escapeNotVerified */ $block->getLabel() ?></span>
+<button <?= /* @noEscape */ $block->getAttributesHtml(), $block->getUiId() ?>>
+    <span><?= $block->escapeHtml($block->getLabel()) ?></span>
 </button>
 <?= $block->getAfterHtml() ?>
