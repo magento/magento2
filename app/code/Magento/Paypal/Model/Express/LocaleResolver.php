@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Model;
+declare(strict_types=1);
+
+namespace Magento\Paypal\Model\Express;
 
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Paypal\Model\ConfigFactory;
+use Magento\Paypal\Model\Config;
 
 /**
  * Resolves locale for PayPal Express.
@@ -36,12 +39,13 @@ class LocaleResolver implements ResolverInterface
 
     /**
      * @param ResolverInterface $resolver
-     * @param Config $config
+     * @param ConfigFactory $configFactory
      */
-    public function __construct(ResolverInterface $resolver, Config $config)
+    public function __construct(ResolverInterface $resolver, ConfigFactory $configFactory)
     {
         $this->resolver = $resolver;
-        $this->config = $config;
+        $this->config = $configFactory->create();
+        $this->config->setMethod(Config::METHOD_EXPRESS);
     }
 
     /**
@@ -80,9 +84,9 @@ class LocaleResolver implements ResolverInterface
      * Gets store's locale or the `en_US` locale if store's locale does not supported by PayPal.
      *
      * @return string
-     * @see https://braintree.github.io/braintree-web/current/PayPalCheckout.html#createPayment
+     * @see https://developer.paypal.com/docs/api/reference/locale-codes/#supported-locale-codes
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         $locale = $this->localeMap[$this->resolver->getLocale()] ?? $this->resolver->getLocale();
         $allowedLocales = $this->config->getValue('supported_locales');

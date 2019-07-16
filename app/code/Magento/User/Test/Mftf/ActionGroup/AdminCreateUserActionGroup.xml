@@ -55,4 +55,7 @@
         <waitForPageLoad stepKey="waitForSaveTheUser" />
         <see userInput="You saved the user." stepKey="seeSuccessMessage" />
     </actionGroup>
+    <actionGroup name="AdminCreateUserWithApiRoleActionGroup" extends="AdminCreateUserWithRoleActionGroup">
+        <click stepKey="chooseRole" selector="{{AdminCreateUserSection.createdRoleInUserPage(role.rolename)}}"/>
+    </actionGroup>
 </actionGroups>
