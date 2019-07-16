@@ -22,6 +22,7 @@ use \Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Image resize service.
@@ -86,6 +87,11 @@ class ImageResize
     private $filesystem;
 
     /**
+     * @var Database
+     */
+    private $fileStorageDatabase;
+
+    /**
      * @param State $appState
      * @param MediaConfig $imageConfig
      * @param ProductImage $productImage
@@ -96,6 +102,7 @@ class ImageResize
      * @param ThemeCustomizationConfig $themeCustomizationConfig
      * @param Collection $themeCollection
      * @param Filesystem $filesystem
+     * @param Database $fileStorageDatabase
      * @internal param ProductImage $gallery
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -109,7 +116,8 @@ class ImageResize
         AssertImageFactory $assertImageFactory,
         ThemeCustomizationConfig $themeCustomizationConfig,
         Collection $themeCollection,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        Database $fileStorageDatabase = null
     ) {
         $this->appState = $appState;
         $this->imageConfig = $imageConfig;
@@ -122,6 +130,8 @@ class ImageResize
         $this->themeCollection = $themeCollection;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->filesystem = $filesystem;
+        $this->fileStorageDatabase = $fileStorageDatabase ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
     }
 
     /**
@@ -132,9 +142,15 @@ class ImageResize
      */
     public function resizeFromImageName(string $originalImageName)
     {
-        $originalImagePath = $this->mediaDirectory->getAbsolutePath(
-            $this->imageConfig->getMediaPath($originalImageName)
-        );
+        $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
+        $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
+
+        if ($this->fileStorageDatabase->checkDbUsage() &&
+            !$this->mediaDirectory->isFile($mediastoragefilename)
+        ) {
+            $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
+        }
+
         if (!$this->mediaDirectory->isFile($originalImagePath)) {
             throw new NotFoundException(__('Cannot resize image "%1" - original image not found', $originalImagePath));
         }
@@ -162,10 +178,15 @@ class ImageResize
 
         foreach ($productImages as $image) {
             $originalImageName = $image['filepath'];
-            $originalImagePath = $this->mediaDirectory->getAbsolutePath(
-                $this->imageConfig->getMediaPath($originalImageName)
-            );
+            $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
+            $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
+
             foreach ($viewImages as $viewImage) {
+                if ($this->fileStorageDatabase->checkDbUsage() &&
+                    !$this->mediaDirectory->isFile($mediastoragefilename)
+                ) {
+                    $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
+                }
                 $this->resize($viewImage, $originalImagePath, $originalImageName);
             }
             yield $originalImageName => $count;
@@ -293,6 +314,11 @@ class ImageResize
             $image->resize($imageParams['image_width'], $imageParams['image_height']);
         }
         $image->save($imageAsset->getPath());
+
+        if ($this->fileStorageDatabase->checkDbUsage()) {
+            $mediastoragefilename = $this->mediaDirectory->getRelativePath($imageAsset->getPath());
+            $this->fileStorageDatabase->saveFile($mediastoragefilename);
+        }
     }
 
     /**

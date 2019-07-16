@@ -6,8 +6,7 @@
   */
 -->
 
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SampleBraintreeConfig" type="braintree_config_state">
         <requiredEntity type="title">SampleTitle</requiredEntity>
         <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
@@ -54,13 +53,13 @@
         <data key="value">sandbox</data>
     </entity>
     <entity name="MerchantId" type="merchant_id">
-        <data key="value">d4pdjhxgjfrsmzbf</data>
+        <data key="value">MERCH_ID</data>
     </entity>
     <entity name="PublicKey" type="public_key">
-        <data key="value">m7q4wmh43xrgyrst</data>
+        <data key="value">PUBLIC_KEY</data>
     </entity>
     <entity name="PrivateKey" type="private_key">
-        <data key="value">67de364080b1b4e2492d7a3de413a572</data>
+        <data key="value">PRIVATE_KEY</data>
     </entity>
 
     <!-- default configuration used to restore Magento config -->
@@ -138,14 +137,17 @@
         <data key="year">20</data>
         <data key="cvv">113</data>
     </entity>
+    <entity name="StoredPaymentMethods">
+        <data key="cardNumberEnding">5100</data>
+        <data key="cardExpire">12/2020</data>
+    </entity>
 
     <entity name="BraintreeConfigurationData" type="data">
         <data key="title">Credit Card (Braintree)</data>
-        <data key="merchantID">d4pdjhxgjfrsmzbf</data>
-        <data key="publicKey">m7q4wmh43xrgyrst</data>
-        <data key="privateKey">67de364080b1b4e2492d7a3de413a572</data>
-        <data key="merchantAccountID">Magneto</data>
+        <data key="merchantID">MERCH_ID</data>
+        <data key="publicKey">PUBLIC_KEY</data>
+        <data key="privateKey">PRIVATE_KEY</data>
+        <data key="merchantAccountID">MERCH_ACCOUNT_ID</data>
         <data key="titleForPayPalThroughBraintree">PayPal (Braintree)</data>
     </entity>
-
 </entities>
