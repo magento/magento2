@@ -30,12 +30,13 @@ require(['prototype'], function(){
                         result = response.message;
                     }
                     if (response.valid == 1) {
-                        validationMessage.removeClassName('hidden').addClassName('success')
+                        validationMessage.removeClassName('hidden').removeClassName('admin__field-error').addClassName('note');
+                        validationMessage.setStyle({color:'green'});
                     } else {
-                        validationMessage.removeClassName('hidden').addClassName('error')
+                        validationMessage.removeClassName('hidden').addClassName('admin__field-error');
                     }
                 } catch (e) {
-                    validationMessage.removeClassName('hidden').addClassName('error')
+                    validationMessage.removeClassName('hidden').addClassName('admin__field-error');
                 }
                 validationMessage.update(result);
             }
@@ -48,8 +49,9 @@ require(['prototype'], function(){
 });
 </script>
 <div class="actions actions-validate-vat">
-    <div id="validation_result" class="message-validation hidden"></div>
     <button onclick="javascript:validateVat(); return false;" class="action-validate-vat" type="button" id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>">
         <span><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
     </button>
+    <p class="admin__field-error hidden" id="validation_result"></p>
 </div>
+
