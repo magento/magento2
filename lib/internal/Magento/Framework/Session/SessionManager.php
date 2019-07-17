@@ -13,6 +13,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
  * Session Manager
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * phpcs:disable Magento2.Exceptions.ThrowCatch - @todo MC-18221 need to fix check false positive
  */
 class SessionManager implements SessionManagerInterface
 {

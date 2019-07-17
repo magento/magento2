@@ -22,6 +22,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * phpcs:disable Magento2.Exceptions.ThrowCatch - @todo MC-18221 need to fix check false positive
  *
  * @api
  * @since 100.0.2
