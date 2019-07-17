@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetGraphQl\Model\Resolver\Customer;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\Request;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -20,32 +19,29 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
 {
-    const CONTENT_TYPE = 'application/json';
-
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
 
     /** @var SerializerInterface */
     private $jsonSerializer;
 
-    /** @var  CustomerTokenServiceInterface */
+    /** @var CustomerTokenServiceInterface */
     private $customerTokenService;
 
-    /** @var Http */
-    private $request;
+    /** @var GraphQlRequest */
+    private $graphQlRequest;
 
     protected function setUp() : void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->request = $this->objectManager->get(Http::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
     }
@@ -88,24 +84,16 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
   }
 }
 QUERY;
-        $postData = [
-            'query' => $query,
-            'variables' => null,
-            'operationName' => null
-        ];
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($this->jsonSerializer->serialize($postData));
+
         $customerToken = $this->customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-        $bearerCustomerToken = 'Bearer ' . $customerToken;
-        $contentType ='application/json';
-        $webApiRequest = $this->objectManager->get(Request::class);
-        $webApiRequest->getHeaders()->addHeaderLine('Content-Type', $contentType)
-            ->addHeaderLine('Accept', $contentType)
-            ->addHeaderLine('Authorization', $bearerCustomerToken);
-        $this->request->setHeaders($webApiRequest->getHeaders());
-        $graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $response = $graphql->dispatch($this->request);
+
+        $requestHeaders = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $customerToken
+        ];
+
+        $response = $this->graphQlRequest->send($query, [], '', $requestHeaders);
+
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
         $this->assertArrayHasKey('setPaymentMethodOnCart', $output['data']);
