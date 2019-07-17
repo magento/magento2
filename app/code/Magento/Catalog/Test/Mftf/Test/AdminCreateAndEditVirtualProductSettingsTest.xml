@@ -32,6 +32,16 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete created virtual product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="defaultVirtualProduct"/>
+            </actionGroup>
+
+            <!-- Delete website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="$createWebsite.website[name]$"/>
+            </actionGroup>
+            
             <!-- Delete related products -->
             <deleteData createDataKey="createFirstRelatedProduct" stepKey="deleteFirstRelatedProduct"/>
             <deleteData createDataKey="createSecondRelatedProduct" stepKey="deleteSecondRelatedProduct"/>
@@ -174,16 +184,6 @@
         <!-- Assert Gift Option product settings  -->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
-
-        <!-- Delete created virtual product -->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
-            <argument name="product" value="defaultVirtualProduct"/>
-        </actionGroup>
-
-        <!-- Delete website -->
-        <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
-            <argument name="websiteName" value="$createWebsite.website[name]$"/>
-        </actionGroup>
 
         <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
     </test>
