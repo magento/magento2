@@ -126,8 +126,7 @@
                        value="<?= $block->escapeHtml($block->getAttributeValue($_attribute)) ?>"
                        title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                        class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass($_attribute)) ?>"
-                       maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                       data-validate="{'validate-alphanum':true}"/>
+                       maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>" />
             <?php endswitch; ?>
             </div>
         </div>
