@@ -3,9 +3,15 @@
 //  * See COPYING.txt for license details.
 //  */
 
-a {
-    &[data-paypal-button=true] {
-        display: inline-block;
-        margin: .6rem 0;
+.pp-buttons-container {
+    & > div {
+        margin-top: -2.2rem;
+
+        a {
+            &[data-paypal-button=true] {
+                margin-top: 2.2rem;
+                display: inline-block;
+            }
+        }
     }
 }
