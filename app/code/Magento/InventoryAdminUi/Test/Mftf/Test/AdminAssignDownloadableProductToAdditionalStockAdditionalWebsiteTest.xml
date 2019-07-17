@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAssignDownloadableProductToAdditionalStockAdditionalWebsiteTest">
+        <annotations>
+            <stories value="Assign Downloadable Product to Additional Stock and Additional Website"/>
+            <title value="Assign Downloadable Product to Additional Stock and Additional Website"/>
+            <description value="Verify, admin should be able to assign downloadable product to stock and additional website."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457024/scenarios/1820423"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Add store code to url.-->
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
+            <!--Create category, product, additional stock and additional source.-->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="DownloadableMsiProduct" stepKey="downloadableProduct"/>
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <!--Assign source to stock.-->
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create website, store and store view.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete created website.-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable created sources.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <!--Delete category, product and stock. Revert configuration.-->
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="downloadableProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+
+        <!--Assign Stock to Website.-->
+        <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignStockToAdditionalWebsite">
+            <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <!--Assign product to source and website.-->
+        <amOnPage url="{{AdminProductEditPage.url($$downloadableProduct.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductQuantity"/>
+        <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignProductToAdditionalWebsite">
+            <argument name="website" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToProduct">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <!--Verify product on storefront.-->
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$category.name$$.html" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <see userInput="$$downloadableProduct.name$$" stepKey="assertProductPresent"/>
+        <see userInput="$$downloadableProduct.price$$" stepKey="assertProductPricePresent"/>
+    </test>
+</tests>
