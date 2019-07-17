@@ -36,6 +36,8 @@ directive @resolver(class: String="") on QUERY
     | ENUM_VALUE
     | INPUT_OBJECT
     | INPUT_FIELD_DEFINITION
+    
+directive @typeResolver(class: String="") on INTERFACE
 
 type Query {
 }
