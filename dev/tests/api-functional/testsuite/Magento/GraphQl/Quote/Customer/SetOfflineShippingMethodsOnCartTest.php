@@ -43,8 +43,10 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      * @magentoApiDataFixture Magento/OfflineShipping/_files/tablerates_weight.php
+     * @@magentoConfigFixture carriers/flatrate/active 1
+     * @@magentoConfigFixture carriers/tablerate/active 1
+     * @@magentoConfigFixture carriers/freeshipping/active 1
      *
      * @param string $carrierCode
      * @param string $methodCode
