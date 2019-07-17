@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl;
 
 use Magento\GraphQl\Controller\GraphQl;
+use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
@@ -43,6 +44,11 @@ abstract class PaypalPayflowProAbstractTest extends TestCase
      */
     protected $graphqlController;
 
+    /**
+     * @var GraphQlRequest
+     */
+    protected $graphQlRequest;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -50,6 +56,8 @@ abstract class PaypalPayflowProAbstractTest extends TestCase
         $this->objectManager->addSharedInstance($this->getGatewayMock(), Gateway::class);
 
         $this->graphqlController = $this->objectManager->get(GraphQl::class);
+
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
     }
 
     protected function tearDown()
