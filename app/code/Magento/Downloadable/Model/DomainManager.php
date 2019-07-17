@@ -58,7 +58,8 @@ class DomainManager implements DomainManagerInterface
     /**
      * @inheritdoc
      */
-    public function addEnvDomains($hosts) {
+    public function addEnvDomains($hosts)
+    {
         $whitelist = $this->getEnvDomainWhitelist();
         foreach (array_map('strtolower', $hosts) as $host) {
             if (!in_array($host, $whitelist)) {
