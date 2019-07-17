@@ -20,5 +20,6 @@
         <element name="shippingAddress" type="text" selector=".order-shipping-address"/>
         <element name="itemsOrdered" type="text" selector=".edit-order-table"/>
         <element name="paymentInformation" type="text" selector="//div[@class='order-payment-method-title']"/>
+        <element name="orderId" type="text" selector="|Order # (\d+)|"/>
     </section>
 </sections>
