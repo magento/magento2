@@ -37,7 +37,7 @@ directive @resolver(class: String="") on QUERY
     | INPUT_OBJECT
     | INPUT_FIELD_DEFINITION
     
-directive @typeResolver(class: String="") on INTERFACE
+directive @typeResolver(class: String="") on INTERFACE | OBJECT
 
 type Query {
 }
