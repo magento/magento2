@@ -25,7 +25,7 @@ class DomainsRemoveCommand extends Command
     /**
      * Name of domains input argument
      */
-    const INPUT_KEY_DOMAINS = 'domains';
+    public const INPUT_KEY_DOMAINS = 'domains';
 
     /**
      * @var ConfigWriter
