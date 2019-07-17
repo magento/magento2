@@ -10,10 +10,8 @@ namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
 use Magento\Downloadable\Model\Link;
-use Magento\Downloadable\Model\LinkFactory;
-use Magento\Framework\Data\Collection;
+use Magento\DownloadableGraphQl\Model\ResourceModel\GetDownloadableProductLinks;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
@@ -40,9 +38,9 @@ class DownloadableLinks implements ResolverInterface
     private $downloadableHelper;
 
     /**
-     * @var LinkFactory
+     * @var GetDownloadableProductLinks
      */
-    private $linkFactory;
+    private $downloadableProductLinks;
 
     /**
      * @var UrlInterface
@@ -52,20 +50,20 @@ class DownloadableLinks implements ResolverInterface
     /**
      * DownloadableLinks constructor.
      *
-     * @param EnumLookup $enumLookup
      * @param DownloadableHelper $downloadableHelper
-     * @param LinkFactory $linkFactory
+     * @param EnumLookup $enumLookup
+     * @param GetDownloadableProductLinks $getDownloadableProductLinks
      * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        EnumLookup $enumLookup,
         DownloadableHelper $downloadableHelper,
-        LinkFactory $linkFactory,
+        EnumLookup $enumLookup,
+        GetDownloadableProductLinks $getDownloadableProductLinks,
         UrlInterface $urlBuilder
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
-        $this->linkFactory = $linkFactory;
+        $this->downloadableProductLinks = $getDownloadableProductLinks;
         $this->urlBuilder = $urlBuilder;
     }
 
@@ -104,27 +102,12 @@ class DownloadableLinks implements ResolverInterface
             );
         }
 
-        if ($field->getName() != 'downloadable_product_links') {
-            throw new GraphQlInputException(
-                __('Incorrect field name. Use "downloadable_product_links" to retrieve links')
-            );
-        }
-
-        $links = $this->linkFactory->create()->getResourceCollection();
-        $links->addTitleToResult($product->getStoreId())
-            ->addPriceToResult($product->getStore()->getWebsiteId())
-            ->addProductToFilter($product->getId());
-
-        if ($product->getLinksPurchasedSeparately() == true) {
-            $selectedLinksIds = explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue());
-            if (count($selectedLinksIds) > 0) {
-                $links->addFieldToFilter('main_table.link_id', ['in' => $selectedLinksIds]);
-            }
-        }
-
-        $data = $this->formatLinks(
-            $links
+        $links = $this->downloadableProductLinks->execute(
+            $product,
+            explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue())
         );
+
+        $data = $this->formatLinks($links);
 
         return $data;
     }
@@ -132,44 +115,49 @@ class DownloadableLinks implements ResolverInterface
     /**
      * Format links from collection as array
      *
-     * @param Collection $links
+     * @param array $links
      * @return array
-     * @throws RuntimeException
      */
-    private function formatLinks(Collection $links): array
+    private function formatLinks(array $links = []): array
     {
         $resultData = [];
-        foreach ($links as $linkKey => $link) {
-            /** @var Link $link */
-            $resultData[$linkKey]['id'] = $link->getId();
-            $resultData[$linkKey]['title'] = $link->getTitle();
-            $resultData[$linkKey]['sort_order'] = $link->getSortOrder();
-            $resultData[$linkKey]['is_shareable'] = $this->downloadableHelper->getIsShareable($link);
-            $resultData[$linkKey]['price'] = $link->getPrice();
-            $resultData[$linkKey]['number_of_downloads'] = $link->getNumberOfDownloads();
-            $sampleType = $link->getSampleType();
-            $linkType = $link->getLinkType();
 
-            if ($linkType !== null) {
-                $resultData[$linkKey]['link_type'] = $this->enumLookup->getEnumValueFromField(
-                    'DownloadableFileTypeEnum',
-                    $linkType
+        try {
+            foreach ($links as $linkKey => $link) {
+                /** @var Link $link */
+                $resultData[$linkKey]['id'] = $link->getId();
+                $resultData[$linkKey]['title'] = $link->getTitle();
+                $resultData[$linkKey]['sort_order'] = $link->getSortOrder();
+                $resultData[$linkKey]['is_shareable'] = $this->downloadableHelper->getIsShareable($link);
+                $resultData[$linkKey]['price'] = $link->getPrice();
+                $resultData[$linkKey]['number_of_downloads'] = $link->getNumberOfDownloads();
+                $sampleType = $link->getSampleType();
+                $linkType = $link->getLinkType();
+
+                if ($linkType !== null) {
+                    $resultData[$linkKey]['link_type'] = $this->enumLookup->getEnumValueFromField(
+                        'DownloadableFileTypeEnum',
+                        $linkType
+                    );
+                }
+
+                if ($sampleType !== null) {
+                    $resultData[$linkKey]['sample_type'] = $this->enumLookup->getEnumValueFromField(
+                        'DownloadableFileTypeEnum',
+                        $sampleType
+                    );
+                }
+
+                $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
+                $resultData[$linkKey]['sample_url'] = $this->urlBuilder->getUrl(
+                    'downloadable/download/linkSample',
+                    ['link_id' => $link->getId()]
                 );
             }
-
-            if ($sampleType !== null) {
-                $resultData[$linkKey]['sample_type'] = $this->enumLookup->getEnumValueFromField(
-                    'DownloadableFileTypeEnum',
-                    $sampleType
-                );
-            }
-
-            $resultData[$linkKey]['sample_file'] = $link->getSampleFile();
-            $resultData[$linkKey]['sample_url'] = $this->urlBuilder->getUrl(
-                'downloadable/download/linkSample',
-                ['link_id' => $link->getId()]
-            );
+        } catch (\Exception $e) {
+            // Do nothing
         }
+
         return $resultData;
     }
 }
