@@ -14,13 +14,8 @@ use Zend\Uri\Uri as UriHandler;
 /**
  * Class is responsible for checking if downloadable product link domain is allowed.
  */
-class DomainValidator extends \Zend_Validate_Abstract
+class DomainValidator
 {
-    /**
-     * Invalid host message key
-     */
-    private const INVALID_HOST = 'invalidHost';
-
     /**
      * Path to the allowed domains in the deployment config
      */
@@ -54,8 +49,6 @@ class DomainValidator extends \Zend_Validate_Abstract
         $this->domainManager = $domainManager;
         $this->ipValidator = $ipValidator;
         $this->uriHandler = $uriHandler;
-
-        $this->initMessageTemplates();
     }
 
     /**
@@ -72,10 +65,6 @@ class DomainValidator extends \Zend_Validate_Abstract
 
         $isIpAddress = $this->ipValidator->isValid($host);
         $isValid = !$isIpAddress && in_array($host, $this->domainManager->getEnvDomainWhitelist());
-
-        if (!$isValid) {
-            $this->_error(self::INVALID_HOST, $host);
-        }
 
         return $isValid;
     }
@@ -96,19 +85,5 @@ class DomainValidator extends \Zend_Validate_Abstract
 
         // ipv6 hosts are brace-delimited in url; they are removed here for subsequent validation
         return trim($host, '[] ');
-    }
-
-    /**
-     * Initialize message templates with translating
-     *
-     * @return void
-     */
-    private function initMessageTemplates()
-    {
-        if (!$this->_messageTemplates) {
-            $this->_messageTemplates = [
-                self::INVALID_HOST => __('Host "%value%" is not allowed.'),
-            ];
-        }
     }
 }
