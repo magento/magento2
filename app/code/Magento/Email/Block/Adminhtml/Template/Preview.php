@@ -12,8 +12,11 @@
 namespace Magento\Email\Block\Adminhtml\Template;
 
 /**
+ * Template Preview Block
+ *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
  */
 class Preview extends \Magento\Backend\Block\Widget
 {
@@ -80,7 +83,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $template->revertDesign();
 
         if ($template->isPlain()) {
-            $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
+            $templateProcessed = "<pre>" . $this->escapeHtml($templateProcessed) . "</pre>";
         }
 
         \Magento\Framework\Profiler::stop($this->profilerName);

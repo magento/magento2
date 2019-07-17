@@ -11,8 +11,27 @@
  */
 namespace Magento\Framework\Data\Form\Filter;
 
+/**
+ * EscapeHtml Form Filter Data
+ */
 class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param \Magento\Framework\Escaper|null $escaper
+     */
+    public function __construct(
+        \Magento\Framework\Escaper $escaper = null
+    ) {
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
+    }
+
     /**
      * Returns the result of filtering $value
      *
@@ -32,6 +51,6 @@ class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function outputFilter($value)
     {
-        return htmlspecialchars($value);
+        return $this->escaper->escapeHtml($value);
     }
 }

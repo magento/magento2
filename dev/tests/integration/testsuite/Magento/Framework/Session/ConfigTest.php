@@ -35,7 +35,7 @@ namespace Magento\Framework\Session {
         } elseif ($mockPHPFunctions === 2) {
             return null;
         }
-        
+
         return call_user_func_array('\ini_get', func_get_args());
     }
 

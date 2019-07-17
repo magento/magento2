@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Tax\Test\TestCase\TaxCalculationTest">
+    <testCase name="Magento\Tax\Test\TestCase\TaxCalculationTest" summary="Apply Taxes for configurable products" >
         <variation name="TaxCalculationTestConfigurableProduct" ticketId="MAGETWO-42708">
             <data name="product" xsi:type="string">configurableProduct::two_options_by_one_dollar</data>
             <data name="taxRule" xsi:type="string">us_full_tax_rule</data>

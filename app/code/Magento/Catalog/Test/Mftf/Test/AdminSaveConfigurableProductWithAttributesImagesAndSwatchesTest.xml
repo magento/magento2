@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSaveConfigurableProductWithAttributesImagesAndSwatchesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product attributes"/>
+            <title value="Saving configurable product with custom product attribute (images as swatches)"/>
+            <description value="Saving configurable product with custom product attribute (images as swatches)"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-17552"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Admin logout -->
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create a new product attribute: set Catalog Input Type for Store Owner: Visual Swatch -->
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillAttributeProperties">
+            <argument name="attributeCode" value="{{productVisualSwatchAttribute.attribute_code}}"/>
+            <argument name="attributeType" value="{{productVisualSwatchAttribute.frontend_input}}"/>
+        </actionGroup>
+
+        <!-- Add a few Swatches and add images to Manage Swatch (Values of Your Attribute)
+             1. Set swatch #1 using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddFirstSwatch"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickFirstSwatch">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.chooseColorRow('1')}}" stepKey="clickChooseFirstColor"/>
+        <actionGroup ref="setColorPickerValueByHex" stepKey="fillFirstHex">
+            <argument name="nthColorPicker" value="1"/>
+            <argument name="hexColor" value="e74c3c"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="red" stepKey="fillFirstAdminField"/>
+
+        <!-- 2. Set swatch #2 using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSecondSwatch"/>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSecondSwatch">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.chooseColorRow('2')}}" stepKey="clickChooseSecondColor"/>
+        <actionGroup ref="setColorPickerValueByHex" stepKey="fillSecondHex">
+            <argument name="nthColorPicker" value="2"/>
+            <argument name="hexColor" value="3498db"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="blue" stepKey="fillSecondAdminField"/>
+
+        <!-- Set Scope: Global in Advanced Attribute Properties -->
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.scope}}" userInput="1" stepKey="selectGlobalScope"/>
+
+        <!-- Click "Save Attribute" button -->
+        <click selector="{{AttributePropertiesSection.saveAndEdit}}" stepKey="clickSaveAndEdit"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+
+        <!-- Add created product attribute to the Default set -->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="productVisualSwatchAttribute.attribute_code"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+
+        <!-- Create configurable product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openOpenProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Select Attribute Set -->
+        <actionGroup ref="AssignProductToAttributeSet" stepKey="selectAttributeSet">
+            <argument name="attributeSetName" value="Default"/>
+        </actionGroup>
+
+        <!-- Fill all the necessary information such as weight, name, SKU etc -->
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Click "Create Configurations" button, select created product attribute using the same Quantity for all products. Click "Generate products" button -->
+        <actionGroup ref="AdminGenerateProductConfigurationsByAttributeCodeActionGroup" stepKey="addAttributeToProduct">
+            <argument name="attributeCode" value="{{productVisualSwatchAttribute.attribute_code}}"/>
+        </actionGroup>
+
+        <!-- Using this action to concatenate 2 strings to have unique identifier for grid -->
+        <executeJS function="return '{{productVisualSwatchAttribute.attribute_code}}: red'" stepKey="attributeCodeRed"/>
+        <executeJS function="return '{{productVisualSwatchAttribute.attribute_code}}: blue'" stepKey="attributeCodeBlue"/>
+
+        <!-- Add images for the products -->
+        <attachFile selector="{{AdminDataGridTableSection.rowTemplate({$attributeCodeRed})}}{{AdminProductFormConfigurationsSection.fileUploaderInput}}" userInput="{{MagentoLogo.file}}" stepKey="uploadImageForFirstProduct"/>
+        <attachFile selector="{{AdminDataGridTableSection.rowTemplate({$attributeCodeBlue})}}{{AdminProductFormConfigurationsSection.fileUploaderInput}}" userInput="{{ProductImage.file}}" stepKey="uploadImageForSecondProduct"/>
+
+        <!-- Click "Save" button -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+
+        <!-- Delete all created product -->
+        <actionGroup ref="AdminDeleteProductBySkuActionGroup" stepKey="deleteCreatedProducts">
+            <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
+        </actionGroup>
+
+        <!-- Delete product attribute -->
+        <actionGroup ref="deleteProductAttribute" stepKey="deleteProductAttribute">
+            <argument name="ProductAttribute" value="productVisualSwatchAttribute"/>
+        </actionGroup>
+    </test>
+</tests>

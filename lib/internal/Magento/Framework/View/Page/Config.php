@@ -55,6 +55,11 @@ class Config
     const HTML_ATTRIBUTE_LANG = 'lang';
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * Allowed group of types
      *
      * @var array
@@ -164,6 +169,7 @@ class Config
      * @param Title $title
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param bool $isIncludesAvailable
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
@@ -172,7 +178,8 @@ class Config
         View\Page\FaviconInterface $favicon,
         Title $title,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        $isIncludesAvailable = true
+        $isIncludesAvailable = true,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
@@ -185,6 +192,9 @@ class Config
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
             strstr($this->localeResolver->getLocale(), '_', true)
+        );
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
         );
     }
 
@@ -237,7 +247,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = htmlspecialchars($content);
+        $this->metadata[$name] = $this->escaper->escapeHtml($content);
     }
 
     /**

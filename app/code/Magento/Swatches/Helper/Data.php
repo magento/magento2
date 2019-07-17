@@ -299,6 +299,7 @@ class Data
 
     /**
      * Method getting full media gallery for current Product
+     *
      * Array structure: [
      *  ['image'] => 'http://url/pub/media/catalog/product/2/0/blabla.jpg',
      *  ['mediaGallery'] => [
@@ -307,7 +308,9 @@ class Data
      *      ...,
      *      ]
      * ]
+     *
      * @param ModelProduct $product
+     *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -545,8 +548,7 @@ class Data
      */
     public function isProductHasSwatch(Product $product)
     {
-        $swatchAttributes = $this->getSwatchAttributes($product);
-        return count($swatchAttributes) > 0;
+        return !empty($this->getSwatchAttributes($product));
     }
 
     /**

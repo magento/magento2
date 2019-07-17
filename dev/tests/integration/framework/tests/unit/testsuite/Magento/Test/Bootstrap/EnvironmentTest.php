@@ -33,6 +33,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('MC-16892: php7.2 dont support session_id as php7.1');
         $this->_object = new \Magento\TestFramework\Bootstrap\Environment();
     }
 

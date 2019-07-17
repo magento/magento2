@@ -114,7 +114,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects(
             $this->any()
         )->method(
-            'getValue'
+            'isSetFlag'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -154,10 +154,12 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSessionIdQueryParamCustom()
     {
+        $this->session->destroy();
         $oldSessionName = $this->session->getName();
         $this->session->setName($this->customSessionName);
         $this->assertEquals($this->customSessionQueryParam, $this->model->getSessionIdQueryParam($this->session));
         $this->session->setName($oldSessionName);
+        $this->session->start();
     }
 
     public function testSetGetUseSessionVar()
@@ -193,7 +195,7 @@ class SidResolverTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects(
             $this->any()
         )->method(
-            'getValue'
+            'isSetFlag'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

@@ -177,7 +177,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         CustomerExtractor $customerExtractor,
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
-        CustomerRepository $customerRepository,
+        CustomerRepository $customerRepository = null,
         Validator $formKeyValidator = null
     ) {
         $this->session = $customerSession;
@@ -198,7 +198,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->dataObjectHelper = $dataObjectHelper;
         $this->accountRedirect = $accountRedirect;
         $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
-        $this->customerRepository = $customerRepository;
+        $this->customerRepository = $customerRepository ?: ObjectManager::getInstance()->get(CustomerRepository::class);
         parent::__construct($context);
     }
 

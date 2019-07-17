@@ -352,7 +352,7 @@ class File implements DriverInterface
     public function symlink($source, $destination, DriverInterface $targetDriver = null)
     {
         $result = false;
-        if (get_class($targetDriver) == get_class($this)) {
+        if ($targetDriver === null || get_class($targetDriver) == get_class($this)) {
             $result = @symlink($this->getScheme() . $source, $destination);
         }
         if (!$result) {

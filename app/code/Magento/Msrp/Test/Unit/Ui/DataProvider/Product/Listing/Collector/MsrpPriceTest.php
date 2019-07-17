@@ -86,6 +86,9 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testCollect()
     {
         $product = $this->getMockBuilder(Product::class)
@@ -97,11 +100,11 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         $productRenderInfoDto->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($productPriceInfo);
-        $extensionAttirbutes = $this->getMockBuilder(
+        $extensionAttributes = $this->getMockBuilder(
             \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface::class
         )
             ->setMethods(['setMsrp'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
             ->setMethods(['getPrice', 'getExtensionAttributes'])
@@ -113,14 +116,14 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         $this->adjustmentCalculator->expects($this->once())
             ->method('getAmount')
             ->willReturn($amountInterface);
-        $extensionAttirbutes->expects($this->once())
+        $extensionAttributes->expects($this->once())
             ->method('setMsrp');
         $this->msrpPriceInfoFactory->expects($this->once())
             ->method('create')
             ->willReturn($priceInfo);
         $this->priceInfoExtensionFactory->expects($this->once())
             ->method('create')
-            ->willReturn($extensionAttirbutes);
+            ->willReturn($extensionAttributes);
         $price = $this->getMockBuilder(\Magento\Msrp\Pricing\Price\MsrpPrice::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -39,6 +39,15 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getComment', 'getLabel', 'getHint', 'getHtmlId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->abstractElementMock,
+            '_escaper',
+            $escaper
+        );
+
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

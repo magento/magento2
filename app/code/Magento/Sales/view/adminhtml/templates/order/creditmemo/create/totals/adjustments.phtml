@@ -68,6 +68,9 @@
                             enableElements('submit-button');
                         }
                     });
+                    $(id).observe('change', function (event) {
+                        enableElements('submit-button');
+                    });
                 }
                 //]]>
 

@@ -174,7 +174,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->statFactory = $this->getMockBuilder(StatFactory::class)
             ->setMethods(['create'])
-            ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->stat = $this->getMockBuilder(\Magento\Framework\Profiler\Driver\Standard\Stat::class)
             ->disableOriginalConstructor()
@@ -354,7 +355,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testDispatchExceptionNoCallback()
     {
-        $exceptionMessage = 'No callbacks found';
+        $jobCode = 'test_job1';
+        $exceptionMessage = sprintf('No callbacks found for cron job %s', $jobCode);
         $exception = new \Exception(__($exceptionMessage));
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
@@ -363,7 +365,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         )->setMethods(
             ['getJobCode', 'tryLockJob', 'getScheduledAt', 'save', 'setStatus', 'setMessages', '__wakeup', 'getStatus']
         )->disableOriginalConstructor()->getMock();
-        $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job1'));
+        $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue($jobCode));
         $schedule->expects($this->once())->method('getScheduledAt')->will($this->returnValue($dateScheduledAt));
         $schedule->expects($this->once())->method('tryLockJob')->will($this->returnValue(true));
         $schedule->expects(
@@ -383,7 +385,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
-        $jobConfig = ['test_group' => ['test_job1' => ['instance' => 'Some_Class']]];
+        $jobConfig = ['test_group' => [$jobCode => ['instance' => 'Some_Class']]];
 
         $this->_config->expects($this->exactly(2))->method('getJobs')->will($this->returnValue($jobConfig));
 

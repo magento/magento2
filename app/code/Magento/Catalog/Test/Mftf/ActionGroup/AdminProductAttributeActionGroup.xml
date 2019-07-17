@@ -80,9 +80,13 @@
             <argument name="attributeType" type="string" defaultValue="select"/>
         </arguments>
         <amOnPage url="{{AdminProductAttributeNewPage.url}}" stepKey="goToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForProductAttributeNewPageLoad"/>
         <fillField selector="{{AttributePropertiesSection.defaultLabel}}" userInput="{{attributeCode}}" stepKey="fillDefaultLabel"/>
         <selectOption selector="{{AttributePropertiesSection.inputType}}" userInput="{{attributeType}}" stepKey="selectInputType"/>
         <waitForElementVisible selector="{{AdminNewAttributePanelSection.addOption}}" stepKey="waitForElementVisible"/>
+    </actionGroup>
+    <actionGroup name="AdminFillProductAttributePropertiesActionGroup" extends="StartCreateProductAttribute">
+        <remove keyForRemoval="waitForElementVisible"/>
     </actionGroup>
     <actionGroup name="AddOptionToProductAttribute">
         <arguments>

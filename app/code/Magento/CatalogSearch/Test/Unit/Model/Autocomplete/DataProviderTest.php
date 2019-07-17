@@ -26,6 +26,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $itemFactory;
 
     /**
+     * @var Magento\Framework\App\Config\ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfig;
+
+    /**
      * @var \Magento\Search\Model\ResourceModel\Query\Collection |\PHPUnit_Framework_MockObject_MockObject
      */
     private $suggestCollection;
@@ -60,11 +65,17 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->model = $helper->getObject(
             \Magento\CatalogSearch\Model\Autocomplete\DataProvider::class,
             [
                 'queryFactory' => $queryFactory,
-                'itemFactory' => $this->itemFactory
+                'itemFactory' => $this->itemFactory,
+                'scopeConfig' => $this->scopeConfig
             ]
         );
     }
@@ -72,6 +83,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetItems()
     {
         $queryString = 'string';
+        $limit = 3;
         $expected = ['title' => $queryString, 'num_results' => 100500];
         $collection = [
             ['query_text' => 'string1', 'num_results' => 1],
@@ -80,6 +92,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ['query_text' => 'string100', 'num_results' => 100],
             ['query_text' => $queryString, 'num_results' => 100500]
         ];
+        $this->scopeConfig->method('getValue')
+            ->willReturn($limit);
         $this->buildCollection($collection);
         $this->query->expects($this->once())
             ->method('getQueryText')
@@ -105,6 +119,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->itemFactory->expects($this->any())->method('create')->willReturn($itemMock);
         $result = $this->model->getItems();
         $this->assertEquals($expected, $result[0]->toArray());
+        $this->assertEquals($limit, count($result));
     }
 
     /**

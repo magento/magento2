@@ -275,29 +275,35 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $storeId = $this->getStoreId();
         $this->_storeManager->setCurrentStore($storeId);
 
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getCategoryChangefreq($storeId),
-                'priority' => $helper->getCategoryPriority($storeId),
-                'collection' => $this->_categoryFactory->create()->getCollection($storeId),
-            ]
-        ));
+        $this->addSitemapItem(
+            new DataObject(
+                [
+                    'changefreq' => $helper->getCategoryChangefreq($storeId),
+                    'priority' => $helper->getCategoryPriority($storeId),
+                    'collection' => $this->_categoryFactory->create()->getCollection($storeId),
+                ]
+            )
+        );
 
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getProductChangefreq($storeId),
-                'priority' => $helper->getProductPriority($storeId),
-                'collection' => $this->_productFactory->create()->getCollection($storeId),
-            ]
-        ));
+        $this->addSitemapItem(
+            new DataObject(
+                [
+                    'changefreq' => $helper->getProductChangefreq($storeId),
+                    'priority' => $helper->getProductPriority($storeId),
+                    'collection' => $this->_productFactory->create()->getCollection($storeId),
+                ]
+            )
+        );
 
-        $this->addSitemapItem(new DataObject(
-            [
-                'changefreq' => $helper->getPageChangefreq($storeId),
-                'priority' => $helper->getPagePriority($storeId),
-                'collection' => $this->_cmsFactory->create()->getCollection($storeId),
-            ]
-        ));
+        $this->addSitemapItem(
+            new DataObject(
+                [
+                    'changefreq' => $helper->getPageChangefreq($storeId),
+                    'priority' => $helper->getPagePriority($storeId),
+                    'collection' => $this->_cmsFactory->create()->getCollection($storeId),
+                ]
+            )
+        );
     }
 
     /**
@@ -505,7 +511,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _getSitemapRow($url, $lastmod = null, $changefreq = null, $priority = null, $images = null)
     {
         $url = $this->_getUrl($url);
-        $row = '<loc>' . htmlspecialchars($url) . '</loc>';
+        $row = '<loc>' . $this->_escaper->escapeUrl($url) . '</loc>';
         if ($lastmod) {
             $row .= '<lastmod>' . $this->_getFormattedLastmodDate($lastmod) . '</lastmod>';
         }
@@ -519,17 +525,17 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             // Add Images to sitemap
             foreach ($images->getCollection() as $image) {
                 $row .= '<image:image>';
-                $row .= '<image:loc>' . htmlspecialchars($image->getUrl()) . '</image:loc>';
-                $row .= '<image:title>' . htmlspecialchars($images->getTitle()) . '</image:title>';
+                $row .= '<image:loc>' . $this->_escaper->escapeUrl($image->getUrl()) . '</image:loc>';
+                $row .= '<image:title>' . $this->_escaper->escapeHtml($images->getTitle()) . '</image:title>';
                 if ($image->getCaption()) {
-                    $row .= '<image:caption>' . htmlspecialchars($image->getCaption()) . '</image:caption>';
+                    $row .= '<image:caption>' . $this->_escaper->escapeHtml($image->getCaption()) . '</image:caption>';
                 }
                 $row .= '</image:image>';
             }
             // Add PageMap image for Google web search
             $row .= '<PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0"><DataObject type="thumbnail">';
-            $row .= '<Attribute name="name" value="' . htmlspecialchars($images->getTitle()) . '"/>';
-            $row .= '<Attribute name="src" value="' . htmlspecialchars($images->getThumbnail()) . '"/>';
+            $row .= '<Attribute name="name" value="' . $this->_escaper->escapeHtml($images->getTitle()) . '"/>';
+            $row .= '<Attribute name="src" value="' . $this->_escaper->escapeUrl($images->getThumbnail()) . '"/>';
             $row .= '</DataObject></PageMap>';
         }
 
@@ -546,7 +552,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected function _getSitemapIndexRow($sitemapFilename, $lastmod = null)
     {
         $url = $this->getSitemapUrl($this->getSitemapPath(), $sitemapFilename);
-        $row = '<loc>' . htmlspecialchars($url) . '</loc>';
+        $row = '<loc>' . $this->_escaper->escapeUrl($url) . '</loc>';
         if ($lastmod) {
             $row .= '<lastmod>' . $this->_getFormattedLastmodDate($lastmod) . '</lastmod>';
         }
@@ -688,6 +694,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getDocumentRoot()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return realpath($this->_request->getServer('DOCUMENT_ROOT'));
     }
 
@@ -698,6 +705,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getStoreBaseDomain()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $storeParsedUrl = parse_url($this->_getStoreBaseUrl());
         $url = $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host'];
 

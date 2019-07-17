@@ -37,7 +37,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
         string $value,
         int $length = 80,
         string $etc = '...',
-        string &$remainder = '',
+        &$remainder = '',
         bool $breakWords = true
     ): string {
         $this->truncateResult = $this->filterManager->truncateFilter(
