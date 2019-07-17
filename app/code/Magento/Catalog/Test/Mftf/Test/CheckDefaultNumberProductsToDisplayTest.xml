@@ -21,12 +21,6 @@
             <!-- Login as Admin -->
             <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-            <!-- Set default configurations -->
-            <comment userInput="Set default configurations" stepKey="commentSetDefaultCategory"/>
-            <magentoCLI command="config:set catalog/frontend/grid_per_page_values 12,24,36" stepKey="setAllowedProductsPerPageValue"/>
-            <magentoCLI command="config:set catalog/frontend/grid_per_page 12" stepKey="setDefaultProductsPerPageValue"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <!--Create 37 Products and Subcategory -->
             <comment userInput="Create 37 Products and Subcategory" stepKey="commentCreateData"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -183,6 +177,14 @@
             <deleteData createDataKey="createSimpleProductThirtySeven" stepKey="deleteProductThirtySeven"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+        <!--Verify configuration for default number of products displayed in the grid view-->
+        <comment userInput="Verify configuration for default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigPagePage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad" />
+        <conditionalClick selector="{{AdminCatalogStorefrontConfigSection.sectionHeader}}" dependentSelector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" visible="false" stepKey="openCatalogConfigStorefrontSection"/>
+        <waitForElementVisible selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" stepKey="waitForSectionOpen"/>
+        <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" userInput="12,24,36" stepKey="seeDefaultValueAllowedNumberProductsPerPage"/>
+        <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageDefaultValue}}" userInput="12" stepKey="seeDefaultValueProductPerPage"/>
         <!-- Open storefront on the category page -->
         <comment userInput="Open storefront on the category page" stepKey="commentOpenStorefront"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToStorefrontCreatedCategoryPage"/>
