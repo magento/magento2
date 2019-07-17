@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryReservationCli\Command\Input;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryReservationsApi\Model\ReservationBuilderInterface;
@@ -35,18 +37,27 @@ class GetReservationFromCompensationArgument
     private $serializer;
 
     /**
-     * @param OrderRepositoryInterface $orderRepository
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @param OrderRepositoryInterface    $orderRepository
      * @param ReservationBuilderInterface $reservationBuilder
-     * @param SerializerInterface $serializer
+     * @param SerializerInterface         $serializer
+     * @param SearchCriteriaBuilder|null  $searchCriteriaBuilder
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         ReservationBuilderInterface $reservationBuilder,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->reservationBuilder = $reservationBuilder;
         $this->serializer = $serializer;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder
+            ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -73,7 +84,10 @@ class GetReservationFromCompensationArgument
     public function execute(string $argument): ReservationInterface
     {
         $argumentParts = $this->parseArgument($argument);
-        $order = $this->orderRepository->get($argumentParts['increment_id']);
+        $results = $this->orderRepository->getList(
+            $this->searchCriteriaBuilder->addFilter('increment_id', $argumentParts['increment_id'], 'eq')->create()
+        );
+        $order = current($results->getItems());
 
         return $this->reservationBuilder
             ->setSku((string)$argumentParts['sku'])
