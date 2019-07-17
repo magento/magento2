@@ -16,11 +16,6 @@ use Magento\Framework\Event\ObserverInterface;
 class InvalidateCacheOnCategoryDesignChange implements ObserverInterface
 {
     /**
-     * Default category design attributes values
-     */
-    private $defaultAttributeValues;
-
-    /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     private $cacheTypeList;
@@ -92,7 +87,7 @@ class InvalidateCacheOnCategoryDesignChange implements ObserverInterface
     private function isCategoryAttributeChanged($attributeCode, $category)
     {
         if (!array_key_exists($attributeCode, $category->getOrigData())) {
-            $defaultValue = $this->getDefaultAttributeValue($attributeCode);
+            $defaultValue = $this->getDefaultAttributeValues()[$attributeCode] ?? null;
             if ($category->getData($attributeCode) !== $defaultValue) {
                 return true;
             }
@@ -103,20 +98,5 @@ class InvalidateCacheOnCategoryDesignChange implements ObserverInterface
         }
 
         return false;
-    }
-
-    /**
-     * Get default category design attribute value
-     *
-     * @param string $attributeCode
-     * @return mixed|null
-     */
-    private function getDefaultAttributeValue($attributeCode)
-    {
-        if ($this->defaultAttributeValues === null) {
-            $this->defaultAttributeValues = $this->getDefaultAttributeValues();
-        }
-
-        return $this->defaultAttributeValues[$attributeCode] ?? null;
     }
 }
