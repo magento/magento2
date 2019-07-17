@@ -62,11 +62,13 @@ $dataObjectHelper->populateWithArray($product, $productData, ProductInterface::c
 /** Out of interface */
 $product
     ->setWebsiteIds([1])
-    ->setStockData([
+    ->setStockData(
+        [
         'qty'            => 85.5,
         'is_in_stock'    => true,
         'manage_stock'   => true,
         'is_qty_decimal' => true
-    ]);
+        ]
+    );
 
 $productRepository->save($product);
