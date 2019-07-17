@@ -4,27 +4,31 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/**
+ * @deprecated
+ */
 
-?>
-<?php
+/**
+ * @codingStandardsIgnoreFile
+ */
+
 /**
  * @var $block \Magento\Reports\Block\Product\Viewed
  */
 ?>
-<?php if (($_products = $block->getRecentlyViewedProducts()) && $_products->getSize()): ?>
+<?php if (($_products = $block->getRecentlyViewedProducts()) && $_products->getSize()) : ?>
 <div class="block widget block-viewed-products-names">
     <div class="block-title">
-        <strong><?= /* @escapeNotVerified */ __('Recently Viewed') ?></strong>
+        <strong><?= $block->escapeHtml(__('Recently Viewed')) ?></strong>
     </div>
     <div class="block-content">
         <?php $suffix = $block->getNameInLayout(); ?>
-        <ol id="widget-viewed-<?= /* @escapeNotVerified */ $suffix ?>" class="product-items product-items-names">
-        <?php foreach ($_products as $_product): ?>
+        <ol id="widget-viewed-<?= $block->escapeHtmlAttr($suffix) ?>" class="product-items product-items-names">
+        <?php foreach ($_products as $_product) : ?>
             <li class="product-item">
                 <strong class="product-item-name">
-                    <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" class="product-item-link">
-                        <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
+                    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" class="product-item-link">
+                        <?= $block->escapeHtml($this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name')) ?>
                     </a>
                 </strong>
             </li>

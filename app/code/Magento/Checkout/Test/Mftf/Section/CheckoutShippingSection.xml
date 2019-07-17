@@ -39,5 +39,7 @@
         <element name="editActiveAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
         <element name="loginButton" type="button" selector=".action.login" timeout="30"/>
         <element name="shipHereButton" type="button" selector="//div[text()='{{street}}']/button[@class='action action-select-shipping-item']" parameterized="true" timeout="30"/>
+        <element name="textFieldAttrRequireMessage" type="text" selector="//input[@name='custom_attributes[{{attribute}}]']/ancestor::div[contains(@class, 'control')]/div/span" parameterized="true" timeout="30"/>
+        <element name="textFieldAttribute" type="input" selector="[name*='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
     </section>
 </sections>

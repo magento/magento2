@@ -4,8 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/**
+ * @deprecated
+ */
 ?>
 <?php
 if ($exist = $block->getRecentlyComparedProducts()) {
@@ -22,18 +23,17 @@ if ($exist = $block->getRecentlyComparedProducts()) {
     $description = false;
 }
 ?>
-<?php if ($exist): ?>
+<?php if ($exist) : ?>
 <div class="block widget block-compared-products-images">
     <div class="block-title">
-        <strong><?= /* @escapeNotVerified */ $title ?></strong>
+        <strong><?= $block->escapeHtml($title) ?></strong>
     </div>
     <div class="block-content">
-        <?php $suffix = $block->getNameInLayout(); ?>
-        <ol id="widget-compared-<?= /* @escapeNotVerified */ $suffix ?>" class="product-items product-items-images">
-        <?php $i = 0; foreach ($items as $_product): ?>
+        <ol id="widget-compared-<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>" class="product-items product-items-images">
+        <?php $i = 0; foreach ($items as $_product) : ?>
             <li class="product-item">
-                <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
-                    title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>">
+                <a class="product-item-photo" href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                    title="<?= $block->escapeHtmlAttr($block->stripTags($_product->getName(), null, true)) ?>">
                     <?= $block->getImage($_product, $image)->toHtml() ?>
                 </a>
             </li>

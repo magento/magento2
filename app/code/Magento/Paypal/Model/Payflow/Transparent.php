@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Model\Payflow;
 
@@ -60,6 +61,11 @@ class Transparent extends Payflowpro implements TransparentInterface
     private $paymentExtensionFactory;
 
     /**
+     * @var \Magento\Paypal\Model\CartFactory
+     */
+    private $payPalCartFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -76,6 +82,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param ResponseValidator $responseValidator
      * @param PaymentTokenInterfaceFactory $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
+     * @param \Magento\Paypal\Model\CartFactory $payPalCartFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -98,6 +105,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         ResponseValidator $responseValidator,
         PaymentTokenInterfaceFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
+        \Magento\Paypal\Model\CartFactory $payPalCartFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -123,9 +131,12 @@ class Transparent extends Payflowpro implements TransparentInterface
         $this->responseValidator = $responseValidator;
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
+        $this->payPalCartFactory = $payPalCartFactory;
     }
 
     /**
+     * Gets response validator instance.
+     *
      * @return ResponseValidator
      */
     public function getResponceValidator()
@@ -162,13 +173,19 @@ class Transparent extends Payflowpro implements TransparentInterface
         $this->addRequestOrderInfo($request, $order);
         $request = $this->fillCustomerContacts($order, $request);
 
+        /** @var \Magento\Paypal\Model\Cart $payPalCart */
+        $payPalCart = $this->payPalCartFactory->create(['salesModel' => $order]);
+        $payPalCart->getAmounts();
+
         $token = $payment->getAdditionalInformation(self::PNREF);
         $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
         $request->setData('origid', $token);
         $request->setData('amt', $this->formatPrice($amount));
         $request->setData('currency', $order->getBaseCurrencyCode());
-        $request->setData('taxamt', $this->formatPrice($order->getBaseTaxAmount()));
-        $request->setData('freightamt', $this->formatPrice($order->getBaseShippingAmount()));
+        $request->setData('itemamt', $this->formatPrice($payPalCart->getSubtotal()));
+        $request->setData('taxamt', $this->formatPrice($payPalCart->getTax()));
+        $request->setData('freightamt', $this->formatPrice($payPalCart->getShipping()));
+        $request->setData('discount', $this->formatPrice($payPalCart->getDiscount()));
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
@@ -178,6 +195,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         } catch (LocalizedException $exception) {
             $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
             throw new LocalizedException(__("The payment couldn't be processed at this time. Please try again later."));
         }
 
@@ -200,10 +218,12 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
+     * Creates vault payment token.
+     *
      * @param Payment $payment
      * @param string $token
-     * @throws LocalizedException
      * @return void
+     * @throws \Exception
      */
     protected function createPaymentToken(Payment $payment, $token)
     {
@@ -222,8 +242,11 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
+     * Generates CC expiration date by year and month provided in payment.
+     *
      * @param Payment $payment
      * @return string
+     * @throws \Exception
      */
     private function getExpirationDate(Payment $payment)
     {
@@ -242,6 +265,8 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
+     * Returns payment extension attributes instance.
+     *
      * @param Payment $payment
      * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface
      */

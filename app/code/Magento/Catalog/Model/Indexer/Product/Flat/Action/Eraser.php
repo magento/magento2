@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 
 /**
@@ -32,18 +33,27 @@ class Eraser
     protected $storeManager;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool = null
     ) {
         $this->productIndexerHelper = $productHelper;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
+        $this->metadataPool = $metadataPool ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -81,17 +91,24 @@ class Eraser
         /* @var $statusAttribute \Magento\Eav\Model\Entity\Attribute */
         $statusAttribute = $this->productIndexerHelper->getAttribute('status');
 
+        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+
         $select = $this->getSelectForProducts($ids);
         $select->joinLeft(
             ['status_global_attr' => $statusAttribute->getBackendTable()],
             ' status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-            . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
+            . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID
+            . ' AND status_global_attr.' . $statusAttribute->getEntityIdField() . '='
+            . 'product_table.' . $metadata->getLinkField(),
             []
         );
         $select->joinLeft(
             ['status_attr' => $statusAttribute->getBackendTable()],
             ' status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-            . ' AND status_attr.store_id = ' . $storeId,
+            . ' AND status_attr.store_id = ' . $storeId
+            . ' AND status_attr.' . $statusAttribute->getEntityIdField() . '='
+            . 'product_table.' . $metadata->getLinkField(),
             []
         );
         $select->where('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_DISABLED);

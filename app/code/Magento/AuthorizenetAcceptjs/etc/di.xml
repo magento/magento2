@@ -258,6 +258,7 @@
                 <item name="po" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PoDataBuilder</item>
                 <item name="customer" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomerDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\AddressDataBuilder</item>
+                <item name="3d_secure" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\StubDataBuilder</item>
                 <item name="custom_settings" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\CustomSettingsBuilder</item>
                 <item name="passthrough_data" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Request\PassthroughDataBuilder</item>
             </argument>

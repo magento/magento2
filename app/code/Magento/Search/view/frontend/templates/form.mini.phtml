@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php
 /** @var $block \Magento\Framework\View\Element\Template */
@@ -12,30 +12,31 @@
 $helper = $this->helper(\Magento\Search\Helper\Data::class);
 ?>
 <div class="block block-search">
-    <div class="block block-title"><strong><?= /* @escapeNotVerified */ __('Search') ?></strong></div>
+    <div class="block block-title"><strong><?= $block->escapeHtml(__('Search')) ?></strong></div>
     <div class="block block-content">
-        <form class="form minisearch" id="search_mini_form" action="<?= /* @escapeNotVerified */ $helper->getResultUrl() ?>" method="get">
+        <form class="form minisearch" id="search_mini_form" action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
             <div class="field search">
                 <label class="label" for="search" data-role="minisearch-label">
-                    <span><?= /* @escapeNotVerified */ __('Search') ?></span>
+                    <span><?= $block->escapeHtml(__('Search')) ?></span>
                 </label>
                 <div class="control">
                     <input id="search"
                            data-mage-init='{"quickSearch":{
                                 "formSelector":"#search_mini_form",
-                                "url":"<?= /* @escapeNotVerified */ $helper->getSuggestUrl()?>",
+                                "url":"<?= $block->escapeUrl($helper->getSuggestUrl())?>",
                                 "destinationSelector":"#search_autocomplete"}
                            }'
                            type="text"
-                           name="<?= /* @escapeNotVerified */ $helper->getQueryParamName() ?>"
-                           value="<?= /* @escapeNotVerified */ $helper->getEscapedQueryText() ?>"
-                           placeholder="<?= /* @escapeNotVerified */ __('Search entire store here...') ?>"
+                           name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                           value="<?= $block->escapeHtmlAttr($helper->getEscapedQueryText()) ?>"
+                           placeholder="<?= $block->escapeHtmlAttr(__('Search entire store here...')) ?>"
                            class="input-text"
-                           maxlength="<?= /* @escapeNotVerified */ $helper->getMaxQueryLength() ?>"
+                           maxlength="<?= $block->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
                            role="combobox"
                            aria-haspopup="false"
                            aria-autocomplete="both"
-                           autocomplete="off"/>
+                           autocomplete="off"
+                           aria-expanded="false"/>
                     <div id="search_autocomplete" class="search-autocomplete"></div>
                     <?= $block->getChildHtml() ?>
                 </div>
@@ -46,7 +47,7 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
                     class="action search"
                     aria-label="Search"
                 >
-                    <span><?= /* @escapeNotVerified */ __('Search') ?></span>
+                    <span><?= $block->escapeHtml(__('Search')) ?></span>
                 </button>
             </div>
         </form>

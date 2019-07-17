@@ -42,6 +42,11 @@ class Generator extends AbstractSchemaGenerator
     const ARRAY_SIGNIFIER = '[0]';
 
     /**
+     * Wrapper node for XML requests
+     */
+    private const XML_SCHEMA_PARAMWRAPPER = 'request';
+
+    /**
      * Swagger factory instance.
      *
      * @var SwaggerFactory
@@ -134,7 +139,7 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endpointUrl)
     {
@@ -194,6 +199,32 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
+     * List out consumes data type
+     *
+     * @return array
+     */
+    private function getConsumableDatatypes()
+    {
+        return [
+            'application/json',
+            'application/xml',
+        ];
+    }
+
+    /**
+     * List out produces data type
+     *
+     * @return array
+     */
+    private function getProducibleDatatypes()
+    {
+        return [
+            'application/json',
+            'application/xml',
+        ];
+    }
+
+    /**
      * Generate path info based on method data
      *
      * @param string $methodName
@@ -212,6 +243,8 @@ class Generator extends AbstractSchemaGenerator
             'tags' => [$tagName],
             'description' => $methodData['documentation'],
             'operationId' => $operationId,
+            'consumes' => $this->getConsumableDatatypes(),
+            'produces' => $this->getProducibleDatatypes(),
         ];
 
         $parameters = $this->generateMethodParameters($httpMethodData, $operationId);
@@ -602,7 +635,7 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Get the CamelCased type name in 'hyphen-separated-lowercase-words' format
      *
-     * e.g. test-module5-v1-entity-all-soap-and-rest
+     * E.g. test-module5-v1-entity-all-soap-and-rest
      *
      * @param string $typeName
      * @return string
@@ -842,6 +875,17 @@ class Generator extends AbstractSchemaGenerator
             $description
         );
         $bodySchema['type'] = 'object';
+
+        /*
+         * Make sure we have a proper XML wrapper for request parameters for the XML format.
+         */
+        if (!isset($bodySchema['xml']) || !is_array($bodySchema['xml'])) {
+            $bodySchema['xml'] = [];
+        }
+        if (!isset($bodySchema['xml']['name']) || empty($bodySchema['xml']['name'])) {
+            $bodySchema['xml']['name'] = self::XML_SCHEMA_PARAMWRAPPER;
+        }
+
         return $bodySchema;
     }
 

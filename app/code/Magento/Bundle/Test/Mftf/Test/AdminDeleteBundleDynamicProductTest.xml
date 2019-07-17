@@ -16,6 +16,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-11016"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-16393"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
