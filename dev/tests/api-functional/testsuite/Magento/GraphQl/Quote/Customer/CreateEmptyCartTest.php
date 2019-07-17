@@ -8,9 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -32,38 +31,27 @@ class CreateEmptyCartTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
+     * @var QuoteCollectionFactory
+     */
+    private $quoteCollectionFactory;
+
+    /**
      * @var QuoteResource
      */
     private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var MaskedQuoteIdToQuoteIdInterface
-     */
-    private $maskedQuoteIdToQuoteId;
 
     /**
      * @var QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
 
-    /**
-     * @var string
-     */
-    private $maskedQuoteId;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->quoteCollectionFactory = $objectManager->get(QuoteCollectionFactory::class);
         $this->guestCartRepository = $objectManager->get(GuestCartRepositoryInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->maskedQuoteIdToQuoteId = $objectManager->get(MaskedQuoteIdToQuoteIdInterface::class);
         $this->quoteIdMaskFactory = $objectManager->get(QuoteIdMaskFactory::class);
     }
 
@@ -79,7 +67,6 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertNotEmpty($response['createEmptyCart']);
 
         $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
-        $this->maskedQuoteId = $response['createEmptyCart'];
 
         self::assertNotNull($guestCart->getId());
         self::assertEquals(1, $guestCart->getCustomer()->getId());
@@ -103,11 +90,69 @@ class CreateEmptyCartTest extends GraphQlAbstract
 
         /* guestCartRepository is used for registered customer to get the cart hash */
         $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
-        $this->maskedQuoteId = $response['createEmptyCart'];
 
         self::assertNotNull($guestCart->getId());
         self::assertEquals(1, $guestCart->getCustomer()->getId());
         self::assertEquals('fixture_second_store', $guestCart->getStore()->getCode());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCreateEmptyCartWithPredefinedCartId()
+    {
+        $predefinedCartId = '572cda51902b5b517c0e1a2b2fd004b4';
+
+        $query = <<<QUERY
+mutation {
+  createEmptyCart (input: {cart_id: "{$predefinedCartId}"})
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+
+        self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertEquals($predefinedCartId, $response['createEmptyCart']);
+
+        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
+        self::assertNotNull($guestCart->getId());
+        self::assertEquals(1, $guestCart->getCustomer()->getId());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cart with ID "572cda51902b5b517c0e1a2b2fd004b4" already exists.
+     */
+    public function testCreateEmptyCartIfPredefinedCartIdAlreadyExists()
+    {
+        $predefinedCartId = '572cda51902b5b517c0e1a2b2fd004b4';
+
+        $query = <<<QUERY
+mutation {
+  createEmptyCart (input: {cart_id: "{$predefinedCartId}"})
+}
+QUERY;
+        $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cart ID length should to be 32 symbols.
+     */
+    public function testCreateEmptyCartWithWrongPredefinedCartId()
+    {
+        $predefinedCartId = '572';
+
+        $query = <<<QUERY
+mutation {
+  createEmptyCart (input: {cart_id: "{$predefinedCartId}"})
+}
+QUERY;
+        $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
     }
 
     /**
@@ -138,15 +183,12 @@ QUERY;
 
     public function tearDown()
     {
-        if (null !== $this->maskedQuoteId) {
-            $quoteId = $this->maskedQuoteIdToQuoteId->execute($this->maskedQuoteId);
-
-            $quote = $this->quoteFactory->create();
-            $this->quoteResource->load($quote, $quoteId);
+        $quoteCollection = $this->quoteCollectionFactory->create();
+        foreach ($quoteCollection as $quote) {
             $this->quoteResource->delete($quote);
 
             $quoteIdMask = $this->quoteIdMaskFactory->create();
-            $quoteIdMask->setQuoteId($quoteId)
+            $quoteIdMask->setQuoteId($quote->getId())
                 ->delete();
         }
         parent::tearDown();

@@ -71,8 +71,7 @@ define([
                     this.isExpandable = true;
                 }.bind(this),
                 exit: function () {
-                    this.isExpandable = false;
-                    this.element.removeAttr('aria-expanded');
+                    this.isExpandable = true;
                 }.bind(this)
             });
 
@@ -129,11 +128,16 @@ define([
          * @param {Boolean} isActive
          */
         setActiveState: function (isActive) {
+            var searchValue;
+
             this.searchForm.toggleClass('active', isActive);
             this.searchLabel.toggleClass('active', isActive);
 
             if (this.isExpandable) {
                 this.element.attr('aria-expanded', isActive);
+                searchValue = this.element.val();
+                this.element.val('');
+                this.element.val(searchValue);
             }
         },
 

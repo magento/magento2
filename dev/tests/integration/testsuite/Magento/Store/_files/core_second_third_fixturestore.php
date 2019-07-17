@@ -13,7 +13,7 @@ $groupId = $website->getDefaultGroupId();
 
 /** @var \Magento\Store\Model\Store $store */
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
-$store->setCode('secondstore')->setName('Second Store')->setSortOrder(10)->setIsActive(1);
+$store->setCode('secondstore')->setWebsiteId($websiteId)->setName('Second Store')->setSortOrder(10)->setIsActive(1);
 $store->save();
 
 /** @var \Magento\Store\Model\Website $website */
@@ -25,5 +25,5 @@ $groupId = $website->getDefaultGroupId();
 
 /** @var \Magento\Store\Model\Store $store */
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
-$store->setCode('thirdstore')->setName('Third Store')->setSortOrder(10)->setIsActive(1);
+$store->setCode('thirdstore')->setWebsiteId($websiteId)->setName('Third Store')->setSortOrder(10)->setIsActive(1);
 $store->save();

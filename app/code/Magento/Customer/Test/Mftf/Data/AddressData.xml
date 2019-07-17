@@ -271,4 +271,31 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionUT</requiredEntity>
     </entity>
+    <entity name="DE_Address_Berlin_Not_Default_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Augsburger Strabe 41</item>
+        </array>
+        <data key="city">Berlin</data>
+        <data key="country_id">DE</data>
+        <data key="postcode">10789</data>
+        <data key="telephone">333-33-333-33</data>
+        <data key="country">Germany</data>
+    </entity>
+    <entity name="US_Address_California">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>6161 West Centinela Avenue</item>
+        </array>
+        <data key="city">Culver City</data>
+        <data key="country_id">United States</data>
+        <data key="country">United States</data>
+        <data key="state">California</data>
+        <data key="postcode">90230</data>
+        <data key="telephone">555-55-555-55</data>
+    </entity>
 </entities>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCheckoutCartItemsActionGroup">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productSku" type="string"/>
+            <argument name="productPrice" type="string"/>
+            <argument name="subtotal" type="string"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <see selector="{{CheckoutCartProductSection.productName}}" userInput="{{productName}}"  stepKey="seeProductNameInCheckoutSummary"/>
+        <see selector="{{CheckoutCartProductSection.checkoutCartProductPrice}}" userInput="{{productPrice}}" stepKey="seeProductPriceInCart"/>
+        <see selector="{{CheckoutCartProductSection.checkoutCartSubtotal}}" userInput="{{subtotal}}" stepKey="seeSubtotalPrice"/>
+        <seeInField selector="{{CheckoutCartProductSection.qtyByContains(productSku)}}" userInput="{{qty}}" stepKey="seeProductQuantity"/>
+    </actionGroup>
+</actionGroups>

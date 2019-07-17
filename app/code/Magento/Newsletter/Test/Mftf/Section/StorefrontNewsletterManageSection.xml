@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontNewsletterManageSection">
         <element name="subscriptionCheckbox" type="checkbox" selector="#subscription" />
+        <element name="saveButton" type="button" selector="div.primary>button"/>
     </section>
 </sections>

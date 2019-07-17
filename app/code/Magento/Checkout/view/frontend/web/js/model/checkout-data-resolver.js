@@ -216,11 +216,11 @@ define([
             newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
 
             if (selectedBillingAddress) {
-                if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) { //eslint-disable-line
+                if (selectedBillingAddress === 'new-customer-billing-address' && newCustomerBillingAddressData) {
                     selectBillingAddress(createBillingAddress(newCustomerBillingAddressData));
                 } else {
                     addressList.some(function (address) {
-                        if (selectedBillingAddress == address.getKey()) { //eslint-disable-line eqeqeq
+                        if (selectedBillingAddress === address.getKey()) {
                             selectBillingAddress(address);
                         }
                     });

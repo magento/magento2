@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5832"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <!-- Create the category -->

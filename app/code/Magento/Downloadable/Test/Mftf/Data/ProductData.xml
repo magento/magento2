@@ -19,6 +19,17 @@
         <data key="status">1</data>
         <data key="urlKey" unique="suffix">downloadableproduct</data>
     </entity>
+    <entity name="DownloadableProductOutOfStock" type="product">
+        <data key="sku" unique="suffix">downloadableoutofstockproduct</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">DownloadableProduct</data>
+        <data key="price">50.99</data>
+        <data key="quantity">100</data>
+        <data key="weight">0</data>
+        <data key="status">0</data>
+        <data key="urlKey" unique="suffix">downloadableproduct</data>
+    </entity>
     <entity name="DownloadableProductWithOneLink" type="product">
         <data key="sku" unique="suffix">downloadableproduct</data>
         <data key="type_id">downloadable</data>

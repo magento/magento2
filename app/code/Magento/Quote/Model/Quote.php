@@ -7,6 +7,7 @@ namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -14,6 +15,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -360,6 +362,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     private $orderIncrementIdChecker;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -401,6 +408,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Sales\Model\OrderIncrementIdChecker|null $orderIncrementIdChecker
+     * @param AllowedCountries|null $allowedCountriesReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -444,7 +452,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null
+        \Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null,
+        AllowedCountries $allowedCountriesReader = null
     ) {
         $this->quoteValidator = $quoteValidator;
         $this->_catalogProduct = $catalogProduct;
@@ -481,6 +490,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         $this->orderIncrementIdChecker = $orderIncrementIdChecker ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Model\OrderIncrementIdChecker::class);
+        $this->allowedCountriesReader = $allowedCountriesReader
+            ?: ObjectManager::getInstance()->get(AllowedCountries::class);
         parent::__construct(
             $context,
             $registry,
@@ -941,7 +952,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
                     $billingAddress = $this->_quoteAddressFactory->create();
                     $billingAddress->importCustomerAddressData($defaultBillingAddress);
-                    $this->setBillingAddress($billingAddress);
+                    $this->assignAddress($billingAddress);
                 }
             }
 
@@ -959,7 +970,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     $shippingAddress = $this->_quoteAddressFactory->create();
                 }
             }
-            $this->setShippingAddress($shippingAddress);
+
+            $this->assignAddress($shippingAddress, false);
         }
 
         return $this;
@@ -1374,7 +1386,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Retrieve quote items collection
      *
      * @param bool $useCache
-     * @return  \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      */
     public function getItemsCollection($useCache = true)
     {
@@ -1429,7 +1441,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function hasItems()
     {
-        return sizeof($this->getAllItems()) > 0;
+        return count($this->getAllItems()) > 0;
     }
 
     /**
@@ -1488,7 +1500,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Delete quote item. If it does not have identifier then it will be only removed from collection
      *
-     * @param   \Magento\Quote\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @return $this
      */
     public function deleteItem(\Magento\Quote\Model\Quote\Item $item)
@@ -1518,7 +1530,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Remove quote item by item identifier
      *
-     * @param   int $itemId
+     * @param int $itemId
      * @return $this
      */
     public function removeItem($itemId)
@@ -1569,7 +1581,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Adding new item to quote
      *
-     * @param   \Magento\Quote\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -2363,7 +2375,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Merge quotes
      *
-     * @param   Quote $quote
+     * @param Quote $quote
      * @return $this
      */
     public function merge(Quote $quote)
@@ -2595,5 +2607,35 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function setExtensionAttributes(\Magento\Quote\Api\Data\CartExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Check is address allowed for store
+     *
+     * @param Address $address
+     * @param int|null $storeId
+     * @return bool
+     */
+    private function isAddressAllowedForWebsite(Address $address, $storeId): bool
+    {
+        $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
+
+        return in_array($address->getCountryId(), $allowedCountries);
+    }
+
+    /**
+     * Assign address to quote
+     *
+     * @param Address $address
+     * @param bool $isBillingAddress
+     * @return void
+     */
+    private function assignAddress(Address $address, bool $isBillingAddress = true): void
+    {
+        if ($this->isAddressAllowedForWebsite($address, $this->getStoreId())) {
+            $isBillingAddress
+                ? $this->setBillingAddress($address)
+                : $this->setShippingAddress($address);
+        }
     }
 }

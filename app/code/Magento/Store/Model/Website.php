@@ -160,7 +160,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\MessageQueue\Api\PoisonPillPutInterface
+     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
      */
     private $pillPut;
 
@@ -179,7 +179,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\MessageQueue\Api\PoisonPillPutInterface|null $pillPut
+     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -197,7 +197,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\MessageQueue\Api\PoisonPillPutInterface $pillPut = null
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         parent::__construct(
             $context,
@@ -216,7 +216,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\MessageQueue\Api\PoisonPillPutInterface::class);
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
     }
 
     /**

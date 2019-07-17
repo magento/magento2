@@ -9,17 +9,11 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product;
 
-use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
-use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-
 /**
  * Products Report collection.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -82,7 +76,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -95,14 +89,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource
-     * @param mixed $connection
-     * @param ProductLimitationFactory|null $productLimitationFactory
-     * @param MetadataPool|null $metadataPool
-     * @param TableMaintainer|null $tableMaintainer
-     * @param PriceTableResolver|null $priceTableResolver
-     * @param DimensionFactory|null $dimensionFactory
-     * @param ResourceModelPoolInterface $resourceModelPool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -116,7 +104,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -129,13 +117,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
-        TableMaintainer $tableMaintainer = null,
-        PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null,
-        ResourceModelPoolInterface $resourceModelPool = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
         $this->setProductEntityTableName($product->getEntityTable());
@@ -160,13 +142,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $connection,
-            $productLimitationFactory,
-            $metadataPool,
-            $tableMaintainer,
-            $priceTableResolver,
-            $dimensionFactory,
-            $resourceModelPool
+            $connection
         );
         $this->_eventTypeFactory = $eventTypeFactory;
         $this->_productType = $productType;

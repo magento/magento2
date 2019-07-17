@@ -155,6 +155,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      */
     public function testSetPaymentMethodWithoutRequiredParameters(string $input, string $message)
     {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
+
         $query = <<<QUERY
 mutation {
   setPaymentMethodOnCart(
@@ -164,7 +167,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
       }
     }
   }
@@ -185,11 +188,11 @@ QUERY;
                 'Required parameter "cart_id" is missing.'
             ],
             'missed_payment_method' => [
-                'cart_id: "test"',
+                'cart_id: "cart_id_value"',
                 'Required parameter "code" for "payment_method" is missing.'
             ],
             'missed_payment_method_code' => [
-                'cart_id: "test", payment_method: {code: ""}',
+                'cart_id: "cart_id_value", payment_method: {code: ""}',
                 'Required parameter "code" for "payment_method" is missing.'
             ],
         ];

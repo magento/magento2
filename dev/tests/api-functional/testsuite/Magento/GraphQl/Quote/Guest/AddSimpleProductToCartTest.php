@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -31,56 +32,193 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      */
     public function testAddSimpleProductToCart()
     {
-        $sku = 'simple';
-        $qty = 2;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'simple_product';
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
         $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
 
-        self::assertEquals($qty, $response['addSimpleProductsToCart']['cart']['items'][0]['qty']);
+        self::assertEquals($quantity, $response['addSimpleProductsToCart']['cart']['items'][0]['quantity']);
         self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testAddSimpleProductToCartIfCartIdIsMissed()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_items: []
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testAddSimpleProductToCartIfCartIdIsEmpty()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "",
+      cart_items: []
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_items" is missing
+     */
+    public function testAddSimpleProductToCartIfCartItemsAreMissed()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "cart_id"
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_items" is missing
+     */
+    public function testAddSimpleProductToCartIfCartItemsAreEmpty()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "cart_id",
+      cart_items: []
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddProductToNonExistentCart()
     {
-        $sku = 'simple';
-        $qty = 1;
+        $sku = 'simple_product';
+        $quantity = 1;
         $maskedQuoteId = 'non_existent_masked_id';
 
-        $query = $this->getQuery($maskedQuoteId, $sku, $qty);
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage Could not find a product with SKU "simple_product"
+     */
+    public function testNonExistentProductToCart()
+    {
+        $sku = 'simple_product';
+        $quantity = 1;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     */
+    public function testAddSimpleProductToCustomerCart()
+    {
+        $sku = 'simple_product';
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"$maskedQuoteId\""
+        );
+
         $this->graphQlMutation($query);
     }
 
     /**
      * @param string $maskedQuoteId
      * @param string $sku
-     * @param int $qty
+     * @param float $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, string $sku, int $qty): string
+    private function getQuery(string $maskedQuoteId, string $sku, float $quantity): string
     {
         return <<<QUERY
 mutation {  
   addSimpleProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}"
-      cartItems: [
+      cart_items: [
         {
           data: {
-            qty: $qty
+            quantity: $quantity
             sku: "$sku"
           }
         }
@@ -89,7 +227,7 @@ mutation {
   ) {
     cart {
       items {
-        qty
+        quantity
         product {
           sku
         }

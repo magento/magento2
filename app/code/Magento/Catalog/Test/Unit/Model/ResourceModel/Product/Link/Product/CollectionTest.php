@@ -7,8 +7,6 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Link\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -28,7 +26,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $loggerMock;
 
-    /** @var FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $fetchStrategyMock;
 
     /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -46,8 +44,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $helperMock;
 
-    /** @var ResourceModelPoolInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resourceModelPoolMock;
+    /** @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $universalFactoryMock;
 
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
@@ -81,23 +79,29 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $this->fetchStrategyMock = $this->createMock(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+        );
         $this->managerInterfaceMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->configMock = $this->createMock(\Magento\Eav\Model\Config::class);
         $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->entityFactoryMock2 = $this->createMock(\Magento\Eav\Model\EntityFactory::class);
         $this->helperMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Helper::class);
         $entity = $this->createMock(\Magento\Eav\Model\Entity\AbstractEntity::class);
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $connection->expects($this->any())
             ->method('select')
             ->willReturn($select);
         $entity->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
-        $this->resourceModelPoolMock = $this->createMock(ResourceModelPoolInterface::class);
-        $this->resourceModelPoolMock->expects($this->any())->method('get')->will($this->returnValue($entity));
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->universalFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
+        $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
+        $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock
             ->expects($this->any())
             ->method('getStore')
@@ -114,7 +118,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->timezoneInterfaceMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $this->sessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
-        $productLimitationFactoryMock = $this->createPartialMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock = $this->getMockBuilder(
+            ProductLimitationFactory::class
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->createMock(ProductLimitation::class));
@@ -130,7 +136,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'resource' => $this->resourceMock,
                 'eavEntityFactory' => $this->entityFactoryMock2,
                 'resourceHelper' => $this->helperMock,
-                'resourceModelPool' => $this->resourceModelPoolMock,
+                'universalFactory' => $this->universalFactoryMock,
                 'storeManager' => $this->storeManagerMock,
                 'catalogData' => $this->catalogHelperMock,
                 'catalogProductFlatState' => $this->stateMock,

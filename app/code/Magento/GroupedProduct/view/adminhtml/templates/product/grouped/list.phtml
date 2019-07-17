@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 /* @var $block \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts */
 ?>
 <script type="text/x-magento-template" id="group-product-template">
@@ -56,16 +56,16 @@
                     <span></span>
                 </th>
                 <th data-column="name" class="no-link col-name">
-                    <span><?= /* @escapeNotVerified */ __('Name') ?></span>
+                    <span><?= $block->escapeHtml(__('Name')) ?></span>
                 </th>
                 <th data-column="sku" class="no-link col-sku">
-                    <span><?= /* @escapeNotVerified */ __('SKU') ?></span>
+                    <span><?= $block->escapeHtml(__('SKU')) ?></span>
                 </th>
                 <th data-column="price" class="no-link col-price">
-                    <span><?= /* @escapeNotVerified */ __('Price') ?></span>
+                    <span><?= $block->escapeHtml(__('Price')) ?></span>
                     </th>
                 <th data-column="qty" class="no-link col-qty">
-                    <span><?= /* @escapeNotVerified */ __('Default Qty') ?></span>
+                    <span><?= $block->escapeHtml(__('Default Qty')) ?></span>
                 </th>
                 <th data-column="actions" class="last no-link col-actions">
                     <span></span>

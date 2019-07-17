@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
+        <arguments>
+            <argument name="graphQlHeaders" xsi:type="array">
+                <item name="Store" xsi:type="object">Magento\StoreGraphQl\Controller\HttpHeaderProcessor\StoreProcessor</item>
+            </argument>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="storeValidator" xsi:type="object">Magento\StoreGraphQl\Controller\HttpRequestValidator\StoreValidator</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

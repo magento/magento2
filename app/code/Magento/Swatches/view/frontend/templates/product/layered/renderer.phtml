@@ -4,24 +4,26 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable PSR2.ControlStructures.SwitchDeclaration
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
 
 /** @var $block \Magento\Swatches\Block\LayeredNavigation\RenderLayered */
 ?>
 <?php $swatchData = $block->getSwatchData(); ?>
+
 <div class="swatch-attribute swatch-layered <?= /* @escapeNotVerified */ $swatchData['attribute_code'] ?>"
      data-attribute-code="<?= /* @escapeNotVerified */ $swatchData['attribute_code'] ?>"
      data-attribute-id="<?= /* @escapeNotVerified */ $swatchData['attribute_id'] ?>">
     <div class="swatch-attribute-options clearfix">
-        <?php foreach ($swatchData['options'] as $option => $label): ?>
-            <a href="<?= /* @escapeNotVerified */ $label['link'] ?>"
-               aria-label="<?= /* @escapeNotVerified */ $label['label'] ?>"
+        <?php foreach ($swatchData['options'] as $option => $label) : ?>
+            <a href="<?= $block->escapeUrl($label['link']) ?>"
+               aria-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                class="swatch-option-link-layered">
-                <?php if (isset($swatchData['swatches'][$option]['type'])): ?>
+                <?php if (isset($swatchData['swatches'][$option]['type'])) : ?>
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
-                            <div class="swatch-option <?= /* @escapeNotVerified */ $label['custom_style'] ?>"
+                            <div class="swatch-option <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="3"
                                  data-option-id="<?= /* @escapeNotVerified */ $option ?>"
@@ -29,12 +31,12 @@
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value=""
                                 ></div>
-                            <?php    break;
+                            <?php break;
                         case '2':
                             ?>
                             <?php $swatchThumbPath = $block->getSwatchPath('swatch_thumb', $swatchData['swatches'][$option]['value']); ?>
                             <?php $swatchImagePath = $block->getSwatchPath('swatch_image', $swatchData['swatches'][$option]['value']); ?>
-                            <div class="swatch-option image <?= /* @escapeNotVerified */ $label['custom_style'] ?>"
+                            <div class="swatch-option image <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="2"
                                  data-option-id="<?= /* @escapeNotVerified */ $option ?>"
@@ -45,7 +47,7 @@
                             <?php    break;
                         case '1':
                             ?>
-                            <div class="swatch-option color <?= /* @escapeNotVerified */ $label['custom_style'] ?>"
+                            <div class="swatch-option color <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="1"
                                  data-option-id="<?= /* @escapeNotVerified */ $option ?>"

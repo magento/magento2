@@ -11,10 +11,12 @@
         "magento/module-store": "*",
         "magento/module-customer": "*",
         "magento/module-customer-graph-ql": "*",
-        "magento/module-sales": "*"
+        "magento/module-sales": "*",
+        "magento/module-directory": "*",
+        "magento/module-graph-ql": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql-cache": "*"
     },
     "license": [
         "OSL-3.0",

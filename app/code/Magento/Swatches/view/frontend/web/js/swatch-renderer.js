@@ -698,7 +698,7 @@ define([
          */
         _sortImages: function (images) {
             return _.sortBy(images, function (image) {
-                return image.position;
+                return parseInt(image.position, 10);
             });
         },
 
@@ -715,6 +715,7 @@ define([
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.data('attribute-id'),
                 $input = $parent.find('.' + $widget.options.classes.attributeInput);
+                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']);
 
             if ($widget.inProductList) {
                 $input = $widget.productForm.find(
@@ -754,7 +755,10 @@ define([
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
-            $widget._loadMedia();
+            if (checkAdditionalData['update_product_preview_image'] === '1') {
+                $widget._loadMedia();
+            }
+
             $input.trigger('change');
         },
 
@@ -1257,7 +1261,7 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-
+                gallery.first();
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

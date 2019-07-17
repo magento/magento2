@@ -45,5 +45,6 @@
     <!-- Magento Specific Rules -->
     <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/AllPurposeAction" />
     <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/CookieAndSessionMisuse" />
+    <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/SerializationAware" />
 
 </ruleset>

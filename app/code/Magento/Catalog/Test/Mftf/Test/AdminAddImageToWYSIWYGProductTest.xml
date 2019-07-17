@@ -16,6 +16,9 @@
             <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84375"/>
+            <skip>
+                <issueId value="MC-17232"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
@@ -47,9 +50,9 @@
         <conditionalClick selector="{{ProductDescriptionWYSIWYGToolbarSection.WysiwygArrow}}" dependentSelector="{{ProductDescriptionWYSIWYGToolbarSection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
         <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder1" />
         <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder1" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading4" timeout="45"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading4"/>
         <attachFile selector="{{ProductDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage1"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload1" timeout="30"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload1"/>
         <waitForElementVisible  selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage1" />
         <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.imageSelected(ImageUpload1.value)}}" stepKey="seeImageSelected1" />
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn1"/>
@@ -60,7 +63,7 @@
         <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="dontSeeImage1" />
         <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn2" />
         <attachFile selector="{{ProductDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage2"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload2" timeout="45"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload2"/>
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage2" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="clickInsertBtn1" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.ImageDescription}}" stepKey="waitForImageDescriptionButton1" />
@@ -72,12 +75,12 @@
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Browse}}" stepKey="clickBrowse2" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.CancelBtn}}" stepKey="waitForCancelButton2"/>
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn2" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading13" timeout="30"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading13"/>
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn2" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading14" timeout="40"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading14"/>
         <dontSeeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
         <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload3" timeout="45"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload3"/>
         <waitForElementVisible  selector="{{ProductShortDescriptionWYSIWYGToolbarSection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage3" />
         <waitForElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="waitForDeletebtn" />
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn2"/>
@@ -86,7 +89,7 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete2" />
         <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn4" />
         <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage4"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload4" timeout="45"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload4"/>
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage4" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="clickInsertBtn" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading11" />
