@@ -23,6 +23,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete created downloadable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+            
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -101,10 +106,5 @@
         <!-- Assert Gift Option product settings  -->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOption"/>
-
-        <!-- Delete created downloadable product -->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
-            <argument name="product" value="DownloadableProduct"/>
-        </actionGroup>
     </test>
 </tests>
