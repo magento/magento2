@@ -35,6 +35,7 @@
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
         </arguments>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="fillProductPrice"/>
@@ -282,5 +283,37 @@
             <argument name="productId" type="string"/>
         </arguments>
         <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProduct"/>
+    </actionGroup>
+
+    <!-- This action group simply navigates to the product catalog page -->
+    <actionGroup name="AdminGoToProductCatalogPage">
+        <comment userInput="actionGroup:GoToProductCatalogPage" stepKey="actionGroupComment"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+    </actionGroup>
+
+    <!-- You are on product Edit Page -->
+    <!-- Assert checkbox available for website in Product In Websites -->
+    <actionGroup name="AdminAssertWebsiteIsAvailableInProductWebsites">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToProductInWebsitesSection"/>
+        <conditionalClick selector="{{ProductInWebsitesSection.sectionHeader}}" dependentSelector="{{ProductInWebsitesSection.sectionHeaderOpened}}" visible="false" stepKey="expandProductWebsitesSection"/>
+        <seeElement selector="{{ProductInWebsitesSection.website(website)}}" stepKey="seeCheckboxForWebsite"/>
+    </actionGroup>
+
+    <!-- You are on product Edit Page -->
+    <!-- Assert checkbox not available for website in Product In Websites -->
+    <actionGroup name="AdminAssertWebsiteIsNotAvailableInProductWebsites" extends="AdminAssertWebsiteIsAvailableInProductWebsites">
+        <remove keyForRemoval="seeCheckboxForWebsite"/>
+        <dontSeeElement selector="{{ProductInWebsitesSection.website(website)}}" after="expandProductWebsitesSection" stepKey="dontSeeCheckboxForWebsite"/>
+    </actionGroup>
+
+    <!-- You are on product Edit Page -->
+    <!-- Assert checkbox Is checked for website in Product In Websites -->
+    <actionGroup name="AdminAssertProductIsAssignedToWebsite" extends="AdminAssertWebsiteIsAvailableInProductWebsites">
+        <remove keyForRemoval="seeCheckboxForWebsite"/>
+        <seeCheckboxIsChecked selector="{{ProductInWebsitesSection.website(website)}}" after="expandProductWebsitesSection" stepKey="seeCustomWebsiteIsChecked"/>
     </actionGroup>
 </actionGroups>
