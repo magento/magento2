@@ -314,7 +314,7 @@ type SelectedCustomizableOption {
 type SelectedCustomizableOptionValue {
     id: Int!
     label: String!
-    value: String @deprecated (reason: "The value field is deprecated. It was moved to CartItemSelectedOptionValuePrice.")
+    value: String!
     price: CartItemSelectedOptionValuePrice!
 }
 
