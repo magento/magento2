@@ -11,6 +11,9 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer;
 
+/**
+ * Class Sender
+ */
 class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -23,10 +26,10 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     {
         $str = '';
         if ($row->getTemplateSenderName()) {
-            $str .= htmlspecialchars($row->getTemplateSenderName()) . ' ';
+            $str .= $this->escapeHtml($row->getTemplateSenderName()) . ' ';
         }
         if ($row->getTemplateSenderEmail()) {
-            $str .= '[' . htmlspecialchars($row->getTemplateSenderEmail()) . ']';
+            $str .= '[' . $this->escapeHtml($row->getTemplateSenderEmail()) . ']';
         }
         if ($str == '') {
             $str .= '---';

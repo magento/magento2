@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <!-- Export products using filtering by attribute -->
+    <actionGroup name="exportProductsFilterByAttribute">
+        <arguments>
+            <argument name="attribute" type="string"/>
+            <argument name="attributeData" type="string"/>
+        </arguments>
+        <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible"/>
+        <scrollTo selector="{{AdminExportAttributeSection.chooseAttribute('attribute')}}" stepKey="scrollToAttribute" />
+        <checkOption selector="{{AdminExportAttributeSection.chooseAttribute('attribute')}}" stepKey="selectAttribute"/>
+        <fillField selector="{{AdminExportAttributeSection.fillFilter('attribute')}}" userInput="{{attributeData}}" stepKey="setDataInField"/>
+        <waitForPageLoad stepKey="waitForUserInput"/>
+        <scrollTo selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="scrollToContinue" />
+        <click selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="clickContinueButton"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Message is added to queue, wait to get your file soon" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <!-- Export products without filtering -->
+    <actionGroup name="exportAllProducts">
+        <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible" time="5"/>
+        <scrollTo selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="scrollToContinue"/>
+        <wait stepKey="waitForScroll" time="5"/>
+        <click selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="clickContinueButton"/>
+        <wait stepKey="waitForClick" time="5"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Message is added to queue, wait to get your file soon" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <!-- Download first file in the grid -->
+    <actionGroup name="downloadFileByRowIndex">
+        <arguments>
+            <argument name="rowIndex" type="string"/>
+        </arguments>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitFormReload"/>
+        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
+        <click stepKey="clickOnDownload" selector="{{AdminExportAttributeSection.download(rowIndex)}}" after="clickSelectBtn"/>
+    </actionGroup>
+
+    <!-- Delete exported file -->
+    <actionGroup name="deleteExportedFile">
+        <arguments>
+            <argument name="rowIndex" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
+        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
+        <click stepKey="clickOnDelete" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>
+        <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmDelete"/>
+        <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+    </actionGroup>
+
+    <actionGroup name="deleteAllExportedFiles">
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
+        <executeInSelenium
+            function="
+                function ($webdriver) use ($I) {
+                    $buttons = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath('//tr[@data-repeat-index=\'0\']//button'));
+                    while(!empty($buttons)) {
+                        $buttons[0]->click();
+                        $I->waitForElementVisible('//tr[@data-repeat-index=\'0\']//a[text()=\'Delete\']', 10);
+                        $deleteButton = $webdriver->findElement(\Facebook\WebDriver\WebDriverBy::xpath('//tr[@data-repeat-index=\'0\']//a[text()=\'Delete\']'));
+                        $deleteButton->click();
+                        $I->waitForElementVisible('.modal-popup.confirm button.action-accept', 10);
+                        $I->click('.modal-popup.confirm button.action-accept');
+                        $I->waitForPageLoad(60);
+                        $buttons = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::xpath('//tr[@data-repeat-index=\'0\']//button'));
+                    }
+                }"
+            stepKey="deleteAllExportedFilesOneByOne"/>
+        <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+    </actionGroup>
+</actionGroups>

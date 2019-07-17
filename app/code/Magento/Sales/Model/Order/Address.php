@@ -730,5 +730,16 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave()
+    {
+        if ($this->getEmail() === null) {
+            $this->setEmail($this->getOrder()->getCustomerEmail());
+        }
+        return parent::beforeSave();
+    }
+
     //@codeCoverageIgnoreEnd
 }

@@ -107,13 +107,13 @@ class StateTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'processing - !canCreditmemo!canShip -> closed' =>
-                [false, 1, false, 0, Order::STATE_PROCESSING, Order::STATE_CLOSED],
+                [false, 1, false, 1, Order::STATE_PROCESSING, Order::STATE_CLOSED],
             'complete - !canCreditmemo,!canShip -> closed' =>
-                [false, 1, false, 0, Order::STATE_COMPLETE, Order::STATE_CLOSED],
-            'processing - !canCreditmemo,canShip -> closed' =>
-                [false, 1, true, 0, Order::STATE_PROCESSING, Order::STATE_CLOSED],
-            'complete - !canCreditmemo,canShip -> closed' =>
-                [false, 1, true, 0, Order::STATE_COMPLETE, Order::STATE_CLOSED],
+                [false, 1, false, 1, Order::STATE_COMPLETE, Order::STATE_CLOSED],
+            'processing - !canCreditmemo,canShip -> processing' =>
+                [false, 1, true, 2, Order::STATE_PROCESSING, Order::STATE_PROCESSING],
+            'complete - !canCreditmemo,canShip -> complete' =>
+                [false, 1, true, 1, Order::STATE_COMPLETE, Order::STATE_COMPLETE],
             'processing - canCreditmemo,!canShip -> complete' =>
                 [true, 1, false, 1, Order::STATE_PROCESSING, Order::STATE_COMPLETE],
             'complete - canCreditmemo,!canShip -> complete' =>

@@ -30,9 +30,12 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->escaper = new Escaper();
         $this->zendEscaper = new \Magento\Framework\ZendEscaper();
         $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
-        $this->escaper = new Escaper($this->zendEscaper, $this->loggerMock);
+        $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
     }
 
     /**

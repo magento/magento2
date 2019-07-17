@@ -9,13 +9,15 @@ namespace Magento\Eav\Setup;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
+ * Base eav setup class.
+ *
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,27 +83,38 @@ class EavSetup
     private $_defaultAttributeSetName = 'Default';
 
     /**
+     * @var Code
+     */
+    private $attributeCodeValidator;
+
+    /**
      * Init
      *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
+     * @param Code|null $attributeCodeValidator
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory
+        CollectionFactory $attrGroupCollectionFactory,
+        Code $attributeCodeValidator = null
     ) {
         $this->cache = $cache;
         $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
         $this->attributeMapper = $context->getAttributeMapper();
         $this->setup = $setup;
+        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
+            Code::class
+        );
     }
 
     /**
-     * Gets setup model
+     * Gets setup model.
+     *
      * @deprecated
      * @return ModuleDataSetupInterface
      */
@@ -568,6 +581,8 @@ class EavSetup
     }
 
     /**
+     * Convert group name to attribute group code.
+     *
      * @param string $groupName
      * @return string
      * @since 100.1.0
@@ -775,38 +790,6 @@ class EavSetup
     }
 
     /**
-     * Validate attribute data before insert into table
-     *
-     * @param  array $data
-     * @return true
-     * @throws LocalizedException
-     */
-    private function _validateAttributeData($data)
-    {
-        $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
-        $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
-        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
-
-        $isAllowedLength = \Zend_Validate::is(
-            trim($attributeCode),
-            'StringLength',
-            ['min' => $minLength, 'max' => $maxLength]
-        );
-
-        if (!$isAllowedLength) {
-            $errorMessage = __(
-                'An attribute code must not be less than %1 and more than %2 characters.',
-                $minLength,
-                $maxLength
-            );
-
-            throw new LocalizedException($errorMessage);
-        }
-
-        return true;
-    }
-
-    /**
      * Add attribute to an entity type
      *
      * If attribute is system will add to all existing attribute sets
@@ -815,6 +798,8 @@ class EavSetup
      * @param string $code
      * @param array $attr
      * @return $this
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -825,7 +810,7 @@ class EavSetup
             $this->attributeMapper->map($attr, $entityTypeId)
         );
 
-        $this->_validateAttributeData($data);
+        $this->validateAttributeCode($data);
 
         $sortOrder = isset($attr['sort_order']) ? $attr['sort_order'] : null;
         $attributeId = $this->getAttribute($entityTypeId, $code, 'attribute_id');
@@ -1063,7 +1048,7 @@ class EavSetup
                 return $this;
             }
         }
-      
+
         $attributeId = $this->getAttributeId($entityTypeId, $id);
         if (false === $attributeId) {
             throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
@@ -1545,5 +1530,22 @@ class EavSetup
         }
 
         return $this;
+    }
+
+    /**
+     * Validate attribute code.
+     *
+     * @param array $data
+     * @throws LocalizedException
+     * @throws \Zend_Validate_Exception
+     */
+    private function validateAttributeCode(array $data): void
+    {
+        $attributeCode = $data['attribute_code'] ?? '';
+        if (!$this->attributeCodeValidator->isValid($attributeCode)) {
+            $errorMessage = implode('\n', $this->attributeCodeValidator->getMessages());
+
+            throw new LocalizedException(__($errorMessage));
+        }
     }
 }

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateSimpleProductWithRegularPriceInStockWithCustomOptionsTest">
+        <annotations>
+            <stories value="Update Simple Product"/>
+            <title value="Update Simple Product with Regular Price (In Stock) with Custom Options"/>
+            <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) with Custom Options"/>
+            <testCaseId value="MC-10819"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17181"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{simpleProductRegularPriceCustomOptions.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Search default simple product in the grid -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGrid">
+            <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Update simple product with regular price -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="fillSimpleProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductRegularPriceCustomOptions.sku}}" stepKey="fillSimpleProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductRegularPriceCustomOptions.price}}" stepKey="fillSimpleProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPriceCustomOptions.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductRegularPriceCustomOptions.status}}" stepKey="selectStockStatusInStock"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPriceCustomOptions.weight}}" stepKey="fillSimpleProductWeight"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory"/>
+        <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPriceCustomOptions.urlKey}}" stepKey="fillUrlKey"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" stepKey="clickAdminProductCustomizableOption"/>
+
+        <!-- Create simple product with customizable option -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton"/>
+        <waitForPageLoad stepKey="waitForDataToLoad"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="{{simpleProductCustomizableOption.title}}" stepKey="fillOptionTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('1')}}" stepKey="selectOptionTypeDropDown"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('1', simpleProductCustomizableOption.type)}}" stepKey="selectOptionFieldFromDropDown"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('0')}}" stepKey="checkRequiredCheckBox"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddValueButton"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_title}}" stepKey="fillOptionTitleForCustomizableOption"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_price}}" stepKey="fillOptionPrice"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_price_type}}" stepKey="selectOptionPriceType"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_sku}}" stepKey="fillOptionSku"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForSimpleProductSave"/>
+
+        <!--Verify customer see success message-->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+
+        <!--Search updated simple product(from above step) in the grid page-->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedSimpleProduct"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="fillSimpleProductNameInNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{simpleProductRegularPriceCustomOptions.sku}}" stepKey="fillProductSku"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
+        <waitForPageLoad stepKey="waitUntilSimpleProductPageIsOpened"/>
+
+        <!-- Verify customer see updated simple product in the product form page -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="seeSimpleProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductRegularPriceCustomOptions.sku}}" stepKey="seeSimpleProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductRegularPriceCustomOptions.price}}" stepKey="seeSimpleProductPrice"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPriceCustomOptions.quantity}}" stepKey="seeSimpleProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductRegularPriceCustomOptions.status}}" stepKey="seeSimpleProductStockStatus"/>
+        <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPriceCustomOptions.weight}}" stepKey="seeSimpleProductWeight"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
+        <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="selectedCategories" />
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPriceCustomOptions.urlKey}}" stepKey="seeUrlKey"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" stepKey="clickAdminProductCustomizableOptionToSeeValues"/>
+
+        <!-- Verify simple product with customizable options -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButtonForCustomizableOption"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="{{simpleProductCustomizableOption.title}}" stepKey="seeOptionTitleForCustomizableOption"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('1')}}" stepKey="selectOptionTypeDropDownForCustomizableOption"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('1', simpleProductCustomizableOption.type)}}" stepKey="selectOptionFieldFromDropDownForCustomizableOption"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('0')}}" stepKey="checkRequiredCheckBoxForTheThirdDataSet"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_title}}" stepKey="seeOptionTitle"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_price}}" stepKey="seeOptionPrice"/>
+        <seeOptionIsSelected selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_price_type}}" stepKey="selectOptionValuePriceType"/>
+        <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_sku}}" stepKey="seeOptionSku"/>
+
+        <!-- Verify customer see updated simple product (from the above step) on the storefront page -->
+        <amOnPage url="{{StorefrontProductPage.url(simpleProductRegularPriceCustomOptions.urlKey)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="seeSimpleProductNameOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{simpleProductRegularPriceCustomOptions.price}}" stepKey="seeSimpleProductPriceOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{simpleProductRegularPriceCustomOptions.sku}}" stepKey="seeSimpleProductSkuOnStoreFrontPage"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
+        <assertEquals stepKey="assertStockAvailableOnProductPage">
+            <expectedResult type="string">{{simpleProductRegularPriceCustomOptions.storefrontStatus}}</expectedResult>
+            <actualResult type="variable">productStockAvailableStatus</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
+        <assertEquals stepKey="assertOldPriceTextOnProductPage">
+            <expectedResult type="string">${{simpleProductRegularPriceCustomOptions.price}}</expectedResult>
+            <actualResult type="variable">productPriceAmount</actualResult>
+        </assertEquals>
+
+        <!--Verify customer see customizable options are Required -->
+        <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(simpleProductCustomizableOption.title)}}" stepKey="verifyFirstCustomOptionIsRequired"/>
+
+        <!--Verify customer see customizable option titles and prices -->
+        <grabAttributeFrom userInput="for" selector="{{StorefrontProductInfoMainSection.customOptionLabel(simpleProductCustomizableOption.title)}}" stepKey="simpleOptionId"/>
+        <grabMultiple selector="{{StorefrontProductInfoMainSection.customSelectOptions({$simpleOptionId})}}" stepKey="grabFourthOptions"/>
+        <assertEquals stepKey="assertFourthSelectOptions">
+            <actualResult type="variable">grabFourthOptions</actualResult>
+            <expectedResult type="array">['-- Please Select --', {{simpleProductCustomizableOption.option_0_title}} +$98.00]</expectedResult>
+        </assertEquals>
+
+        <!-- Verify added Product in cart -->
+        <selectOption selector="{{StorefrontProductPageSection.customOptionDropDown}}" userInput="{{simpleProductCustomizableOption.option_0_title}} +$98.00" stepKey="selectCustomOption"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillProductQuantity"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
+        <waitForPageLoad stepKey="waitForProductToAddInCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeYouAddedSimpleprod4ToYourShoppingCartSuccessSaveMessage"/>
+        <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
+        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}"  stepKey="seeProductNameInMiniCart"/>
+        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{simpleProductRegularPriceCustomOptions.storefront_new_cartprice}}" stepKey="seeProductPriceInMiniCart"/>
+    </test>
+</tests>

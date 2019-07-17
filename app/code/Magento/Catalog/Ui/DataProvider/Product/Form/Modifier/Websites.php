@@ -165,7 +165,7 @@ class Websites extends AbstractModifier
         $websitesList = $this->getWebsitesList();
         $isNewProduct = !$this->locator->getProduct()->getId();
         $tooltip = [
-            'link' => 'http://docs.magento.com/m2/ce/user_guide/configuration/scope.html',
+            'link' => 'https://docs.magento.com/m2/ce/user_guide/configuration/scope.html',
             'description' => __(
                 'If your Magento installation has multiple websites, ' .
                 'you can edit the scope to use the product on specific sites.'
@@ -175,11 +175,9 @@ class Websites extends AbstractModifier
         $label = __('Websites');
 
         $defaultWebsiteId = $this->websiteRepository->getDefault()->getId();
-        $isOnlyOneWebsiteAvailable = count($websitesList) === 1;
         foreach ($websitesList as $website) {
             $isChecked = in_array($website['id'], $websiteIds)
-                || ($defaultWebsiteId == $website['id'] && $isNewProduct)
-                || $isOnlyOneWebsiteAvailable;
+                || ($defaultWebsiteId == $website['id'] && $isNewProduct);
             $children[$website['id']] = [
                 'arguments' => [
                     'data' => [

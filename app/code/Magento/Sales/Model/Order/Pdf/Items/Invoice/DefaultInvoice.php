@@ -3,10 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order\Pdf\Items\Invoice;
+declare(strict_types=1);
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Sales\Model\Order\Address\Renderer;
+namespace Magento\Sales\Model\Order\Pdf\Items\Invoice;
 
 /**
  * Sales Order Invoice Pdf default items renderer
@@ -21,11 +20,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
     protected $string;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address\Renderer
-     */
-    private $renderer;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -35,8 +29,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Sales\Model\Order\Address\Renderer $renderer
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -47,8 +39,7 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        Renderer $renderer = null
+        array $data = []
     ) {
         $this->string = $string;
         parent::__construct(
@@ -61,7 +52,6 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
             $resourceCollection,
             $data
         );
-        $this->renderer = $renderer ?: ObjectManager::getInstance()->get(Renderer::class);
     }
 
     /**
@@ -80,14 +70,16 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         // draw Product name
         $lines[0] = [
             [
-                'text' => $this->string->split($this->renderer->processArabicText($item->getName()), 35, true, true),
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                'text' => $this->string->split(html_entity_decode($item->getName()), 35, true, true),
                 'feed' => 35
             ]
         ];
 
         // draw SKU
         $lines[0][] = [
-            'text' => $this->string->split($this->renderer->processArabicText($item->getSku($item)), 17),
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            'text' => $this->string->split(html_entity_decode($this->getSku($item)), 17),
             'feed' => 290,
             'align' => 'right',
         ];

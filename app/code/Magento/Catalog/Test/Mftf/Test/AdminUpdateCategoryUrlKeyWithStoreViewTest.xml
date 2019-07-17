@@ -31,20 +31,24 @@
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
+
         <!--Open Store Page -->
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForSystemStorePage"/>
+
         <!--Create Custom Store -->
         <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
         <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
         <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
         <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
         <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+
         <!--Create Store View-->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="StoreGroup" value="customStore"/>
             <argument name="customStore" value="customStore"/>
         </actionGroup>
+
         <!--Verify Category in Store View-->
         <amOnPage url="/{{NewRootCategory.name}}/{{SimpleRootSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>
         <waitForPageLoad stepKey="waitForSystemStorePage1"/>
@@ -53,6 +57,7 @@
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="seeCatergoryInStoreFront"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
+
         <!--Update URL Key-->
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
         <waitForPageLoad stepKey="waitForPageToLoaded2"/>
@@ -65,12 +70,14 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryAfterFirstSeoUpdate"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
+
         <!--Open Category Store Front Page-->
         <amOnPage url="/{{NewRootCategory.name}}/{{SimpleRootSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFront1"/>
         <waitForPageLoad stepKey="waitForSystemStorePage3"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="seeCategoryOnNavigation1"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="selectCategory2"/>
         <waitForPageLoad stepKey="waitForProductToLoad1"/>
+
         <!--Verify Updated URLKey is present-->
         <seeInCurrentUrl stepKey="verifyUpdatedUrlKey" url="newurlkey.html"/>
     </test>

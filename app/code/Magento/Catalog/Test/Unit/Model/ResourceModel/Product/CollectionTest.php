@@ -98,7 +98,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'getId', 'getWebsiteId'])
             ->getMockForAbstractClass();
-        $moduleManager = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $moduleManager = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $catalogProductFlatState = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Flat\State::class)
@@ -125,32 +125,25 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->entityMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->galleryResourceMock = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Gallery::class
         )->disableOriginalConstructor()->getMock();
-
         $this->metadataPoolMock = $this->getMockBuilder(
             \Magento\Framework\EntityManager\MetadataPool::class
         )->disableOriginalConstructor()->getMock();
-
         $this->galleryReadHandlerMock = $this->getMockBuilder(
             \Magento\Catalog\Model\Product\Gallery\ReadHandler::class
         )->disableOriginalConstructor()->getMock();
-
         $this->storeManager->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->any())->method('getStore')->willReturnSelf();
         $universalFactory->expects($this->exactly(1))->method('create')->willReturnOnConsecutiveCalls(

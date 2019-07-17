@@ -185,6 +185,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\TierPrice $tierPriceValidator
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Exception
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -255,6 +256,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $rowData
      * @param int $rowNum
      * @return bool
+     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {
@@ -308,6 +310,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Save advanced pricing
      *
      * @return $this
+     * @throws \Exception
      */
     public function saveAdvancedPricing()
     {
@@ -319,6 +322,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Deletes Advanced price data from raw data.
      *
      * @return $this
+     * @throws \Exception
      */
     public function deleteAdvancedPricing()
     {
@@ -347,6 +351,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Replace advanced pricing
      *
      * @return $this
+     * @throws \Exception
      */
     public function replaceAdvancedPricing()
     {
@@ -360,6 +365,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Exception
      */
     protected function saveAndReplaceAdvancedPrices()
     {
@@ -368,8 +374,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $this->_cachedSkuToDelete = null;
         }
         $listSku = [];
+        $tierPrices = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $tierPrices = [];
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
                     $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
@@ -397,23 +403,28 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                     ];
                 }
             }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
-                if ($listSku) {
-                    $this->processCountNewPrices($tierPrices);
-                    if ($this->deleteProductTierPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
-                        $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
-                        $this->setUpdatedAt($listSku);
-                    }
-                }
-            } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
+
+            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
                 $this->processCountExistingPrices($tierPrices, self::TABLE_TIER_PRICE)
                     ->processCountNewPrices($tierPrices);
+
                 $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
                 if ($listSku) {
                     $this->setUpdatedAt($listSku);
                 }
             }
         }
+
+        if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
+            if ($listSku) {
+                $this->processCountNewPrices($tierPrices);
+                if ($this->deleteProductTierPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
+                    $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
+                    $this->setUpdatedAt($listSku);
+                }
+            }
+        }
+
         return $this;
     }
 
@@ -423,6 +434,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $priceData
      * @param string $table
      * @return $this
+     * @throws \Exception
      */
     protected function saveProductPrices(array $priceData, $table)
     {
@@ -454,6 +466,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $listSku
      * @param string $table
      * @return boolean
+     * @throws \Exception
      */
     protected function deleteProductTierPrices(array $listSku, $table)
     {
@@ -531,6 +544,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Retrieve product skus
      *
      * @return array
+     * @throws \Exception
      */
     protected function retrieveOldSkus()
     {
@@ -551,6 +565,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $prices
      * @param string $table
      * @return $this
+     * @throws \Exception
      */
     protected function processCountExistingPrices($prices, $table)
     {
@@ -562,11 +577,14 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
         $tableName = $this->_resourceFactory->create()->getTable($table);
         $productEntityLinkField = $this->getProductEntityLinkField();
-        $existingPrices = $this->_connection->fetchAssoc(
+        $existingPrices = $this->_connection->fetchAll(
             $this->_connection->select()->from(
                 $tableName,
-                ['value_id', $productEntityLinkField, 'all_groups', 'customer_group_id']
-            )->where($productEntityLinkField . ' IN (?)', $existProductIds)
+                [$productEntityLinkField, 'all_groups', 'customer_group_id', 'qty']
+            )->where(
+                $productEntityLinkField . ' IN (?)',
+                $existProductIds
+            )
         );
         foreach ($existingPrices as $existingPrice) {
             foreach ($prices as $sku => $skuPrices) {
@@ -591,8 +609,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         foreach ($prices as $price) {
             if ($existingPrice['all_groups'] == $price['all_groups']
                 && $existingPrice['customer_group_id'] == $price['customer_group_id']
+                && (int) $existingPrice['qty'] === (int) $price['qty']
             ) {
                 $this->countItemsUpdated++;
+                continue;
             }
         }
     }

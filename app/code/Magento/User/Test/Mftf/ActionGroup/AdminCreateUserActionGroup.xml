@@ -15,12 +15,12 @@
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="amOnAdminUsersPage"/>
         <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
         <click selector="{{AdminCreateUserSection.create}}" stepKey="clickToCreateNewUser"/>
-        <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{newAdmin.username}}" stepKey="enterUserName" />
-        <fillField selector="{{AdminEditUserSection.firstNameTextField}}" userInput="{{newAdmin.firstName}}" stepKey="enterFirstName" />
-        <fillField selector="{{AdminEditUserSection.lastNameTextField}}" userInput="{{newAdmin.lastName}}" stepKey="enterLastName" />
-        <fillField selector="{{AdminEditUserSection.emailTextField}}" userInput="{{newAdmin.username}}@magento.com" stepKey="enterEmail" />
-        <fillField selector="{{AdminEditUserSection.passwordTextField}}" userInput="{{newAdmin.password}}" stepKey="enterPassword" />
-        <fillField selector="{{AdminEditUserSection.pwConfirmationTextField}}" userInput="{{newAdmin.password}}" stepKey="confirmPassword" />
+        <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{User.username}}" stepKey="enterUserName" />
+        <fillField selector="{{AdminEditUserSection.firstNameTextField}}" userInput="{{User.firstName}}" stepKey="enterFirstName" />
+        <fillField selector="{{AdminEditUserSection.lastNameTextField}}" userInput="{{User.lastName}}" stepKey="enterLastName" />
+        <fillField selector="{{AdminEditUserSection.emailTextField}}" userInput="{{User.username}}@magento.com" stepKey="enterEmail" />
+        <fillField selector="{{AdminEditUserSection.passwordTextField}}" userInput="{{User.password}}" stepKey="enterPassword" />
+        <fillField selector="{{AdminEditUserSection.pwConfirmationTextField}}" userInput="{{User.password}}" stepKey="confirmPassword" />
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword" />
         <scrollToTopOfPage stepKey="scrollToTopOfPage" />
         <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRole" />
@@ -39,7 +39,7 @@
             <argument name="role"/>
             <argument name="user" defaultValue="newAdmin"/>
         </arguments>
-        <amOnPage url="{{AdminEditUserPage.url}}" stepKey="navigateToNewUser"/>
+        <amOnPage url="{{AdminNewUserPage.url}}" stepKey="navigateToNewUser"/>
         <waitForPageLoad stepKey="waitForUsersPage" />
         <fillField selector="{{AdminCreateUserSection.usernameTextField}}" userInput="{{user.username}}" stepKey="enterUserName" />
         <fillField selector="{{AdminCreateUserSection.firstNameTextField}}" userInput="{{user.firstName}}" stepKey="enterFirstName" />

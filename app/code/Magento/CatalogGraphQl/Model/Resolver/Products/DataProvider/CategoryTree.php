@@ -101,11 +101,21 @@ class CategoryTree
 
         $collection->addFieldToFilter('level', ['gt' => $level]);
         $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
+        $collection->addAttributeToFilter('is_active', 1, "left");
         $collection->setOrder('level');
+        $collection->setOrder(
+            'position',
+            $collection::SORT_ORDER_DESC
+        );
         $collection->getSelect()->orWhere(
-            $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField() . ' = ?',
+            $collection->getSelect()
+                ->getConnection()
+                ->quoteIdentifier(
+                    'e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
+                ) . ' = ?',
             $rootCategoryId
         );
+
         return $collection->getIterator();
     }
 

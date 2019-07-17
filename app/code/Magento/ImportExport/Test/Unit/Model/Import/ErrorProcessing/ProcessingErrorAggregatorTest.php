@@ -216,6 +216,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsErrorLimitExceededFalse()
     {
+        $this->model->initValidationStrategy('validation-stop-on-errors', 5);
         $this->model->addError('systemException');
         $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
         $this->model->addError('systemException', 'critical', 4, 'Some column name', 'Message', 'Description');

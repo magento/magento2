@@ -13,7 +13,7 @@
         <comment><![CDATA[Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflow_link/active</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-link.html</comment>
+            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-link.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="payflow_link_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -106,7 +106,7 @@
                     <field id="enable_payflow_link"/>
                 </requires>
             </field>
-            <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="41">
+            <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="41" showInDefault="1" showInWebsite="1">
                 <comment><![CDATA[Payflow Link lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
                         <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
@@ -117,7 +117,7 @@
                     <field id="enable_express_checkout"/>
                 </requires>
             </field>
-            <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+            <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1">
                 <config_path>payment/payflow_express_bml/sort_order</config_path>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
                 <depends>
