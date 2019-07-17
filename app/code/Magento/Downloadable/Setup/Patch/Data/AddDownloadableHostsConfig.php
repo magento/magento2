@@ -76,7 +76,8 @@ class AddDownloadableHostsConfig implements DataPatchInterface
                 ->from(
                     $this->moduleDataSetup->getTable('downloadable_link'),
                     ['link_url']
-                )->where('link_type = ?', 'url');
+                )
+                ->where('link_type = ?', 'url');
 
             foreach ($this->moduleDataSetup->getConnection()->fetchAll($select) as $link) {
                 $this->addHost($link['link_url']);
@@ -87,7 +88,8 @@ class AddDownloadableHostsConfig implements DataPatchInterface
                 ->from(
                     $this->moduleDataSetup->getTable('downloadable_link'),
                     ['sample_url']
-                )->where('sample_type = ?', 'url');
+                )
+                ->where('sample_type = ?', 'url');
 
             foreach ($this->moduleDataSetup->getConnection()->fetchAll($select) as $link) {
                 $this->addHost($link['sample_url']);
@@ -100,7 +102,8 @@ class AddDownloadableHostsConfig implements DataPatchInterface
                 ->from(
                     $this->moduleDataSetup->getTable('downloadable_sample'),
                     ['sample_url']
-                )->where('sample_type = ?', 'url');
+                )
+                ->where('sample_type = ?', 'url');
 
             foreach ($this->moduleDataSetup->getConnection()->fetchAll($select) as $link) {
                 $this->addHost($link['sample_url']);
