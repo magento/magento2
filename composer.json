@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Open Source)",
     "type": "project",
-    "version": "2.2.9",
+    "version": "2.2.10-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
