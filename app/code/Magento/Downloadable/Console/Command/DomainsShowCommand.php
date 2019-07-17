@@ -9,9 +9,7 @@ namespace Magento\Downloadable\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
-
-use Magento\Framework\App\DeploymentConfig\Writer as ConfigWriter;
-use Magento\Downloadable\Model\Url\DomainValidator;
+use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 
 /**
  * Class DomainsAddCommand
@@ -21,27 +19,18 @@ use Magento\Downloadable\Model\Url\DomainValidator;
 class DomainsShowCommand extends Command
 {
     /**
-     * @var ConfigWriter
+     * @var DomainManager
      */
-    private $configWriter;
-
-    /**
-     * @var DomainValidator
-     */
-    private $domainValidator;
+    private $domainManager;
 
     /**
      * DomainsShowCommand constructor.
-     *
-     * @param ConfigWriter $configWriter
-     * @param DomainValidator $domainValidator
+     * @param DomainManager $domainManager
      */
     public function __construct(
-        ConfigWriter $configWriter,
-        DomainValidator $domainValidator
+        DomainManager $domainManager
     ) {
-        $this->configWriter = $configWriter;
-        $this->domainValidator = $domainValidator;
+        $this->domainManager = $domainManager;
         parent::__construct();
     }
 
@@ -63,11 +52,10 @@ class DomainsShowCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $whitelist = implode("\n", $this->domainValidator->getEnvDomainWhitelist() ?: []);
+            $whitelist = implode("\n", $this->domainManager->getEnvDomainWhitelist());
             $output->writeln(
                 "Downloadable domains whitelist:\n$whitelist"
             );
-
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {

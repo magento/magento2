@@ -10,10 +10,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 
-use Magento\Framework\App\DeploymentConfig\Writer as ConfigWriter;
-use Magento\Downloadable\Model\Url\DomainValidator;
-use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Class DomainsAddCommand
@@ -28,27 +26,18 @@ class DomainsAddCommand extends Command
     public const INPUT_KEY_DOMAINS = 'domains';
 
     /**
-     * @var ConfigWriter
+     * @var DomainManager
      */
-    private $configWriter;
-
-    /**
-     * @var DomainValidator
-     */
-    private $domainValidator;
+    private $domainManager;
 
     /**
      * DomainsAddCommand constructor.
-     *
-     * @param ConfigWriter $configWriter
-     * @param DomainValidator $domainValidator
+     * @param DomainManager $domainManager
      */
     public function __construct(
-        ConfigWriter $configWriter,
-        DomainValidator $domainValidator
+        DomainManager $domainManager
     ) {
-        $this->configWriter = $configWriter;
-        $this->domainValidator = $domainValidator;
+        $this->domainManager = $domainManager;
         parent::__construct();
     }
 
@@ -80,33 +69,18 @@ class DomainsAddCommand extends Command
     {
         try {
             if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
+                $whitelistBefore = $this->domainManager->getEnvDomainWhitelist();
                 $newDomains = $input->getArgument(self::INPUT_KEY_DOMAINS);
                 $newDomains = array_filter(array_map('trim', $newDomains), 'strlen');
 
-                $whitelist = $this->domainValidator->getEnvDomainWhitelist() ?: [];
-                foreach ($newDomains as $newDomain) {
-                    if (in_array($newDomain, $whitelist)) {
-                        $output->writeln(
-                            "$newDomain is already in the whitelist"
-                        );
-                        continue;
-                    } else {
-                        array_push($whitelist, $newDomain);
-                        $output->writeln(
-                            "$newDomain was added to the whitelist"
-                        );
-                    }
+                $this->domainManager->addEnvDomains($newDomains);
+
+                foreach (array_diff($this->domainManager->getEnvDomainWhitelist(), $whitelistBefore) as $newHost) {
+                    $output->writeln(
+                        $newHost . ' was added to the whitelist.'
+                    );
                 }
-
-                $this->configWriter->saveConfig(
-                    [
-                        ConfigFilePool::APP_ENV => [
-                            $this->domainValidator::PARAM_DOWNLOADABLE_DOMAINS => $whitelist
-                        ]
-                    ]
-                );
             }
-
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {

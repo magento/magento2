@@ -92,6 +92,7 @@
     <preference for="Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="Magento\Downloadable\Model\File\ContentUploader" />
     <preference for="Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
     <preference for="Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="Magento\Downloadable\Model\DownloadableOption" />
+    <preference for="Magento\Downloadable\Api\DomainManagerInterface" type="Magento\Downloadable\Model\DomainManager"/>
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">

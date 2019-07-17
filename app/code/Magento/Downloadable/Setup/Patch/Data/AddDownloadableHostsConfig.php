@@ -10,9 +10,7 @@ namespace Magento\Downloadable\Setup\Patch\Data;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Zend\Uri\Uri as UriHandler;
 use Magento\Framework\Url\ScopeResolverInterface;
-use Magento\Framework\App\DeploymentConfig\Writer as ConfigWriter;
-use Magento\Downloadable\Model\Url\DomainValidator;
-use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
@@ -31,14 +29,14 @@ class AddDownloadableHostsConfig implements DataPatchInterface
     private $scopeResolver;
 
     /**
-     * @var ConfigWriter
-     */
-    private $configWriter;
-
-    /**
      * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
+
+    /**
+     * @var DomainManager
+     */
+    private $domainManager;
 
     /**
      * @var array
@@ -50,18 +48,18 @@ class AddDownloadableHostsConfig implements DataPatchInterface
      *
      * @param UriHandler $uriHandler
      * @param ScopeResolverInterface $scopeResolver
-     * @param ConfigWriter $configWriter
+     * @param DomainManager $domainManager
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         UriHandler $uriHandler,
         ScopeResolverInterface $scopeResolver,
-        ConfigWriter $configWriter,
+        DomainManager $domainManager,
         ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->uriHandler = $uriHandler;
         $this->scopeResolver = $scopeResolver;
-        $this->configWriter = $configWriter;
+        $this->domainManager = $domainManager;
         $this->moduleDataSetup = $moduleDataSetup;
     }
 
@@ -114,13 +112,7 @@ class AddDownloadableHostsConfig implements DataPatchInterface
             $this->addHost($scope->getBaseUrl());
         }
 
-        $this->configWriter->saveConfig(
-            [
-                ConfigFilePool::APP_ENV => [
-                    DomainValidator::PARAM_DOWNLOADABLE_DOMAINS => array_unique($this->whitelist)
-                ]
-            ]
-        );
+        $this->domainManager->addEnvDomains(array_unique($this->whitelist));
     }
 
     /**

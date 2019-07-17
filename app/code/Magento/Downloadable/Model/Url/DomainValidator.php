@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Model\Url;
 
-use Magento\Framework\App\DeploymentConfig;
+use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 use Magento\Framework\Validator\Ip as IpValidator;
 use Zend\Uri\Uri as UriHandler;
 
@@ -37,21 +37,21 @@ class DomainValidator extends \Zend_Validate_Abstract
     private $uriHandler;
 
     /**
-     * @var DeploymentConfig
+     * @var DomainManager
      */
-    private $deploymentConfig;
+    private $domainManager;
 
     /**
-     * @param DeploymentConfig $deploymentConfig
+     * @param DomainManager $domainManager
      * @param IpValidator $ipValidator
      * @param UriHandler $uriHandler
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
+        DomainManager $domainManager,
         IpValidator $ipValidator,
         UriHandler $uriHandler
     ) {
-        $this->deploymentConfig = $deploymentConfig;
+        $this->domainManager = $domainManager;
         $this->ipValidator = $ipValidator;
         $this->uriHandler = $uriHandler;
 
@@ -71,23 +71,13 @@ class DomainValidator extends \Zend_Validate_Abstract
         $host = $this->getHost($value);
 
         $isIpAddress = $this->ipValidator->isValid($host);
-        $isValid = !$isIpAddress && in_array($host, $this->getEnvDomainWhitelist());
+        $isValid = !$isIpAddress && in_array($host, $this->domainManager->getEnvDomainWhitelist());
 
         if (!$isValid) {
             $this->_error(self::INVALID_HOST, $host);
         }
 
         return $isValid;
-    }
-
-    /**
-     * Get environment whitelist
-     *
-     * @return array
-     */
-    public function getEnvDomainWhitelist(): array
-    {
-        return array_map('strtolower', $this->deploymentConfig->get(self::PARAM_DOWNLOADABLE_DOMAINS) ?? []);
     }
 
     /**

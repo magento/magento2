@@ -10,10 +10,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 
-use Magento\Framework\App\DeploymentConfig\Writer as ConfigWriter;
-use Magento\Downloadable\Model\Url\DomainValidator;
-use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Class DomainsRemoveCommand
@@ -28,27 +26,19 @@ class DomainsRemoveCommand extends Command
     public const INPUT_KEY_DOMAINS = 'domains';
 
     /**
-     * @var ConfigWriter
+     * @var DomainManager
      */
-    private $configWriter;
-
-    /**
-     * @var DomainValidator
-     */
-    private $domainValidator;
+    private $domainManager;
 
     /**
      * DomainsRemoveCommand constructor.
      *
-     * @param ConfigWriter $configWriter
-     * @param DomainValidator $domainValidator
+     * @param DomainManager $domainManager
      */
     public function __construct(
-        ConfigWriter $configWriter,
-        DomainValidator $domainValidator
+        DomainManager $domainManager
     ) {
-        $this->configWriter = $configWriter;
-        $this->domainValidator = $domainValidator;
+        $this->domainManager = $domainManager;
         parent::__construct();
     }
 
@@ -80,35 +70,17 @@ class DomainsRemoveCommand extends Command
     {
         try {
             if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
+                $whitelistBefore = $this->domainManager->getEnvDomainWhitelist();
                 $removeDomains = $input->getArgument(self::INPUT_KEY_DOMAINS);
                 $removeDomains = array_filter(array_map('trim', $removeDomains), 'strlen');
+                $this->domainManager->removeEnvDomains($removeDomains);
 
-                $whitelist = $this->domainValidator->getEnvDomainWhitelist() ?: [];
-                foreach ($removeDomains as $removeDomain) {
-                    if (in_array($removeDomain, $whitelist)) {
-                        $index = array_search($removeDomain, $whitelist);
-                        unset($whitelist[$index]);
-                        $output->writeln(
-                            "$removeDomain was removed from the whitelist"
-                        );
-                        continue;
-                    } else {
-                        $output->writeln(
-                            "$removeDomain is absent in the whitelist"
-                        );
-                    }
+                foreach (array_diff($whitelistBefore, $this->domainManager->getEnvDomainWhitelist()) as $removedHost) {
+                    $output->writeln(
+                        $removedHost . ' was removed from the whitelist.'
+                    );
                 }
-
-                $this->configWriter->saveConfig(
-                    [
-                        ConfigFilePool::APP_ENV => [
-                            $this->domainValidator::PARAM_DOWNLOADABLE_DOMAINS => $whitelist
-                        ]
-                    ],
-                    true
-                );
             }
-
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
