@@ -29,8 +29,18 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete grouped product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="GroupedProduct"/>
+            </actionGroup>
+
+            <!-- Delete Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCreatedWebsite">
+                <argument name="websiteName" value="$createWebsite.website[name]$"/>
+            </actionGroup>
+
             <!-- Delete simple product -->
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
 
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
@@ -152,15 +162,5 @@
         <!-- Assert Gift Option product settings  -->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
-
-        <!-- Delete grouped product -->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
-            <argument name="product" value="GroupedProduct"/>
-        </actionGroup>
-
-        <!-- Delete Website -->
-        <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCreatedWebsite">
-            <argument name="websiteName" value="$createWebsite.website[name]$"/>
-        </actionGroup>
     </test>
 </tests>
