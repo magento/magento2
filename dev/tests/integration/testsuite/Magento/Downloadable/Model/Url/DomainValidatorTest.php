@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Model\Url;
 
+use Magento\Downloadable\Model\DomainManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 
@@ -25,16 +26,21 @@ class DomainValidatorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $objectManager = Bootstrap::getObjectManager();
+
         $this->deploymentConfig = $this->createPartialMock(
             DeploymentConfig::class,
             ['get']
         );
 
-        $objectManager = Bootstrap::getObjectManager();
+        $domainManager = $objectManager->create(
+            DomainManager::class,
+            ['deploymentConfig' => $this->deploymentConfig]
+        );
 
         $this->model = $objectManager->create(
             DomainValidator::class,
-            ['deploymentConfig' => $this->deploymentConfig]
+            ['domainManager' => $domainManager]
         );
     }
 
