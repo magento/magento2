@@ -42,19 +42,19 @@ class ContentValidator
     /**
      * @param FileContentValidator $fileContentValidator
      * @param UrlValidator $urlValidator
+     * @param DomainValidator $domainValidator
      * @param File|null $fileHelper
-     * @param DomainValidator|null $domainValidator
      */
     public function __construct(
         FileContentValidator $fileContentValidator,
         UrlValidator $urlValidator,
-        File $fileHelper = null,
-        DomainValidator $domainValidator = null
+        DomainValidator $domainValidator,
+        File $fileHelper = null
     ) {
         $this->fileContentValidator = $fileContentValidator;
         $this->urlValidator = $urlValidator;
+        $this->domainValidator = $domainValidator;
         $this->fileHelper = $fileHelper ?? ObjectManager::getInstance()->get(File::class);
-        $this->domainValidator = $domainValidator ?? ObjectManager::getInstance()->get(DomainValidator::class);
     }
 
     /**
