@@ -80,7 +80,8 @@ class DomainManager implements DomainManagerInterface
     /**
      * @inheritdoc
      */
-    public function removeEnvDomains($hosts) {
+    public function removeEnvDomains($hosts)
+    {
         $whitelist = $this->getEnvDomainWhitelist();
         foreach (array_map('strtolower', $hosts) as $host) {
             if (in_array($host, $whitelist)) {
