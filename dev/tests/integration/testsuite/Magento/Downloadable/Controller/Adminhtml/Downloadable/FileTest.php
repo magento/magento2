@@ -7,36 +7,53 @@
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
 
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Magento\Downloadable\Controller\Adminhtml\Downloadable\File
  *
  * @magentoAppArea adminhtml
- *
- * phpcs:disable Magento2.Functions.DiscouragedFunction
- * phpcs:disable Magento2.Security.Superglobal
  */
 class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * @var Json
+     */
+    private $jsonSerializer;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->jsonSerializer = $this->_objectManager->get(Json::class);
+    }
+
     /**
      * @inheritdoc
      */
     protected function tearDown()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $filePath = dirname(__DIR__) . '/_files/sample.tmp';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (is_file($filePath)) {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
             unlink($filePath);
         }
     }
 
     public function testUploadAction()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         copy(dirname(__DIR__) . '/_files/sample.txt', dirname(__DIR__) . '/_files/sample.tmp');
+        // phpcs:ignore Magento2.Security.Superglobal
         $_FILES = [
             'samples' => [
                 'name' => 'sample.txt',
                 'type' => 'text/plain',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'tmp_name' => dirname(__DIR__) . '/_files/sample.tmp',
                 'error' => 0,
                 'size' => 0,
@@ -46,7 +63,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
-        $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
+        $result = $this->jsonSerializer->unserialize($body);
         $this->assertEquals(0, $result['error']);
     }
 
@@ -58,9 +75,11 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testUploadProhibitedExtensions($fileName)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $path = dirname(__DIR__) . '/_files/';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         copy($path . 'sample.txt', $path . 'sample.tmp');
-
+        // phpcs:ignore Magento2.Security.Superglobal
         $_FILES = [
             'samples' => [
                 'name' => $fileName,
@@ -74,7 +93,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
-        $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
+        $result = $this->jsonSerializer->unserialize($body);
 
         self::assertArrayHasKey('errorcode', $result);
         self::assertEquals(0, $result['errorcode']);
@@ -113,7 +132,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/admin/downloadable_file/upload');
         $body = $this->getResponse()->getBody();
-        $result = Bootstrap::getObjectManager()->get(Json::class)->unserialize($body);
+        $result = $this->jsonSerializer->unserialize($body);
         $this->assertEquals('Upload type can not be determined.', $result['error']);
         $this->assertEquals(0, $result['errorcode']);
     }

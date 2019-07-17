@@ -81,11 +81,11 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
         try {
             $type = $this->getRequest()->getParam('type');
             $tmpPath = '';
-            if ($type == 'samples') {
+            if ($type === 'samples') {
                 $tmpPath = $this->_sample->getBaseTmpPath();
-            } elseif ($type == 'links') {
+            } elseif ($type === 'links') {
                 $tmpPath = $this->_link->getBaseTmpPath();
-            } elseif ($type == 'link_samples') {
+            } elseif ($type === 'link_samples') {
                 $tmpPath = $this->_link->getBaseSampleTmpPath();
             } else {
                 throw new LocalizedException(__('Upload type can not be determined.'));
