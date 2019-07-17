@@ -10,6 +10,9 @@ namespace Magento\CatalogInventory\Setup\Patch\Schema;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
+/**
+ * Change engine for temporary tables to InnoDB.
+ */
 class ChangeTmpTablesEngine implements SchemaPatchInterface
 {
     /**
