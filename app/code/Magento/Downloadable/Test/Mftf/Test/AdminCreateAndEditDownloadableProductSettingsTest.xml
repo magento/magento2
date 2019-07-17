@@ -27,7 +27,7 @@
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
-            
+
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
