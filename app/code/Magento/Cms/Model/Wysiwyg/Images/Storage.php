@@ -22,7 +22,6 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
- * phpcs:disable Magento2.Exceptions.ThrowCatch - @todo MC-18221 need to fix check false positive
  *
  * @api
  * @since 100.0.2
@@ -448,6 +447,8 @@ class Storage extends \Magento\Framework\DataObject
                 'id' => $this->_cmsWysiwygImages->convertPathToId($newPath),
             ];
             return $result;
+            // @todo MC-18221 need to fix check false positive
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot create a new directory.'));
         }
@@ -469,6 +470,8 @@ class Storage extends \Magento\Framework\DataObject
             $this->_deleteByPath($path);
             $path = $this->getThumbnailRoot() . $this->_getRelativePathToRoot($path);
             $this->_deleteByPath($path);
+            // @todo MC-18221 need to fix check false positive
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot delete directory %1.', $path));
         }
