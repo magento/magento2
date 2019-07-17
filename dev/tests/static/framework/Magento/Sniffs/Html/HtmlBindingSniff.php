@@ -41,15 +41,30 @@ class HtmlBindingSniff implements Sniff
                 $loaded = false;
             }
             if ($loaded) {
+                /** @var string[] $htmlBindings */
+                $htmlBindings = [];
                 $domXpath = new \DOMXPath($dom);
                 $dataBindAttributes = $domXpath->query('//@*[name() = "data-bind"]');
                 foreach ($dataBindAttributes as $dataBindAttribute) {
                     $knockoutBinding = $dataBindAttribute->nodeValue;
-                    preg_match('/^(.+\s*?)?html\s*?\:\s*?([a-z0-9\.\(\)\_]+)/ims', $knockoutBinding, $htmlBinding);
-                    if ($htmlBinding && !preg_match('/UnsanitizedHtml[\(\)]*?$/', $htmlBinding[2])) {
+                    preg_match('/^(.+\s*?)?html\s*?\:(.+)/ims', $knockoutBinding, $htmlBindingStart);
+                    if ($htmlBindingStart) {
+                        $htmlBinding = trim(preg_replace('/\,[a-z0-9\_\s]+\:.+/ims', '', $htmlBindingStart[2]));
+                        $htmlBindings[] = $htmlBinding;
+                    }
+                }
+                $htmlAttributes = $domXpath->query('//@*[name() = "html"]');
+                foreach ($htmlAttributes as $htmlAttribute) {
+                    $magentoBinding = $htmlAttribute->nodeValue;
+                    $htmlBindings[] = trim($magentoBinding);
+                }
+                foreach ($htmlBindings as $htmlBinding) {
+                    if (!preg_match('/^[0-9\\\'\"]/ims', $htmlBinding)
+                        && !preg_match('/UnsanitizedHtml(\(.*?\))*?$/', $htmlBinding)
+                    ) {
                         $phpcsFile->addError(
                             'Variables/functions used for HTML binding must have UnsanitizedHtml suffix'
-                            .' - "' .$htmlBinding[2] .'" doesn\'t,' .PHP_EOL
+                            .' - "' .$htmlBinding .'" doesn\'t,' .PHP_EOL
                             .'consider using text binding if the value is supposed to be text',
                             null,
                             'UIComponentTemplate.KnockoutBinding.HtmlSuffix'
