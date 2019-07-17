@@ -65,7 +65,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         parent::setUp();
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         /** @var DomainsAddCommand $domainsAddCommand */
         $domainsAddCommand = $objectManager->get(DomainsAddCommand::class);
         $command = new CommandTester($domainsAddCommand);
@@ -79,7 +79,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         parent::tearDown();
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
          /** @var DomainsRemoveCommand $domainsRemoveCommand */
         $domainsRemoveCommand = $objectManager->get(DomainsRemoveCommand::class);
         $command = new CommandTester($domainsRemoveCommand);

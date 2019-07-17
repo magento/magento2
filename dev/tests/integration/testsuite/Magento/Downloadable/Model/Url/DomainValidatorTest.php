@@ -53,7 +53,6 @@ class DomainValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValid(string $urlInput, array $envDomainWhitelist, bool $isValid)
     {
         $this->deploymentConfig
-            ->expects($this->any())
             ->method('get')
             ->with(DomainValidator::PARAM_DOWNLOADABLE_DOMAINS)
             ->willReturn($envDomainWhitelist);
