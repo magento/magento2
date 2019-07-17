@@ -15,11 +15,15 @@
             <testCaseId value="MC-14719"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
         </annotations>
 
         <before>
             <magentoCLI stepKey="disableShoppingCartSidebar" command="config:set checkout/sidebar/display 0"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRatePrice"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
 
             <!--Create  simple products-->

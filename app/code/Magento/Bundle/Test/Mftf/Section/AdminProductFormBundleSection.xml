@@ -92,7 +92,7 @@
         <!--Category Selection-->
         <element name="categoryByName" type="multiselect" selector="//div[@data-index='category_ids']//span[contains(text(), '{{category}}')]" parameterized="true"/>
         <element name="searchForCategory" type="input" selector="div.action-menu._active > div.admin__action-multiselect-search-wrap input" timeout="30"/>
-        <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']"/>
+        <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']" timeout="30"/>
         <element name="categoriesLabel" type="text" selector="//div[@class='action-menu _active']//button[@data-action='close-advanced-select']"/>
         <element name="userDefinedQuantity" type="checkbox" selector="[name='bundle_options[bundle_options][{{option}}][bundle_selections][{{product}}][selection_can_change_qty]'][type='checkbox']" parameterized="true"/>
     </section>

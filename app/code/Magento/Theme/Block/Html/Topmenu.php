@@ -75,6 +75,16 @@ class Topmenu extends Template implements IdentityInterface
     }
 
     /**
+     * Get cache key informative items
+     *
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        return array_merge(parent::getCacheKeyInfo(), $this->getIdentities());
+    }
+
+    /**
      * Get top menu html
      *
      * @param string $outermostClass
