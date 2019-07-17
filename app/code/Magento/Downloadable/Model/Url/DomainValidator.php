@@ -19,12 +19,12 @@ class DomainValidator extends \Zend_Validate_Abstract
     /**
      * Invalid host message key
      */
-    const INVALID_HOST = 'invalidHost';
+    private const INVALID_HOST = 'invalidHost';
 
     /**
      * Path to the allowed domains in the deployment config
      */
-    const PARAM_DOWNLOADABLE_DOMAINS = 'downloadable_domains';
+    public const PARAM_DOWNLOADABLE_DOMAINS = 'downloadable_domains';
 
     /**
      * @var IpValidator
