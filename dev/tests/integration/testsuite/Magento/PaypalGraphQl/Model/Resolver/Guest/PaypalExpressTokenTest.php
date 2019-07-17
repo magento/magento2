@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Paypal\Model\Api\Nvp;
@@ -23,11 +22,6 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 class PaypalExpressTokenTest extends PaypalExpressAbstractTest
 {
     /**
-     * @var Http
-     */
-    private $request;
-
-    /**
      * @var SerializerInterface
      */
     private $json;
@@ -41,7 +35,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
     {
         parent::setUp();
 
-        $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
     }
@@ -72,14 +65,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
         $query = $this->getCreateTokenMutation($cartId, $paymentMethod);
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
         $paypalRequest = include __DIR__ . '/../../../_files/guest_paypal_create_token_request.php';
         if ($paymentMethod == 'payflow_express') {
             $paypalRequest['SOLUTIONTYPE'] = null;
@@ -96,7 +81,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
             ->with(Nvp::SET_EXPRESS_CHECKOUT, $paypalRequest)
             ->willReturn($paypalResponse);
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
         $createTokenData = $responseData['data']['createPaypalExpressToken'];
 
@@ -131,14 +116,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
         $query = $this->getCreateTokenMutation($cartId, $paymentMethod);
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
         $paypalRequest = include __DIR__ . '/../../../_files/guest_paypal_create_token_request.php';
         if ($paymentMethod == 'payflow_express') {
             $paypalRequest['SOLUTIONTYPE'] = null;
@@ -152,7 +129,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
             ->with(Nvp::SET_EXPRESS_CHECKOUT, $paypalRequest)
             ->willThrowException($expectedException);
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('createPaypalExpressToken', $responseData['data']);
         $this->assertEmpty($responseData['data']['createPaypalExpressToken']);
@@ -199,17 +176,9 @@ mutation {
 }
 QUERY;
 
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
-
         $expectedExceptionMessage = "Invalid URL 'not/a/url'.";
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
