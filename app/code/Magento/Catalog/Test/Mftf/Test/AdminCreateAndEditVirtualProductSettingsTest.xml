@@ -41,7 +41,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="$createWebsite.website[name]$"/>
             </actionGroup>
-            
+
             <!-- Delete related products -->
             <deleteData createDataKey="createFirstRelatedProduct" stepKey="deleteFirstRelatedProduct"/>
             <deleteData createDataKey="createSecondRelatedProduct" stepKey="deleteSecondRelatedProduct"/>

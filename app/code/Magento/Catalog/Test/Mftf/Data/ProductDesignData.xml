@@ -18,6 +18,11 @@
         <data key="page_layout">Empty</data>
         <data key="options_container">Block after Info Column</data>
     </entity>
+    <entity name="simpleLumaDesignThreeColumns" type="product">
+        <data key="custom_design">Magento Luma</data>
+        <data key="page_layout">3 columns</data>
+        <data key="options_container">Block after Info Column</data>
+    </entity>
     <entity name="simpleBlankDesignOneColumn" type="product">
         <data key="custom_design">Magento Blank</data>
         <data key="page_layout">1 column</data>
