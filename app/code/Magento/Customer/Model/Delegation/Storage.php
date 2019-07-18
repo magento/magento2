@@ -101,11 +101,13 @@ class Storage
             }
         }
         $this->session->setCustomerFormData($customerData);
-        $this->session->setDelegatedNewCustomerData([
-            'customer' => $customerData,
-            'addresses' => $addressesData,
-            'delegated_data' => $delegatedData,
-        ]);
+        $this->session->setDelegatedNewCustomerData(
+            [
+                'customer' => $customerData,
+                'addresses' => $addressesData,
+                'delegated_data' => $delegatedData,
+            ]
+        );
     }
 
     /**
@@ -155,11 +157,11 @@ class Storage
         $customerData = $serialized['customer'];
         $customerData['addresses'] = $addresses;
 
-        return $this->newFactory->create([
-            'customer' => $this->customerFactory->create(
-                ['data' => $customerData]
-            ),
-            'additionalData' => $serialized['delegated_data'],
-        ]);
+        return $this->newFactory->create(
+            [
+                'customer' => $this->customerFactory->create(['data' => $customerData]),
+                'additionalData' => $serialized['delegated_data'],
+            ]
+        );
     }
 }
