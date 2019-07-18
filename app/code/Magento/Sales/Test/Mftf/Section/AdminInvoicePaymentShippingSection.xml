@@ -15,7 +15,7 @@
         <element name="ShippingMethod" type="text" selector=".order-shipping-address .shipping-description-title"/>
         <element name="ShippingPrice" type="text" selector=".order-shipping-address .shipping-description-content .price"/>
         <element name="CreateShipment" type="checkbox" selector=".order-shipping-address input[name='invoice[do_shipment]']"/>
-        <element name="getShippingMethodAndRates" type="button" selector="//span[text()='Get shipping methods and rates']"/>
-        <element name="shippingMethod" type="button" selector="//label[contains(text(), 'Fixed')]"/>
+        <element name="getShippingMethodAndRates" type="button" selector="//span[text()='Get shipping methods and rates']" timeout="60"/>
+        <element name="shippingMethod" type="button" selector="//label[contains(text(), 'Fixed')]" timeout="60"/>
     </section>
 </sections>

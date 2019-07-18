@@ -381,7 +381,7 @@
 
 # For 404s and 403s that aren't handled by the application, show plain 404 response
 ErrorDocument 404 /pub/errors/404.php
-ErrorDocument 403 /pub/errors/404.php
+# ErrorDocument 403 /pub/errors/404.php
 
 ################################
 ## If running in cluster environment, uncomment this
