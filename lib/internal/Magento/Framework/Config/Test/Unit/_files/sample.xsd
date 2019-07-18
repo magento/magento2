@@ -21,6 +21,7 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:attribute name="attribute_with_default_value" type="xs:string" default="default_value"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

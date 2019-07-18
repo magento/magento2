@@ -36,7 +36,7 @@
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <!--see Insert Widget button disabled-->
         <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
         <!--Select "Widget Type"-->
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Page Link" stepKey="selectCMSPageLink" />

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework;
 
 /**
@@ -12,6 +13,11 @@ namespace Magento\Framework;
  */
 class Escaper
 {
+    /**
+     * HTML special characters flag
+     */
+    private $htmlSpecialCharsFlag = ENT_QUOTES | ENT_SUBSTITUTE;
+
     /**
      * @var \Magento\Framework\ZendEscaper
      */
@@ -33,12 +39,22 @@ class Escaper
     private $allowedAttributes = ['id', 'class', 'href', 'target', 'title', 'style'];
 
     /**
+     * @var string
+     */
+    private static $xssFiltrationPattern =
+        '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:))|'
+        . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
+        . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
+
+    /**
      * @var string[]
      */
     private $escapeAsUrlAttributes = ['href'];
 
     /**
-     * Escape string for HTML context. allowedTags will not be escaped, except the following: script, img, embed,
+     * Escape string for HTML context.
+     *
+     * AllowedTags will not be escaped, except the following: script, img, embed,
      * iframe, video, source, object, audio
      *
      * @param string|array $data
@@ -47,6 +63,10 @@ class Escaper
      */
     public function escapeHtml($data, $allowedTags = null)
     {
+        if (!is_array($data)) {
+            $data = (string)$data;
+        }
+
         if (is_array($data)) {
             $result = [];
             foreach ($data as $item) {
@@ -54,28 +74,22 @@ class Escaper
             }
         } elseif (strlen($data)) {
             if (is_array($allowedTags) && !empty($allowedTags)) {
-                $notAllowedTags = array_intersect(
-                    array_map('strtolower', $allowedTags),
-                    $this->notAllowedTags
-                );
-                if (!empty($notAllowedTags)) {
-                    $this->getLogger()->critical(
-                        'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
-                    );
-                    $allowedTags = array_diff($allowedTags, $this->notAllowedTags);
-                }
+                $allowedTags = $this->filterProhibitedTags($allowedTags);
                 $wrapperElementId = uniqid();
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
                     function ($errorNumber, $errorString) {
+                        // phpcs:ignore Magento2.Exceptions.DirectThrow
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
+                $data = $this->prepareUnescapedCharacters($data);
                 $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
                 try {
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
+                    // phpcs:disable Magento2.Exceptions.ThrowCatch
                 } catch (\Exception $e) {
                     restore_error_handler();
                     $this->getLogger()->critical($e);
@@ -91,12 +105,25 @@ class Escaper
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
             } else {
-                $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+                $result = htmlspecialchars($data, $this->htmlSpecialCharsFlag, 'UTF-8', false);
             }
         } else {
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Used to replace characters, that mb_convert_encoding will not process
+     *
+     * @param string $data
+     * @return string|null
+     */
+    private function prepareUnescapedCharacters(string $data): ?string
+    {
+        $patterns = ['/\&/u'];
+        $replacements = ['&amp;'];
+        return \preg_replace($patterns, $replacements, $data);
     }
 
     /**
@@ -197,7 +224,7 @@ class Escaper
         if ($escapeSingleQuote) {
             return $this->getEscaper()->escapeHtmlAttr((string) $string);
         }
-        return htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
+        return htmlspecialchars((string)$string, $this->htmlSpecialCharsFlag, 'UTF-8', false);
     }
 
     /**
@@ -278,14 +305,13 @@ class Escaper
                 $result[] = $this->escapeJsQuote($item, $quote);
             }
         } else {
-            $result = str_replace($quote, '\\' . $quote, $data);
+            $result = str_replace($quote, '\\' . $quote, (string)$data);
         }
         return $result;
     }
 
     /**
      * Escape xss in urls
-     * Remove `javascript:`, `vbscript:`, `data:` words from url
      *
      * @param string $data
      * @return string
@@ -293,15 +319,33 @@ class Escaper
      */
     public function escapeXssInUrl($data)
     {
-        $pattern = '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:))|'
-            . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
-            . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
-        $result = preg_replace($pattern, ':', $data);
-        return htmlspecialchars($result, ENT_COMPAT | ENT_HTML5 | ENT_HTML401, 'UTF-8', false);
+        return htmlspecialchars(
+            $this->escapeScriptIdentifiers((string)$data),
+            $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
+            'UTF-8',
+            false
+        );
+    }
+
+    /**
+     * Remove `javascript:`, `vbscript:`, `data:` words from the string.
+     *
+     * @param string $data
+     * @return string
+     */
+    private function escapeScriptIdentifiers(string $data): string
+    {
+        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $data) ?: '';
+        if (preg_match(self::$xssFiltrationPattern, $filteredData)) {
+            $filteredData = $this->escapeScriptIdentifiers($filteredData);
+        }
+
+        return $filteredData;
     }
 
     /**
      * Escape quotes inside html attributes
+     *
      * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
      *
      * @param string $data
@@ -314,7 +358,7 @@ class Escaper
         if ($addSlashes === true) {
             $data = addslashes($data);
         }
-        return htmlspecialchars($data, ENT_QUOTES, null, false);
+        return htmlspecialchars($data, $this->htmlSpecialCharsFlag, null, false);
     }
 
     /**
@@ -345,5 +389,28 @@ class Escaper
                 ->get(\Psr\Log\LoggerInterface::class);
         }
         return $this->logger;
+    }
+
+    /**
+     * Filter prohibited tags.
+     *
+     * @param string[] $allowedTags
+     * @return string[]
+     */
+    private function filterProhibitedTags(array $allowedTags): array
+    {
+        $notAllowedTags = array_intersect(
+            array_map('strtolower', $allowedTags),
+            $this->notAllowedTags
+        );
+
+        if (!empty($notAllowedTags)) {
+            $this->getLogger()->critical(
+                'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
+            );
+            $allowedTags = array_diff($allowedTags, $this->notAllowedTags);
+        }
+
+        return $allowedTags;
     }
 }

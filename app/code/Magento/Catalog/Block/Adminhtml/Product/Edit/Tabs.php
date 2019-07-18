@@ -8,13 +8,13 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Accordion;
-use Magento\Backend\Block\Widget\Tabs as WigetTabs;
+use Magento\Backend\Block\Widget\Tabs as WidgetTabs;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Catalog\Helper\Catalog;
 use Magento\Catalog\Helper\Data;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Translate\InlineInterface;
 
@@ -22,7 +22,7 @@ use Magento\Framework\Translate\InlineInterface;
  * Admin product edit tabs
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Tabs extends WigetTabs
+class Tabs extends WidgetTabs
 {
     const BASIC_TAB_GROUP_CODE = 'basic';
 
@@ -65,7 +65,7 @@ class Tabs extends WigetTabs
     protected $_collectionFactory;
 
     /**
-     * @var Manager
+     * @var ModuleManagerInterface
      */
     protected $_moduleManager;
 
@@ -78,7 +78,7 @@ class Tabs extends WigetTabs
      * @param Context $context
      * @param EncoderInterface $jsonEncoder
      * @param Session $authSession
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      * @param CollectionFactory $collectionFactory
      * @param Catalog $helperCatalog
      * @param Data $catalogData
@@ -91,7 +91,7 @@ class Tabs extends WigetTabs
         Context $context,
         EncoderInterface $jsonEncoder,
         Session $authSession,
-        Manager $moduleManager,
+        ModuleManagerInterface $moduleManager,
         CollectionFactory $collectionFactory,
         Catalog $helperCatalog,
         Data $catalogData,
@@ -109,7 +109,7 @@ class Tabs extends WigetTabs
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -119,6 +119,8 @@ class Tabs extends WigetTabs
     }
 
     /**
+     * Get group collection.
+     *
      * @param int $attributeSetId
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection
      */
@@ -131,10 +133,11 @@ class Tabs extends WigetTabs
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _prepareLayout()
     {
@@ -315,6 +318,8 @@ class Tabs extends WigetTabs
     }
 
     /**
+     * Set attribute tab block.
+     *
      * @param string $attributeTabBlock
      * @return $this
      */
@@ -337,6 +342,8 @@ class Tabs extends WigetTabs
     }
 
     /**
+     * Get accordion.
+     *
      * @param string $parentTab
      * @return string
      */

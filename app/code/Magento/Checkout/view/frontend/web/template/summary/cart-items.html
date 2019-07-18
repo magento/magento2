@@ -6,7 +6,7 @@
 -->
 <div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': isItemsBlockExpanded()}}">
     <div class="title" data-role="title">
-        <strong role="heading">
+        <strong role="heading" aria-level="1">
             <translate args="maxCartItemsToDisplay" if="maxCartItemsToDisplay < getCartLineItemsCount()"/>
             <translate args="'of'" if="maxCartItemsToDisplay < getCartLineItemsCount()"/>
             <span data-bind="text: getCartLineItemsCount()"></span>

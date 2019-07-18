@@ -107,8 +107,9 @@ class QueueManagement
     }
 
     /**
-     * Mark messages to be deleted if sufficient amount of time passed since last update
      * Delete marked messages
+     *
+     * Mark messages to be deleted if sufficient amount of time passed since last update
      *
      * @return void
      */
@@ -223,7 +224,7 @@ class QueueManagement
     }
 
     /**
-     * In progress message delay befor retry
+     * In progress message delay before retry
      *
      * Indicates how long message will stay in IN PROGRESS status before attempted to retry
      *

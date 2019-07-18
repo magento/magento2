@@ -250,6 +250,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
                 'productCollectionFactory' => $productCollectionFactory,
                 'storeManager' => $this->storeManager,
                 'currencyFactory' => $currencyFactory,
+                'collectionProvider' => null
             ]
         );
         $instance->addFilters($values);

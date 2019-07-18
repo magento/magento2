@@ -447,10 +447,10 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'creditmemo_data' => [
-                    'grand_total' => 64.95,
-                    'base_grand_total' => 64.95,
-                    'tax_amount' => 4.95,
-                    'base_tax_amount' => 4.95,
+                    'grand_total' => 64.94,
+                    'base_grand_total' => 64.94,
+                    'tax_amount' => 4.94,
+                    'base_tax_amount' => 4.94,
                 ],
             ],
         ];

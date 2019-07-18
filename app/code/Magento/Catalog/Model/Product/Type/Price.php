@@ -11,12 +11,14 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Product type price model
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Price
@@ -184,6 +186,8 @@ class Price
     }
 
     /**
+     * Retrieve final price for child product
+     *
      * @param Product $product
      * @param float $productQty
      * @param Product $childProduct
@@ -428,6 +432,8 @@ class Price
     }
 
     /**
+     * Retrieve customer group id from product
+     *
      * @param Product $product
      * @return int
      */
@@ -453,7 +459,7 @@ class Price
             $product->getSpecialPrice(),
             $product->getSpecialFromDate(),
             $product->getSpecialToDate(),
-            $product->getStore()
+            WebsiteInterface::ADMIN_CODE
         );
     }
 
@@ -601,7 +607,7 @@ class Price
             $specialPrice,
             $specialPriceFrom,
             $specialPriceTo,
-            $sId
+            WebsiteInterface::ADMIN_CODE
         );
 
         if ($rulePrice === false) {

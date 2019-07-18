@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\LoginAfterJSMinificationTest" summary="Verify login is successful after JS minification is enabled">
         <variation name="LoginAfterJSMinificationEnabledVariation1" summary="Verify login is successful after JS minification" ticketId="MAGETWO-71416">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1,mftf_migrated:yes</data>
             <data name="configData" xsi:type="string">minify_js_files</data>
             <data name="menuItem" xsi:type="string">Dashboard</data>
             <data name="pageTitle" xsi:type="string">Dashboard</data>

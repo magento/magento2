@@ -6,20 +6,19 @@
 
 use Magento\Framework\View\Element\Template;
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Shipping\Block\Tracking\Popup */
+//phpcs:disable Magento2.Files.LineLength.MaxExceeded
 
 $results = $block->getTrackingInfo();
 ?>
 <div class="page tracking">
-    <?php if (!empty($results)): ?>
-        <?php foreach ($results as $shipId => $result): ?>
-            <?php if ($shipId): ?>
+    <?php if (!empty($results)) : ?>
+        <?php foreach ($results as $shipId => $result) : ?>
+            <?php if ($shipId) : ?>
                 <div class="order subtitle caption"><?= /* @noEscape */ $block->escapeHtml(__('Shipment #')) . $shipId ?></div>
             <?php endif; ?>
-            <?php if (!empty($result)): ?>
-                <?php foreach ($result as $counter => $track): ?>
+            <?php if (!empty($result)) : ?>
+                <?php foreach ($result as $counter => $track) : ?>
                     <div class="table-wrapper">
                         <?php
                             $shipmentBlockIdentifier = $shipId . '.' . $counter;
@@ -27,12 +26,11 @@ $results = $block->getTrackingInfo();
                                 'track' => $track,
                                 'template' => 'Magento_Shipping::tracking/details.phtml',
                                 'storeSupportEmail' => $block->getStoreSupportEmail()
-                            ]
-                        );
+                            ]);
                         ?>
                         <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.details.' . $shipmentBlockIdentifier) ?>
                     </div>
-                    <?php if (is_object($track) && !empty($track->getProgressdetail())): ?>
+                    <?php if (is_object($track) && !empty($track->getProgressdetail())) : ?>
                         <?php
                             $block->addChild('shipping.tracking.progress.' . $shipmentBlockIdentifier, Template::class, [
                                 'track' => $track,
@@ -42,13 +40,13 @@ $results = $block->getTrackingInfo();
                         <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.progress.' . $shipmentBlockIdentifier) ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
-            <?php else: ?>
+            <?php else : ?>
                 <div class="message info empty">
                     <div><?= $block->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
-    <?php else: ?>
+    <?php else : ?>
         <div class="message info empty">
             <div><?= $block->escapeHtml(__('There is no tracking available.')) ?></div>
         </div>

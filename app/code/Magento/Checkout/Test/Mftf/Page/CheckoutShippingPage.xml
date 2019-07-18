@@ -11,5 +11,6 @@
     <page name="CheckoutShippingPage" url="/checkout/#shipping" module="Checkout" area="storefront">
         <section name="CheckoutShippingGuestInfoSection"/>
         <section name="CheckoutShippingSection"/>
+        <section name="StorefrontCheckoutAddressPopupSection"/>
     </page>
 </pages>

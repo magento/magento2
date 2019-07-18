@@ -266,7 +266,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionText The image doesn't exist. Verify and try again.
+     * @expectedExceptionMessage The image doesn't exist. Verify and try again.
      */
     public function testGetWithNonExistingImage()
     {

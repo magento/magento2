@@ -7,6 +7,7 @@ namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register.
@@ -39,7 +40,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Manager */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleManagerInterface */
     private $_moduleManager;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
@@ -274,12 +275,13 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $isNewsletterEnabled
-     * @param $expectedValue
+     * @param boolean $isNewsletterEnabled
+     * @param string $isNewsletterActive
+     * @param boolean $expectedValue
      *
      * @dataProvider isNewsletterEnabledProvider
      */
-    public function testIsNewsletterEnabled($isNewsletterEnabled, $expectedValue)
+    public function testIsNewsletterEnabled($isNewsletterEnabled, $isNewsletterActive, $expectedValue)
     {
         $this->_moduleManager->expects(
             $this->once()
@@ -290,6 +292,17 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($isNewsletterEnabled)
         );
+
+        $this->_scopeConfig->expects(
+            $this->any()
+        )->method(
+            'getValue'
+        )->with(
+            PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE
+        )->will(
+            $this->returnValue($isNewsletterActive)
+        );
+
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 
@@ -298,7 +311,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function isNewsletterEnabledProvider()
     {
-        return [[true, true], [false, false]];
+        return [[true, true, true], [true, false, false], [false, true, false], [false, false, false]];
     }
 
     /**

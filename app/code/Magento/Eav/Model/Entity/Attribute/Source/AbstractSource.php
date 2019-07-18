@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 /**
  * Entity/Attribute/Model - attribute selection source abstract
- *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -65,7 +66,7 @@ abstract class AbstractSource implements
     {
         $options = $this->getAllOptions();
         // Fixed for tax_class_id and custom_design
-        if (sizeof($options) > 0) {
+        if (count($options) > 0) {
             foreach ($options as $option) {
                 if (isset($option['value']) && $option['value'] == $value) {
                     return isset($option['label']) ? $option['label'] : $option['value'];
@@ -73,20 +74,22 @@ abstract class AbstractSource implements
             }
         }
         // End
-        if (isset($options[$value])) {
+        if (is_scalar($value) && isset($options[$value])) {
             return $options[$value];
         }
         return false;
     }
 
     /**
+     * Get option id.
+     *
      * @param string $value
      * @return null|string
      */
     public function getOptionId($value)
     {
         foreach ($this->getAllOptions() as $option) {
-            if (strcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
+            if ($this->mbStrcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
                 return $option['value'];
             }
         }
@@ -163,5 +166,21 @@ abstract class AbstractSource implements
     public function toOptionArray()
     {
         return $this->getAllOptions();
+    }
+
+    /**
+     * Multibyte support strcasecmp function version.
+     *
+     * @param string $str1
+     * @param string $str2
+     * @return int
+     */
+    private function mbStrcasecmp($str1, $str2)
+    {
+        $encoding = mb_internal_encoding();
+        return strcmp(
+            mb_strtoupper($str1, $encoding),
+            mb_strtoupper($str2, $encoding)
+        );
     }
 }

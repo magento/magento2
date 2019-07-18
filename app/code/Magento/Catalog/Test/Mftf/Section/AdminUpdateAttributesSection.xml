@@ -38,4 +38,8 @@
 
         <element name="description" type="input" selector="#description"/>
     </section>
+    <section name="AdminUpdateAttributesWebsiteSection">
+        <element name="website" type="button" selector="#attributes_update_tabs_websites"/>
+        <element name="addProductToWebsite" type="checkbox" selector="#add-products-to-website-content .website-checkbox"/>
+    </section>
 </sections>

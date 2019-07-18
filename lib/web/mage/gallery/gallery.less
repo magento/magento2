@@ -181,8 +181,8 @@
 
 .fotorama__active {
     .fotorama__dot {
-        background-color: @color-orange-red1;
-        border-color: @color-orange-red1;
+        background-color: @active__color;
+        border-color: @active__color;
     }
 }
 
@@ -237,7 +237,7 @@
     &:extend(.fotorama-print-background);
     backface-visibility: hidden;
     background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.25), rgba(64, 64, 64, 0.1));
-    border: 1px solid @color-orange-red1;
+    border: 1px solid @active__color;
     left: 0;
     position: absolute;
     top: 0;
@@ -764,6 +764,7 @@
         max-width: inherit;
         position: absolute;
         top: 0;
+        object-fit: scale-down;
     }
 }
 
@@ -976,12 +977,9 @@
 
 // While first time init
 .gallery-placeholder {
-    .loading-mask {
-        padding: 0 0 50%;
-        position: static;
-    }
-    .loader img {
-        position: absolute;
+    &__image {
+        display: block;
+        margin: auto;
     }
 }
 
@@ -1002,6 +1000,7 @@
         display: block;
     }
 }
+
 .fotorama__product-video--loaded {
     .fotorama__img, .fotorama__img--full {
         display: none !important;

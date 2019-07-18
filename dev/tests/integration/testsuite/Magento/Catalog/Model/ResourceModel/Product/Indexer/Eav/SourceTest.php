@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\_files\MultiselectSourceMock;
 
 /**
  * Class SourceTest
@@ -151,6 +152,52 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         $this->_eavIndexerProcessor->reindexAll();
         $connection = $this->productResource->getConnection();
         $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
+            ->where('entity_id in (?)', [$product1Id, $product2Id])
+            ->where('attribute_id = ?', $attr->getId());
+
+        $result = $connection->fetchAll($select);
+        $this->assertCount(3, $result);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute_with_source_model.php
+     * @magentoDbIsolation disabled
+     */
+    public function testReindexMultiselectAttributeWithSourceModel()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->create(ProductRepositoryInterface::class);
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
+        $attr = $objectManager->get(\Magento\Eav\Model\Config::class)
+           ->getAttribute('catalog_product', 'multiselect_attr_with_source');
+
+        /** @var $sourceModel MultiselectSourceMock */
+        $sourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            MultiselectSourceMock::class
+        );
+        $options = $sourceModel->getAllOptions();
+        $product1Id = $options[0]['value'] * 10;
+        $product2Id = $options[1]['value'] * 10;
+
+        /** @var \Magento\Catalog\Model\Product $product1 **/
+        $product1 = $productRepository->getById($product1Id);
+        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $productRepository->save($product1);
+
+        /** @var \Magento\Catalog\Model\Product $product2 **/
+        $product2 = $productRepository->getById($product2Id);
+        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $productRepository->save($product2);
+
+        $this->_eavIndexerProcessor->reindexAll();
+        $connection = $this->productResource->getConnection();
+        $select = $connection->select()
+            ->from($this->productResource->getTable('catalog_product_index_eav'))
             ->where('entity_id in (?)', [$product1Id, $product2Id])
             ->where('attribute_id = ?', $attr->getId());
 

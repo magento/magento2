@@ -12,9 +12,11 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Class for testing QuoteManagement model
@@ -99,6 +101,33 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuote('test01');
         $this->cartManagement->placeOrder($quote->getId());
+    }
+
+    /**
+     * Tries to create an order using quote with empty customer email.
+     *
+     * Order should not start placing if order validation is failed.
+     *
+     * @magentoDataFixture Magento/Quote/Fixtures/quote_without_customer_email.php
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Email has a wrong format
+     */
+    public function testSubmitWithEmptyCustomerEmail()
+    {
+        $quote = $this->getQuote('test01');
+        $orderManagement = $this->createMock(OrderManagementInterface::class);
+        $orderManagement->expects($this->never())
+            ->method('place');
+        $cartManagement = $this->objectManager->create(
+            CartManagementInterface::class,
+            ['orderManagement' => $orderManagement]
+        );
+
+        try {
+            $cartManagement->placeOrder($quote->getId());
+        } catch (ExpectationFailedException $e) {
+            $this->fail('Place order method was not expected to be called if order validation is failed');
+        }
     }
 
     /**

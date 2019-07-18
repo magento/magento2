@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Allowed locale and currency configuration.
+ */
 class Config implements \Magento\Framework\Locale\ConfigInterface
 {
     /**
@@ -90,6 +93,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'sq_AL', /*Albanian (Albania)*/
         'sr_Cyrl_RS', /*Serbian (Serbia)*/
         'sv_SE', /*Swedish (Sweden)*/
+        'sv_FI', /*Swedish (Finland)*/
         'sw_KE', /*Swahili (Kenya)*/
         'th_TH', /*Thai (Thailand)*/
         'tr_TR', /*Turkish (Turkey)*/

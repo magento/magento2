@@ -44,7 +44,6 @@ class ProductViewTest extends GraphQlAbstract
             attribute_set_id
             country_of_manufacture
             created_at
-            description
             gift_message_available
             id
             categories {
@@ -53,8 +52,7 @@ class ProductViewTest extends GraphQlAbstract
                available_sort_by
                level
             }
-            image
-            image_label
+            image { url, label }
             meta_description
             meta_keyword
             meta_title
@@ -92,6 +90,7 @@ class ProductViewTest extends GraphQlAbstract
                 title
                 required
                 sort_order
+                option_id
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -130,6 +129,26 @@ class ProductViewTest extends GraphQlAbstract
                 }
                 ... on CustomizableRadioOption {
                   radio_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ... on CustomizableCheckboxOption {
+                  checkbox_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                    sort_order
+                  }
+                }
+                ... on CustomizableMultipleOption {
+                  multiple_option: value {
                     option_type_id
                     sku
                     price
@@ -203,18 +222,13 @@ class ProductViewTest extends GraphQlAbstract
                 position
                 sku
             }
-            short_description
             sku
-            small_image {
-                path
-            }
-            small_image_label
+            small_image{ url, label }
+            thumbnail { url, label }
             special_from_date
             special_price
             special_to_date
-            swatch_image
-            thumbnail
-            thumbnail_label
+            swatch_image            
             tier_price
             tier_prices
             {
@@ -287,7 +301,6 @@ QUERY;
      */
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
-        $this->markTestSkipped("Skipped until ticket MAGETWO-90021 is resolved.");
         $productSku = 'simple';
 
         $query = <<<QUERY
@@ -302,11 +315,9 @@ QUERY;
             }
             country_of_manufacture
             created_at
-            description
             gift_message_available
             id
-            image
-            image_label
+            image {url, label}
             meta_description
             meta_keyword
             meta_title
@@ -344,6 +355,7 @@ QUERY;
                 title
                 required
                 sort_order
+                option_id
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -453,16 +465,13 @@ QUERY;
                 position
                 sku
             }
-            short_description
             sku
-            small_image
-            small_image_label
+            small_image { url, label }
             special_from_date
             special_price
             special_to_date
             swatch_image
-            thumbnail
-            thumbnail_label
+            thumbnail { url, label }
             tier_price
             tier_prices
             {
@@ -747,7 +756,7 @@ QUERY;
                         $values = $option->getValues();
                         /** @var \Magento\Catalog\Model\Product\Option\Value $value */
                         $value = current($values);
-                        $findValueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                        $findValueKeyName = $option->getType() . '_option';
                         if ($value->getTitle() === $optionsArray[$findValueKeyName][0]['title']) {
                             $match = true;
                         }
@@ -762,11 +771,12 @@ QUERY;
             $assertionMap = [
                 ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()],
                 ['response_field' => 'title', 'expected_value' => $option->getTitle()],
-                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()]
+                ['response_field' => 'required', 'expected_value' => $option->getIsRequire()],
+                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()]
             ];
 
             if (!empty($option->getValues())) {
-                $valueKeyName = $option->getType() === 'radio' ? 'radio_option' : 'drop_down_option';
+                $valueKeyName = $option->getType() . '_option';
                 $value = current($optionsArray[$valueKeyName]);
                 /** @var \Magento\Catalog\Model\Product\Option\Value $productValue */
                 $productValue = current($option->getValues());
@@ -786,7 +796,7 @@ QUERY;
                         ['response_field' => 'product_sku', 'expected_value' => $option->getProductSku()],
                     ]
                 );
-                $valueKeyName = "";
+
                 if ($option->getType() === 'file') {
                     $valueKeyName = 'file_option';
                     $valueAssertionMap = [
@@ -917,11 +927,9 @@ QUERY;
     {
         $eavAttributes = [
             'url_key',
-            'description',
             'meta_description',
             'meta_keyword',
             'meta_title',
-            'short_description',
             'country_of_manufacture',
             'gift_message_available',
             'news_from_date',

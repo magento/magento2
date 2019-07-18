@@ -5,6 +5,7 @@
  */
 namespace Magento\Deploy\Test\Unit\Service;
 
+use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Service\Bundle;
@@ -220,5 +221,36 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
                 '654321'
             ]
         ];
+    }
+
+    public function testMaxExecutionTimeOptionPassed()
+    {
+        $options = [
+            DeployStaticOptions::MAX_EXECUTION_TIME => 100,
+            DeployStaticOptions::REFRESH_CONTENT_VERSION_ONLY => false,
+            DeployStaticOptions::JOBS_AMOUNT => 3,
+            DeployStaticOptions::STRATEGY => 'compact',
+            DeployStaticOptions::NO_JAVASCRIPT => true,
+            DeployStaticOptions::NO_HTML_MINIFY => true,
+        ];
+
+        $queueMock = $this->createMock(Queue::class);
+        $strategyMock = $this->createMock(CompactDeploy::class);
+        $this->queueFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'logger' => $this->logger,
+                'maxExecTime' => 100,
+                'maxProcesses' => 3,
+                'options' => $options,
+                'deployPackageService' => null
+            ])
+            ->willReturn($queueMock);
+        $this->deployStrategyFactory->expects($this->once())
+            ->method('create')
+            ->with('compact', ['queue' => $queueMock])
+            ->willReturn($strategyMock);
+
+        $this->service->deploy($options);
     }
 }

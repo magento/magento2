@@ -19,6 +19,11 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     protected $valueMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeFormatMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -26,6 +31,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
         $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price($storeManagerMock);
+        $this->localeFormatMock = $this->createMock(\Magento\Framework\Locale\FormatInterface::class);
         $config = [
             [
                 'label' => 'group label 1',
@@ -53,7 +59,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods, []);
         $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\Select(
             $configMock,
-            $priceConfigMock
+            $priceConfigMock,
+            $this->localeFormatMock
         );
     }
 
@@ -69,6 +76,12 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
         $this->valueMock->expects($this->any())->method('getData')->with('values')->will($this->returnValue([$value]));
+        if (isset($value['price'])) {
+            $this->localeFormatMock
+                ->expects($this->once())
+                ->method('getNumber')
+                ->will($this->returnValue($value['price']));
+        }
         $this->assertEquals($expectedResult, $this->validator->isValid($this->valueMock));
     }
 
@@ -117,6 +130,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->with('values')
             ->will($this->returnValue('invalid_data'));
+
         $messages = [
             'option values' => 'Invalid option value',
         ];
@@ -159,6 +173,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
         $this->valueMock->expects($this->any())->method('getData')->with('values')->will($this->returnValue([$value]));
+        $this->localeFormatMock->expects($this->any())->method('getNumber')->will($this->returnValue($price));
         $messages = [
             'option values' => 'Invalid option value',
         ];

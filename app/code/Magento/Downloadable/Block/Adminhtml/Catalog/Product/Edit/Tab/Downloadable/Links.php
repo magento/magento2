@@ -10,6 +10,9 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links
  */
 class Links extends \Magento\Backend\Block\Template
 {
@@ -434,6 +437,8 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Is single store mode
+     *
      * @return bool
      */
     public function isSingleStoreMode()
@@ -442,8 +447,11 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get base currency code
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getBaseCurrencyCode($storeId)
     {
@@ -451,8 +459,11 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get base currency symbol
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getBaseCurrencySymbol($storeId)
     {

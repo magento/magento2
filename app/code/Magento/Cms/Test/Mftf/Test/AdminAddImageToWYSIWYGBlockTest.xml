@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84376"/>
             <skip>
-                <issueId value="MQE-1187" />
+                <issueId value="MC-17232"/>
             </skip>
         </annotations>
         <before>

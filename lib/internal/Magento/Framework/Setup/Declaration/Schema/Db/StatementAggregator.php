@@ -36,7 +36,7 @@ class StatementAggregator
         }
 
         /**
-         * If we add trigger after some specific statement, than we say that statement is final
+         * If we add trigger after some specific statement, then we say that statement is final
          * and can`t be updated anymore. Otherwise trigger can fail.
          *
          * Example: while migrating data from one column to another and another column should be removed,

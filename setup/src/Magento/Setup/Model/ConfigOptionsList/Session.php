@@ -139,7 +139,7 @@ class Session implements ConfigOptionsListInterface
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptions()
@@ -289,7 +289,7 @@ class Session implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -320,7 +320,7 @@ class Session implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -340,7 +340,7 @@ class Session implements ConfigOptionsListInterface
 
         if (isset($options[self::INPUT_KEY_SESSION_REDIS_LOG_LEVEL])) {
             $level = $options[self::INPUT_KEY_SESSION_REDIS_LOG_LEVEL];
-            if (($level < 0) or ($level > 7)) {
+            if (($level < 0) || ($level > 7)) {
                 $errors[] = "Invalid Redis log level '{$level}'. Valid range is 0-7, inclusive.";
             }
         }

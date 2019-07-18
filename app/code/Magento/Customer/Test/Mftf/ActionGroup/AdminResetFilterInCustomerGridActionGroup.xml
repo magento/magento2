@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Reset customers grid filter and to default view -->
+    <actionGroup name="AdminResetFilterInCustomerGrid">
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminCustomerFiltersSection.viewDropdown}}" stepKey="openViewBookmarksTab"/>
+        <click selector="{{AdminCustomerFiltersSection.viewBookmark('Default View')}}" stepKey="resetToDefaultGridView"/>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
+        <see selector="{{AdminCustomerFiltersSection.viewDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+    </actionGroup>
+</actionGroups>

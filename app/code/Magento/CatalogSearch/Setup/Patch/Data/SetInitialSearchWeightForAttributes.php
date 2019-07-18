@@ -13,8 +13,8 @@ use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 /**
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVersionInterface
 {

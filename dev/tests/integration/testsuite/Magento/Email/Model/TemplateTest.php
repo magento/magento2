@@ -315,25 +315,25 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_template"}}',
-                '<b>customer_create_account_email_template template from Vendor/custom_theme</b>',
+                '<strong>customer_create_account_email_template template from Vendor/custom_theme</strong>',
             ],
             'Template from parent theme - frontend' => [
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_confirmation_template"}}',
-                '<b>customer_create_account_email_confirmation_template template from Vendor/default</b>',
+                '<strong>customer_create_account_email_confirmation_template template from Vendor/default</strong',
             ],
             'Template from grandparent theme - frontend' => [
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_confirmed_template"}}',
-                '<b>customer_create_account_email_confirmed_template template from Magento/default</b>',
+                '<strong>customer_create_account_email_confirmed_template template from Magento/default</strong',
             ],
             'Template from grandparent theme - adminhtml' => [
                 BackendFrontNameResolver::AREA_CODE,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="catalog/productalert_cron/error_email_template"}}',
-                '<b>catalog_productalert_cron_error_email_template template from Magento/default</b>',
+                '<strong>catalog_productalert_cron_error_email_template template from Magento/default</strong',
                 null,
                 null,
                 true,
@@ -703,8 +703,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $testTemplateVariables = '{"var data.name":"Sender Name","var data.email":"Sender Email"}';
         $this->model->setOrigTemplateVariables($testTemplateVariables);
         $variablesOptionArray = $this->model->getVariablesOptionArray(true);
-        $this->assertEquals('Template Variables', $variablesOptionArray['label']->getText());
-        $this->assertEquals($this->model->getVariablesOptionArray(), $variablesOptionArray['value']);
+        $this->assertEquals('Template Variables', $variablesOptionArray[0]['label']->getText());
+        $this->assertEquals($this->model->getVariablesOptionArray(), $variablesOptionArray[0]['value']);
     }
 
     /**

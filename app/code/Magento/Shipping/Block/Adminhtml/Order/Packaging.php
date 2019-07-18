@@ -74,6 +74,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Configuration for popup window for packaging
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getConfigDataJson()
     {
@@ -86,7 +87,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $itemsName = [];
         $itemsWeight = [];
         $itemsProductId = [];
-
+        $itemsOrderItemId = [];
         if ($shipmentId) {
             $urlParams['shipment_id'] = $shipmentId;
             $createLabelUrl = $this->getUrl('adminhtml/order_shipment/createLabel', $urlParams);

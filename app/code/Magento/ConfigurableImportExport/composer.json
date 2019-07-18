@@ -11,7 +11,8 @@
         "magento/module-catalog-import-export": "*",
         "magento/module-configurable-product": "*",
         "magento/module-eav": "*",
-        "magento/module-import-export": "*"
+        "magento/module-import-export": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [

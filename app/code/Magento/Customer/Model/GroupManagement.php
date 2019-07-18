@@ -15,7 +15,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -170,7 +169,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
             ->create();
         $groupNameSortOrder = $this->sortOrderBuilder
             ->setField('customer_group_code')
-            ->setDirection(Collection::SORT_ORDER_ASC)
+            ->setAscendingDirection()
             ->create();
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilters($notLoggedInFilter)

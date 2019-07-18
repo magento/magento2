@@ -160,7 +160,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Do request to shipment
+     * Do request to shipment.
+     *
      * Implementation must be in overridden method
      *
      * @param Request $request
@@ -173,7 +174,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Do return of shipment
+     * Do return of shipment.
+     *
      * Implementation must be in overridden method
      *
      * @param Request $request
@@ -275,6 +277,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
+     * Validate request for available ship countries.
+     *
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -400,6 +404,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
+     * Allows free shipping when all product items have free shipping.
+     *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -531,10 +537,10 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Sets the number of boxes for shipping
+     * Gets the average weight of each box available for shipping
      *
-     * @param int $weight in some measure
-     * @return int
+     * @param float $weight in some measure
+     * @return float
      */
     public function getTotalNumOfBoxes($weight)
     {
@@ -545,7 +551,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         $maxPackageWeight = $this->getConfigData('max_package_weight');
         if ($weight > $maxPackageWeight && $maxPackageWeight != 0) {
             $this->_numBoxes = ceil($weight / $maxPackageWeight);
-            $weight = $weight / $this->_numBoxes;
+            $weight = (float)$weight / $this->_numBoxes;
         }
 
         return $weight;
@@ -671,7 +677,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Recursive replace sensitive xml nodes values by specified mask
+     * Recursive replace sensitive xml nodes values by specified mask.
+     *
      * @param \SimpleXMLElement $xml
      * @return void
      */
