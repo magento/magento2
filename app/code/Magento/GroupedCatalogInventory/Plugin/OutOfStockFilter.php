@@ -51,7 +51,7 @@ class OutOfStockFilter
         if (is_array($result) && !empty($result) && !$buyRequest->getData('super_group')) {
             foreach ($result as $index => $cartItem) {
                 $productStockStatus = $this->stockRegistry->getProductStockStatus($cartItem->getId());
-                if ($productStockStatus === StockStatusInterface::STATUS_OUT_OF_STOCK) {
+                if ($productStockStatus == StockStatusInterface::STATUS_OUT_OF_STOCK) {
                     unset($result[$index]);
                 }
             }
