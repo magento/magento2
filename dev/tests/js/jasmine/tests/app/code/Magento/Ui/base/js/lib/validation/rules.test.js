@@ -63,7 +63,25 @@ define([
 
                 expect(rules['validate-number'].handler(value)).toBe(true);
             });
+            
+            it('Check on space', function () {
+                var value = '10 000';
 
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+            
+            it('Check on formatted float (For International price)', function () {
+                var value = '10.000,00';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on formatted float (For International price)', function () {
+                var value = "10'000.00";
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+            
             it('Check on not a number', function () {
                 var value = 'string';
 
