@@ -164,7 +164,7 @@ class FieldsFilter
             }
         } else {
             if (isset($responseArray['total_count']) && $responseArray['total_count'] > 0) {
-                if(isset($responseArray['items'])) {
+                if (isset($responseArray['items'])) {
                     foreach ($responseArray['items'] as $key => $itemarray) {
                         $arrayIntersect[] = $this->recursiveArrayIntersectKey($itemarray, $filter);
                     }
