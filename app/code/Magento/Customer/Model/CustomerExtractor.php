@@ -80,7 +80,7 @@ class CustomerExtractor
         $customerData = $customerForm->compactData($customerData);
 
         $allowedAttributes = $customerForm->getAllowedAttributes();
-        $isGroupIdEmpty = isset($allowedAttributes['group_id']);
+        $isGroupIdEmpty = !isset($allowedAttributes['group_id']);
 
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
