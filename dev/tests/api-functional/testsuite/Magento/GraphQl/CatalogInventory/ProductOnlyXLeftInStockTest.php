@@ -9,6 +9,9 @@ namespace Magento\GraphQl\CatalogInventory;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test for the product only x left in stock
+ */
 class ProductOnlyXLeftInStockTest extends GraphQlAbstract
 {
     /**

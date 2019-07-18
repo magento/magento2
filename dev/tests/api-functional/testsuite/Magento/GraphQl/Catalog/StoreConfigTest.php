@@ -58,4 +58,3 @@ QUERY;
         $this->assertEquals('asc', $response['storeConfig']['catalog_default_sort_by']);
     }
 }
-

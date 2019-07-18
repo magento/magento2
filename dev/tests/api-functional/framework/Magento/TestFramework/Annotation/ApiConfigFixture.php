@@ -134,9 +134,8 @@ class ApiConfigFixture extends ConfigFixture
     /**
      * Check if config exist in the database
      *
-     * @param string $configPath
-     * @param $originalValue
-     * @param string|null $storeCode
+     * @param string        $configPath
+     * @param string|null   $storeCode
      */
     private function checkIfValueExist(string $configPath, string $storeCode = null): bool
     {
@@ -147,7 +146,8 @@ class ApiConfigFixture extends ConfigFixture
 
     /**
      * Returns the store ID by the store code
-     * @param string $storeCode
+     *
+     * @param  string $storeCode
      * @return int
      */
     private function getStoreIdByCode(string $storeCode): int
