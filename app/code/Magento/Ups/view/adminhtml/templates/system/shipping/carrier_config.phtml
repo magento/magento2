@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $upsModel \Magento\Ups\Helper\Config */
 /** @var $block \Magento\Ups\Block\Backend\System\CarrierConfig */
 $upsCarrierConfig = $block->getCarrierConfig();
@@ -87,7 +85,7 @@ require(["prototype"], function(){
             this.storedOriginShipment = '<?= /* @noEscape */ $storedOriginShipment ?>';
             this.storedFreeShipment = '<?= /* @noEscape */ $storedFreeShipment ?>';
             this.storedUpsType = '<?= /* @noEscape */ $storedUpsType ?>';
-            <?php /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */ $jsonHelper = $this->helper('Magento\Framework\Json\Helper\Data'); ?>
+            <?php /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */ $jsonHelper = $this->helper(\Magento\Framework\Json\Helper\Data::class); ?>
             this.storedAllowedMethods = <?= /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
             this.originShipmentObj = <?= /* @noEscape */ $jsonHelper->jsonEncode($orShipArr) ?>;
             this.originShipmentObj['default'] = <?= /* @noEscape */ $jsonHelper->jsonEncode($defShipArr) ?>;
