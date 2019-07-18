@@ -145,7 +145,7 @@ define([
                         }
                     }, delay);
 
-                    if (!formPopUpState.isVisible()) {
+                    if (!formPopUpState.isVisible() && $('#shipping').is(':visible')) {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
                             self.validateFields();
