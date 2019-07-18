@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Exception;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -77,6 +78,37 @@ class PlaceOrderTest extends GraphQlAbstract
     }
 
     /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testPlaceOrderIfCartIdIsEmpty()
+    {
+        $maskedQuoteId = '';
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testPlaceOrderIfCartIdIsMissed()
+    {
+        $query = <<<QUERY
+mutation {
+  placeOrder(input: {}) {
+    order {
+      order_id
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
@@ -86,6 +118,9 @@ class PlaceOrderTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Guest email for cart is missing.
      */
     public function testPlaceOrderWithNoEmail()
     {
@@ -93,7 +128,6 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $query = $this->getQuery($maskedQuoteId);
 
-        self::expectExceptionMessage("Guest email for cart is missing. Please enter");
         $this->graphQlMutation($query);
     }
 

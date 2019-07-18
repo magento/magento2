@@ -104,7 +104,7 @@
         <executeJS function="jQuery('.zoid-component-frame.zoid-visible').attr('id', 'myIframe')" stepKey="clickOrderLink"/>
         <!--switch to iframe of PayPal group button-->
         <comment userInput="switch to iframe of PayPal group button" stepKey="commentSwitchToIframe"/>
-        <switchToIframe userInput="myIframe" stepKey="clickPrintOrderLink"/>
+        <switchToIFrame userInput="myIframe" stepKey="clickPrintOrderLink"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="waitForPayPalBtn"/>
         <seeElement selector="{{PayPalButtonOnStorefront.label(PayPalLabel.credit)}}{{PayPalButtonOnStorefront.size(PayPalSize.medium)}}" stepKey="seeButtonInMediumSize"/>
         <seeElement selector="{{PayPalButtonOnStorefront.label(PayPalLabel.credit)}}{{PayPalButtonOnStorefront.shape(PayPalShape.pill)}}" stepKey="seeButtonInPillShape"/>

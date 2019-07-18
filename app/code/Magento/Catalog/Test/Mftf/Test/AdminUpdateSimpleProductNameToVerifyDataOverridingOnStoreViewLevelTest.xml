@@ -52,9 +52,14 @@
 
         <!-- Assign simple product to created store view -->
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="clickCategoryStoreViewDropdownToggle"/>
+        <waitForPageLoad stepKey="waitForStoreViewDropdown"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(customStoreFR.name)}}" stepKey="waitForStoreViewOption"/>
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(customStoreFR.name)}}" stepKey="selectCategoryStoreViewOption"/>
+        <waitForPageLoad stepKey="waitForAcceptModal"/>
+        <waitForElementVisible selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="waitForAcceptButton"/>
         <click selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="clickAcceptButton"/>
         <waitForPageLoad stepKey="waitForThePageToLoad"/>
+        <waitForElementNotVisible selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="waitForAcceptButtonGone"/>
         <uncheckOption selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckProductStatus"/>
 
         <!-- Update default simple product with name -->

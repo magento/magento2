@@ -12,7 +12,7 @@
         <var key="product" entityType="product" entityKey="id"/>
         <var key="customer_email" entityType="customer" entityKey="email"/>
         <var key="customer_password" entityType="customer" entityKey="password"/>
-        <data key="shareInfo_emails" entityType="customer" >JohnDoe123456789@example.com,JohnDoe987654321@example.com,JohnDoe123456abc@example.com</data>
-        <data key="shareInfo_message" entityType="customer">Sharing message.</data>
+        <data key="shareInfo_emails">JohnDoe123456789@example.com,JohnDoe987654321@example.com,JohnDoe123456abc@example.com</data>
+        <data key="shareInfo_message">Sharing message.</data>
     </entity>
 </entities>

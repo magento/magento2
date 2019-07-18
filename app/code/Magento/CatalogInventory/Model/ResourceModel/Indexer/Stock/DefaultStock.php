@@ -292,6 +292,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function _updateIndex($entityIds)
     {
+        $this->deleteOldRecords($entityIds);
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
         $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds, true);
@@ -314,7 +315,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             }
         }
 
-        $this->deleteOldRecords($entityIds);
         $this->_updateIndexTable($data);
 
         return $this;
@@ -322,6 +322,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
     /**
      * Delete records by their ids from index table
+     *
      * Used to clean table before re-indexation
      *
      * @param array $ids
@@ -366,6 +367,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     }
 
     /**
+     * Get status expression
+     *
      * @param AdapterInterface $connection
      * @param bool $isAggregate
      * @return mixed
@@ -391,6 +394,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     }
 
     /**
+     * Get stock configuration
+     *
      * @return StockConfigurationInterface
      *
      * @deprecated 100.1.0
@@ -406,6 +411,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     }
 
     /**
+     * Get query processor composite
+     *
      * @return QueryProcessorComposite
      */
     private function getQueryProcessorComposite()

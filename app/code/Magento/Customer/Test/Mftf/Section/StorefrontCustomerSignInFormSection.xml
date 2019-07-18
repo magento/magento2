@@ -13,6 +13,7 @@
         <element name="passwordField" type="input" selector="#pass"/>
         <element name="signInAccountButton" type="button" selector="#send2" timeout="30"/>
         <element name="forgotPasswordLink" type="button" selector=".action.remind" timeout="10"/>
+        <element name="customerLoginBlock" type="text" selector=".login-container .block.block-customer-login"/>
     </section>
     <section name="StorefrontCustomerSignInPopupFormSection">
         <element name="errorMessage" type="input" selector="[data-ui-id='checkout-cart-validationmessages-message-error']"/>
