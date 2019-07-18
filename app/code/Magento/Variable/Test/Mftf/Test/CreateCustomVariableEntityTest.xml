@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateCustomVariableEntityTest">
+        <annotations>
+            <features value="Variable"/>
+            <stories value="Create Custom Variable."/>
+            <title value="Create Custom Variable."/>
+            <description value="Test for creating a custom variable."/>
+            <severity value="MAJOR"/>
+            <group value="variable"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminResetGridFilterActionGroup" stepKey="resetVariablesGrid"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateToNewVariablePageActionGroup" stepKey="goToNewVariableAdminPage"/>
+        <actionGroup ref="AdminFillFormCustomVariableActionGroup" stepKey="fillInCustomVariableData"/>
+        <actionGroup ref="AdminClickMainButtonActionGroup" stepKey="clickSaveCustomVariable">
+            <argument name="button" value="{{AdminMainActionsSection.save}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the custom variable."/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterGridActionGroup" stepKey="filterVariablesGridByNewVariableCode" >
+            <argument name="field" value="{{AdminVariablesFilterSection.codeFilter}}"/>
+            <argument name="value" value="{{customVariable.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterGridActionGroup" stepKey="filterVariablesGridByNewVariableName" >
+            <argument name="field" value="{{AdminVariablesFilterSection.nameFilter}}"/>
+            <argument name="value" value="{{customVariable.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertValueInAdminGridActionGroup" stepKey="seeNewVariableInGrid">
+            <argument name="value" value="{{customVariable.code}}"/>
+        </actionGroup>
+    </test>
+</tests>
