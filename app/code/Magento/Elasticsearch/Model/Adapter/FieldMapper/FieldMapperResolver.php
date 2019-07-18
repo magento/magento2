@@ -9,6 +9,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 
+/**
+ * Field Mapper resolver.
+ */
 class FieldMapperResolver implements FieldMapperInterface
 {
     /**
@@ -43,7 +46,7 @@ class FieldMapperResolver implements FieldMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFieldName($attributeCode, $context = [])
     {
@@ -52,7 +55,7 @@ class FieldMapperResolver implements FieldMapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAllAttributesTypes($context = [])
     {
@@ -71,6 +74,7 @@ class FieldMapperResolver implements FieldMapperInterface
     {
         if (empty($this->fieldMapperEntity[$entityType])) {
             if (empty($entityType)) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception(
                     'No entity type given'
                 );
