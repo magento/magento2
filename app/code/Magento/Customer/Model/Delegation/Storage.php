@@ -19,6 +19,7 @@ use Magento\Customer\Model\Session\Proxy as SessionProxy;
 use Magento\Customer\Model\Delegation\Data\NewOperationFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -134,9 +135,22 @@ class Storage
                 );
                 $addressData['region'] = $region;
             }
-            $addresses[] = $this->addressFactory->create(
+
+            $customAttributes = [];
+            if (!empty($addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])) {
+                $customAttributes = $addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES];
+                unset($addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]);
+            }
+
+            $address = $this->addressFactory->create(
                 ['data' => $addressData]
             );
+
+            foreach ($customAttributes as $attributeCode => $attributeValue) {
+                $address->setCustomAttribute($attributeCode, $attributeValue);
+            }
+
+            $addresses[] = $address;
         }
         $customerData = $serialized['customer'];
         $customerData['addresses'] = $addresses;
