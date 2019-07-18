@@ -10,6 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="NoOptionAvailableToConfigureDisabledProductTest">
         <annotations>
+            <stories value="Disabled Product"/>
             <title value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
             <description value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
             <severity value="AVERAGE"/>
