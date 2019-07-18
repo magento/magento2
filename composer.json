@@ -79,14 +79,15 @@
         "zendframework/zend-text": "^2.6.0",
         "zendframework/zend-uri": "^2.5.1",
         "zendframework/zend-validator": "^2.6.0",
-        "zendframework/zend-view": "~2.10.0"
+        "zendframework/zend-view": "~2.10.0",
+        "guzzlehttp/guzzle": "^6.3.3"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
         "friendsofphp/php-cs-fixer": "~2.13.0",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "~1.0.0",
-        "magento/magento2-functional-testing-framework": "~2.4.0",
+        "magento/magento2-functional-testing-framework": "~2.4.1",
         "pdepend/pdepend": "2.5.2",
         "phpmd/phpmd": "@stable",
         "phpunit/phpunit": "~6.5.0",
@@ -107,6 +108,7 @@
         "magento/module-authorization": "*",
         "magento/module-authorizenet": "*",
         "magento/module-authorizenet-acceptjs": "*",
+        "magento/module-authorizenet-cardinal": "*",
         "magento/module-authorizenet-graph-ql": "*",
         "magento/module-advanced-search": "*",
         "magento/module-backend": "*",
@@ -117,6 +119,7 @@
         "magento/module-bundle-import-export": "*",
         "magento/module-cache-invalidate": "*",
         "magento/module-captcha": "*",
+        "magento/module-cardinal-commerce": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-analytics": "*",
         "magento/module-catalog-import-export": "*",
