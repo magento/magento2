@@ -169,7 +169,7 @@ class FieldsFilter
                         $responseArray["items"][$key] = $this->recursiveArrayIntersectKey($itemarray, $filter);
                     }
                 }
-               $arrayIntersect = $responseArray;
+                $arrayIntersect = $responseArray;
             } else {
                 $arrayIntersect = $this->recursiveArrayIntersectKey($responseArray, $filter);
             }
