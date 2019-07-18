@@ -9,14 +9,13 @@ namespace Magento\PaypalGraphQl\Model;
 
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
+use Magento\Paypal\Model\Config;
 
 /**
- * Get payment additional data for Paypal Express payment
+ * Get payment additional data for Payflow pro payment
  */
-class PaypalExpressAdditionalDataProvider implements AdditionalDataProviderInterface
+class PayflowProAdditionalDataProvider implements AdditionalDataProviderInterface
 {
-
-    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data';
 
     /**
      * @var ArrayManager
@@ -40,8 +39,9 @@ class PaypalExpressAdditionalDataProvider implements AdditionalDataProviderInter
      */
     public function getData(array $args): array
     {
-        $additionalData = $this->arrayManager->get(self::PATH_ADDITIONAL_DATA, $args) ?? [];
-
-        return $additionalData;
+        if (isset($args[Config::METHOD_PAYFLOWPRO])) {
+            return $args[Config::METHOD_PAYFLOWPRO];
+        }
+        return [];
     }
 }

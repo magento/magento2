@@ -23,5 +23,12 @@
             <xs:element minOccurs="1" name="magento_code"/>
             <xs:element minOccurs="1" name="signifyd_code"/>
         </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    Element's unique identifier.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 </xs:schema>

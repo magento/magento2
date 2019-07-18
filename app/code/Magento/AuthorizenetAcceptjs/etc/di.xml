@@ -188,10 +188,15 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="CloseCaptureTransactionHandler" type="Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler">
+        <arguments>
+            <argument name="closeTransaction" xsi:type="boolean">false</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="AuthorizenetAcceptjsCaptureTransactionHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="close_parent_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseParentTransactionHandler</item>
+                <item name="close_transaction" xsi:type="string">CloseCaptureTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>
