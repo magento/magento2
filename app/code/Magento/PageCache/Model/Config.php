@@ -208,6 +208,7 @@ class Config
      *  "127.0.0.1";
      *  "127.0.0.2";
      * }
+     *
      * @return mixed|null|string
      * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
