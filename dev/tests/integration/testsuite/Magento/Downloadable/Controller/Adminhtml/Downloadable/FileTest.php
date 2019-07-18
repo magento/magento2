@@ -117,23 +117,35 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
+     * @dataProvider uploadWrongUploadTypeDataProvider
      * @return void
      */
-    public function testUploadWrongUploadType(): void
+    public function testUploadWrongUploadType($postData): void
     {
-        $postData = [
-            'type' => [
-                'tmp_name' => 'test.txt',
-                'name' => 'result.txt',
-            ],
-        ];
         $this->getRequest()->setPostValue($postData);
-
         $this->getRequest()->setMethod('POST');
+
         $this->dispatch('backend/admin/downloadable_file/upload');
+
         $body = $this->getResponse()->getBody();
         $result = $this->jsonSerializer->unserialize($body);
         $this->assertEquals('Upload type can not be determined.', $result['error']);
         $this->assertEquals(0, $result['errorcode']);
+    }
+
+    public function uploadWrongUploadTypeDataProvider(): array
+    {
+        return [
+            [
+                ['type' => 'test'],
+            ],
+            [
+                [
+                    'type' => [
+                        'type1' => 'test',
+                    ],
+                ],
+            ],
+        ];
     }
 }
