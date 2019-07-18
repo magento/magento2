@@ -35,15 +35,14 @@ class ValidateCustomerData
      * Validate customer data
      *
      * @param array $customerData
-     * @param bool $addRequiredAttributes
      *
      * @return void
      *
      * @throws GraphQlInputException
      */
-    public function execute(array $customerData, $addRequiredAttributes = false): void
+    public function execute(array $customerData): void
     {
-        $attributes = $this->getAllowedCustomerAttributes->execute(array_keys($customerData), $addRequiredAttributes);
+        $attributes = $this->getAllowedCustomerAttributes->execute(array_keys($customerData));
         $errorInput = [];
 
         foreach ($attributes as $attributeInfo) {

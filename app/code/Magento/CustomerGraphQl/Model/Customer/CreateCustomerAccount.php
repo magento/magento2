@@ -13,6 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -51,6 +52,11 @@ class CreateCustomerAccount
     private $validateCustomerData;
 
     /**
+     * @var DataObjectProcessor
+     */
+    private $dataObjectProcessor;
+
+    /**
      * CreateCustomerAccount constructor.
      *
      * @param DataObjectHelper $dataObjectHelper
@@ -58,6 +64,7 @@ class CreateCustomerAccount
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $accountManagement
      * @param ChangeSubscriptionStatus $changeSubscriptionStatus
+     * @param DataObjectProcessor $dataObjectProcessor
      * @param ValidateCustomerData $validateCustomerData
      */
     public function __construct(
@@ -66,6 +73,7 @@ class CreateCustomerAccount
         StoreManagerInterface $storeManager,
         AccountManagementInterface $accountManagement,
         ChangeSubscriptionStatus $changeSubscriptionStatus,
+        DataObjectProcessor $dataObjectProcessor,
         ValidateCustomerData $validateCustomerData
     ) {
         $this->dataObjectHelper = $dataObjectHelper;
@@ -74,6 +82,7 @@ class CreateCustomerAccount
         $this->storeManager = $storeManager;
         $this->changeSubscriptionStatus = $changeSubscriptionStatus;
         $this->validateCustomerData = $validateCustomerData;
+        $this->dataObjectProcessor = $dataObjectProcessor;
     }
 
     /**
@@ -106,8 +115,16 @@ class CreateCustomerAccount
      */
     private function createAccount(array $data): CustomerInterface
     {
-        $this->validateCustomerData->execute($data, true);
         $customerDataObject = $this->customerFactory->create();
+        /**
+         * Add required attributes for customer entity
+         */
+        $requiredDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
+            $customerDataObject,
+            CustomerInterface::class
+        );
+        $data = array_merge($requiredDataAttributes, $data);
+        $this->validateCustomerData->execute($data);
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
             $data,

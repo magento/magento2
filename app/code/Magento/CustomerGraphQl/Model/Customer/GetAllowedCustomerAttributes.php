@@ -66,27 +66,13 @@ class GetAllowedCustomerAttributes
      * Get allowed customer attributes
      *
      * @param array $attributeKeys
-     * @param bool $addRequiredAttributes
      *
      * @throws GraphQlInputException
      *
      * @return AbstractAttribute[]
      */
-    public function execute($attributeKeys, $addRequiredAttributes = false): array
+    public function execute($attributeKeys): array
     {
-        /**
-         * Add required attributes for customer entity to passed attribute keys
-         */
-        if ($addRequiredAttributes) {
-            /** @var CustomerInterface $customerDataDummy */
-            $customerDataDummy = $this->customerDataFactory->create();
-            $requiredDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
-                $customerDataDummy,
-                CustomerInterface::class
-            );
-            $attributeKeys = array_merge($attributeKeys, array_keys($requiredDataAttributes));
-        }
-        
         $this->searchCriteriaBuilder->addFilter('attribute_code', $attributeKeys, 'in');
         $searchCriteria = $this->searchCriteriaBuilder->create();
         try {
