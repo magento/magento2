@@ -246,14 +246,19 @@ define([
          * Set shipping information handler
          */
         setShippingInformation: function () {
-            var checkoutProvider = registry.get('checkoutProvider');
             if (this.validateShippingInformation()) {
                 quote.billingAddress(null);
                 checkoutDataResolver.resolveBillingAddress();
-                checkoutProvider.set(
-                    'shippingAddress',
-                    $.extend(true, {}, checkoutProvider.get('shippingAddress'), quote.shippingAddress())
-                );
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    var shippingAddressData = checkoutData.getShippingAddressFromData();
+
+                    if (shippingAddressData) {
+                        checkoutProvider.set(
+                            'shippingAddress',
+                            $.extend(true, {}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        );
+                    }
+                });
                 setShippingInformationAction().done(
                     function () {
                         stepNavigator.next();
