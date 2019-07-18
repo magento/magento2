@@ -163,7 +163,16 @@ class FieldsFilter
                 $arrayIntersect[$key] = $this->recursiveArrayIntersectKey($item, $filter);
             }
         } else {
-            $arrayIntersect = $this->recursiveArrayIntersectKey($responseArray, $filter);
+            if (isset($responseArray['total_count']) && $responseArray['total_count'] > 0) {
+                if(isset($responseArray['items'])) {
+                    foreach ($responseArray['items'] as $key => $itemarray) {
+                        $arrayIntersect[] = $this->recursiveArrayIntersectKey($itemarray, $filter);
+                    }
+                }
+                return $arrayIntersect;
+            } else {
+                $arrayIntersect = $this->recursiveArrayIntersectKey($responseArray, $filter);
+            }
         }
         return $arrayIntersect;
     }
