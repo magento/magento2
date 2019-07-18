@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateDownloadableProductWithLinkTest">
+    <test name="AdminCreateDownloadableProductWithDefaultSetLinksTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="Create Downloadable Product"/>
