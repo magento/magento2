@@ -10,8 +10,10 @@
 <div class="admin__field field-apply-coupon-code">
     <label class="admin__field-label"><span><?= $block->escapeHtml(__('Apply Coupon Code')) ?></span></label>
     <div class="admin__field-control">
+        <?php if (!$block->getCouponCode()) : ?>
         <input type="text" class="admin__control-text" id="coupons:code" value="" name="coupon_code" />
-        <?= $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
+            <?= $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
+        <?php endif; ?>
         <?php if ($block->getCouponCode()) : ?>
         <p class="added-coupon-code">
             <span><?= $block->escapeHtml($block->getCouponCode()) ?></span>

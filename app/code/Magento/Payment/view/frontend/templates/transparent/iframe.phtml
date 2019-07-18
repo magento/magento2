@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Payment\Block\Transparent\Iframe $block */
 $params = $block->getParams();
 ?>
 <html>
     <head>
         <script>
-        <?php if (isset($params['redirect'])): ?>
+        <?php if (isset($params['redirect'])) : ?>
             window.location="<?= $block->escapeUrl($params['redirect']) ?>";
-        <?php elseif (isset($params['redirect_parent'])): ?>
+        <?php elseif (isset($params['redirect_parent'])) : ?>
             var require = window.top.require;
             require(
                 [
@@ -26,7 +24,7 @@ $params = $block->getParams();
                     parent.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
                 }
             );
-        <?php elseif (isset($params['error_msg'])): ?>
+        <?php elseif (isset($params['error_msg'])) : ?>
             var require = window.top.require;
             require(
                 [
@@ -44,7 +42,7 @@ $params = $block->getParams();
                     });
                 }
             );
-        <?php elseif (isset($params['multishipping'])): ?>
+        <?php elseif (isset($params['multishipping'])) : ?>
             var require = window.top.require;
             require(
                 [
@@ -56,9 +54,9 @@ $params = $block->getParams();
                     $(parent.document).find('#multishipping-billing-form').submit();
                 }
             );
-        <?php elseif (isset($params['order_success'])): ?>
+        <?php elseif (isset($params['order_success'])) : ?>
             window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
-        <?php else: ?>
+        <?php else : ?>
             var require = window.top.require;
             require(
                 [
