@@ -11,6 +11,7 @@
     <test name="CheckCurrentCategoryIsHighlightedAndProductsDisplayed">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Category"/>
             <title value="Сheck that current category is highlighted and all products displayed for it"/>
             <description value="Сheck that current category is highlighted and all products displayed for it"/>
             <severity value="MAJOR"/>
