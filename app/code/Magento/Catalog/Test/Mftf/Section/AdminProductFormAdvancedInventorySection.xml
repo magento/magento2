@@ -18,7 +18,7 @@
         <element name="qtyIncrementsUseConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_qty_increments]']"/>
         <element name="doneButton" type="button" selector="//aside[contains(@class,'product_form_product_form_advanced_inventory_modal')]//button[contains(@data-role,'action')]" timeout="5"/>
         <element name="useConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_manage_stock]']"/>
-        <element name="manageStock" type="select" selector="//*[@name='product[stock_data][manage_stock]']"/>
+        <element name="manageStock" type="select" selector="//*[@name='product[stock_data][manage_stock]']" timeout="30"/>
         <element name="advancedInventoryCloseButton" type="button" selector=".product_form_product_form_advanced_inventory_modal button.action-close" timeout="30"/>
         <element name="miniQtyConfigSetting" type="checkbox" selector="//*[@name='product[stock_data][use_config_min_sale_qty]']"/>
         <element name="miniQtyAllowedInCart" type="input" selector="//*[@name='product[stock_data][min_sale_qty]']"/>

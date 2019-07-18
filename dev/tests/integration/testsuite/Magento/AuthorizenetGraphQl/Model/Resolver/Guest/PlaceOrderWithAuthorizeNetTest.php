@@ -7,18 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
-use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Quote\Model\Quote\PaymentFactory;
 use PHPUnit\Framework\TestCase;
 use Zend_Http_Response;
 
@@ -27,26 +24,20 @@ use Zend_Http_Response;
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderWithAuthorizeNetTest extends TestCase
 {
-    const CONTENT_TYPE = 'application/json';
-
-    /** @var  ObjectManager */
+    /** @var ObjectManager */
     private $objectManager;
 
-    /** @var  GetMaskedQuoteIdByReservedOrderId */
+    /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
-
-    /** @var GraphQl */
-    private $graphql;
 
     /** @var SerializerInterface */
     private $jsonSerializer;
 
-    /** @var Http */
-    private $request;
+    /** @var GraphQlRequest */
+    private $graphQlRequest;
 
     /** @var ZendClient|MockObject|InvocationMocker */
     private $clientMock;
@@ -54,16 +45,12 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     /** @var Zend_Http_Response */
     protected $responseMock;
 
-    /** @var  PaymentFactory */
-    private $paymentFactory;
-
     protected function setUp() : void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->request = $this->objectManager->get(Http::class);
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
         $this->clientMock = $this->createMock(ZendClient::class);
         $this->responseMock = $this->createMock(Zend_Http_Response::class);
         $this->clientMock->method('request')
@@ -73,9 +60,12 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
         $clientFactoryMock = $this->createMock(ZendClientFactory::class);
         $clientFactoryMock->method('create')
             ->willReturn($this->clientMock);
-        /** @var PaymentDataObjectFactory $paymentFactory */
-        $this->paymentFactory = $this->objectManager->get(PaymentDataObjectFactory::class);
         $this->objectManager->addSharedInstance($clientFactoryMock, ZendClientFactory::class);
+    }
+
+    protected function tearDown()
+    {
+        $this->objectManager->removeSharedInstance(ZendClientFactory::class);
     }
 
     /**
@@ -124,17 +114,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     }
 }
 QUERY;
-        $postData = [
-            'query' => $query,
-            'variables' => null,
-            'operationName' => null
-        ];
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent(json_encode($postData));
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
+
         // phpcs:ignore Magento2.Security.IncludeFile
         $expectedRequest = include __DIR__ . '/../../../_files/request_authorize.php';
         // phpcs:ignore Magento2.Security.IncludeFile
@@ -145,7 +125,7 @@ QUERY;
 
         $this->responseMock->method('getBody')->willReturn(json_encode($authorizeResponse));
 
-        $response = $this->graphql->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->jsonSerializer->unserialize($response->getContent());
 
         $this->assertArrayNotHasKey('errors', $responseData, 'Response has errors');
@@ -165,11 +145,5 @@ QUERY;
             'test_quote',
             $responseData['data']['placeOrder']['order']['order_id']
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->objectManager->removeSharedInstance(ZendClientFactory::class);
-        parent::tearDown();
     }
 }
