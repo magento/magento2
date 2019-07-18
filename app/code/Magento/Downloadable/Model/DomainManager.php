@@ -50,7 +50,7 @@ class DomainManager implements DomainManagerInterface
     /**
      * @inheritdoc
      */
-    public function getEnvDomainWhitelist(): array
+    public function getDomains(): array
     {
         return array_map('strtolower', $this->deploymentConfig->get(self::PARAM_DOWNLOADABLE_DOMAINS) ?? []);
     }
@@ -58,9 +58,9 @@ class DomainManager implements DomainManagerInterface
     /**
      * @inheritdoc
      */
-    public function addEnvDomains($hosts)
+    public function addDomains(array $hosts): void
     {
-        $whitelist = $this->getEnvDomainWhitelist();
+        $whitelist = $this->getDomains();
         foreach (array_map('strtolower', $hosts) as $host) {
             if (!in_array($host, $whitelist)) {
                 array_push($whitelist, $host);
@@ -80,9 +80,9 @@ class DomainManager implements DomainManagerInterface
     /**
      * @inheritdoc
      */
-    public function removeEnvDomains($hosts)
+    public function removeDomains(array $hosts): void
     {
-        $whitelist = $this->getEnvDomainWhitelist();
+        $whitelist = $this->getDomains();
         foreach (array_map('strtolower', $hosts) as $host) {
             if (in_array($host, $whitelist)) {
                 $index = array_search($host, $whitelist);

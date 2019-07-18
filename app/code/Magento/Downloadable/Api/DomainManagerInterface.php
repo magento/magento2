@@ -7,7 +7,7 @@ namespace Magento\Downloadable\Api;
 
 /**
  * Interface DomainManagerInterface
- * Manage downloadable domains whitelist in the environment config.
+ * Manage downloadable domains whitelist.
  */
 interface DomainManagerInterface
 {
@@ -16,7 +16,7 @@ interface DomainManagerInterface
      *
      * @return array
      */
-    public function getEnvDomainWhitelist();
+    public function getDomains(): array;
 
     /**
      * Add host to the whitelist.
@@ -24,7 +24,7 @@ interface DomainManagerInterface
      * @param array $hosts
      * @return void
      */
-    public function addEnvDomains($hosts);
+    public function addDomains(array $hosts): void;
 
     /**
      * Remove host from the whitelist.
@@ -32,5 +32,5 @@ interface DomainManagerInterface
      * @param array $hosts
      * @return void
      */
-    public function removeEnvDomains($hosts);
+    public function removeDomains(array $hosts): void;
 }

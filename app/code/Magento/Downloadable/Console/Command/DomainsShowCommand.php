@@ -52,7 +52,7 @@ class DomainsShowCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $whitelist = implode("\n", $this->domainManager->getEnvDomainWhitelist());
+            $whitelist = implode("\n", $this->domainManager->getDomains());
             $output->writeln(
                 "Downloadable domains whitelist:\n$whitelist"
             );

@@ -64,7 +64,7 @@ class DomainValidator
         $host = $this->getHost($value);
 
         $isIpAddress = $this->ipValidator->isValid($host);
-        $isValid = !$isIpAddress && in_array($host, $this->domainManager->getEnvDomainWhitelist());
+        $isValid = !$isIpAddress && in_array($host, $this->domainManager->getDomains());
 
         return $isValid;
     }

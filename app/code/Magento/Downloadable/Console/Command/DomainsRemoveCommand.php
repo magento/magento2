@@ -70,12 +70,12 @@ class DomainsRemoveCommand extends Command
     {
         try {
             if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
-                $whitelistBefore = $this->domainManager->getEnvDomainWhitelist();
+                $whitelistBefore = $this->domainManager->getDomains();
                 $removeDomains = $input->getArgument(self::INPUT_KEY_DOMAINS);
                 $removeDomains = array_filter(array_map('trim', $removeDomains), 'strlen');
-                $this->domainManager->removeEnvDomains($removeDomains);
+                $this->domainManager->removeDomains($removeDomains);
 
-                foreach (array_diff($whitelistBefore, $this->domainManager->getEnvDomainWhitelist()) as $removedHost) {
+                foreach (array_diff($whitelistBefore, $this->domainManager->getDomains()) as $removedHost) {
                     $output->writeln(
                         $removedHost . ' was removed from the whitelist.'
                     );

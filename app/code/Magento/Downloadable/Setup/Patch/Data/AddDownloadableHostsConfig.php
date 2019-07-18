@@ -112,7 +112,7 @@ class AddDownloadableHostsConfig implements DataPatchInterface
             $this->addHost($scope->getBaseUrl());
         }
 
-        $this->domainManager->addEnvDomains(array_unique($this->whitelist));
+        $this->domainManager->addDomains(array_unique($this->whitelist));
     }
 
     /**

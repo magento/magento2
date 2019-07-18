@@ -69,13 +69,13 @@ class DomainsAddCommand extends Command
     {
         try {
             if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
-                $whitelistBefore = $this->domainManager->getEnvDomainWhitelist();
+                $whitelistBefore = $this->domainManager->getDomains();
                 $newDomains = $input->getArgument(self::INPUT_KEY_DOMAINS);
                 $newDomains = array_filter(array_map('trim', $newDomains), 'strlen');
 
-                $this->domainManager->addEnvDomains($newDomains);
+                $this->domainManager->addDomains($newDomains);
 
-                foreach (array_diff($this->domainManager->getEnvDomainWhitelist(), $whitelistBefore) as $newHost) {
+                foreach (array_diff($this->domainManager->getDomains(), $whitelistBefore) as $newHost) {
                     $output->writeln(
                         $newHost . ' was added to the whitelist.'
                     );
