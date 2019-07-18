@@ -158,7 +158,8 @@ class ConvertToXml
         $stream = $this->directory->openFile($file, 'w+');
         $stream->lock();
 
-        $excel->setDataHeader($this->metadataProvider->getHeaders($component));
+        $headers = array_map(function ($value) { return str_replace('"', '', $value); }, $this->metadataProvider->getHeaders($component));
+        $excel->setDataHeader($headers);
         $excel->write($stream, $component->getName() . '.xml');
 
         $stream->unlock();

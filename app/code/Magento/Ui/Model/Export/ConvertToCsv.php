@@ -77,7 +77,8 @@ class ConvertToCsv
         $this->directory->create('export');
         $stream = $this->directory->openFile($file, 'w+');
         $stream->lock();
-        $stream->writeCsv($this->metadataProvider->getHeaders($component));
+        $headers = array_map(function ($value) { return str_replace('"', '', $value); }, $this->metadataProvider->getHeaders($component));
+        $stream->writeCsv($headers);
         $i = 1;
         $searchCriteria = $dataProvider->getSearchCriteria()
             ->setCurrentPage($i)
