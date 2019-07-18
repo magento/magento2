@@ -39,6 +39,8 @@ directive @resolver(class: String="") on QUERY
     
 directive @typeResolver(class: String="") on INTERFACE | OBJECT
 
+directive @cache(cacheIdentity: String="" cachable: Boolean=true) on QUERY
+
 type Query {
 }
 
