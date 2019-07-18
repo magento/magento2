@@ -289,7 +289,7 @@
     <actionGroup name="AdminGoToProductCatalogPage">
         <comment userInput="actionGroup:GoToProductCatalogPage" stepKey="actionGroupComment"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
     </actionGroup>
 
     <!-- You are on product Edit Page -->
