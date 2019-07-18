@@ -125,17 +125,13 @@ define([
                     shiftedValue = moment(value, dateFormat);
                 }
 
-                if (!shiftedValue.isValid()) {
-                    shiftedValue = moment(value, this.inputDateFormat);
-                }
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
-            } else {
-                shiftedValue = '';
+
+                if (shiftedValue !== this.shiftedValue()) {
+                    this.shiftedValue(shiftedValue);
+                }
             }
 
-            if (shiftedValue !== this.shiftedValue()) {
-                this.shiftedValue(shiftedValue);
-            }
         },
 
         /**

@@ -12,5 +12,13 @@
         <element name="statusCodeFilterField" type="input" selector="[data-role=filter-form] [name=status]"/>
         <element name="statusCodeDataColumn" type="input" selector="[data-role=row] [data-column=status]"/>
         <element name="statusLabelDataColumn" type="input" selector="[data-role=row] [data-column=label]"/>
+        <element name="assignStatusToStateBtn" type="button" selector="#assign" timeout="30"/>
+        <element name="statusLabel" type="input" selector="#sales_order_status_grid_filter_label"/>
+        <element name="statusCode" type="input" selector="#sales_order_status_grid_filter_status"/>
+        <element name="resetFilter" type="button" selector="//div[contains(concat(' ',normalize-space(@class),' '),' action-reset ')]" timeout="30"/>
+        <element name="search" type="button" selector="[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="gridCell" type="text" selector="//tr['{{row}}']//td[count(//div[contains(concat(' ',normalize-space(@class),' '),' admin__data-grid-wrap ')]//tr//th[contains(., '{{cellName}}')]/preceding-sibling::th) +1 ]" parameterized="true" timeout="30"/>
+        <element name="stateCodeAndTitleDataColumn" type="input" selector="[data-role=row] [data-column=state]"/>
+        <element name="unassign" type="text" selector="[data-role=row] [data-column=unassign]"/>
     </section>
 </sections>

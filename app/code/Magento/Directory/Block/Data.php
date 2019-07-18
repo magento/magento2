@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Block;
 
 /**
@@ -173,10 +175,33 @@ class Data extends \Magento\Framework\View\Element\Template
      * Returns region html select
      *
      * @return string
+     * @deprecated
+     * @see getRegionSelect() method for more configurations
      */
     public function getRegionHtmlSelect()
     {
+        return $this->getRegionSelect();
+    }
+
+    /**
+     * Returns region html select
+     *
+     * @param null|int $value
+     * @param string $name
+     * @param string $id
+     * @param string $title
+     * @return string
+     */
+    public function getRegionSelect(
+        ?int $value = null,
+        string $name = 'region',
+        string $id = 'state',
+        string $title = 'State/Province'
+    ): string {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
+        if ($value === null) {
+            $value = (int)$this->getRegionId();
+        }
         $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
@@ -188,15 +213,15 @@ class Data extends \Magento\Framework\View\Element\Template
         $html = $this->getLayout()->createBlock(
             \Magento\Framework\View\Element\Html\Select::class
         )->setName(
-            'region'
+            $name
         )->setTitle(
-            __('State/Province')
+            __($title)
         )->setId(
-            'state'
+            $id
         )->setClass(
             'required-entry validate-state'
         )->setValue(
-            (int)$this->getRegionId()
+            $value
         )->setOptions(
             $options
         )->getHtml();

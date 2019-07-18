@@ -51,12 +51,12 @@ class UpdateCartItems implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['cart_items']) || empty($args['input']['cart_items'])
+        if (empty($args['input']['cart_items'])
             || !is_array($args['input']['cart_items'])
         ) {
             throw new GraphQlInputException(__('Required parameter "cart_items" is missing.'));
@@ -91,7 +91,7 @@ class UpdateCartItems implements ResolverInterface
     private function processCartItems(Quote $cart, array $items): void
     {
         foreach ($items as $item) {
-            if (!isset($item['cart_item_id']) || empty($item['cart_item_id'])) {
+            if (empty($item['cart_item_id'])) {
                 throw new GraphQlInputException(__('Required parameter "cart_item_id" for "cart_items" is missing.'));
             }
             $itemId = $item['cart_item_id'];

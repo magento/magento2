@@ -12,7 +12,7 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via the Admin"/>
-            <title value="Customer Checkout"/>
+            <title value="Customer Checkout via the Admin"/>
             <description value="Should be able to place an order as a customer."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5922"/>
@@ -252,7 +252,7 @@
         <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}" />
         <waitForPageLoad stepKey="waitBillingForm"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
-        <dontsee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->
         <uncheckOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShippingShared}}" stepKey="uncheckBillingAddressSameAsShippingCheckCheckBox"/>

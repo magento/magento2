@@ -9,6 +9,8 @@ namespace Magento\Framework\View\Page;
 use Magento\Framework\App;
 use Magento\Framework\App\Area;
 use Magento\Framework\View;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * An API for page configuration
@@ -53,6 +55,11 @@ class Config
      * Constant html language attribute
      */
     const HTML_ATTRIBUTE_LANG = 'lang';
+
+    /**
+     * @var Escaper
+     */
+    private $escaper;
 
     /**
      * Allowed group of types
@@ -150,7 +157,7 @@ class Config
     private function getAreaResolver()
     {
         if ($this->areaResolver === null) {
-            $this->areaResolver = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->areaResolver = ObjectManager::getInstance()
                 ->get(\Magento\Framework\App\State::class);
         }
         return $this->areaResolver;
@@ -164,6 +171,7 @@ class Config
      * @param Title $title
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param bool $isIncludesAvailable
+     * @param Escaper|null $escaper
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
@@ -172,7 +180,8 @@ class Config
         View\Page\FaviconInterface $favicon,
         Title $title,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        $isIncludesAvailable = true
+        $isIncludesAvailable = true,
+        Escaper $escaper = null
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
@@ -185,6 +194,9 @@ class Config
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
             strstr($this->localeResolver->getLocale(), '_', true)
+        );
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 
@@ -245,7 +257,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = htmlspecialchars($content);
+        $this->metadata[$name] = $this->escaper->escapeHtml($content);
     }
 
     /**

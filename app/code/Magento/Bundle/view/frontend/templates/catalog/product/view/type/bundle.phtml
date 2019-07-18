@@ -4,19 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */
 ?>
 <?php $_product = $block->getProduct() ?>
-<?php if ($block->displayProductStockStatus()): ?>
-    <?php if ($_product->isAvailable()): ?>
-        <p class="stock available" title="<?= /* @escapeNotVerified */ __('Availability:') ?>">
-            <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
+<?php if ($block->displayProductStockStatus()) : ?>
+    <?php if ($_product->isAvailable()) : ?>
+        <p class="stock available" title="<?= $block->escapeHtmlAttr(__('Availability:')) ?>">
+            <span><?= $block->escapeHtml(__('In stock')) ?></span>
         </p>
-    <?php else: ?>
-        <p class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability:') ?>">
-            <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+    <?php else : ?>
+        <p class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability:')) ?>">
+            <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
         </p>
     <?php endif; ?>
 <?php endif; ?>

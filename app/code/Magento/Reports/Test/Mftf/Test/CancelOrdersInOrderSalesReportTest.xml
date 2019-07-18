@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95960"/>
             <useCaseId value="MAGETWO-95823"/>
+            <skip>
+                <issueId value="MC-17274"/>
+            </skip>
         </annotations>
 
         <before>

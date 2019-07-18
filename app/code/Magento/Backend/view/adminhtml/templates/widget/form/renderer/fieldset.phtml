@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /** @var $element \Magento\Framework\Data\Form\Element\Fieldset */
@@ -32,40 +29,40 @@ if ($isField) {
 
 <?php
 /**
-* @todo investigate situations, when the following is needed:
-* echo $element->getHeaderBar();
-* echo $element->getSubFieldsetHtml();
-*/ ?>
+ * @todo investigate situations, when the following is needed:
+ * echo $element->getHeaderBar();
+ * echo $element->getSubFieldsetHtml();
+ */ ?>
 
-<?php if ($isWrapped): ?>
+<?php if ($isWrapped) : ?>
     <div class="fieldset-wrapper <?= ($isCollapsable) ? 'admin__collapsible-block-wrapper ' : '' ?>"
-        id="<?= /* @escapeNotVerified */ $containerId ? $containerId : $id . '-wrapper' ?>"
-        data-role="<?= /* @escapeNotVerified */ $id ?>-wrapper">
+        id="<?=  $block->escapeHtmlAttr($containerId ? $containerId : $id . '-wrapper') ?>"
+        data-role="<?=  $block->escapeHtmlAttr($id) ?>-wrapper">
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
-            <strong <?php /* @escapeNotVerified */ echo($isCollapsable) ?
+            <strong <?= /* @noEscape */ $isCollapsable ?
                 'class="admin__collapsible-title" data-toggle="collapse" data-target="#' . $id . '-content"' :
                 'class="title"'; ?>>
-                <span><?= /* @escapeNotVerified */ $element->getLegend() ?></span>
+                <span><?= $block->escapeHtml($element->getLegend()) ?></span>
             </strong>
-            <?= /* @escapeNotVerified */ $titleActions ?>
+            <?= /* @noEscape */ $titleActions ?>
         </div>
         <div class="fieldset-wrapper-content admin__fieldset-wrapper-content<?= ($isCollapsable) ? ' collapse' : '' ?>"
-            id="<?= /* @escapeNotVerified */ $id ?>-content"
-            data-role="<?= /* @escapeNotVerified */ $id ?>-content">
+            id="<?=  $block->escapeHtmlAttr($id) ?>-content"
+            data-role="<?=  $block->escapeHtmlAttr($id) ?>-content">
 <?php endif; ?>
 
-    <?php if (!$element->getNoContainer()): ?>
-        <fieldset class="<?= /* @escapeNotVerified */ $cssClass ?>" id="<?= /* @escapeNotVerified */ $id ?>">
-        <?php if ($element->getLegend() && !$isWrapped): ?>
-            <legend class="<?= /* @escapeNotVerified */ $isField ? 'label admin__field-label' : 'admin__legend legend' ?>">
-                <span><?= /* @escapeNotVerified */ $element->getLegend() ?></span>
+    <?php if (!$element->getNoContainer()) : ?>
+        <fieldset class="<?=  $block->escapeHtmlAttr($cssClass) ?>" id="<?=  $block->escapeHtmlAttr($id) ?>">
+        <?php if ($element->getLegend() && !$isWrapped) : ?>
+            <legend class="<?= /* @noEscape */ $isField ? 'label admin__field-label' : 'admin__legend legend' ?>">
+                <span><?= $block->escapeHtml($element->getLegend()) ?></span>
             </legend><br />
         <?php endif; ?>
     <?php endif; ?>
 
 
     <div class="messages">
-        <?php if ($element->getComment() && !$isField): ?>
+        <?php if ($element->getComment() && !$isField) : ?>
             <div class="message message-notice"><?= $block->escapeHtml($element->getComment()) ?></div>
         <?php endif; ?>
     </div>
@@ -73,34 +70,34 @@ if ($isField) {
 
     <?= ($isField) ? '<div class="control admin__field-control">' : '' ?>
 
-    <?php if ($element->hasHtmlContent() && !$isField): ?>
+    <?php if ($element->hasHtmlContent() && !$isField) : ?>
         <?= $element->getHtmlContent() ?>
-    <?php else: ?>
+    <?php else : ?>
 
-        <?php if ($isField && $count > 1):?>
-            <div class="fields-group-<?= /* @escapeNotVerified */ $count ?>">
+        <?php if ($isField && $count > 1) : ?>
+            <div class="fields-group-<?= /* @noEscape */ $count ?>">
         <?php endif; ?>
 
         <?= $element->getBasicChildrenHtml() ?>
 
         <?= ($isField && $count > 1) ? '</div>' : '' ?>
 
-        <?php if ($element->getComment() && $isField): ?>
+        <?php if ($element->getComment() && $isField) : ?>
             <div class="note"><?= $block->escapeHtml($element->getComment()) ?></div>
         <?php endif; ?>
 
-        <?php if ($element->hasAdvanced() && !$isField): ?>
+        <?php if ($element->hasAdvanced() && !$isField) : ?>
             <?= (!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : '' ?>
-            <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?= /* @escapeNotVerified */ $id ?>">
-                <summary class="details-summary admin__collapsible-title" id="details-summary<?= /* @escapeNotVerified */ $id ?>">
-                    <span><?= /* @escapeNotVerified */ $advancedLabel ?></span>
+            <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?= /* @noEscape */ $id ?>">
+                <summary class="details-summary admin__collapsible-title" id="details-summary<?= /* @noEscape */ $id ?>">
+                    <span><?= $block->escapeHtml($advancedLabel) ?></span>
                 </summary>
-                <div class="details-content admin__fieldset" id="details-content<?= /* @escapeNotVerified */ $id ?>">
+                <div class="details-content admin__fieldset" id="details-content<?= /* @noEscape */ $id ?>">
                     <?= $element->getAdvancedChildrenHtml() ?>
                 </div>
             </details>
-        <?php elseif ($element->hasAdvanced() && $isField): ?>
-            <div class="nested" id="nested<?= /* @escapeNotVerified */ $id ?>">
+        <?php elseif ($element->hasAdvanced() && $isField) : ?>
+            <div class="nested" id="nested<?= /* @noEscape */ $id ?>">
                 <?= $element->getAdvancedChildrenHtml() ?>
             </div>
         <?php endif; ?>
@@ -110,11 +107,11 @@ if ($isField) {
     <?php endif; ?>
 
 
-    <?php if (!$element->getNoContainer() && !$advancedAfter): ?>
+    <?php if (!$element->getNoContainer() && !$advancedAfter) : ?>
         </fieldset>
     <?php endif; ?>
 
-<?php if ($isWrapped): ?>
+<?php if ($isWrapped) : ?>
         </div>
     </div>
 <?php endif; ?>

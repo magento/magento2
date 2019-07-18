@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Ui\Block\Logger */
 ?>
-<?php /** @var $block \Magento\Ui\Block\Logger */ ?>
-<?php if ($block->isLoggingEnabled()): ?>
+<?php if ($block->isLoggingEnabled()) : ?>
     <script>
         window.onerror = function(msg, url, line) {
-            var key = "<?= /* @escapeNotVerified */ $block->getSessionStorageKey() ?>";
+            var key = "<?= $block->escapeJs($block->getSessionStorageKey()) ?>";
             var errors = {};
             if (sessionStorage.getItem(key)) {
                 errors = JSON.parse(sessionStorage.getItem(key));

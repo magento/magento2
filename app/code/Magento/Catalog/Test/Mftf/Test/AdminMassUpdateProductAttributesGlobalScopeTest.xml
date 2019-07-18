@@ -18,6 +18,9 @@
             <testCaseId value="MC-56"/>
             <group value="Catalog"/>
             <group value="Product Attributes"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
