@@ -4,24 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Downloadable\Console\Command\DomainsRemoveCommand;
+use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->getInstance()->reinitialize();
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-/** @var DomainsRemoveCommand $domainsRemoveCommand */
-$domainsRemoveCommand = $objectManager->get(DomainsRemoveCommand::class);
-$command = new \Symfony\Component\Console\Tester\CommandTester($domainsRemoveCommand);
-$command->execute(
+/** @var DomainManagerInterface $domainManager */
+$domainManager = $objectManager->get(DomainManagerInterface::class);
+$domainManager->removeDomains(
     [
-        DomainsRemoveCommand::INPUT_KEY_DOMAINS => [
-            'example.com',
-            'www.example.com',
-            'www.sample.example.com',
-            'google.com'
-        ]
+        'example.com',
+        'www.example.com',
+        'www.sample.example.com',
+        'google.com'
     ]
 );
 

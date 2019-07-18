@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Downloadable\Console\Command\DomainsRemoveCommand;
+use Magento\Downloadable\Api\DomainManagerInterface;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-/** @var DomainsRemoveCommand $domainsRemoveCommand */
-$domainsRemoveCommand = $objectManager->get(DomainsRemoveCommand::class);
-$command = new \Symfony\Component\Console\Tester\CommandTester($domainsRemoveCommand);
-$command->execute([DomainsRemoveCommand::INPUT_KEY_DOMAINS => ['sampleurl.com']]);
+/** @var DomainManagerInterface $domainManager */
+$domainManager = $objectManager->get(DomainManagerInterface::class);
+$domainManager->removeDomains(['sampleurl.com']);
 
 // @codingStandardsIgnoreLine
 require __DIR__ . '/product_downloadable_rollback.php';

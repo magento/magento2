@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 
 /**
- * Class DomainsAddCommand
+ * Class DomainsShowCommand
  *
  * Command for listing allowed downloadable domains
  */

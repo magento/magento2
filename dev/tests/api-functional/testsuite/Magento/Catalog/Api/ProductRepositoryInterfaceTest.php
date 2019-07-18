@@ -9,8 +9,7 @@ namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\Downloadable\Console\Command\DomainsAddCommand;
-use Magento\Downloadable\Console\Command\DomainsRemoveCommand;
+use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Downloadable\Model\Link;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
@@ -24,7 +23,6 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @magentoAppIsolation enabled
@@ -66,10 +64,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         parent::setUp();
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var DomainsAddCommand $domainsAddCommand */
-        $domainsAddCommand = $objectManager->get(DomainsAddCommand::class);
-        $command = new CommandTester($domainsAddCommand);
-        $command->execute([DomainsAddCommand::INPUT_KEY_DOMAINS => ['example.com']]);
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->addDomains(['example.com']);
     }
 
     /**
@@ -80,10 +77,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         parent::tearDown();
 
         $objectManager = Bootstrap::getObjectManager();
-         /** @var DomainsRemoveCommand $domainsRemoveCommand */
-        $domainsRemoveCommand = $objectManager->get(DomainsRemoveCommand::class);
-        $command = new CommandTester($domainsRemoveCommand);
-        $command->execute([DomainsRemoveCommand::INPUT_KEY_DOMAINS => ['example.com']]);
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->removeDomains(['example.com']);
     }
 
     /**

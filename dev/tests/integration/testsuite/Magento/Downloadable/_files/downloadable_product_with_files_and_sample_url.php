@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Downloadable\Console\Command\DomainsAddCommand;
+use Magento\Downloadable\Api\DomainManagerInterface;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-/** @var DomainsAddCommand $domainsAddCommand */
-$domainsAddCommand = $objectManager->get(DomainsAddCommand::class);
-$command = new \Symfony\Component\Console\Tester\CommandTester($domainsAddCommand);
-$command->execute([DomainsAddCommand::INPUT_KEY_DOMAINS => ['example.com', 'sampleurl.com']]);
+/** @var DomainManagerInterface $domainManager */
+$domainManager = $objectManager->get(DomainManagerInterface::class);
+$domainManager->addDomains(['example.com', 'sampleurl.com']);
 
 /**
  * @var \Magento\Catalog\Model\Product $product
