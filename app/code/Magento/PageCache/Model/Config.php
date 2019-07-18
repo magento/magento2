@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\PageCache\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -12,8 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\PageCache\Model\Varnish\VclGeneratorFactory;
 
 /**
- * Model is responsible for replacing default vcl template
- * file configuration with user-defined from configuration
+ * Model is responsible for replacing default vcl template file configuration with user-defined from configuration
  *
  * @api
  * @since 100.0.2
@@ -163,14 +163,16 @@ class Config
         $sslOffloadedHeader = $this->_scopeConfig->getValue(
             \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER
         );
-        $vclGenerator = $this->vclGeneratorFactory->create([
-            'backendHost' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_HOST),
-            'backendPort' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_PORT),
-            'accessList' => $accessList ? explode(',', $accessList) : [],
-            'designExceptions' => $designExceptions ? $this->serializer->unserialize($designExceptions) : [],
-            'sslOffloadedHeader' => $sslOffloadedHeader,
-            'gracePeriod' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
-        ]);
+        $vclGenerator = $this->vclGeneratorFactory->create(
+            [
+                'backendHost' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_HOST),
+                'backendPort' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_PORT),
+                'accessList' => $accessList ? explode(',', $accessList) : [],
+                'designExceptions' => $designExceptions ? $this->serializer->unserialize($designExceptions) : [],
+                'sslOffloadedHeader' => $sslOffloadedHeader,
+                'gracePeriod' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
+            ]
+        );
         return $vclGenerator->generateVcl($version);
     }
 
@@ -200,13 +202,12 @@ class Config
     }
 
     /**
-     * Get IPs access list that can purge Varnish configuration for config file generation
-     * and transform it to appropriate view
+     * Get IPs access list allowed purge Varnish config for config file generation and transform it to appropriate view
      *
-     * acl purge{
+     * Example acl_purge{
      *  "127.0.0.1";
      *  "127.0.0.2";
-     *
+     * }
      * @return mixed|null|string
      * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */

@@ -13,6 +13,9 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
 
+/**
+ * Class VclTemplateLocator provides vcl template path
+ */
 class VclTemplateLocator implements VclTemplateLocatorInterface
 {
     /**
@@ -84,7 +87,7 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTemplate($version)
     {
