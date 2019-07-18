@@ -155,17 +155,20 @@ class OutOfStockFilterTest extends TestCase
         return [
             [
                 'originalResult' => [$product1, $product2],
-                'productStockStatusMap' => [[123, null, false], [321, null, true]],
+                'productStockStatusMap' => [
+                    [123, null, StockStatusInterface::STATUS_OUT_OF_STOCK],
+                    [321, null, StockStatusInterface::STATUS_IN_STOCK],
+                ],
                 'expectedResult' => [1 => $product2],
             ],
             [
                 'originalResult' => [$product1],
-                'productStockStatusMap' => [[123, null, true]],
+                'productStockStatusMap' => [[123, null, StockStatusInterface::STATUS_IN_STOCK]],
                 'expectedResult' => [0 => $product1],
             ],
             [
                 'originalResult' => $product1,
-                'productStockStatusMap' => [[123, null, true]],
+                'productStockStatusMap' => [[123, null, StockStatusInterface::STATUS_IN_STOCK]],
                 'expectedResult' => [0 => $product1],
             ],
         ];
