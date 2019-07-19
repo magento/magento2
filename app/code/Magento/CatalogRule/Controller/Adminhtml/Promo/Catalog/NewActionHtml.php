@@ -7,13 +7,16 @@
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\Rule\Model\Action\AbstractAction;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\NewActionHtml
  */
-class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
+class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog implements HttpPostActionInterface
 {
     /**
+     * New action html action
+     *
      * @return void
      */
     public function execute()
