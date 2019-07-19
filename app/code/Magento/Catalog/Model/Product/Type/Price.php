@@ -94,11 +94,6 @@ class Price
     private $tierPriceExtensionFactory;
 
     /**
-     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
-     */
-    private $ruleDateFormatter;
-
-    /**
      * Constructor
      *
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
@@ -111,7 +106,6 @@ class Price
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
-     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -124,8 +118,7 @@ class Price
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null,
-        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
+        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
@@ -138,8 +131,6 @@ class Price
         $this->config = $config;
         $this->tierPriceExtensionFactory = $tierPriceExtensionFactory ?: ObjectManager::getInstance()
             ->get(ProductTierPriceExtensionFactory::class);
-        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -605,10 +596,7 @@ class Price
     ) {
         \Magento\Framework\Profiler::start('__PRODUCT_CALCULATE_PRICE__');
         if ($wId instanceof Store) {
-            $sId = $wId->getId();
             $wId = $wId->getWebsiteId();
-        } else {
-            $sId = $this->_storeManager->getWebsite($wId)->getDefaultGroup()->getDefaultStoreId();
         }
 
         $finalPrice = $basePrice;
@@ -622,7 +610,7 @@ class Price
         );
 
         if ($rulePrice === false) {
-            $date = $this->ruleDateFormatter->getDate($sId);
+            $date = $this->_localeDate->date(null, null, false);
             $rulePrice = $this->_ruleFactory->create()->getRulePrice($date, $wId, $gId, $productId);
         }
 

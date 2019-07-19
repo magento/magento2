@@ -57,11 +57,6 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
     private $ruleResource;
 
     /**
-     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
-     */
-    private $ruleDateFormatter;
-
-    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param Calculator $calculator
@@ -70,7 +65,6 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
      * @param StoreManager $storeManager
      * @param Session $customerSession
      * @param RuleFactory $catalogRuleResourceFactory
-     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         Product $saleableItem,
@@ -80,16 +74,13 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
         TimezoneInterface $dateTime,
         StoreManager $storeManager,
         Session $customerSession,
-        RuleFactory $catalogRuleResourceFactory,
-        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
+        RuleFactory $catalogRuleResourceFactory
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->dateTime = $dateTime;
         $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
         $this->resourceRuleFactory = $catalogRuleResourceFactory;
-        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -105,7 +96,7 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
             } else {
                 $this->value = $this->getRuleResource()
                     ->getRulePrice(
-                        $this->ruleDateFormatter->getDate($this->storeManager->getStore()->getId()),
+                        $this->dateTime->date(null, null, false),
                         $this->storeManager->getStore()->getWebsiteId(),
                         $this->customerSession->getCustomerGroupId(),
                         $this->product->getId()

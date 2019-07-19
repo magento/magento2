@@ -14,7 +14,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Observer for applying catalog rules on product for frontend area
@@ -49,33 +48,24 @@ class ProcessFrontFinalPriceObserver implements ObserverInterface
     protected $rulePricesStorage;
 
     /**
-     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
-     */
-    private $ruleDateFormatter;
-
-    /**
      * @param RulePricesStorage $rulePricesStorage
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param StoreManagerInterface $storeManager
      * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
-     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
         \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory,
         StoreManagerInterface $storeManager,
         TimezoneInterface $localeDate,
-        CustomerModelSession $customerSession,
-        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
+        CustomerModelSession $customerSession
     ) {
         $this->rulePricesStorage = $rulePricesStorage;
         $this->resourceRuleFactory = $resourceRuleFactory;
         $this->storeManager = $storeManager;
         $this->localeDate = $localeDate;
         $this->customerSession = $customerSession;
-        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -93,7 +83,7 @@ class ProcessFrontFinalPriceObserver implements ObserverInterface
         if ($observer->hasDate()) {
             $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = $this->ruleDateFormatter->getDate($storeId);
+            $date = $this->localeDate->date(null, null, false);
         }
 
         if ($observer->hasWebsiteId()) {
