@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnlyXLeftThresholdForOutOfStockSimpleProductOnDefaultSourceTest">
+        <annotations>
+            <stories value="Only X Left Threshold"/>
+            <title value="Admin user apply 'Only X left Threshold' for 'Out of Stock' Simple product on Default source"/>
+            <description value="Verify, 'Only 0 left' won't appear on out of stock simple product on default source in multistock environment on main website, when 'Display Out of Stock Products' is on."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3041042"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Set "Only X Left" to 1.-->
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 1" stepKey="setStockThreshold"/>
+            <!--Enable "Show Out Of Stock Products".-->
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 1" stepKey="setShowOutOfStockProducts"/>
+            <!--Crate additional source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create category and product.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Perform reindex and flash cache.-->
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Revert "Only X Left".-->
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 0" stepKey="revertOnlyXLeftConfig"/>
+            <!--Revert "Show Out Of Stock Products".-->
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 0" stepKey="revertShowOutOfStockProductsConfig"/>
+            <!--Perform reindex and flush cache.-->
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterRevertThresholdConfig"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterRevertThresholdConfig"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+
+        <!--Set created product qty to zero, to make product 'Out Of Stock'.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToSetQty"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="0" stepKey="setProduct1Quantity"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <!--Verify 'Only X Left' message.-->
+        <amOnPage url="{{StorefrontProductPage.url($$product.name$$)}}" stepKey="navigateToProductDetailsPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoadToVerifyMessage"/>
+        <dontSeeElement selector=".availability.only" stepKey="verifyMessage"/>
+    </test>
+</tests>
