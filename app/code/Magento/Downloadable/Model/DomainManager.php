@@ -14,6 +14,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Class DomainManager
+ *
  * Manage downloadable domains whitelist in the environment config.
  */
 class DomainManager implements DomainManagerInterface

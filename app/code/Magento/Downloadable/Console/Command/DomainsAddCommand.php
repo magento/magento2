@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 
-
 /**
  * Class DomainsAddCommand
  *
