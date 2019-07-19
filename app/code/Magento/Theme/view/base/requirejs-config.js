@@ -10,8 +10,7 @@ var config = {
             'ko': 'knockoutjs/knockout',
             'knockout': 'knockoutjs/knockout',
             'mageUtils': 'mage/utils/main',
-            'rjsResolver': 'mage/requirejs/resolver',
-            'jquery/ui': 'jquery/compat'
+            'rjsResolver': 'mage/requirejs/resolver'
         }
     },
     'shim': {
