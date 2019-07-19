@@ -34,17 +34,17 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
     const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
 
     /**
-     *
+     * Varnish 4 supported version
      */
     const VARNISH_SUPPORTED_VERSION_4 = '4';
 
     /**
-     *
+     * Varnish 5 supported version
      */
     const VARNISH_SUPPORTED_VERSION_5 = '5';
 
     /**
-     *
+     * Varnish 6 supported version
      */
     const VARNISH_SUPPORTED_VERSION_6 = '6';
 

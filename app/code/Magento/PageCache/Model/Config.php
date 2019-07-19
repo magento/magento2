@@ -50,7 +50,7 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * XML path to Varnish 5 config template path
+     * XML path to Varnish 6 config template path
      */
     const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
 
