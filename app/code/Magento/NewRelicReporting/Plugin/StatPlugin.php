@@ -49,19 +49,22 @@ class StatPlugin
     }
 
     /**
+     * Before running original profiler, register NewRelic transaction
+     *
      * @param Stat $schedule
-     * @param array $args
+     * @param array ...$args
      * @return array
      * @see \Magento\Cron\Observer\ProcessCronQueueObserver::startProfiling
      */
-    public function beforeStart(Stat $schedule, ...$args)
+    public function beforeStart(Stat $schedule, ...$args): array
     {
         $timerName = current($args);
 
-        if (0 === strpos($timerName, static::TIMER_NAME_CRON_PREFIX))
-        $this->newRelicWrapper->setTransactionName(
-            sprintf('Cron %s', $timerName)
-        );
+        if (0 === strpos($timerName, static::TIMER_NAME_CRON_PREFIX)) {
+            $this->newRelicWrapper->setTransactionName(
+                sprintf('Cron %s', $timerName)
+            );
+        }
 
         return $args;
     }
@@ -71,7 +74,7 @@ class StatPlugin
      * @param array ...$args
      * @return array
      */
-    public function beforeStop(Stat $schedule, ...$args)
+    public function beforeStop(Stat $schedule, ...$args): array
     {
         $this->newRelicWrapper->endTransaction();
 

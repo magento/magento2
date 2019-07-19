@@ -505,7 +505,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param array $jobs
      * @param array $exists
      * @param string $groupId
-     * @return  void
+     * @return void
      */
     protected function _generateJobs($jobs, $exists, $groupId)
     {
