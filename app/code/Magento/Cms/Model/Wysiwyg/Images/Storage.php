@@ -191,13 +191,13 @@ class Storage extends \Magento\Framework\DataObject
         \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
         \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory $directoryDatabaseFactory,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
-        \Psr\Log\LoggerInterface $logger = null,
         array $resizeParameters = [],
         array $extensions = [],
         array $dirs = [],
         array $data = [],
         \Magento\Framework\Filesystem\DriverInterface $file = null,
-        \Magento\Framework\Filesystem\Io\File $ioFile = null
+        \Magento\Framework\Filesystem\Io\File $ioFile = null,
+        \Psr\Log\LoggerInterface $logger = null
     ) {
         $this->_session = $session;
         $this->_backendUrl = $backendUrl;
