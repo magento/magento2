@@ -80,9 +80,9 @@ class PhpFormatter implements FormatterInterface
      */
     private function varExportShort($var, int $depth = 0)
     {
-        if(null === $var){
+        if (null === $var) {
             return 'null';
-        }elseif (!is_array($var)) {
+        } elseif (!is_array($var)) {
             return var_export($var, true);
         }
 
