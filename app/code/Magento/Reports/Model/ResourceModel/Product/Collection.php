@@ -3,10 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Reports\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;

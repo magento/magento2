@@ -29,6 +29,8 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
+ * Paypal transparent test class
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransparentTest extends \PHPUnit\Framework\TestCase
