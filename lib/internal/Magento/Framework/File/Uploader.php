@@ -563,7 +563,8 @@ class Uploader
      */
     private function _setUploadFileId($fileId)
     {
-        if (is_array($fileId) && $this->isValidFileId($fileId)) {
+        if (is_array($fileId)) {
+            $this->validateFileId($fileId);
             $this->_uploadType = self::MULTIPLE_STYLE;
             $this->_file = $fileId;
         } else {
@@ -598,19 +599,19 @@ class Uploader
     }
 
     /**
-     * Check if $fileId has correct 'tmp_name' field.
+     * Validates explicitly given uploaded file data.
      *
      * @param array $fileId
-     * @return bool
+     * @return void
      * @throws \InvalidArgumentException
      */
-    private function isValidFileId(array $fileId): bool
+    private function validateFileId(array $fileId): void
     {
         $isValid = false;
         if (isset($fileId['tmp_name'])) {
             $tmpName = trim($fileId['tmp_name']);
 
-            if (mb_strpos($tmpName, '..') === false) {
+            if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
                     $this->directoryList->getPath(DirectoryList::MEDIA),
@@ -619,9 +620,20 @@ class Uploader
                     $this->directoryList->getPath(DirectoryList::UPLOAD),
                 ];
 
+                $disallowedFolders = [
+                    $this->directoryList->getPath(DirectoryList::LOG),
+                ];
+
                 foreach ($allowedFolders as $allowedFolder) {
-                    if (stripos($tmpName, $allowedFolder) !== false) {
+                    if (stripos($tmpName, $allowedFolder) === 0) {
                         $isValid = true;
+                        break;
+                    }
+                }
+
+                foreach ($disallowedFolders as $disallowedFolder) {
+                    if (stripos($tmpName, $disallowedFolder) === 0) {
+                        $isValid = false;
                         break;
                     }
                 }
@@ -630,11 +642,9 @@ class Uploader
 
         if (!$isValid) {
             throw new \InvalidArgumentException(
-                'Invalid parameter given. A valid $fileId[tmp_name] is expected.'
+                __('Invalid parameter given. A valid $fileId[tmp_name] is expected.')
             );
         }
-
-        return $isValid;
     }
 
     /**
