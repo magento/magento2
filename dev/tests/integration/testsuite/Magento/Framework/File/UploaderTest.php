@@ -47,8 +47,8 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $fileName = 'text.txt';
         $tmpDir = 'tmp';
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
-        $file = fopen($filePath, "wb");
-        fwrite($file, 'just a text');
+
+        $tmpDirectory->writeFile($fileName, 'just a text');
 
         $type = [
             'tmp_name' => $filePath,
@@ -58,7 +58,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $uploader = $this->uploaderFactory->create(['fileId' => $type]);
         $uploader->save($mediaDirectory->getAbsolutePath($tmpDir));
 
-        $this->assertTrue(is_file($mediaDirectory->getAbsolutePath($tmpDir . DIRECTORY_SEPARATOR . $fileName)));
+        $this->assertTrue($mediaDirectory->isFile($tmpDir . DIRECTORY_SEPARATOR . $fileName));
     }
 
     /**
@@ -72,13 +72,9 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $fileName = 'text.txt';
         $tmpDir = 'tmp';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);
-        $directoryPath = $tmpDirectory->getAbsolutePath() . $tmpDir;
-        if (!is_dir($directoryPath)) {
-            mkdir($directoryPath, 0777, true);
-        }
-        $filePath = $directoryPath . DIRECTORY_SEPARATOR . $fileName;
-        $file = fopen($filePath, "wb");
-        fwrite($file, 'just a text');
+        $filePath = $tmpDirectory->getAbsolutePath() . $tmpDir . DIRECTORY_SEPARATOR . $fileName;
+
+        $tmpDirectory->writeFile($tmpDir . DIRECTORY_SEPARATOR . $fileName, 'just a text');
 
         $type = [
             'tmp_name' => $filePath,
@@ -91,15 +87,17 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    public static function tearDownAfterClass()
     {
-        parent::tearDown();
+        parent::tearDownAfterClass();
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Filesystem::class);
 
         $tmpDir = 'tmp';
-        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete($tmpDir);
 
-        $logDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);
+        $logDirectory = $filesystem->getDirectoryWrite(DirectoryList::LOG);
         $logDirectory->delete($tmpDir);
     }
 }
