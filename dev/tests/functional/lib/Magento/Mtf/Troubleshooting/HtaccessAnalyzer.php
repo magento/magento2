@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Checks if .htaccess is identical to .htaccess.
+ * Checks if .htaccess is identical to .htaccess.sample.
  */
 class HtaccessAnalyzer extends \Symfony\Component\Console\Command\Command
 {
@@ -85,7 +85,7 @@ class HtaccessAnalyzer extends \Symfony\Component\Console\Command\Command
             $responseCode = $this->curl->getInfo(CURLINFO_HTTP_CODE);
             if ($responseCode != 200) {
                 $message['error'][] = 'Your .htaccess file doesn\'t exist. '
-                    . 'Please, create it from to .htaccess.';
+                    . 'Please, create it from to .htaccess.sample.';
                 $output->outputMessages($message);
             }
             $this->curl->close();
