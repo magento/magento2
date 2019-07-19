@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\RequestInterface;
@@ -127,14 +128,19 @@ class Context
      *
      * @param StoreInterface $store
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function updateContext(StoreInterface $store)
     {
-        $this->httpContext->setValue(
-            StoreManagerInterface::CONTEXT_STORE,
-            $store->getCode(),
-            $this->storeManager->getDefaultStoreView()->getCode()
-        );
+        if (!$store->getConfig(Store::XML_PATH_STORE_IN_URL) ||
+            $store->getId() == $this->storeManager->getDefaultStoreView()->getId()
+        ) {
+            $this->httpContext->setValue(
+                StoreManagerInterface::CONTEXT_STORE,
+                $store->getCode(),
+                $this->storeManager->getDefaultStoreView()->getCode()
+            );
+        }
 
         /** @var StoreInterface $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
