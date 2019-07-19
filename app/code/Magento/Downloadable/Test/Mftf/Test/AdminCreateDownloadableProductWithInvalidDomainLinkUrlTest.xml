@@ -34,5 +34,8 @@
             <argument name="index" value="0"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProductAfterAddingDomainToWhitelist" after="addDownloadableProductLinkAgain" />
+        <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="scrollToLinks"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="selectProductLink"/>
+        <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$52.99" stepKey="assertProductPriceInCart"/>
     </test>
 </tests>
