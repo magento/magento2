@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Sales\Api;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -135,7 +133,7 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
         /** @var Order $orderModel */
         $orderModel = $this->orderFactory->create();
         $orderModel->loadByIncrementId($orderAutoincrementId);
-        $orderId = $orderModel->getId();
+        $orderId = (int)$orderModel->getId();
         unset($orderModel);
 
         $this->delegate->delegateNew($orderId);
