@@ -133,7 +133,7 @@ class Context
     private function updateContext(StoreInterface $store)
     {
         if (!$store->getConfig(Store::XML_PATH_STORE_IN_URL) ||
-            $store->getId() == $this->storeManager->getDefaultStoreView()->getId()
+            $store->getCode() == $this->storeManager->getDefaultStoreView()->getCode()
         ) {
             $this->httpContext->setValue(
                 StoreManagerInterface::CONTEXT_STORE,
