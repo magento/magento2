@@ -39,7 +39,7 @@ class HtmlBindingSniff implements Sniff
                 @$dom->loadHTML($html);
                 return $dom;
             } catch (\Throwable $exception) {
-                //Invalid HTML, skipping
+                return null;
             }
         }
 
