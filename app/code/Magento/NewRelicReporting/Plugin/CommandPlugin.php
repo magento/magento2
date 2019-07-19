@@ -26,15 +26,23 @@ class CommandPlugin
     private $newRelicWrapper;
 
     /**
+     * @var string[]
+     */
+    private $skipCommands;
+
+    /**
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
+     * @param array $skipCommands
      */
     public function __construct(
         Config $config,
-        NewRelicWrapper $newRelicWrapper
+        NewRelicWrapper $newRelicWrapper,
+        array $skipCommands = []
     ) {
         $this->config = $config;
         $this->newRelicWrapper = $newRelicWrapper;
+        $this->skipCommands = $skipCommands;
     }
 
     /**
@@ -46,9 +54,11 @@ class CommandPlugin
      */
     public function beforeRun(Command $command, ...$args)
     {
-        $this->newRelicWrapper->setTransactionName(
-            sprintf('CLI %s', $command->getName())
-        );
+        if (!in_array($command->getName(), $this->skipCommands)) {
+            $this->newRelicWrapper->setTransactionName(
+                sprintf('CLI %s', $command->getName())
+            );
+        }
 
         return $args;
     }

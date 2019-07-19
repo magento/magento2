@@ -68,6 +68,19 @@ class NewRelicWrapper
     }
 
     /**
+     * Wrapper for 'newrelic_end_transaction'
+     *
+     * @param bool $ignore
+     * @return void
+     */
+    public function endTransaction($ignore = false)
+    {
+        if ($this->isExtensionInstalled()) {
+            newrelic_end_transaction($ignore);
+        }
+    }
+
+    /**
      * Checks whether newrelic-php5 agent is installed
      *
      * @return bool
