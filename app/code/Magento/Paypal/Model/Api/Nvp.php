@@ -1488,7 +1488,18 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             \Magento\Framework\DataObject\Mapper::accumulateByMap($data, $shippingAddress, $this->_shippingAddressMap);
             $this->_applyStreetAndRegionWorkarounds($shippingAddress);
             // PayPal doesn't provide detailed shipping name fields, so the name will be overwritten
-            $shippingAddress->addData(['firstname'  => $data['SHIPTONAME']]);
+            $_arraydata = explode(' ', $data['SHIPTONAME'], 2);
+            if (!empty($_arraydata[0]) && !empty($_arraydata[1])) {
+                $shippingAddress->addData(array(
+                    'firstname'  => $_arraydata[0],
+                    'lastname'  => $_arraydata[1]
+                ));
+            } else {
+                $shippingAddress->addData(array(
+                    'firstname'  => $data['FIRSTNAME'],
+                    'lastname'  => $data['LASTNAME']
+                ));
+            }
             $this->setExportedShippingAddress($shippingAddress);
         }
     }
