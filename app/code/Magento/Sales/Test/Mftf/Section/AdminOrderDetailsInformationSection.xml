@@ -21,5 +21,6 @@
         <element name="itemsOrdered" type="text" selector=".edit-order-table"/>
         <element name="attributeLabel" type="text" selector="//label[contains(.,'{{attributeLabel}}')]" parameterized="true"/>
         <element name="paymentInformation" type="text" selector="//div[@class='order-payment-method-title']"/>
+        <element name="orderId" type="text" selector="|Order # (\d+)|"/>
     </section>
 </sections>
