@@ -283,4 +283,18 @@
         </arguments>
         <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProduct"/>
     </actionGroup>
+
+    <!-- Change any product data product description You should be on product page -->
+    <actionGroup name="AdminChangeProductDescriptionActionGroup">
+        <arguments>
+            <argument name="description" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductContentSection.sectionHeader}}" dependentSelector="{{AdminProductContentSection.sectionHeader}}" visible="true" stepKey="openDescriptionDropDown"/>
+        <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{description}}" stepKey="fillLongDescription"/>
+    </actionGroup>
+    <!-- Change any product data product short description You should be on product page -->
+    <actionGroup name="AdminChangeProductShortDescriptionActionGroup" extends="AdminChangeProductDescriptionActionGroup">
+        <remove keyForRemoval="fillLongDescription"/>
+        <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{description}}" stepKey="fillShortDescription"/>
+    </actionGroup>
 </actionGroups>
