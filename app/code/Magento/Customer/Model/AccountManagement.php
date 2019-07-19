@@ -903,6 +903,7 @@ class AccountManagement implements AccountManagementInterface
                     $newAddress = clone $address;
                     $newAddress->setId(null);
                     $newAddress->setCustomerId($customer->getId());
+                    $newAddress->setPrefix($customer->getPrefix());
                     $this->addressRepository->save($newAddress);
                 } else {
                     $address->setCustomerId($customer->getId());
