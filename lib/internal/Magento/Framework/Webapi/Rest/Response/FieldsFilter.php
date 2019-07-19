@@ -163,6 +163,7 @@ class FieldsFilter
                 $arrayIntersect[$key] = $this->recursiveArrayIntersectKey($item, $filter);
             }
         } else {
+            //Check if the array is coming from searchcriteria and filtering collection accordingly
             if (isset($responseArray['total_count']) && $responseArray['total_count'] > 0) {
                 if (isset($responseArray['items'])) {
                     foreach ($responseArray['items'] as $key => $itemarray) {
