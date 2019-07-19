@@ -52,7 +52,7 @@ class StatPlugin
      * Before running original profiler, register NewRelic transaction
      *
      * @param Stat $schedule
-     * @param array ...$args
+     * @param array $args,...
      * @return array
      * @see \Magento\Cron\Observer\ProcessCronQueueObserver::startProfiling
      *
@@ -72,8 +72,10 @@ class StatPlugin
     }
 
     /**
+     * Before stopping original profiler, close NewRelic transaction
+     *
      * @param Stat $schedule
-     * @param array ...$args
+     * @param array $args,...
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
