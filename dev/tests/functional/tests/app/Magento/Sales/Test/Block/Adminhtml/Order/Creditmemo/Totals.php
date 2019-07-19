@@ -32,21 +32,21 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
      *
      * @var string
      */
-    private $refundShippingSelector = '//input[@id=\'shipping_amount\']';
+    private $refundShippingSelector = '#shipping_amount';
 
     /**
      * Adjustment Refund css selector.
      *
      * @var string
      */
-    private $adjustmentRefundSelector = '//input[@id=\'adjustment_positive\']';
+    private $adjustmentRefundSelector = '#adjustment_positive';
 
     /**
      * Adjustment Fee css selector.
      *
      * @var string
      */
-    private $adjustmentFeeSelector = '//input[@id=\'adjustment_negative\']';
+    private $adjustmentFeeSelector = '#adjustment_negative';
 
     /**
      * 'Update Totals button css selector.
