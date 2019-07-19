@@ -32,13 +32,13 @@
         <page_size />
         <show_attributes>
             <selector>
-                .control [name="parameters[show_attributes][]"]
+                .control [name="parameters[show_attributes][1]"]
             </selector>
             <input>multiselect</input>
         </show_attributes>
         <show_buttons>
             <selector>
-                .control [name="parameters[show_buttons][]"]
+                .control [name="parameters[show_buttons][2]"]
             </selector>
             <input>multiselect</input>
         </show_buttons>
