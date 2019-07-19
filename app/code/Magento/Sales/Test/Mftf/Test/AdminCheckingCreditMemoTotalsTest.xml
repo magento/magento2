@@ -19,7 +19,7 @@
             <group value="sales"/>
             <group value="tax"/>
             <skip>
-                <issueId value="MAGETWO-97826"/>
+                <issueId value="MAGETWO-99951"/>
             </skip>
         </annotations>
         <before>
@@ -36,10 +36,10 @@
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
             <!--Configure Tax Class for shipping-->
             <createData entity="TaxClassForShippingConfig" stepKey="configureTaxClassForShipping"/>
-            <!--Configure Braintree-->
-            <createData entity="SandboxBraintreeConfig" stepKey="configureBraintree"/>
             <!--Login to admin page-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Configure Braintree-->
+            <actionGroup ref="AdminFillBasicBraintreeConfigActionGroup" stepKey="configureBraintree"/>
         </before>
         <after>
             <!--Delete category-->
@@ -53,7 +53,7 @@
             <!--Restore default configuration for Tax Class for shipping-->
             <createData entity="DefaultTaxClassForShippingConfig" stepKey="restoreTaxClassForShippingConfig"/>
             <!--Restore default configuration for Braintree-->
-            <createData entity="DefaultBraintreeConfig" stepKey="restoreBraintreeConfig"/>
+            <actionGroup ref="DisableBraintreeActionGroup" stepKey="restoreBraintreeConfig"/>
             <!--Logout from admin page-->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

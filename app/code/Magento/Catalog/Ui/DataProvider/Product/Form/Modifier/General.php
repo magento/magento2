@@ -281,8 +281,6 @@ class General extends AbstractModifier
             $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
             $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
             $commonFieldsMeta = [
-                'outputDateTimeToISO' => false,
-                'inputDateTimeFormat' => 'YYYY-MM-DD h:mm',
                 'options' => [
                     'showsTime' => true,
                 ]

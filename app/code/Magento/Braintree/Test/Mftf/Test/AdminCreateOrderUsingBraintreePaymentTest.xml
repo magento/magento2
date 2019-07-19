@@ -18,12 +18,11 @@
             <testCaseId value="MAGETWO-94247"/>
             <group value="braintree"/>
             <skip>
-                <issueId value="MQE-1576"/>
+                <issueId value="MAGETWO-99951"/>
             </skip>
         </annotations>
 
         <before>
-            <createData entity="SandboxBraintreeConfig" stepKey="setupBraintree"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -33,6 +32,7 @@
             <createData entity="restrictedWebUser" stepKey="createRestrictedAdmin"/>
 
             <actionGroup ref="LoginToAdminActionGroup" stepKey="loginToBackend"/>
+            <actionGroup ref="AdminFillBasicBraintreeConfigActionGroup" stepKey="setupBraintree"/>
             <actionGroup ref="AdminCreateUserRoleActionGroup" stepKey="createRestrictedAdminRole">
                 <argument name="roleName" value="{{RoleTest.roleName}}"/>
                 <argument name="resourceAccess" value="Custom"/>
@@ -46,6 +46,9 @@
         </before>
 
         <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="removeSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="removeCustomer"/>
+            <actionGroup ref="DisableBraintreeActionGroup" stepKey="disableBraintree"/>
             <actionGroup ref="LoginToAdminActionGroup" stepKey="loginToBackendWithDefaultAdmin"/>
             <!--Remove created admin user-->
             <actionGroup ref="AdminDeleteUserActionGroup" stepKey="removeAdminUser">
@@ -56,19 +59,14 @@
                 <argument name="roleName" value="{{RoleTest.roleName}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutDefaultAdminFromBackend"/>
-            <createData entity="DefaultBraintreeConfig" stepKey="restoreBraintree"/>
-            <deleteData createDataKey="createSimpleProduct" stepKey="removeSimpleProduct"/>
-            <deleteData createDataKey="createCustomer" stepKey="removeCustomer"/>
         </after>
         <!--Login with restricted user-->
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
-        <waitForPageLoad stepKey="waitForLoginPageLoad"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="$$createRestrictedAdmin.username$$" stepKey="fillUsername"/>
         <fillField selector="{{AdminLoginFormSection.password}}" userInput="$$createRestrictedAdmin.password$$" stepKey="fillPassword"/>
         <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn"/>
         <!--Navigate to orders page-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
-        <waitForPageLoad time="30" stepKey="waitForIndexPageLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
         <!--Create new order-->
         <click selector="{{OrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
