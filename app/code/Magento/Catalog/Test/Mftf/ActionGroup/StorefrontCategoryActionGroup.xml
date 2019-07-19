@@ -91,4 +91,15 @@
         <seeInTitle userInput="{{subCategory.name}}" stepKey="assertCategoryNameInTitle"/>
         <see userInput="{{subCategory.name}}" selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryName"/>
     </actionGroup>
+    <!-- Assert product store view image in storefront category page -->
+    <actionGroup name="AssertStorefrontActiveImageCategoryActionGroup">
+        <arguments>
+            <argument name="category"/>
+            <argument name="product"/>
+            <argument name="image" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(category.name)}}" stepKey="openCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByNameAndSrc(product.name, image)}}" stepKey="seeImage"/>
+    </actionGroup>
 </actionGroups>
