@@ -167,13 +167,13 @@ class Storage extends \Magento\Framework\DataObject
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
      * @param \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory $directoryDatabaseFactory
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
-     * @param \Psr\Log\LoggerInterface|null $logger
      * @param array $resizeParameters
      * @param array $extensions
      * @param array $dirs
      * @param array $data
      * @param \Magento\Framework\Filesystem\DriverInterface $file
      * @param \Magento\Framework\Filesystem\Io\File|null $ioFile
+     * @param \Psr\Log\LoggerInterface|null $logger
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
