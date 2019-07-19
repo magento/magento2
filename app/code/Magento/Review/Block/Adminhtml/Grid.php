@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Review\Block\Adminhtml;
+
 /**
  * Adminhtml reviews grid
  *
@@ -16,8 +18,6 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block\Adminhtml;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
