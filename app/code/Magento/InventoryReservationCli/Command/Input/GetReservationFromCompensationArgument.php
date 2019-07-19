@@ -61,6 +61,8 @@ class GetReservationFromCompensationArgument
     }
 
     /**
+     * Parse CLI argument into order and order item information. 
+     *
      * @param string $argument
      * @return array
      * @throws InvalidArgumentException
@@ -76,6 +78,8 @@ class GetReservationFromCompensationArgument
     }
 
     /**
+     * Builds reservation model from given compensation input argument.
+     *
      * @param string $argument
      * @return ReservationInterface
      * @throws InvalidArgumentException
@@ -93,11 +97,15 @@ class GetReservationFromCompensationArgument
             ->setSku((string)$argumentParts['sku'])
             ->setQuantity((float)$argumentParts['quantity'])
             ->setStockId((int)$argumentParts['stock_id'])
-            ->setMetadata($this->serializer->serialize([
-                'event_type' => 'manual_compensation',
-                'object_type' => 'order',
-                'object_id' => $order->getEntityId(),
-            ]))
+            ->setMetadata(
+                $this->serializer->serialize(
+                    [
+                        'event_type' => 'manual_compensation',
+                        'object_type' => 'order',
+                        'object_id' => $order->getEntityId(),
+                    ]
+                )
+            )
             ->build();
     }
 }
