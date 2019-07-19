@@ -8,6 +8,7 @@ define([
     'jquery',
     'underscore',
     '../template/renderer',
+    'jquery-ui-modules/widget',
     'jquery-ui-modules/slider'
 ], function (ko, $, _, renderer) {
     'use strict';

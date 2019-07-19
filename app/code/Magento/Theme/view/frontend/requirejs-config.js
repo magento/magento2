@@ -29,8 +29,7 @@ var config = {
             'validation':             'mage/validation/validation',
             'welcome':                'Magento_Theme/js/view/welcome',
             'breadcrumbs':            'Magento_Theme/js/view/breadcrumbs',
-            'criticalCssLoader':      'Magento_Theme/js/view/critical-css-loader',
-            'jquery/ui':              'jquery/compat'
+            'criticalCssLoader':      'Magento_Theme/js/view/critical-css-loader'
         }
     },
     paths: {
