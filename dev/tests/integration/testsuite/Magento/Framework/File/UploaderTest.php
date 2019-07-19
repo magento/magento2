@@ -87,17 +87,15 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    protected function tearDown()
     {
-        parent::tearDownAfterClass();
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\Filesystem::class);
+        parent::tearDown();
 
         $tmpDir = 'tmp';
-        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete($tmpDir);
 
-        $logDirectory = $filesystem->getDirectoryWrite(DirectoryList::LOG);
+        $logDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);
         $logDirectory->delete($tmpDir);
     }
 }
