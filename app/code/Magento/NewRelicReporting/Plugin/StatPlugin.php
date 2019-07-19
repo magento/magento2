@@ -55,6 +55,8 @@ class StatPlugin
      * @param array ...$args
      * @return array
      * @see \Magento\Cron\Observer\ProcessCronQueueObserver::startProfiling
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeStart(Stat $schedule, ...$args): array
     {
@@ -73,6 +75,8 @@ class StatPlugin
      * @param Stat $schedule
      * @param array ...$args
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeStop(Stat $schedule, ...$args): array
     {
