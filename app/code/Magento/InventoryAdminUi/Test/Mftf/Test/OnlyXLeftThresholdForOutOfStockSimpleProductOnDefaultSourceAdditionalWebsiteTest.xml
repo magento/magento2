@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnlyXLeftThresholdForOutOfStockSimpleProductOnDefaultSourceAdditionalWebsiteTest">
+        <annotations>
+            <stories value="Only X Left Threshold"/>
+            <title value="Admin user apply 'Only X left Threshold' for 'Out of Stock' Simple product on default source, additional website"/>
+            <description value="Verify, 'Only 0 left' won't appear on out of stock simple product on default source in multistock environment on additional website, when 'Display Out of Stock Products' is on."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3041088"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Add store code to url.-->
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
+            <!--Set "Only X Left" to 1.-->
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 1" stepKey="setStockThreshold"/>
+            <!--Enable "Show Out Of Stock Products".-->
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 1" stepKey="setShowOutOfStockProducts"/>
+            <!--Crate additional source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create category and product.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <!--Create website, store and store view.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!--Perform reindex and flash cache.-->
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        </before>
+        <after>
+            <!--Delete created website.-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Revert "Only X Left".-->
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 0" stepKey="revertOnlyXLeftConfig"/>
+            <!--Revert "Show Out Of Stock Products".-->
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 0" stepKey="revertShowOutOfStockProductsConfig"/>
+            <!--Revert "Add Store Code To URL" configuration.-->
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <!--Perform reindex and flush cache.-->
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterRevertThresholdConfig"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterRevertThresholdConfig"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+
+        <!--Assign Default Stock to Additional Website.-->
+        <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignStockToAdditionalWebsite">
+            <argument name="stockName" value="{{_defaultStock.name}}"/>
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <!--Assign product to additional website and set product qty to zero, to make one 'Out Of Stock'.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="0" stepKey="setProductQuantity"/>
+        <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignProductToAdditionalWebsite">
+            <argument name="website" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <!--Verify 'Only X Left' message.-->
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$product.name$$.html" stepKey="navigateToProductDetailsPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoadToVerifyMessage"/>
+        <dontSeeElement selector=".availability.only" stepKey="verifyMessage"/>
+    </test>
+</tests>
