@@ -636,6 +636,12 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getStore'])
             ->getMockForAbstractClass();
 
+        $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->setMethods(['escapeHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escaper->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $escaper = $objectManager->getObject(
             \Magento\Framework\Escaper::class
@@ -643,6 +649,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         $constructArguments = $objectManager->getConstructArguments(
             \Magento\Sitemap\Model\Sitemap::class,
             [
+                'escaper' => $escaper,
                 'categoryFactory' => $categoryFactory,
                 'productFactory' => $productFactory,
                 'cmsFactory' => $cmsFactory,
