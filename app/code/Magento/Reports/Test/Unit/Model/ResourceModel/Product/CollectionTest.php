@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Product;
 
@@ -12,6 +13,8 @@ use Magento\Catalog\Model\Product\OptionFactory;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\ResourceModel\Helper;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Catalog\Model\ResourceModel\Url;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Session;
@@ -75,6 +78,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $selectMock;
 
+    /**
+     * SetUp method
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -138,31 +146,44 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
 
-        $this->collection = new ProductCollection(
-            $entityFactoryMock,
-            $loggerMock,
-            $fetchStrategyMock,
-            $eventManagerMock,
-            $eavConfigMock,
-            $this->resourceMock,
-            $eavEntityFactoryMock,
-            $resourceHelperMock,
-            $universalFactoryMock,
-            $storeManagerMock,
-            $moduleManagerMock,
-            $productFlatStateMock,
-            $scopeConfigMock,
-            $optionFactoryMock,
-            $catalogUrlMock,
-            $localeDateMock,
-            $customerSessionMock,
-            $dateTimeMock,
-            $groupManagementMock,
-            $productMock,
-            $this->eventTypeFactoryMock,
-            $productTypeMock,
-            $quoteResourceMock,
-            $this->connectionMock
+        $productLimitationFactoryMock = $this->createPartialMock(
+            ProductLimitationFactory::class,
+            ['create']
+        );
+        $productLimitation = $this->createMock(ProductLimitation::class);
+        $productLimitationFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($productLimitation);
+
+        $this->collection = $this->objectManager->getObject(
+            ProductCollection::class,
+            [
+                'entityFactory' => $entityFactoryMock,
+                'logger' => $loggerMock,
+                'fetchStrategy' => $fetchStrategyMock,
+                'eventManager' => $eventManagerMock,
+                'eavConfig' => $eavConfigMock,
+                'resource' => $this->resourceMock,
+                'eavEntityFactory' => $eavEntityFactoryMock,
+                'resourceHelper' => $resourceHelperMock,
+                'universalFactory' => $universalFactoryMock,
+                'storeManager' => $storeManagerMock,
+                'moduleManager' => $moduleManagerMock,
+                'catalogProductFlatState' => $productFlatStateMock,
+                'scopeConfig' => $scopeConfigMock,
+                'productOptionFactory' => $optionFactoryMock,
+                'catalogUrl' => $catalogUrlMock,
+                'localeDate' => $localeDateMock,
+                'customerSession' => $customerSessionMock,
+                'dateTime' => $dateTimeMock,
+                'groupManagement' => $groupManagementMock,
+                'product' => $productMock,
+                'eventTypeFactory' => $this->eventTypeFactoryMock,
+                'productType' => $productTypeMock,
+                'quoteResource' => $quoteResourceMock,
+                'connection' => $this->connectionMock,
+                'productLimitationFactory' => $productLimitationFactoryMock
+            ]
         );
     }
 
