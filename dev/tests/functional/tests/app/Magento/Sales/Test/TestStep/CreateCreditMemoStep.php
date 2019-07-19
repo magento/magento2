@@ -127,7 +127,7 @@ class CreateCreditMemoStep implements TestStepInterface
      * @param array $data
      * @return int
      */
-    private function compareRefundTotalsData($data): int
+    private function compareRefundTotalsData(array $data): int
     {
         $compareData = [
             'shipping_amount' =>
