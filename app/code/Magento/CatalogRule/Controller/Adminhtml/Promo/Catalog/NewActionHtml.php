@@ -8,6 +8,9 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\Rule\Model\Action\AbstractAction;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\NewActionHtml
+ */
 class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
@@ -30,7 +33,9 @@ class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Cata
         }
 
         if ($model instanceof AbstractAction) {
-            $model->setJsFormObject($this->getRequest()->getParam('form'));
+            $formName = $this->getRequest()->getParam('form_namespace');
+            $model->setJsFormObject($formName);
+            $model->setFormName($formName);
             $html = $model->asHtmlRecursive();
         } else {
             $html = '';
