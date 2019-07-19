@@ -7,6 +7,12 @@ namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Layout;
 
+/**
+ * Creates html container and validates element
+ *
+ * Class Container
+ * @package Magento\Framework\View\Layout\Generator
+ */
 class Container implements Layout\GeneratorInterface
 {
     /**#@+
@@ -48,7 +54,7 @@ class Container implements Layout\GeneratorInterface
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return string
      */
@@ -101,6 +107,8 @@ class Container implements Layout\GeneratorInterface
     }
 
     /**
+     * Validates allowed htmlTags for layout
+     *
      * @param array $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
