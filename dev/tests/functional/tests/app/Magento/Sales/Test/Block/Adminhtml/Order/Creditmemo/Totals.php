@@ -93,7 +93,7 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
      */
     public function getRefundShippingElement()
     {
-        return $this->_rootElement->find($this->refundShippingSelector, Locator::SELECTOR_XPATH);
+        return $this->_rootElement->find($this->refundShippingSelector, Locator::SELECTOR_CSS);
     }
 
     /**
@@ -103,7 +103,7 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
      */
     public function getAdjustmentRefundElement()
     {
-        return $this->_rootElement->find($this->adjustmentRefundSelector, Locator::SELECTOR_XPATH);
+        return $this->_rootElement->find($this->adjustmentRefundSelector, Locator::SELECTOR_CSS);
     }
 
     /**
@@ -113,7 +113,7 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
      */
     public function getAdjustmentFeeElement()
     {
-        return $this->_rootElement->find($this->adjustmentFeeSelector, Locator::SELECTOR_XPATH);
+        return $this->_rootElement->find($this->adjustmentFeeSelector, Locator::SELECTOR_CSS);
     }
 
     /**
