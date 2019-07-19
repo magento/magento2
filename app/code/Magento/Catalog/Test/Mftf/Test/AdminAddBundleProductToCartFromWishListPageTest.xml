@@ -10,6 +10,7 @@
     <test name="AdminAddBundleProductToCartFromWishListPageTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Add bundle product to Cart"/>
             <title value="Add bundle product to Cart from Wish list page"/>
             <description value="Add bundle product to Cart from Wish list page"/>
             <severity value="MAJOR"/>
