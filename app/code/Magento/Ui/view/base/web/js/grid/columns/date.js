@@ -40,13 +40,11 @@ define([
          * @returns {String} Formatted date.
          */
         getLabel: function (value, format) {
-            let date;
+            let date = moment.utc(this._super());
 
             if (this.storeLocale !== undefined) {
                 moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
             }
-
-            date = moment.utc(this._super());
 
             if (!_.isUndefined(this.timeZone)) {
                 date = date.tz(this.timeZone);
