@@ -4,17 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Theme wysiwyg storage model
- */
 namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Class Storage
- *
- * @package Magento\Theme\Model\Wysiwyg
+ * Theme wysiwyg storage model
  */
 class Storage
 {
@@ -110,7 +105,7 @@ class Storage
      * Upload file
      *
      * @param string $targetPath
-     * @return bool
+     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadFile($targetPath)
@@ -271,7 +266,7 @@ class Storage
             if (self::TYPE_IMAGE == $storageType) {
                 $requestParams['file'] = $fileName;
                 $file['thumbnailParams'] = $requestParams;
-
+                //phpcs:ignore Generic.PHP.NoSilencedErrors
                 $size = @getimagesize($path);
                 if (is_array($size)) {
                     $file['width'] = $size[0];

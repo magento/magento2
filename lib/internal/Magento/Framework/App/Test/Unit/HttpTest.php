@@ -92,7 +92,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
                 'pathInfoProcessor' => $pathInfoProcessorMock,
                 'objectManager' => $objectManagerMock
             ])
-            ->setMethods(['getFrontName'])
+            ->setMethods(['getFrontName', 'isHead'])
             ->getMock();
         $this->areaListMock = $this->getMockBuilder(\Magento\Framework\App\AreaList::class)
             ->disableOriginalConstructor()
@@ -135,12 +135,17 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $frontName = 'frontName';
         $areaCode = 'areaCode';
-        $this->requestMock->expects($this->once())->method('getFrontName')->will($this->returnValue($frontName));
+        $this->requestMock->expects($this->once())
+            ->method('getFrontName')
+            ->willReturn($frontName);
         $this->areaListMock->expects($this->once())
             ->method('getCodeByFrontName')
-            ->with($frontName)->will($this->returnValue($areaCode));
+            ->with($frontName)
+            ->willReturn($areaCode);
         $this->configLoaderMock->expects($this->once())
-            ->method('load')->with($areaCode)->will($this->returnValue([]));
+            ->method('load')
+            ->with($areaCode)
+            ->willReturn([]);
         $this->objectManagerMock->expects($this->once())->method('configure')->with([]);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
@@ -149,12 +154,15 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')
             ->with($this->requestMock)
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
     }
 
     public function testLaunchSuccess()
     {
         $this->setUpLaunch();
+        $this->requestMock->expects($this->once())
+            ->method('isHead')
+            ->willReturn(false);
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with(
@@ -171,33 +179,101 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function testLaunchException()
     {
         $this->setUpLaunch();
-        $this->frontControllerMock->expects($this->once())->method('dispatch')->with($this->requestMock)->will(
-            $this->returnCallback(
-                function () {
-                    throw new \Exception('Message');
-                }
-            )
-        );
+        $this->frontControllerMock->expects($this->once())
+            ->method('dispatch')
+            ->with($this->requestMock)
+            ->willThrowException(
+                new \Exception('Message')
+            );
         $this->http->launch();
+    }
+
+    /**
+     * Test that HEAD requests lead to an empty body and a Content-Length header matching the original body size.
+     * @dataProvider dataProviderForTestLaunchHeadRequest
+     * @param string $body
+     * @param int $expectedLength
+     */
+    public function testLaunchHeadRequest($body, $expectedLength)
+    {
+        $this->setUpLaunch();
+        $this->requestMock->expects($this->once())
+            ->method('isHead')
+            ->willReturn(true);
+        $this->responseMock->expects($this->once())
+            ->method('getHttpResponseCode')
+            ->willReturn(200);
+        $this->responseMock->expects($this->once())
+            ->method('getContent')
+            ->willReturn($body);
+        $this->responseMock->expects($this->once())
+            ->method('clearBody')
+            ->willReturn($this->responseMock);
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Content-Length', $expectedLength)
+            ->willReturn($this->responseMock);
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'controller_front_send_response_before',
+                ['request' => $this->requestMock, 'response' => $this->responseMock]
+            );
+        $this->assertSame($this->responseMock, $this->http->launch());
+    }
+
+    /**
+     * Different test content for responseMock with their expected lengths in bytes.
+     * @return array
+     */
+    public function dataProviderForTestLaunchHeadRequest(): array
+    {
+        return [
+            [
+                "<html><head></head><body>Test</body></html>",                // Ascii text
+                43                                                            // Expected Content-Length
+            ],
+            [
+                "<html><head></head><body>部落格</body></html>",               // Multi-byte characters
+                48                                                            // Expected Content-Length
+            ],
+            [
+                "<html><head></head><body>\0</body></html>",     // Null byte
+                40                                                            // Expected Content-Length
+            ],
+            [
+                "<html><head></head>خرید<body></body></html>",                // LTR text
+                47                                                            // Expected Content-Length
+            ]
+        ];
     }
 
     public function testHandleDeveloperModeNotInstalled()
     {
         $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $dir->expects($this->once())->method('getAbsolutePath')->willReturn(__DIR__);
+        $dir->expects($this->once())
+            ->method('getAbsolutePath')
+            ->willReturn(__DIR__);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
             ->willReturn($dir);
-        $this->responseMock->expects($this->once())->method('setRedirect')->with('/_files/');
-        $this->responseMock->expects($this->once())->method('sendHeaders');
+        $this->responseMock->expects($this->once())
+            ->method('setRedirect')
+            ->with('/_files/');
+        $this->responseMock->expects($this->once())
+            ->method('sendHeaders');
         $bootstrap = $this->getBootstrapNotInstalled();
-        $bootstrap->expects($this->once())->method('getParams')->willReturn([
-            'SCRIPT_NAME' => '/index.php',
-            'DOCUMENT_ROOT' => __DIR__,
-            'SCRIPT_FILENAME' => __DIR__ . '/index.php',
-            SetupInfo::PARAM_NOT_INSTALLED_URL_PATH => '_files',
-        ]);
+        $bootstrap->expects($this->once())
+            ->method('getParams')
+            ->willReturn(
+                [
+                    'SCRIPT_NAME' => '/index.php',
+                    'DOCUMENT_ROOT' => __DIR__,
+                    'SCRIPT_FILENAME' => __DIR__ . '/index.php',
+                    SetupInfo::PARAM_NOT_INSTALLED_URL_PATH => '_files',
+                ]
+            );
         $this->assertTrue($this->http->catchException($bootstrap, new \Exception('Test Message')));
     }
 
@@ -206,24 +282,37 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->will($this->throwException(new \Exception('strange error')));
-        $this->responseMock->expects($this->once())->method('setHttpResponseCode')->with(500);
-        $this->responseMock->expects($this->once())->method('setHeader')->with('Content-Type', 'text/plain');
+        $this->responseMock->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(500);
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Content-Type', 'text/plain');
         $constraint = new \PHPUnit\Framework\Constraint\StringStartsWith('1 exception(s):');
-        $this->responseMock->expects($this->once())->method('setBody')->with($constraint);
-        $this->responseMock->expects($this->once())->method('sendResponse');
+        $this->responseMock->expects($this->once())
+            ->method('setBody')
+            ->with($constraint);
+        $this->responseMock->expects($this->once())
+            ->method('sendResponse');
         $bootstrap = $this->getBootstrapNotInstalled();
-        $bootstrap->expects($this->once())->method('getParams')->willReturn(
-            ['DOCUMENT_ROOT' => 'something', 'SCRIPT_FILENAME' => 'something/else']
-        );
+        $bootstrap->expects($this->once())
+            ->method('getParams')
+            ->willReturn(
+                ['DOCUMENT_ROOT' => 'something', 'SCRIPT_FILENAME' => 'something/else']
+            );
         $this->assertTrue($this->http->catchException($bootstrap, new \Exception('Test')));
     }
 
     public function testCatchExceptionSessionException()
     {
-        $this->responseMock->expects($this->once())->method('setRedirect');
-        $this->responseMock->expects($this->once())->method('sendHeaders');
+        $this->responseMock->expects($this->once())
+            ->method('setRedirect');
+        $this->responseMock->expects($this->once())
+            ->method('sendHeaders');
         $bootstrap = $this->createMock(\Magento\Framework\App\Bootstrap::class);
-        $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(false);
+        $bootstrap->expects($this->once())
+            ->method('isDeveloperMode')
+            ->willReturn(false);
         $this->assertTrue($this->http->catchException(
             $bootstrap,
             new \Magento\Framework\Exception\SessionException(new \Magento\Framework\Phrase('Test'))
@@ -238,8 +327,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     private function getBootstrapNotInstalled()
     {
         $bootstrap = $this->createMock(\Magento\Framework\App\Bootstrap::class);
-        $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(true);
-        $bootstrap->expects($this->once())->method('getErrorCode')->willReturn(Bootstrap::ERR_IS_INSTALLED);
+        $bootstrap->expects($this->once())
+            ->method('isDeveloperMode')
+            ->willReturn(true);
+        $bootstrap->expects($this->once())
+            ->method('getErrorCode')
+            ->willReturn(Bootstrap::ERR_IS_INSTALLED);
         return $bootstrap;
     }
 }

@@ -24,9 +24,6 @@
         <testsuite name="Code Integrity Tests">
             <directory>testsuite/Magento/Test/Integrity</directory>
         </testsuite>
-        <testsuite name="Xss Unsafe Output Test">
-            <file>testsuite/Magento/Test/Php/XssPhtmlTemplateTest.php</file>
-        </testsuite>
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>

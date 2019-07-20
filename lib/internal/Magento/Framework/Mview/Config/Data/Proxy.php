@@ -55,10 +55,17 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
     }
 
     /**
+     * Remove links to objects.
+     *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         return ['subject', 'isShared'];
     }
 
@@ -66,9 +73,14 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
@@ -100,7 +112,7 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function merge(array $config)
     {
@@ -108,7 +120,7 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($path = null, $default = null)
     {

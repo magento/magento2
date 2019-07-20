@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontMiniCartItemsActionGroup">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productPrice" type="string"/>
+            <argument name="cartSubtotal" type="string"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productName}}"  stepKey="seeProductNameInMiniCart"/>
+        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productPrice}}" stepKey="seeProductPriceInMiniCart"/>
+        <seeElement selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="seeCheckOutButtonInMiniCart"/>
+        <seeElement selector="{{StorefrontMinicartSection.productQuantity(productName, qty)}}" stepKey="seeProductQuantity1"/>
+        <seeElement selector="{{StorefrontMinicartSection.productImage}}" stepKey="seeProductImage"/>
+        <see selector="{{StorefrontMinicartSection.productSubTotal}}" userInput="{{cartSubtotal}}" stepKey="seeSubTotal"/>
+    </actionGroup>
+</actionGroups>

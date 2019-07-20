@@ -31,7 +31,7 @@
                 <field id="account" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Account Number</label>
                 </field>
-                <field id="content_type" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="content_type" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Content Type (Non Domestic)</label>
                     <comment>Whether to use Documents or NonDocuments service for non domestic shipments. (Shipments within the EU are classed as domestic)</comment>
                     <source_model>Magento\Dhl\Model\Source\Contenttype</source_model>

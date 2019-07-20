@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Config\Test\Unit;
 
+/**
+ * Test for \Magento\Framework\Config\Dom class.
+ */
 class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -62,6 +65,37 @@ class DomTest extends \PHPUnit\Framework\TestCase
             ['override_node.xml', 'override_node_new.xml', [], null, 'override_node_merged.xml'],
             ['override_node_new.xml', 'override_node.xml', [], null, 'override_node_merged.xml'],
             ['text_node.xml', 'text_node_new.xml', [], null, 'text_node_merged.xml'],
+            'text node replaced with cdata' => [
+                'text_node_cdata.xml',
+                'text_node_cdata_new.xml',
+                [],
+                null,
+                'text_node_cdata_merged.xml'
+            ],
+            'cdata' => ['cdata.xml', 'cdata_new.xml', [], null, 'cdata_merged.xml'],
+            'cdata with html' => ['cdata_html.xml', 'cdata_html_new.xml', [], null, 'cdata_html_merged.xml'],
+            'cdata replaced with text node' => [
+                'cdata_text.xml',
+                'cdata_text_new.xml',
+                [],
+                null,
+                'cdata_text_merged.xml'
+            ],
+            'big cdata' => ['big_cdata.xml', 'big_cdata_new.xml', [], null, 'big_cdata_merged.xml'],
+            'big cdata with attribute' => [
+                'big_cdata_attribute.xml',
+                'big_cdata_attribute_new.xml',
+                [],
+                null,
+                'big_cdata_attribute_merged.xml'
+            ],
+            'big cdata replaced with text' => [
+                'big_cdata_text.xml',
+                'big_cdata_text_new.xml',
+                [],
+                null,
+                'big_cdata_text_merged.xml'
+            ],
             [
                 'recursive.xml',
                 'recursive_new.xml',

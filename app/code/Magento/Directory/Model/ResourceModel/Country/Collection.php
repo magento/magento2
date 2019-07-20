@@ -127,24 +127,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_foregroundCountries = [];
 
     /**
-     * Add top destinition countries to head of option array
-     *
-     * @param string $emptyLabel
-     * @param array $options
-     * @return array
-     */
-    private function addForegroundCountriesToOptionArray($emptyLabel, $options)
-    {
-        if ($emptyLabel !== false && count($this->_foregroundCountries) !== 0 &&
-            count($options) === count($this->_foregroundCountries)
-        ) {
-            $options[] = ['value' => '', 'label' => $emptyLabel];
-            return $options;
-        }
-        return $options;
-    }
-
-    /**
      * Define main table
      *
      * @return void
@@ -269,24 +251,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function toOptionArray($emptyLabel = ' ')
     {
         $options = $this->_toOptionArray('country_id', 'name', ['title' => 'iso2_code']);
-        $sort = [];
-        foreach ($options as $data) {
-            $name = (string)$this->_localeLists->getCountryTranslation($data['value']);
-            if (!empty($name)) {
-                $sort[$name] = $data['value'];
-            }
-        }
+        $sort = $this->getSort($options);
+
         $this->_arrayUtils->ksortMultibyte($sort, $this->_localeResolver->getLocale());
         foreach (array_reverse($this->_foregroundCountries) as $foregroundCountry) {
             $name = array_search($foregroundCountry, $sort);
-            unset($sort[$name]);
-            $sort = [$name => $foregroundCountry] + $sort;
+            if ($name) {
+                unset($sort[$name]);
+                $sort = [$name => $foregroundCountry] + $sort;
+            }
         }
         $isRegionVisible = (bool)$this->helperData->isShowNonRequiredState();
 
         $options = [];
         foreach ($sort as $label => $value) {
-            $options = $this->addForegroundCountriesToOptionArray($emptyLabel, $options);
             $option = ['value' => $value, 'label' => $label];
             if ($this->helperData->isRegionRequired($value)) {
                 $option['is_region_required'] = true;
@@ -365,5 +343,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
         }
         return $countries;
+    }
+
+    /**
+     * Get sort
+     *
+     * @param array $options
+     * @return array
+     */
+    private function getSort(array $options): array
+    {
+        $sort = [];
+        foreach ($options as $data) {
+            $name = (string)$this->_localeLists->getCountryTranslation($data['value']);
+            if (!empty($name)) {
+                $sort[$name] = $data['value'];
+            }
+        }
+
+        return $sort;
     }
 }

@@ -9,8 +9,8 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CustomerLogoutStorefrontByMenuItemsActionGroup">
-        <conditionalClick selector="{{StorefrontPanelHeaderSection.customerWelcome}}"
-                          dependentSelector="{{StorefrontPanelHeaderSection.customerWelcomeMenu}}"
+        <conditionalClick selector="{{StorefrontPanelHeaderSection.customerWelcomeMenu}}"
+                          dependentSelector="{{StorefrontPanelHeaderSection.customerLogoutLink}}"
                           visible="false"
                           stepKey="clickHeaderCustomerMenuButton" />
         <click selector="{{StorefrontPanelHeaderSection.customerLogoutLink}}" stepKey="clickSignOutButton" />

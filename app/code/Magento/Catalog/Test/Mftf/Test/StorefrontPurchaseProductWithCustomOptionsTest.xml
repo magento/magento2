@@ -12,10 +12,10 @@
         <annotations>
             <features value="Catalog"/>
             <stories value="Purchase a product with Custom Options of different types"/>
-            <title value="Admin should be able to sell products with different variants of their own"/>
-            <description value="Admin should be able to sell products with different variants of their own"/>
+            <title value="Admin should be able to sell products with custom options of different types"/>
+            <description value="Admin should be able to sell products with custom options of different types"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-61717"/>
+            <testCaseId value="MC-16462"/>
             <group value="Catalog"/>
         </annotations>
         <before>

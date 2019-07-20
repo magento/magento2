@@ -373,7 +373,7 @@ define([
                 allowedProducts,
                 i,
                 j,
-                basePrice = parseFloat(this.options.spConfig.prices.basePrice.amount),
+                finalPrice = parseFloat(this.options.spConfig.prices.finalPrice.amount),
                 optionFinalPrice,
                 optionPriceDiff,
                 optionPrices = this.options.spConfig.optionPrices,
@@ -410,7 +410,7 @@ define([
                             typeof optionPrices[allowedProducts[0]] !== 'undefined') {
                             allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
                             optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
-                            optionPriceDiff = optionFinalPrice - basePrice;
+                            optionPriceDiff = optionFinalPrice - finalPrice;
 
                             if (optionPriceDiff !== 0) {
                                 options[i].label = options[i].label + ' ' + priceUtils.formatPrice(

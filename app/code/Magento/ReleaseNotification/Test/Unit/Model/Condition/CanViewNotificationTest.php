@@ -12,6 +12,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\CacheInterface;
+use Magento\User\Model\User;
 
 class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,6 +34,11 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
     private $cacheStorageMock;
 
+    /**
+     * @var User|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $userMock;
+
     public function setUp()
     {
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
@@ -41,7 +47,6 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUser', 'getId'])
             ->getMock();
         $this->viewerLoggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
@@ -49,6 +54,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->userMock = $this->createMock(User::class);
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
@@ -65,8 +71,8 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     {
         $this->sessionMock->expects($this->once())
             ->method('getUser')
-            ->willReturn($this->sessionMock);
-        $this->sessionMock->expects($this->once())
+            ->willReturn($this->userMock);
+        $this->userMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
         $this->cacheStorageMock->expects($this->once())
@@ -90,8 +96,8 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
         $this->sessionMock->expects($this->once())
             ->method('getUser')
-            ->willReturn($this->sessionMock);
-        $this->sessionMock->expects($this->once())
+            ->willReturn($this->userMock);
+        $this->userMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
         $this->productMetadataMock->expects($this->once())

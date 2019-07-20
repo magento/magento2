@@ -16,7 +16,8 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-captcha": "*"
     },
     "suggest": {
         "magento/module-configurable-product": "*",

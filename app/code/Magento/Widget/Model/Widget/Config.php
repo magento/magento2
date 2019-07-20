@@ -120,6 +120,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 
     /**
      * Return url to error image
+     *
      * @return string
      */
     public function getErrorImageUrl()
@@ -129,6 +130,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 
     /**
      * Return url to wysiwyg plugin
+     *
      * @return string
      */
     public function getWysiwygJsPluginSrc()
@@ -157,7 +159,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
             }
         }
 
-        if (count($skipped) > 0) {
+        if (!empty($skipped)) {
             $params['skip_widgets'] = $this->encodeWidgetsToQuery($skipped);
         }
         return $this->_backendUrl->getUrl('adminhtml/widget/index', $params);
@@ -189,6 +191,8 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     }
 
     /**
+     * Get available widgets.
+     *
      * @param \Magento\Framework\DataObject $config Editor element config
      * @return array
      */
@@ -202,7 +206,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
                 if (is_array($skipped) && in_array($widget['type'], $skipped)) {
                     continue;
                 }
-                $result[] = $widget['name']->getText();
+                $result[$widget['type']] = $widget['name']->getText();
             }
         }
 

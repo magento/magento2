@@ -22,13 +22,15 @@ class Term implements BucketBuilderInterface
         array $queryResult,
         DataProviderInterface $dataProvider
     ) {
+        $buckets = $queryResult['aggregations'][$bucket->getName()]['buckets'] ?? [];
         $values = [];
-        foreach ($queryResult['aggregations'][$bucket->getName()]['buckets'] as $resultBucket) {
+        foreach ($buckets as $resultBucket) {
             $values[$resultBucket['key']] = [
                 'value' => $resultBucket['key'],
                 'count' => $resultBucket['doc_count'],
             ];
         }
+
         return $values;
     }
 }

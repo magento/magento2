@@ -89,4 +89,98 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
             'partial invoice' => [1]
         ];
     }
+
+    /**
+     * Checks if ordered and invoiced qty of bundle product does match.
+     *
+     * @param array $qtyToInvoice
+     * @param array $qtyInvoiced
+     * @param string $errorMsg
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @magentoDataFixture Magento/Sales/_files/order_with_bundle.php
+     * @dataProvider bundleProductQtyOrderedDataProvider
+     */
+    public function testPrepareInvoiceBundleProduct(
+        array $qtyToInvoice,
+        array $qtyInvoiced,
+        string $errorMsg
+    ): void {
+        /** @var Order $order */
+        $order = Bootstrap::getObjectManager()->create(Order::class)
+            ->load('100000001', 'increment_id');
+
+        $predefinedQtyToInvoice = $this->getPredefinedQtyToInvoice($order, $qtyToInvoice);
+        $invoice = $this->invoiceService->prepareInvoice($order, $predefinedQtyToInvoice);
+
+        foreach ($invoice->getItems() as $invoiceItem) {
+            if (isset($qtyInvoiced[$invoiceItem->getSku()])) {
+                $this->assertEquals(
+                    $qtyInvoiced[$invoiceItem->getSku()],
+                    $invoiceItem->getQty(),
+                    sprintf($errorMsg, $invoiceItem->getSku())
+                );
+            }
+        }
+    }
+
+    /**
+     * Data provider for invoice creation with and w/o predefined qty to invoice.
+     *
+     * @return array
+     */
+    public function bundleProductQtyOrderedDataProvider(): array
+    {
+        return [
+            'Create invoice w/o predefined qty' => [
+                'Qty to invoice' => [],
+                'Qty ordered' => [
+                    'bundle_1' => 2,
+                    'bundle_simple_1' => 10,
+                ],
+                'Error msg' => 'Invoiced qty for product %s does not match.',
+            ],
+            'Create invoice with predefined qty' => [
+                'Qty to invoice' => [
+                    'bundle_1' => 2,
+                    'bundle_simple_1' => 10,
+                ],
+                'Qty ordered' => [
+                    'bundle_1' => 2,
+                    'bundle_simple_1' => 10,
+                ],
+                'Error msg' => 'Invoiced qty for product %s does not match.',
+            ],
+            'Create invoice with partial predefined qty for bundle' => [
+                'Qty to invoice' => [
+                    'bundle_1' => 1,
+                ],
+                'Qty ordered' => [
+                    'bundle_1' => 1,
+                    'bundle_simple_1' => 5,
+                ],
+                'Error msg' => 'Invoiced qty for product %s does not match.',
+            ],
+        ];
+    }
+
+    /**
+     * Associate product qty to invoice to order item id.
+     *
+     * @param Order $order
+     * @param array $qtyToInvoice
+     * @return array
+     */
+    private function getPredefinedQtyToInvoice(Order $order, array $qtyToInvoice): array
+    {
+        $predefinedQtyToInvoice = [];
+
+        foreach ($order->getAllItems() as $orderItem) {
+            if (array_key_exists($orderItem->getSku(), $qtyToInvoice)) {
+                $predefinedQtyToInvoice[$orderItem->getId()] = $qtyToInvoice[$orderItem->getSku()];
+            }
+        }
+
+        return $predefinedQtyToInvoice;
+    }
 }

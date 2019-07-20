@@ -12,4 +12,9 @@
         <data key="store_id">0</data>
         <var key="sku" entityType="product2" entityKey="sku" />
     </entity>
+    <entity name="specialProductPrice2" type="catalogSpecialPrice">
+        <data key="price">55.55</data>
+        <data key="store_id">0</data>
+        <var key="sku" entityType="product" entityKey="sku" />
+    </entity>
 </entities>

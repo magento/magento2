@@ -3,7 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Block\Product\View\Options\Type;
+
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Block\Product\View\Options\Type\Select\CheckableFactory;
+use Magento\Catalog\Block\Product\View\Options\Type\Select\MultipleFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\Pricing\Helper\Data;
+use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
  * Product options text type block
@@ -14,168 +23,59 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
 class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
     /**
+     * @var CheckableFactory
+     */
+    private $checkableFactory;
+    /**
+     * @var MultipleFactory
+     */
+    private $multipleFactory;
+
+    /**
+     * Select constructor.
+     * @param Context $context
+     * @param Data $pricingHelper
+     * @param CatalogHelper $catalogData
+     * @param array $data
+     * @param CheckableFactory|null $checkableFactory
+     * @param MultipleFactory|null $multipleFactory
+     */
+    public function __construct(
+        Context $context,
+        Data $pricingHelper,
+        CatalogHelper $catalogData,
+        array $data = [],
+        CheckableFactory $checkableFactory = null,
+        MultipleFactory $multipleFactory = null
+    ) {
+        parent::__construct($context, $pricingHelper, $catalogData, $data);
+        $this->checkableFactory = $checkableFactory ?: ObjectManager::getInstance()->get(CheckableFactory::class);
+        $this->multipleFactory = $multipleFactory ?: ObjectManager::getInstance()->get(MultipleFactory::class);
+    }
+
+    /**
      * Return html for control element
      *
      * @return string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getValuesHtml()
     {
-        $_option = $this->getOption();
-        $configValue = $this->getProduct()->getPreconfiguredValues()->getData('options/' . $_option->getId());
-        $store = $this->getProduct()->getStore();
-
-        $this->setSkipJsReloadPrice(1);
-        // Remove inline prototype onclick and onchange events
-
-        if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN ||
-            $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE
+        $option = $this->getOption();
+        $optionType = $option->getType();
+        if ($optionType === Option::OPTION_TYPE_DROP_DOWN ||
+            $optionType === Option::OPTION_TYPE_MULTIPLE
         ) {
-            $require = $_option->getIsRequire() ? ' required' : '';
-            $extraParams = '';
-            $select = $this->getLayout()->createBlock(
-                \Magento\Framework\View\Element\Html\Select::class
-            )->setData(
-                [
-                    'id' => 'select_' . $_option->getId(),
-                    'class' => $require . ' product-custom-option admin__control-select'
-                ]
-            );
-            if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN) {
-                $select->setName('options[' . $_option->getId() . ']')->addOption('', __('-- Please Select --'));
-            } else {
-                $select->setName('options[' . $_option->getId() . '][]');
-                $select->setClass('multiselect admin__control-multiselect' . $require . ' product-custom-option');
-            }
-            foreach ($_option->getValues() as $_value) {
-                $priceStr = $this->_formatPrice(
-                    [
-                        'is_percent' => $_value->getPriceType() == 'percent',
-                        'pricing_value' => $_value->getPrice($_value->getPriceType() == 'percent'),
-                    ],
-                    false
-                );
-                $select->addOption(
-                    $_value->getOptionTypeId(),
-                    $_value->getTitle() . ' ' . strip_tags($priceStr) . '',
-                    ['price' => $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false)]
-                );
-            }
-            if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE) {
-                $extraParams = ' multiple="multiple"';
-            }
-            if (!$this->getSkipJsReloadPrice()) {
-                $extraParams .= ' onchange="opConfig.reloadPrice()"';
-            }
-            $extraParams .= ' data-selector="' . $select->getName() . '"';
-            $select->setExtraParams($extraParams);
-
-            if ($configValue) {
-                $select->setValue($configValue);
-            }
-
-            return $select->getHtml();
+            $optionBlock = $this->multipleFactory->create();
         }
-
-        if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO ||
-            $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX
+        if ($optionType === Option::OPTION_TYPE_RADIO ||
+            $optionType === Option::OPTION_TYPE_CHECKBOX
         ) {
-            $selectHtml = '<div class="options-list nested" id="options-' . $_option->getId() . '-list">';
-            $require = $_option->getIsRequire() ? ' required' : '';
-            $arraySign = '';
-            switch ($_option->getType()) {
-                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO:
-                    $type = 'radio';
-                    $class = 'radio admin__control-radio';
-                    if (!$_option->getIsRequire()) {
-                        $selectHtml .= '<div class="field choice admin__field admin__field-option">' .
-                            '<input type="radio" id="options_' .
-                            $_option->getId() .
-                            '" class="' .
-                            $class .
-                            ' product-custom-option" name="options[' .
-                            $_option->getId() .
-                            ']"' .
-                            ' data-selector="options[' . $_option->getId() . ']"' .
-                            ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"') .
-                            ' value="" checked="checked" /><label class="label admin__field-label" for="options_' .
-                            $_option->getId() .
-                            '"><span>' .
-                            __('None') . '</span></label></div>';
-                    }
-                    break;
-                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX:
-                    $type = 'checkbox';
-                    $class = 'checkbox admin__control-checkbox';
-                    $arraySign = '[]';
-                    break;
-            }
-            $count = 1;
-            foreach ($_option->getValues() as $_value) {
-                $count++;
-
-                $priceStr = $this->_formatPrice(
-                    [
-                        'is_percent' => $_value->getPriceType() == 'percent',
-                        'pricing_value' => $_value->getPrice($_value->getPriceType() == 'percent'),
-                    ]
-                );
-
-                $htmlValue = $_value->getOptionTypeId();
-                if ($arraySign) {
-                    $checked = is_array($configValue) && in_array($htmlValue, $configValue) ? 'checked' : '';
-                } else {
-                    $checked = $configValue == $htmlValue ? 'checked' : '';
-                }
-
-                $dataSelector = 'options[' . $_option->getId() . ']';
-                if ($arraySign) {
-                    $dataSelector .= '[' . $htmlValue . ']';
-                }
-
-                $selectHtml .= '<div class="field choice admin__field admin__field-option' .
-                    $require .
-                    '">' .
-                    '<input type="' .
-                    $type .
-                    '" class="' .
-                    $class .
-                    ' ' .
-                    $require .
-                    ' product-custom-option"' .
-                    ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"') .
-                    ' name="options[' .
-                    $_option->getId() .
-                    ']' .
-                    $arraySign .
-                    '" id="options_' .
-                    $_option->getId() .
-                    '_' .
-                    $count .
-                    '" value="' .
-                    $htmlValue .
-                    '" ' .
-                    $checked .
-                    ' data-selector="' . $dataSelector . '"' .
-                    ' price="' .
-                    $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false) .
-                    '" />' .
-                    '<label class="label admin__field-label" for="options_' .
-                    $_option->getId() .
-                    '_' .
-                    $count .
-                    '"><span>' .
-                    $_value->getTitle() .
-                    '</span> ' .
-                    $priceStr .
-                    '</label>';
-                $selectHtml .= '</div>';
-            }
-            $selectHtml .= '</div>';
-
-            return $selectHtml;
+            $optionBlock = $this->checkableFactory->create();
         }
+        return $optionBlock
+            ->setOption($option)
+            ->setProduct($this->getProduct())
+            ->setSkipJsReloadPrice(1)
+            ->_toHtml();
     }
 }

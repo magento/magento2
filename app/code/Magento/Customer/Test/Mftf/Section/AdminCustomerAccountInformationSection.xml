@@ -31,5 +31,8 @@
         <element name="firstNameRequiredMessage" type="text" selector="//input[@name='customer[firstname]']/../label[contains(.,'This is a required field.')]"/>
         <element name="lastNameRequiredMessage" type="text" selector="//input[@name='customer[lastname]']/../label[contains(.,'This is a required field.')]"/>
         <element name="emailRequiredMessage" type="text" selector="//input[@name='customer[email]']/../label[contains(.,'This is a required field.')]"/>
+        <element name="customAttribute" type="select" selector="//select[contains(@name, 'customer[{{attribute_code}}]')]" parameterized="true"/>
+        <element name="disabledGroup" type="text" selector="//div[@class='admin__action-group-wrap admin__action-multiselect-wrap action-select-wrap _disabled']"/>
+        <element name="attributeImage" type="block" selector="//div[contains(concat(' ',normalize-space(@class),' '),' file-uploader-preview ')]//img"/>
     </section>
 </sections>

@@ -29,6 +29,10 @@
                     <label>Transaction Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
+                <field id="signature_key" translate="label" type="obscure" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Signature Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
                 <field id="trans_md5" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Merchant MD5</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>

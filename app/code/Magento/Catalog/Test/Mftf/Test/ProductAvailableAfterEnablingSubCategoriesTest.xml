@@ -11,6 +11,7 @@
     <test name="ProductAvailableAfterEnablingSubCategoriesTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Categories"/>
             <title value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
             <description value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
             <severity value="MAJOR"/>

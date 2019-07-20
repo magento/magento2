@@ -83,10 +83,10 @@
             <argument name="description" type="string"/>
         </arguments>
         <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
-        <click selector="{{AdminUrlRewriteEditSection.storeValue('storeValue')}}" stepKey="clickOnStoreValue"/>
+        <click selector="{{AdminUrlRewriteEditSection.storeValue(storeValue)}}" stepKey="clickOnStoreValue"/>
         <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
         <click selector="{{AdminUrlRewriteEditSection.redirectType}}" stepKey="selectRedirectType"/>
-        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue('redirectTypeValue')}}" stepKey="selectRedirectTypeValue"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue(redirectTypeValue)}}" stepKey="selectRedirectTypeValue"/>
         <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
         <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>

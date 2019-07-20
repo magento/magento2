@@ -62,9 +62,14 @@ trait Interceptor
      * Calls parent class sleep if defined, otherwise provides own implementation
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         if (method_exists(get_parent_class($this), '__sleep')) {
             $properties = parent::__sleep();
         } else {
@@ -78,9 +83,14 @@ trait Interceptor
      * Causes Interceptor to be initialized
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         if (method_exists(get_parent_class($this), '__wakeup')) {
             parent::__wakeup();
         }

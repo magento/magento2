@@ -13,5 +13,6 @@
         <element name="nthSuccess" type="text" selector=".message.message-success.success:nth-of-type({{n}})>div" parameterized="true"/>
         <element name="error" type="text" selector="#messages div.message-error"/>
         <element name="notice" type="text" selector=".message.message-notice.notice"/>
+        <element name="messageByType" type="text" selector="#messages div.message-{{messageType}}" parameterized="true" />
     </section>
 </sections>

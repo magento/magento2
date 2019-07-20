@@ -12,12 +12,19 @@
         <element name="emailField" type="input" selector="#email"/>
         <element name="passwordField" type="input" selector="#pass"/>
         <element name="signInAccountButton" type="button" selector="#send2" timeout="30"/>
-        <element name="forgotPasswordLink" type="link" selector=".action.remind" timeout="10"/>
+        <element name="forgotPasswordLink" type="button" selector=".action.remind" timeout="10"/>
+        <element name="customerLoginBlock" type="text" selector=".login-container .block.block-customer-login"/>
     </section>
     <section name="StorefrontCustomerSignInPopupFormSection">
         <element name="errorMessage" type="input" selector="[data-ui-id='checkout-cart-validationmessages-message-error']"/>
         <element name="email" type="input" selector="#customer-email"/>
         <element name="password" type="input" selector="#pass"/>
         <element name="signIn" type="button" selector="#send2" timeout="30"/>
+    </section>
+    <section name="StorefrontCustomerSignInLinkSection">
+        <element name="signInLink" type="button" selector=".action-auth-toggle" timeout="30"/>
+        <element name="email" type="input" selector="#login-email"/>
+        <element name="password" type="input" selector="#login-password"/>
+        <element name="signInBtn" type="button" selector="//button[contains(@class, 'action-login') and not(contains(@id,'send2'))]" timeout="30"/>
     </section>
 </sections>

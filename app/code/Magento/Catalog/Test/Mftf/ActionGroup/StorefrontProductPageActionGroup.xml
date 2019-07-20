@@ -13,10 +13,20 @@
             <argument name="productName"/>
         </arguments>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AddProductWithQtyToCartFromStorefrontProductPage" extends="addToCartFromStorefrontProductPage">
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQuantity" before="addToCart"/>
     </actionGroup>
 
     <!--Verify text length validation hint with multiple inputs-->

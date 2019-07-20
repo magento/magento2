@@ -546,15 +546,16 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     public function validateResponse()
     {
         $response = $this->getResponse();
-        //md5 check
-        if (!$this->getConfigData('trans_md5')
-            || !$this->getConfigData('login')
-            || !$response->isValidHash($this->getConfigData('trans_md5'), $this->getConfigData('login'))
+        $hashConfigKey = !empty($response->getData('x_SHA2_Hash')) ? 'signature_key' : 'trans_md5';
+
+        //hash check
+        if (!$response->isValidHash($this->getConfigData($hashConfigKey), $this->getConfigData('login'))
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The transaction was declined because the response hash validation failed.')
             );
         }
+
         return true;
     }
 

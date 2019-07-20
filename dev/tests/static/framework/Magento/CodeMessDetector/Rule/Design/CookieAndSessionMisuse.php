@@ -55,6 +55,19 @@ class CookieAndSessionMisuse extends AbstractRule implements ClassAware
     }
 
     /**
+     * Is given class a Layout Processor?
+     *
+     * @param \ReflectionClass $class
+     * @return bool
+     */
+    private function isLayoutProcessor(\ReflectionClass $class): bool
+    {
+        return $class->isSubclassOf(
+            \Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class
+        );
+    }
+
+    /**
      * Is given class an HTML UI Document?
      *
      * @param \ReflectionClass $class
@@ -159,6 +172,7 @@ class CookieAndSessionMisuse extends AbstractRule implements ClassAware
      * @inheritdoc
      *
      * @param ClassNode|ASTClass $node
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function apply(AbstractNode $node)
     {
@@ -176,6 +190,7 @@ class CookieAndSessionMisuse extends AbstractRule implements ClassAware
                 && !$this->isUiDocument($class)
                 && !$this->isControllerPlugin($class)
                 && !$this->isBlockPlugin($class)
+                && !$this->isLayoutProcessor($class)
             ) {
                 $this->addViolation($node, [$node->getFullQualifiedName()]);
             }

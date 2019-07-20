@@ -161,9 +161,15 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionAdapter->expects($this->once())
+
+        $this->connectionAdapter->expects($this->exactly(2))
             ->method('select')
             ->willReturn($select);
+
+        $this->connectionAdapter->expects($this->once())
+            ->method('fetchOne')
+            ->with($select)
+            ->willReturn($selectResult['total']);
 
         $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
             ->disableOriginalConstructor()
