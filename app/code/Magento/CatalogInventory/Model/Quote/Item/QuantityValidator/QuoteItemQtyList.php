@@ -5,10 +5,14 @@
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList
+ */
 class QuoteItemQtyList
 {
     /**
      * Product qty's checked
+     *
      * data is valid if you check quote item qty and use singleton instance
      *
      * @var array
@@ -17,13 +21,13 @@ class QuoteItemQtyList
 
     /**
      * Get product qty includes information from all quote items
+     *
      * Need be used only in singleton mode
      *
      * @param int   $productId
      * @param int   $quoteItemId
      * @param int   $quoteId
      * @param float $itemQty
-     *
      * @return int
      */
     public function getQty($productId, $quoteItemId, $quoteId, $itemQty)
