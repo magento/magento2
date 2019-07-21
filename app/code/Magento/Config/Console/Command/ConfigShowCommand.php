@@ -150,7 +150,7 @@ class ConfigShowCommand extends Command
             $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
             $configValue = $this->configSource->get($configPath);
 
-            if (empty($configValue)) {
+            if ($configValue == null && empty($configValue)) {
                 $output->writeln(sprintf(
                     '<error>%s</error>',
                     __('Configuration for path: "%1" doesn\'t exist', $this->inputPath)->render()
