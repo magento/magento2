@@ -10,6 +10,9 @@ namespace Magento\ConfigurableProduct\Api;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 
+/**
+ * Class OptionRepositoryTest for testing ConfigurableProductoption integration
+ */
 class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'configurableProductOptionRepositoryV1';
@@ -208,6 +211,47 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $this->assertGreaterThan(0, $result);
         $configurableAttribute = $this->getConfigurableAttribute($productSku);
         $this->assertEquals($requestBody['option']['label'], $configurableAttribute[0]['label']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testUpdateWithoutOptionId()
+    {
+        $productSku = 'configurable';
+        /** @var AttributeRepositoryInterface $attributeRepository */
+
+        $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
+
+        /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
+        $attribute = $attributeRepository->get('catalog_product', 'test_configurable');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/options',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save'
+            ]
+        ];
+
+        $option = [
+            'attribute_id' => $attribute->getAttributeId(),
+            'label' => 'Update Test Configurable with sku and attribute_id',
+            'values' => [
+                [
+                    'value_index' => 1,
+                ]
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'option' => $option]);
+        $this->assertGreaterThan(0, $result);
+        $configurableAttribute = $this->getConfigurableAttribute($productSku);
+        $this->assertEquals($option['label'], $configurableAttribute[0]['label']);
     }
 
     /**

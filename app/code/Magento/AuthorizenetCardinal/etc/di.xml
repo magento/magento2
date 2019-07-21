@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="AuthorizenetAcceptjsAuthorizeRequest">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="3d_secure" xsi:type="string">Magento\AuthorizenetCardinal\Gateway\Request\Authorize3DSecureBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

@@ -80,8 +80,8 @@ class QuoteAddressFactory
      * @param int $customerAddressId
      * @param int $customerId
      * @return QuoteAddress
-     * @throws GraphQlInputException
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
     public function createBasedOnCustomerAddress(int $customerAddressId, int $customerId): QuoteAddress

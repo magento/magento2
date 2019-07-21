@@ -24,7 +24,7 @@
         <element name="mediaDescription" type="text" selector="img[alt='{{var1}}']" parameterized="true"/>
         <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
         <element name="productImage" type="text" selector="img.product-image-photo"/>
-        <element name="productLink" type="text" selector="a.product-item-link"/>
+        <element name="productLink" type="text" selector="a.product-item-link" timeout="30"/>
         <element name="productLinkByHref" type="text" selector="a.product-item-link[href$='{{var1}}.html']" parameterized="true"/>
         <element name="productPrice" type="text" selector=".price-final_price"/>
         <element name="categoryImage" type="text" selector=".category-image"/>
