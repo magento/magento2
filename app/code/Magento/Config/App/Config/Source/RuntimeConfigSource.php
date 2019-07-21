@@ -60,7 +60,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
     public function get($path = '')
     {
         $data = new DataObject($this->loadConfig());
-        return $data->getData($path) ?: [];
+        return $data->getData($path);
     }
 
     /**
