@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
@@ -21,11 +22,17 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Currency;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\Translit;
 use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use Magento\Ui\Component\Form\Field;
@@ -282,12 +289,12 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
-        $this->wysiwygConfigProcessor = $wysiwygConfigProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->wysiwygConfigProcessor = $wysiwygConfigProcessor ?: ObjectManager::getInstance()
             ->get(CompositeConfigProcessor::class);
-        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()
         ->get(ScopeConfigInterface::class);
         $this->attributeCollectionFactory = $attributeCollectionFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+            ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
 
     /**
@@ -323,7 +330,7 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface[] $attributes
      * @param string $groupCode
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getAttributesMeta(array $attributes, $groupCode)
     {
@@ -357,9 +364,11 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @param string $groupCode
      * @param int $sortOrder
+     *
      * @return array
-     * @api
+     * @throws LocalizedException
      * @since 101.0.0
+     * @api
      */
     public function addContainerChildren(
         array $attributeContainer,
@@ -388,9 +397,11 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @param string $groupCode
      * @param int $sortOrder
+     *
      * @return array
-     * @api
+     * @throws LocalizedException
      * @since 101.0.0
+     * @api
      */
     public function getContainerChildren(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -434,8 +445,9 @@ class Eav extends AbstractModifier
     /**
      * Obtain if given attribute is a price
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param ProductAttributeInterface $attribute
      * @param string|integer $attributeValue
+     *
      * @return bool
      */
     private function isPriceAttribute(ProductAttributeInterface $attribute, $attributeValue)
@@ -448,7 +460,8 @@ class Eav extends AbstractModifier
     /**
      * Obtain if current product is bundle and given attribute is special_price
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param ProductAttributeInterface $attribute
+     *
      * @return bool
      */
     private function isBundleSpecialPrice(ProductAttributeInterface $attribute)
@@ -505,6 +518,7 @@ class Eav extends AbstractModifier
      * Retrieve groups
      *
      * @return AttributeGroupInterface[]
+     * @throws NoSuchEntityException
      */
     private function getGroups()
     {
@@ -546,6 +560,7 @@ class Eav extends AbstractModifier
      * Retrieve attributes
      *
      * @return ProductAttributeInterface[]
+     * @throws NoSuchEntityException
      */
     private function getAttributes()
     {
@@ -613,7 +628,7 @@ class Eav extends AbstractModifier
      * Get attribute codes of prev set
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getPreviousSetAttributes()
     {
@@ -648,7 +663,7 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @param int $sortOrder
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @api
@@ -658,7 +673,10 @@ class Eav extends AbstractModifier
     {
         $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
         $attributeCode = $attribute->getAttributeCode();
-        $meta = $this->arrayManager->set($configPath, [], [
+        $meta = $this->arrayManager->set(
+            $configPath,
+            [],
+            [
             'dataType' => $attribute->getFrontendInput(),
             'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
             'visible' => $attribute->getIsVisible(),
@@ -671,45 +689,66 @@ class Eav extends AbstractModifier
             'scopeLabel' => $this->getScopeLabel($attribute),
             'globalScope' => $this->isScopeGlobal($attribute),
             'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
-        ]);
+            ]
+        );
 
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
             $options = $attributeModel->getSource()->getAllOptions(true, true);
-            $meta = $this->arrayManager->merge($configPath, $meta, [
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                [
                 'options' => $this->convertOptionsValueToString($options),
-            ]);
+                ]
+            );
         }
 
         if ($this->canDisplayUseDefault($attribute)) {
-            $meta = $this->arrayManager->merge($configPath, $meta, [
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                [
                 'service' => [
                     'template' => 'ui/form/element/helper/service',
                 ]
-            ]);
+                ]
+            );
         }
 
         if (!$this->arrayManager->exists($configPath . '/componentType', $meta)) {
-            $meta = $this->arrayManager->merge($configPath, $meta, [
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                [
                 'componentType' => Field::NAME,
-            ]);
+                ]
+            );
         }
 
         $product = $this->locator->getProduct();
         if (in_array($attributeCode, $this->attributesToDisable)
             || $product->isLockedAttribute($attributeCode)) {
-            $meta = $this->arrayManager->merge($configPath, $meta, [
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                [
                 'disabled' => true,
-            ]);
+                ]
+            );
         }
 
         // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
         $childData = $this->arrayManager->get($configPath, $meta, []);
         if (($rules = $this->catalogEavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
-            $meta = $this->arrayManager->merge($configPath, $meta, [
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                [
                 'validation' => $rules,
-            ]);
+                ]
+            );
         }
 
         $meta = $this->addUseDefaultValueCheckbox($attribute, $meta);
@@ -740,14 +779,16 @@ class Eav extends AbstractModifier
      * Returns attribute default value, based on db setting or setting in the system configuration.
      *
      * @param ProductAttributeInterface $attribute
+     *
      * @return null|string
+     * @throws NoSuchEntityException
      */
     private function getAttributeDefaultValue(ProductAttributeInterface $attribute)
     {
         if ($attribute->getAttributeCode() === 'page_layout') {
             $defaultValue = $this->scopeConfig->getValue(
                 'web/default_layouts/default_product_layout',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $this->storeManager->getStore()
             );
             $attribute->setDefaultValue($defaultValue);
@@ -763,11 +804,14 @@ class Eav extends AbstractModifier
      */
     private function convertOptionsValueToString(array $options) : array
     {
-        array_walk($options, function (&$value) {
-            if (isset($value['value']) && is_scalar($value['value'])) {
-                $value['value'] = (string)$value['value'];
+        array_walk(
+            $options,
+            function (&$value) {
+                if (isset($value['value']) && is_scalar($value['value'])) {
+                    $value['value'] = (string)$value['value'];
+                }
             }
-        });
+        );
 
         return $options;
     }
@@ -788,7 +832,7 @@ class Eav extends AbstractModifier
             ];
 
             $meta['arguments']['data']['config']['disabled'] = !$this->scopeOverriddenValue->containsValue(
-                \Magento\Catalog\Api\Data\ProductInterface::class,
+                ProductInterface::class,
                 $this->locator->getProduct(),
                 $attribute->getAttributeCode(),
                 $this->locator->getStore()->getId()
@@ -836,9 +880,11 @@ class Eav extends AbstractModifier
      * Setup attribute data
      *
      * @param ProductAttributeInterface $attribute
+     *
      * @return mixed|null
-     * @api
+     * @throws LocalizedException
      * @since 101.0.0
+     * @api
      */
     public function setupAttributeData(ProductAttributeInterface $attribute)
     {
@@ -944,7 +990,7 @@ class Eav extends AbstractModifier
      * Retrieve scope label
      *
      * @param ProductAttributeInterface $attribute
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      */
     private function getScopeLabel(ProductAttributeInterface $attribute)
     {
@@ -1047,14 +1093,14 @@ class Eav extends AbstractModifier
     /**
      * The getter function to get the locale currency for real application code
      *
-     * @return \Magento\Framework\Locale\CurrencyInterface
+     * @return CurrencyInterface
      *
      * @deprecated 101.0.0
      */
     private function getLocaleCurrency()
     {
         if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+            $this->localeCurrency = ObjectManager::getInstance()->get(CurrencyInterface::class);
         }
         return $this->localeCurrency;
     }
@@ -1063,7 +1109,10 @@ class Eav extends AbstractModifier
      * Format price according to the locale of the currency
      *
      * @param mixed $value
+     *
      * @return string
+     * @throws NoSuchEntityException
+     * @throws \Zend_Currency_Exception
      * @since 101.0.0
      */
     protected function formatPrice($value)
@@ -1074,7 +1123,7 @@ class Eav extends AbstractModifier
 
         $store = $this->storeManager->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+        $value = $currency->toCurrency($value, ['display' => Currency::NO_SYMBOL]);
 
         return $value;
     }

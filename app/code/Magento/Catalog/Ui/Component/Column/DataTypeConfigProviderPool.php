@@ -35,6 +35,8 @@ class DataTypeConfigProviderPool
     }
 
     /**
+     * Get the config for the certain datatype
+     *
      * @param string $dataType
      *
      * @return array
