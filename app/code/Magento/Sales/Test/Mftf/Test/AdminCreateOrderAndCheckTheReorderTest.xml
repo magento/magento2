@@ -34,7 +34,7 @@
             <argument name="product" value="$$simpleProduct$$"/>
             <argument name="productQty" value="{{SimpleProduct_25.quantity}}"/>
         </actionGroup>
-        <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod" />
+        <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
@@ -44,7 +44,7 @@
         <actionGroup ref="NavigateToCustomerAccountPageActionGroup" stepKey="goToOrderHistoryPage">
             <argument name="page" value="{{StorefrontCustomerOrdersHistoryPage.url}}"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontCustomerElementNotVisibleActionGroup" stepKey="checkReorderButton">
+        <actionGroup ref="StorefrontCustomerElementNotVisibleActionGroup" stepKey="checkReorderButton">
             <argument name="selector" value="{{StorefrontCustomerOrderViewSection.reorder}}"/>
         </actionGroup>
         <after>

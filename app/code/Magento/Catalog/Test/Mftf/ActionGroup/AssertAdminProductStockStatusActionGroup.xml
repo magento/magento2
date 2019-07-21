@@ -6,7 +6,7 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminProductStockStatusActionGroup">
         <arguments>
             <argument name="productId" type="string"/>
@@ -14,6 +14,7 @@
         </arguments>
         <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProductEditPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <seeOptionIsSelected selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{stockStatus}}" stepKey="checkProductStatus" />
+        <seeOptionIsSelected selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{stockStatus}}"
+                             stepKey="checkProductStatus"/>
     </actionGroup>
 </actionGroups>

@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="NavigateToCustomerAccountPageActionGroup">
         <arguments>
-            <argument name="page" type="string" />
+            <argument name="page" type="string"/>
         </arguments>
         <amOnPage url="{{page}}" stepKey="amOnTheCustomerPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
