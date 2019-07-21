@@ -207,7 +207,7 @@ class Config
             foreach ($ips as $ip) {
                 $ipsList[] = sprintf($tpl, trim($ip));
             }
-            return implode('\n', $ipsList);
+            return implode("\n", $ipsList);
         }
 
         return '';
