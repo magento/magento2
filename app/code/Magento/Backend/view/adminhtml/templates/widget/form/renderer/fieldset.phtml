@@ -53,6 +53,9 @@ if ($isField) {
 
     <?php if (!$element->getNoContainer()) : ?>
         <fieldset class="<?=  $block->escapeHtmlAttr($cssClass) ?>" id="<?=  $block->escapeHtmlAttr($id) ?>">
+        <?php if (strlen($element->getBeforeElementHtml())) : ?>
+            <?= $element->getBeforeElementHtml() ?>
+        <?php endif ?>
         <?php if ($element->getLegend() && !$isWrapped) : ?>
             <legend class="<?= /* @noEscape */ $isField ? 'label admin__field-label' : 'admin__legend legend' ?>">
                 <span><?= $block->escapeHtml($element->getLegend()) ?></span>
