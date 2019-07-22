@@ -96,7 +96,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var \Magento\Framework\Filesystem\Io\File
      */
-    protected $file;
+    private $file;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context

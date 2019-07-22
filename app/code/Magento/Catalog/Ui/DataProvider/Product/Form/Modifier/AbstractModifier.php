@@ -11,6 +11,9 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 /**
  * Class AbstractModifier
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 101.0.0
  */
