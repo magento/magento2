@@ -38,8 +38,8 @@ $associatedProductIds = [];
 $productIds = [10, 20];
 array_shift($options); //remove the first option which is empty
 $visibility = [
-    10 => Visibility::VISIBILITY_IN_CATALOG,
-    20 => Visibility::VISIBILITY_NOT_VISIBLE,
+    10 => Visibility::VISIBILITY_NOT_VISIBLE,
+    20 => Visibility::VISIBILITY_IN_CATALOG
 ];
 
 foreach ($options as $option) {

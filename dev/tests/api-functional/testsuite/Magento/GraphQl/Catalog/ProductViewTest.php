@@ -15,6 +15,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test products query output
+ */
 class ProductViewTest extends GraphQlAbstract
 {
     /**

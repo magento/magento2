@@ -15,6 +15,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test products query for configurable products
+ */
 class ConfigurableProductViewTest extends GraphQlAbstract
 {
     /**
@@ -232,7 +235,6 @@ QUERY;
         $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
         /** @var MetadataPool $metadataPool */
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -311,7 +313,7 @@ QUERY;
             /** @var \Magento\Catalog\Model\Product $childProduct */
             $childProduct = $productRepository->get($indexValue);
 
-            switch( $variantProductId ){
+            switch ($variantProductId) {
                 case 10:
                     $this->assertEmpty(
                         $actualResponse['variants'][$variantKey]['product']['categories'],
@@ -323,6 +325,7 @@ QUERY;
                         $actualResponse['variants'][$variantKey]['product']['categories'][0],
                         ['id' => 333]
                     );
+                    break;
             }
             unset($variantArray['product']['categories']);
 
