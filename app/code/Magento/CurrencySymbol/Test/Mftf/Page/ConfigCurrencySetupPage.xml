@@ -8,6 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="ConfigCurrencySetupPage" url="admin/system_config/edit/section/currency" area="admin" module="Magento_Config">
+    <page name="ConfigCurrencySetupPage" url="admin/system_config/edit/section/currency" area="admin" module="Magento_CurrencySymbol">
+        <section name="CurrencySetupSection"/>
     </page>
 </pages>
