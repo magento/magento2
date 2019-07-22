@@ -27,6 +27,11 @@
                 <requiredEntity createDataKey="additionalStock"/>
                 <requiredEntity createDataKey="additionalSource"/>
             </createData>
+            <comment userInput="Perform reindex and cache flush after assign default stock to main website." stepKey="reindexCacheFlushAfterAssignDefaultStockToMainWebsite"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <waitForPageLoad time="60" stepKey="waitForReindex"/>
+
             <!--Create product and category.-->
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct">
