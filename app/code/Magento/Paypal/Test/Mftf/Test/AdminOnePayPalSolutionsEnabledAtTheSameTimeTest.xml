@@ -17,9 +17,6 @@
             <testCaseId value="MC-17776"/>
             <useCaseId value=" MC-15140"/>
             <group value="paypal"/>
-            <skip>
-                <issueId value="MQE-1578"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
