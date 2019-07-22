@@ -41,12 +41,8 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="frontendCustomerLogIn">
             <argument name="Customer" value="$$simpleCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="NavigateToCustomerAccountPageActionGroup" stepKey="goToOrderHistoryPage">
-            <argument name="page" value="{{StorefrontCustomerOrdersHistoryPage.url}}"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontCustomerElementNotVisibleActionGroup" stepKey="checkReorderButton">
-            <argument name="selector" value="{{StorefrontCustomerOrderViewSection.reorder}}"/>
-        </actionGroup>
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage"/>
+        <actionGroup ref="StorefrontCustomerReorderButtonNotVisibleActionGroup" stepKey="checkReorderButton"/>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
