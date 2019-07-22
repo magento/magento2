@@ -73,6 +73,11 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private $checkoutPagePath = 'checkout';
 
     /**
+     * @var Quote
+     */
+    private $quote;
+
+    /**
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
@@ -97,6 +102,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         $this->_eventManager = $eventManager;
         $this->_persistentData = $persistentData;
         $this->request = $request;
+        $this->quote = $this->_checkoutSession->getQuote();
     }
 
     /**
@@ -111,11 +117,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             return;
         }
 
-        /** @var Quote $quote */
-        $quote = $this->_checkoutSession->getQuote();
-
         //clear persistent when persistent data is disabled
-        if ($this->isPersistentQuoteOutdated($quote)) {
+        if ($this->isPersistentQuoteOutdated()) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
             return;
@@ -127,10 +130,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_checkoutSession->getQuoteId() &&
             !$this->isRequestFromCheckoutPage($this->request) &&
             // persistent session does not expire on onepage checkout page
-            (
-                $quote->getIsPersistent() ||
-                $quote->getCustomerIsGuest()
-            )
+            $this->isNeedToExpireSession()
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
@@ -141,12 +141,37 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     /**
      * Checks if current quote marked as persistent and Persistence Functionality is disabled.
      *
-     * @param Quote $quote
      * @return bool
      */
-    private function isPersistentQuoteOutdated(Quote $quote): bool
+    private function isPersistentQuoteOutdated(): bool
     {
-        return !$this->_persistentData->isEnabled() && $quote->getIsPersistent();
+        if (!$this->_persistentData->isEnabled()) {
+            return $this->getQuote()->getIsPersistent();
+        }
+        return false;
+    }
+
+    /**
+     * Condition checker
+     *
+     * @return bool
+     */
+    private function isNeedToExpireSession(): bool
+    {
+        return $this->getQuote()->getIsPersistent() || $this->getQuote()->getCustomerIsGuest();
+    }
+
+    /**
+     * Getter for Quote with micro optimization
+     *
+     * @return Quote
+     */
+    private function getQuote(): Quote
+    {
+        if ($this->quote === null) {
+            $this->quote = $this->_checkoutSession->getQuote();
+        }
+        return $this->quote;
     }
 
     /**
