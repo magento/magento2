@@ -433,7 +433,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if ($this->flatState->isFlatEnabled()) {
             $flatIndexer = $this->indexerRegistry->get(Indexer\Category\Flat\State::INDEXER_ID);
             if (!$flatIndexer->isScheduled()) {
-                $flatIndexer->reindexList([$this->getId(), $oldParentId, $parentId]);
+                $sameLevelCategories = explode(',', $this->getParentCategory()->getChildren());
+                $list = array_unique(array_merge($sameLevelCategories, [$this->getId(), $oldParentId, $parentId]));
+                $flatIndexer->reindexList($list);
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
