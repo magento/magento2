@@ -6,15 +6,14 @@
 
 namespace Magento\Store\App\Action\Plugin;
 
+use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Action\AbstractAction;
-use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ContextPlugin
@@ -132,15 +131,11 @@ class Context
      */
     private function updateContext(StoreInterface $store)
     {
-        if (!$store->getConfig(Store::XML_PATH_STORE_IN_URL) ||
-            $store->getCode() == $this->storeManager->getDefaultStoreView()->getCode()
-        ) {
-            $this->httpContext->setValue(
-                StoreManagerInterface::CONTEXT_STORE,
-                $store->getCode(),
-                $this->storeManager->getDefaultStoreView()->getCode()
-            );
-        }
+        $this->httpContext->setValue(
+            StoreManagerInterface::CONTEXT_STORE,
+            $store->getCode(),
+            $store->isUseStoreInUrl() ? $store->getCode() : $this->storeManager->getDefaultStoreView()->getCode()
+        );
 
         /** @var StoreInterface $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();

@@ -35,17 +35,17 @@ class ContextNonDefaultStoreDirectLinkTest extends TestCase
      * Test for full page cache hits from new http clients if store context was specified in the URL
      *
      * @dataProvider cacheHitOnDirectLinkToNonDefaultStoreView
-     * @param $customStore
-     * @param $defaultStore
-     * @param $setValueNumberOfTimes
-     * @param $xmlPathStoreInUrl
+     * @param string $customStore
+     * @param string $defaultStore
+     * @param string $expectedDefaultStore
+     * @param bool $useStoreInUrl
      * @return void
      */
     public function testCacheHitOnDirectLinkToNonDefaultStoreView(
-        $customStore,
-        $defaultStore,
-        $setValueNumberOfTimes,
-        $xmlPathStoreInUrl
+        string $customStore,
+        string $defaultStore,
+        string $expectedDefaultStore,
+        bool $useStoreInUrl
     ) {
         $sessionMock = $this->createPartialMock(Generic::class, ['getCurrencyCode']);
         $httpContextMock = $this->createMock(HttpContext::class);
@@ -90,12 +90,10 @@ class ContextNonDefaultStoreDirectLinkTest extends TestCase
             ->willReturn(self::CURRENCY_CURRENT_STORE);
 
         $currentStoreMock->expects($this->any())
-            ->method('getConfig')
-            ->willReturn($xmlPathStoreInUrl);
-
-        $currentStoreMock->expects($this->any())
             ->method('getCode')
             ->willReturn($customStore);
+
+        $currentStoreMock->method('isUseStoreInUrl')->willReturn($useStoreInUrl);
 
         $storeManager->expects($this->any())
             ->method('getWebsite')
@@ -126,8 +124,11 @@ class ContextNonDefaultStoreDirectLinkTest extends TestCase
             ->method('getCurrencyCode')
             ->willReturn(self::CURRENCY_SESSION);
 
-        $httpContextMock->expects($this->exactly($setValueNumberOfTimes))
-            ->method('setValue');
+        $httpContextMock->expects($this->at(1))->method(
+            'setValue'
+        )->with(StoreManagerInterface::CONTEXT_STORE, $customStore, $expectedDefaultStore);
+
+        $httpContextMock->expects($this->at(2))->method('setValue');
 
         $plugin->beforeDispatch(
             $subjectMock,
@@ -141,20 +142,20 @@ class ContextNonDefaultStoreDirectLinkTest extends TestCase
             [
                 'custom_store',
                 'default',
-                1,
-                1
+                'custom_store',
+                true,
+            ],
+            [
+                'custom_store',
+                'default',
+                'default',
+                false,
             ],
             [
                 'default',
                 'default',
-                2,
-                0
-            ],
-            [
                 'default',
-                'default',
-                2,
-                1
+                true,
             ],
         ];
     }
