@@ -12,12 +12,23 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Url\Validator as UrlValidator;
+use Magento\Downloadable\Model\Url\DomainValidator;
 
 /**
  * Class to validate Sample Content.
  */
 class ContentValidator
 {
+    /**
+     * @var File
+     */
+    private $fileHelper;
+
+    /**
+     * @var DomainValidator
+     */
+    private $domainValidator;
+
     /**
      * @var UrlValidator
      */
@@ -29,22 +40,20 @@ class ContentValidator
     protected $fileContentValidator;
 
     /**
-     * @var File
-     */
-    private $fileHelper;
-
-    /**
      * @param FileContentValidator $fileContentValidator
      * @param UrlValidator $urlValidator
+     * @param DomainValidator $domainValidator
      * @param File|null $fileHelper
      */
     public function __construct(
         FileContentValidator $fileContentValidator,
         UrlValidator $urlValidator,
+        DomainValidator $domainValidator,
         File $fileHelper = null
     ) {
         $this->fileContentValidator = $fileContentValidator;
         $this->urlValidator = $urlValidator;
+        $this->domainValidator = $domainValidator;
         $this->fileHelper = $fileHelper ?? ObjectManager::getInstance()->get(File::class);
     }
 
@@ -81,6 +90,10 @@ class ContentValidator
         if ($sample->getSampleType() === 'url') {
             if (!$this->urlValidator->isValid($sample->getSampleUrl())) {
                 throw new InputException(__('Sample URL must have valid format.'));
+            }
+
+            if (!$this->domainValidator->isValid($sample->getSampleUrl())) {
+                throw new InputException(__('Sample URL\'s domain is not in list of downloadable_domains in env.php.'));
             }
         } elseif ($sample->getSampleFileContent()) {
             if (!$this->fileContentValidator->isValid($sample->getSampleFileContent())) {
