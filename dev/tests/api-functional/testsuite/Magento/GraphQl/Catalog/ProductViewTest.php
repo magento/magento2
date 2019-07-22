@@ -282,11 +282,11 @@ QUERY;
         $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
             'Movable Position 2',
-            $responseObject->getData('products/items/0/categories/1/name')
+            $responseObject->getData('products/items/0/categories/0/name')
         );
         self::assertEquals(
             'Filter category',
-            $responseObject->getData('products/items/0/categories/2/name')
+            $responseObject->getData('products/items/0/categories/1/name')
         );
         $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
         self::assertEquals(
