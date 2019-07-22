@@ -19,7 +19,7 @@ class DomainValidator
     /**
      * Path to the allowed domains in the deployment config
      */
-    public const PARAM_DOWNLOADABLE_DOMAINS = 'downloadable_domains';
+    const PARAM_DOWNLOADABLE_DOMAINS = 'downloadable_domains';
 
     /**
      * @var IpValidator
