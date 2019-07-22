@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrderAndCheckTheReorderTest">
         <annotations>
-            <title value="v"/>
+            <title value="'Reorder' button is not visible for customer if ordered item is out of stock"/>
             <stories value="MAGETWO-63924: 'Reorder' button is not visible for customer if ordered item is out of stock"/>
             <description value="'Reorder' button is not visible for customer if ordered item is out of stock"/>
             <features value="Sales"/>
