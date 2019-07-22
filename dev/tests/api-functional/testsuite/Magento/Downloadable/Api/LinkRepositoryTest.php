@@ -473,7 +473,7 @@ class LinkRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Link URL must have valid format.
+     * @expectedExceptionMessage Link URL's domain is not in list of downloadable_domains in env.php.
      */
     public function testCreateThrowsExceptionIfLinkUrlUsesDomainNotInWhitelist()
     {
@@ -499,7 +499,7 @@ class LinkRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Sample URL must have valid format.
+     * @expectedExceptionMessage Sample URL's domain is not in list of downloadable_domains in env.php.
      */
     public function testCreateThrowsExceptionIfSampleUrlUsesDomainNotInWhitelist()
     {

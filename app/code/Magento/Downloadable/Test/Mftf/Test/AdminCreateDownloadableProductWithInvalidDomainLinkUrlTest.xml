@@ -26,7 +26,7 @@
             <argument name="index" value="0"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormNoSuccessCheck" stepKey="saveProduct"/>
-        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="Link URL must have valid format." stepKey="seeLinkUrlInvalidMessage" after="saveProduct" />
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="Link URL's domain is not in list of downloadable_domains in env.php." stepKey="seeLinkUrlInvalidMessage" after="saveProduct" />
         <magentoCLI stepKey="addDownloadableDomain2" command="downloadable:domains:add static.magento.com" after="seeLinkUrlInvalidMessage" />
         <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable" after="addDownloadableDomain2"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkIsLinksPurchasedSeparately" after="checkIsDownloadable"/>

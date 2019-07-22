@@ -100,10 +100,12 @@ class ContentValidator
     protected function validateLinkResource(LinkInterface $link)
     {
         if ($link->getLinkType() === 'url') {
-            if (!$this->urlValidator->isValid($link->getLinkUrl())
-                || !$this->domainValidator->isValid($link->getLinkUrl())
-            ) {
+            if (!$this->urlValidator->isValid($link->getLinkUrl())) {
                 throw new InputException(__('Link URL must have valid format.'));
+            }
+
+            if (!$this->domainValidator->isValid($link->getLinkUrl())) {
+                throw new InputException(__('Link URL\'s domain is not in list of downloadable_domains in env.php.'));
             }
         } elseif ($link->getLinkFileContent()) {
             if (!$this->fileContentValidator->isValid($link->getLinkFileContent())) {
@@ -124,10 +126,12 @@ class ContentValidator
     protected function validateSampleResource(LinkInterface $link)
     {
         if ($link->getSampleType() === 'url') {
-            if (!$this->urlValidator->isValid($link->getSampleUrl())
-                || !$this->domainValidator->isValid($link->getSampleUrl())
-            ) {
+            if (!$this->urlValidator->isValid($link->getSampleUrl())) {
                 throw new InputException(__('Sample URL must have valid format.'));
+            }
+
+            if (!$this->domainValidator->isValid($link->getSampleUrl())) {
+                throw new InputException(__('Sample URL\'s domain is not in list of downloadable_domains in env.php.'));
             }
         } elseif ($link->getSampleFileContent()) {
             if (!$this->fileContentValidator->isValid($link->getSampleFileContent())) {

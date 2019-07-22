@@ -88,9 +88,12 @@ class ContentValidator
     protected function validateSampleResource(SampleInterface $sample)
     {
         if ($sample->getSampleType() === 'url') {
-            if (!$this->urlValidator->isValid($sample->getSampleUrl())
-                || !$this->domainValidator->isValid($sample->getSampleUrl())) {
+            if (!$this->urlValidator->isValid($sample->getSampleUrl())) {
                 throw new InputException(__('Sample URL must have valid format.'));
+            }
+
+            if (!$this->domainValidator->isValid($sample->getSampleUrl())) {
+                throw new InputException(__('Sample URL\'s domain is not in list of downloadable_domains in env.php.'));
             }
         } elseif ($sample->getSampleFileContent()) {
             if (!$this->fileContentValidator->isValid($sample->getSampleFileContent())) {
