@@ -8,10 +8,10 @@ namespace Magento\Paypal\Model;
 
 use Magento\Paypal\Model\Api\AbstractApi;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Paypal\Model\Info;
 
 /**
- * PayPal Website Payments Pro implementation for payment method instances
+ * PayPal Website Payments Pro implementation for payment method instances.
+ *
  * This model was created because right now PayPal Direct and PayPal Express payment methods cannot have same abstract
  */
 class Pro
@@ -147,7 +147,8 @@ class Pro
     }
 
     /**
-     * API instance getter
+     * API instance getter.
+     *
      * Sets current store id to current config instance and passes it to API
      *
      * @return \Magento\Paypal\Model\Api\Nvp
@@ -229,19 +230,22 @@ class Pro
     public function void(\Magento\Framework\DataObject $payment)
     {
         $authTransactionId = $this->_getParentTransactionId($payment);
-        if ($authTransactionId) {
-            $api = $this->getApi();
-            $api->setPayment($payment)->setAuthorizationId($authTransactionId)->callDoVoid();
-            $this->importPaymentInfo($api, $payment);
-        } else {
+        if (empty($authTransactionId)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('You need an authorization transaction to void.')
             );
         }
+
+        $api = $this->getApi();
+        $api->setPayment($payment);
+        $api->setAuthorizationId($authTransactionId);
+        $api->callDoVoid();
+        $this->importPaymentInfo($api, $payment);
     }
 
     /**
-     * Attempt to capture payment
+     * Attempt to capture payment.
+     *
      * Will return false if the payment is not supposed to be captured
      *
      * @param \Magento\Framework\DataObject $payment

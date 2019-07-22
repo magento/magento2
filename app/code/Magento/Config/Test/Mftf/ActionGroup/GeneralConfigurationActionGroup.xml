@@ -22,7 +22,7 @@
 
     <actionGroup name="SelectTopDestinationsCountry">
         <arguments>
-            <argument name="countries" type="countryArray"/>
+            <argument name="countries" type="entity"/>
         </arguments>
         <selectOption selector="{{CountryOptionsSection.topDestinations}}" parameterArray="[{{countries.country}}]" stepKey="selectTopDestinationsCountry"/>
         <click selector="#save" stepKey="saveConfig"/>
@@ -31,7 +31,7 @@
 
     <actionGroup name="UnSelectTopDestinationsCountry">
         <arguments>
-            <argument name="countries" type="countryArray"/>
+            <argument name="countries" type="entity"/>
         </arguments>
         <unselectOption selector="{{CountryOptionsSection.topDestinations}}" parameterArray="[{{countries.country}}]" stepKey="unSelectTopDestinationsCountry"/>
         <click selector="#save" stepKey="saveConfig"/>
@@ -40,7 +40,7 @@
 
     <actionGroup name="SelectCountriesWithRequiredRegion">
         <arguments>
-            <argument name="countries" type="countryArray"/>
+            <argument name="countries" type="entity"/>
         </arguments>
         <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToAdminConfigGeneralPage"/>
         <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab" />

@@ -165,7 +165,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 //Recreate a minimalistic secure a tag
                 $links[] = sprintf(
                     '<a href="%s">%s</a>',
-                    htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false),
+                    $this->escaper->escapeHtml($url),
                     $this->escaper->escapeHtml($text)
                 );
                 $data = str_replace($matches[0], '%' . $i . '$s', $data);
@@ -188,6 +188,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
         if ($url) {
             //Revert the sprintf escaping
             $url = str_replace('%%', '%', $url);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $urlScheme = parse_url($url, PHP_URL_SCHEME);
             $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
             if ($urlScheme !== 'http' && $urlScheme !== 'https') {

@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var $block \Magento\OfflinePayments\Block\Form\Banktransfer
  */
 $instructions = $block->getInstructions();
 ?>
-<?php if ($instructions): ?>
+<?php if ($instructions) : ?>
     <?php $methodCode = $block->escapeHtml($block->getMethodCode());?>
     <div class="items <?= /* @noEscape */ $methodCode ?> instructions agreement checkout-agreement-item-content" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display: none;">
         <?= /* @noEscape */ nl2br($block->escapeHtml($instructions)) ?>

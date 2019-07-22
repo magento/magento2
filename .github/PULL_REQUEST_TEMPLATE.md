@@ -21,7 +21,6 @@
     There could be 1 or more issues linked here and it will help us find some more information about the reasoning behind this change.
 -->
 1. magento/magento2#<issue_number>: Issue title
-2. ...
 
 ### Manual testing scenarios (*)
 <!---
@@ -30,6 +29,12 @@
 -->
 1. ...
 2. ...
+
+### Questions or comments
+<!---
+	If relevant, here you can ask questions or provide comments on your pull request for the reviewer
+	For example if you need assistance with writing tests or would like some feedback on one of your development ideas
+-->
 
 ### Contribution checklist (*)
  - [ ] Pull request has a meaningful description of its purpose
