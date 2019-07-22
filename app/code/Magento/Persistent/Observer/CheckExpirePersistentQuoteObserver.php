@@ -110,7 +110,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             return;
         }
 
-        if ($this->_persistentData->isEnabled() &&
+        if (($this->_persistentData->isEnabled() || $this->isPersistentQuoteOutdated()) &&
             !$this->_persistentSession->isPersistent() &&
             !$this->_customerSession->isLoggedIn() &&
             $this->_checkoutSession->getQuoteId() &&
@@ -125,6 +125,16 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->quoteManager->expire();
             $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
         }
+    }
+
+    /**
+     * Checks if current quote marked as persistent and Persistence Functionality is disabled.
+     *
+     * @return bool
+     */
+    private function isPersistentQuoteOutdated(): bool
+    {
+        return !$this->_persistentData->isEnabled() && $this->_checkoutSession->getQuote()->getIsPersistent();
     }
 
     /**
