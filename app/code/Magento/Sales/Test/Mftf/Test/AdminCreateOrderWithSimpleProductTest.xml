@@ -44,6 +44,7 @@
         </actionGroup>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI command="config:set payment/cashondelivery/active 0" stepKey="disableCashOnDeliveryMethod"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
