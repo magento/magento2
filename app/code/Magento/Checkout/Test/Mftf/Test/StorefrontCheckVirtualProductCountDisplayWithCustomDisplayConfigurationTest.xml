@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckVirtualProductCountDisplayWithCustomDisplayConfigurationTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Verify virtual products count in mini cart and summary block with custom display configuration"/>
+            <description value="Verify virtual products count in mini cart and summary block with custom display configuration"/>
+            <testCaseId value="MC-14724"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!--Set Mini Cart and Summary Block Display -->
+            <magentoCLI stepKey="setMaxDisplayCountForMiniCart" command="config:set checkout/options/max_items_display_count 2"/>
+            <magentoCLI stepKey="setMaxDisplayCountForOrderSummary" command="config:set checkout/sidebar/max_items_display_count 3"/>
+            <!--Create  simple product-->
+            <createData entity="VirtualProduct" stepKey="virtualProduct1">
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="virtualProduct2">
+                <field key="price">20.00</field>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="virtualProduct3">
+                <field key="price">30.00</field>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="virtualProduct4">
+                <field key="price">40.00</field>
+            </createData>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="virtualProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="virtualProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="virtualProduct3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="virtualProduct4" stepKey="deleteProduct4"/>
+            <magentoCLI stepKey="setMaxDisplayCountForMiniCart" command="config:set checkout/options/max_items_display_count 10"/>
+            <magentoCLI stepKey="setMaxDisplayCountForOrderSummary" command="config:set checkout/sidebar/max_items_display_count 10"/>
+        </after>
+
+        <!-- Open Product1 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+            <argument name="product" value="$$virtualProduct1$$"/>
+        </actionGroup>
+
+        <!-- Add Product1 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+            <argument name="productName" value="$$virtualProduct1.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product2 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct2PageAndVerifyProduct">
+            <argument name="product" value="$$virtualProduct2$$"/>
+        </actionGroup>
+
+        <!-- Add Product2 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct2ToTheCart">
+            <argument name="productName" value="$$virtualProduct2.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product3 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct3PageAndVerifyProduct">
+            <argument name="product" value="$$virtualProduct3$$"/>
+        </actionGroup>
+
+        <!-- Add Product3 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct3ToTheCart">
+            <argument name="productName" value="$$virtualProduct3.name$$"/>
+        </actionGroup>
+
+        <!-- Open Product4 page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct4PageAndVerifyProduct">
+            <argument name="product" value="$$virtualProduct4$$"/>
+        </actionGroup>
+
+        <!-- Add Product4 to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct4ToTheCart">
+            <argument name="productName" value="$$virtualProduct4.name$$"/>
+        </actionGroup>
+
+        <!-- Open Mini Cart -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
+
+        <!-- Assert Product Count in Mini Cart -->
+        <actionGroup ref="StorefrontAssertMiniCartItemCountActionGroup" stepKey="assertProductCountAndTextInMiniCart">
+            <argument name="productCount" value="4"/>
+            <argument name="productCountText" value="3 of 4 Items in Cart"/>
+        </actionGroup>
+
+        <!-- Assert Product1 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct11MiniCart">
+            <argument name="productName" value="$$virtualProduct1.name$$"/>
+            <argument name="productPrice" value="$10.00"/>
+            <argument name="cartSubtotal" value="$100.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product2 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct2MiniCart">
+            <argument name="productName" value="$$virtualProduct2.name$$"/>
+            <argument name="productPrice" value="$20.00"/>
+            <argument name="cartSubtotal" value="$100.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Product3 in Mini Cart -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
+            <argument name="productName" value="$$virtualProduct3.name$$"/>
+            <argument name="productPrice" value="$30.00"/>
+            <argument name="cartSubtotal" value="$100.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert Order Summary -->
+        <actionGroup ref="StorefrontCheckoutAndAssertOrderSummaryDisplayActionGroup" stepKey="AssertItemCountInOrderSummary">
+            <argument name="itemsText" value="2 of 4 Items in Cart"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeViewAndEditLinkInOrderSummary">
+            <argument name="selector" value="{{StorefrontMinicartSection.viewAndEditCart}}"/>
+        </actionGroup>
+
+        <!-- Click and open order summary tab-->
+        <conditionalClick selector="{{CheckoutOrderSummarySection.miniCartTab}}" dependentSelector="{{CheckoutOrderSummarySection.miniCartTabClosed}}" visible="true" stepKey="clickOnOrderSummaryTab"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Assert Product3 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct3InOrderSummary">
+            <argument name="productName" value="$$virtualProduct3.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$30.00"/>
+        </actionGroup>
+
+        <!-- Assert Product4 displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct4InOrderSummary">
+            <argument name="productName" value="$$virtualProduct4.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$40.00"/>
+        </actionGroup>
+    </test>
+</tests>

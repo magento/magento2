@@ -18,6 +18,9 @@
             <testCaseId value="MC-56"/>
             <group value="Catalog"/>
             <group value="Product Attributes"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -58,7 +61,13 @@
         <click selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$$createProductOne.price$$0" stepKey="fillAttributeNameField"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 2 record(s) were updated." stepKey="seeAttributeUpateSuccessMsg"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
+
+        <!-- Run cron twice -->
+        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitFormToReload1"/>
 
         <!-- Assert on storefront default view -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>

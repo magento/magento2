@@ -23,6 +23,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class SampleRepository
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInterface
@@ -100,7 +101,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku)
     {
@@ -209,6 +210,8 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     }
 
     /**
+     * Save sample.
+     *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param SampleInterface $sample
      * @param bool $isGlobalScopeContent
@@ -257,6 +260,8 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     }
 
     /**
+     * Update sample.
+     *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param SampleInterface $sample
      * @param bool $isGlobalScopeContent
@@ -308,15 +313,18 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             $existingSample->setTitle($sample->getTitle());
         }
 
-        if ($sample->getSampleType() === 'file' && $sample->getSampleFileContent() === null) {
-            $sample->setSampleFile($existingSample->getSampleFile());
+        if ($sample->getSampleType() === 'file'
+            && $sample->getSampleFileContent() === null
+            && $sample->getSampleFile() !== null
+        ) {
+            $existingSample->setSampleFile($sample->getSampleFile());
         }
         $this->saveSample($product, $sample, $isGlobalScopeContent);
         return $existingSample->getId();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($id)
     {

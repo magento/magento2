@@ -146,7 +146,6 @@
                 <editor>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
-                        <rule name="validate-xml-identifier" xsi:type="boolean">true</rule>
                     </validation>
                     <editorType>text</editorType>
                 </editor>

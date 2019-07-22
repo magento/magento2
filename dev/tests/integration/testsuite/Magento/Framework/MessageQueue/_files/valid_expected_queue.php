@@ -40,7 +40,7 @@ return [
             "name" => "publisher5.topic",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => '\\' . \Magento\MysqlMq\Model\DataObject::class
+                "schema_value" => '\\' . \Magento\TestModuleMysqlMq\Model\DataObject::class
             ],
             "response_schema" => [
                 "schema_type" => "object",
@@ -58,7 +58,7 @@ return [
             "handlers" => [
                 "topic.broker.test" => [
                     "0" => [
-                        "type" => \Magento\MysqlMq\Model\Processor::class,
+                        "type" => \Magento\TestModuleMysqlMq\Model\Processor::class,
                         "method" => "processMessage"
                     ]
                 ]

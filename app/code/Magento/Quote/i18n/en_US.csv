@@ -65,3 +65,5 @@ error345,error345
 Carts,Carts
 "Manage carts","Manage carts"
 "Invalid state change requested","Invalid state change requested"
+"Validated Country Code","Validated Country Code"
+"Validated Vat Number","Validated Vat Number"

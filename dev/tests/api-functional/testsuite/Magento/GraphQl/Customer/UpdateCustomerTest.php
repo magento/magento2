@@ -13,6 +13,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests for update customer
+ */
 class UpdateCustomerTest extends GraphQlAbstract
 {
     /**
@@ -21,22 +24,22 @@ class UpdateCustomerTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var CustomerRegistry
-     */
-    private $customerRegistry;
-
-    /**
      * @var CustomerAuthUpdate
      */
     private $customerAuthUpdate;
+
+    /**
+     * @var LockCustomer
+     */
+    private $lockCustomer;
 
     protected function setUp()
     {
         parent::setUp();
 
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
-        $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
         $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
+        $this->lockCustomer = Bootstrap::getObjectManager()->get(LockCustomer::class);
     }
 
     /**
@@ -47,33 +50,62 @@ class UpdateCustomerTest extends GraphQlAbstract
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
+        $newPrefix = 'Dr';
         $newFirstname = 'Richard';
+        $newMiddlename = 'Riley';
         $newLastname = 'Rowe';
+        $newSuffix = 'III';
+        $newDob = '3/11/1972';
+        $newTaxVat = 'GQL1234567';
+        $newGender = 2;
         $newEmail = 'customer_updated@example.com';
 
         $query = <<<QUERY
 mutation {
     updateCustomer(
         input: {
+            prefix: "{$newPrefix}"
             firstname: "{$newFirstname}"
+            middlename: "{$newMiddlename}"
             lastname: "{$newLastname}"
+            suffix: "{$newSuffix}"
+            dob: "{$newDob}"
+            taxvat: "{$newTaxVat}"
             email: "{$newEmail}"
             password: "{$currentPassword}"
+            gender: {$newGender}
         }
     ) {
         customer {
+            prefix
             firstname
+            middlename
             lastname
+            suffix
+            dob
+            taxvat
             email
+            gender
         }
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
 
+        $this->assertEquals($newPrefix, $response['updateCustomer']['customer']['prefix']);
         $this->assertEquals($newFirstname, $response['updateCustomer']['customer']['firstname']);
+        $this->assertEquals($newMiddlename, $response['updateCustomer']['customer']['middlename']);
         $this->assertEquals($newLastname, $response['updateCustomer']['customer']['lastname']);
+        $this->assertEquals($newSuffix, $response['updateCustomer']['customer']['suffix']);
+        $this->assertEquals($newDob, $response['updateCustomer']['customer']['dob']);
+        $this->assertEquals($newTaxVat, $response['updateCustomer']['customer']['taxvat']);
         $this->assertEquals($newEmail, $response['updateCustomer']['customer']['email']);
+        $this->assertEquals($newGender, $response['updateCustomer']['customer']['gender']);
     }
 
     /**
@@ -99,7 +131,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
@@ -123,7 +155,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -133,7 +165,7 @@ QUERY;
      */
     public function testUpdateCustomerIfAccountIsLocked()
     {
-        $this->lockCustomer(1);
+        $this->lockCustomer->execute(1);
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
@@ -152,7 +184,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
@@ -179,13 +211,13 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
+     * @expectedExceptionMessage Invalid login or password.
      */
     public function testUpdateEmailIfPasswordIsInvalid()
     {
@@ -208,7 +240,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
@@ -236,7 +268,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**
@@ -248,16 +280,5 @@ QUERY;
     {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
-    }
-
-    /**
-     * @param int $customerId
-     * @return void
-     */
-    private function lockCustomer(int $customerId): void
-    {
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
-        $customerSecure->setLockExpires('2030-12-31 00:00:00');
-        $this->customerAuthUpdate->saveAuth($customerId);
     }
 }

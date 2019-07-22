@@ -7,6 +7,8 @@
 
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\AddressRegistry;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
@@ -25,6 +27,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
@@ -86,6 +89,11 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     private $escaper;
 
     /**
+     * @var AddressRegistry
+     */
+    private $addressRegistry;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
@@ -93,6 +101,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
      * @param Escaper|null $escaper
+     * @param AddressRegistry|null $addressRegistry
      */
     public function __construct(
         Context $context,
@@ -101,7 +110,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor,
-        ?Escaper $escaper = null
+        ?Escaper $escaper = null,
+        AddressRegistry $addressRegistry = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -110,6 +120,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
+        $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
     }
 
     /**
@@ -194,6 +205,9 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
 
                 // whether a customer enabled change password option
                 $isPasswordChanged = $this->changeCustomerPassword($currentCustomerDataObject->getEmail());
+
+                // No need to validate customer address while editing customer profile
+                $this->disableAddressValidation($customerCandidateDataObject);
 
                 $this->customerRepository->save($customerCandidateDataObject);
                 $this->getEmailNotification()->credentialsChanged(
@@ -351,5 +365,19 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $this->customerMapper = ObjectManager::getInstance()->get(\Magento\Customer\Model\Customer\Mapper::class);
         }
         return $this->customerMapper;
+    }
+
+    /**
+     * Disable Customer Address Validation
+     *
+     * @param CustomerInterface $customer
+     * @throws NoSuchEntityException
+     */
+    private function disableAddressValidation($customer)
+    {
+        foreach ($customer->getAddresses() as $address) {
+            $addressModel = $this->addressRegistry->retrieve($address->getId());
+            $addressModel->setShouldIgnoreValidation(true);
+        }
     }
 }

@@ -7,6 +7,7 @@
 namespace Magento\Mtf\Util\Command\File;
 
 use Magento\Mtf\Util\Protocol\CurlTransport;
+use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
 /**
  * Get content of log file in var/log folder.
@@ -16,7 +17,7 @@ class Log
     /**
      * Url to log.php.
      */
-    const URL = 'dev/tests/functional/utils/log.php';
+    const URL = '/dev/tests/functional/utils/log.php';
 
     /**
      * Curl transport protocol.
@@ -26,11 +27,20 @@ class Log
     private $transport;
 
     /**
-     * @param CurlTransport $transport
+     * Webapi handler.
+     *
+     * @var WebapiDecorator
      */
-    public function __construct(CurlTransport $transport)
+    private $webapiHandler;
+
+    /**
+     * @param CurlTransport $transport
+     * @param WebapiDecorator $webapiHandler
+     */
+    public function __construct(CurlTransport $transport, WebapiDecorator $webapiHandler)
     {
         $this->transport = $transport;
+        $this->webapiHandler = $webapiHandler;
     }
 
     /**
@@ -41,22 +51,29 @@ class Log
      */
     public function getFileContent($name)
     {
-        $curl = $this->transport;
-        $curl->write($this->prepareUrl($name), [], CurlTransport::GET);
-        $data = $curl->read();
-        $curl->close();
-
+        $this->transport->write(
+            rtrim(str_replace('index.php', '', $_ENV['app_frontend_url']), '/') . self::URL,
+            $this->prepareParamArray($name),
+            CurlInterface::POST,
+            []
+        );
+        $data = $this->transport->read();
+        $this->transport->close();
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return unserialize($data);
     }
 
     /**
-     * Prepare url.
+     * Prepare parameter array.
      *
      * @param string $name
-     * @return string
+     * @return array
      */
-    private function prepareUrl($name)
+    private function prepareParamArray($name)
     {
-        return $_ENV['app_frontend_url'] . self::URL . '?name=' . urlencode($name);
+        return [
+            'token' => urlencode($this->webapiHandler->getWebapiToken()),
+            'name' => urlencode($name)
+        ];
     }
 }

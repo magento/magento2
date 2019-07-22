@@ -81,7 +81,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['composerFactory' => $this->composerFactory]
         );
 
-        $this->assertEquals("~5.5.0|~5.6.0|~7.0.0", $composerInfo->getRequiredPhpVersion());
+        $this->assertEquals("~7.1.3||~7.2.0", $composerInfo->getRequiredPhpVersion());
     }
 
     /**
@@ -92,7 +92,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectory($composerDir);
-        $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
+        $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'hash', 'curl', 'iconv', 'intl'];
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(

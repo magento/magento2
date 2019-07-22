@@ -3,10 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Catalog Price rules observer model
- */
 namespace Magento\CatalogRule\Observer;
 
 use Magento\Catalog\Model\Product;
@@ -16,7 +14,11 @@ use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Observer for applying catalog rules on product for admin area
+ */
 class ProcessAdminFinalPriceObserver implements ObserverInterface
 {
     /**
@@ -42,21 +44,30 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     protected $rulePricesStorage;
 
     /**
+     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
+     */
+    private $ruleDateFormatter;
+
+    /**
      * @param RulePricesStorage $rulePricesStorage
      * @param Registry $coreRegistry
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param TimezoneInterface $localeDate
+     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
         Registry $coreRegistry,
         \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory,
-        TimezoneInterface $localeDate
+        TimezoneInterface $localeDate,
+        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
     ) {
         $this->rulePricesStorage = $rulePricesStorage;
         $this->coreRegistry = $coreRegistry;
         $this->resourceRuleFactory = $resourceRuleFactory;
         $this->localeDate = $localeDate;
+        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -69,7 +80,7 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     {
         $product = $observer->getEvent()->getProduct();
         $storeId = $product->getStoreId();
-        $date = $this->localeDate->scopeDate($storeId);
+        $date = $this->ruleDateFormatter->getDate($storeId);
         $key = false;
 
         $ruleData = $this->coreRegistry->registry('rule_data');

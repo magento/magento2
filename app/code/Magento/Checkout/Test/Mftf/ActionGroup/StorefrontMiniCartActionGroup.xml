@@ -8,9 +8,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="clickViewAndEditCartFromMiniCart">
+        <scrollTo selector="{{StorefrontMinicartSection.showCart}}" stepKey="scrollToMiniCart"/>
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="viewAndEditCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
         <seeInCurrentUrl url="checkout/cart" stepKey="seeInCurrentUrl"/>
     </actionGroup>
     <actionGroup name="assertOneProductNameInMiniCart">
@@ -34,5 +36,12 @@
         <see selector="{{StoreFrontRemoveItemModalSection.message}}" userInput="Are you sure you would like to remove this item from the shopping cart?" stepKey="seeDeleteConfirmationMessage"/>
         <click selector="{{StoreFrontRemoveItemModalSection.ok}}" stepKey="confirmDelete"/>
         <waitForPageLoad stepKey="waitForDeleteToFinish"/>
+    </actionGroup>
+
+    <!--Check that the minicart is empty-->
+    <actionGroup name="assertMiniCartEmpty">
+        <dontSeeElement selector="{{StorefrontMinicartSection.productCount}}" stepKey="dontSeeMinicartProductCount"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="expandMinicart"/>
+        <see selector="{{StorefrontMinicartSection.minicartContent}}" userInput="You have no items in your shopping cart." stepKey="seeEmptyCartMessage"/>
     </actionGroup>
 </actionGroups>

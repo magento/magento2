@@ -42,7 +42,7 @@
                 comment="Link ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="false" default="0"
+        <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="false" default="0"
                 comment="Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="price_id"/>
@@ -223,9 +223,9 @@
                 identity="false"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="decimal" name="min_price" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Minimum price"/>
-        <column xsi:type="decimal" name="max_price" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="max_price" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Maximum price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -241,9 +241,9 @@
                 identity="false"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="decimal" name="min_price" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Minimum price"/>
-        <column xsi:type="decimal" name="max_price" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="max_price" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Maximum price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>

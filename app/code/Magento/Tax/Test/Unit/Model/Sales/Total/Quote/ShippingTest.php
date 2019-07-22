@@ -133,7 +133,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $getterValueMap = [];
         $methods = ['__wakeup'];
         foreach ($objectState as $key => $value) {
-            $getterName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+            $getterName = 'get' . str_replace('_', '', ucwords($key, '_'));
             $getterValueMap[$getterName] = $value;
             $methods[] = $getterName;
         }

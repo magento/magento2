@@ -13,26 +13,62 @@ namespace Magento\TestFramework\Helper;
  */
 class Amqp
 {
+    const CONFIG_PATH_HOST = 'queue/amqp/host';
+    const CONFIG_PATH_USER = 'queue/amqp/user';
+    const CONFIG_PATH_PASSWORD = 'queue/amqp/password';
+    const DEFAULT_MANAGEMENT_PORT = '15672';
+
     /**
      * @var Curl
      */
     private $curl;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * RabbitMQ API host
      *
      * @var string
      */
-    private $host = 'http://localhost:15672/api/';
+    private $host;
 
     /**
      * Initialize dependencies.
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      */
-    public function __construct()
-    {
+    public function __construct(
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig = null
+    ) {
+        $this->deploymentConfig = $deploymentConfig ?? \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\App\DeploymentConfig::class);
         $this->curl = new Curl();
-        $this->curl->setCredentials('guest', 'guest');
+        $this->curl->setCredentials(
+            $this->deploymentConfig->get(self::CONFIG_PATH_USER),
+            $this->deploymentConfig->get(self::CONFIG_PATH_PASSWORD)
+        );
         $this->curl->addHeader('content-type', 'application/json');
+        $this->host = sprintf(
+            'http://%s:%s/api/',
+            $this->deploymentConfig->get(self::CONFIG_PATH_HOST),
+            defined('RABBITMQ_MANAGEMENT_PORT') ? RABBITMQ_MANAGEMENT_PORT : self::DEFAULT_MANAGEMENT_PORT
+        );
+    }
+
+    /**
+     * Check that the RabbitMQ instance has the management plugin installed and the api is available.
+     *
+     * @return bool
+     */
+    public function isAvailable(): bool
+    {
+        $this->curl->get($this->host . 'overview');
+        $data = $this->curl->getBody();
+        $data = json_decode($data, true);
+
+        return isset($data['management_version']);
     }
 
     /**
@@ -55,6 +91,7 @@ class Amqp
     /**
      * Get declared exchange bindings.
      *
+     * @param string $name
      * @return array
      */
     public function getExchangeBindings($name)
@@ -82,6 +119,8 @@ class Amqp
     }
 
     /**
+     * Clear Queue
+     *
      * @param string $name
      * @param int $numMessages
      * @return string
@@ -101,7 +140,7 @@ class Amqp
     /**
      * Delete connection
      *
-     * @param $name
+     * @param string $name
      * @return string $data
      */
     public function deleteConnection($name)

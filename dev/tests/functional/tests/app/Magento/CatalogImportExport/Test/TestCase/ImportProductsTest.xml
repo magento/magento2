@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductsTest" summary="Import products">
         <variation name="ImportProductVariation1" ticketId="MAGETWO-47724" summary="Import Products with Add/Update Behavior">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Products</item>
                 <item name="behavior" xsi:type="string">Add/Update</item>
@@ -38,6 +39,7 @@
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
         </variation>
         <variation name="ImportProductVariation2" ticketId="MAGETWO-47719" summary="Import Products assigned to different websites with Replace Behavior">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="import/data/entity" xsi:type="string">Products</data>
             <data name="import/data/behavior" xsi:type="string">Replace</data>
             <data name="import/data/validation_strategy" xsi:type="string">Stop on Error</data>

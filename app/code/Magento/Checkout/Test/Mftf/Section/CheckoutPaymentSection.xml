@@ -14,12 +14,14 @@
         <element name="notAvailablePaymentSolutions" type="text" selector="#checkout-payment-method-load>div>div>div.payment-method._active>div.payment-method-title.field.choice"/>
         <element name="billingNewAddressForm" type="text" selector="[data-form='billing-new-address']"/>
         <element name="billingAddressNotSameCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-checkmo"/>
+        <element name="editAddress" type="button" selector="button.action.action-edit-address"/>
         <element name="placeOrderDisabled" type="button" selector="#checkout-payment-method-load button.disabled"/>
         <element name="update" type="button" selector=".payment-method-billing-address .action.action-update"/>
         <element name="guestFirstName" type="input" selector=".billing-address-form input[name*='firstname']"/>
         <element name="guestLastName" type="input" selector=".billing-address-form input[name*='lastname']"/>
         <element name="guestStreet" type="input" selector=".billing-address-form input[name*='street[0]']"/>
         <element name="guestCity" type="input" selector=".billing-address-form input[name*='city']"/>
+        <element name="guestCountry" type="select" selector=".billing-address-form select[name*='country_id']"/>
         <element name="guestRegion" type="select" selector=".billing-address-form select[name*='region_id']"/>
         <element name="guestPostcode" type="input" selector=".billing-address-form input[name*='postcode']"/>
         <element name="guestTelephone" type="input" selector=".billing-address-form input[name*='telephone']"/>
@@ -54,5 +56,8 @@
         <element name="addressBook" type="button" selector="//a[text()='Address Book']"/>
         <element name="noQuotes" type="text" selector=".no-quotes-block"/>
         <element name="paymentMethodByName" type="text" selector="//*[@id='checkout-payment-method-load']//*[contains(@class, 'payment-group')]//label[normalize-space(.)='{{var1}}']" parameterized="true"/>
+        <element name="billingAddressSelectShared" type="select" selector=".checkout-billing-address select[name='billing_address_id']"/>
+        <element name="discount" type="block" selector="tr.totals.discount"/>
+        <element name="discountPrice" type="text" selector=".discount .price"/>
     </section>
 </sections>

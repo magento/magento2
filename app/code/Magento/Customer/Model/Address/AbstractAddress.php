@@ -222,7 +222,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Get steet line by number
+     * Get street line by number
      *
      * @param int $number
      * @return string
@@ -375,6 +375,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             }
         } elseif (is_string($region)) {
             $this->setData('region', $region);
+        } elseif (!$regionId && is_array($region)) {
+            $this->setData('region', $regionId);
         }
 
         return $this->getData('region');

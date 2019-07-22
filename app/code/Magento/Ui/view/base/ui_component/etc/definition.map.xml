@@ -14,6 +14,7 @@
                     <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
                     <item name="type" type="string" xsi:type="xpath">settings/type</item>
                     <item name="url" type="url" xsi:type="converter">settings/url</item>
+                    <item name="actionDisable" type="boolean" xsi:type="xpath">settings/actionDisable</item>
                     <item name="confirm" xsi:type="array">
                         <item name="title" type="string" translate="true" xsi:type="xpath">settings/confirm/title</item>
                         <item name="message" type="string" translate="true" xsi:type="xpath">settings/confirm/message</item>

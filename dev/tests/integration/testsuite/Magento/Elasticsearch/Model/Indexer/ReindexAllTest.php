@@ -68,7 +68,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     /**
      * Test search of all products after full reindex
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
@@ -82,7 +82,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     /**
      * Test search of specific product after full reindex
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
