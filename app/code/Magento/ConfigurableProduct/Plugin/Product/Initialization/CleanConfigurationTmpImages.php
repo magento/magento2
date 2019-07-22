@@ -39,7 +39,7 @@ class CleanConfigurationTmpImages
     private $request;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Serialize
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serialize;
 
@@ -48,7 +48,7 @@ class CleanConfigurationTmpImages
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Serialize\Serializer\Serialize $serialize
+     * @param \Magento\Framework\Serialize\Serializer\Json $serialize
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
@@ -57,7 +57,7 @@ class CleanConfigurationTmpImages
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Serialize\Serializer\Serialize $serialize
+        \Magento\Framework\Serialize\Serializer\Json $serialize
     ) {
         $this->request = $request;
         $this->fileStorageDb = $fileStorageDb;

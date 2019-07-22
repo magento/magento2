@@ -12,6 +12,7 @@ use Magento\ConfigurableProduct\Plugin\Product\Initialization\CleanConfiguration
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\MediaStorage\Helper\File\Storage\Database as FileStorage;
 
@@ -59,6 +60,11 @@ class CleanConfigurationTmpImagesTest extends \PHPUnit\Framework\TestCase
     private $writeFolder;
 
     /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $seralizer;
+
+    /**
      * @var ProductInitializationHelper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subjectMock;
@@ -79,6 +85,9 @@ class CleanConfigurationTmpImagesTest extends \PHPUnit\Framework\TestCase
         $this->writeFolder = $this->getMockBuilder(Write::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->seralizer = $this->getMockBuilder(Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->subjectMock = $this->getMockBuilder(ProductInitializationHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -94,7 +103,8 @@ class CleanConfigurationTmpImagesTest extends \PHPUnit\Framework\TestCase
                 'request' => $this->requestMock,
                 'fileStorageDb' => $this->fileStorageDb,
                 'mediaConfig' => $this->mediaConfig,
-                'filesystem' => $this->filesystem
+                'filesystem' => $this->filesystem,
+                'seralizer' => $this->seralizer
             ]
         );
     }
@@ -163,7 +173,10 @@ class CleanConfigurationTmpImagesTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->assertSame($productMock, $this->cleanConfigurationTmpImages->afterInitialize($this->subjectMock, $productMock));
+        $this->assertSame(
+            $productMock,
+            $this->cleanConfigurationTmpImages->afterInitialize($this->subjectMock, $productMock)
+        );
     }
 
     /**
