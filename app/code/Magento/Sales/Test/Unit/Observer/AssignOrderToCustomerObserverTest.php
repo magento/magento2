@@ -51,10 +51,11 @@ class AssignOrderToCustomerObserverTest extends TestCase
      * Test assigning order to customer after issuing guest order
      *
      * @dataProvider getCustomerIds
+     * @param null|int $orderCustomerId
      * @param null|int $customerId
      * @return void
      */
-    public function testAssignOrderToCustomerAfterGuestOrder($customerId)
+    public function testAssignOrderToCustomerAfterGuestOrder($orderCustomerId, $customerId)
     {
         $orderId = 1;
         /** @var Observer|PHPUnit_Framework_MockObject_MockObject $observerMock */
@@ -71,15 +72,18 @@ class AssignOrderToCustomerObserverTest extends TestCase
             ->getMockForAbstractClass();
         $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->any())->method('getData')
-            ->willReturnMap([
-                ['delegate_data', null, ['__sales_assign_order_id' => $orderId]],
-                ['customer_data_object', null, $customerMock]
-            ]);
-        $orderMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
+            ->willReturnMap(
+                [
+                    ['delegate_data', null, ['__sales_assign_order_id' => $orderId]],
+                    ['customer_data_object', null, $customerMock]
+                ]
+            );
+        $orderMock->expects($this->once())->method('getCustomerId')->willReturn($orderCustomerId);
         $this->orderRepositoryMock->expects($this->once())->method('get')->with($orderId)
             ->willReturn($orderMock);
 
-        if ($customerId) {
+        if (!$orderCustomerId) {
+            $customerMock->expects($this->once())->method('getId')->willReturn($customerId);
             $this->assignmentMock->expects($this->once())->method('execute')->with($orderMock, $customerMock);
             $this->sut->execute($observerMock);
             return;
@@ -96,6 +100,9 @@ class AssignOrderToCustomerObserverTest extends TestCase
      */
     public function getCustomerIds()
     {
-        return [[null, 1]];
+        return [
+            [null, 1],
+            [1, 1],
+        ];
     }
 }

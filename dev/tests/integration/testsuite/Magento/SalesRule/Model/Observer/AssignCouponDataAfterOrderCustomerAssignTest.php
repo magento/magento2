@@ -6,14 +6,14 @@
 
 namespace Magento\SalesRule\Model\Observer;
 
+use Magento\Customer\Model\Data\Customer;
+use Magento\Customer\Model\GroupManagement;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Sales\Model\Order;
-use Magento\Customer\Model\GroupManagement;
 use Magento\SalesRule\Api\CouponRepositoryInterface;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\Rule;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Model\Data\Customer;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -252,9 +252,8 @@ class AssignCouponDataAfterOrderCustomerAssignTest extends \PHPUnit\Framework\Te
 
     /**
      * @param Order $order
-     * @return Redirect
      */
-    private function delegateOrderToBeAssigned(Order $order): Redirect
+    private function delegateOrderToBeAssigned(Order $order)
     {
         $this->delegateCustomerService->delegateNew($order->getId());
     }
