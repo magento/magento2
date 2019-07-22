@@ -13,4 +13,20 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\AuthorizenetCardinal\Gateway\Validator\VirtualTransactionValidator" type="Magento\Payment\Gateway\Validator\ValidatorComposite">
+        <arguments>
+            <argument name="chainBreakingValidators" xsi:type="array">
+                <item name="general" xsi:type="boolean">true</item>
+            </argument>
+            <argument name="validators" xsi:type="array">
+                <item name="general" xsi:type="string">AuthorizenetAcceptjsTransactionValidator</item>
+                <item name="cavv_response" xsi:type="string">Magento\AuthorizenetCardinal\Gateway\Validator\CavvResponseValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AuthorizenetAcceptjsAuthorizeCommand">
+        <arguments>
+            <argument name="validator" xsi:type="object">Magento\AuthorizenetCardinal\Gateway\Validator\VirtualTransactionValidator</argument>
+        </arguments>
+    </virtualType>
 </config>
