@@ -1,0 +1,1 @@
+The purpose of Magento\AdminAnalytics module is gather information on which features the users uses and sends it to adobe analytics

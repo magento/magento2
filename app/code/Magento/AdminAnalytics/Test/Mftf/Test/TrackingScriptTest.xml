@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="TrackingScriptTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Checks to see if the tracking script is in the dom of admin and if setting is turned to no it checks if the tracking script in the dom was removed"/>
+            <title value="Checks to see if the tracking script is in the dom of admin and if setting is turned to no it checks if the tracking script in the dom was removed"/>
+            <description value="Checks to see if the tracking script is in the dom of admin and if setting is turned to no it checks if the tracking script in the dom was removed"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-18192"/>
+            <group value="backend"/>
+            <group value="login"/>
+        </annotations>
+
+        <!-- Logging in Magento admin and checking for tracking script in dashboard -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <closeAdminNotification stepKey="closeAdminNotification"/>
+
+        <!-- Navigating to advance settings -->
+        <amOnPage url="{{AdminConfigAdvancedAdmin.url}}" stepKey="goToAdminSettings"/>
+        <waitForPageLoad stepKey="waitForAdvanceSettings"/>
+
+        <!-- Changing usage setting to Yes -->
+        <actionGroup ref="SelectAdminUsageSetting" stepKey="changeAdminUsageSettingToYes">
+            <argument name="adminUsageValue" value="1"/>
+        </actionGroup>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrl"/>
+
+        <!-- Checking for tracking script in salesOrderPage -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToSalesOrderPage"/>
+        <waitForPageLoad stepKey="waitForSalesOrderPage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlSalesOrder"/>
+
+        <!-- Checking for tracking script in catalogProductsPage -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToCatalogProductsPage"/>
+        <waitForPageLoad stepKey="waitForCatalogProductsPage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlCatalogProducts"/>
+
+        <!-- Checking for tracking script in customersAllCustomersPage -->
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersAllCustomersPage"/>
+        <waitForPageLoad stepKey="waitForCustomersAllCustomersPage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlCustomersAllCustomers"/>
+
+        <!-- Checking for tracking script in marketingCatalogPriceRulePage -->
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToMarketingCatalogPriceRulePage"/>
+        <waitForPageLoad stepKey="waitForMarketingCatalogPriceRulePage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlMarketingCatalogPriceRule"/>
+
+        <!-- Checking for tracking script in contentBlocksPage -->
+        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="goToContentBlocksPage"/>
+        <waitForPageLoad stepKey="waitForContentBlocksPage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlContentBlocks"/>
+
+        <!-- Checking for tracking script in reportsSearchTermsPage -->
+        <amOnPage url="{{ReportsSearchTermPage.url}}" stepKey="goToReportsSearchTermsPage"/>
+        <waitForPageLoad stepKey="waitForSearchTermsPage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlReportsSearchTerms"/>
+
+        <!-- Checking for tracking script in storesAllStoresPage -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToStoresAllStoresPage"/>
+        <waitForPageLoad stepKey="waitForStoresAllStoresPage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlStoresAllStores"/>
+
+        <!-- Checking for tracking script in systemImportPage -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToSystemImportPage"/>
+        <waitForPageLoad stepKey="waitForSystemImportPage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlSystemImport"/>
+
+        <!-- Checking for tracking script in findPartnersAndExtensionsPage -->
+        <amOnPage url="{{FindPartnersAndExtensionsPage.url}}" stepKey="goToFindPartnersAndExtensionsPage"/>
+        <waitForPageLoad stepKey="waitForFindPartnersAndExtensionsPage"/>
+        <seeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="seeTrackingUrlFindPartnersAndExtensions"/>
+
+        <!-- Navigating to advance settings -->
+        <amOnPage url="{{AdminConfigAdvancedAdmin.url}}" stepKey="goToAdminSettingsAgain"/>
+        <waitForPageLoad stepKey="waitForAdvanceSettingsAgain"/>
+
+        <!--  Changing usage setting back to No -->
+        <actionGroup ref="SelectAdminUsageSetting" stepKey="changeAdminUsageSettingToNo">
+            <argument name="adminUsageValue" value="0"/>
+        </actionGroup>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlTest"/>
+
+        <!-- Checking for removed tracking script in salesOrderPage -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToSalesOrderPageAgain"/>
+        <waitForPageLoad stepKey="waitForSalesOrderPageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlSalesOrderTest"/>
+
+        <!-- Checking for removed tracking script in catalogProductsPage -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToCatalogProductsPageAgain"/>
+        <waitForPageLoad stepKey="waitForCatalogProductsPageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlCatalogProductsTest"/>
+
+        <!-- Checking for removed tracking script in customersAllCustomersPage -->
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersAllCustomersPageAgain"/>
+        <waitForPageLoad stepKey="waitForCustomersAllCustomersPageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlCustomersAllCustomersTest"/>
+
+        <!-- Checking for removed tracking script in marketingCatalogPriceRulePage -->
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToMarketingCatalogPriceRulePageAgain"/>
+        <waitForPageLoad stepKey="waitForMarketingCatalogPriceRulePageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlMarketingCatalogTest"/>
+
+        <!-- Checking for removed tracking script in contentBlocksPage -->
+        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="goToContentBlocksPageAgain"/>
+        <waitForPageLoad stepKey="waitForContentBlocksPageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlContentBlocksTest"/>
+
+        <!-- Checking for removed tracking script in reportsSearchTermsPage -->
+        <amOnPage url="{{ReportsSearchTermPage.url}}" stepKey="goToReportsSearchTermsPageAgain"/>
+        <waitForPageLoad stepKey="waitForSearchTermsPageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlReportsSearchTest"/>
+
+        <!-- Checking for removed tracking script in storesAllStoresPage -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToStoresAllStoresPageAgain"/>
+        <waitForPageLoad stepKey="waitForStoresAllStoresPageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlStoresAllStoresTest"/>
+
+        <!-- Checking for removed tracking script in systemImportPage -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToSystemImportPageAgain"/>
+        <waitForPageLoad stepKey="waitForSystemImportPageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlSystemsImportTest"/>
+
+        <!-- Checking for removed tracking script in findPartnersAndExtensionsPage -->
+        <amOnPage url="{{FindPartnersAndExtensionsPage.url}}" stepKey="goToFindPartnersAndExtensionsPageAgain"/>
+        <waitForPageLoad stepKey="waitForFindPartnersAndExtensionsPageAgain"/>
+        <dontSeeElementInDOM selector="{{AdminHeaderSection.adminTrackingScript}}" stepKey="dontSeeTrackingUrlFindPartnersTest"/>
+    </test>
+</tests>
