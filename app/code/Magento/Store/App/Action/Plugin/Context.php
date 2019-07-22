@@ -9,7 +9,6 @@ namespace Magento\Store\App\Action\Plugin;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Store\Model\Store;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreResolverInterface;
@@ -135,15 +134,11 @@ class Context
         /** @var StoreInterface $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
 
-        if (!$store->getConfig(Store::XML_PATH_STORE_IN_URL) ||
-            $store->getCode() == $this->storeManager->getDefaultStoreView()->getCode()
-        ) {
-            $this->httpContext->setValue(
-                StoreManagerInterface::CONTEXT_STORE,
-                $store->getCode(),
-                $defaultStore->getCode()
-            );
-        }
+        $this->httpContext->setValue(
+            StoreManagerInterface::CONTEXT_STORE,
+            $store->getCode(),
+            $store->isUseStoreInUrl() ? $store->getCode() : $this->storeManager->getDefaultStoreView()->getCode()
+        );
 
         $this->httpContext->setValue(
             HttpContext::CONTEXT_CURRENCY,
