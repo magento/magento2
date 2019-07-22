@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\App\Action\Plugin;
 
 use Magento\Framework\App\Action\AbstractAction;
-use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Store\App\Action\Plugin\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
@@ -29,6 +32,8 @@ class ContextNonDefaultStoreDirectLinkTest extends TestCase
     const CURRENCY_CURRENT_STORE = 'UAH';
 
     /**
+     * Test for full page cache hits from new http clients if store context was specified in the URL
+     *
      * @dataProvider cacheHitOnDirectLinkToNonDefaultStoreView
      * @param $customStore
      * @param $defaultStore
@@ -57,13 +62,14 @@ class ContextNonDefaultStoreDirectLinkTest extends TestCase
             ->method('getValue')
             ->with(StoreManagerInterface::CONTEXT_STORE)
             ->willReturn(null);
+
         $websiteMock = $this->createPartialMock(
             Website::class,
             ['getDefaultStore', '__wakeup']
         );
 
         $plugin = (new ObjectManager($this))->getObject(
-            \Magento\Store\App\Action\Plugin\Context::class,
+            Context::class,
             [
                 'session' => $sessionMock,
                 'httpContext' => $httpContextMock,
