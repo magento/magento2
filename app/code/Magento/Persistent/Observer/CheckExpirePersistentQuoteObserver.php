@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Observer of expired session
@@ -110,15 +111,25 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             return;
         }
 
-        if (($this->_persistentData->isEnabled() || $this->isPersistentQuoteOutdated()) &&
+        /** @var Quote $quote */
+        $quote = $this->_checkoutSession->getQuote();
+
+        //clear persistent when persistent data is disabled
+        if ($this->isPersistentQuoteOutdated($quote)) {
+            $this->_eventManager->dispatch('persistent_session_expired');
+            $this->quoteManager->expire();
+            return;
+        }
+
+        if ($this->_persistentData->isEnabled() &&
             !$this->_persistentSession->isPersistent() &&
             !$this->_customerSession->isLoggedIn() &&
             $this->_checkoutSession->getQuoteId() &&
             !$this->isRequestFromCheckoutPage($this->request) &&
             // persistent session does not expire on onepage checkout page
             (
-                $this->_checkoutSession->getQuote()->getIsPersistent() ||
-                $this->_checkoutSession->getQuote()->getCustomerIsGuest()
+                $quote->getIsPersistent() ||
+                $quote->getCustomerIsGuest()
             )
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
@@ -130,11 +141,12 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     /**
      * Checks if current quote marked as persistent and Persistence Functionality is disabled.
      *
+     * @param Quote $quote
      * @return bool
      */
-    private function isPersistentQuoteOutdated(): bool
+    private function isPersistentQuoteOutdated(Quote $quote): bool
     {
-        return !$this->_persistentData->isEnabled() && $this->_checkoutSession->getQuote()->getIsPersistent();
+        return !$this->_persistentData->isEnabled() && $quote->getIsPersistent();
     }
 
     /**
