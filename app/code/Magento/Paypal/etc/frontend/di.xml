@@ -40,6 +40,7 @@
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="paypal_billing" xsi:type="string">/paypal/billing/</item>
+                <item name="paypal_billing_agreement" xsi:type="string">/paypal/billing_agreement/</item>
                 <item name="paypal_bml" xsi:type="string">/paypal/bml/</item>
                 <item name="paypal_hostedpro" xsi:type="string">/paypal/hostedpro/</item>
                 <item name="paypal_ipn" xsi:type="string">/paypal/ipn/</item>

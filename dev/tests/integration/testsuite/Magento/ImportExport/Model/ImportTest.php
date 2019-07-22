@@ -160,9 +160,20 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetEntity()
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Entity is unknown
+     */
+    public function testGetUnknownEntity()
     {
         $entityName = 'entity_name';
+        $this->_model->setEntity($entityName);
+        $this->assertSame($entityName, $this->_model->getEntity());
+    }
+
+    public function testGetEntity()
+    {
+        $entityName = 'catalog_product';
         $this->_model->setEntity($entityName);
         $this->assertSame($entityName, $this->_model->getEntity());
     }
