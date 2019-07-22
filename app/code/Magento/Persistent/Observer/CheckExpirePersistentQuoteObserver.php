@@ -102,7 +102,6 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         $this->_eventManager = $eventManager;
         $this->_persistentData = $persistentData;
         $this->request = $request;
-        $this->quote = $this->_checkoutSession->getQuote();
     }
 
     /**
