@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="simpleBlankDesign" type="product">
+        <data key="custom_design">Magento Blank</data>
+        <data key="page_layout">2 columns with left bar</data>
+        <data key="options_container">Product Info Column</data>
+    </entity>
+    <entity name="simpleLumaDesign" type="product">
+        <data key="custom_design">Magento Luma</data>
+        <data key="page_layout">Empty</data>
+        <data key="options_container">Block after Info Column</data>
+    </entity>
+</entities>
