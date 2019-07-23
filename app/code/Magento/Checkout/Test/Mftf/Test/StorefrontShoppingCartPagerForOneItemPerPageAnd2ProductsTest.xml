@@ -37,9 +37,8 @@
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteProduct2"/>
         </after>
         <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage" />
-        <actionGroup ref="AssertTextIsVisibleOnPageActionGroup" stepKey="VerifyPagerTextWithChangedConfiguration">
+        <actionGroup ref="AssertToolbarTextIsVisibleInCartActionGroup" stepKey="VerifyPagerTextWithChangedConfiguration">
             <argument name="text" value="Items 1 to 1 of 2 total"/>
-            <argument name="selector" value="{{StorefrontCartToolbarSection.toolbarNumber}}"/>
         </actionGroup>
     </test>
 </tests>

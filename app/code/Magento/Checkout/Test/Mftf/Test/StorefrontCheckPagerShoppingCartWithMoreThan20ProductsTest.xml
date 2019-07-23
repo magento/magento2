@@ -131,9 +131,8 @@
             <deleteData createDataKey="simpleProduct21" stepKey="deleteCartItem21"/>
         </after>
         <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage" />
-        <actionGroup ref="AssertTextIsVisibleOnPageActionGroup" stepKey="VerifyPagerText">
+        <actionGroup ref="AssertToolbarTextIsVisibleInCartActionGroup" stepKey="VerifyPagerText">
             <argument name="text" value="Items 1 to 20 of 21 total"/>
-            <argument name="selector" value="{{StorefrontCartToolbarSection.toolbarNumber}}"/>
         </actionGroup>
         <actionGroup ref="StorefrontRemoveCartItemActionGroup" stepKey="removeCartItem" />
         <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText2" >
