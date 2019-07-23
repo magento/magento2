@@ -16,6 +16,7 @@ use \Magento\Store\Model\Store;
  * Class Downloadable
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -102,7 +103,9 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_COLS_IS_EMPTY = 'emptyOptions';
 
-    private const ERROR_NOT_IN_DOMAIN_WHITELIST = 'notInDomainWhitelist';
+    private const ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST = 'linkUrlNotInDomainWhitelist';
+
+    private const ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST = 'sampleUrlNotInDomainWhitelist';
 
     /**
      * Validation failure message template definitions
@@ -115,7 +118,10 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_OPTION_NO_TITLE => 'Option no title',
         self::ERROR_MOVE_FILE => 'Error move file',
         self::ERROR_COLS_IS_EMPTY => 'Missing sample and links data for the downloadable product',
-        self::ERROR_NOT_IN_DOMAIN_WHITELIST => 'Link URL'
+        self::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST =>
+            'Link URL\'s domain is not in list of downloadable_domains in env.php.',
+        self::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST =>
+            'Sample URL\'s domain is not in list of downloadable_domains in env.php.'
     ];
 
     /**
@@ -344,6 +350,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function isRowValidSample(array $rowData)
     {
@@ -366,7 +373,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     strlen($link['sample_url']) &&
                     !$this->domainValidator->isValid($link['sample_url'])
                 ) {
-                    $this->_entityModel->addRowError(static::ERROR_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                    $this->_entityModel->addRowError(static::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                     $result = true;
                 }
             }
@@ -379,6 +386,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function isRowValidLink(array $rowData)
     {
@@ -403,7 +411,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     strlen($link['link_url']) &&
                     !$this->domainValidator->isValid($link['link_url'])
                 ) {
-                    $this->_entityModel->addRowError(static::ERROR_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                    $this->_entityModel->addRowError(static::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                     $result = true;
                 }
             }
