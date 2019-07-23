@@ -14,8 +14,8 @@
         <element name="advancedReportingIndustry" type="select" selector="#analytics_general_vertical"/>
         <element name="advancedReportingIndustryLabel" type="text" selector=".config-vertical-label>label>span"/>
         <element name="advancedReportingHour" type="select" selector="#row_analytics_general_collection_time>td:nth-child(2)>select:nth-child(2)"/>
-        <element name="advancedReportingMinute" type="select" selector="#row_analytics_general_collection_time>td:nth-child(2)>select:nth-child(3)"/>
-        <element name="advancedReportingSeconds" type="select" selector="#row_analytics_general_collection_time>td:nth-child(2)>select:nth-child(4)"/>
+        <element name="advancedReportingMinute" type="select" selector="#row_analytics_general_collection_time>td:nth-child(2)>select:nth-child(4)"/>
+        <element name="advancedReportingSeconds" type="select" selector="#row_analytics_general_collection_time>td:nth-child(2)>select:nth-child(6)"/>
         <element name="advancedReportingBlankIndustryError" type="text" selector=".message-error>div"/>
     </section>
 </sections>

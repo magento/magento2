@@ -434,7 +434,7 @@ class Select extends \Zend_Db_Select
             }
         }
 
-        return parent::_tableCols($correlationName, $cols, $afterCorrelationName);
+        parent::_tableCols($correlationName, $cols, $afterCorrelationName);
     }
 
     /**

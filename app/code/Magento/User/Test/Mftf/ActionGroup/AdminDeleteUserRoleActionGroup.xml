@@ -8,11 +8,20 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteUserRoleActionGroup">
-        <click stepKey="clickOnRole" selector="{{AdminDeleteRoleSection.salesRole}}"/>
-        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteRoleSection.current_pass}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
-        <click stepKey="clickToDeleteRole" selector="{{AdminDeleteRoleSection.delete}}"/>
-        <waitForAjaxLoad stepKey="waitForDeleteConfirmationPopup" time="5"/>
-        <click stepKey="clickToConfirm" selector="{{AdminDeleteRoleSection.confirm}}"/>
-        <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
+        <arguments>
+            <argument name="roleName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRolesGrid" />
+        <fillField selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{roleName}}" stepKey="enterRoleName" />
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch" />
+        <see selector="{{AdminDataGridTableSection.row('1')}}" userInput="{{roleName}}" stepKey="seeUserRole" />
+        <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="openRoleEditPage"/>
+        <waitForPageLoad stepKey="waitForRoleEditPageLoad"/>
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
+        <click selector="{{AdminEditRoleInfoSection.deleteButton}}" stepKey="deleteUserRole"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the role." stepKey="seeUserRoleDeleteMessage"/>
     </actionGroup>
 </actionGroups>
