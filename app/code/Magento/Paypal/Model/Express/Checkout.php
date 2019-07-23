@@ -632,12 +632,6 @@ class Checkout
                 if ($exportedShippingAddress && $isButton) {
                     $this->_setExportedAddressData($shippingAddress, $exportedShippingAddress);
                     // PayPal doesn't provide detailed shipping info: prefix, middlename, lastname, suffix
-//                    $shippingAddress->setPrefix(null);
-//                    $shippingAddress->setMiddlename(null);
-//                    $shippingAddress->setLastname(null);
-//                    $shippingAddress->setSuffix(null);
-//                    $shippingAddress->setCollectShippingRates(true);
-//                    $shippingAddress->setSameAsBilling(0);
                 }
 
                 // import shipping method
