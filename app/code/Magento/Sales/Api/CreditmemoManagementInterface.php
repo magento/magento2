@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Api;
+
+use Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface;
 
 /**
  * Credit memo add comment interface.
@@ -32,7 +32,7 @@ interface CreditmemoManagementInterface
      * Lists comments for a specified credit memo.
      *
      * @param int $id The credit memo ID.
-     * @return \Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface Credit memo comment search results interface.
+     * @return CreditmemoCommentSearchResultInterface Credit memo comment search results interface.
      */
     public function getCommentsList($id);
 
