@@ -145,7 +145,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      */
     private function isPersistentQuoteOutdated(): bool
     {
-        if (!$this->_persistentData->isEnabled() && $this->_checkoutSession->hasQuote()) {
+        if (!$this->_persistentData->isEnabled() && $this->_checkoutSession->getQuoteId()) {
             return (bool)$this->getQuote()->getIsPersistent();
         }
         return false;
