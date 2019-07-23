@@ -116,5 +116,8 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
                 'Wrong product name specified per store.'
             );
         }
+
+        $this->objectManager->removeSharedInstance(State::class);
+        $this->objectManager->removeSharedInstance(Processor::class);
     }
 }
