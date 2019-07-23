@@ -9,6 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontVisibilityOfDuplicateProductTest">
         <annotations>
+            <stories value="Duplicate Product"/>
             <features value="ConfigurableProduct"/>
             <title value="Visibility of duplicate product on the Storefront"/>
             <description value="Check visibility of duplicate product on the Storefront"/>

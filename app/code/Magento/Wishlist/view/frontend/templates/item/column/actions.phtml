@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions $block */
 ?>
 <?php $children = $block->getChildNames(); ?>
-<?php if ($children): ?>
+<?php if ($children) : ?>
     <div class="<?= $block->escapeHtmlAttr($block->getCssClass()) ?>">
-        <?php foreach ($children as $childName):?>
+        <?php foreach ($children as $childName) : ?>
             <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
         <?php endforeach;?>
     </div>
