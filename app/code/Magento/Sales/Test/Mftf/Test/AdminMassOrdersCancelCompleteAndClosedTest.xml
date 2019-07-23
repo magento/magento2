@@ -17,6 +17,9 @@
             <testCaseId value="MC-16183"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-18275"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -56,7 +59,7 @@
         <assertNotEmpty actual="$getSecondOrderId" stepKey="assertSecondOrderIdIsNotEmpty" after="getSecondOrderId"/>
 
         <!-- Create CreditMemo for second Order -->
-       <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/>
+        <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/>
 
         <!-- Navigate to backend: Go to Sales > Orders -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrderPage"/>

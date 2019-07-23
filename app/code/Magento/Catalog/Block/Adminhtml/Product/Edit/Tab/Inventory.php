@@ -18,7 +18,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Catalog::catalog/product/tab/inventory.phtml';
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -53,7 +53,7 @@ class Inventory extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Model\Source\Stock $stock
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
@@ -63,7 +63,7 @@ class Inventory extends \Magento\Backend\Block\Widget
         \Magento\Backend\Block\Template\Context $context,
         \Magento\CatalogInventory\Model\Source\Backorders $backorders,
         \Magento\CatalogInventory\Model\Source\Stock $stock,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
@@ -79,6 +79,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get backorder option.
+     *
      * @return array
      */
     public function getBackordersOption()
@@ -128,6 +130,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get field value.
+     *
      * @param string $field
      * @return string|null
      */
@@ -145,6 +149,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get config field value.
+     *
      * @param string $field
      * @return string|null
      */
@@ -163,6 +169,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get default config value.
+     *
      * @param string $field
      * @return string|null
      */
@@ -182,6 +190,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Is new.
+     *
      * @return bool
      */
     public function isNew()
@@ -193,6 +203,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get field suffix.
+     *
      * @return string
      */
     public function getFieldSuffix()
@@ -221,6 +233,8 @@ class Inventory extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Is single store mode enabled.
+     *
      * @return bool
      */
     public function isSingleStoreMode()
