@@ -64,7 +64,7 @@ class DomainManager implements DomainManagerInterface
         $whitelist = $this->getDomains();
         foreach (array_map('strtolower', $hosts) as $host) {
             if (!in_array($host, $whitelist)) {
-                array_push($whitelist, $host);
+                $whitelist[] = $host;
             }
         }
 
@@ -90,6 +90,8 @@ class DomainManager implements DomainManagerInterface
                 unset($whitelist[$index]);
             }
         }
+
+        $whitelist = array_values($whitelist);  // reindex whitelist to prevent non-sequential keying
 
         $this->configWriter->saveConfig(
             [

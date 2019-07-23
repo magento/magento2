@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Setup\Patch\Data;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Store\Model\ScopeInterface;
 use Zend\Uri\Uri as UriHandler;
 use Magento\Framework\Url\ScopeResolverInterface;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Backend\App\Area\FrontNameResolver;
 
 /**
  * Adding base url as allowed downloadable domain.
@@ -27,6 +30,11 @@ class AddDownloadableHostsConfig implements DataPatchInterface
      * @var ScopeResolverInterface
      */
     private $scopeResolver;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @var ModuleDataSetupInterface
@@ -48,17 +56,20 @@ class AddDownloadableHostsConfig implements DataPatchInterface
      *
      * @param UriHandler $uriHandler
      * @param ScopeResolverInterface $scopeResolver
+     * @param ScopeConfigInterface $scopeConfig
      * @param DomainManager $domainManager
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         UriHandler $uriHandler,
         ScopeResolverInterface $scopeResolver,
+        ScopeConfigInterface $scopeConfig,
         DomainManager $domainManager,
         ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->uriHandler = $uriHandler;
         $this->scopeResolver = $scopeResolver;
+        $this->scopeConfig = $scopeConfig;
         $this->domainManager = $domainManager;
         $this->moduleDataSetup = $moduleDataSetup;
     }
@@ -68,6 +79,19 @@ class AddDownloadableHostsConfig implements DataPatchInterface
      */
     public function apply()
     {
+        foreach ($this->scopeResolver->getScopes() as $scope) {
+            $this->addHost($scope->getBaseUrl());
+        }
+
+        $customAdminUrl = $this->scopeConfig->getValue(
+            FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        if ($customAdminUrl) {
+            $this->addHost($customAdminUrl);
+        }
+
         if ($this->moduleDataSetup->tableExists('downloadable_link')) {
             $select = $this->moduleDataSetup->getConnection()
                 ->select()
@@ -106,10 +130,6 @@ class AddDownloadableHostsConfig implements DataPatchInterface
             foreach ($this->moduleDataSetup->getConnection()->fetchAll($select) as $link) {
                 $this->addHost($link['sample_url']);
             }
-        }
-
-        foreach ($this->scopeResolver->getScopes() as $scope) {
-            $this->addHost($scope->getBaseUrl());
         }
 
         $this->domainManager->addDomains($this->whitelist);
