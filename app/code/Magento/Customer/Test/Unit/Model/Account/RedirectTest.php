@@ -1,12 +1,8 @@
 <?php
 /**
- * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Test\Unit\Model\Account;
 
@@ -18,6 +14,8 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
+ * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RedirectTest extends \PHPUnit\Framework\TestCase
