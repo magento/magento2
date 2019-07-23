@@ -61,7 +61,7 @@ class GetReservationFromCompensationArgument
     }
 
     /**
-     * Parse CLI argument into order and order item information. 
+     * Parse CLI argument into order and order item information.
      *
      * @param string $argument
      * @return array
