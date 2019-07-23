@@ -8,6 +8,7 @@
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\EntityManager\MetadataPool;
 use \Magento\Store\Model\Store;
 
@@ -101,6 +102,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_COLS_IS_EMPTY = 'emptyOptions';
 
+    private const ERROR_NOT_IN_DOMAIN_WHITELIST = 'notInDomainWhitelist';
+
     /**
      * Validation failure message template definitions
      *
@@ -111,7 +114,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_GROUP_TITLE_NOT_FOUND => 'Group titles not found for downloadable products',
         self::ERROR_OPTION_NO_TITLE => 'Option no title',
         self::ERROR_MOVE_FILE => 'Error move file',
-        self::ERROR_COLS_IS_EMPTY => 'Missing sample and links data for the downloadable product'
+        self::ERROR_COLS_IS_EMPTY => 'Missing sample and links data for the downloadable product',
+        self::ERROR_NOT_IN_DOMAIN_WHITELIST => 'Link URL'
     ];
 
     /**
@@ -245,6 +249,11 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $downloadableHelper;
 
     /**
+     * @var DomainValidator
+     */
+    private $domainValidator;
+
+    /**
      * Downloadable constructor
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
@@ -262,12 +271,14 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         array $params,
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
         \Magento\DownloadableImportExport\Helper\Data $downloadableHelper,
+        DomainValidator $domainValidator,
         MetadataPool $metadataPool = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->parameters = $this->_entityModel->getParameters();
         $this->_resource = $resource;
         $this->uploaderHelper = $uploaderHelper;
+        $this->domainValidator = $domainValidator;
         $this->downloadableHelper = $downloadableHelper;
     }
 
@@ -345,7 +356,20 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
             && $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '') {
-            $result = $this->isTitle($this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]));
+            $sampleData = $this->prepareSampleData($rowData[static::COL_DOWNLOADABLE_SAMPLES]);
+
+            $result = $this->isTitle($sampleData);
+            foreach ($sampleData as $link) {
+                if (isset($link['sample_type']) &&
+                    $link['sample_type'] === 'url' &&
+                    isset($link['sample_url']) &&
+                    strlen($link['sample_url']) &&
+                    !$this->domainValidator->isValid($link['sample_url'])
+                ) {
+                    $this->_entityModel->addRowError(static::ERROR_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                    $result = true;
+                }
+            }
         }
         return $result;
     }
@@ -369,7 +393,20 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
             $rowData[self::COL_DOWNLOADABLE_LINKS] != ''
         ) {
-            $result = $this->isTitle($this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]));
+            $linkData = $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
+            $result = $this->isTitle($linkData);
+
+            foreach ($linkData as $link) {
+                if (isset($link['link_type']) &&
+                    $link['link_type'] === 'url' &&
+                    isset($link['link_url']) &&
+                    strlen($link['link_url']) &&
+                    !$this->domainValidator->isValid($link['link_url'])
+                ) {
+                    $this->_entityModel->addRowError(static::ERROR_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                    $result = true;
+                }
+            }
         }
         return $result;
     }
