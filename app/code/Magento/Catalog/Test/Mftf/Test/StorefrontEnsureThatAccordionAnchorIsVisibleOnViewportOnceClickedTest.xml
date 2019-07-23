@@ -55,6 +55,15 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete reviews -->
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+
+            <!-- Delete customer -->
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+
             <deleteData createDataKey="createFirstAttribute" stepKey="deleteFirstAttribute"/>
             <deleteData createDataKey="createSecondAttribute" stepKey="deleteSecondAttribute"/>
             <deleteData createDataKey="createThirdAttribute" stepKey="deleteThirdAttribute"/>
@@ -165,14 +174,5 @@
         <!-- Scroll so that the description is visible and More info tab is on the upper middle of the page -->
         <scrollTo selector="{{StorefrontProductInfoDetailsSection.detailsTab}}" stepKey="scrollToMoreInfoTab"/>
         <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
-
-        <!-- Delete reviews -->
-        <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
-        <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
-
-        <!-- Delete customer -->
-        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
-            <argument name="email" value="{{CustomerEntityOne.email}}"/>
-        </actionGroup>
     </test>
 </tests>
