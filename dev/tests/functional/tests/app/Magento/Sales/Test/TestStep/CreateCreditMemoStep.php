@@ -138,13 +138,12 @@ class CreateCreditMemoStep implements TestStepInterface
                 $this->orderCreditMemoNew->getTotalsBlock()->getAdjustmentFeeElement()->getValue(),
         ];
 
-        $count = 0;
         foreach ($compareData as $key => $val) {
-            if (isset($data['form_data'][$key])) {
-                $count += ($val != $data['form_data'][$key] ? 1 : 0);
+            if (isset($data['form_data'][$key]) && $val != $data['form_data'][$key]) {
+                return false;
             }
         }
 
-        return $count;
+        return true;
     }
 }
