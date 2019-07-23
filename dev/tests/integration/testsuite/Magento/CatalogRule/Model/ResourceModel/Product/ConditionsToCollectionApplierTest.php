@@ -8,8 +8,6 @@ namespace Magento\CatalogRule\Model\ResourceModel\Product;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\Product;
 
-// @codingStandardsIgnoreFile
-
 class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
 {
     private $objectManager;
@@ -82,7 +80,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Undefined rule operator "====" passed in. Valid operators are: ==,!=,>=,<=,>,<,{},!{},(),!()
+     * @expectedExceptionMessage Undefined rule operator "====" passed in.
+     * Valid operators are: ==,!=,>=,<=,>,<,{},!{},(),!()
      *
      * @magentoDbIsolation disabled
      */
