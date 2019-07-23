@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var $block \Magento\OfflinePayments\Block\Form\Cashondelivery
  */
 $instructions = $block->getInstructions();
 ?>
-<?php if ($instructions): ?>
+<?php if ($instructions) : ?>
     <?php $methodCode = $block->escapeHtml($block->getMethodCode());?>
     <ul class="form-list checkout-agreements" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display:none;">
         <li>
