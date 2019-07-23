@@ -17,12 +17,13 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13908"/>
             <group value="LogoUpload"/>
+            <skip>
+                <issueId value="MC-18496"/>
+            </skip>
         </annotations>
         <!--Login to Admin Area-->
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <!--Logout from Admin Area-->
         <after>
