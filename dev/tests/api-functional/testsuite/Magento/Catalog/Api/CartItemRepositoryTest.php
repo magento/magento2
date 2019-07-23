@@ -62,7 +62,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'sku' => $item->getSku(),
                 'qty' => $item->getQty(),
                 'name' => $item->getName(),
-                
+                'price' => $item->getPrice(),
                 'product_type' => $item->getProductType(),
                 'quote_id' => $item->getQuoteId(),
                 'product_option' => [

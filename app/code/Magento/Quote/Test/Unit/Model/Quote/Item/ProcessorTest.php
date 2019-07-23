@@ -68,7 +68,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
 
-        $this->itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class,
+        $this->itemMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Item::class,
             [
                 'getId',
                 'setOptions',
