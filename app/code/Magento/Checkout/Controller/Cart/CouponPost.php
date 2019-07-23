@@ -70,6 +70,9 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         if (!$this->getRequest()->isPost()) {
             throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
         }
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            return $this->_goBack();
+        }
 
         $couponCode = $this->getRequest()->getParam('remove') == 1
             ? ''

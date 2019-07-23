@@ -4,13 +4,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Block\Transparent\Iframe;
 
 /**
  * Class Redirect
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
 {

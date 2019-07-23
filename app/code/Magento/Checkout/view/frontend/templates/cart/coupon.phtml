@@ -38,6 +38,7 @@
                     </div>
                 </div>
                 <div class="actions-toolbar">
+                    <?= $block->getBlockHtml('formkey')?>
                     <?php if (!strlen($block->getCouponCode())) :?>
                     <div class="primary">
                         <button class="action apply primary" type="button" value="<?= $block->escapeHtmlAttr(__('Apply Discount')) ?>">
