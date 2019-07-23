@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\CustomerImportExport\Model\Import\CustomerComposite;
@@ -116,18 +114,28 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $this->_importFactory = $this->createMock(\Magento\ImportExport\Model\ImportFactory::class);
         $this->_resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->_resourceHelper = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Helper::class);
-        $this->_dataFactory = $this->createMock(\Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory::class);
+        $this->_dataFactory = $this->createMock(
+            \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory::class
+        );
         $this->_customerFactory = $this->createMock(\Magento\CustomerImportExport\Model\Import\CustomerFactory::class);
         $this->_addressFactory = $this->createMock(\Magento\CustomerImportExport\Model\Import\AddressFactory::class);
 
-        $this->errorFactory = $this->createPartialMock(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory::class, ['create']);
+        $this->errorFactory = $this->createPartialMock(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory::class,
+            ['create']
+        );
 
-        $this->error = $this->createPartialMock(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class, ['init']);
+        $this->error = $this->createPartialMock(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class,
+            ['init']
+        );
 
         $this->errorFactory->expects($this->any())->method('create')->will($this->returnValue($this->error));
         $this->error->expects($this->any())->method('init')->will($this->returnValue(true));
 
-        $this->errorAggregator = $this->getMockBuilder(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class)
+        $this->errorAggregator = $this->getMockBuilder(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
+        )
             ->setMethods(['hasToBeTerminated'])
             ->setConstructorArgs([$this->errorFactory])
             ->getMock();
