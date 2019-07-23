@@ -6,8 +6,6 @@
 
 namespace Magento\Sales\Api\Data;
 
-use Magento\Sales\Api\Data\CreditmemoCommentInterface;
-
 /**
  * Credit memo interface.
  *
@@ -617,14 +615,15 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Gets credit memo comments.
      *
-     * @return CreditmemoCommentInterface[]|null Array of any credit memo comments. Otherwise, null.
+     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null Array of any credit memo comments.
+     * Otherwise, null.
      */
     public function getComments();
 
     /**
      * Sets credit memo comments.
      *
-     * @param CreditmemoCommentInterface[] $comments
+     * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface[] $comments
      * @return $this
      */
     public function setComments($comments);

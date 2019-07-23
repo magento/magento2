@@ -232,6 +232,8 @@ class Edit extends Widget
     /**
      * Return preview action url for form
      *
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
+     *
      * @return string
      */
     public function getPreviewUrl()
@@ -265,6 +267,8 @@ class Edit extends Widget
     /**
      * Return delete url for customer group
      *
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
+     *
      * @return string
      */
     public function getDeleteUrl()
@@ -274,6 +278,8 @@ class Edit extends Widget
 
     /**
      * Retrieve Save As Flag
+     *
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      *
      * @return int
      */

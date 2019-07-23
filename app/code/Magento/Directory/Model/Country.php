@@ -14,6 +14,7 @@ namespace Magento\Directory\Model;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Country extends \Magento\Framework\Model\AbstractModel
 {

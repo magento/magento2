@@ -13,7 +13,7 @@
         <?= $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Name::class)->setObject($block->getCustomer())->toHtml() ?>
 
         <?php $_dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
-        <?php $_taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxva::class) ?>
+        <?php $_taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
         <?php $_gender = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Gender::class) ?>
         <?php if ($_dob->isEnabled()) : ?>
             <?= $_dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
