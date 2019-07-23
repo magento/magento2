@@ -8,11 +8,11 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateInvoiceForOrderWithSimpleProductOnDefaultStockTest">
+    <test name="AdminCreateFullInvoiceForOrderWithSimpleProductOnDefaultStockTest">
         <annotations>
-            <stories value="Admin user create Invoice for order with Simple product on Default stock from Main Website"/>
-            <title value="Admin user create Invoice for order with Simple product on Default stock from Main Website"/>
-            <description value="Admin user create Invoice for order with Simple product on Default stock from Main Website"/>
+            <stories value="Admin user create Invoice for whole order with Simple product on Default stock from Main Website"/>
+            <title value="Admin user create Invoice for whole order with Simple product on Default stock from Main Website"/>
+            <description value="Admin user create Invoice for whole order with Simple product on Default stock from Main Website"/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735232/scenarios/1438968"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
