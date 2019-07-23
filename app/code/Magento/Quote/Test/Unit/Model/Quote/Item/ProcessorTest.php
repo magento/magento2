@@ -68,7 +68,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
 
-        $this->itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, [
+        $this->itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class,
+            [
                 'getId',
                 'setOptions',
                 '__wakeup',
@@ -78,7 +79,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
                 'setOriginalCustomPrice',
                 'setData',
                 'setprice'
-            ]);
+            ]
+        );
         $this->quoteItemFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->itemMock));
