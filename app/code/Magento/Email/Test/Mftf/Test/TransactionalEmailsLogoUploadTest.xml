@@ -21,6 +21,8 @@
         <!--Login to Admin Area-->
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <!--Logout from Admin Area-->
         <after>
