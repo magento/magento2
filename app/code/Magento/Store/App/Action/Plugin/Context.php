@@ -137,7 +137,7 @@ class Context
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
             $store->getCode(),
-            $store->isUseStoreInUrl() ? $store->getCode() : $this->storeManager->getDefaultStoreView()->getCode()
+            $store->isUseStoreInUrl() ? $store->getCode() : $defaultStore->getCode()
         );
 
         $this->httpContext->setValue(
