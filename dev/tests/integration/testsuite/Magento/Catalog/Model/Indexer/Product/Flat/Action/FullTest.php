@@ -93,6 +93,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $store = $storeManager->getStore('fixturestore');
+        $currentStore = $storeManager->getStore();
 
         $expectedData = [
             $storeManager->getDefaultStoreView()->getId() => 'Simple Product One',
@@ -117,6 +118,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
             );
         }
 
+        $storeManager->setCurrentStore($currentStore);
         $this->objectManager->removeSharedInstance(State::class);
         $this->objectManager->removeSharedInstance(Processor::class);
     }
