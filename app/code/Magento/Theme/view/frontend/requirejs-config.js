@@ -33,9 +33,6 @@ var config = {
             'jquery/ui':              'jquery/compat'
         }
     },
-    paths: {
-        'jquery/ui': 'jquery/jquery-ui'
-    },
     deps: [
         'jquery/jquery.mobile.custom',
         'mage/common',
