@@ -26,18 +26,12 @@ class CategoryCacheTest extends AbstractGraphqlCacheTest
     private $graphqlController;
 
     /**
-     * @var Http
-     */
-    private $request;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
     }
     /**
      * Test cache tags and debug header for category and querying only for category
@@ -59,10 +53,8 @@ class CategoryCacheTest extends AbstractGraphqlCacheTest
            }
        }
 QUERY;
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setQueryValue('query', $query);
-        $response = $this->graphqlController->dispatch($this->request);
+        $request = $this->prepareRequest($query);
+        $response = $this->graphqlController->dispatch($request);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_c','cat_c_' . $categoryId,'FPC'];
