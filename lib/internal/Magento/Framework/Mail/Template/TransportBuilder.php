@@ -5,13 +5,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Mail\MailEnvelopeBuilder;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
+use Magento\Framework\Mail\MimeInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
@@ -98,6 +101,18 @@ class TransportBuilder
     private $messageFactory;
 
     /**
+     * Param that used for storing all message data until it will be used
+     *
+     * @var array
+     */
+    private $messageData = [];
+
+    /**
+     * @var MailEnvelopeBuilder|null
+     */
+    private $mailEnvelopeBuilder;
+
+    /**
      * @param FactoryInterface $templateFactory
      * @param MessageInterface $message
      * @param SenderResolverInterface $senderResolver
@@ -105,6 +120,7 @@ class TransportBuilder
      * @param TransportInterfaceFactory $mailTransportFactory
      * @param MessageInterfaceFactory $messageFactory
      *
+     * @param MailEnvelopeBuilder|null $mailEnvelopeBuilder
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -113,14 +129,18 @@ class TransportBuilder
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
         TransportInterfaceFactory $mailTransportFactory,
-        MessageInterfaceFactory $messageFactory = null
+        MessageInterfaceFactory $messageFactory = null,
+        MailEnvelopeBuilder $mailEnvelopeBuilder =null
     ) {
         $this->templateFactory = $templateFactory;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
-        $this->messageFactory = $messageFactory ?: $this->objectManager->get(MessageInterfaceFactory::class);
+        $this->messageFactory = $messageFactory ?: $this->objectManager
+            ->get(MessageInterfaceFactory::class);
         $this->message = $this->messageFactory->create();
+        $this->mailEnvelopeBuilder = $mailEnvelopeBuilder ?: $this->objectManager
+            ->get(MailEnvelopeBuilder::class);
     }
 
     /**
@@ -132,7 +152,8 @@ class TransportBuilder
      */
     public function addCc($address, $name = '')
     {
-        $this->message->addCc($address, $name);
+        $this->messageData['cc'][$address] = $name;
+
         return $this;
     }
 
@@ -145,7 +166,8 @@ class TransportBuilder
      */
     public function addTo($address, $name = '')
     {
-        $this->message->addTo($address, $name);
+        $this->messageData['to'][$address] =  $name;
+
         return $this;
     }
 
@@ -157,7 +179,8 @@ class TransportBuilder
      */
     public function addBcc($address)
     {
-        $this->message->addBcc($address);
+        $this->messageData['bcc'] = [$address];
+
         return $this;
     }
 
@@ -170,20 +193,21 @@ class TransportBuilder
      */
     public function setReplyTo($email, $name = null)
     {
-        $this->message->setReplyTo($email, $name);
+        $this->messageData['replyTo'][$email] = $name;
+
         return $this;
     }
 
     /**
      * Set mail from address
      *
-     * @deprecated This function sets the from address but does not provide
-     * a way of setting the correct from addresses based on the scope.
-     * @see setFromByScope()
-     *
      * @param string|array $from
      * @return $this
      * @throws \Magento\Framework\Exception\MailException
+     * @see setFromByScope()
+     *
+     * @deprecated This function sets the from address but does not provide
+     * a way of setting the correct from addresses based on the scope.
      */
     public function setFrom($from)
     {
@@ -201,7 +225,32 @@ class TransportBuilder
     public function setFromByScope($from, $scopeId = null)
     {
         $result = $this->_senderResolver->resolve($from, $scopeId);
-        $this->message->setFromAddress($result['email'], $result['name']);
+        $this->messageData['from'][$result['email']] = $result['name'];
+        return $this;
+    }
+
+    /**
+     *
+     *
+     * @param $content
+     * @param string $type
+     * @param string $fileName
+     * @param string $disposition
+     * @return $this
+     */
+    public function addAttachment(
+        $content,
+        string $type,
+        string $fileName,
+        string $disposition = MimeInterface::DISPOSITION_ATTACHMENT
+    ): self {
+        $this->messageData['body'][] = [
+            'content' => $content,
+            'type' => $type,
+            'fileName' => $fileName,
+            'disposition' => $disposition
+        ];
+
         return $this;
     }
 
@@ -278,7 +327,7 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->messageFactory->create();
+        $this->messageData = [];
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
@@ -306,14 +355,14 @@ class TransportBuilder
     protected function prepareMessage()
     {
         $template = $this->getTemplate();
-        $body = $template->processTemplate();
+        $part['content'] = $template->processTemplate();
         switch ($template->getType()) {
             case TemplateTypesInterface::TYPE_TEXT:
-                $this->message->setBodyText($body);
+                $part['type'] = MimeInterface::TYPE_TEXT;
                 break;
 
             case TemplateTypesInterface::TYPE_HTML:
-                $this->message->setBodyHtml($body);
+                $part['type'] = MimeInterface::TYPE_HTML;
                 break;
 
             default:
@@ -321,7 +370,10 @@ class TransportBuilder
                     new Phrase('Unknown template type')
                 );
         }
-        $this->message->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
+        $this->messageData['body'][] = $part;
+        $this->messageData['subject'] = html_entity_decode($template->getSubject(), ENT_QUOTES);
+        $this->message = $this->mailEnvelopeBuilder->buildByArray($this->messageData);
+
         return $this;
     }
 }
