@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+           <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logOut"/>
@@ -27,49 +27,52 @@
         <!--Create New User-->
         <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
         <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm">
-            <argument name="user" value="NewAdminUser" />
+            <argument name="user" value="NewAdminUser"/>
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
 
-
         <!--Create New Role-->
-        <actionGroup ref="AdminNavigateToUserRolesActionGroup" stepKey="openUserRolesGrig"/>
         <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
         <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
             <argument name="role" value="salesRole"/>
         </actionGroup>
-        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveRole"/>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
 
         <!--Assign new role-->
         <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openUserEditPage">
-            <argument name="user" value="NewAdminUser"/>
-        </actionGroup>
+             <argument name="user" value="NewAdminUser"/>
+         </actionGroup>
+
          <actionGroup ref="AdminUpdateUserRoleActionGroup" stepKey="assignNewUserRole">
              <argument name="role" value="salesRole"/>
          </actionGroup>
          <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveUser"/>
-         <actionGroup ref="AssertUserSuccessSaveMessageActionGroup" stepKey="seeSuccessSaveUserMessage"/>
+         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+             <argument name="message" value="You saved the user."/>
+         </actionGroup>
+
          <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="seeUserInGrid">
              <argument name="user" value="NewAdminUser"/>
          </actionGroup>
-
-        <actionGroup ref="logout" stepKey="logOutFromAdminPanel"/>
+         <actionGroup ref="logout" stepKey="logOutFromAdminPanel"/>
          <actionGroup ref="LoginAsAdmin" stepKey="loginAsSaleRoleUser">
              <argument name="adminUser" value="NewAdminUser"/>
          </actionGroup>
-        <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="seeSuccessloginMessage"/>
-        <actionGroup ref="AssertUserRoleRestrictedAccessActionGroup" stepKey="seeErrorMessage"/>
+         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="seeSuccessloginMessage"/>
+         <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="navigateToAdminUsersPage"/>
+         <actionGroup ref="AssertUserRoleRestrictedAccessActionGroup" stepKey="seeErrorMessage"/>
 
-        <!--Delete new User-->
+         <!--Delete new User-->
         <actionGroup ref="logout" stepKey="logoutAsSaleRoleUser"/>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
         <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
             <argument name="user" value="NewAdminUser"/>
         </actionGroup>
 
-       <!--Delete Role-->
-        <actionGroup ref="AdminNavigateToUserRolesActionGroup" stepKey="goBackToUserRolesGrig"/>
-        <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRole"/>
+        <!--Delete new Role-->
+        <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRole">
+            <argument name="roleName" value="{{salesRole.name}}"/>
+        </actionGroup>
 
-     </test>
- </tests>
+       </test>
+   </tests>
