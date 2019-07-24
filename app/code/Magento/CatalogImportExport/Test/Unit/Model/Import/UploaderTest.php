@@ -100,16 +100,18 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->uploader = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
-            ->setConstructorArgs([
-                $this->coreFileStorageDb,
-                $this->coreFileStorage,
-                $this->imageFactory,
-                $this->validator,
-                $this->filesystem,
-                $this->readFactory,
-                null,
-                $this->random
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->coreFileStorageDb,
+                    $this->coreFileStorage,
+                    $this->imageFactory,
+                    $this->validator,
+                    $this->filesystem,
+                    $this->readFactory,
+                    null,
+                    $this->random
+                ]
+            )
             ->setMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
             ->getMock();
     }
@@ -224,14 +226,16 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($driverMock);
 
         $uploaderMock = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
-            ->setConstructorArgs([
-                $this->coreFileStorageDb,
-                $this->coreFileStorage,
-                $this->imageFactory,
-                $this->validator,
-                $this->filesystem,
-                $readFactory,
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->coreFileStorageDb,
+                    $this->coreFileStorage,
+                    $this->imageFactory,
+                    $this->validator,
+                    $this->filesystem,
+                    $readFactory,
+                ]
+            )
             ->getMock();
 
         $result = $uploaderMock->move($fileUrl);

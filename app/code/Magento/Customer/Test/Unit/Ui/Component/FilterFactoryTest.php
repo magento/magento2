@@ -7,6 +7,9 @@ namespace Magento\Customer\Test\Unit\Ui\Component;
 
 use Magento\Customer\Ui\Component\FilterFactory;
 
+/**
+ * Test FilterFactory Class
+ */
 class FilterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */

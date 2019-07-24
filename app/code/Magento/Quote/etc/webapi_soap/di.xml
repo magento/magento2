@@ -11,5 +11,6 @@
     </type>
     <type name="Magento\Quote\Model\QuoteRepository">
         <plugin name="accessControl" type="Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl" />
+        <plugin name="authorization" type="Magento\Quote\Model\QuoteRepository\Plugin\Authorization" />
     </type>
 </config>

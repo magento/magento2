@@ -9,7 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Class AbstractOptionsField
+ * Base abstract form element.
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
@@ -62,6 +62,7 @@ abstract class AbstractOptionsField extends AbstractElement
             if (empty($config['rawOptions'])) {
                 $options = $this->convertOptionsValueToString($options);
             }
+
             array_walk(
                 $options,
                 function (&$item) {
@@ -69,7 +70,7 @@ abstract class AbstractOptionsField extends AbstractElement
                 }
             );
 
-            $config['options'] = array_values(array_merge_recursive($config['options'], $options));
+            $config['options'] = array_values(array_replace_recursive($config['options'], $options));
         }
         $this->setData('config', (array)$config);
         parent::prepare();

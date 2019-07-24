@@ -7,6 +7,9 @@ namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
 
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 
+/**
+ * Test AttributeRepository Class
+ */
 class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\CustomerMetadataManagementInterface|\PHPUnit_Framework_MockObject_MockObject */

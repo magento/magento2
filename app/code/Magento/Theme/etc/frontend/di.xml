@@ -28,5 +28,11 @@
     </type>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="result-js-footer" type="Magento\Theme\Controller\Result\JsFooterPlugin"/>
+        <plugin name="asyncCssLoad" type="Magento\Theme\Controller\Result\AsyncCssPlugin"/>
+    </type>
+    <type name="Magento\Theme\Block\Html\Header\CriticalCss">
+        <arguments>
+            <argument name="filePath" xsi:type="string">css/critical.css</argument>
+        </arguments>
     </type>
 </config>

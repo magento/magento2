@@ -246,8 +246,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param UserContextInterface|null $userContext
-     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -271,9 +269,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        ?UserContextInterface $userContext = null,
-        ?AuthorizationInterface $authorization = null
+        array $data = []
     ) {
         $this->metadataService = $metadataService;
         $this->_treeModel = $categoryTreeResource;
@@ -298,8 +294,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             $resourceCollection,
             $data
         );
-        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
-        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -627,11 +621,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 return $this->getData('url');
             }
 
-            $rewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::ENTITY_ID => $this->getId(),
-                UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::STORE_ID => $this->getStoreId(),
-            ]);
+            $rewrite = $this->urlFinder->findOneByData(
+                [
+                    UrlRewrite::ENTITY_ID => $this->getId(),
+                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::STORE_ID => $this->getStoreId(),
+                ]
+            );
             if ($rewrite) {
                 $this->setData('url', $this->getUrlInstance()->getDirectUrl($rewrite->getRequestPath()));
                 Profiler::stop('REWRITE: ' . __METHOD__);
@@ -936,22 +932,50 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Get user context.
+     *
+     * @return UserContextInterface
+     */
+    private function getUserContext(): UserContextInterface
+    {
+        if (!$this->userContext) {
+            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
+        }
+
+        return $this->userContext;
+    }
+
+    /**
+     * Get authorization service.
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization(): AuthorizationInterface
+    {
+        if (!$this->authorization) {
+            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        }
+
+        return $this->authorization;
+    }
+
+    /**
      * @inheritDoc
      */
     public function beforeSave()
     {
         //Validate changing of design.
-        $userType = $this->userContext->getUserType();
+        $userType = $this->getUserContext()->getUserType();
         if ((
                 $userType === UserContextInterface::USER_TYPE_ADMIN
                 || $userType === UserContextInterface::USER_TYPE_INTEGRATION
             )
-            && !$this->authorization->isAllowed('Magento_Catalog::edit_category_design')
+            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_category_design')
         ) {
-            $this->getCustomAttributes();
             foreach ($this->_designAttributes as $attributeCode) {
                 $this->setData($attributeCode, $value = $this->getOrigData($attributeCode));
-                if (array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])) {
+                if (!empty($this->_data[self::CUSTOM_ATTRIBUTES])
+                    && array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])) {
                     //In case custom attribute were used to update the entity.
                     $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]->setValue($value);
                 }

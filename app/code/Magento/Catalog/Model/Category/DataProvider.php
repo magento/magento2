@@ -272,10 +272,13 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      */
     public function prepareMeta($meta)
     {
-        $meta = array_replace_recursive($meta, $this->prepareFieldsMeta(
-            $this->getFieldsMap(),
-            $this->getAttributesMeta($this->eavConfig->getEntityType('catalog_category'))
-        ));
+        $meta = array_replace_recursive(
+            $meta,
+            $this->prepareFieldsMeta(
+                $this->getFieldsMap(),
+                $this->getAttributesMeta($this->eavConfig->getEntityType('catalog_category'))
+            )
+        );
 
         return $meta;
     }
