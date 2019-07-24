@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
 define([
     'squire'
 ], function (Squire) {
