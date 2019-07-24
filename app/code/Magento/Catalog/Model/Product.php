@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -14,6 +15,7 @@ use Magento\Catalog\Model\FilterProductCustomAttribute;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
@@ -354,6 +356,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     private $filterCustomAttribute;
 
     /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -485,6 +497,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product::class);
     }
 
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     /**
      * Get resource instance
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
@@ -497,6 +510,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         return parent::_getResource();
     }
+    // phpcs:enable
 
     /**
      * Get a list of custom attribute codes that belongs to product attribute set.
@@ -859,6 +873,34 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Get user context.
+     *
+     * @return UserContextInterface
+     */
+    private function getUserContext(): UserContextInterface
+    {
+        if (!$this->userContext) {
+            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
+        }
+
+        return $this->userContext;
+    }
+
+    /**
+     * Get authorization service.
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization(): AuthorizationInterface
+    {
+        if (!$this->authorization) {
+            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        }
+
+        return $this->authorization;
+    }
+
+    /**
      * Check product options and type options and save them, too
      *
      * @return void
@@ -874,6 +916,22 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->setRequiredOptions(false);
 
         $this->getTypeInstance()->beforeSave($this);
+
+        //Validate changing of design.
+        $userType = $this->getUserContext()->getUserType();
+        if ((
+                $userType === UserContextInterface::USER_TYPE_ADMIN
+                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
+            )
+            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_product_design')
+        ) {
+            $this->setData('custom_design', $this->getOrigData('custom_design'));
+            $this->setData('page_layout', $this->getOrigData('page_layout'));
+            $this->setData('options_container', $this->getOrigData('options_container'));
+            $this->setData('custom_layout_update', $this->getOrigData('custom_layout_update'));
+            $this->setData('custom_design_from', $this->getOrigData('custom_design_from'));
+            $this->setData('custom_design_to', $this->getOrigData('custom_design_to'));
+        }
 
         $hasOptions = false;
         $hasRequiredOptions = false;
@@ -1167,7 +1225,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get formatted by currency product price
      *
-     * @return array|double*
+     * @return array|double
+     *
      * @deprecated
      * @see getFormattedPrice()
      */
