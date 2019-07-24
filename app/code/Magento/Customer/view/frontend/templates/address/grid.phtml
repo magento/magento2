@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Address\Grid $block */
 $customerAddressView = $block->getData('customer_address');
 ?>
@@ -13,33 +11,33 @@ $customerAddressView = $block->getData('customer_address');
 <div class="block block-addresses-list">
     <div class="block-title"><strong><?= $block->escapeHtml(__('Additional Address Entries')) ?></strong></div>
     <div class="block-content">
-        <?php if ($_pAddsses = $block->getAdditionalAddresses()): ?>
+        <?php if ($_pAddsses = $block->getAdditionalAddresses()) : ?>
 
             <div class="table-wrapper additional-addresses">
                 <table class="data table table-additional-addresses-items history" id="additional-addresses-table">
-                    <caption class="table-caption"><?= /* @escapeNotVerified */ __('Additional addresses') ?></caption>
+                    <caption class="table-caption"><?= $block->escapeHtml(__('Additional addresses')) ?></caption>
                     <thead>
                     <tr>
-                        <th scope="col" class="col firstname"><?= /* @escapeNotVerified */ __('First Name') ?></th>
-                        <th scope="col" class="col lastname"><?= /* @escapeNotVerified */ __('Last Name') ?></th>
-                        <th scope="col" class="col streetaddress"><?= /* @escapeNotVerified */ __('Street Address') ?></th>
-                        <th scope="col" class="col city"><?= /* @escapeNotVerified */ __('City') ?></th>
-                        <th scope="col" class="col country"><?= /* @escapeNotVerified */ __('Country') ?></th>
-                        <th scope="col" class="col state"><?= /* @escapeNotVerified */ __('State') ?></th>
-                        <th scope="col" class="col zip"><?= /* @escapeNotVerified */ __('Zip/Postal Code') ?></th>
-                        <th scope="col" class="col phone"><?= /* @escapeNotVerified */ __('Phone') ?></th>
+                        <th scope="col" class="col firstname"><?= $block->escapeHtml(__('First Name')) ?></th>
+                        <th scope="col" class="col lastname"><?= $block->escapeHtml(__('Last Name')) ?></th>
+                        <th scope="col" class="col streetaddress"><?= $block->escapeHtml(__('Street Address')) ?></th>
+                        <th scope="col" class="col city"><?= $block->escapeHtml(__('City')) ?></th>
+                        <th scope="col" class="col country"><?= $block->escapeHtml(__('Country')) ?></th>
+                        <th scope="col" class="col state"><?= $block->escapeHtml(__('State')) ?></th>
+                        <th scope="col" class="col zip"><?= $block->escapeHtml(__('Zip/Postal Code')) ?></th>
+                        <th scope="col" class="col phone"><?= $block->escapeHtml(__('Phone')) ?></th>
                         <th scope="col" class="col actions"> </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($_pAddsses as $address): ?>
+                    <?php foreach ($_pAddsses as $address) : ?>
                         <tr>
                             <td data-th="<?= $block->escapeHtml(__('First Name')) ?>" class="col firstname"><?= $block->escapeHtml($address->getFirstname()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Last Name')) ?>" class="col lastname"><?= $block->escapeHtml($address->getLastname()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Street Address')) ?>" class="col streetaddress"><?= $block->escapeHtml($block->getStreetAddress($address)) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('City')) ?>" class="col city"><?= $block->escapeHtml($address->getCity()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('Country')) ?>" class="col country"><?= /* @escapeNotVerified */ $block->getCountryByCode($address->getCountryId()) ?></td>
-                            <td data-th="<?= $block->escapeHtml(__('State')) ?>" class="col state"><?= /* @escapeNotVerified */ $address->getRegion()->getRegion() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Country')) ?>" class="col country"><?= $block->escapeHtml($block->getCountryByCode($address->getCountryId())) ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('State')) ?>" class="col state"><?= $block->escapeHtml($address->getRegion()->getRegion()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Zip/Postal Code')) ?>" class="col zip"><?= $block->escapeHtml($address->getPostcode()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Phone')) ?>" class="col phone"><?= $block->escapeHtml($address->getTelephone()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
@@ -51,10 +49,10 @@ $customerAddressView = $block->getData('customer_address');
                     </tbody>
                 </table>
             </div>
-            <?php if ($block->getChildHtml('pager')): ?>
+            <?php if ($block->getChildHtml('pager')) : ?>
                 <div class="customer-addresses-toolbar toolbar bottom"><?= $block->getChildHtml('pager') ?></div>
             <?php endif ?>
-        <?php else: ?>
+        <?php else : ?>
             <p class="empty"><?= $block->escapeHtml(__('You have no other address entries in your address book.')) ?></p>
         <?php endif ?>
     </div>
