@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Controller\Product\Compare;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Add item to compare list action.
@@ -35,7 +36,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
                 $product = null;
             }
 
-            if ($product && $product->isSalable()) {
+            if ($product && (int)$product->getStatus() !== Status::STATUS_DISABLED) {
                 $this->_catalogProductCompareList->addProduct($product);
                 $productName = $this->_objectManager->get(
                     \Magento\Framework\Escaper::class

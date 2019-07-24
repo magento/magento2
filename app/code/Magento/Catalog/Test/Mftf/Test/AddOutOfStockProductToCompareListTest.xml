@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddOutOfStockProductToCompareListTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Add out of stock product to compare list"/>
+            <description value="Add out of stock product to compare list"/>
+            <stories value="Add product to compare list"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-18542"/>
+            <useCaseId value="MAGETWO-98521"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock" arguments="0" stepKey="doNotDisplayOutOfStockProducts"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="OutOfStockProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock" arguments="0" stepKey="setOutOfStockToNo"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!--Open product page-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToSimpleProductPage"/>
+        <!--'Add to compare' link is not available-->
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="doNotSeeAddToCompareLink"/>
+
+        <!--Turn on 'out on stock' config-->
+        <magentoCLI command="config:set cataloginventory/options/show_out_of_stock" arguments="1" stepKey="displayOutOfStockYes"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <!-- Add product to comparison list -->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToSimpleProductPageAgain"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addProductToCompare">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!--See product in the comparison list-->
+        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage"/>
+        <actionGroup ref="StorefrontCheckCompareOutOfStockProductActionGroup" stepKey="checkSimpleProductOnCompareListPage">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!--Go to Category page and delete product from comparison list-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
+        <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearCompareList"/>
+
+        <!--Add product to compare list from Category page-->
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addProductToCompareFromCategory">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!--Check that product displays on add to compare widget-->
+        <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="seeProductNameOnCompareWidget">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!--See product on the compare page-->
+        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePageAgain"/>
+        <actionGroup ref="StorefrontCheckCompareOutOfStockProductActionGroup" stepKey="checkSimpleProductOnCompareListPageAgain">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="RemoveProductFromComparisonList" stepKey="removeProductFromComparisonList">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+    </test>
+</tests>

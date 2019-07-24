@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductCompareMainSection">
         <element name="pageName" type="text" selector="#maincontent h1 span"/>
         <element name="productLinkByName" type="button" selector="//*[@id='product-comparison']//tr//strong[@class='product-item-name']/a[contains(text(), '{{var1}}')]" parameterized="true"/>
@@ -15,5 +15,6 @@
         <element name="productImageByName" type="text" selector="//*[@id='product-comparison']//td[.//strong[@class='product-item-name']/a[contains(text(), '{{var1}}')]]//img[@class='product-image-photo']" parameterized="true"/>
         <element name="productAttributeByCodeAndProductName" type="text" selector="//*[@id='product-comparison']//tr[.//th[./span[contains(text(), '{{var1}}')]]]//td[count(//*[@id='product-comparison']//tr//td[.//strong[@class='product-item-name']/a[contains(text(), '{{var2}}')]]/preceding-sibling::td)+1]/div" parameterized="true"/>
         <element name="productAttributeByName" type="text" selector="//table[@id='product-comparison']/tbody/tr/th/*[contains(text(),'{{name}}')]" parameterized="true"/>
+        <element name="removeProduct" type="button" selector=".action.delete" timeout="30"/>
     </section>
 </sections>
