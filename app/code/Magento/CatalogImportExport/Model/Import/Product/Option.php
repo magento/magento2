@@ -1469,7 +1469,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $specificTypeData = $this->_getSpecificTypeData($rowData, 0, false);
             //For others stores
             if ($specificTypeData) {
-                $typePrices[$nextValueId][$this->_rowStoreId] = $specificTypeData['price'];
+                if (isset($specificTypeData['price'])) {
+                    $typePrices[$nextValueId][$this->_rowStoreId] = $specificTypeData['price'];
+                }
                 $typeTitles[$nextValueId++][$this->_rowStoreId] = $specificTypeData['title'];
             }
         }
@@ -1756,17 +1758,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _getSpecificTypeData(array $rowData, $optionTypeId, $defaultStore = true)
     {
-        $data = false;
-        $priceData = false;
+        $data = [];
+        $priceData = [];
         $customOptionRowPrice = $rowData[self::COLUMN_ROW_PRICE];
         if (!empty($customOptionRowPrice) || $customOptionRowPrice === '0') {
-            $priceData = [
-                'price' => (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%'),
-                'price_type' => 'fixed',
-            ];
-            if ('%' == substr($rowData[self::COLUMN_ROW_PRICE], -1)) {
-                $priceData['price_type'] = 'percent';
-            }
+            $priceData['price'] = (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%');
+            $priceData['price_type'] = ('%' == substr($rowData[self::COLUMN_ROW_PRICE], -1)) ? 'percent' : 'fixed';
         }
         if (!empty($rowData[self::COLUMN_ROW_TITLE]) && $defaultStore && empty($rowData[self::COLUMN_STORE])) {
             $valueData = [
@@ -1774,12 +1771,17 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 'sort_order' => empty($rowData[self::COLUMN_ROW_SORT]) ? 0 : abs($rowData[self::COLUMN_ROW_SORT]),
                 'sku' => !empty($rowData[self::COLUMN_ROW_SKU]) ? $rowData[self::COLUMN_ROW_SKU] : '',
             ];
-            $data =  ['value' => $valueData, 'title' => $rowData[self::COLUMN_ROW_TITLE], 'price' => $priceData];
+            $data['value'] = $valueData;
+            $data['title'] = $rowData[self::COLUMN_ROW_TITLE];
+            $data['price'] = $priceData;
         } elseif (!empty($rowData[self::COLUMN_ROW_TITLE]) && !$defaultStore && !empty($rowData[self::COLUMN_STORE])) {
-            $data =  ['title' => $rowData[self::COLUMN_ROW_TITLE], 'price' => $priceData];
+            if ($priceData) {
+                $data['price'] = $priceData;
+            }
+            $data['title'] = $rowData[self::COLUMN_ROW_TITLE];
         }
 
-        return $data;
+        return $data ?: false;
     }
 
     /**
