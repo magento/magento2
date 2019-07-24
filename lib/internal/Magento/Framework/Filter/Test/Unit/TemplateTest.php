@@ -236,8 +236,8 @@ EXPECTED_RESULT;
      */
     public function testDisallowedMethods(string $method)
     {
-        $this->templateFilter->setVariables(['store' => $this->store]);
-        $this->templateFilter->filter('{{var store.'.$method.'()}}');
+        $this->templateFilter->setVariables(['store' => $this->store, 'filter' => $this->templateFilter]);
+        $this->templateFilter->filter('{{var store.'.$method.'()}} {{var filter.' .$method .'()}}');
     }
 
     /**
@@ -253,6 +253,12 @@ EXPECTED_RESULT;
             ['save'],
             ['getCollection'],
             ['getResource'],
+            ['getConfig'],
+            ['setVariables'],
+            ['setTemplateProcessor'],
+            ['getTemplateProcessor'],
+            ['varDirective'],
+            ['delete'],
         ];
     }
 

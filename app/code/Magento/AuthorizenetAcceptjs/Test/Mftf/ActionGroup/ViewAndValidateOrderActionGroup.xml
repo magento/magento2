@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ViewAndValidateOrderActionGroup">
+        <arguments>
+           <argument name="orderData"/>
+        </arguments>
+        <click selector="{{AdminOrderViewTabsSection.commentsHistory}}" stepKey="viewCommentsHistory"/>
+        <see userInput="{{orderData.amount}}" selector="{{AdminOrderCommentsHistoryTabSection.capturedAmountText}}" stepKey="validateCapturedAmount"/>
+        <see userInput="{{orderData.status}}" selector="{{AdminOrderCommentsHistoryTabSection.orderStatusHistory}}" stepKey="validateOrderStatus"/>
+        <click selector="{{AdminOrderViewTabsSection.invoices}}" stepKey="openInvoices"/>
+        <waitForPageLoad stepKey="waitForInvoices"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" stepKey="seeFirstInvoice"/>
+        <click selector="{{AdminOrderViewTabsSection.transactions}}" stepKey="openTransactions"/>
+        <see userInput="{{orderData.captureStatus}}" selector="{{AdminOrderTransactionsTabSection.confirmCapture}}" stepKey="seeCapture"/>
+        <!-- Enable below line after fix of MC-
+        <see userInput="{{orderData.closedStatus}}" selector="{{AdminOrderTransactionsTabSection.confirmClosed}}" stepKey="seeClosed"/>
+        -->
+    </actionGroup>
+    <actionGroup name="ViewAndValidateOrderActionGroupNoSubmit" extends="ViewAndValidateOrderActionGroup">
+        <see userInput="{{orderData.amount}}" selector="{{AdminOrderCommentsHistoryTabSection.capturedAmountTextUnsubmitted}}" stepKey="validateCapturedAmount"/>
+    </actionGroup>
+</actionGroups>
