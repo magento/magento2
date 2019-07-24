@@ -93,7 +93,7 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
 
         $collection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
-        $collection->expects($this->once())->method('getAllIds')->willReturn([$categoryIdFirst, $categoryIdSecond]);
+        $collection->expects($this->once())->method('getLoadedIds')->willReturn([$categoryIdFirst, $categoryIdSecond]);
 
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')
@@ -106,10 +106,12 @@ class CategoryListTest extends \PHPUnit\Framework\TestCase
 
         $this->categoryRepository->expects($this->exactly(2))
             ->method('get')
-            ->willReturnMap([
-                [$categoryIdFirst, $categoryFirst],
-                [$categoryIdSecond, $categorySecond],
-            ])
+            ->willReturnMap(
+                [
+                    [$categoryIdFirst, $categoryFirst],
+                    [$categoryIdSecond, $categorySecond],
+                ]
+            )
             ->willReturn($categoryFirst);
 
         $this->categorySearchResultsFactory->expects($this->once())->method('create')->willReturn($searchResult);
