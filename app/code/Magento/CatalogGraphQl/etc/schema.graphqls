@@ -79,9 +79,9 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     meta_title: String @doc(description: "A string that is displayed in the title bar and tab of the browser and in search results lists.")
     meta_keyword: String @doc(description: "A comma-separated list of keywords that are visible only to search engines.")
     meta_description: String @doc(description: "A brief overview of the product for search results listings, maximum 255 characters.")
-    image: ProductImage @doc(description: "The relative path to the main image on the product page.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
-    small_image: ProductImage @doc(description: "The relative path to the small image, which is used on catalog pages.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
-    thumbnail: ProductImage @doc(description: "The relative path to the product's thumbnail image.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
+    image: MediaGalleryInterface @doc(description: "The relative path to the main image on the product page.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
+    small_image: MediaGalleryInterface @doc(description: "The relative path to the small image, which is used on catalog pages.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
+    thumbnail: MediaGalleryInterface @doc(description: "The relative path to the product's thumbnail image.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
     new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     new_to_date: String @doc(description: "The end date for new product listings.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     tier_price: Float @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached.")
@@ -99,6 +99,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
     canonical_url: String @doc(description: "Canonical URL.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
+    media_gallery: [MediaGalleryInterface] @doc(description: "An array of Media Gallery objects.")
 }
 
 interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "PhysicalProductInterface contains attributes specific to tangible products.") {
@@ -184,7 +185,12 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
     image_size_y: Int @doc(description: "The maximum height of an image.")
 }
 
-type ProductImage @doc(description: "Product image information. Contains image relative path, URL and label.") {
+interface MediaGalleryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\MediaGalleryTypeResolver") {
+    label: String
+    url: String
+}
+
+type ProductImage implements MediaGalleryInterface @doc(description: "Product image information. Contains image relative path, URL and label.") {
     url: String @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage\\Url")
     label: String @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage\\Label")
 }
@@ -412,4 +418,11 @@ type StoreConfig @doc(description: "The type contains information about a store 
     grid_per_page : Int @doc(description: "Products per Page on Grid Default Value.")
     list_per_page : Int @doc(description: "Products per Page on List Default Value.")
     catalog_default_sort_by : String @doc(description: "Default Sort By.")
+}
+
+type ProductVideo implements MediaGalleryInterface {
+    description: String @doc(description: "A description of the video.")
+    metadata: String @doc(description: "Optional data about the video.")
+    provider: String @doc(description: "Describes the video source.")
+    title: String @doc(description: "The title of the video.")
 }
