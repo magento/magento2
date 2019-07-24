@@ -117,14 +117,12 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data: {
             payflow_link: 
             {
            cancel_url:"http://mage.test/paypal/payflow/cancel"
            return_url:"http://mage.test/paypal/payflow/return"
            error_url:"http://mage.test/paypal/payflow/error"
           }
-        }
       }
   }) {    
        cart {
@@ -221,14 +219,12 @@ QUERY;
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data: {
             payflow_link: 
             {
            cancel_url:"http://mage.test/paypal/payflow/cancelPayment"
            return_url:"http://mage.test/paypal/payflow/returnUrl"
            error_url:"http://mage.test/paypal/payflow/returnUrl"
           }
-        }
       }
   }) {    
        cart {
