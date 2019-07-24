@@ -107,7 +107,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('increment_id', ['header' => __('Order'), 'width' => '100', 'index' => 'increment_id']);
+        $this->addColumn('increment_id', ['header' => __('Order #'), 'width' => '100', 'index' => 'increment_id']);
 
         $this->addColumn(
             'created_at',
@@ -140,7 +140,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->addColumn(
                 'action',
                 [
-                    'header' => ' ',
+                    'header' => 'Action',
                     'filter' => false,
                     'sortable' => false,
                     'width' => '100px',

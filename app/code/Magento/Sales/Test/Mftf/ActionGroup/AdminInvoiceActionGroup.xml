@@ -43,6 +43,7 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />
+        <conditionalClick selector="{{AdminOrderInvoicesTabSection.clearFilters}}" dependentSelector="{{AdminOrderInvoicesTabSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="openInvoicePage"/>
         <waitForPageLoad stepKey="waitForInvoicePageLoad"/>
     </actionGroup>
@@ -79,5 +80,12 @@
         <fillField selector="{{AdminInvoicesFiltersSection.orderNum}}" userInput="{{orderId}}" stepKey="fillOrderIdForFilter"/>
         <click selector="{{AdminInvoicesFiltersSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForPageLoad stepKey="waitForFiltersApply"/>
+    </actionGroup>
+
+    <actionGroup name="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" extends="filterInvoiceGridByOrderId">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminInvoicesGridSection.clearFilters}}" dependentSelector="{{AdminInvoicesGridSection.clearFilters}}" visible="true" stepKey="clearFilters" after="goToInvoices"/>
     </actionGroup>
 </actionGroups>

@@ -16,8 +16,11 @@
         <!-- Rule Information (the main form on the page) -->
         <element name="ruleInformationHeader" type="button" selector="div[data-index='rule_information']" timeout="30"/>
         <element name="ruleName" type="input" selector="input[name='name']"/>
+        <element name="description" type="textarea" selector="//div[@class='admin__field-control']/textarea[@name='description']"/>
+        <element name="active" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='is_active']/../label"/>
         <element name="websites" type="multiselect" selector="select[name='website_ids']"/>
         <element name="customerGroups" type="multiselect" selector="select[name='customer_group_ids']"/>
+        <element name="customerGroupsOptions" type="multiselect" selector="select[name='customer_group_ids'] option"/>
         <element name="coupon" type="select" selector="select[name='coupon_type']"/>
         <element name="couponCode" type="input" selector="input[name='coupon_code']"/>
         <element name="useAutoGeneration" type="checkbox" selector="input[name='use_auto_generation']"/>
@@ -26,6 +29,7 @@
         <element name="userPerCoupon" type="input" selector="//input[@name='uses_per_coupon']"/>
         <element name="userPerCustomer" type="input" selector="//input[@name='uses_per_customer']"/>
         <element name="priority" type="input" selector="//*[@name='sort_order']"/>
+        <element name="publicInRSSFeed" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='is_rss']/../label"/>
 
         <!-- Conditions sub-form -->
         <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
@@ -39,6 +43,21 @@
         <element name="ruleParameterInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
         <element name="openChooser" type="button" selector="//label[@for='conditions__{{arg}}__value']" parameterized="true"/>
         <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
+        <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child" timeout="30"/>
+        <element name="conditionSelect" type="select" selector="select[name='rule[conditions][1][new_child]']"/>
+        <element name="targetEllipsis" type="input" selector="//ul[contains(@id, 'conditions')]//a[.='...']"/>
+        <element name="ruleFieldByIndex" type="input" selector="[id='conditions__{{index}}__value']" parameterized="true"/>
+        <element name="addNewCondition" type="button" selector="//ul[@id = 'conditions__{{nestedIndex}}__children']/li/span[contains(@class, 'rule-param-new-child')]" parameterized="true" timeout="30"/>
+        <element name="conditionSelectDropdown" type="select" selector="select[name='rule[conditions][{{nestedIndex}}][new_child]']" parameterized="true"/>
+        <element name="selectCountryDropdown" type="select" selector="(//*[contains(@value,'country_id')]/..//select)[last()]"/>
+
+        <!--Conditions checker -->
+        <element name="openList" type="button" selector="a.rule-chooser-trigger>img.v-middle.rule-chooser-trigger"/>
+        <element name="searchSegmentName" type="input" selector="//div[@class='rule-chooser']//input[@name='grid_segment_name']"/>
+        <element name="searchButton" type="button" selector="div.admin__filter-actions>button.action-default.scalable.action-secondary" timeout="10" />
+        <element name="selectAll" type="checkbox" selector="//*[@class='rule-chooser']//input[contains(@class, 'admin__control-checkbox')]" timeout="10"/>
+        <element name="resetSearchFilter" type="button" selector="//div[@class='admin__filter-actions']//button[@title='Reset Filter']"/>
+        <element name="setSegment" type="button" selector="//*[@class='rule-tree-wrapper']//a[@class='rule-param-apply']"/>
 
         <!-- Actions sub-form -->
         <element name="actionsTab" type="text" selector="//div[@data-index='actions']//span[contains(.,'Actions')][1]"/>
@@ -58,9 +77,17 @@
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
+        <element name="maximumQtyDiscount" type="input" selector="input[name='discount_qty']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
+        <element name="applyToShippingAmount" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='apply_to_shipping']/../label"/>
+        <element name="discardSubsequentRules" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='stop_rules_processing']/../label"/>
         <element name="addRewardPoints" type="input" selector="input[name='extension_attributes[reward_points_delta]']"/>
         <element name="freeShipping" type="select" selector="//select[@name='simple_free_shipping']"/>
+
+        <!-- Labels sub-form -->
+        <element name="labelsHeader" type="button" selector="div[data-index='labels']" timeout="30"/>
+        <element name="defaultRuleLabelAllStoreViews" type="input" selector="input[name='store_labels[0]']"/>
+        <element name="defaultStoreView" type="input" selector="input[name='store_labels[1]']"/>
 
         <!-- Manage Coupon Codes sub-form -->
         <element name="manageCouponCodesHeader" type="button" selector="div[data-index='manage_coupon_codes']" timeout="30"/>

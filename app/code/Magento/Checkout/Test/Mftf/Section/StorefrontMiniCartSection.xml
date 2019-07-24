@@ -16,7 +16,7 @@
         <element name="productName" type="text" selector=".product-item-name"/>
         <element name="productOptionsDetailsByName" type="button" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//span[.='See Details']"  parameterized="true"/>
         <element name="productOptionByNameAndAttribute" type="text" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//dt[@class='label' and .='{{var2}}']/following-sibling::dd[@class='values']//span"  parameterized="true"/>
-        <element name="showCart" type="button" selector="a.showcart"/>
+        <element name="showCart" type="button" selector="a.showcart" timeout="60"/>
         <element name="quantity" type="button" selector="span.counter-number"/>
         <element name="miniCartOpened" type="button" selector="a.showcart.active"/>
         <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>
@@ -33,5 +33,10 @@
         <element name="subtotal" type="text" selector="//tr[@class='totals sub']//td[@class='amount']/span"/>
         <element name="emptyCart" type="text" selector=".counter.qty.empty"/>
         <element name="minicartContent" type="block" selector="#minicart-content-wrapper"/>
+        <element name="messageEmptyCart" type="text" selector="//*[@id='minicart-content-wrapper']//*[contains(@class,'subtitle empty')]"/>
+        <element name="visibleItemsCountText" type="text" selector="//div[@class='items-total']"/>
+        <element name="productQuantity" type="input" selector="//*[@id='mini-cart']//a[contains(text(),'{{productName}}')]/../..//div[@class='details-qty qty']//input[@data-item-qty='{{qty}}']" parameterized="true"/>
+        <element name="productImage" type="text" selector="//ol[@id='mini-cart']//img[@class='product-image-photo']"/>
+        <element name="productSubTotal" type="text" selector="//div[@class='subtotal']//span/span[@class='price']"/>
     </section>
 </sections>

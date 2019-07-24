@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Debug;
-use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Debug;
 use Magento\Framework\Event;
 use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
  * HTTP web application. Called from webroot index.php to serve web requests.
@@ -143,10 +144,29 @@ class Http implements \Magento\Framework\AppInterface
         } else {
             throw new \InvalidArgumentException('Invalid return type');
         }
+        if ($this->_request->isHead() && $this->_response->getHttpResponseCode() == 200) {
+            $this->handleHeadRequest();
+        }
         // This event gives possibility to launch something before sending output (allow cookie setting)
         $eventParams = ['request' => $this->_request, 'response' => $this->_response];
         $this->_eventManager->dispatch('controller_front_send_response_before', $eventParams);
         return $this->_response;
+    }
+
+    /**
+     * Handle HEAD requests by adding the Content-Length header and removing the body from the response.
+     *
+     * @return void
+     */
+    private function handleHeadRequest()
+    {
+        // It is possible that some PHP installations have overloaded strlen to use mb_strlen instead.
+        // This means strlen might return the actual number of characters in a non-ascii string instead
+        // of the number of bytes. Use mb_strlen explicitly with a single byte character encoding to ensure
+        // that the content length is calculated in bytes.
+        $contentLength = mb_strlen($this->_response->getContent(), '8bit');
+        $this->_response->clearBody();
+        $this->_response->setHeader('Content-Length', $contentLength);
     }
 
     /**
@@ -248,7 +268,7 @@ class Http implements \Magento\Framework\AppInterface
                 . "because the Magento setup directory cannot be accessed. \n"
                 . 'You can install Magento using either the command line or you must restore access '
                 . 'to the following directory: ' . $setupInfo->getDir($projectRoot) . "\n";
-
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($newMessage, 0, $exception);
         }
     }
@@ -257,13 +277,14 @@ class Http implements \Magento\Framework\AppInterface
      * Handler for bootstrap errors
      *
      * @param Bootstrap $bootstrap
-     * @param \Exception &$exception
+     * @param \Exception $exception
      * @return bool
      */
     private function handleBootstrapErrors(Bootstrap $bootstrap, \Exception &$exception)
     {
         $bootstrapCode = $bootstrap->getErrorCode();
         if (Bootstrap::ERR_MAINTENANCE == $bootstrapCode) {
+            // phpcs:ignore Magento2.Security.IncludeFile
             require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/503.php');
             return true;
         }
@@ -304,6 +325,7 @@ class Http implements \Magento\Framework\AppInterface
     {
         if ($exception instanceof \Magento\Framework\Exception\State\InitException) {
             $this->getLogger()->critical($exception);
+            // phpcs:ignore Magento2.Security.IncludeFile
             require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
             return true;
         }
@@ -335,6 +357,7 @@ class Http implements \Magento\Framework\AppInterface
         if (isset($params['SCRIPT_NAME'])) {
             $reportData['script_name'] = $params['SCRIPT_NAME'];
         }
+        // phpcs:ignore Magento2.Security.IncludeFile
         require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/report.php');
         return true;
     }

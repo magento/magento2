@@ -12,5 +12,6 @@
         <element name="quantity" type="button" selector="span.counter-number"/>
         <element name="show" type="button" selector="a.showcart"/>
         <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>
+        <element name="emptyMiniCart" type="text" selector="//div[@class='minicart-wrapper']//span[@class='counter qty empty']/../.."/>
     </section>
 </sections>

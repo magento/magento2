@@ -27,7 +27,8 @@ define([
         '<% } %>',
         controlContainer: 'dd', // should be eliminated
         priceFormat: {},
-        isFixedPrice: false
+        isFixedPrice: false,
+        optionTierPricesBlocksSelector: '#option-tier-prices-{1} [data-role="selection-tier-prices"]'
     };
 
     $.widget('mage.priceBundle', {
@@ -91,6 +92,8 @@ define([
             if (changes) {
                 priceBox.trigger('updatePrice', changes);
             }
+
+            this._displayTierPriceBlock(bundleOption);
             this.updateProductSummary();
         },
 
@@ -205,6 +208,35 @@ define([
             this._super(options);
 
             return this;
+        },
+
+        /**
+         * Show or hide option tier prices block
+         *
+         * @param {Object} optionElement
+         * @private
+         */
+        _displayTierPriceBlock: function (optionElement) {
+            var optionType = optionElement.prop('type'),
+                optionId,
+                optionValue,
+                optionTierPricesElements;
+
+            if (optionType === 'select-one') {
+                optionId = utils.findOptionId(optionElement[0]);
+                optionValue = optionElement.val() || null;
+                optionTierPricesElements = $(this.options.optionTierPricesBlocksSelector.replace('{1}', optionId));
+
+                _.each(optionTierPricesElements, function (tierPriceElement) {
+                    var selectionId = $(tierPriceElement).data('selection-id') + '';
+
+                    if (selectionId === optionValue) {
+                        $(tierPriceElement).show();
+                    } else {
+                        $(tierPriceElement).hide();
+                    }
+                });
+            }
         },
 
         /**

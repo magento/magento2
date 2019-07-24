@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
@@ -20,6 +21,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * File Backend
@@ -39,6 +41,11 @@ class File extends BackendFile
     private $mime;
 
     /**
+     * @var Database
+     */
+    private $databaseHelper;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config
@@ -50,6 +57,7 @@ class File extends BackendFile
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @param Database $databaseHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -63,7 +71,8 @@ class File extends BackendFile
         UrlInterface $urlBuilder,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Database $databaseHelper = null
     ) {
         parent::__construct(
             $context,
@@ -78,6 +87,7 @@ class File extends BackendFile
             $data
         );
         $this->urlBuilder = $urlBuilder;
+        $this->databaseHelper = $databaseHelper ?: ObjectManager::getInstance()->get(Database::class);
     }
 
     /**
@@ -102,22 +112,21 @@ class File extends BackendFile
             $this->setValue($file);
             return $this;
         }
-
+      
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->updateMediaDirectory(basename($file), $value['url']);
 
         return $this;
     }
 
     /**
-     * After Load
-     *
-     * @return File
-     * @throws LocalizedException
+     * @inheritDoc
      */
     public function afterLoad()
     {
         $value = $this->getValue();
         if ($value && !is_array($value)) {
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             $fileName = $this->_getUploadDir() . '/' . basename($value);
             $fileInfo = null;
             if ($this->_mediaDirectory->isExist($fileName)) {
@@ -128,6 +137,7 @@ class File extends BackendFile
                         'url' => $url,
                         'file' => $value,
                         'size' => is_array($stat) ? $stat['size'] : 0,
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
                         'name' => basename($value),
                         'type' => $this->getMimeType($fileName),
                         'exists' => true,
@@ -237,7 +247,7 @@ class File extends BackendFile
      */
     private function getRelativeMediaPath(string $path): string
     {
-        return str_replace('/pub/media/', '', $path);
+        return preg_replace('/\/(pub\/)?media\//', '', $path);
     }
 
     /**
@@ -257,6 +267,10 @@ class File extends BackendFile
         $result = $mediaPath === $destinationMediaPath;
         if (!$result) {
             $result = $this->_mediaDirectory->copyFile(
+                $mediaPath,
+                $destinationMediaPath
+            );
+            $this->databaseHelper->renameFile(
                 $mediaPath,
                 $destinationMediaPath
             );

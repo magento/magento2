@@ -34,8 +34,15 @@ class SelectedPaymentMethod implements ResolverInterface
             return [];
         }
 
+        try {
+            $methodTitle = $payment->getMethodInstance()->getTitle();
+        } catch (LocalizedException $e) {
+            $methodTitle = '';
+        }
+
         return [
-            'code' => $payment->getMethod(),
+            'code' => $payment->getMethod() ?? '',
+            'title' => $methodTitle,
             'purchase_order_number' => $payment->getPoNumber(),
         ];
     }

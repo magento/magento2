@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account")
+    customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account") @cache(cacheable: false)
     isEmailAvailable (
         email: String! @doc(description: "The new customer email")
     ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable")
@@ -126,8 +126,8 @@ type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the 
 }
 
 type CustomerAddressAttribute {
-     attribute_code: String  @doc(description: "Attribute code")
-     value: String  @doc(description: "Attribute value")
+     attribute_code: String @doc(description: "Attribute code")
+     value: String @doc(description: "Attribute value")
 }
 
 type IsEmailAvailableOutput {

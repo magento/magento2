@@ -13,6 +13,8 @@
             <argument name="message" type="string" defaultValue="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later." />
             <argument name="messageType" type="string" defaultValue="error" />
         </arguments>
+
+        <waitForElementVisible selector="{{AdminLoginMessagesSection.messageByType(messageType)}}" stepKey="waitForAdminLoginFormMessage" />
         <see userInput="{{message}}" selector="{{AdminLoginMessagesSection.messageByType(messageType)}}" stepKey="verifyMessage" />
     </actionGroup>
 </actionGroups>

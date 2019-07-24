@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Downloadable product type
  *
@@ -14,13 +12,13 @@
 ?>
 <?php $_product = $block->getProduct() ?>
 
-<?php if ($_product->getIsSalable()): ?>
-    <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-        <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
+<?php if ($_product->getIsSalable()) : ?>
+    <div class="stock available" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+        <span><?= $block->escapeHtml(__('In stock')) ?></span>
     </div>
-<?php else: ?>
-    <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-        <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+<?php else : ?>
+    <div class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+        <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
     </div>
 <?php endif; ?>
 <?= $block->getChildHtml() ?>

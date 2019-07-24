@@ -45,6 +45,9 @@
         <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{label}}" stepKey="fillName"/>
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave1"/>
     </actionGroup>
+    <actionGroup name="goToAttributeGridPage">
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+    </actionGroup>
     <actionGroup name="goToAttributeSetByName">
         <arguments>
             <argument name="name" type="string"/>

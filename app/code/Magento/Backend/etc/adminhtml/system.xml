@@ -323,11 +323,11 @@
                     <label>Port (25)</label>
                     <comment>For Windows server only.</comment>
                 </field>
-                <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Set Return-Path</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesnocustom</source_model>
                 </field>
-                <field id="return_path_email" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="return_path_email" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Return-Path Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>

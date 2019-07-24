@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -50,7 +51,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
         self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
@@ -58,7 +59,43 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testRemoveCouponFromCartIfCartIdIsEmpty()
+    {
+        $maskedQuoteId = '';
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testRemoveCouponFromCartIfCartIdIsMissed()
+    {
+        $query = <<<QUERY
+mutation {
+  removeCouponFromCart(input: {}) {
+    cart {
+      applied_coupon {
+        code
+      }
+    }
+  }
+}
+
+QUERY;
+
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testRemoveCouponFromNonExistentCart()
@@ -66,13 +103,13 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Cart does not contain products
      */
     public function testRemoveCouponFromEmptyCart()
@@ -80,7 +117,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -94,7 +131,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
         self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
@@ -115,7 +152,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -132,7 +169,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessage('The current user cannot perform operations on cart "' . $maskedQuoteId . '"');
-        $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
     }
 
     /**

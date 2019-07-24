@@ -65,6 +65,7 @@
     <preference for="Magento\Framework\Config\CacheInterface" type="Magento\Framework\App\Cache\Type\Config" />
     <preference for="Magento\Framework\Config\ValidationStateInterface" type="Magento\Framework\App\Arguments\ValidationState" />
     <preference for="Magento\Framework\Module\ModuleListInterface" type="Magento\Framework\Module\ModuleList" />
+    <preference for="Magento\Framework\Module\ModuleManagerInterface" type="Magento\Framework\Module\Manager" />
     <preference for="Magento\Framework\Component\ComponentRegistrarInterface" type="Magento\Framework\Component\ComponentRegistrar"/>
     <preference for="Magento\Framework\Event\ConfigInterface" type="Magento\Framework\Event\Config" />
     <preference for="Magento\Framework\Event\InvokerInterface" type="Magento\Framework\Event\Invoker\InvokerDefault" />
@@ -153,7 +154,6 @@
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
-    <preference for="Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface" type="Magento\Framework\Model\ResourceModel\ResourceModelPool" />
     <preference for="Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface" type="Magento\Framework\Model\ResourceModel\Db\TransactionManager" />
     <preference for="Magento\Framework\Api\Data\ImageContentInterface" type="Magento\Framework\Api\ImageContent" />
     <preference for="Magento\Framework\Api\ImageContentValidatorInterface" type="Magento\Framework\Api\ImageContentValidator" />
@@ -210,6 +210,7 @@
     <preference for="Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface" type="Magento\Framework\MessageQueue\Bulk\ExchangeFactory" />
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
     <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
+    <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -760,6 +761,7 @@
                 <item name="extensionInterface" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator</item>
                 <item name="extension" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator</item>
                 <item name="remote" xsi:type="string">\Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator</item>
+                <item name="proxyDeferred" xsi:type="string">\Magento\Framework\Async\Code\Generator\ProxyDeferredGenerator</item>
             </argument>
         </arguments>
     </type>
@@ -1739,7 +1741,7 @@
             <argument name="map" xsi:type="array">
                 <item name="OPTIONS" xsi:type="string">\Magento\Framework\App\Action\HttpOptionsActionInterface</item>
                 <item name="GET" xsi:type="string">\Magento\Framework\App\Action\HttpGetActionInterface</item>
-                <item name="HEAD" xsi:type="string">\Magento\Framework\App\Action\HttpHeadActionInterface</item>
+                <item name="HEAD" xsi:type="string">\Magento\Framework\App\Action\HttpGetActionInterface</item>
                 <item name="POST" xsi:type="string">\Magento\Framework\App\Action\HttpPostActionInterface</item>
                 <item name="PUT" xsi:type="string">\Magento\Framework\App\Action\HttpPutActionInterface</item>
                 <item name="PATCH" xsi:type="string">\Magento\Framework\App\Action\HttpPatchActionInterface</item>
@@ -1764,4 +1766,9 @@
             <argument name="delayTimeout" xsi:type="number">20</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\HTTP\AsyncClientInterface" type="Magento\Framework\HTTP\AsyncClient\GuzzleAsyncClient" />
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompare"/>
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPut"/>
+    <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillRead"/>
+    <preference for="Magento\Framework\MessageQueue\CallbackInvokerInterface" type="Magento\Framework\MessageQueue\CallbackInvoker"/>
 </config>

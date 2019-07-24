@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Review\Model\ResourceModel\Review;
 
 use Magento\Framework\Model\AbstractModel;
@@ -71,6 +72,48 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $connection->quoteInto('primary_id = ?', $row['primary_id'])
             );
         }
+        return $this;
+    }
+
+    /**
+     * Append review summary fields to product collection
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
+     * @param string $storeId
+     * @param string $entityCode
+     * @return Summary
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function appendSummaryFieldsToCollection(
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection,
+        string $storeId,
+        string $entityCode
+    ) {
+        if (!$productCollection->isLoaded()) {
+            $summaryEntitySubSelect = $this->getConnection()->select();
+            $summaryEntitySubSelect
+                ->from(
+                    ['review_entity' => $this->getTable('review_entity')],
+                    ['entity_id']
+                )->where(
+                    'entity_code = ?',
+                    $entityCode
+                );
+            $joinCond = new \Zend_Db_Expr(
+                "e.entity_id = review_summary.entity_pk_value AND review_summary.store_id = {$storeId}"
+                . " AND review_summary.entity_type = ({$summaryEntitySubSelect})"
+            );
+            $productCollection->getSelect()
+                ->joinLeft(
+                    ['review_summary' => $this->getMainTable()],
+                    $joinCond,
+                    [
+                        'reviews_count' => new \Zend_Db_Expr("IFNULL(review_summary.reviews_count, 0)"),
+                        'rating_summary' => new \Zend_Db_Expr("IFNULL(review_summary.rating_summary, 0)")
+                    ]
+                );
+        }
+
         return $this;
     }
 }
