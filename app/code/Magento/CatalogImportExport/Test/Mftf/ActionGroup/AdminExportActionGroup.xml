@@ -54,6 +54,7 @@
             <argument name="rowIndex" type="string"/>
         </arguments>
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
+        <waitForPageLoad time="30" stepKey="waitFormReload"/>
         <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
         <click stepKey="clickOnDelete" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
