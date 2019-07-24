@@ -588,6 +588,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     public function afterSave()
     {
+        if ($this->getIsActive()) {
+            return parent::afterSave();
+        }
+
         if ($this->isObjectNew() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
             $productIds = $this->getMatchingProductIds();
             if (!empty($productIds) && is_array($productIds)) {
