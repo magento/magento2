@@ -95,7 +95,7 @@ class CreateCreditMemoStep implements TestStepInterface
             if ($this->compare($items, $refundData)) {
                 $this->orderCreditMemoNew->getFormBlock()->updateQty();
             }
-            $hasChangeTotals = $this->compareRefundTotalsData($refundData);
+            $hasChangeTotals = $this->isTotalsDataChanged($refundData);
             $this->orderCreditMemoNew->getFormBlock()->fillFormData($refundData);
             if ($hasChangeTotals) {
                 $this->orderCreditMemoNew->getTotalsBlock()->clickUpdateTotals();
@@ -122,12 +122,12 @@ class CreateCreditMemoStep implements TestStepInterface
     }
 
     /**
-     * Compare refund total items.
+     * Is totals data changed.
      *
      * @param array $data
-     * @return int
+     * @return bool
      */
-    private function compareRefundTotalsData(array $data): int
+    private function isTotalsDataChanged(array $data): bool
     {
         $compareData = [
             'shipping_amount' =>
@@ -138,8 +138,8 @@ class CreateCreditMemoStep implements TestStepInterface
                 $this->orderCreditMemoNew->getTotalsBlock()->getAdjustmentFeeElement()->getValue(),
         ];
 
-        foreach ($compareData as $key => $val) {
-            if (isset($data['form_data'][$key]) && $val != $data['form_data'][$key]) {
+        foreach ($compareData as $fieldName => $fieldValue) {
+            if (isset($data['form_data'][$fieldName]) && $fieldValue != $data['form_data'][$fieldName]) {
                 return false;
             }
         }

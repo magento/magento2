@@ -43,6 +43,7 @@
         </arguments>
         <amOnPage url="{{AdminOrderPage.url(orderId)}}" stepKey="navigateToOrderPage"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <waitForElementVisible selector="{{AdminHeaderSection.pageTitle}}" stepKey="waitForPageTitle"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
     </actionGroup>
     <actionGroup name="SubmitCreditMemoActionGroup">
@@ -50,12 +51,9 @@
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}$grabOrderId" stepKey="seeViewOrderPageCreditMemo"/>
     </actionGroup>
     <actionGroup name="UpdateCreditMemoTotalsActionGroup">
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="waitUpdateTotalsButtonEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForUpdateTotals"/>
     </actionGroup>
 </actionGroups>

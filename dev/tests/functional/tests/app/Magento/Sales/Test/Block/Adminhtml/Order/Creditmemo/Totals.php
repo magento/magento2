@@ -49,7 +49,7 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
     private $adjustmentFeeSelector = '#adjustment_negative';
 
     /**
-     * 'Update Totals button css selector.
+     * Update Totals button css selector.
      *
      * @var string
      */
