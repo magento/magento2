@@ -28,7 +28,14 @@ class SaveTest extends AbstractShipmentControllerTest
      */
     public function testSendEmailOnShipmentSave(): void
     {
-        $order = $this->prepareRequest(['shipment' => ['send_email' => true]]);
+        $tracking = [
+            [
+                'number' => 'some_racking_number',
+                'title' => 'some_tracking_title',
+                'carrier_code' => 'carrier_code'
+            ]
+        ];
+        $order = $this->prepareRequest(['shipment' => ['send_email' => true], 'tracking' => $tracking]);
         $this->dispatch('backend/admin/order_shipment/save');
 
         $this->assertSessionMessages(
@@ -47,6 +54,15 @@ class SaveTest extends AbstractShipmentControllerTest
             ),
             new StringContains(
                 "Your Shipment #{$shipment->getIncrementId()} for Order #{$order->getIncrementId()}"
+            ),
+            new StringContains(
+                "some_tracking_title"
+            ),
+            new StringContains(
+                "some_racking_number"
+            ),
+            new StringContains(
+                "shipping/tracking/popup?hash="
             )
         );
 

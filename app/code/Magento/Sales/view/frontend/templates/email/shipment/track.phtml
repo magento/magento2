@@ -25,7 +25,7 @@ $_order = $block->getOrder() ?>
                 <tr>
                     <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
                     <td>
-                        <a href="<?= $block->getTrackingUrlEscaped($_item) ?>" target="_blank">
+                        <a href="<?= $block->escapeUrl($block->getTrackingUrl()->getUrl($_item)) ?>" target="_blank">
                             <?= $block->escapeHtml($_item->getNumber()) ?>
                         </a>
                     </td>
