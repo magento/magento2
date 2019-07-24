@@ -15,6 +15,7 @@
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="openAdminUsersPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
+        <waitForPageLoad stepKey="waitForPageToLoadAfterFilterReset"/>
         <fillField selector="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('username')}}" userInput="{{user.username}}" stepKey="fillSearchUsernameFilter"/>
         <click selector="{{AdminLegacyDataGridFilterSection.apply}}" stepKey="clickSearch" />
         <waitForPageLoad stepKey="waitForGridToLoad"/>
