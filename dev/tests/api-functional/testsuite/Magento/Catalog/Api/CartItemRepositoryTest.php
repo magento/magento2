@@ -9,6 +9,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * Class \Magento\Catalog\Api\CartItemRepositoryTest
+ */
 class CartItemRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'quoteCartItemRepositoryV1';
