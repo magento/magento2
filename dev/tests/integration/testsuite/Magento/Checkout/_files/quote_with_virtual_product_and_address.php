@@ -37,7 +37,7 @@ $quote->setStoreId(1)
     )->setReservedOrderId('test_order_with_virtual_product')
     ->setEmail('store@example.com')
     ->addProduct(
-        $product->load($product->getId()),
+        $product,
         1
     );
 

@@ -7,12 +7,12 @@
 /**
  * Adminhtml reviews grid
  *
- * @method int getProductId() getProductId()
- * @method \Magento\Review\Block\Adminhtml\Grid setProductId() setProductId(int $productId)
- * @method int getCustomerId() getCustomerId()
- * @method \Magento\Review\Block\Adminhtml\Grid setCustomerId() setCustomerId(int $customerId)
- * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue()
- * setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
+ * @method int getProductId()
+ * @method \Magento\Review\Block\Adminhtml\Grid setProductId(int $productId)
+ * @method int getCustomerId()
+ * @method \Magento\Review\Block\Adminhtml\Grid setCustomerId(int $customerId)
+ * @method bool getMassactionIdFieldOnlyIndexValue()
+ * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

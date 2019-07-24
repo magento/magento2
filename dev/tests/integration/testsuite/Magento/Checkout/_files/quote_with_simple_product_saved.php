@@ -13,7 +13,7 @@ $quote->setStoreId(1)
     ->setIsMultiShipping(false)
     ->setReservedOrderId('test_order_with_simple_product_without_address')
     ->setEmail('store@example.com')
-    ->addProduct($product->load($product->getId()), 1);
+    ->addProduct($product, 1);
 
 $quote->collectTotals()->save();
 

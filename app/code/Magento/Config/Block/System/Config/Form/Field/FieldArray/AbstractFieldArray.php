@@ -227,7 +227,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             $column['size'] .
             '"' : '') .
             ' class="' .
-            (isset($column['class']) ? $column['class'] : 'input-text') . '"' .
+            ($column['class'] ?? 'input-text') . '"' .
             (isset($column['style']) ? ' style="' . $column['style'] . '"' : '') .
             '/>';
     }
