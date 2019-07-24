@@ -132,7 +132,7 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -140,7 +140,7 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -150,7 +150,8 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -185,9 +186,11 @@ class SimpleProductsFixture extends Fixture
 
         $additionalAttributeSets = $this->getAdditionalAttributeSets();
         $attributeSet = function ($index) use ($defaultAttributeSets, $additionalAttributeSets) {
+            // phpcs:ignore
             mt_srand($index);
             $attributeSetCount = count(array_keys($defaultAttributeSets));
             if ($attributeSetCount > (($index - 1) % (int)$this->fixtureModel->getValue('categories', 30))) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 return array_keys($defaultAttributeSets)[mt_rand(0, count(array_keys($defaultAttributeSets)) - 1)];
             } else {
                 $customSetsAmount = count($additionalAttributeSets);
@@ -205,9 +208,11 @@ class SimpleProductsFixture extends Fixture
             $additionalAttributeSets
         ) {
             $attributeValues = [];
+            // phpcs:ignore
             mt_srand($index);
             if (isset($defaultAttributeSets[$attributeSetId])) {
                 foreach ($defaultAttributeSets[$attributeSetId] as $attributeCode => $values) {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $attributeValues[$attributeCode] = $values[mt_rand(0, count($values) - 1)];
                 }
             }
