@@ -18,6 +18,9 @@
             <testCaseId value="MC-14008"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-15934"/>
+            </skip>
         </annotations>
         <before>
             <!--Create bundle product with dynamic price with two simple products -->
@@ -80,19 +83,15 @@
                 <requiredEntity createDataKey="secondSimpleProductForFixedWithAttribute"/>
             </createData>
 
-            <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
             <!-- Run cron twice -->
             <magentoCLI command="cron:run" stepKey="runCron1"/>
             <magentoCLI command="cron:run" stepKey="runCron2"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
         </before>
         <after>
-            <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
-                <argument name="rowIndex" value="0"/>
-            </actionGroup>
-
             <!-- Delete products creations -->
             <deleteData createDataKey="createDynamicBundleProduct" stepKey="deleteDynamicBundleProduct"/>
             <deleteData createDataKey="firstSimpleProductForDynamic" stepKey="deleteFirstSimpleProductForDynamic"/>
@@ -105,6 +104,10 @@
             <deleteData createDataKey="secondSimpleProductForFixedWithAttribute" stepKey="deleteSecondSimpleProductForFixedWithAttribute"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
 
+            <!-- Delete exported file -->
+            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -117,6 +120,7 @@
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">

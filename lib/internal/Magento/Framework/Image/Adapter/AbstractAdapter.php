@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Image abstract adapter
+ *
  * @file        Abstract.php
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -169,6 +174,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Save image to specific path.
+     *
      * If some folders of path does not exist they will be created
      *
      * @param null|string $destination
@@ -620,7 +626,7 @@ abstract class AbstractAdapter implements AdapterInterface
             $frameHeight !== null && $frameHeight <= 0 ||
             empty($frameWidth) && empty($frameHeight)
         ) {
-            throw new \Exception('Invalid image dimensions.');
+            throw new \InvalidArgumentException('Invalid image dimensions.');
         }
     }
 
@@ -687,7 +693,9 @@ abstract class AbstractAdapter implements AdapterInterface
                 $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
             } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 $this->logger->critical($e);
-                throw new \Exception('Unable to write file into directory ' . $destination . '. Access forbidden.');
+                throw new \DomainException(
+                    'Unable to write file into directory ' . $destination . '. Access forbidden.'
+                );
             }
         }
 
@@ -701,7 +709,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _canProcess()
     {
-        return !empty($this->_fileName);
+        return !empty($this->_fileName) && filesize($this->_fileName) > 0;
     }
 
     /**
@@ -710,11 +718,18 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string $filePath
      * @return bool
      * @throws \InvalidArgumentException
+     * @throws \DomainException
+     * @throws \BadFunctionCallException
+     * @throws \RuntimeException
+     * @throws \OverflowException
      */
     public function validateUploadFile($filePath)
     {
         if (!file_exists($filePath)) {
             throw new \InvalidArgumentException("File '{$filePath}' does not exists.");
+        }
+        if (filesize($filePath) === 0) {
+            throw new \InvalidArgumentException('Wrong file size.');
         }
         if (!getimagesize($filePath)) {
             throw new \InvalidArgumentException('Disallowed file type.');
