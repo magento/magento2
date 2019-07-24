@@ -79,7 +79,7 @@ class GeneratePatchCommand extends Command
                     self::INPUT_KEY_PATCH_TYPE,
                     null,
                     InputOption::VALUE_OPTIONAL,
-                    'Find out what type of patch should be generated.',
+                    'Find out what type of patch should be generated. Available values: `data`, `schema`.',
                     'data'
                 ),
             ]);
