@@ -74,7 +74,6 @@ class QuoteAddressFactory
             );
         }
 
-
         $quoteAddress = $this->quoteAddressFactory->create();
         $quoteAddress->addData($addressInput);
         return $quoteAddress;
