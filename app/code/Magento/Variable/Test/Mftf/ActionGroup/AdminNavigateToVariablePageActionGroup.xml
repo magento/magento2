@@ -8,10 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminNavigateToVariablePageActionGroup">
+    <actionGroup name="AdminNavigateToVariablePageByCodeActionGroup">
         <arguments>
             <argument name="code" type="string"/>
         </arguments>
-        <click selector="{{CustomVariableSection.GridCustomVariableCode(code)}}" stepKey="goToCustomVariableEditPage"/>
+        <click selector="{{AdminLegacyDataGridTableSection.rowTemplateStrict(code)}}" stepKey="goToCustomVariableEditPage"/>
+        <waitForPageLoad stepKey="waitForVariableEditPageOpen" />
     </actionGroup>
 </actionGroups>

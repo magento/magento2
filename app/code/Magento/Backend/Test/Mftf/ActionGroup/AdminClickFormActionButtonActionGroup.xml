@@ -8,8 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminNavigateToNewVariablePageActionGroup">
-        <amOnPage url="{{AdminNewVariablePage.url}}" stepKey="openNewVariablePage"/>
+    <actionGroup name="AdminClickFormActionButtonActionGroup">
+        <arguments>
+            <argument name="buttonSelector" type="string" />
+        </arguments>
+        <waitForElementVisible selector="{{buttonSelector}}" stepKey="waitForButton"/>
+        <click selector="{{buttonSelector}}" stepKey="clickButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

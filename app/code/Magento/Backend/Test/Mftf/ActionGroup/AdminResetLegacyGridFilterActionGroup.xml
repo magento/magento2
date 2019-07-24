@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminResetGridFilterActionGroup">
+    <actionGroup name="AdminResetLegacyGridFilterActionGroup">
         <arguments>
-            <argument name="selector" type="string" defaultValue="{{AdminSecondaryGridSection.resetFilters}}"/>
+            <argument name="selector" type="string" defaultValue="{{AdminLegacyDataGridFilterSection.clear}}"/>
         </arguments>
         <click selector="{{selector}}" stepKey="clickResetButton"/>
     </actionGroup>

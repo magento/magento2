@@ -8,8 +8,8 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdminVariablesFilterSection">
-        <element name="codeFilter" type="input" selector="input.admin__control-text[name='code']"/>
-        <element name="nameFilter" type="input" selector="input.admin__control-text[name='name']"/>
+    <section name="AdminVariableGridFilterSection">
+        <element name="codeField" type="input" selector="[data-role='filter-form'] input.admin__control-text[name='code']"/>
+        <element name="nameField" type="input" selector="[data-role='filter-form'] input.admin__control-text[name='name']"/>
     </section>
 </sections>
