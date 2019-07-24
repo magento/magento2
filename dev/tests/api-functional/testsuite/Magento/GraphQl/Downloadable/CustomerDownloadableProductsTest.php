@@ -91,14 +91,21 @@ class CustomerDownloadableProductsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
      */
     public function testCustomerHasNoDownloadableProducts()
     {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
+        $this->cartManagement->placeOrder($quote->getId());
+
         $query = $this->getQuery();
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
