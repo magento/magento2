@@ -47,9 +47,6 @@
             <argument name="resourceStockItem" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Layer">
-        <plugin name="addStockStatusOnPrepareFrontCollection" type="Magento\CatalogInventory\Model\Plugin\Layer"/>
-    </type>
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">

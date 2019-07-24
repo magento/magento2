@@ -125,7 +125,7 @@ class DynamicField implements FieldProviderInterface
                 ['categoryId' => $categoryId]
             );
             $allAttributes[$categoryPositionKey] = [
-                'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING),
+                'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_INT),
                 'index' => $this->indexTypeConverter->convert(IndexTypeConverterInterface::INTERNAL_NO_INDEX_VALUE)
             ];
             $allAttributes[$categoryNameKey] = [
