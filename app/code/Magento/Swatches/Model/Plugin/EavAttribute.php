@@ -167,7 +167,8 @@ class EavAttribute
             if (!empty($additionalData)) {
                 $additionalData = $this->serializer->unserialize($additionalData);
                 if (is_array($additionalData) && isset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY])) {
-                    $this->cleanEavAttributeOptionSwatchValues($attribute->getOption());
+                    $option = $attribute->getOption() ?: [];
+                    $this->cleanEavAttributeOptionSwatchValues($option);
                     unset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY]);
                     $attribute->setData('additional_data', $this->serializer->serialize($additionalData));
                 }
@@ -246,7 +247,8 @@ class EavAttribute
     {
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $this->processVisualSwatch($attribute);
-            $this->cleanTextSwatchValuesAfterSwitch($attribute->getOptiontext());
+            $attributeOptions = $attribute->getOptiontext() ?: [];
+            $this->cleanTextSwatchValuesAfterSwitch($attributeOptions);
         } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
             $this->processTextualSwatch($attribute);
         }
@@ -283,10 +285,10 @@ class EavAttribute
      * Clean swatch option values after switching to the dropdown type.
      *
      * @param array $attributeOptions
-     * @param null  $swatchType
+     * @param int|null  $swatchType
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function cleanEavAttributeOptionSwatchValues($attributeOptions, $swatchType = null)
+    private function cleanEavAttributeOptionSwatchValues(array $attributeOptions, int $swatchType = null)
     {
         if (count($attributeOptions) && isset($attributeOptions['value'])) {
             $optionsIDs = array_keys($attributeOptions['value']);
@@ -301,7 +303,7 @@ class EavAttribute
      * @param array $attributeOptions
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function cleanTextSwatchValuesAfterSwitch($attributeOptions)
+    private function cleanTextSwatchValuesAfterSwitch(array $attributeOptions)
     {
         $this->cleanEavAttributeOptionSwatchValues($attributeOptions, Swatch::SWATCH_TYPE_TEXTUAL);
     }

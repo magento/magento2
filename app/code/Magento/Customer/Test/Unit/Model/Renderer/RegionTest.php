@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Renderer;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class RegionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -58,6 +60,15 @@ class RegionTest extends \PHPUnit\Framework\TestCase
                 ]
             )
         );
+
+        $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $objectManager->setBackwardCompatibleProperty(
+            $elementMock,
+            '_escaper',
+            $escaper
+        );
+
         $formMock->expects(
             $this->any()
         )->method(

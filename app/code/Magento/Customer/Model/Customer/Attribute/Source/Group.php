@@ -42,9 +42,9 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table implements 
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function getAllOptions()
+    public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
         if (!$this->_options) {
             $groups = $this->_groupManagement->getLoggedInGroups();

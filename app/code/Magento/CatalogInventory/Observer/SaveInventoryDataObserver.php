@@ -42,6 +42,11 @@ class SaveInventoryDataObserver implements ObserverInterface
     /**
      * @var array
      */
+    private $parentItemProcessorPool;
+
+    /**
+     * @var array
+     */
     private $paramListToCheck = [
         'use_config_min_qty' => [
             'item' => 'stock_data/min_qty',
@@ -77,15 +82,18 @@ class SaveInventoryDataObserver implements ObserverInterface
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
      * @param StockItemValidator $stockItemValidator
+     * @param array $parentItemProcessorPool
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
-        StockItemValidator $stockItemValidator = null
+        StockItemValidator $stockItemValidator = null,
+        array $parentItemProcessorPool = []
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockRegistry = $stockRegistry;
         $this->stockItemValidator = $stockItemValidator ?: ObjectManager::getInstance()->get(StockItemValidator::class);
+        $this->parentItemProcessorPool = $parentItemProcessorPool;
     }
 
     /**
@@ -99,7 +107,10 @@ class SaveInventoryDataObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
+        /** @var Product $product */
         $product = $observer->getEvent()->getProduct();
+
+        /** @var Item $stockItem */
         $stockItem = $this->getStockItemToBeUpdated($product);
 
         if ($product->getStockData() !== null) {
@@ -108,6 +119,7 @@ class SaveInventoryDataObserver implements ObserverInterface
         }
         $this->stockItemValidator->validate($product, $stockItem);
         $this->stockRegistry->updateStockItemBySku($product->getSku(), $stockItem);
+        $this->processParents($product);
     }
 
     /**
@@ -155,5 +167,18 @@ class SaveInventoryDataObserver implements ObserverInterface
                 - $originalQty;
         }
         return $stockData;
+    }
+
+    /**
+     * Process stock data for parent products
+     *
+     * @param Product $product
+     * @return void
+     */
+    private function processParents(Product $product)
+    {
+        foreach ($this->parentItemProcessorPool as $processor) {
+            $processor->process($product);
+        }
     }
 }

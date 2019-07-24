@@ -160,7 +160,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      * Check not exists sitemap path validation
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please create the specified folder "" before saving the sitemap.
+     * @expectedExceptionMessage Please create the specified folder "/" before saving the sitemap.
      */
     public function testPathNotExists()
     {
@@ -637,6 +637,9 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $escaper = $objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
         $constructArguments = $objectManager->getConstructArguments(
             \Magento\Sitemap\Model\Sitemap::class,
             [
@@ -645,7 +648,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 'cmsFactory' => $cmsFactory,
                 'storeManager' => $this->storeManagerMock,
                 'sitemapData' => $this->_helperMockSitemap,
-                'filesystem' => $this->_filesystemMock
+                'filesystem' => $this->_filesystemMock,
+                'escaper' => $escaper
             ]
         );
         $constructArguments['resource'] = null;

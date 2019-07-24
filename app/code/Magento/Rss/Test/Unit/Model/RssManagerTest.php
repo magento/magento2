@@ -45,8 +45,8 @@ class RssManagerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($dataProvider));
 
         $this->assertInstanceOf(
-             \Magento\Framework\App\Rss\DataProviderInterface::class,
-             $this->rssManager->getProvider('rss_feed')
+            \Magento\Framework\App\Rss\DataProviderInterface::class,
+            $this->rssManager->getProvider('rss_feed')
         );
     }
 

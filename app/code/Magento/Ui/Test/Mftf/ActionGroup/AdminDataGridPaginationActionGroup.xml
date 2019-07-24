@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDataGridSelectCustomPageSize">
+        <arguments>
+            <argument name="pageSize" type="string"/>
+        </arguments>
+        <click selector="{{AdminDataGridPaginationSection.pageSizeDropdown}}" stepKey="clickPageSizeDropdown"/>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.pageSizeOption('Custom')}}" stepKey="waitCustomPageSizeOptionAppear"/>
+        <click selector="{{AdminDataGridPaginationSection.pageSizeOption('Custom')}}" stepKey="selectCustomPageSize"/>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.pageSizeInput}}" stepKey="waitForInputVisible"/>
+        <fillField selector="{{AdminDataGridPaginationSection.pageSizeInput}}" userInput="{{pageSize}}" stepKey="fillCustomPageSize"/>
+        <click selector="{{AdminDataGridPaginationSection.pageSizeApplyInput}}" stepKey="applyCustomPageSize"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.pageSizeDropDownValue}}" userInput="{{pageSize}}" stepKey="seePageSizeValueInDropDown"/>
+    </actionGroup>
+
+    <actionGroup name="AdminDataGridDeleteCustomPageSize">
+        <arguments>
+            <argument name="pageSize" type="string"/>
+        </arguments>
+        <click selector="{{AdminDataGridPaginationSection.pageSizeDropdown}}" stepKey="clickPageSizeDropdown"/>
+        <click selector="{{AdminDataGridPaginationSection.pageSizeEditCustomValue(pageSize)}}" stepKey="clickToEditCustomPageSize"/>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.pageSizeDeleteCustomValue(pageSize)}}" stepKey="waitForDeleteButtonVisible"/>
+        <click selector="{{AdminDataGridPaginationSection.pageSizeDeleteCustomValue(pageSize)}}" stepKey="clickToDeleteCustomPageSize"/>
+        <click selector="{{AdminDataGridPaginationSection.pageSizeDropdown}}" stepKey="clickPageSizeDropdownAfterCustomPageSizeDeleted"/>
+        <dontSeeElement selector="{{AdminDataGridPaginationSection.pageSizeDropDownItem(pageSize)}}" stepKey="dontSeeDropDownItem"/>
+    </actionGroup>
+</actionGroups>

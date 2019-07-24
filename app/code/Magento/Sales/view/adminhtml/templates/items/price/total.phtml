@@ -4,13 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable PSR2.Files.ClosingTag
 ?>
 <?php
 /** @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn $block */
-
 $_item = $block->getItem();
 ?>
-
-<?= /* @escapeNotVerified */ $block->displayPrices($block->getBaseTotalAmount($_item), $block->getTotalAmount($_item)) ?>
+<?= /* @noEscape */ $block->displayPrices($block->getBaseTotalAmount($_item), $block->getTotalAmount($_item)) ?>

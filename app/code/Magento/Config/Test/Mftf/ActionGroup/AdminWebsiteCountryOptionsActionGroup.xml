@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AllowOnlyOneCountryActionGroup">
+        <arguments>
+            <argument name="country" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminConfigurationGeneralCountryOptionsSection.countryOptions}}" dependentSelector="{{AdminConfigurationGeneralCountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="openCountryOptionsTab"/>
+        <waitForElementVisible selector="{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}}" stepKey="waitAllowedCountriesToBeVisible"/>
+        <uncheckOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryDefaultInherit}}" stepKey="uncheckDefaultCountryInheritCheckbox"/>
+        <selectOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryDefault}}" userInput="{{country}}" stepKey="chooseDefaultCountry"/>
+        <uncheckOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryAllowInherit}}" stepKey="uncheckAllowInheritCheckbox"/>
+        <selectOption selector="{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}}" userInput="{{country}}" stepKey="chooseAllowedCountries"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="AllowAllCountriesExceptOneActionGroup" extends="AllowOnlyOneCountryActionGroup">
+        <remove keyForRemoval="uncheckDefaultCountryInheritCheckbox"/>
+        <remove keyForRemoval="chooseDefaultCountry"/>
+        <remove keyForRemoval="chooseAllowedCountries"/>
+        <unselectOption selector="{{AdminConfigurationGeneralCountryOptionsSection.allowedCountries}}" userInput="{{country}}" after="uncheckAllowInheritCheckbox" stepKey="unselectCountry"/>
+    </actionGroup>
+    <actionGroup name="SetWebsiteCountryOptionsToDefaultActionGroup">
+        <conditionalClick selector="{{AdminConfigurationGeneralCountryOptionsSection.countryOptions}}" dependentSelector="{{AdminConfigurationGeneralCountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="openCountryOptionsTab"/>
+        <waitForElementVisible selector="{{AdminConfigurationGeneralCountryOptionsSection.topDestinations}}" stepKey="waitCheckboxToBeVisible"/>
+        <checkOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryAllowInherit}}" stepKey="setAllowInheritToDefault"/>
+        <checkOption selector="{{AdminConfigurationGeneralCountryOptionsSection.generalCountryDefaultInherit}}" stepKey="setDefaultCountryInheritToDefault"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

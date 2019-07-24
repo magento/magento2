@@ -258,7 +258,8 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      */
     public function getMultipleRows($item)
     {
-        return $item->getChildren();
+        $children = $item->getChildren();
+        return $children ?: [];
     }
 
     /**

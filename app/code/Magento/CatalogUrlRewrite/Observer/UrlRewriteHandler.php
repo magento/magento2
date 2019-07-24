@@ -280,7 +280,7 @@ class UrlRewriteHandler
             /* @var Collection $collection */
             $collection = $this->productCollectionFactory->create()
                 ->setStoreId($categoryStoreId)
-                ->addIdFilter($category->getAffectedProductIds())
+                ->addIdFilter($category->getChangedProductIds())
                 ->addAttributeToSelect('visibility')
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')

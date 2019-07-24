@@ -14,6 +14,11 @@ namespace Magento\Framework;
 class Escaper
 {
     /**
+     * HTML special characters flag
+     */
+    private $htmlSpecialCharsFlag = ENT_QUOTES | ENT_SUBSTITUTE;
+
+    /**
      * @var \Magento\Framework\ZendEscaper
      */
     private $escaper;
@@ -74,6 +79,7 @@ class Escaper
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
                     function ($errorNumber, $errorString) {
+                        // phpcs:ignore Magento2.Exceptions.DirectThrow
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
@@ -83,6 +89,7 @@ class Escaper
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
+                    // phpcs:disable Magento2.Exceptions.ThrowCatch
                 } catch (\Exception $e) {
                     restore_error_handler();
                     $this->getLogger()->critical($e);
@@ -98,7 +105,7 @@ class Escaper
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
             } else {
-                $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+                $result = htmlspecialchars($data, $this->htmlSpecialCharsFlag, 'UTF-8', false);
             }
         } else {
             $result = $data;
@@ -217,7 +224,7 @@ class Escaper
         if ($escapeSingleQuote) {
             return $this->getEscaper()->escapeHtmlAttr((string) $string);
         }
-        return htmlspecialchars((string)$string, ENT_COMPAT, 'UTF-8', false);
+        return htmlspecialchars((string)$string, $this->htmlSpecialCharsFlag, 'UTF-8', false);
     }
 
     /**
@@ -314,7 +321,7 @@ class Escaper
     {
         return htmlspecialchars(
             $this->escapeScriptIdentifiers((string)$data),
-            ENT_COMPAT | ENT_HTML5 | ENT_HTML401,
+            $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false
         );
@@ -351,7 +358,7 @@ class Escaper
         if ($addSlashes === true) {
             $data = addslashes($data);
         }
-        return htmlspecialchars($data, ENT_QUOTES, null, false);
+        return htmlspecialchars($data, $this->htmlSpecialCharsFlag, null, false);
     }
 
     /**

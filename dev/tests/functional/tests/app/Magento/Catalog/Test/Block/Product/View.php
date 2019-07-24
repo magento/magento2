@@ -298,6 +298,7 @@ class View extends AbstractConfigureBlock
         $checkoutData = $product->getCheckoutData();
 
         $this->getMiniCartBlock()->waitInit();
+        sleep(10);
         $this->fillOptions($product);
         if (isset($checkoutData['qty'])) {
             $this->setQty($checkoutData['qty']);

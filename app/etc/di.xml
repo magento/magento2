@@ -248,6 +248,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\FeedFactory">
+        <arguments>
+            <argument name="formats" xsi:type="array">
+                <item name="rss" xsi:type="string">Magento\Framework\App\Feed</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Session\SaveHandler\Redis">
         <arguments>
             <argument name="config" xsi:type="object">Cm\RedisSession\Handler\ConfigInterface</argument>

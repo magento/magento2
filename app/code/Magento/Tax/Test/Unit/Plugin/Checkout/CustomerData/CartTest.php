@@ -119,7 +119,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('items', $result);
         $this->assertTrue(is_array($result['items']));
         $this->assertEquals(2, count($result['items']));
-        $this->assertEquals(1, count($result['items'][0]['product_price']));
-        $this->assertEquals(1, count($result['items'][1]['product_price']));
+        $this->assertEquals(1, $result['items'][0]['product_price']);
+        $this->assertEquals(1, $result['items'][1]['product_price']);
     }
 }

@@ -13,6 +13,7 @@
                 <object key="fields" dataType="customer_account_sharing_config">
                     <object key="scope" dataType="account_share_scope_value">
                         <field key="value">string</field>
+                        <field key="inherit">boolean</field>
                     </object>
                 </object>
             </object>

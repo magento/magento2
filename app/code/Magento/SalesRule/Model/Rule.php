@@ -296,8 +296,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 $this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null
             )->setUsagePerCustomer(
                 $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
-            )->setExpirationDate(
-                $this->getToDate()
             )->save();
         } else {
             $this->getPrimaryCoupon()->delete();
@@ -499,8 +497,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null
         )->setUsagePerCustomer(
             $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
-        )->setExpirationDate(
-            $this->getToDate()
         )->setType(
             \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
         );

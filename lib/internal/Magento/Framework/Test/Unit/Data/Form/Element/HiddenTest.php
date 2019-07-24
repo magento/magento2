@@ -21,7 +21,15 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->element = $objectManager->getObject(\Magento\Framework\Data\Form\Element\Hidden::class);
+        $escaper = $objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
+        $this->element = $objectManager->getObject(
+            \Magento\Framework\Data\Form\Element\Hidden::class,
+            [
+                'escaper' => $escaper
+            ]
+        );
     }
 
     /**

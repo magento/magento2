@@ -18,6 +18,11 @@ use Magento\Framework\Filesystem\Driver\File;
 class DependencyReadinessCheck
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @var ComposerJsonFinder
      */
     private $composerJsonFinder;
@@ -49,18 +54,23 @@ class DependencyReadinessCheck
      * @param DirectoryList $directoryList
      * @param File $file
      * @param MagentoComposerApplicationFactory $composerAppFactory
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         ComposerJsonFinder $composerJsonFinder,
         DirectoryList $directoryList,
         File $file,
-        MagentoComposerApplicationFactory $composerAppFactory
+        MagentoComposerApplicationFactory $composerAppFactory,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->composerJsonFinder = $composerJsonFinder;
         $this->directoryList = $directoryList;
         $this->file = $file;
         $this->requireUpdateDryRunCommand = $composerAppFactory->createRequireUpdateDryRunCommand();
         $this->magentoComposerApplication = $composerAppFactory->create();
+        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Escaper::class
+        );
     }
 
     /**
@@ -91,7 +101,7 @@ class DependencyReadinessCheck
             $this->requireUpdateDryRunCommand->run($packages, $workingDir);
             return ['success' => true];
         } catch (\RuntimeException $e) {
-            $message = str_replace(PHP_EOL, '<br/>', htmlspecialchars($e->getMessage()));
+            $message = str_replace(PHP_EOL, '<br/>', $this->escaper->escapeHtml($e->getMessage()));
             return ['success' => false, 'error' => $message];
         }
     }

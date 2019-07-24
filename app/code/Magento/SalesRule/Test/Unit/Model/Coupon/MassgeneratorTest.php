@@ -109,7 +109,6 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
                 'setRuleId',
                 'setUsageLimit',
                 'setUsagePerCustomer',
-                'setExpirationDate',
                 'setCreatedAt',
                 'setType',
                 'setCode',
@@ -120,7 +119,6 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
         $couponMock->expects($this->any())->method('setRuleId')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setUsageLimit')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setUsagePerCustomer')->will($this->returnSelf());
-        $couponMock->expects($this->any())->method('setExpirationDate')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setCreatedAt')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setType')->will($this->returnSelf());
         $couponMock->expects($this->any())->method('setCode')->will($this->returnSelf());

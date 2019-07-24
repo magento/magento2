@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminDataGridPaginationSection">
+        <element name="pageSizeDropdown" type="select" selector=".admin__data-grid-pager-wrap .selectmenu"/>
+        <element name="pageSizeOption" type="button" selector="//div[@class='admin__data-grid-pager-wrap']//div[@class='selectmenu-items _active']//li//button[text()='{{var1}}']" parameterized="true"/>
+        <element name="pageSizeInput" type="input" selector="div.admin__data-grid-pager-wrap div.selectmenu-items._active li._edit div.selectmenu-item-edit input"/>
+        <element name="pageSizeApplyInput" type="button" selector="div.admin__data-grid-pager-wrap div.selectmenu-items._active li._edit div.selectmenu-item-edit button" timeout="30"/>
+        <element name="pageSizeDropDownItem" type="button" selector="//*[contains(@class, 'selectmenu-items _active')]//button[contains(@class, 'selectmenu-item-action') and text()='{{dropDownItem}}']" parameterized="true"/>
+        <element name="pageSizeEditCustomValue" type="button" selector="//div[contains(@class, 'selectmenu-items _active')]//div[contains(@class, 'selectmenu-item')]//button[text()='{{perPageCustomValue}}']/following-sibling::button[contains(@class, 'action-edit')]" parameterized="true"/>
+        <element name="pageSizeDeleteCustomValue" type="button" selector="//div[contains(@class, 'selectmenu-items _active')]//div[contains(@class, 'selectmenu-item')]//button[text()='{{perPageCustomValue}}']/parent::div/preceding-sibling::div/button[contains(@class, 'action-delete')]" parameterized="true" timeout="30"/>
+        <element name="nextPage" type="button" selector="div.admin__data-grid-pager > button.action-next" timeout="30"/>
+        <element name="previousPage" type="button" selector=".admin__data-grid-header:nth-of-type(2) div.admin__data-grid-pager > button.action-previous:not(disabled)" timeout="30"/>
+        <element name="currentPage" type="input" selector="div.admin__data-grid-pager > input[data-ui-id='current-page-input']"/>
+        <element name="pageSizeDropDownValue" type="input" selector=".admin__data-grid-pager-wrap .selectmenu-value input" timeout="30"/>
+    </section>
+</sections>

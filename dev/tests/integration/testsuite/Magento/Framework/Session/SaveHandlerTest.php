@@ -9,6 +9,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,6 +38,15 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->addSharedInstance($this->deploymentConfigMock, DeploymentConfig::class);
         $this->saveHandlerFactoryMock = $this->createMock(SaveHandlerFactory::class);
         $this->objectManager->addSharedInstance($this->saveHandlerFactoryMock, SaveHandlerFactory::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->objectManager->removeSharedInstance(DeploymentConfig::class);
+        $this->objectManager->removeSharedInstance(SaveHandlerFactory::class);
     }
 
     /**
@@ -75,15 +85,6 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             $expected,
             $sessionConfig->getOption('session.save_handler')
         );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        $this->objectManager->removeSharedInstance(DeploymentConfig::class);
-        $this->objectManager->removeSharedInstance(SaveHandlerFactory::class);
     }
 
     /**

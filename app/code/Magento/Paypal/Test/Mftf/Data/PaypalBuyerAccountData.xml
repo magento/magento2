@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Should be resolved from {{_CREDS}} after MQE-1576 will be delivered -->
+    <entity name="DefaultPaypalBuyerAccount" type="data">
+        <data key="email">{{_CREDS.paypal_buyer_account_email}}</data>
+        <data key="password">{{_CREDS.paypal_buyer_account_password}}</data>
+    </entity>
+</entities>

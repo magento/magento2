@@ -113,4 +113,17 @@
         <data key="default_billing">true</data>
         <data key="default_shipping">false</data>
     </entity>
+    <entity name="Canada_Address">
+        <data key="firstname">Robert</data>
+        <data key="lastname">Roe</data>
+        <array key="street">
+            <item>3197 rue Parc</item>
+        </array>
+        <data key="city">Sherbrooke</data>
+        <data key="state">Quebec</data>
+        <data key="postcode">J1L 1C9</data>
+        <data key="country_id">CA</data>
+        <data key="country">Canada</data>
+        <data key="telephone">999-99-99-99</data>
+    </entity>
 </entities>

@@ -6,6 +6,7 @@
 namespace Magento\UrlRewrite\Controller;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -70,13 +71,13 @@ class Router implements \Magento\Framework\App\RouterInterface
     /**
      * Match corresponding URL Rewrite and modify request
      *
-     * @param \Magento\Framework\App\RequestInterface|HttpRequest $request
+     * @param RequestInterface|HttpRequest $request
      * @return ActionInterface|null
      */
-    public function match(\Magento\Framework\App\RequestInterface $request)
+    public function match(RequestInterface $request)
     {
         $rewrite = $this->getRewrite(
-            $request->getPathInfo(),
+            $this->getNormalizedPathInfo($request),
             $this->storeManager->getStore()->getId()
         );
         if ($rewrite === null) {
@@ -101,7 +102,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param UrlRewrite $rewrite
      * @return ActionInterface|null
      */
@@ -117,7 +118,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
-     * @param \Magento\Framework\App\RequestInterface|HttpRequest $request
+     * @param RequestInterface|HttpRequest $request
      * @param string $url
      * @param int $code
      * @return ActionInterface
@@ -141,5 +142,31 @@ class Router implements \Magento\Framework\App\RouterInterface
             UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
             UrlRewrite::STORE_ID => $storeId,
         ]);
+    }
+
+    /**
+     * Get normalized request path
+     *
+     * @param RequestInterface|HttpRequest $request
+     * @return string
+     */
+    private function getNormalizedPathInfo(RequestInterface $request): string
+    {
+        $path = (string)$request->getPathInfo();
+        /**
+         * If request contains query params then we need to trim a slash in end of the path.
+         * For example:
+         * the original request is: http://my-host.com/category-url-key.html/?color=black
+         * where the original path is: category-url-key.html/
+         * and the result path will be: category-url-key.html
+         *
+         * It need to except a redirect like this:
+         * http://my-host.com/category-url-key.html/?color=black => http://my-host.com/category-url-key.html
+         */
+        if (!empty($path) && $request->getQuery()->count()) {
+            $path = rtrim($path, '/');
+        }
+
+        return $path;
     }
 }

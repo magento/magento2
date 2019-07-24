@@ -80,9 +80,7 @@
         <waitForPageLoad stepKey="waitForSavingChanges"/>
 
         <!-- Enable `Use Categories Path for Product URLs` on Stores -> Configuration -> Catalog -> Catalog -> Search Engine Optimization -->
-        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="onConfigPage"/>
-        <waitForPageLoad stepKey="waitForLoading"/>
-        <conditionalClick selector="{{AdminCatalogSearchEngineConfigurationSection.searchEngineOptimization}}" dependentSelector="{{AdminCatalogSearchEngineConfigurationSection.openedEngineOptimization}}" visible="false" stepKey="clickEngineOptimization"/>
+        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url('#catalog_seo-link')}}" stepKey="onConfigPage"/>
         <uncheckOption selector="{{AdminCatalogSearchEngineConfigurationSection.systemValueUseCategoriesPath}}" stepKey="uncheckDefault"/>
         <selectOption userInput="Yes" selector="{{AdminCatalogSearchEngineConfigurationSection.selectUseCategoriesPatForProductUrls}}" stepKey="selectYes"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>

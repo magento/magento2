@@ -54,6 +54,15 @@ class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getComment', 'getHtmlId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->abstractElementMock,
+            '_escaper',
+            $escaper
+        );
+
         $this->formMock = $this->getMockBuilder(Form::class)
             ->disableOriginalConstructor()
             ->getMock();

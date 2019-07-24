@@ -98,19 +98,19 @@
         <data key="value">sandbox</data>
     </entity>
     <entity name="EnabledMerchantId" type="merchant_id">
-        <data key="value">d4pdjhxgjfrsmzbf</data>
+        <data key="value">{{_CREDS.braintree_disabled_fraud_merchant_id}}</data>
     </entity>
     <entity name="EnabledPublicKey" type="public_key">
-        <data key="value">m7q4wmh43xrgyrst</data>
+        <data key="value">{{_CREDS.braintree_disabled_fraud_public_key}}</data>
     </entity>
     <entity name="EnabledPrivateKey" type="private_key">
-        <data key="value">67de364080b1b4e2492d7a3de413a572</data>
+        <data key="value">{{_CREDS.braintree_disabled_fraud_private_key}}</data>
     </entity>
     <entity name="EnabledActive" type="active">
         <data key="value">1</data>
     </entity>
     <entity name="EnabledMerchantAccountId" type="merchant_account_id">
-        <data key="value">Magneto</data>
+        <data key="value">{{_CREDS.braintree_disabled_fraud_merchant_account_id}}</data>
     </entity>
 
     <entity name="SandboxBraintreeWithPaypalConfig" extends="SandboxBraintreeConfig">
@@ -126,5 +126,39 @@
         <data key="exp_month">12</data>
         <data key="exp_year">20</data>
         <data key="cvv">113</data>
+    </entity>
+
+    <entity name="BraintreeConfigData" type="data">
+        <data key="title">Credit Card (Braintree)</data>
+        <data key="environment">sandbox</data>
+        <data key="payment_action">authorize</data>
+        <data key="active">1</data>
+        <data key="useccv">1</data>
+    </entity>
+
+    <entity name="BraintreeWithPaypalConfigData" extends="BraintreeConfigData">
+        <data key="active_braintree_paypal">1</data>
+    </entity>
+
+    <entity name="CustomBraintreeConfigurationData" type="custom_braintree_config_state">
+        <requiredEntity type="braintree_cc_vault_active">BraintreeValuteActive</requiredEntity>
+        <requiredEntity type="active">EnableSolution</requiredEntity>
+    </entity>
+    <entity name="BraintreeValuteActive" type="braintree_cc_vault_active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableSolution" type="active">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="RollBackCustomBraintreeConfigurationData" type="custom_braintree_config_state">
+        <requiredEntity type="braintree_cc_vault_active">DefaultBraintreeValuteActive</requiredEntity>
+        <requiredEntity type="active">DefaultEnableSolution</requiredEntity>
+    </entity>
+    <entity name="DefaultBraintreeValuteActive" type="braintree_cc_vault_active">
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultEnableSolution" type="active">
+        <data key="value">0</data>
     </entity>
 </entities>

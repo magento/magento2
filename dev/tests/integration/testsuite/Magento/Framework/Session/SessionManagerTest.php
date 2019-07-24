@@ -9,8 +9,10 @@ namespace {
 }
 
 namespace Magento\Framework\Session {
+
     use Magento\Framework\App\DeploymentConfig;
     use Magento\Framework\App\State;
+
     // @codingStandardsIgnoreEnd
 
     /**
@@ -147,6 +149,7 @@ namespace Magento\Framework\Session {
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+            /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
             $this->appState = $this->getMockBuilder(State::class)
                 ->setMethods(['getAreaCode'])
                 ->disableOriginalConstructor()
@@ -156,7 +159,7 @@ namespace Magento\Framework\Session {
             $this->sidResolver = $this->objectManager->create(
                 \Magento\Framework\Session\SidResolver::class,
                 [
-                    'appState' => $this->appState
+                    'appState' => $this->appState,
                 ]
             );
 
@@ -384,7 +387,7 @@ namespace Magento\Framework\Session {
             $saveHandler = $this->objectManager->create(SaveHandler::class, ['sessionConfig' => $sessionConfig]);
 
             $this->model = $this->objectManager->create(
-                SessionManager::class,
+                \Magento\Framework\Session\SessionManager::class,
                 [
                     'sidResolver' => $this->sidResolver,
                     'saveHandler' => $saveHandler,
@@ -414,9 +417,9 @@ namespace Magento\Framework\Session {
         private function initializeModel()
         {
             $this->model = $this->objectManager->create(
-                SessionManager::class,
+                \Magento\Framework\Session\SessionManager::class,
                 [
-                    'sidResolver' => $this->sidResolver,
+                    'sidResolver' => $this->sidResolver
                 ]
             );
         }
