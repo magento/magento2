@@ -10,7 +10,7 @@ namespace Magento\AuthorizenetCardinal\Gateway\Request;
 
 use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\AuthorizenetCardinal\Model\Config;
-use Magento\CardinalCommerce\Model\Response\JwtParser;
+use Magento\CardinalCommerce\Model\Response\JwtParserInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
 
@@ -30,19 +30,19 @@ class Authorize3DSecureBuilder implements BuilderInterface
     private $config;
 
     /**
-     * @var JwtParser
+     * @var JwtParserInterface
      */
     private $jwtParser;
 
     /**
      * @param SubjectReader $subjectReader
      * @param Config $config
-     * @param JwtParser $jwtParser
+     * @param JwtParserInterface $jwtParser
      */
     public function __construct(
         SubjectReader $subjectReader,
         Config $config,
-        JwtParser $jwtParser
+        JwtParserInterface $jwtParser
     ) {
         $this->subjectReader = $subjectReader;
         $this->config = $config;
