@@ -145,6 +145,67 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Bundle/_files/quote_with_bundle_and_options.php
+     * @dataProvider dataProviderTestUpdateBundleItemQuantity
+     */
+    public function testUpdateBundleItemQuantity(int $quantity)
+    {
+        $this->quoteResource->load(
+            $this->quote,
+            'test_cart_with_bundle_and_options',
+            'reserved_order_id'
+        );
+
+        $item = current($this->quote->getAllVisibleItems());
+
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $mutation = <<<QUERY
+mutation {
+  updateCartItems(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      cart_items: {
+        cart_item_id: {$item->getId()}
+        quantity: {$quantity}
+      }
+    }
+  ) {
+    cart {
+      items {
+        id
+        quantity
+        product {
+          sku
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($mutation);
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('cart', $response['updateCartItems']);
+        $cart = $response['updateCartItems']['cart'];
+        if ($quantity === 0) {
+            $this->assertCount(0, $cart['items']);
+            return;
+        }
+
+        $bundleItem = current($cart['items']);
+        $this->assertEquals($quantity, $bundleItem['quantity']);
+    }
+
+    public function dataProviderTestUpdateBundleItemQuantity(): array
+    {
+        return [
+            [2],
+            [0],
+        ];
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @expectedException \Exception

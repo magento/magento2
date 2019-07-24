@@ -22,7 +22,7 @@ $quote->delete();
 $quoteIdMask = $objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
 $quoteIdMask->delete($quote->getId());
 
-require __DIR__ . 'product_with_multiple_options_rollback.php';
+require __DIR__ . '/product_with_multiple_options_rollback.php';
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
