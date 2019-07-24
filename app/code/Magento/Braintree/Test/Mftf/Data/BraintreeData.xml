@@ -161,4 +161,9 @@
     <entity name="DefaultEnableSolution" type="active">
         <data key="value">0</data>
     </entity>
+
+    <entity name="StoredPaymentMethods">
+        <data key="cardNumberEnding">5100</data>
+        <data key="cardExpire">12/2020</data>
+    </entity>
 </entities>
