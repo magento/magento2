@@ -28,7 +28,10 @@
         <actionGroup ref="SaveProductFormNoSuccessCheck" stepKey="saveProduct"/>
         <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="Link URL's domain is not in list of downloadable_domains in env.php." stepKey="seeLinkUrlInvalidMessage" after="saveProduct" />
         <magentoCLI stepKey="addDownloadableDomain2" command="downloadable:domains:add static.magento.com" after="seeLinkUrlInvalidMessage" />
-        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable" after="addDownloadableDomain2"/>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillDownloadableProductFormAgain" after="addDownloadableDomain2">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable" after="fillDownloadableProductFormAgain"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkIsLinksPurchasedSeparately" after="checkIsDownloadable"/>
         <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableProductLinkAgain" after="checkIsLinksPurchasedSeparately">
             <argument name="link" value="downloadableLink"/>
