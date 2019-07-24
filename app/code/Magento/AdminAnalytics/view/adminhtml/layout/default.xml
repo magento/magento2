@@ -13,6 +13,8 @@
                     <argument name="tracking_url" xsi:type="string">//assets.adobedtm.com/launch-EN30eb7ffa064444f1b8b0368ef38fd3a9.min.js</argument>
                 </arguments>
             </block>
+
+            <block name="confirm_popup_block" template="Magento_AdminAnalytics::confirm_popup.phtml"/>
         </referenceContainer>
     </body>
 </page>

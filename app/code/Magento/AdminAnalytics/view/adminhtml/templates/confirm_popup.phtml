@@ -1,0 +1,86 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<div class="confirmation-modal-content">
+    <p>Help us improve Magento Admin by allowing us to collect usage data.</p>
+    <p>All usage data that we collect for this purpose cannot be used to individually identify you and is used only to improve the Magento Admin and related products and services.</p>
+    <p>You can learn more and opt out at any time by following the instructions in <a href="https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html" target="_blank">merchant documentation</a></p>
+</div>
+
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/modal'
+    ], function ($) {
+        'use strict';
+
+        $('.confirmation-modal-content').modal({
+            imports: {
+                logAction:  '${ $.provider }:data.logAction'
+            },
+            title: 'Allow admin usage data collection',
+            autoOpen: true,
+            type: 'popup',
+            clickableOverlay: false,
+            responsive: true,
+            keyEventHandlers: {
+                escapeKey: function(){}
+            },
+            opened: function($Event){
+                $('.modal-header button.action-close', $Event.srcElement).hide();
+            },
+            buttons: [
+                {
+                    text: $.mage.__(`Don't Allow`),
+                    class: 'action',
+                    click: function(){
+                        console.log(`I clicked Don't Allow`);
+
+
+                        var data = {
+                            'form_key': window.FORM_KEY
+                        };
+                        console.log(data.logAction)
+                        $.ajax({
+                            type: 'POST',
+                            url: '/magento2ce/admin_michell/adminAnalytics/config/disableAdminUsage',
+                            data: data,
+                            showLoader: true
+                        }).done(function (xhr) {
+                            if (xhr.error) {
+                                self.onError(xhr);
+                            }
+                        }).fail(this.onError);
+                        this.closeModal();
+                    },
+                },
+                {
+                    text: $.mage.__('Ok'),
+                    class: 'action',
+                    click: function(){
+                        console.log("I clicked Ok");
+                        var data = {
+                            'form_key': window.FORM_KEY
+                        };
+                        $.ajax({
+                            type: 'POST',
+                            url: '/magento2ce/admin_michell/adminAnalytics/config/enableAdminUsage',
+                            data: data,
+                            showLoader: true
+                        }).done(function (xhr) {
+                            if (xhr.error) {
+                                self.onError(xhr);
+                            }
+                        }).fail(this.onError);
+
+                        this.closeModal();
+                    },
+                }
+            ],
+        });
+    });
+</script>
