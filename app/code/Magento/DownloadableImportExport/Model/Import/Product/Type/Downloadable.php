@@ -16,7 +16,6 @@ use \Magento\Store\Model\Store;
  * Class Downloadable
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -351,34 +350,34 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function isRowValidSample(array $rowData)
     {
-        $result = false;
-        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
-            && $rowData[self::COL_DOWNLOADABLE_SAMPLES] != ''
-            && $this->sampleGroupTitle($rowData) == '') {
-            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
-            $result = true;
-        }
-        if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])
-            && $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '') {
-            $sampleData = $this->prepareSampleData($rowData[static::COL_DOWNLOADABLE_SAMPLES]);
+        $hasSampleLinkData = (
+            isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
+            $rowData[self::COL_DOWNLOADABLE_SAMPLES] != ''
+        );
 
-            $result = $this->isTitle($sampleData);
-            foreach ($sampleData as $link) {
-                if (isset($link['sample_type']) &&
-                    $link['sample_type'] === 'url' &&
-                    isset($link['sample_url']) &&
-                    strlen($link['sample_url']) &&
-                    !$this->domainValidator->isValid($link['sample_url'])
-                ) {
-                    $this->_entityModel->addRowError(static::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
-                    $result = true;
-                }
+        if (!$hasSampleLinkData) {
+            return false;
+        }
+
+        $sampleData = $this->prepareSampleData($rowData[static::COL_DOWNLOADABLE_SAMPLES]);
+
+        if ($this->sampleGroupTitle($rowData) == '') {
+            $result = true;
+            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
+        }
+
+        $result = $result ?? $this->isTitle($sampleData);
+
+        foreach ($sampleData as $link) {
+            if ($this->hasDomainNotInWhitelist($link, 'sample_type', 'sample_url')) {
+                $this->_entityModel->addRowError(static::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $result = true;
             }
         }
+
         return $result;
     }
 
@@ -387,36 +386,34 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $rowData
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function isRowValidLink(array $rowData)
     {
-        $result = false;
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
-            $rowData[self::COL_DOWNLOADABLE_LINKS] != '' &&
-            $this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == ''
-        ) {
+        $hasLinkData = (
+            isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
+            $rowData[self::COL_DOWNLOADABLE_LINKS] != ''
+        );
+
+        if (!$hasLinkData) {
+            return false;
+        }
+
+        $linkData = $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
+
+        if ($this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == '') {
             $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
             $result = true;
         }
-        if (isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
-            $rowData[self::COL_DOWNLOADABLE_LINKS] != ''
-        ) {
-            $linkData = $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
-            $result = $this->isTitle($linkData);
 
-            foreach ($linkData as $link) {
-                if (isset($link['link_type']) &&
-                    $link['link_type'] === 'url' &&
-                    isset($link['link_url']) &&
-                    strlen($link['link_url']) &&
-                    !$this->domainValidator->isValid($link['link_url'])
-                ) {
-                    $this->_entityModel->addRowError(static::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
-                    $result = true;
-                }
+        $result = $result ?? $this->isTitle($linkData);
+
+        foreach ($linkData as $link) {
+            if ($this->hasDomainNotInWhitelist($link, 'link_type', 'link_url')) {
+                $this->_entityModel->addRowError(static::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $result = true;
             }
         }
+
         return $result;
     }
 
@@ -907,5 +904,22 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         ];
         $this->productIds = [];
         return $this;
+    }
+
+    /**
+     * @param array $link
+     * @param string $linkTypeKey
+     * @param string $linkUrlKey
+     * @return bool
+     */
+    private function hasDomainNotInWhitelist(array $link, string $linkTypeKey, string $linkUrlKey): bool
+    {
+        return (
+            isset($link[$linkTypeKey]) &&
+            $link[$linkTypeKey] === 'url' &&
+            isset($link[$linkUrlKey]) &&
+            strlen($link[$linkUrlKey]) &&
+            !$this->domainValidator->isValid($link[$linkUrlKey])
+        );
     }
 }
