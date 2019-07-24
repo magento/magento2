@@ -136,7 +136,7 @@ class ConfigShowCommand extends Command
      * Shows error message if configuration for given path doesn't exist
      * or scope/scope-code doesn't pass validation.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -151,10 +151,12 @@ class ConfigShowCommand extends Command
             $configValue = $this->configSource->get($configPath);
 
             if ($configValue == null && empty($configValue)) {
-                $output->writeln(sprintf(
-                    '<error>%s</error>',
-                    __('Configuration for path: "%1" doesn\'t exist', $this->inputPath)->render()
-                ));
+                $output->writeln(
+                    sprintf(
+                        '<error>%s</error>',
+                        __('Configuration for path: "%1" doesn\'t exist', $this->inputPath)->render()
+                    )
+                );
                 return Cli::RETURN_FAILURE;
             }
 
