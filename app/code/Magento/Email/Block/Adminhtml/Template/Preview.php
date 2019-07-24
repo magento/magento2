@@ -88,7 +88,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $templateProcessed = $this->_maliciousCode->filter($templateProcessed);
 
         if ($template->isPlain()) {
-            $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
+            $templateProcessed = "<pre>" . $this->escapeHtml($templateProcessed) . "</pre>";
         }
 
         \Magento\Framework\Profiler::stop($this->profilerName);

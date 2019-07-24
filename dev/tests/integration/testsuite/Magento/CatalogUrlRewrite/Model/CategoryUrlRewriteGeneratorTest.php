@@ -8,7 +8,9 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -316,6 +318,53 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
         ];
 
         $this->assertResults($productExpectedResult, $actualResults);
+    }
+
+    /**
+     * Check number of records after removing product
+     *
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @return void
+     */
+    public function testRemoveCatalogUrlRewrites()
+    {
+        /** @var CategoryRepository $categoryRepository */
+        $categoryRepository = $this->objectManager->create(CategoryRepository::class);
+        $category = $categoryRepository->get(5);
+        $categoryId = $category->getId();
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepository::class);
+        $product = $productRepository->get('12345');
+        $productId = $product->getId();
+
+        $countBeforeRemoving = $this->getCountOfRewrites($productId, $categoryId);
+        $productRepository->delete($product);
+        $countAfterRemoving = $this->getCountOfRewrites($productId, $categoryId);
+        $this->assertEquals($countBeforeRemoving - 1, $countAfterRemoving);
+    }
+
+    /**
+     * Get count of records in table
+     *
+     * @param $productId
+     * @param $categoryId
+     * @return string
+     */
+    private function getCountOfRewrites($productId, $categoryId): string
+    {
+        /** @var Product $model */
+        $model = $this->objectManager->get(Product::class);
+        $connection = $model->getConnection();
+        $select = $connection->select();
+        $select->from(Product::TABLE_NAME, 'COUNT(*)');
+        $select->where('category_id = ?', $categoryId);
+        $select->where('product_id = ?', $productId);
+        return $connection->fetchOne($select);
     }
 
     /**

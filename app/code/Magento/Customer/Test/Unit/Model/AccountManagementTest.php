@@ -816,14 +816,18 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         if ($testNumber == 1) {
             $this->expectException(\Magento\Framework\Exception\InputException::class);
-            $this->expectExceptionMessage('The password needs at least ' . $minPasswordLength . ' characters. '
-                . 'Create a new password and try again.');
+            $this->expectExceptionMessage(
+                'The password needs at least ' . $minPasswordLength . ' characters. '
+                . 'Create a new password and try again.'
+            );
         }
 
         if ($testNumber == 2) {
             $this->expectException(\Magento\Framework\Exception\InputException::class);
-            $this->expectExceptionMessage('Minimum of different classes of characters in password is ' .
-                $minCharacterSetsNum . '. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.');
+            $this->expectExceptionMessage(
+                'Minimum of different classes of characters in password is ' .
+                $minCharacterSetsNum . '. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.'
+            );
         }
 
         $customer = $this->getMockBuilder(Customer::class)->disableOriginalConstructor()->getMock();

@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Reports\Model\ResourceModel\Product;
+
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Products Report collection.
@@ -76,7 +76,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -90,6 +90,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param ProductLimitationFactory|null $productLimitationFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -104,7 +105,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -117,7 +118,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ProductLimitationFactory $productLimitationFactory = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
         $this->setProductEntityTableName($product->getEntityTable());
@@ -142,7 +144,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $connection
+            $connection,
+            $productLimitationFactory
         );
         $this->_eventTypeFactory = $eventTypeFactory;
         $this->_productType = $productType;

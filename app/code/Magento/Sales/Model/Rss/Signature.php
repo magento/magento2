@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\Rss;
 
-use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 /**
  * Class for generating signature.
@@ -16,47 +16,17 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 class Signature
 {
     /**
-     * Version of encryption key.
-     *
-     * @var int
+     * @var EncryptorInterface
      */
-    private $keyVersion;
+    private $encryptor;
 
     /**
-     * Array of encryption keys.
-     *
-     * @var string[]
-     */
-    private $keys = [];
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
-        \Magento\Framework\App\DeploymentConfig $deploymentConfig
+        EncryptorInterface $encryptor
     ) {
-        $this->deploymentConfig = $deploymentConfig;
-        // load all possible keys
-        $this->keys = preg_split(
-            '/\s+/s',
-            (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
-        );
-        $this->keyVersion = count($this->keys) - 1;
-    }
-
-    /**
-     * Get secret key.
-     *
-     * @return string
-     */
-    private function getSecretKey(): string
-    {
-        return (string)$this->keys[$this->keyVersion];
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -67,6 +37,18 @@ class Signature
      */
     public function signData(string $data): string
     {
-        return hash_hmac('sha256', $data, pack('H*', $this->getSecretKey()));
+        return $this->encryptor->hash($data);
+    }
+
+    /**
+     * Check if valid signature is provided for given data.
+     *
+     * @param string $data
+     * @param string $signature
+     * @return bool
+     */
+    public function isValid(string $data, string $signature): bool
+    {
+        return $this->encryptor->validateHash($data, $signature);
     }
 }

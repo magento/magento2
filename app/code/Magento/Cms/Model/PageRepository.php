@@ -92,8 +92,6 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
-     * @param UserContextInterface|null $userContext
-     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -105,9 +103,7 @@ class PageRepository implements PageRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null,
-        ?UserContextInterface $userContext = null,
-        ?AuthorizationInterface $authorization = null
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -118,8 +114,34 @@ class PageRepository implements PageRepositoryInterface
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
-        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
-        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
+    }
+
+    /**
+     * Get user context.
+     *
+     * @return UserContextInterface
+     */
+    private function getUserContext(): UserContextInterface
+    {
+        if (!$this->userContext) {
+            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
+        }
+
+        return $this->userContext;
+    }
+
+    /**
+     * Get authorization service.
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization(): AuthorizationInterface
+    {
+        if (!$this->authorization) {
+            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        }
+
+        return $this->authorization;
     }
 
     /**
@@ -137,12 +159,12 @@ class PageRepository implements PageRepositoryInterface
         }
         try {
             //Validate changing of design.
-            $userType = $this->userContext->getUserType();
+            $userType = $this->getUserContext()->getUserType();
             if ((
                     $userType === UserContextInterface::USER_TYPE_ADMIN
                     || $userType === UserContextInterface::USER_TYPE_INTEGRATION
                 )
-                && !$this->authorization->isAllowed('Magento_Cms::save_design')
+                && !$this->getAuthorization()->isAllowed('Magento_Cms::save_design')
             ) {
                 if (!$page->getId()) {
                     $page->setLayoutUpdateXml(null);
@@ -224,10 +246,9 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->delete($page);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__(
-                'Could not delete the page: %1',
-                $exception->getMessage()
-            ));
+            throw new CouldNotDeleteException(
+                __('Could not delete the page: %1', $exception->getMessage())
+            );
         }
         return true;
     }

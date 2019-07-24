@@ -377,6 +377,14 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{orderStatus}}" stepKey="seeOrderStatusCanceled"/>
     </actionGroup>
 
+    <!--Assert that the product is not in the order items list-->
+    <actionGroup name="dontSeeProductInItemsOrdered">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <dontSee selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="dontseeSkuInItemsOrdered"/>
+    </actionGroup>
+
     <!--Select Check Money payment method-->
     <actionGroup name="SelectCheckMoneyPaymentMethod">
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
@@ -418,6 +426,7 @@
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
         <waitForPageLoad stepKey="waitForProductsListForOrder"/>
         <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
+        <waitForPageLoad stepKey="waitForClickProduct"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addSelectedProductToOrder"/>
         <waitForPageLoad stepKey="waitForProductAddedInOrder"/>
         <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
@@ -425,6 +434,7 @@
         <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
         <waitForPageLoad stepKey="waitForShippingMethodsThickened"/>
         <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForSubmitOrder"/>
         <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
 </actionGroups>

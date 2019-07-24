@@ -159,7 +159,7 @@ class OrderStatus implements DataProviderInterface
         }
 
         $data = (string)$this->request->getParam('data');
-        if ((string)$this->request->getParam('signature') !== $this->signature->signData($data)) {
+        if (!$this->signature->isValid($data, (string)$this->request->getParam('signature'))) {
             return null;
         }
         // phpcs:ignore
@@ -229,9 +229,11 @@ class OrderStatus implements DataProviderInterface
                 $entries[] = ['title' => $title, 'link' => $url, 'description' => $description];
             }
         }
-        $title = __('Order #%1 created at %2', $this->order->getIncrementId(), $this->localeDate->formatDate(
-            $this->order->getCreatedAt()
-        ));
+        $title = __(
+            'Order #%1 created at %2',
+            $this->order->getIncrementId(),
+            $this->localeDate->formatDate($this->order->getCreatedAt())
+        );
         $url = $this->urlBuilder->getUrl('sales/order/view', ['order_id' => $this->order->getId()]);
         $description = '<p>' . __('Current Status: %1<br/>', $this->order->getStatusLabel()) .
             __('Total: %1<br/>', $this->order->formatPrice($this->order->getGrandTotal())) . '</p>';

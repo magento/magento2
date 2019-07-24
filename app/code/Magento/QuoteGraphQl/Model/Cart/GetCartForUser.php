@@ -58,6 +58,7 @@ class GetCartForUser
      * @return Quote
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function execute(string $cartHash, ?int $customerId): Quote
     {
@@ -96,7 +97,7 @@ class GetCartForUser
         $cartCustomerId = (int)$cart->getCustomerId();
 
         /* Guest cart, allow operations */
-        if (!$cartCustomerId && null === $customerId) {
+        if (0 === $cartCustomerId && (null === $customerId || 0 === $customerId)) {
             return $cart;
         }
 

@@ -10,7 +10,7 @@ namespace Magento\Framework\Image\Adapter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Class AbstractAdapter
+ * Image abstract adapter
  *
  * @file        Abstract.php
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -626,7 +626,7 @@ abstract class AbstractAdapter implements AdapterInterface
             empty($frameWidth) && empty($frameHeight)
         ) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception('Invalid image dimensions.');
+            throw new \InvalidArgumentException('Invalid image dimensions.');
         }
     }
 
@@ -694,7 +694,9 @@ abstract class AbstractAdapter implements AdapterInterface
             } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 $this->logger->critical($e);
                 //phpcs:ignore Magento2.Exceptions.DirectThrow
-                throw new \Exception('Unable to write file into directory ' . $destination . '. Access forbidden.');
+                throw new \DomainException(
+                    'Unable to write file into directory ' . $destination . '. Access forbidden.'
+                );
             }
         }
 
@@ -708,7 +710,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _canProcess()
     {
-        return !empty($this->_fileName);
+        return !empty($this->_fileName) && filesize($this->_fileName) > 0;
     }
 
     /**
@@ -717,11 +719,19 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string $filePath
      * @return bool
      * @throws \InvalidArgumentException
+     * @throws \DomainException
+     * @throws \BadFunctionCallException
+     * @throws \RuntimeException
+     * @throws \OverflowException
      */
     public function validateUploadFile($filePath)
     {
         if (!file_exists($filePath)) {
             throw new \InvalidArgumentException('Upload file does not exist.');
+        }
+
+        if (filesize($filePath) === 0) {
+            throw new \InvalidArgumentException('Wrong file size.');
         }
 
         try {

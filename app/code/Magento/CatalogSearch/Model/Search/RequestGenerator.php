@@ -103,7 +103,7 @@ class RequestGenerator
                 }
             }
             /** @var $attribute Attribute */
-            if (!$attribute->getIsSearchable() || in_array($attribute->getAttributeCode(), ['price', 'sku'], true)) {
+            if (!$attribute->getIsSearchable() || in_array($attribute->getAttributeCode(), ['price'], true)) {
                 // Some fields have their own specific handlers
                 continue;
             }

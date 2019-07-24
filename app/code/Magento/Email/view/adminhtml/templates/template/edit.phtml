@@ -6,11 +6,9 @@
 
 use Magento\Framework\App\TemplateTypesInterface;
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
 ?>
-<?php if (!$block->getEditMode()): ?>
+<?php if (!$block->getEditMode()) : ?>
 <form action="<?= $block->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
     <?= $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset form-inline">
@@ -19,14 +17,14 @@ use Magento\Framework\App\TemplateTypesInterface;
             <label class="admin__field-label" for="template_select"><?= $block->escapeHtml(__('Template')) ?></label>
             <div class="admin__field-control">
                 <select id="template_select" name="code" class="admin__control-select required-entry">
-                    <?php foreach ($block->getTemplateOptions() as $group => $options): ?>
-                        <?php if ($group): ?>
+                    <?php foreach ($block->getTemplateOptions() as $group => $options) : ?>
+                        <?php if ($group) : ?>
                             <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
                         <?php endif; ?>
-                        <?php foreach ($options as $option): ?>
+                        <?php foreach ($options as $option) : ?>
                             <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"<?= /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?></option>
                         <?php endforeach; ?>
-                        <?php if ($group): ?>
+                        <?php if ($group) : ?>
                             </optgroup>
                         <?php endif; ?>
                     <?php endforeach; ?>

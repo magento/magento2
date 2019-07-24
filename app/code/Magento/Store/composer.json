@@ -13,7 +13,8 @@
         "magento/module-media-storage": "*",
         "magento/module-ui": "*",
         "magento/module-customer": "*",
-        "magento/module-authorization": "*"
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*"
     },
     "suggest": {
         "magento/module-deploy": "*"
