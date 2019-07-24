@@ -25,7 +25,7 @@
         <!--Go to New CMS Page page-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <!--Set page disabled-->
-        <actionGroup ref="AdminDisableCMSPage" stepKey="setCMSPageDisabled"/>
+        <actionGroup ref="AdminDisableCMSPageActionGroup" stepKey="setCMSPageDisabled"/>
         <!--Fill the CMS page form-->
         <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForDisabledPage"/>
         <!--Verify successfully saved-->
