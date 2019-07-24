@@ -79,7 +79,7 @@
         "zendframework/zend-text": "^2.6.0",
         "zendframework/zend-uri": "^2.5.1",
         "zendframework/zend-validator": "^2.6.0",
-        "zendframework/zend-view": "~2.10.0",
+        "zendframework/zend-view": "~2.11.2",
         "guzzlehttp/guzzle": "^6.3.3"
     },
     "require-dev": {
