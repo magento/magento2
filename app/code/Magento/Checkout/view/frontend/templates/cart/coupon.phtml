@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @var \Magento\Framework\View\Element\AbstractBlock $block
+ */
 ?>
 <div class="block discount"
      id="block-discount"
@@ -51,6 +54,9 @@
                     <?php endif; ?>
                 </div>
             </div>
+            <?php if (!strlen($block->getCouponCode())) : ?>
+                <?= /* @noEscape */ $block->getChildHtml('captcha') ?>
+            <?php endif; ?>
         </form>
     </div>
 </div>

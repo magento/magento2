@@ -35,6 +35,7 @@
                 <button class="action primary checkout"
                         type="submit"
                         click="beforePlaceOrder"
+                        css="disabled: !isPlaceOrderActionAllowed()"
                         attr="title: $t('Place Order')"
                 >
                     <span translate="'Place Order'"></span>
