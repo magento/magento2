@@ -79,7 +79,7 @@ class ProductCategories
     }
 
     /**
-     * Get catalog_product_category table name
+     * Get catalog_category_product table name
      *
      * @param int $storeId
      * @return string
