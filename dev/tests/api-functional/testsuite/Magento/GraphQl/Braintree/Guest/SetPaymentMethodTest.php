@@ -121,6 +121,28 @@ class SetPaymentMethodTest extends GraphQlAbstract
         $this->graphQlMutation($setPaymentQuery);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
+     * @expectedException \Exception
+     */
+    public function testSetPaymentMethodInvalidMethodInput()
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
+        $setPaymentQuery = $this->getSetPaymentBraintreeQueryInvalidMethodInput($maskedQuoteId);
+        $this->expectExceptionMessage("for \"braintree\" is missing.");
+        $this->graphQlMutation($setPaymentQuery);
+    }
+
     private function assertPlaceOrderResponse(array $response, string $reservedOrderId): void
     {
         self::assertArrayHasKey('placeOrder', $response);
@@ -152,7 +174,7 @@ mutation {
       code:"braintree"
       braintree:{
         is_active_payment_token_enabler:false
-        payment_method_nonce:"fake-valid-nonce"
+        payment_method_nonce:"{$nonce}"
       }
     }
   }) {
@@ -178,6 +200,31 @@ mutation {
     cart_id:"{$maskedQuoteId}"
     payment_method:{
       code:"braintree"
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getSetPaymentBraintreeQueryInvalidMethodInput(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"braintree"
+      braintree: {}
     }
   }) {
     cart {

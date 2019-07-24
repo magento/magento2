@@ -31,6 +31,12 @@ class BraintreeVaultDataProvider implements AdditionalDataProviderInterface
             );
         }
 
+        if (!isset($args[static::PATH_ADDITIONAL_DATA]['public_hash'])) {
+            throw new GraphQlInputException(
+                __('Required parameter "public_hash" for "braintree_cc_vault" is missing.')
+            );
+        }
+
         return $args[static::PATH_ADDITIONAL_DATA];
     }
 }
