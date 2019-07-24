@@ -35,10 +35,14 @@
             <!--Assign crated source to product and set product to Out of Stock.-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
             <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+            <!--Unassign Default Source.-->
+            <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSource">
+                <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+            </actionGroup>
             <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct">
                 <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
             </actionGroup>
-            <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="Out of Stock" stepKey="setProductToOutOfStock"/>
+            <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setProductToOutOfStock"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedSimpleProduct"/>
         </before>
 
@@ -71,8 +75,8 @@
 
         <!--Set Product to In Stock.-->
         <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
-        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="In Stock" stepKey="setProductToInStockStock"/>
-        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductQuantity"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="In Stock" stepKey="setProductToInStockStock"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setProductQuantity"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedSimpleProduct"/>
 
         <!--Verify product is visible on storefront page.-->
