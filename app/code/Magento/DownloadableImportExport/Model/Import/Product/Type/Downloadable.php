@@ -268,6 +268,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $params
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
+     * @param DomainValidator $domainValidator
      * @param MetadataPool $metadataPool
      */
     public function __construct(
@@ -874,6 +875,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     /**
      * Uploading files into the "downloadable/files" media folder.
+     *
      * Return a new file name if the same file is already exists.
      *
      * @param string $fileName
