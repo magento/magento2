@@ -321,7 +321,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * Retrieve CSS processor
+     * Get CSS processor
      *
      * @deprecated 100.1.2
      * @return Css\Processor
@@ -335,7 +335,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * Retrieve pub directory
+     * Get pub directory
      *
      * @deprecated 100.1.2
      * @param string $dirType
@@ -855,7 +855,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return $css;
         } else {
             // Return CSS comment for debugging purposes
-            return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
+            return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
     }
 
