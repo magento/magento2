@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontCustomerSavedCardActionGroup">
         <arguments>
-            <argument name="card" type="entity" defaultValue="StoredPaymentMethods"/>
+            <argument name="card" type="entity"/>
         </arguments>
         <see selector="{{StorefrontCustomerStoredPaymentMethodsSection.cardNumber}}" userInput="{{card.cardNumberEnding}}" stepKey="verifyCardNumber"/>
         <see selector="{{StorefrontCustomerStoredPaymentMethodsSection.expirationDate}}" userInput="{{card.cardExpire}}" stepKey="verifyCardExpire"/>
