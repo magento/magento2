@@ -158,7 +158,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->directoryMock)
         );
 
-        $this->fileMock   = $this->createPartialMock(\Magento\Framework\Filesystem\Driver\File::class, ['getParentDirectory']);
+        $this->fileMock   = $this->createPartialMock(
+            \Magento\Framework\Filesystem\Driver\File::class,
+            ['getParentDirectory']
+        );
         $this->ioFileMock = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
         $this->ioFileMock->expects(
             $this->any()
