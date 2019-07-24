@@ -19,31 +19,32 @@
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="newDefaultCategory"/>
+            <createData entity="_defaultBlock" stepKey="newDefaultBlock"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="deleteBlock" stepKey="deleteCreatedBlock">
-                <argument name="Block" value="_defaultBlock"/>
-            </actionGroup>
             <deleteData createDataKey="newDefaultCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="newDefaultBlock" stepKey="deleteBlock"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminNavigateToCreateNewCMSBlockPageActionGroup" stepKey="navigateToCreateNewCMSBlockPage"/>
-        <actionGroup ref="FillOutBlockContent" stepKey="fillOutBlockContent"/>
+        <actionGroup ref="AdminOpenCmsBlockActionGroup" stepKey="openCmsBlock">
+            <argument name="block_id" value="$$newDefaultBlock.id$$"/>
+        </actionGroup>
         <actionGroup ref="AdminSetCMSBlockDisabledActionGroup" stepKey="disableBlock"/>
         <actionGroup ref="saveCMSBlock" stepKey="saveCMSBlock"/>
 
-        <actionGroup ref="AdminOpenCMSBlocksGridActionGroup" stepKey="openCMSBlocksGrid"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilters"/>
-        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortGridByIdDescending"/>
-        <actionGroup ref="AdminSelectCMSBlockFromGridActionGroup" stepKey="verifyBlockInGrid">
-            <argument name="identifier" value="_defaultBlock.identifier"/>
-        </actionGroup>
-
-        <actionGroup ref="AdminAddCmsBlockToCategoryActionGroup" stepKey="addCmsBlockToCategory">
+        <actionGroup ref="AdminOpenCategoriesPageActionGroup" stepKey="openCategoriesPage"/>
+        <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAll"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$newDefaultCategory$$"/>
         </actionGroup>
+        <actionGroup ref="AdminCategoriesOpenContentSectionActionGroup" stepKey="openContentSection"/>
+        <actionGroup ref="AdminCategoriesSetStaticBlockActionGroup" stepKey="setStaticBlock"/>
+        <actionGroup ref="AdminCategoriesSetDisplayModeActionGroup" stepKey="setDisplay">
+            <argument name="value" value="Static block only"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
 
         <actionGroup ref="AssertNoTextOnCategoryFrontPageActionGroup" stepKey="assertBlockOnCategoryFrontPage">
             <argument name="category" value="$$newDefaultCategory$$"/>
