@@ -1488,17 +1488,17 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             \Magento\Framework\DataObject\Mapper::accumulateByMap($data, $shippingAddress, $this->_shippingAddressMap);
             $this->_applyStreetAndRegionWorkarounds($shippingAddress);
             // PayPal doesn't provide detailed shipping name fields, so the name will be overwritten
-            $_arraydata = explode(' ', $data['SHIPTONAME']);
+            $nameParts = explode(' ', $data['SHIPTONAME']);
             // when there is more than one first and/or last name, we assume that the last word in the string is the last name
-            if(count($_arraydata) > 2){
-                $lastname = array_pop($_arraydata);
-                $firstname = join(' ', $_arraydata);
-                $_arraydata = array($firstname,$lastname);
+            if(count($nameParts) > 2){
+                $lastname = array_pop($nameParts);
+                $firstname = implode(' ', $nameParts);
+                $nameParts = [$firstname, $lastname];
             }
-            if (!empty($_arraydata[0]) && !empty($_arraydata[1])) {
+            if (!empty($nameParts[0]) && !empty($nameParts[1])) {
                 $shippingAddress->addData(array(
-                    'firstname'  => $_arraydata[0],
-                    'lastname'  => $_arraydata[1]
+                    'firstname'  => $nameParts[0],
+                    'lastname'  => $nameParts[1]
                 ));
             } else {
                 $shippingAddress->addData(array(
