@@ -907,6 +907,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
+     * Does link contain url not in whitelist?
+     *
      * @param array $link
      * @param string $linkTypeKey
      * @param string $linkUrlKey
