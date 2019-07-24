@@ -588,7 +588,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     public function afterSave()
     {
-        if ($this->getIsActive()) {
+        if (!$this->getIsActive()) {
             return parent::afterSave();
         }
 
