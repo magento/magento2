@@ -60,3 +60,18 @@ $results = $block->getTrackingInfo();
         </button>
     </div>
 </div>
+<script>
+    require([
+        'jquery',
+        'prototype'
+    ], function (jQuery) {
+        var hideActions = function () {
+            jQuery('.actions button.close').hide();
+        };
+
+        /* hide the close button when the content doesn't open in a modal window */
+        if (window.opener === null || typeof window.opener === "undefined") {
+            hideActions();
+        }
+    });
+</script>
