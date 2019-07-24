@@ -56,13 +56,13 @@ class SaveTest extends AbstractShipmentControllerTest
                 "Your Shipment #{$shipment->getIncrementId()} for Order #{$order->getIncrementId()}"
             ),
             new StringContains(
-                "some_tracking_title"
+                'some_tracking_title'
             ),
             new StringContains(
-                "some_racking_number"
+                'some_racking_number'
             ),
             new StringContains(
-                "shipping/tracking/popup?hash="
+                'shipping/tracking/popup?hash='
             )
         );
 
