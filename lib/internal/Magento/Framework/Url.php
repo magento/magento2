@@ -94,6 +94,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     ];
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @var string
      */
     protected $_scopeType;
@@ -204,6 +209,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Url\RouteParamsPreprocessorInterface $routeParamsPreprocessor
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $scopeType
      * @param array $data
      * @param HostChecker|null $hostChecker
@@ -221,6 +227,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Url\RouteParamsPreprocessorInterface $routeParamsPreprocessor,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $scopeType,
         array $data = [],
         HostChecker $hostChecker = null,
@@ -237,6 +244,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_scopeConfig = $scopeConfig;
         $this->routeParamsPreprocessor = $routeParamsPreprocessor;
         $this->_scopeType = $scopeType;
+        $this->_storeManager = $storeManager;
         $this->hostChecker = $hostChecker ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(HostChecker::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -1142,21 +1150,28 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getCurrentUrl()
     {
-        $httpHostWithPort = $this->_request->getHttpHost(false);
-        $httpHostWithPort = explode(':', $httpHostWithPort);
-        $httpHost = isset($httpHostWithPort[0]) ? $httpHostWithPort[0] : '';
-        $port = '';
-        if (isset($httpHostWithPort[1])) {
+        if ($this->_storeManager->getStore() && $this->_storeManager->getStore()->getBaseUrl()) {
+            $baseUrl = rtrim($this->_storeManager->getStore()->getBaseUrl(), '/');
+            $path    = $this->_request->getOriginalPathInfo();
+        } else {
+            /** @var \Zend\Uri\Http */
+            $requestUri = $this->_request->getUri();
+            if (!$requestUri) {
+                throw new \Exception("No request URI defined. Cannot determine current url.");
+            }
+
+            $requestPort  = $requestUri->getPort();
             $defaultPorts = [
                 \Magento\Framework\App\Request\Http::DEFAULT_HTTP_PORT,
                 \Magento\Framework\App\Request\Http::DEFAULT_HTTPS_PORT,
             ];
-            if (!in_array($httpHostWithPort[1], $defaultPorts)) {
-                /** Custom port */
-                $port = ':' . $httpHostWithPort[1];
-            }
+            $port         = (in_array($requestPort, $defaultPorts)) ? ':' . $requestPort : '';
+
+            $baseUrl = $requestUri->getScheme() . '://' . $requestUri->getHost() . $port;
+            $path    = $requestUri->getPath();
         }
-        return $this->_request->getScheme() . '://' . $httpHost . $port . $this->_request->getRequestUri();
+
+        return $baseUrl . $path;
     }
 
     /**

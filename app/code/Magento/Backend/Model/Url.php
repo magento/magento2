@@ -102,6 +102,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * @param Auth\Session $authSession
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Store\Model\StoreFactory $storeFactory
+     * @param \Magento\Store\Model\StoreManager $storeManager
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param array $data
      * @param HostChecker|null $hostChecker
@@ -126,6 +127,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Store\Model\StoreFactory $storeFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey $formKey,
         array $data = [],
         HostChecker $hostChecker = null,
@@ -144,6 +146,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             $queryParamsResolver,
             $scopeConfig,
             $routeParamsPreprocessor,
+            $storeManager,
             $scopeType,
             $data,
             $hostChecker,
