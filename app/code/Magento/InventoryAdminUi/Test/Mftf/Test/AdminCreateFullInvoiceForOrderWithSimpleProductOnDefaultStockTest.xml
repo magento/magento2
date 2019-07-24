@@ -64,7 +64,6 @@
         </after>
 
         <!--Create Order with Simple product from Admin-->
-
         <comment userInput="Create order with Simple product from admin area." stepKey="createOrderWithSimpleProductComment"/>
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
             <argument name="customer" value="$$customer$$"/>
@@ -103,6 +102,5 @@
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 1" stepKey="orderedQuantity"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced	1" stepKey="invoicedQuantity"/>
-
     </test>
 </tests>
