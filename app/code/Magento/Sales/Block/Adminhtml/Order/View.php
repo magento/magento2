@@ -449,7 +449,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getBackUrl()
     {
-        if($this->getRequest()->getParam('customer_id')) {
+        if ($this->getRequest()->getParam('customer_id')) {
             return $this->getUrl('customer/index/edit', ['id'=> $this->getRequest()->getParam('customer_id')]);
         }
         if ($this->getOrder() && $this->getOrder()->getBackUrl()) {
