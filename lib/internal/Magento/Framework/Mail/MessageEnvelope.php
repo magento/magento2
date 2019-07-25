@@ -172,9 +172,9 @@ class MessageEnvelope implements MessageEnvelopeInterface
      */
     public function getBody(): MimeMessageInterface
     {
-        return $this->mimeMessageFactory->create([
-            'parts' => $this->message->getBody()->getParts()
-        ]);
+        return $this->mimeMessageFactory->create(
+            ['parts' => $this->message->getBody()->getParts()]
+        );
     }
 
     /**

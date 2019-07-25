@@ -22,19 +22,20 @@ class MimePart implements MimePartInterface
     /**
      * MimePart constructor
      *
-     * @param string $disposition
-     * @param string $description
-     * @param string $fileName
-     * @param string $charset
-     * @param string $boundary
-     * @param string $location
-     * @param string $language
-     * @param bool $isStream
-     * @param $content
-     * @param array $filters
-     * @param string $type
-     * @param string $encoding
-     * @SuppressWarnings(PHPMD.NPathComplexity, PHPMD.ExcessiveParameterList)
+     * @param resource|string $content
+     * @param string|null $type
+     * @param string|null $fileName
+     * @param string|null $disposition
+     * @param string|null $encoding
+     * @param string|null $description
+     * @param array|null $filters
+     * @param string|null $charset
+     * @param string|null $boundary
+     * @param string|null $location
+     * @param string|null $language
+     * @param bool|null $isStream
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $content,

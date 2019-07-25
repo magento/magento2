@@ -130,7 +130,7 @@ class TransportBuilder
         ObjectManagerInterface $objectManager,
         TransportInterfaceFactory $mailTransportFactory,
         MessageInterfaceFactory $messageFactory = null,
-        MailEnvelopeBuilder $mailEnvelopeBuilder =null
+        MailEnvelopeBuilder $mailEnvelopeBuilder = null
     ) {
         $this->templateFactory = $templateFactory;
         $this->objectManager = $objectManager;
@@ -230,12 +230,13 @@ class TransportBuilder
     }
 
     /**
+     * Add mail attachment
      *
-     *
-     * @param $content
+     * @param resource|string $content
      * @param string $type
      * @param string $fileName
      * @param string $disposition
+     *
      * @return $this
      */
     public function addAttachment(
