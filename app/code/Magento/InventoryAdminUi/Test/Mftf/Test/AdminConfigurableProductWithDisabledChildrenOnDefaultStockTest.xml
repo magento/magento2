@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductWithDisabledChildrenOnDefaultStockTest">
+        <annotations>
+            <stories value="Configurable Product Default Stock."/>
+            <title value="Configurable Product with Disabled Children on Default Stock."/>
+            <description value="Verify, configurable product won't be visible on storefront after it's children have been disabled."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457025/scenarios/1698126"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional source and stock.-->
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <createData entity="_defaultCategory" stepKey="category"/>
+        </before>
+        <after>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedConfigurableProduct">
+                <argument name="sku" value="{{ConfigurableMsiProduct.sku}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <!-- Delete Created Data -->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+        <!--Create configurable product.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="addConfigurableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForConfigurableProductNewPageLoad"/>
+        <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillProductName"/>
+        <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillProductSku"/>
+        <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillProductPrice"/>
+        <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillProductWeight"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton"/>
+        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresents"/>
+        <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="selectColorAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorWhite"/>
+        <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameWhite"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveWhiteColor"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="openSelectSourcesModalWindow"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultSourceByNameForAssignment">
+            <argument name="keyword" value="_defaultSource.name"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.checkboxByValue(_defaultSource.name)}}" stepKey="selectDefaultSource"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="doneAssignSources"/>
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillQuantityForCustomSource"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToConfigurableProduct">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
+        <!--Verify configurable product on storefront.-->
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsPresentOnCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="checkConfigurableOnProductViewPage">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <!--Disable configurable option.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateBackToAdminProductGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridPageIsLoaded"/>
+        <actionGroup ref="filterProductGridByName" stepKey="filterWhiteConfigurableVariation">
+            <argument name="product" value="colorProductAttribute1"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="editWhiteConfigurableVariation"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
+        <!--Verify configurable product is not visible on storefront.-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <dontSee userInput="{{ConfigurableMsiProduct.name}}" stepKey="verifyProductIsNotPresentOnStorefront"/>
+        <!--Verify configurable product has 'Out Of Stock' status on PDP.-->
+        <amOnPage url="{{ConfigurableMsiProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPDPPageLoad"/>
+        <see userInput="{{ConfigurableMsiProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK" stepKey="verifyStockStatus"/>
+    </test>
+</tests>
