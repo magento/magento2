@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+  <section name="AdminCustomerMenuSection">
+    <element name="MiddleOfThePage" type="text" selector="#general_country_allow"/>
+    <element name="YotpoIconInMenu" type="text" selector="#system_config_tabs .yotpo-icon"/>
+    <element name="ReviewsAndVisualMarketingButton" type="text" selector="#system_config_tabs .yotpo-icon"/>
+  </section>
+</sections>
