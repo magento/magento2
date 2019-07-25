@@ -71,13 +71,11 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
       cart_id: "$maskedCartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data: {
             payflow_link: {           
                return_url:"http://magento.com/paypal/payflow/link/success"
                cancel_url:"http://magento.com/paypal/payflow/link/cancel"
                error_url:"http://magento.com/paypal/payflow/link/error"
             }
-          }
       }
   }) {    
        cart {
@@ -147,13 +145,11 @@ QUERY;
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data: {
             payflow_link: {           
                return_url:"http://magento.com/paypal/payflow/link/sucess"
                cancel_url:"http://magento.com/paypal/payflow/link/cancel"
                error_url:"/not/a/validUrl"
             }
-        }
       }
   }) {    
        cart {

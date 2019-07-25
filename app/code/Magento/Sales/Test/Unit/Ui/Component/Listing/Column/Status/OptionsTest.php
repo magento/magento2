@@ -39,17 +39,34 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArray()
     {
-        $collectionMock =
-            $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Status\Collection::class);
-        $options = ['options'];
+        $collectionMock = $this->createMock(
+            \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class
+        );
+
+        $options = [
+            [
+                'value' => '1',
+                'label' => 'Label'
+            ]
+        ];
+
+        $expectedOptions = [
+            [
+                'value' => '1',
+                'label' => 'Label',
+                '__disableTmpl' => true
+            ]
+        ];
 
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collectionMock);
+
         $collectionMock->expects($this->once())
             ->method('toOptionArray')
             ->willReturn($options);
-        $this->assertEquals($options, $this->model->toOptionArray());
-        $this->assertEquals($options, $this->model->toOptionArray());
+
+        $this->assertEquals($expectedOptions, $this->model->toOptionArray());
+        $this->assertEquals($expectedOptions, $this->model->toOptionArray());
     }
 }
