@@ -12,6 +12,7 @@ use \Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Abstract Resource Collection
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -44,6 +45,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @var array|null
      */
     protected $_fieldsToSelect = null;
+
+    /**
+     * Expression fields to select in query.
+     *
+     * @var array
+     */
+    private $expressionFieldsToSelect = [];
 
     /**
      * Fields initial fields to select like id_field
@@ -130,7 +138,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
@@ -170,7 +178,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _initSelect()
     {
@@ -205,7 +213,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $columnsToSelect = [];
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
-            if ($correlationName !== 'main_table') {
+            if ($correlationName !== 'main_table' || isset($this->expressionFieldsToSelect[$alias])) {
                 // Add joined fields to select
                 if ($column instanceof \Zend_Db_Expr) {
                     $column = $column->__toString();
@@ -347,6 +355,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
 
         $this->getSelect()->columns([$alias => $fullExpression]);
+        $this->expressionFieldsToSelect[$alias] = $fullExpression;
 
         return $this;
     }

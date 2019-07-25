@@ -15,6 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
+/**
+ * Class Suggestions
+ */
 class Suggestions implements SuggestedQueriesInterface
 {
     /**
@@ -66,6 +69,8 @@ class Suggestions implements SuggestedQueriesInterface
     private $storeManager;
 
     /**
+     * Suggestions constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param Config $config
      * @param QueryResultFactory $queryResultFactory
@@ -90,11 +95,9 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function getItems(QueryInterface $query, $limit = null, $additionalFilters = null)
+    public function getItems(QueryInterface $query)
     {
         $result = [];
         if ($this->isSuggestionsAllowed()) {
@@ -118,19 +121,23 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isResultsCountEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
+     * Get Suggestions
+     *
      * @param QueryInterface $query
+     *
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getSuggestions(QueryInterface $query)
     {
@@ -178,6 +185,8 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
+     * Fetch Query
+     *
      * @param array $query
      * @return array
      */
@@ -200,16 +209,18 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
+     * Is Search Suggestions Allowed
+     *
      * @return bool
      */
     private function isSuggestionsAllowed()
     {
-        $isSearchSuggestionsEnabled = (bool)$this->scopeConfig->getValue(
+        $isSuggestionsEnabled = $this->scopeConfig->isSetFlag(
             self::CONFIG_SUGGESTION_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
         $isEnabled = $this->config->isElasticsearchEnabled();
-        $isSuggestionsAllowed = ($isEnabled && $isSearchSuggestionsEnabled);
+        $isSuggestionsAllowed = ($isEnabled && $isSuggestionsEnabled);
         return $isSuggestionsAllowed;
     }
 }

@@ -6,13 +6,10 @@
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
 
     <!--Create an Account. Check Sign Up for Newsletter checkbox -->
     <actionGroup name="StorefrontCreateNewAccountNewsletterChecked" extends="SignUpNewUserFromStorefrontActionGroup">
-        <arguments>
-            <argument name="Customer"/>
-        </arguments>
         <click selector="{{StorefrontCustomerCreateFormSection.signUpForNewsletter}}" stepKey="selectSignUpForNewsletterCheckbox" after="fillLastName"/>
         <see stepKey="seeDescriptionNewsletter" userInput='You are subscribed to "General Subscription".' selector="{{CustomerMyAccountPage.DescriptionNewsletter}}" />
     </actionGroup>
@@ -28,4 +25,9 @@
         <see stepKey="seeThankYouMessage" userInput="Thank you for registering with NewStore."/>
     </actionGroup>
 
+    <!--Check Subscribed Newsletter via StoreFront-->
+    <actionGroup name="CheckSubscribedNewsletterActionGroup">
+        <amOnPage url="{{StorefrontNewsletterManagePage.url}}" stepKey="goToNewsletterManage"/>
+        <seeCheckboxIsChecked selector="{{StorefrontNewsletterManageSection.subscriptionCheckbox}}" stepKey="checkSubscribedNewsletter"/>
+    </actionGroup>
 </actionGroups>

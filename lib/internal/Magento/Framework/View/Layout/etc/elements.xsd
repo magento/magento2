@@ -17,6 +17,13 @@
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
+        <xs:complexType name="object">
+            <xs:complexContent>
+                <xs:extension base="argumentType">
+                    <xs:attribute name="shared" use="optional" type="xs:boolean"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
     </xs:redefine>
     <!-- Defined the types of elements -->
 
@@ -313,6 +320,7 @@
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>
         <xs:attribute type="xs:string" name="template" use="optional"/>
+        <xs:attribute type="xs:string" name="class" use="optional"/>
         <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
         <xs:attribute type="xs:boolean" name="remove" use="optional"/>
     </xs:complexType>

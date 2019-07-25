@@ -15,6 +15,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
         </variation>
         <variation name="ManageProductsStockTestVariation2" summary="Checking that Out of Stock products are not visible in category" ticketId="MAGETWO-13645">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
@@ -33,6 +34,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="ManageProductsStockTestVariation3" summary="Add In Stock product to cart" ticketId="MAGETWO-13645">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
@@ -51,6 +53,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="ManageProductsStockTestVariation4" summary="Enable displaying of out of stock products in category" ticketId="MAGETWO-13645">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>

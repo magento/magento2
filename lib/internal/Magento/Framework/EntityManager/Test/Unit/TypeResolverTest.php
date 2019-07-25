@@ -32,7 +32,7 @@ class TypeResolverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param object $dataObject
-     * @param string $interfaceNames
+     * @param string $interfaceName
      * @dataProvider resolveDataProvider
      */
     public function testResolve($dataObject, $interfaceName)

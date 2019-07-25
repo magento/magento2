@@ -288,7 +288,7 @@
         .lib-form-element-input(@_type: select);
     }
 
-    select[multiple="multiple"] {
+    select[multiple] {
         .lib-css(height, auto);
         background-image: none;
     }
@@ -300,6 +300,8 @@
 
     input[type="checkbox"] {
         .lib-form-element-choice(@_type: input-checkbox);
+        position: relative;
+        top: 2px;
     }
 
     input[type="radio"] {

@@ -45,7 +45,7 @@ void,void
 "Fraud Filters","Fraud Filters"
 "Place Order","Place Order"
 "Sorry, but something went wrong. Please contact the seller.","Sorry, but something went wrong. Please contact the seller."
-"Authorize.net Direct Post","Authorize.net Direct Post"
+"Authorize.Net Direct Post (Deprecated)","Authorize.Net Direct Post (Deprecated)"
 Enabled,Enabled
 "Payment Action","Payment Action"
 Title,Title
@@ -67,3 +67,9 @@ Debug,Debug
 "Minimum Order Total","Minimum Order Total"
 "Maximum Order Total","Maximum Order Total"
 "Sort Order","Sort Order"
+"x_card_type","Credit Card Type"
+"x_account_number", "Credit Card Number"
+"x_avs_code","AVS Response Code"
+"x_auth_code","Processor Authentication Code"
+"x_response_reason_text","Processor Response Text"
+"x_cvv2_resp_code","CVV2 Response Code"

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="module9_test_main_table" resource="default" engine="innodb" comment="Main Test Table for Module9">
+        <column xsi:type="int" name="module9_email_contact_id" padding="10" unsigned="true" nullable="false"
+                identity="true" comment="Entity ID"/>
+        <column xsi:type="smallint" name="module9_is_guest" padding="5" unsigned="true" nullable="true"
+                identity="false" comment="Is Guest"/>
+        <column xsi:type="int" name="module9_guest_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Guest ID"/>
+        <column xsi:type="date" name="module9_created_at" comment="Created At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="module9_email_contact_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="MODULE9_INSTALL_UNIQUE_INDEX_1">
+            <column name="module9_email_contact_id"/>
+            <column name="module9_guest_id"/>
+        </constraint>
+    </table>
+</schema>

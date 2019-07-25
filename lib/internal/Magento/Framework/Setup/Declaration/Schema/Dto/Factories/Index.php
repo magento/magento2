@@ -8,6 +8,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\TableElement\ElementNameResolver;
 use Magento\Framework\Setup\Declaration\Schema\TableNameResolver;
 
 /**
@@ -18,7 +19,7 @@ class Index implements FactoryInterface
     /**
      * Default index type.
      */
-    const DEFAULT_INDEX_TYPE = "BTREE";
+    const DEFAULT_INDEX_TYPE = "btree";
 
     /**
      * @var ObjectManagerInterface
@@ -41,27 +42,35 @@ class Index implements FactoryInterface
     private $tableNameResolver;
 
     /**
+     * @var ElementNameResolver
+     */
+    private $elementNameResolver;
+
+    /**
      * Constructor.
      *
      * @param ObjectManagerInterface $objectManager
      * @param ResourceConnection $resourceConnection
      * @param TableNameResolver $tableNameResolver
+     * @param ElementNameResolver $elementNameResolver
      * @param string $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ResourceConnection $resourceConnection,
         TableNameResolver $tableNameResolver,
+        ElementNameResolver $elementNameResolver,
         $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Index::class
     ) {
         $this->objectManager = $objectManager;
         $this->resourceConnection = $resourceConnection;
         $this->className = $className;
         $this->tableNameResolver = $tableNameResolver;
+        $this->elementNameResolver = $elementNameResolver;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(array $data)
     {
@@ -69,29 +78,12 @@ class Index implements FactoryInterface
             $data['indexType'] = self::DEFAULT_INDEX_TYPE;
         }
 
-        $nameWithoutPrefix = $data['name'];
-
-        if ($this->resourceConnection->getTablePrefix()) {
-            /**
-             * Temporary solution.
-             * @see MAGETWO-91365
-             */
-            $indexType = AdapterInterface::INDEX_TYPE_INDEX;
-            if ($data['indexType'] === AdapterInterface::INDEX_TYPE_FULLTEXT) {
-                $indexType = $data['indexType'];
-            }
-            $nameWithoutPrefix = $this->resourceConnection
-                ->getConnection($data['table']->getResource())
-                ->getIndexName(
-                    $this->tableNameResolver->getNameOfOriginTable(
-                        $data['table']->getNameWithoutPrefix()
-                    ),
-                    $data['column'],
-                    $indexType
-                );
-        }
-
-        $data['nameWithoutPrefix'] = $nameWithoutPrefix;
+        $data['nameWithoutPrefix'] = $this->elementNameResolver->getIndexNameWithoutPrefix(
+            $data['name'],
+            $data['table'],
+            $data['column'],
+            $data['indexType']
+        );
 
         return $this->objectManager->create($this->className, $data);
     }

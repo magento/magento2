@@ -6,7 +6,15 @@
 
 namespace Magento\Directory\Helper;
 
+use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Json\Helper\Data as JsonData;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Directory data helper
@@ -53,7 +61,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Country collection
      *
-     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @var Collection
      */
     protected $_countryCollection;
 
@@ -86,47 +94,49 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_optZipCountries = null;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config
+     * @var Config
      */
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_regCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var JsonData
      */
     protected $jsonHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Directory\Model\CurrencyFactory
+     * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
-     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regCollectionFactory,
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * Data constructor.
+     *
+     * @param Context $context
+     * @param Config $configCacheType
+     * @param Collection $countryCollection
+     * @param CollectionFactory $regCollectionFactory
+     * @param JsonData $jsonHelper
+     * @param StoreManagerInterface $storeManager
+     * @param CurrencyFactory $currencyFactory
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection,
-        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regCollectionFactory,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory
+        Context $context,
+        Config $configCacheType,
+        Collection $countryCollection,
+        CollectionFactory $regCollectionFactory,
+        JsonData $jsonHelper,
+        StoreManagerInterface $storeManager,
+        CurrencyFactory $currencyFactory
     ) {
         parent::__construct($context);
         $this->_configCacheType = $configCacheType;
@@ -155,7 +165,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve country collection
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
-     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @return Collection
      */
     public function getCountryCollection($store = null)
     {
@@ -169,6 +179,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve regions data json
      *
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getRegionJson()
     {
@@ -197,8 +208,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param float $amount
      * @param string $from
      * @param string $to
+     *
      * @return float
      * @SuppressWarnings(PHPMD.ShortVariable)
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function currencyConvert($amount, $from, $to = null)
     {
@@ -251,7 +264,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns the list of countries, for which region is required
      *
      * @param boolean $asJson
-     * @return array
+     * @return array|string
      */
     public function getCountriesWithStatesRequired($asJson = false)
     {
@@ -275,7 +288,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isShowNonRequiredState()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DISPLAY_ALL_STATES,
             ScopeInterface::SCOPE_STORE
         );
@@ -303,7 +316,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBaseCurrencyCode()
     {
-        return $this->scopeConfig->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default');
+        return $this->scopeConfig->getValue(
+            Currency::XML_PATH_CURRENCY_BASE,
+            'default'
+        );
     }
 
     /**

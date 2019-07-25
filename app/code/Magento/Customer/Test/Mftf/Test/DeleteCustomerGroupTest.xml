@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteCustomerGroupTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Delete Customer Group"/>
+            <title value="Delete Customer Group in Admin Panel"/>
+            <description value="Admin should be able to delete a Customer Group"/>
+            <testCaseId value="MC-14590"/>
+            <severity value="MAJOR"/>
+            <group value="customers"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="CustomCustomerGroup" stepKey="customerGroup"/>
+            <createData entity="UsCustomerAssignedToNewCustomerGroup" stepKey="customer">
+                <requiredEntity createDataKey="customerGroup"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Customer Group success delete message-->
+        <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
+            <argument name="customerGroupName" value="$$customerGroup.code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCustomerGroupNotInGridActionGroup" stepKey="assertCustomerGroupNotInGrid">
+            <argument name="customerGroup" value="$$customerGroup$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$customer.id$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertCustomerGroupOnCustomerFormActionGroup" stepKey="assertCustomerGroupOnCustomerForm">
+            <argument name="customerGroup" value="GeneralCustomerGroup"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductForm"/>
+
+        <actionGroup ref="AssertCustomerGroupNotOnProductFormActionGroup" stepKey="assertCustomerGroupNotOnProductForm">
+            <argument name="customerGroup" value="$$customerGroup$$"/>
+        </actionGroup>
+    </test>
+</tests>

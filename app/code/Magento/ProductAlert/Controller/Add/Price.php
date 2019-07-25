@@ -6,6 +6,7 @@
 
 namespace Magento\ProductAlert\Controller\Add;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -16,7 +17,10 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class Price extends AddController
+/**
+ * Controller for notifying about price.
+ */
+class Price extends AddController implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -62,6 +66,8 @@ class Price extends AddController
     }
 
     /**
+     * Method for adding info about product alert price.
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
@@ -75,6 +81,7 @@ class Price extends AddController
             return $resultRedirect;
         }
 
+        $store = $this->storeManager->getStore();
         try {
             /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productRepository->getById($productId);
@@ -83,11 +90,8 @@ class Price extends AddController
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
                 ->setPrice($product->getFinalPrice())
-                ->setWebsiteId(
-                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
-                        ->getStore()
-                        ->getWebsiteId()
-                );
+                ->setWebsiteId($store->getWebsiteId())
+                ->setStoreId($store->getId());
             $model->save();
             $this->messageManager->addSuccess(__('You saved the alert subscription.'));
         } catch (NoSuchEntityException $noEntityException) {

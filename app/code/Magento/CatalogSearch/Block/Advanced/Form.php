@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Advanced search form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogSearch\Block\Advanced;
 
 use Magento\CatalogSearch\Model\Advanced;
@@ -21,10 +16,10 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
+ * Advanced search form
+ *
  * @api
  * @since 100.0.2
- * @deprecated CatalogSearch will be removed in 2.4, and {@see \Magento\ElasticSearch}
- *             will replace it as the default search engine.
  */
 class Form extends Template
 {
@@ -60,7 +55,7 @@ class Form extends Template
     }
 
     /**
-     * @return AbstractBlock
+     * @inheritdoc
      */
     public function _prepareLayout()
     {
@@ -288,6 +283,8 @@ class Form extends Template
     }
 
     /**
+     * Get select block.
+     *
      * @return BlockInterface
      */
     protected function _getSelectBlock()
@@ -301,6 +298,8 @@ class Form extends Template
     }
 
     /**
+     * Get date block.
+     *
      * @return BlockInterface|mixed
      */
     protected function _getDateBlock()

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSubmitsOrderPaymentMethodValidationTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="MC-5537: No UI validation for Payment methods when creating an order from admin"/>
+            <title value="UI validation for Payment methods when creating an order from admin"/>
+            <description value="Admin should not be able to submit orders without selecting a payment method when there is more than one"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-6029"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 1" />
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 0" />
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+        <!--Create order via Admin-->
+        <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+
+        <!--Check if order can be submitted without the required fields-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder" after="seeNewOrderPageTitle">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="checkRequiredFieldsNewOrderForm" stepKey="checkRequiredFieldsNewOrder" after="addSimpleProductToOrder"/>
+        <see selector="{{AdminOrderFormPaymentSection.paymentError}}" userInput="Please select one of the options." stepKey="seePaymentMethodRequired" after="checkRequiredFieldsNewOrder"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seePaymentMethodRequired"/>
+
+        <!--Fill customer group and customer email-->
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup" after="scrollToTopOfOrderFormPage"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillCustomerEmail">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Select payment and shipping -->
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" stepKey="waitForPaymentOptions"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" userInput="checkmo" stepKey="checkPaymentOption"/>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
+
+        <!--Verify totals on Order page-->
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" stepKey="seeOrderShipping" after="seeOrderSubTotal"/>
+        <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeCorrectGrandTotal" after="scrollToOrderGrandTotal"/>
+
+        <!--Submit Order and verify information-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
+    </test>
+</tests>

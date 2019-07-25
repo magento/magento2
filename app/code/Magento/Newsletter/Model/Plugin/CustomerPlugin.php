@@ -12,6 +12,9 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Customer\Api\Data\CustomerExtensionInterface;
 
+/**
+ * Newsletter Plugin for customer
+ */
 class CustomerPlugin
 {
     /**

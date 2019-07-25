@@ -7,6 +7,8 @@
     "require": {
         "php": "~7.1.3||~7.2.0",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
+        "magento/module-asynchronous-operations": "*",
         "magento/module-backend": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-rule": "*",
@@ -29,7 +31,8 @@
         "magento/module-ui": "*",
         "magento/module-url-rewrite": "*",
         "magento/module-widget": "*",
-        "magento/module-wishlist": "*"
+        "magento/module-wishlist": "*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-cookie": "*",

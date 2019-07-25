@@ -21,19 +21,19 @@
                 default="0" comment="Subscriber Status"/>
         <column xsi:type="varchar" name="subscriber_confirm_code" nullable="true" length="32" default="NULL"
                 comment="Subscriber Confirm Code"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="subscriber_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="NEWSLETTER_SUBSCRIBER_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_SUBSCRIBER_STORE_ID_STORE_STORE_ID"
                     table="newsletter_subscriber" column="store_id" referenceTable="store" referenceColumn="store_id"
                     onDelete="SET NULL"/>
-        <index name="NEWSLETTER_SUBSCRIBER_CUSTOMER_ID" indexType="btree">
+        <index referenceId="NEWSLETTER_SUBSCRIBER_CUSTOMER_ID" indexType="btree">
             <column name="customer_id"/>
         </index>
-        <index name="NEWSLETTER_SUBSCRIBER_STORE_ID" indexType="btree">
+        <index referenceId="NEWSLETTER_SUBSCRIBER_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index name="NEWSLETTER_SUBSCRIBER_SUBSCRIBER_EMAIL" indexType="btree">
+        <index referenceId="NEWSLETTER_SUBSCRIBER_SUBSCRIBER_EMAIL" indexType="btree">
             <column name="subscriber_email"/>
         </index>
     </table>
@@ -54,16 +54,16 @@
                 default="1" comment="Template Actual"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="true" comment="Added At"/>
         <column xsi:type="timestamp" name="modified_at" on_update="false" nullable="true" comment="Modified At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="template_id"/>
         </constraint>
-        <index name="NEWSLETTER_TEMPLATE_TEMPLATE_ACTUAL" indexType="btree">
+        <index referenceId="NEWSLETTER_TEMPLATE_TEMPLATE_ACTUAL" indexType="btree">
             <column name="template_actual"/>
         </index>
-        <index name="NEWSLETTER_TEMPLATE_ADDED_AT" indexType="btree">
+        <index referenceId="NEWSLETTER_TEMPLATE_ADDED_AT" indexType="btree">
             <column name="added_at"/>
         </index>
-        <index name="NEWSLETTER_TEMPLATE_MODIFIED_AT" indexType="btree">
+        <index referenceId="NEWSLETTER_TEMPLATE_MODIFIED_AT" indexType="btree">
             <column name="modified_at"/>
         </index>
     </table>
@@ -86,13 +86,13 @@
         <column xsi:type="timestamp" name="queue_start_at" on_update="false" nullable="true" comment="Queue Start At"/>
         <column xsi:type="timestamp" name="queue_finish_at" on_update="false" nullable="true"
                 comment="Queue Finish At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="queue_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="NEWSLETTER_QUEUE_TEMPLATE_ID_NEWSLETTER_TEMPLATE_TEMPLATE_ID"
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_QUEUE_TEMPLATE_ID_NEWSLETTER_TEMPLATE_TEMPLATE_ID"
                     table="newsletter_queue" column="template_id" referenceTable="newsletter_template"
                     referenceColumn="template_id" onDelete="CASCADE"/>
-        <index name="NEWSLETTER_QUEUE_TEMPLATE_ID" indexType="btree">
+        <index referenceId="NEWSLETTER_QUEUE_TEMPLATE_ID" indexType="btree">
             <column name="template_id"/>
         </index>
     </table>
@@ -104,19 +104,19 @@
         <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Subscriber Id"/>
         <column xsi:type="timestamp" name="letter_sent_at" on_update="false" nullable="true" comment="Letter Sent At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="queue_link_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="NEWSLETTER_QUEUE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_QUEUE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
                     table="newsletter_queue_link" column="queue_id" referenceTable="newsletter_queue"
                     referenceColumn="queue_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="NLTTR_QUEUE_LNK_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID"
+        <constraint xsi:type="foreign" referenceId="NLTTR_QUEUE_LNK_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID"
                     table="newsletter_queue_link" column="subscriber_id" referenceTable="newsletter_subscriber"
                     referenceColumn="subscriber_id" onDelete="CASCADE"/>
-        <index name="NEWSLETTER_QUEUE_LINK_SUBSCRIBER_ID" indexType="btree">
+        <index referenceId="NEWSLETTER_QUEUE_LINK_SUBSCRIBER_ID" indexType="btree">
             <column name="subscriber_id"/>
         </index>
-        <index name="NEWSLETTER_QUEUE_LINK_QUEUE_ID_LETTER_SENT_AT" indexType="btree">
+        <index referenceId="NEWSLETTER_QUEUE_LINK_QUEUE_ID_LETTER_SENT_AT" indexType="btree">
             <column name="queue_id"/>
             <column name="letter_sent_at"/>
         </index>
@@ -126,17 +126,17 @@
                 default="0" comment="Queue Id"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store Id"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="queue_id"/>
             <column name="store_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="NEWSLETTER_QUEUE_STORE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_QUEUE_STORE_LINK_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
                     table="newsletter_queue_store_link" column="queue_id" referenceTable="newsletter_queue"
                     referenceColumn="queue_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="NEWSLETTER_QUEUE_STORE_LINK_STORE_ID_STORE_STORE_ID"
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_QUEUE_STORE_LINK_STORE_ID_STORE_STORE_ID"
                     table="newsletter_queue_store_link" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <index name="NEWSLETTER_QUEUE_STORE_LINK_STORE_ID" indexType="btree">
+        <index referenceId="NEWSLETTER_QUEUE_STORE_LINK_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>
@@ -150,19 +150,19 @@
         <column xsi:type="int" name="problem_error_code" padding="10" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Problem Error Code"/>
         <column xsi:type="varchar" name="problem_error_text" nullable="true" length="200" comment="Problem Error Text"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="problem_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="NEWSLETTER_PROBLEM_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
+        <constraint xsi:type="foreign" referenceId="NEWSLETTER_PROBLEM_QUEUE_ID_NEWSLETTER_QUEUE_QUEUE_ID"
                     table="newsletter_problem" column="queue_id" referenceTable="newsletter_queue"
                     referenceColumn="queue_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="NLTTR_PROBLEM_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID"
+        <constraint xsi:type="foreign" referenceId="NLTTR_PROBLEM_SUBSCRIBER_ID_NLTTR_SUBSCRIBER_SUBSCRIBER_ID"
                     table="newsletter_problem" column="subscriber_id" referenceTable="newsletter_subscriber"
                     referenceColumn="subscriber_id" onDelete="CASCADE"/>
-        <index name="NEWSLETTER_PROBLEM_SUBSCRIBER_ID" indexType="btree">
+        <index referenceId="NEWSLETTER_PROBLEM_SUBSCRIBER_ID" indexType="btree">
             <column name="subscriber_id"/>
         </index>
-        <index name="NEWSLETTER_PROBLEM_QUEUE_ID" indexType="btree">
+        <index referenceId="NEWSLETTER_PROBLEM_QUEUE_ID" indexType="btree">
             <column name="queue_id"/>
         </index>
     </table>

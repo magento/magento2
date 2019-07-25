@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader;
 
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\TypeMetaWrapperReader;
-
 /**
  * Reads fields and possible arguments from a meta field
  */
@@ -25,13 +23,24 @@ class FieldMetaReader
     private $docReader;
 
     /**
+     * @var CacheAnnotationReader
+     */
+    private $cacheAnnotationReader;
+
+    /**
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
      */
-    public function __construct(TypeMetaWrapperReader $typeMetaReader, DocReader $docReader)
-    {
+    public function __construct(
+        TypeMetaWrapperReader $typeMetaReader,
+        DocReader $docReader,
+        CacheAnnotationReader $cacheAnnotationReader = null
+    ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
+        $this->cacheAnnotationReader = $cacheAnnotationReader ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CacheAnnotationReader::class);
     }
 
     /**
@@ -61,6 +70,10 @@ class FieldMetaReader
 
         if ($this->docReader->read($fieldMeta->astNode->directives)) {
             $result['description'] = $this->docReader->read($fieldMeta->astNode->directives);
+        }
+
+        if ($this->docReader->read($fieldMeta->astNode->directives)) {
+            $result['cache'] = $this->cacheAnnotationReader->read($fieldMeta->astNode->directives);
         }
 
         $arguments = $fieldMeta->args;

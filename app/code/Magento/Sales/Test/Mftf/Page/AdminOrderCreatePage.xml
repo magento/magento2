@@ -17,5 +17,6 @@
         <section name="AdminOrderFormShippingAddressSection"/>
         <section name="AdminOrderFormPaymentSection"/>
         <section name="AdminOrderFormTotalSection"/>
+        <section name="AdminOrderFormStoreSelectorSection"/>
     </page>
 </pages>

@@ -16,8 +16,16 @@ class Config implements ConfigInterface, UploadConfigInterface
 
     const XML_PATH_IMAGE_ADAPTERS = 'dev/image/adapters';
 
+    /**
+     * Config path for the maximal image width value
+     * @deprecated
+     */
     const XML_PATH_MAX_WIDTH_IMAGE = 'system/upload_configuration/max_width';
 
+    /**
+     * Config path for the maximal image height value
+     * @deprecated
+     */
     const XML_PATH_MAX_HEIGHT_IMAGE = 'system/upload_configuration/max_height';
 
     /**
@@ -57,6 +65,8 @@ class Config implements ConfigInterface, UploadConfigInterface
      * Get Maximum Image Width resolution in pixels. For image resizing on client side.
      *
      * @return int
+     * @deprecated
+     * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface::getMaxHeight()
      */
     public function getMaxWidth(): int
     {
@@ -67,6 +77,8 @@ class Config implements ConfigInterface, UploadConfigInterface
      * Get Maximum Image Height resolution in pixels. For image resizing on client side.
      *
      * @return int
+     * @deprecated
+     * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface::getMaxHeight()
      */
     public function getMaxHeight(): int
     {

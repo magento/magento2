@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuSalesCreditMemos">
+        <data key="pageTitle">Credit Memos</data>
+        <data key="title">Credit Memos</data>
+        <data key="dataUiId">magento-sales-sales-creditmemo</data>
+    </entity>
+    <entity name="AdminMenuSalesInvoices">
+        <data key="pageTitle">Invoices</data>
+        <data key="title">Invoices</data>
+        <data key="dataUiId">magento-sales-sales-invoice</data>
+    </entity>
+    <entity name="AdminMenuSalesOrders">
+        <data key="pageTitle">Orders</data>
+        <data key="title">Orders</data>
+        <data key="dataUiId">magento-sales-sales-order</data>
+    </entity>
+    <entity name="AdminMenuSalesShipments">
+        <data key="pageTitle">Shipments</data>
+        <data key="title">Shipments</data>
+        <data key="dataUiId">magento-sales-sales-shipment</data>
+    </entity>
+    <entity name="AdminMenuSalesTransactions">
+        <data key="pageTitle">Transactions</data>
+        <data key="title">Transactions</data>
+        <data key="dataUiId">magento-sales-sales-transactions</data>
+    </entity>
+    <entity name="AdminMenuStoresSettingsOrderStatus">
+        <data key="pageTitle">Order Status</data>
+        <data key="title">Order Status</data>
+        <data key="dataUiId">magento-sales-system-order-statuses</data>
+    </entity>
+</entities>

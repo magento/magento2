@@ -10,17 +10,13 @@ namespace Magento\Catalog\Model\Product\Image;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Model\Product\Image;
 
 /**
  * Builds parameters array used to build Image Asset
  */
 class ParamsBuilder
 {
-    /**
-     * @var int
-     */
-    private $defaultQuality = 80;
-
     /**
      * @var array
      */
@@ -69,6 +65,8 @@ class ParamsBuilder
     }
 
     /**
+     * Build image params
+     *
      * @param array $imageArguments
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -89,6 +87,8 @@ class ParamsBuilder
     }
 
     /**
+     * Overwrite default values
+     *
      * @param array $imageArguments
      * @return array
      */
@@ -100,11 +100,12 @@ class ParamsBuilder
         $transparency = $imageArguments['transparency'] ?? $this->defaultKeepTransparency;
         $background = $imageArguments['background'] ?? $this->defaultBackground;
         $angle = $imageArguments['angle'] ?? $this->defaultAngle;
+        $quality = (int) $this->scopeConfig->getValue(Image::XML_PATH_JPEG_QUALITY);
 
         return [
             'background' => (array) $background,
             'angle' => $angle,
-            'quality' => $this->defaultQuality,
+            'quality' => $quality,
             'keep_aspect_ratio' => (bool) $aspectRatio,
             'keep_frame' => (bool) $frame,
             'keep_transparency' => (bool) $transparency,
@@ -113,6 +114,8 @@ class ParamsBuilder
     }
 
     /**
+     * Get watermark
+     *
      * @param string $type
      * @return array
      */
@@ -153,13 +156,12 @@ class ParamsBuilder
 
     /**
      * Get frame from product_image_white_borders
+     *
      * @return bool
      */
     private function hasDefaultFrame(): bool
     {
-        return (bool) $this->viewConfig->getViewConfig()->getVarValue(
-            'Magento_Catalog',
-            'product_image_white_borders'
-        );
+        return (bool) $this->viewConfig->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+            ->getVarValue('Magento_Catalog', 'product_image_white_borders');
     }
 }

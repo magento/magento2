@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Pricing\Renderer;
 
-use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as TypeConfigurable;
 
 /**
  * A plugin for a salable resolver.
@@ -13,29 +13,25 @@ use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterfac
 class SalableResolver
 {
     /**
-     * @var LowestPriceOptionsProviderInterface
+     * @var TypeConfigurable
      */
-    private $lowestPriceOptionsProvider;
+    private $typeConfigurable;
 
     /**
-     * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
+     * @param TypeConfigurable $typeConfigurable
      */
-    public function __construct(
-        LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
-    ) {
-        $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider;
+    public function __construct(TypeConfigurable $typeConfigurable)
+    {
+        $this->typeConfigurable = $typeConfigurable;
     }
 
     /**
-     * Performs an additional check whether given configurable product has
-     * at least one configuration in-stock.
+     * Performs an additional check whether given configurable product has at least one configuration in-stock.
      *
      * @param \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver $subject
      * @param bool $result
      * @param \Magento\Framework\Pricing\SaleableInterface $salableItem
-     *
      * @return bool
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterIsSalable(
@@ -43,10 +39,8 @@ class SalableResolver
         $result,
         \Magento\Framework\Pricing\SaleableInterface $salableItem
     ) {
-        if ($salableItem->getTypeId() == 'configurable' && $result) {
-            if (!$this->lowestPriceOptionsProvider->getProducts($salableItem)) {
-                $result = false;
-            }
+        if ($salableItem->getTypeId() === TypeConfigurable::TYPE_CODE && $result) {
+            $result = $this->typeConfigurable->isSalable($salableItem);
         }
 
         return $result;

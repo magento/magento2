@@ -75,9 +75,9 @@
 
     max-width: 100%;
     min-width: 8.5rem;
-    padding-bottom: @field-control__padding-bottom - .1rem;
+    padding-bottom: @field-control__padding-bottom;
     padding-right: 4.4rem; // Distance between select switch and inner text
-    padding-top: @field-control__padding-top - .1rem;
+    padding-top: @field-control__padding-top;
     transition: @smooth__border-color;
 
     &:hover {
@@ -85,7 +85,7 @@
         cursor: pointer;
     }
 
-    &:focus {
+    &:active {
         background-image+: url('../images/arrows-bg.svg');
         background-position+: ~'calc(100% - 12px)' 13px;
 
@@ -202,7 +202,6 @@ option:empty {
 
 .admin__control-textarea {
     &:extend(.abs-form-control-pattern all);
-    height: 8.48rem;
     line-height: 1.18;
     padding-top: .8rem;
     resize: vertical;

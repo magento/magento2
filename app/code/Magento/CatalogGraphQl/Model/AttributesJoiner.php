@@ -16,6 +16,11 @@ use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 class AttributesJoiner
 {
     /**
+     * @var array
+     */
+    private $queryFields = [];
+
+    /**
      * Join fields attached to field node to collection's select.
      *
      * @param FieldNode $fieldNode
@@ -24,17 +29,33 @@ class AttributesJoiner
      */
     public function join(FieldNode $fieldNode, AbstractCollection $collection) : void
     {
-        $query = $fieldNode->selectionSet->selections;
-
-        /** @var FieldNode $field */
-        foreach ($query as $field) {
-            if ($field->kind === 'InlineFragment') {
-                continue;
-            }
-
-            if (!$collection->isAttributeAdded($field->name->value)) {
-                $collection->addAttributeToSelect($field->name->value);
+        foreach ($this->getQueryFields($fieldNode) as $field) {
+            if (!$collection->isAttributeAdded($field)) {
+                $collection->addAttributeToSelect($field);
             }
         }
+    }
+
+    /**
+     * Get an array of queried fields.
+     *
+     * @param FieldNode $fieldNode
+     * @return string[]
+     */
+    public function getQueryFields(FieldNode $fieldNode)
+    {
+        if (!isset($this->queryFields[$fieldNode->name->value])) {
+            $this->queryFields[$fieldNode->name->value] = [];
+            $query = $fieldNode->selectionSet->selections;
+            /** @var FieldNode $field */
+            foreach ($query as $field) {
+                if ($field->kind === 'InlineFragment') {
+                    continue;
+                }
+                $this->queryFields[$fieldNode->name->value][] = $field->name->value;
+            }
+        }
+
+        return $this->queryFields[$fieldNode->name->value];
     }
 }

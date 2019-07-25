@@ -6,6 +6,7 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
+use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
 
 /**
  * Customer register form block
@@ -22,7 +23,7 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerSession;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $_moduleManager;
 
@@ -40,7 +41,7 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
@@ -54,7 +55,7 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
         array $data = []
@@ -83,15 +84,6 @@ class Register extends \Magento\Directory\Block\Data
     public function getConfig($path)
     {
         return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-    }
-
-    /**
-     * @return $this
-     */
-    protected function _prepareLayout()
-    {
-        $this->pageConfig->getTitle()->set(__('Create New Customer Account'));
-        return parent::_prepareLayout();
     }
 
     /**
@@ -177,11 +169,13 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function isNewsletterEnabled()
     {
-        return $this->_moduleManager->isOutputEnabled('Magento_Newsletter');
+        return $this->_moduleManager->isOutputEnabled('Magento_Newsletter')
+            && $this->getConfig(PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE);
     }
 
     /**
      * Restore entity data from session
+     *
      * Entity and form code must be defined for the form
      *
      * @param \Magento\Customer\Model\Metadata\Form $form

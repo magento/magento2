@@ -154,6 +154,8 @@ class SystemPackage
     }
 
     /**
+     * Get installed system packages.
+     *
      * @return array
      * @throws \Exception
      * @throws \RuntimeException
@@ -179,7 +181,7 @@ class SystemPackage
             throw new \RuntimeException(
                 'We\'re sorry, no components are available because you cloned the Magento 2 GitHub repository. ' .
                 'You must manually update components as discussed in the ' .
-                '<a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/dev_options.html">' .
+                '<a href="https://devdocs.magento.com/guides/v2.0/install-gde/install/cli/dev_options.html">' .
                 'Installation Guide</a>.'
             );
         }
@@ -187,6 +189,8 @@ class SystemPackage
     }
 
     /**
+     * Sort versions.
+     *
      * @param array $enterpriseVersions
      * @return array
      */
@@ -241,6 +245,8 @@ class SystemPackage
     }
 
     /**
+     * Filter enterprise versions.
+     *
      * @param string $currentCE
      * @param array $enterpriseVersions
      * @param string $maxVersion

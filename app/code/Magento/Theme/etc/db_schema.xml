@@ -20,7 +20,7 @@
         <column xsi:type="smallint" name="type" padding="6" unsigned="false" nullable="false" identity="false"
                 comment="Theme type: 0:physical, 1:virtual, 2:staging"/>
         <column xsi:type="text" name="code" nullable="true" comment="Full theme code, including package"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="theme_id"/>
         </constraint>
     </table>
@@ -35,10 +35,10 @@
         <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <column xsi:type="boolean" name="is_temporary" nullable="false" default="false" comment="Is Temporary File"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="theme_files_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="THEME_FILE_THEME_ID_THEME_THEME_ID" table="theme_file" column="theme_id"
+        <constraint xsi:type="foreign" referenceId="THEME_FILE_THEME_ID_THEME_THEME_ID" table="theme_file" column="theme_id"
                     referenceTable="theme" referenceColumn="theme_id" onDelete="CASCADE"/>
     </table>
     <table name="design_change" resource="default" engine="innodb" comment="Design Changes">
@@ -49,12 +49,12 @@
         <column xsi:type="varchar" name="design" nullable="true" length="255" comment="Design"/>
         <column xsi:type="date" name="date_from" comment="First Date of Design Activity"/>
         <column xsi:type="date" name="date_to" comment="Last Date of Design Activity"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="design_change_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="DESIGN_CHANGE_STORE_ID_STORE_STORE_ID" table="design_change"
+        <constraint xsi:type="foreign" referenceId="DESIGN_CHANGE_STORE_ID_STORE_STORE_ID" table="design_change"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
-        <index name="DESIGN_CHANGE_STORE_ID" indexType="btree">
+        <index referenceId="DESIGN_CHANGE_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
     </table>

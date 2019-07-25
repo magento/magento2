@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -13,11 +10,13 @@
  *
  * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
  */
-use Magento\Catalog\Model\Product\ProductList\Toolbar;
+
+// phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
+// phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
 ?>
-<?php if ($block->getCollection()->getSize()): ?>
-    <div class="toolbar toolbar-products" data-mage-init='<?= /* @escapeNotVerified */ $block->getWidgetOptionsJson() ?>'>
-        <?php if ($block->isExpanded()): ?>
+<?php if ($block->getCollection()->getSize()) :?>
+    <div class="toolbar toolbar-products" data-mage-init='<?= /* @noEscape */ $block->getWidgetOptionsJson() ?>'>
+        <?php if ($block->isExpanded()) :?>
             <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
         <?php endif; ?>
 
@@ -27,7 +26,7 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar;
 
         <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml')) ?>
 
-        <?php if ($block->isExpanded()): ?>
+        <?php if ($block->isExpanded()) :?>
             <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml')) ?>
         <?php endif; ?>
     </div>

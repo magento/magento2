@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GroupedProductGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -44,7 +44,7 @@ class GroupedItems implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['model'])) {
-            throw new GraphQlInputException(__('"model" value should be specified'));
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
         $data = [];
