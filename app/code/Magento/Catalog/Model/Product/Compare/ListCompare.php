@@ -90,7 +90,7 @@ class ListCompare extends \Magento\Framework\DataObject
         $this->_addVisitorToItem($item);
         $item->loadByProduct($product);
 
-        if (!$item->getId()) {
+        if (!$item->getId() && $item->getProductId()) {
             $item->addProductData($product);
             $item->save();
         }

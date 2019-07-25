@@ -44,6 +44,9 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
         $this->_session->setCustomerId(null);
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     */
     public function testAddProductWithSession()
     {
         $this->_session->setCustomerId(1);
@@ -51,8 +54,15 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Model\Product::class)
             ->load(1);
-        $this->_model->addProduct($product);
+        /** @var $product2 \Magento\Catalog\Model\Product */
+        $product2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\Product::class)
+            ->load(6);
+        $this->_model->addProducts([$product->getId(), $product2->getId(), 'none', 99]);
         $this->assertTrue($this->_model->hasItems(1, $this->_visitor->getId()));
+        $this->assertTrue($this->_model->hasItems(6, $this->_visitor->getId()));
+        $this->assertFalse($this->_model->hasItems('none', $this->_visitor->getId()));
+        $this->assertFalse($this->_model->hasItems(99, $this->_visitor->getId()));
     }
 
     public function testAddProductWithoutSession()
