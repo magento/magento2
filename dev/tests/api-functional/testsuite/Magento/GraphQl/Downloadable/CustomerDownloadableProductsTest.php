@@ -61,6 +61,19 @@ class CustomerDownloadableProductsTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/customer_order_with_downloadable_product.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
+     */
+    public function testGuestCannotAccessDownloadableProducts()
+    {
+        $this->graphQlQuery($this->getQuery());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testCustomerHasNoOrders()
     {
