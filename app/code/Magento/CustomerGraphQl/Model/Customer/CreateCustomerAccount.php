@@ -14,7 +14,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Create new customer account
@@ -37,11 +37,6 @@ class CreateCustomerAccount
     private $accountManagement;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var ChangeSubscriptionStatus
      */
     private $changeSubscriptionStatus;
@@ -61,7 +56,6 @@ class CreateCustomerAccount
      *
      * @param DataObjectHelper $dataObjectHelper
      * @param CustomerInterfaceFactory $customerFactory
-     * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $accountManagement
      * @param ChangeSubscriptionStatus $changeSubscriptionStatus
      * @param DataObjectProcessor $dataObjectProcessor
@@ -70,7 +64,6 @@ class CreateCustomerAccount
     public function __construct(
         DataObjectHelper $dataObjectHelper,
         CustomerInterfaceFactory $customerFactory,
-        StoreManagerInterface $storeManager,
         AccountManagementInterface $accountManagement,
         ChangeSubscriptionStatus $changeSubscriptionStatus,
         DataObjectProcessor $dataObjectProcessor,
@@ -79,7 +72,6 @@ class CreateCustomerAccount
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerFactory = $customerFactory;
         $this->accountManagement = $accountManagement;
-        $this->storeManager = $storeManager;
         $this->changeSubscriptionStatus = $changeSubscriptionStatus;
         $this->validateCustomerData = $validateCustomerData;
         $this->dataObjectProcessor = $dataObjectProcessor;
@@ -89,13 +81,14 @@ class CreateCustomerAccount
      * Creates new customer account
      *
      * @param array $data
+     * @param StoreInterface $store
      * @return CustomerInterface
      * @throws GraphQlInputException
      */
-    public function execute(array $data): CustomerInterface
+    public function execute(array $data, StoreInterface $store): CustomerInterface
     {
         try {
-            $customer = $this->createAccount($data);
+            $customer = $this->createAccount($data, $store);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
@@ -110,10 +103,11 @@ class CreateCustomerAccount
      * Create account
      *
      * @param array $data
+     * @param StoreInterface $store
      * @return CustomerInterface
      * @throws LocalizedException
      */
-    private function createAccount(array $data): CustomerInterface
+    private function createAccount(array $data, StoreInterface $store): CustomerInterface
     {
         $customerDataObject = $this->customerFactory->create();
         /**
@@ -130,7 +124,6 @@ class CreateCustomerAccount
             $data,
             CustomerInterface::class
         );
-        $store = $this->storeManager->getStore();
         $customerDataObject->setWebsiteId($store->getWebsiteId());
         $customerDataObject->setStoreId($store->getId());
 
