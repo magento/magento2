@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\File;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Validation\ValidationException;
 
@@ -13,6 +14,8 @@ use Magento\Framework\Validation\ValidationException;
  *
  * ATTENTION! This class must be used like abstract class and must added
  * validation by protected file extension list to extended class
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
  */
@@ -161,16 +164,26 @@ class Uploader
     protected $_result;
 
     /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
      * Init upload
      *
      * @param string|array $fileId
      * @param \Magento\Framework\File\Mime|null $fileMime
+     * @param DirectoryList|null $directoryList
      * @throws \DomainException
      */
     public function __construct(
         $fileId,
-        Mime $fileMime = null
+        Mime $fileMime = null,
+        DirectoryList $directoryList = null
     ) {
+        $this->directoryList= $directoryList ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(DirectoryList::class);
+
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -552,6 +565,7 @@ class Uploader
     private function _setUploadFileId($fileId)
     {
         if (is_array($fileId)) {
+            $this->validateFileId($fileId);
             $this->_uploadType = self::MULTIPLE_STYLE;
             $this->_file = $fileId;
         } else {
@@ -582,6 +596,55 @@ class Uploader
                     'Invalid parameter given. A valid $_FILES[] identifier is expected.'
                 );
             }
+        }
+    }
+
+    /**
+     * Validates explicitly given uploaded file data.
+     *
+     * @param array $fileId
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function validateFileId(array $fileId): void
+    {
+        $isValid = false;
+        if (isset($fileId['tmp_name'])) {
+            $tmpName = trim($fileId['tmp_name']);
+
+            if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
+                $allowedFolders = [
+                    sys_get_temp_dir(),
+                    $this->directoryList->getPath(DirectoryList::MEDIA),
+                    $this->directoryList->getPath(DirectoryList::VAR_DIR),
+                    $this->directoryList->getPath(DirectoryList::TMP),
+                    $this->directoryList->getPath(DirectoryList::UPLOAD),
+                ];
+
+                $disallowedFolders = [
+                    $this->directoryList->getPath(DirectoryList::LOG),
+                ];
+
+                foreach ($allowedFolders as $allowedFolder) {
+                    if (stripos($tmpName, $allowedFolder) === 0) {
+                        $isValid = true;
+                        break;
+                    }
+                }
+
+                foreach ($disallowedFolders as $disallowedFolder) {
+                    if (stripos($tmpName, $disallowedFolder) === 0) {
+                        $isValid = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!$isValid) {
+            throw new \InvalidArgumentException(
+                __('Invalid parameter given. A valid $fileId[tmp_name] is expected.')
+            );
         }
     }
 
