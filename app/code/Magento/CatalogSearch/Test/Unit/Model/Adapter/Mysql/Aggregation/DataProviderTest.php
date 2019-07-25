@@ -20,6 +20,7 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Event\Manager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -64,6 +65,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $selectBuilderForAttribute;
 
+    /**
+     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventManager;
+
     protected function setUp()
     {
         $this->eavConfigMock = $this->createMock(Config::class);
@@ -73,12 +79,14 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->selectBuilderForAttribute = $this->createMock(SelectBuilderForAttribute::class);
+        $this->eventManager = $this->createMock(Manager::class);
         $this->model = new DataProvider(
             $this->eavConfigMock,
             $this->resourceConnectionMock,
             $this->scopeResolverMock,
             $this->sessionMock,
-            $this->selectBuilderForAttribute
+            $this->selectBuilderForAttribute,
+            $this->eventManager
         );
     }
 
@@ -102,6 +110,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $selectMock = $this->createMock(Select::class);
         $this->adapterMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
+        $this->eventManager->expects($this->once())->method('dispatch')->willReturn($selectMock);
         $tableMock = $this->createMock(Table::class);
 
         $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);
@@ -129,6 +138,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $selectMock = $this->createMock(Select::class);
         $this->selectBuilderForAttribute->expects($this->once())->method('build')->willReturn($selectMock);
         $this->adapterMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
+        $this->eventManager->expects($this->once())->method('dispatch')->willReturn($selectMock);
         $tableMock = $this->createMock(Table::class);
         $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);
     }

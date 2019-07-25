@@ -30,9 +30,12 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->escaper = new Escaper();
         $this->zendEscaper = new \Magento\Framework\ZendEscaper();
         $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
-        $this->escaper = new Escaper($this->zendEscaper, $this->loggerMock);
+        $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
     }
 
     /**
@@ -40,6 +43,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
      *
      * @param int $codepoint Unicode codepoint in hex notation
      * @return string UTF-8 literal string
+     * @throws \Exception
      */
     protected function codepointToUtf8($codepoint)
     {
@@ -262,13 +266,34 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeUrl
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider escapeUrlDataProvider
      */
-    public function testEscapeUrl()
+    public function testEscapeUrl(string $data, string $expected): void
     {
-        $data = 'http://example.com/search?term=this+%26+that&view=list';
-        $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
         $this->assertEquals($expected, $this->escaper->escapeUrl($data));
         $this->assertEquals($expected, $this->escaper->escapeUrl($expected));
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeUrlDataProvider(): array
+    {
+        return [
+            [
+                'data' => "http://example.com/search?term=this+%26+that&view=list",
+                'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
+            ],
+            [
+                'data' => "http://exam\r\nple.com/search?term=this+%26+that&view=list",
+                'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
+            ],
+        ];
     }
 
     /**

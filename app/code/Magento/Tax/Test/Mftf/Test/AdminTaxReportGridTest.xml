@@ -136,9 +136,8 @@
         <waitForPageLoad stepKey="waitForInvoicePageOpened"/>
 
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoiceSaved"/>
 
-        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="waitForInvoiceSaved"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl" after="clickShipAction"/>
         <!--Submit Shipment-->
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="seeOrderShipmentUrl"/>

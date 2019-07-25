@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Fill data in checkout shipping section -->
+    <actionGroup name="StorefrontFillGuestShippingInfoActionGroup">
+        <arguments>
+            <argument name="customerData" defaultValue="Simple_UK_Customer_For_Shipment"/>
+        </arguments>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{customerData.email}}" stepKey="fillEmailAddressField"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{customerData.firstName}}" stepKey="fillFirstNameField"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{customerData.lastName}}" stepKey="fillLastNameField"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.company}}" userInput="{{customerData.company}}" stepKey="fillCompanyField"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.street}}" userInput="{{customerData.streetFirstLine}}" stepKey="fillStreetAddressFirstLineField"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.street2}}" userInput="{{customerData.streetSecondLine}}" stepKey="fillStreetAddressSecondLineField"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{customerData.city}}" stepKey="fillCityField"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{customerData.telephone}}" stepKey="fillPhoneNumberField"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ApplyCouponOnPaymentPageActionGroup">
+        <arguments>
+            <argument name="couponCode" type="string"/>
+        </arguments>
+        <click selector="{{ProductCardSection.addCoupon}}" stepKey="clickToAddDiscount"/>
+        <fillField selector="{{ProductCardSection.addCode}}" userInput="{{couponCode}}" stepKey="TypeDiscountCode"/>
+        <click selector="{{ProductCardSection.applyDiscount}}" stepKey="clickToApplyDiscount"/>
+        <waitForPageLoad stepKey="WaitForDiscountToBeAdded"/>
+        <see selector="{{ProductCardSection.discountVerificationMsg}}" userInput="Your coupon was successfully applied" stepKey="discountApplyMessage"/>
+    </actionGroup>
+</actionGroups>

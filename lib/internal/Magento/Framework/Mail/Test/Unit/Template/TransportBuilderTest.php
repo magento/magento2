@@ -144,6 +144,34 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test get transport with exception
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Unknown template type
+     */
+    public function testGetTransportWithException()
+    {
+        $this->builder->setTemplateModel('Test\Namespace\Template');
+
+        $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
+        $options = ['area' => 'frontend', 'store' => 1];
+
+        $template = $this->createMock(\Magento\Framework\Mail\TemplateInterface::class);
+        $template->expects($this->once())->method('setVars')->with($this->equalTo($vars))->willReturnSelf();
+        $template->expects($this->once())->method('setOptions')->with($this->equalTo($options))->willReturnSelf();
+        $template->expects($this->once())->method('getType')->willReturn('Unknown');
+        $this->messageFactoryMock->expects($this->once())->method('create');
+        $this->templateFactoryMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('identifier'), $this->equalTo('Test\Namespace\Template'))
+            ->willReturn($template);
+
+        $this->builder->setTemplateIdentifier('identifier')->setTemplateVars($vars)->setTemplateOptions($options);
+
+        $this->assertInstanceOf(\Magento\Framework\Mail\TransportInterface::class, $this->builder->getTransport());
+    }
+
+    /**
      * @return array
      */
     public function getTransportDataProvider()
@@ -167,20 +195,20 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testSetFromByStore()
+    public function testSetFromByScope()
     {
         $sender = ['email' => 'from@example.com', 'name' => 'name'];
-        $store = 1;
+        $scopeId = 1;
         $this->senderResolverMock->expects($this->once())
             ->method('resolve')
-            ->with($sender, $store)
+            ->with($sender, $scopeId)
             ->willReturn($sender);
         $this->messageMock->expects($this->once())
             ->method('setFromAddress')
             ->with($sender['email'], $sender['name'])
             ->willReturnSelf();
 
-        $this->builder->setFromByStore($sender, $store);
+        $this->builder->setFromByScope($sender, $scopeId);
     }
 
     /**

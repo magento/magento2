@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CatalogProductsSection">
         <element name="catalogItem" type="button" selector="//*[@id='menu-magento-catalog-catalog']/a/span"/>
         <element name="productItem" type="button" selector="//*[@data-ui-id='menu-magento-catalog-catalog-products']/a"/>
@@ -53,7 +53,6 @@
         <element name="saveAttributeButton" type="button" selector="//*[@id='save']"/>
         <element name="advancedAttributeProperties" type="button" selector="//*[@id='advanced_fieldset-wrapper']//*[contains(text(),'Advanced Attribute Properties')]"/>
         <element name="attributeCodeField" type="input"  selector="//*[@id='attribute_code']"/>
-
     </section>
 
     <section name="CreateProductConfigurations">
@@ -64,5 +63,4 @@
         <element name="checkboxBlack" type="input" selector="//fieldset[@class='admin__fieldset admin__fieldset-options']//*[contains(text(),'black')]/preceding-sibling::input"/>
         <element name="errorMessage" type="input" selector="//div[@data-ui-id='messages-message-error']"/>
     </section>
-
 </sections>

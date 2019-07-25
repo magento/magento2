@@ -921,7 +921,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         );
         $dbSelectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->connection->expects($this->once())
-            ->method('fetchAssoc')
+            ->method('fetchAll')
             ->willReturn($existingPrices);
         $this->connection->expects($this->once())
             ->method('select')
@@ -930,7 +930,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ->method('from')
             ->with(
                 self::TABLE_NAME,
-                ['value_id', self::LINK_FIELD, 'all_groups', 'customer_group_id']
+                [self::LINK_FIELD, 'all_groups', 'customer_group_id', 'qty']
             )->willReturnSelf();
         $this->advancedPricing->expects($this->once())
             ->method('retrieveOldSkus')

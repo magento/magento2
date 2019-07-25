@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertProductInfoOnEditPageActionGroup" extends="OpenEditProductOnBackendActionGroup">
+        <arguments>
+            <argument name="product" type="entity"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="seeProductPrice"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}" stepKey="seeProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="seeProductStockStatus"/>
+    </actionGroup>
+</actionGroups>

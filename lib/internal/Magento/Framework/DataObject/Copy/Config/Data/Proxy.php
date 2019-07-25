@@ -57,6 +57,8 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
+     * Sleep magic method.
+     *
      * @return array
      */
     public function __sleep()
@@ -100,7 +102,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function merge(array $config)
     {
@@ -108,7 +110,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function get($path = null, $default = null)
     {
@@ -116,7 +118,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function reset()
     {

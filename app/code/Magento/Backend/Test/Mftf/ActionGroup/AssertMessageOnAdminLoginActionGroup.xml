@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertMessageOnAdminLoginActionGroup">
+        <arguments>
+            <argument name="message" type="string" defaultValue="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later." />
+            <argument name="messageType" type="string" defaultValue="error" />
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminLoginMessagesSection.messageByType(messageType)}}" stepKey="waitForAdminLoginFormMessage" />
+        <see userInput="{{message}}" selector="{{AdminLoginMessagesSection.messageByType(messageType)}}" stepKey="verifyMessage" />
+    </actionGroup>
+</actionGroups>

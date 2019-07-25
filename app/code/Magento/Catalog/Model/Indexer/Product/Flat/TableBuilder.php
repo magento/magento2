@@ -115,7 +115,7 @@ class TableBuilder
     /**
      * Create empty temporary table with given columns list
      *
-     * @param string $tableName  Table name
+     * @param string $tableName Table name
      * @param array $columns array('columnName' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute, ...)
      * @param string $valueFieldSuffix
      *
@@ -304,12 +304,16 @@ class TableBuilder
 
                 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 foreach ($columnsList as $columnName => $attribute) {
-                    $countTableName = 't' . $iterationNum++;
+                    $countTableName = 't' . ($iterationNum++);
                     $joinCondition = sprintf(
-                        'e.%3$s = %1$s.%3$s AND %1$s.attribute_id = %2$d AND %1$s.store_id = 0',
+                        'e.%3$s = %1$s.%3$s' .
+                        ' AND %1$s.attribute_id = %2$d' .
+                        ' AND (%1$s.store_id = %4$d' .
+                        ' OR %1$s.store_id = 0)',
                         $countTableName,
                         $attribute->getId(),
-                        $metadata->getLinkField()
+                        $metadata->getLinkField(),
+                        $storeId
                     );
 
                     $select->joinLeft(
@@ -323,9 +327,10 @@ class TableBuilder
                         $columnValueName = $attributeCode . $valueFieldSuffix;
                         if (isset($flatColumns[$columnValueName])) {
                             $valueJoinCondition = sprintf(
-                                'e.%1$s = %2$s.option_id AND %2$s.store_id = 0',
+                                'e.%1$s = %2$s.option_id AND (%2$s.store_id = %3$d OR %2$s.store_id = 0)',
                                 $attributeCode,
-                                $countTableName
+                                $countTableName,
+                                $storeId
                             );
                             $selectValue->joinLeft(
                                 [

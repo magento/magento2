@@ -38,8 +38,8 @@
                 comment="Entity ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
-        <column xsi:type="decimal" name="total" scale="0" precision="10" unsigned="true" nullable="true"/>
-        <column xsi:type="decimal" name="total_base" scale="0" precision="10" unsigned="true" nullable="true"/>
+        <column xsi:type="decimal" name="total" scale="4" precision="20" unsigned="true" nullable="true"/>
+        <column xsi:type="decimal" name="total_base" scale="4" precision="20" unsigned="true" nullable="true"/>
         <column xsi:type="int" name="item_count" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Line Item Count"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"

@@ -194,7 +194,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         foreach ($classes as $class) {
             $class = trim($class, '\\');
             try {
-                if (strrchr($class, '\\') === false and !Classes::isVirtual($class)) {
+                if (strrchr($class, '\\') === false && !Classes::isVirtual($class)) {
                     $badUsages[] = $class;
                     continue;
                 } else {

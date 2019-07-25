@@ -20,6 +20,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ResolverInterface
     as FieldIndexResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
+    as FieldNameResolver;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -62,6 +64,11 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
     private $fieldTypeResolver;
 
     /**
+     * @var FieldNameResolver
+     */
+    private $fieldNameResolver;
+
+    /**
      * Set up test environment
      *
      * @return void
@@ -90,6 +97,10 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getFieldIndex'])
             ->getMock();
+        $this->fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getFieldName'])
+            ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -102,6 +113,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 'attributeAdapterProvider' => $this->attributeAdapterProvider,
                 'fieldIndexResolver' => $this->fieldIndexResolver,
                 'fieldTypeResolver' => $this->fieldTypeResolver,
+                'fieldNameResolver' => $this->fieldNameResolver,
             ]
         );
     }
@@ -113,6 +125,10 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
      * @param $indexType
      * @param $isComplexType
      * @param $complexType
+     * @param $isSortable
+     * @param $fieldName
+     * @param $compositeFieldName
+     * @param $sortFieldName
      * @param array $expected
      * @return void
      */
@@ -122,6 +138,10 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
         $indexType,
         $isComplexType,
         $complexType,
+        $isSortable,
+        $fieldName,
+        $compositeFieldName,
+        $sortFieldName,
         $expected
     ) {
         $this->fieldTypeResolver->expects($this->any())
@@ -132,7 +152,30 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
             ->willReturn($indexType);
         $this->indexTypeConverter->expects($this->any())
             ->method('convert')
-            ->willReturn('no');
+            ->with($this->anything())
+            ->will($this->returnCallback(
+                function ($type) {
+                    if ($type === 'no_index') {
+                        return 'no';
+                    } elseif ($type === 'no_analyze') {
+                        return 'not_analyzed';
+                    }
+                }
+            ));
+        $this->fieldNameResolver->expects($this->any())
+            ->method('getFieldName')
+            ->with($this->anything())
+            ->will($this->returnCallback(
+                function ($attributeMock, $context) use ($fieldName, $compositeFieldName, $sortFieldName) {
+                    if (empty($context)) {
+                        return $fieldName;
+                    } elseif ($context['type'] === 'sort') {
+                        return $sortFieldName;
+                    } elseif ($context['type'] === 'text') {
+                        return $compositeFieldName;
+                    }
+                }
+            ));
 
         $productAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->setMethods(['getAttributeCode'])
@@ -146,11 +189,14 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
 
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isComplexType', 'getAttributeCode'])
+            ->setMethods(['isComplexType', 'getAttributeCode', 'isSortable'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isComplexType')
             ->willReturn($isComplexType);
+        $attributeMock->expects($this->any())
+            ->method('isSortable')
+            ->willReturn($isSortable);
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
@@ -168,11 +214,10 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
 
                     if ($type === 'string') {
                         return 'string';
-                    }
-                    if ($type === 'string') {
-                        return 'string';
                     } elseif ($type === 'float') {
                         return 'float';
+                    } elseif ($type === 'keyword') {
+                        return 'string';
                     } else {
                         return $complexType;
                     }
@@ -197,6 +242,10 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 true,
                 true,
                 'text',
+                false,
+                'category_ids',
+                'category_ids_value',
+                '',
                 [
                     'category_ids' => [
                         'type' => 'select',
@@ -217,6 +266,10 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 'no',
                 false,
                 null,
+                false,
+                'attr_code',
+                '',
+                '',
                 [
                     'attr_code' => [
                         'type' => 'text',
@@ -234,9 +287,39 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 null,
                 false,
                 null,
+                false,
+                'attr_code',
+                '',
+                '',
                 [
                     'attr_code' => [
                         'type' => 'text'
+                    ],
+                    'store_id' => [
+                        'type' => 'string',
+                        'index' => 'no'
+                    ]
+                ]
+            ],
+            [
+                'attr_code',
+                'text',
+                null,
+                false,
+                null,
+                true,
+                'attr_code',
+                '',
+                'sort_attr_code',
+                [
+                    'attr_code' => [
+                        'type' => 'text',
+                        'fields' => [
+                            'sort_attr_code' => [
+                                'type' => 'string',
+                                'index' => 'not_analyzed'
+                            ]
+                        ]
                     ],
                     'store_id' => [
                         'type' => 'string',

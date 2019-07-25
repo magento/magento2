@@ -3,19 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
-/**
- * @see \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
- */
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+/** @var $block \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element */
 ?>
 <?php
 /* @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element */
 $element = $block->getElement();
-$note = $element->getNote() ? '<div class="note admin__field-note">' . $element->getNote() . '</div>' : '';
+$note = $element->getNote() ? '<div class="note admin__field-note">' . $block->escapeHtml($element->getNote()) . '</div>' : '';
 $elementBeforeLabel = $element->getExtType() == 'checkbox' || $element->getExtType() == 'radio';
 $addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
 $fieldId = ($element->getHtmlId()) ? ' id="attribute-' . $element->getHtmlId() . '-container"' : '';
@@ -27,8 +24,8 @@ $fieldClass .= ($element->getRequired()) ? ' required' : '';
 $fieldClass .= ($note) ? ' with-note' : '';
 $fieldClass .= ($entity && $entity->getIsUserDefined()) ? ' user-defined type-' . $entity->getFrontendInput() : '';
 
-$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
-    . $block->getUiId('form-field', $element->getId());
+$fieldAttributes = $fieldId . ' class="' . $block->escapeHtmlAttr($fieldClass) . '" '
+    . $block->getUiId('form-field', $block->escapeHtmlAttr($element->getId()));
 ?>
 
 <?php $block->checkFieldDisable() ?>
@@ -36,38 +33,38 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode()
         : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
 ?>
-<?php if (!$element->getNoDisplay()): ?>
-    <?php if ($element->getType() == 'hidden'): ?>
+<?php if (!$element->getNoDisplay()) :?>
+    <?php if ($element->getType() == 'hidden') :?>
         <?= $element->getElementHtml() ?>
-    <?php else: ?>
-    <div<?= /* @escapeNotVerified */ $fieldAttributes ?> data-attribute-code="<?= $element->getHtmlId() ?>"
-        data-apply-to="<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
+    <?php else :?>
+    <div<?= /* @noEscape */ $fieldAttributes ?> data-attribute-code="<?= $element->getHtmlId() ?>"
+        data-apply-to="<?= $block->escapeHtmlAttr($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(
             $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
         ))?>"
         >
-        <?php if ($elementBeforeLabel): ?>
+        <?php if ($elementBeforeLabel) :?>
             <?= $block->getElementHtml() ?>
             <?= $element->getLabelHtml('', $block->getScopeLabel()) ?>
-            <?= /* @escapeNotVerified */ $note ?>
-        <?php else: ?>
+            <?= /* @noEscape */ $note ?>
+        <?php else :?>
             <?= $element->getLabelHtml('', $block->getScopeLabel()) ?>
             <div class="admin__field-control control">
-                <?= /* @escapeNotVerified */ ($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml() ?>
-                <?= /* @escapeNotVerified */ $note ?>
+                <?= ($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml() ?>
+                <?= /* @noEscape */ $note ?>
             </div>
         <?php endif; ?>
         <div class="field-service">
-            <?php if ($block->canDisplayUseDefault()): ?>
+            <?php if ($block->canDisplayUseDefault()) :?>
                 <label for="<?= $element->getHtmlId() ?>_default" class="choice use-default">
-                    <input <?php if ($element->getReadonly()):?> disabled="disabled"<?php endif; ?>
+                    <input <?php if ($element->getReadonly()) :?> disabled="disabled"<?php endif; ?>
                             type="checkbox"
                             name="use_default[]"
                             class="use-default-control"
                             id="<?= $element->getHtmlId() ?>_default"
-                            <?php if ($block->usedDefault()): ?> checked="checked"<?php endif; ?>
-                            onclick="<?= /* @escapeNotVerified */ $elementToggleCode ?>"
-                            value="<?= /* @escapeNotVerified */ $block->getAttributeCode() ?>"/>
-                    <span class="use-default-label"><?= /* @escapeNotVerified */ __('Use Default Value') ?></span>
+                            <?php if ($block->usedDefault()) :?> checked="checked"<?php endif; ?>
+                            onclick="<?= $block->escapeHtmlAttr($elementToggleCode) ?>"
+                            value="<?= $block->escapeHtmlAttr($block->getAttributeCode()) ?>"/>
+                    <span class="use-default-label"><?= $block->escapeHtml(__('Use Default Value')) ?></span>
                 </label>
             <?php endif; ?>
         </div>

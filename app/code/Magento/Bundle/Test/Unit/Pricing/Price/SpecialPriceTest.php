@@ -6,6 +6,7 @@
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
 use \Magento\Bundle\Pricing\Price\SpecialPrice;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 {
@@ -77,12 +78,6 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getSpecialPrice')
             ->will($this->returnValue($specialPrice));
 
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->saleable->expects($this->once())
-            ->method('getStore')
-            ->will($this->returnValue($store));
         $this->saleable->expects($this->once())
             ->method('getSpecialFromDate')
             ->will($this->returnValue($specialFromDate));
@@ -92,7 +87,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->localeDate->expects($this->once())
             ->method('isScopeDateInInterval')
-            ->with($store, $specialFromDate, $specialToDate)
+            ->with(WebsiteInterface::ADMIN_CODE, $specialFromDate, $specialToDate)
             ->will($this->returnValue($isScopeDateInInterval));
 
         $this->priceCurrencyMock->expects($this->never())

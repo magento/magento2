@@ -42,6 +42,7 @@ class Text implements CustomizableOptionValueInterface
     ): array {
         /** @var TextOptionType $optionTypeRenderer */
         $optionTypeRenderer = $option->groupFactory($option->getType());
+        $optionTypeRenderer->setOption($option);
         $priceValueUnits = $this->priceUnitLabel->getData($option->getPriceType());
 
         $selectedOptionValueData = [

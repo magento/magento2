@@ -12,12 +12,18 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /**
  * Map product index data to search engine metadata
  */
 class ProductDataMapper implements BatchDataMapperInterface
 {
+    /**
+     * @var AttributeOptionInterface[]
+     */
+    private $attributeOptionsCache;
+
     /**
      * @var Builder
      */
@@ -95,6 +101,7 @@ class ProductDataMapper implements BatchDataMapperInterface
         $this->excludedAttributes = array_merge($this->defaultExcludedAttributes, $excludedAttributes);
         $this->additionalFieldsProvider = $additionalFieldsProvider;
         $this->dataProvider = $dataProvider;
+        $this->attributeOptionsCache = [];
     }
 
     /**
@@ -272,13 +279,35 @@ class ProductDataMapper implements BatchDataMapperInterface
     private function getValuesLabels(Attribute $attribute, array $attributeValues): array
     {
         $attributeLabels = [];
-        foreach ($attribute->getOptions() as $option) {
+
+        $options = $this->getAttributeOptions($attribute);
+        if (empty($options)) {
+            return $attributeLabels;
+        }
+
+        foreach ($options as $option) {
             if (\in_array($option->getValue(), $attributeValues)) {
                 $attributeLabels[] = $option->getLabel();
             }
         }
 
         return $attributeLabels;
+    }
+
+    /**
+     * Retrieve options for attribute
+     *
+     * @param Attribute $attribute
+     * @return array
+     */
+    private function getAttributeOptions(Attribute $attribute): array
+    {
+        if (!isset($this->attributeOptionsCache[$attribute->getId()])) {
+            $options = $attribute->getOptions() ?? [];
+            $this->attributeOptionsCache[$attribute->getId()] = $options;
+        }
+
+        return $this->attributeOptionsCache[$attribute->getId()];
     }
 
     /**

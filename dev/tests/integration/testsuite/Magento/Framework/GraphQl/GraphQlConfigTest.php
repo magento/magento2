@@ -7,11 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Cache;
-use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\GraphQl\Config\Config;
-use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 use Magento\Framework\GraphQl\Config\Data\Argument;
 use Magento\Framework\GraphQl\Config\Data\Enum;
 use Magento\Framework\GraphQl\Config\Data\Field;
@@ -19,9 +16,11 @@ use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use Magento\Framework\GraphQl\Config\Data\Type;
 use Magento\Framework\GraphQl\Config\Element\EnumValue;
 use Magento\Framework\GraphQl\Config\Element\InterfaceType;
-use Magento\Framework\GraphQl\Config\Element\TypeFactory;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Test of schema configuration reading and parsing
+ */
 class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
 {
    /** @var \Magento\Framework\GraphQl\Config  */
@@ -76,7 +75,12 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
                 ['response_field' => 'required', 'expected_value' => $queryFields[$fieldKey]->isRequired()],
                 ['response_field' => 'isList', 'expected_value' => $queryFields[$fieldKey]->isList()],
                 ['response_field' => 'resolver', 'expected_value' => $queryFields[$fieldKey]->getResolver()],
-                ['response_field' => 'description', 'expected_value' => $queryFields[$fieldKey]->getDescription()]
+                ['response_field' => 'description', 'expected_value' => $queryFields[$fieldKey]->getDescription()],
+                [
+                    'response_field' => 'cache',
+                    'expected_value' => $queryFields[$fieldKey]->getCache(),
+                    'optional' => true
+                ]
             ];
             $this->assertResponseFields($expectedOutputArray['Query']['fields'][$fieldKey], $fieldAssertionMap);
             /** @var \Magento\Framework\GraphQl\Config\Element\Argument $queryFieldArguments */
@@ -212,12 +216,15 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
+            $optionalField = isset($assertionData['optional']) ? $assertionData['optional'] : false;
+            if (!$optionalField || isset($actualResponse[$responseField])) {
+                $this->assertEquals(
+                    $expectedValue,
+                    $actualResponse[$responseField],
+                    "Value of '{$responseField}' field in response does not match expected value: "
+                    . var_export($expectedValue, true)
+                );
+            }
         }
     }
 

@@ -17,8 +17,8 @@ use Magento\Framework\Data\CollectionModifierInterface;
 
 /**
  * Provide product render information (this information should be enough for rendering product on front)
- * for one or few products
  *
+ * Render information provided for one or few products
  */
 class ProductRenderList implements ProductRenderListInterface
 {
@@ -64,7 +64,6 @@ class ProductRenderList implements ProductRenderListInterface
      * @param ProductRenderSearchResultsFactory $searchResultFactory
      * @param ProductRenderFactory $productRenderDtoFactory
      * @param Config $config
-     * @param Product\Visibility $productVisibility
      * @param CollectionModifier $collectionModifier
      * @param array $productAttributes
      */

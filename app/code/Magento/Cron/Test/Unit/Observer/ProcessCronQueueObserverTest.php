@@ -174,7 +174,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->statFactory = $this->getMockBuilder(StatFactory::class)
             ->setMethods(['create'])
-            ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->stat = $this->getMockBuilder(\Magento\Framework\Profiler\Driver\Standard\Stat::class)
             ->disableOriginalConstructor()

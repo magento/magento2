@@ -25,6 +25,10 @@ class MySQLSearchDeprecationNotification implements \Magento\Framework\Setup\Pat
      */
     private $notifier;
 
+    /**
+     * @param \Magento\Framework\Search\EngineResolverInterface $searchEngineResolver
+     * @param \Magento\Framework\Notification\NotifierInterface $notifier
+     */
     public function __construct(
         \Magento\Framework\Search\EngineResolverInterface $searchEngineResolver,
         \Magento\Framework\Notification\NotifierInterface $notifier

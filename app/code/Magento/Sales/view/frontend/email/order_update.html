@@ -10,7 +10,7 @@
 "var order.getCustomerName()":"Customer Name",
 "var comment":"Order Comment",
 "var order.increment_id":"Order Id",
-"var order.getStatusLabel()":"Order Status"
+"var order.getFrontendStatusLabel()":"Order Status"
 } @-->
 {{template config_path="design/email/header_template"}}
 
@@ -23,7 +23,7 @@
                     "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
 
                     increment_id=$order.increment_id
-                    order_status=$order.getStatusLabel()
+                    order_status=$order.getFrontendStatusLabel()
                 |raw}}
             </p>
             <p>{{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}</p>

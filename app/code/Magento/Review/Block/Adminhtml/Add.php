@@ -56,7 +56,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                     },
                     loadProductData : function() {
                         jQuery.ajax({
-                            type: "POST",
+                            type: "GET",
                             url: review.productInfoUrl,
                             data: {
                                 form_key: FORM_KEY
@@ -93,13 +93,14 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         if( response.error ) {
                             alert(response.message);
                         } else if( response.id ){
+                            var productName = response.name;
                             $("product_id").value = response.id;
 
                             $("product_name").innerHTML = \'<a href="' .
             $this->getUrl(
                 'catalog/product/edit'
             ) .
-            'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
+            'id/\' + response.id + \'" target="_blank">\' + productName.escapeHTML() + \'</a>\';
                         } else if ( response.message ) {
                             alert(response.message);
                         }

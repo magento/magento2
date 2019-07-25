@@ -171,7 +171,14 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Create or update a customer.
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param string $passwordHash
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\InputException If bad input is provided
+     * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -202,7 +209,9 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customerModel->setId($customer->getId());
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
-            $customerModel->setStoreId($this->storeManager->getStore()->getId());
+            $customerModel->setStoreId(
+                $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
+            );
         }
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
@@ -270,7 +279,6 @@ class CustomerRepository implements CustomerRepositoryInterface
                 'delegate_data' => $delegatedNewOperation ? $delegatedNewOperation->getAdditionalData() : [],
             ]
         );
-
         return $savedCustomer;
     }
 
@@ -304,7 +312,13 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Retrieve customer.
+     *
+     * @param string $email
+     * @param int|null $websiteId
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified email does not exist.
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function get($email, $websiteId = null)
     {
@@ -313,7 +327,12 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Get customer by Customer ID.
+     *
+     * @param int $customerId
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getById($customerId)
     {
@@ -322,7 +341,15 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Retrieve customers which match a specified criteria.
+     *
+     * This call returns an array of objects, but detailed information about each object’s attributes might not be
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#CustomerRepositoryInterface to determine
+     * which call to use to get detailed information about all attributes for an object.
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -362,7 +389,11 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Delete customer.
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function delete(CustomerInterface $customer)
     {
@@ -370,7 +401,12 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Delete customer by Customer ID.
+     *
+     * @param int $customerId
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteById($customerId)
     {

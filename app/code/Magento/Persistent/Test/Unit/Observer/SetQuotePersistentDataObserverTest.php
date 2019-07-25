@@ -7,6 +7,9 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
+/**
+ * Observer test for setting "is_persistent" value to quote
+ */
 class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -83,7 +86,6 @@ class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getEvent')
             ->will($this->returnValue($this->eventManagerMock));
         $this->eventManagerMock->expects($this->once())->method('getQuote');
-        $this->customerSessionMock->expects($this->never())->method('isLoggedIn');
         $this->model->execute($this->observerMock);
     }
 
@@ -98,8 +100,7 @@ class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getQuote')
             ->will($this->returnValue($this->quoteMock));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(false));
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(true));
         $this->quoteManagerMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
         $this->quoteMock->expects($this->once())->method('setIsPersistent')->with(true);
         $this->model->execute($this->observerMock);
