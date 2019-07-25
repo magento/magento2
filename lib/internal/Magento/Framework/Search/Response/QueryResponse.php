@@ -75,7 +75,14 @@ class QueryResponse implements ResponseInterface
     }
 
     /**
-     * @inheritdoc
+     * Temporary solution for an existing interface of a fulltext search request in Backward compatibility purposes.
+     * Don't use this function.
+     * It must be move to different interface.
+     * Scope to split Search response interface on two different 'Search' and 'Fulltext Search' contains in MC-16461.
+     *
+     * @deprecated
+     *
+     * @return int
      */
     public function getTotal(): int
     {
