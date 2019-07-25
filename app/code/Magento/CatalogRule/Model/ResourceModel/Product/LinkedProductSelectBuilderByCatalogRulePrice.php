@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -11,6 +13,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
+/**
+ * Provide Select object for retrieve product id with minimal price
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelectBuilderInterface
 {
     /**
@@ -49,6 +56,11 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
     private $baseSelectProcessor;
 
     /**
+     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
+     */
+    private $ruleDateFormatter;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Customer\Model\Session $customerSession
@@ -56,6 +68,7 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param BaseSelectProcessorInterface $baseSelectProcessor
+     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -64,7 +77,8 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        BaseSelectProcessorInterface $baseSelectProcessor = null
+        BaseSelectProcessorInterface $baseSelectProcessor = null,
+        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;
@@ -74,14 +88,16 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
         $this->metadataPool = $metadataPool;
         $this->baseSelectProcessor = (null !== $baseSelectProcessor)
             ? $baseSelectProcessor : ObjectManager::getInstance()->get(BaseSelectProcessorInterface::class);
+        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build($productId)
     {
-        $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
+        $timestamp = $this->ruleDateFormatter->getTimeStamp($this->storeManager->getStore());
         $currentDate = $this->dateTime->formatDate($timestamp, false);
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productTable = $this->resource->getTableName('catalog_product_entity');
