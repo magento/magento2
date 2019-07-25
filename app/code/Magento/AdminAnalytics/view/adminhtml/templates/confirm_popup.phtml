@@ -38,13 +38,9 @@
                     text: $.mage.__(`Don't Allow`),
                     class: 'action',
                     click: function(){
-                        console.log(`I clicked Don't Allow`);
-
-
                         var data = {
                             'form_key': window.FORM_KEY
                         };
-                        console.log(data.logAction)
                         $.ajax({
                             type: 'POST',
                             url: '/magento2ce/admin_michell/adminAnalytics/config/disableAdminUsage',
@@ -62,7 +58,6 @@
                     text: $.mage.__('Ok'),
                     class: 'action',
                     click: function(){
-                        console.log("I clicked Ok");
                         var data = {
                             'form_key': window.FORM_KEY
                         };

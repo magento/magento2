@@ -22,14 +22,14 @@ class CanViewNotification implements VisibilityConditionInterface
      *
      * @var string
      */
-    private static $conditionName = 'can_view_notification';
+    private static $conditionName = 'can_view_admin_usage_notification';
 
     /**
      * Prefix for cache
      *
      * @var string
      */
-    private static $cachePrefix = 'release-notification-popup-';
+    private static $cachePrefix = 'admin-usage-notification-popup-';
 
     /**
      * @var Logger
@@ -78,18 +78,18 @@ class CanViewNotification implements VisibilityConditionInterface
      */
     public function isVisible(array $arguments)
     {
-        $userId = $this->session->getUser()->getId();
-        $cacheKey = self::$cachePrefix . $userId;
-        $value = $this->cacheStorage->load($cacheKey);
-        if ($value === false) {
-            $value = version_compare(
-                $this->viewerLogger->get($userId)->getLastViewVersion(),
-                $this->productMetadata->getVersion(),
-                '<'
-            );
-            $this->cacheStorage->save(false, $cacheKey);
-        }
-        return (bool)$value;
+//        $userId = $this->session->getUser()->getId();
+//        $cacheKey = self::$cachePrefix . $userId;
+//        $value = $this->cacheStorage->load($cacheKey);
+//        if ($value === false) {
+//            $value = version_compare(
+//                $this->viewerLogger->get($userId)->getLastViewVersion(),
+//                $this->productMetadata->getVersion(),
+//                '<'
+//            );
+//            $this->cacheStorage->save(false, $cacheKey);
+//        }
+        return true;
     }
 
     /**

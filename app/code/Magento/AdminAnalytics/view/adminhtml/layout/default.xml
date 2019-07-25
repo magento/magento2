@@ -14,8 +14,13 @@
                 </arguments>
             </block>
 
-            <block name="confirm_popup_block" template="Magento_AdminAnalytics::confirm_popup.phtml"/>
+
         </referenceContainer>
+        <referenceContainer name="content">
+        <uiComponent name="admin_usage_notification">
+            <visibilityCondition name="can_view_admin_usage_notification" className="Magento\AdminAnalytics\Model\Condition\CanViewNotification"/>
+        </uiComponent>
+    </referenceContainer>
     </body>
 </page>
 

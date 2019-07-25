@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AdminAnalytics\Model\ResourceModel\Viewer;
 
-use Magento\ReleaseNotification\Model\Viewer\Log;
-use Magento\ReleaseNotification\Model\Viewer\LogFactory;
+use Magento\AdminAnalytics\Model\Viewer\Log;
+use Magento\AdminAnalytics\Model\Viewer\LogFactory;
 use Magento\Framework\App\ResourceConnection;
 
 /**

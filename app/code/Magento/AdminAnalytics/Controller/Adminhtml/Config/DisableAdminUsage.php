@@ -22,6 +22,7 @@ class DisableAdminUsage extends Action
 
 
     private $configFactory;
+
     /**
      * @var ProductMetadataInterface
      */

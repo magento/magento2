@@ -20,7 +20,6 @@ use Magento\Config\Model\Config\Factory;
 class EnableAdminUsage extends Action
 {
 
-
     private $configFactory;
     /**
      * @var ProductMetadataInterface
