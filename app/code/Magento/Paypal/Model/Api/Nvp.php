@@ -1490,21 +1490,21 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             // PayPal doesn't provide detailed shipping name fields, so the name will be overwritten
             $nameParts = explode(' ', $data['SHIPTONAME']);
             // when there is more than one first and/or last name, we assume that the last word in the string is the last name
-            if(count($nameParts) > 2){
+            if (count($nameParts) > 2) {
                 $lastname = array_pop($nameParts);
                 $firstname = implode(' ', $nameParts);
                 $nameParts = [$firstname, $lastname];
             }
             if (!empty($nameParts[0]) && !empty($nameParts[1])) {
-                $shippingAddress->addData(array(
+                $shippingAddress->addData([
                     'firstname'  => $nameParts[0],
                     'lastname'  => $nameParts[1]
-                ));
+                ]);
             } else {
-                $shippingAddress->addData(array(
+                $shippingAddress->addData([
                     'firstname'  => $data['FIRSTNAME'],
                     'lastname'  => $data['LASTNAME']
-                ));
+                ]);
             }
             $this->setExportedShippingAddress($shippingAddress);
         }
