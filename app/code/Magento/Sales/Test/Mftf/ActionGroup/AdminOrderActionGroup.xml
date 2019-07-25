@@ -377,6 +377,14 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{orderStatus}}" stepKey="seeOrderStatusCanceled"/>
     </actionGroup>
 
+    <!--Assert that the product is not in the order items list-->
+    <actionGroup name="dontSeeProductInItemsOrdered">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <dontSee selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="dontseeSkuInItemsOrdered"/>
+    </actionGroup>
+
     <!--Select Check Money payment method-->
     <actionGroup name="SelectCheckMoneyPaymentMethod">
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>

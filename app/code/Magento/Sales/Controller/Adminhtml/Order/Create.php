@@ -21,6 +21,10 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 abstract class Create extends \Magento\Backend\App\Action
 {
     /**
+     * Indicates how to process post data
+     */
+    private const ACTION_SAVE = 'save';
+    /**
      * @var \Magento\Framework\Escaper
      */
     protected $escaper;
@@ -209,7 +213,7 @@ abstract class Create extends \Magento\Backend\App\Action
         /**
          * Apply mass changes from sidebar
          */
-        if ($data = $this->getRequest()->getPost('sidebar')) {
+        if (($data = $this->getRequest()->getPost('sidebar')) && $action !== self::ACTION_SAVE) {
             $this->_getOrderCreateModel()->applySidebarData($data);
         }
 
@@ -225,7 +229,8 @@ abstract class Create extends \Magento\Backend\App\Action
         /**
          * Adding products to quote from special grid
          */
-        if ($this->getRequest()->has('item') && !$this->getRequest()->getPost('update_items') && !($action == 'save')
+        if ($this->getRequest()->has('item') && !$this->getRequest()->getPost('update_items')
+            && $action !== self::ACTION_SAVE
         ) {
             $items = $this->getRequest()->getPost('item');
             $items = $this->_processFiles($items);

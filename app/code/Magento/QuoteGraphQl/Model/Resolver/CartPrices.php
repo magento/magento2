@@ -73,7 +73,7 @@ class CartPrices implements ResolverInterface
         $appliedTaxesData = [];
         $appliedTaxes = $total->getAppliedTaxes();
 
-        if (count($appliedTaxes) === 0) {
+        if (empty($appliedTaxes)) {
             return $appliedTaxesData;
         }
 
