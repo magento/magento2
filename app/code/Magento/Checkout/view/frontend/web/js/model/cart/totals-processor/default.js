@@ -96,7 +96,7 @@ define([
             // ) {
             //     quote.setTotals(cartCache.get('totals'));
             // } else {
-                return loadFromServer(address);
+            return loadFromServer(address);
             // }
         }
     };
