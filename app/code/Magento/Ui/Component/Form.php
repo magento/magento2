@@ -77,9 +77,7 @@ class Form extends AbstractComponent
         } elseif (isset($data['items'])) {
             foreach ($data['items'] as $item) {
                 if ($item[$idFieldName] == $id) {
-                    $dataSource = [
-                        'data' => $item
-                    ];
+                    $dataSource = ['data' => ['general' => $item]];
                 }
             }
         }
