@@ -147,7 +147,10 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $this->persistentHelperMock->expects($this->atLeastOnce())
             ->method('isEnabled')
             ->willReturn(true);
-        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
+        $this->persistentHelperMock->expects($this->atLeastOnce())
+            ->method('isShoppingCartPersist')
+            ->willReturn(true);
+        $this->sessionMock->expects($this->atLeastOnce())->method('isPersistent')->willReturn(false);
         $this->checkoutSessionMock
             ->method('getQuote')
             ->willReturn($this->quoteMock);
