@@ -106,7 +106,10 @@ QUERY;
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('file', $response['products']['items'][0]['media_gallery_entries'][0]);
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['media_gallery_entries'][0]['file']);
+        self::assertContains(
+            'magento_image.jpg',
+            $response['products']['items'][0]['media_gallery_entries'][0]['file']
+        );
     }
 
     /**
