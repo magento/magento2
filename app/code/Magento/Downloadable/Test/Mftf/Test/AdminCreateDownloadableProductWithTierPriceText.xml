@@ -19,12 +19,6 @@
             <group value="Downloadable"/>
             <group value="mtf_migrated"/>
         </annotations>
-        <before>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
-        </before>
-        <after>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
-        </after>
         <remove keyForRemoval="addCustomerGroupPrice"/>
 
         <!-- Add tier price to product -->

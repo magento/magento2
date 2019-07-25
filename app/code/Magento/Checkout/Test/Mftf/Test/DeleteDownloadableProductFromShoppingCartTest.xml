@@ -31,9 +31,9 @@
             </createData>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete downloadable product -->
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
         </after>
 
         <!-- Add downloadable product to the cart -->

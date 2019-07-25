@@ -28,6 +28,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
@@ -38,7 +39,6 @@
 
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
         </after>
 
         <!-- Create downloadable product -->

@@ -19,7 +19,7 @@
             <group value="Downloadable"/>
         </annotations>
         <before>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="product"/>
             <createData entity="ApiDownloadableProduct" stepKey="product"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="product"/>
@@ -29,7 +29,7 @@
             </createData>
         </before>
         <after>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="delete"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchDownloadableBySkuTest" extends="AdvanceCatalogSearchSimpleProductBySkuTest">
@@ -43,7 +43,7 @@
             <group value="Downloadable"/>
         </annotations>
         <before>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="product"/>
             <createData entity="ApiDownloadableProduct" stepKey="product"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="product"/>
@@ -53,7 +53,7 @@
             </createData>
         </before>
         <after>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="delete"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchDownloadableByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">
@@ -67,7 +67,7 @@
             <group value="Downloadable"/>
         </annotations>
         <before>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="product"/>
             <createData entity="ApiDownloadableProduct" stepKey="product"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="product"/>
@@ -77,7 +77,7 @@
             </createData>
         </before>
         <after>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="delete"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchDownloadableByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
@@ -91,7 +91,7 @@
             <group value="Downloadable"/>
         </annotations>
         <before>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="product"/>
             <createData entity="ApiDownloadableProduct" stepKey="product"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="product"/>
@@ -101,7 +101,7 @@
             </createData>
         </before>
         <after>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="delete"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchDownloadableByPriceTest" extends="AdvanceCatalogSearchSimpleProductByPriceTest">
@@ -125,7 +125,7 @@
             </createData>
         </before>
         <after>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="delete"/>
         </after>
     </test>
 </tests>

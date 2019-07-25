@@ -20,14 +20,15 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
@@ -41,7 +42,6 @@
 
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
         </after>
 
         <!-- Create store view -->

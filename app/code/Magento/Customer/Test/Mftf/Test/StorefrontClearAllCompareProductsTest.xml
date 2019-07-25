@@ -109,6 +109,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Logout -->
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
 
@@ -122,7 +123,6 @@
             <deleteData createDataKey="createBundleProduct1" stepKey="deleteBundleProduct1"/>
             <deleteData createDataKey="createGroupedProduct1" stepKey="deleteGroupedProduct1"/>
             <deleteData createDataKey="createDownloadableProduct1" stepKey="deleteDownloadableProduct1"/>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer1">
