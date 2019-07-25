@@ -65,7 +65,8 @@ class SetPaymentMethodOnCart implements ResolverInterface
         }
         $paymentData = $args['input']['payment_method'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->checkCartCheckoutAllowance->execute($cart);
         $this->setPaymentMethodOnCart->execute($cart, $paymentData);
 
