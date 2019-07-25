@@ -411,8 +411,6 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage "Country Code" cannot contain lowercase characters.
      */
     public function testSetShippingAddressWithLowerCaseCountry()
     {
@@ -452,7 +450,13 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlMutation($query);
+        $result = $this->graphQlMutation($query);
+
+        self::assertCount(1, $result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+        $address = reset($result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+
+        $this->assertEquals('US', $address['country']['code']);
+        $this->assertEquals('CA', $address['region']['code']);
     }
 
     /**

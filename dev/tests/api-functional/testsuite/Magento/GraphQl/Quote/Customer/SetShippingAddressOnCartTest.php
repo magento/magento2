@@ -607,8 +607,6 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage "Country Code" cannot contain lowercase characters.
      */
     public function testSetShippingAddressWithLowerCaseCountry()
     {
@@ -618,20 +616,18 @@ QUERY;
 mutation {
   setShippingAddressesOnCart(
     input: {
-      cart_id: "$maskedQuoteId"
+      cart_id: "{$maskedQuoteId}"
       shipping_addresses: [
         {
           address: {
-            firstname: "test firstname"
-            lastname: "test lastname"
-            company: "test company"
-            street: ["test street 1", "test street 2"]
-            city: "test city"
-            region: "test region"
-            postcode: "887766"
+            firstname: "John"
+            lastname: "Doe"
+            street: ["6161 West Centinella Avenue"]
+            city: "Culver City"
+            region: "CA"
+            postcode: "90230"
             country_code: "us"
-            telephone: "88776655"
-            save_in_address_book: false
+            telephone: "555-555-55-55"
           }
         }
       ]
@@ -639,13 +635,24 @@ mutation {
   ) {
     cart {
       shipping_addresses {
-        firstname
+        region {
+            code
+        }
+        country {
+            code
+        }
       }
     }
   }
 }
 QUERY;
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $result = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        self::assertCount(1, $result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+        $address = reset($result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+
+        $this->assertEquals('US', $address['country']['code']);
+        $this->assertEquals('CA', $address['region']['code']);
     }
 
     /**

@@ -642,8 +642,6 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage "Country Code" cannot contain lowercase characters.
      */
     public function testSetBillingAddressWithLowerCaseCountry()
     {
@@ -673,12 +671,29 @@ mutation {
     cart {
       billing_address {
         firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
       }
     }
   }
 }
 QUERY;
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        self::assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        $this->assertNewAddressFields($billingAddressResponse);
     }
 
     /**
