@@ -8,52 +8,35 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Downloadable;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Model\QuoteFactory;
 
 /**
- * Test retrieving of customer download products
+ * Test retrieving of customer downloadable products.
  */
 class CustomerDownloadableProductsTest extends GraphQlAbstract
 {
-    /**
-     * @var QuoteFactory
-     */
-    protected $quoteFactory;
-
-    /**
-     * @var QuoteResource
-     */
-    protected $quoteResource;
-
     /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
 
     /**
-     * @var CartManagementInterface
+     * @inheritdoc
      */
-    private $cartManagement;
+    protected function setUp()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/downloadable_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_downloadable_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/customer_order_with_downloadable_product.php
      */
     public function testCustomerDownloadableProducts()
     {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
-        $this->cartManagement->placeOrder($quote->getId());
-
         $query = $this->getQuery();
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
@@ -89,43 +72,6 @@ class CustomerDownloadableProductsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
-     */
-    public function testCustomerHasNoDownloadableProducts()
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
-        $this->cartManagement->placeOrder($quote->getId());
-
-        $query = $this->getQuery();
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-
-        self::assertArrayHasKey('items', $response['customerDownloadableProducts']);
-        self::assertCount(0, $response['customerDownloadableProducts']['items']);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->cartManagement = $objectManager->get(CartManagementInterface::class);
-    }
-
-    /**
      * @return string
      */
     private function getQuery(): string
@@ -154,7 +100,6 @@ QUERY;
     private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
     {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        return $headerMap;
+        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 }
