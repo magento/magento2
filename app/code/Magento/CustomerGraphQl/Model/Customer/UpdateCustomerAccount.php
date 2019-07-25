@@ -10,12 +10,14 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Update customer account data
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - https://jira.corp.magento.com/browse/MC-18152
  */
 class UpdateCustomerAccount
 {
@@ -23,11 +25,6 @@ class UpdateCustomerAccount
      * @var SaveCustomer
      */
     private $saveCustomer;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
 
     /**
      * @var CheckCustomerPassword
@@ -51,7 +48,6 @@ class UpdateCustomerAccount
 
     /**
      * @param SaveCustomer $saveCustomer
-     * @param StoreManagerInterface $storeManager
      * @param CheckCustomerPassword $checkCustomerPassword
      * @param DataObjectHelper $dataObjectHelper
      * @param ChangeSubscriptionStatus $changeSubscriptionStatus
@@ -59,14 +55,12 @@ class UpdateCustomerAccount
      */
     public function __construct(
         SaveCustomer $saveCustomer,
-        StoreManagerInterface $storeManager,
         CheckCustomerPassword $checkCustomerPassword,
         DataObjectHelper $dataObjectHelper,
         ChangeSubscriptionStatus $changeSubscriptionStatus,
         array $restrictedKeys = []
     ) {
         $this->saveCustomer = $saveCustomer;
-        $this->storeManager = $storeManager;
         $this->checkCustomerPassword = $checkCustomerPassword;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->restrictedKeys = $restrictedKeys;
@@ -78,12 +72,14 @@ class UpdateCustomerAccount
      *
      * @param CustomerInterface $customer
      * @param array $data
+     * @param StoreInterface $store
      * @return void
      * @throws GraphQlAlreadyExistsException
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
-    public function execute(CustomerInterface $customer, array $data): void
+    public function execute(CustomerInterface $customer, array $data, StoreInterface $store): void
     {
         if (isset($data['email']) && $customer->getEmail() !== $data['email']) {
             if (!isset($data['password']) || empty($data['password'])) {
@@ -97,7 +93,7 @@ class UpdateCustomerAccount
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
         $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
 
-        $customer->setStoreId($this->storeManager->getStore()->getId());
+        $customer->setStoreId($store->getId());
 
         $this->saveCustomer->execute($customer);
 
