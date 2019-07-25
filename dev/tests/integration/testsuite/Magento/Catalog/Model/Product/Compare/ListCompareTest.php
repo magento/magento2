@@ -6,10 +6,6 @@
 
 namespace Magento\Catalog\Model\Product\Compare;
 
-/**
- * @magentoDataFixture Magento/Catalog/_files/product_simple.php
- * @magentoDataFixture Magento/Customer/_files/customer.php
- */
 class ListCompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -45,7 +41,8 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testAddProductWithSession()
     {
@@ -58,13 +55,29 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
         $product2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Model\Product::class)
             ->load(6);
-        $this->_model->addProducts([$product->getId(), $product2->getId(), 'none', 99]);
+        $products = [$product->getId(), $product2->getId()];
+        $this->_model->addProducts($products);
+
         $this->assertTrue($this->_model->hasItems(1, $this->_visitor->getId()));
-        $this->assertTrue($this->_model->hasItems(6, $this->_visitor->getId()));
-        $this->assertFalse($this->_model->hasItems('none', $this->_visitor->getId()));
-        $this->assertFalse($this->_model->hasItems(99, $this->_visitor->getId()));
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testAddProductWithSessionNeg()
+    {
+        $this->_session->setCustomerId(1);
+        $products = ['none', 99];
+        $this->_model->addProducts($products);
+
+        $this->assertFalse($this->_model->hasItems(1, $this->_visitor->getId()));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
     public function testAddProductWithoutSession()
     {
         /** @var $product \Magento\Catalog\Model\Product */
