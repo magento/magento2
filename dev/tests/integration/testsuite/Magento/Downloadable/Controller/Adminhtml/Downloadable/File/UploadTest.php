@@ -35,7 +35,7 @@ class UploadTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      * @dataProvider uploadWrongUploadTypeDataProvider
      * @return void
      */
-    public function testUploadWrongUploadType($postData): void
+    public function testUploadWrongUploadType($postData)
     {
         $this->getRequest()->setPostValue($postData);
         $this->getRequest()->setMethod('POST');
