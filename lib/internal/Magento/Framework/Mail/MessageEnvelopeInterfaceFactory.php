@@ -1,7 +1,5 @@
 <?php
 /**
- * Mail Template Transport Builder
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
