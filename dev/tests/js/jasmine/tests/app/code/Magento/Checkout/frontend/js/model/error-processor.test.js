@@ -33,6 +33,13 @@ define([
             });
         });
 
+        afterEach(function () {
+            try {
+                injector.clean();
+                injector.remove();
+            } catch (e) {}
+        });
+
         describe('Check process method', function () {
             it('check on success response with invalid response data', function () {
                 var messageContainer = jasmine.createSpyObj('globalMessageList', ['addErrorMessage']),
