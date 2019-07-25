@@ -12,11 +12,11 @@
         <arguments>
             <argument name="user" type="entity"/>
         </arguments>
-        <click selector="{{AdminUserGridSection.resetButton}}" stepKey="resetGridFilter" />
+        <click selector="{{AdminUserGridSection.resetButton}}" stepKey="resetGridFilter"/>
         <waitForPageLoad stepKey="waitForFiltersReset" time="15"/>
-        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName" />
-        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName"/>
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch"/>
         <waitForPageLoad stepKey="waitForGridToLoad" time="15"/>
-        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser" />
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser"/>
     </actionGroup>
 </actionGroups>

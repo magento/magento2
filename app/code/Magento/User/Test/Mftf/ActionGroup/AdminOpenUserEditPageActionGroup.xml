@@ -11,11 +11,11 @@
         <arguments>
              <argument name="user" type="entity"/>
          </arguments>
-         <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToUserGrid" />
-         <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName" />
-         <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch" />
+         <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToUserGrid"/>
+         <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName"/>
+         <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch"/>
          <waitForPageLoad stepKey="waitForGridToLoad" time="15"/>
-         <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser" />
+         <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser"/>
          <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="openUserEdit"/>
          <waitForPageLoad stepKey="waitForUserEditPageLoad" time="15"/>
 

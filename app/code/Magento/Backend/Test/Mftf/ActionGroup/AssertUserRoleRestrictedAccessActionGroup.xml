@@ -9,6 +9,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertUserRoleRestrictedAccessActionGroup">
-        <see selector="{{AdminHeaderSection.pageHeading}}" userInput="Sorry, you need permissions to view this content." stepKey="seeErrorMessage" />
+        <see selector="{{AdminHeaderSection.pageHeading}}" userInput="Sorry, you need permissions to view this content." stepKey="seeErrorMessage"/>
     </actionGroup>
 </actionGroups>
