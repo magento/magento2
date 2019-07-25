@@ -63,8 +63,8 @@ class QuoteAddressFactory
         $addressInput['country_id'] = '';
         if ($addressInput['country_code']) {
             $addressInput['country_code'] = strtoupper($addressInput['country_code']);
+            $addressInput['country_id'] = $addressInput['country_code'];
         }
-        $addressInput['country_id'] = $addressInput['country_code'];
 
         $maxAllowedLineCount = $this->addressHelper->getStreetLines();
         if (is_array($addressInput['street']) && count($addressInput['street']) > $maxAllowedLineCount) {
