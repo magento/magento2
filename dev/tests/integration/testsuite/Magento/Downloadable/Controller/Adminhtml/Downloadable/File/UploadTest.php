@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
 
@@ -47,6 +48,9 @@ class UploadTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->assertEquals(0, $result['errorcode']);
     }
 
+    /**
+     * @return array
+     */
     public function uploadWrongUploadTypeDataProvider(): array
     {
         return [

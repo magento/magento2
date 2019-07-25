@@ -39,7 +39,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUploadFileFromAllowedFolder(): void
+    public function testUploadFileFromAllowedFolder()
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
@@ -67,7 +67,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testUploadFileFromNotAllowedFolder(): void
+    public function testUploadFileFromNotAllowedFolder()
     {
         $fileName = 'text.txt';
         $tmpDir = 'tmp';
@@ -89,8 +89,6 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown()
     {
-        parent::tearDown();
-
         $tmpDir = 'tmp';
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete($tmpDir);

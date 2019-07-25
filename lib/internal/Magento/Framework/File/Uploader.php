@@ -173,17 +173,12 @@ class Uploader
      *
      * @param string|array $fileId
      * @param \Magento\Framework\File\Mime|null $fileMime
-     * @param DirectoryList|null $directoryList
      * @throws \DomainException
      */
     public function __construct(
         $fileId,
-        Mime $fileMime = null,
-        DirectoryList $directoryList = null
+        Mime $fileMime = null
     ) {
-        $this->directoryList= $directoryList ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(DirectoryList::class);
-
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -606,7 +601,7 @@ class Uploader
      * @return void
      * @throws \InvalidArgumentException
      */
-    private function validateFileId(array $fileId): void
+    private function validateFileId(array $fileId)
     {
         $isValid = false;
         if (isset($fileId['tmp_name'])) {
@@ -615,14 +610,14 @@ class Uploader
             if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
-                    $this->directoryList->getPath(DirectoryList::MEDIA),
-                    $this->directoryList->getPath(DirectoryList::VAR_DIR),
-                    $this->directoryList->getPath(DirectoryList::TMP),
-                    $this->directoryList->getPath(DirectoryList::UPLOAD),
+                    $this->getDirectoryList()->getPath(DirectoryList::MEDIA),
+                    $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR),
+                    $this->getDirectoryList()->getPath(DirectoryList::TMP),
+                    $this->getDirectoryList()->getPath(DirectoryList::UPLOAD),
                 ];
 
                 $disallowedFolders = [
-                    $this->directoryList->getPath(DirectoryList::LOG),
+                    $this->getDirectoryList()->getPath(DirectoryList::LOG),
                 ];
 
                 foreach ($allowedFolders as $allowedFolder) {
@@ -646,6 +641,19 @@ class Uploader
                 __('Invalid parameter given. A valid $fileId[tmp_name] is expected.')
             );
         }
+    }
+
+    /**
+     * @return DirectoryList
+     */
+    private function getDirectoryList(): DirectoryList
+    {
+        if ($this->directoryList === null) {
+            $this->directoryList = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 
     /**
