@@ -39,6 +39,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
      * @param string|null $senderName
      * @param string|null $subject
      * @param string|null $encoding
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         MimeMessageInterface $body,
