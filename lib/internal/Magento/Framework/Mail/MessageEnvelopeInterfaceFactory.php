@@ -23,12 +23,12 @@ class MessageEnvelopeInterfaceFactory
     /**
      * @var ObjectManagerInterface
      */
-    protected $_objectManager;
+    private $objectManager;
 
     /**
      * @var string
      */
-    protected $_instanceName;
+    private $instanceName;
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -38,8 +38,8 @@ class MessageEnvelopeInterfaceFactory
         ObjectManagerInterface $objectManager,
         $instanceName = MessageEnvelopeInterface::class
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_instanceName = $instanceName;
+        $this->objectManager = $objectManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -50,6 +50,6 @@ class MessageEnvelopeInterfaceFactory
      */
     public function create(array $data = []): MessageEnvelopeInterface
     {
-        return $this->_objectManager->create($this->_instanceName, $data);
+        return $this->objectManager->create($this->instanceName, $data);
     }
 }

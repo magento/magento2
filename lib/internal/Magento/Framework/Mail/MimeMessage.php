@@ -24,9 +24,8 @@ class MimeMessage implements MimeMessageInterface
      *
      * @param array $parts
      */
-    public function __construct(
-        array $parts
-    ) {
+    public function __construct(array $parts)
+    {
         $this->mimeMessage = new ZendMimeMessage();
         $this->mimeMessage->setParts($parts);
     }

@@ -23,12 +23,12 @@ class MimeMessageInterfaceFactory
     /**
      * @var ObjectManagerInterface
      */
-    private $_objectManager;
+    private $objectManager;
 
     /**
      * @var string
      */
-    private $_instanceName;
+    private $instanceName;
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -38,8 +38,8 @@ class MimeMessageInterfaceFactory
         ObjectManagerInterface $objectManager,
         $instanceName = MimeMessageInterface::class
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_instanceName = $instanceName;
+        $this->objectManager = $objectManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -50,6 +50,6 @@ class MimeMessageInterfaceFactory
      */
     public function create(array $data = []): MimeMessageInterface
     {
-        return $this->_objectManager->create($this->_instanceName, $data);
+        return $this->objectManager->create($this->instanceName, $data);
     }
 }

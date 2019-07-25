@@ -55,11 +55,13 @@ class MailEnvelopeBuilder
     public function buildByArray(array $messageData): MessageEnvelopeInterface
     {
         $parts = [];
-        foreach ($messageData['body'] as $item) {
-            if ($item instanceof MimePartInterface) {
-                $parts[] = $item;
-            } else {
-                $parts[] = $this->mimePartFactory->create($item);
+        if (isset($messageData['body'])) {
+            foreach ($messageData['body'] as $item) {
+                if ($item instanceof MimePartInterface) {
+                    $parts[] = $item;
+                } else {
+                    $parts[] = $this->mimePartFactory->create($item);
+                }
             }
         }
         $messageData['body'] = $this->mimeMessageFactory->create(['parts'=>$parts]);

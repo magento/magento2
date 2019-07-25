@@ -34,15 +34,16 @@ class MimePart implements MimePartInterface
      * @param array $filters
      * @param string $type
      * @param string $encoding
+     * @SuppressWarnings(PHPMD.NPathComplexity, PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $content,
         ?string $type = MimeInterface::TYPE_OCTETSTREAM,
-        ?string $encoding = MimeInterface::ENCODING_8BIT,
-        ?array $filters = [],
-        ?string $disposition = null,
-        ?string $description = null,
         ?string $fileName = null,
+        ?string $disposition = null,
+        ?string $encoding = MimeInterface::ENCODING_8BIT,
+        ?string $description = null,
+        ?array $filters = [],
         ?string $charset = null,
         ?string $boundary = null,
         ?string $location = null,

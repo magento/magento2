@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -21,6 +23,8 @@ use Zend\Mail\Transport\Sendmail;
  */
 class MailTransport implements TransportInterface
 {
+    private const IS_SET_RETURN_PATH_YES = 1;
+    private const IS_SET_RETURN_PATH_CUSTOM = 2;
     /**
      * Configuration path to source of Return-Path and whether it should be set at all
      * @see \Magento\Config\Model\Config\Source\Yesnocustom to possible values
@@ -89,9 +93,9 @@ class MailTransport implements TransportInterface
     {
         try {
             $zendMessage = Message::fromString($this->message->getRawMessage())->setEncoding('utf-8');
-            if (2 === $this->isSetReturnPath && $this->returnPathValue) {
+            if (self::IS_SET_RETURN_PATH_CUSTOM === $this->isSetReturnPath && $this->returnPathValue) {
                 $zendMessage->setSender($this->returnPathValue);
-            } elseif (1 === $this->isSetReturnPath && $zendMessage->getFrom()->count()) {
+            } elseif (self::IS_SET_RETURN_PATH_YES === $this->isSetReturnPath && $zendMessage->getFrom()->count()) {
                 $fromAddressList = $zendMessage->getFrom();
                 $fromAddressList->rewind();
                 $zendMessage->setSender($fromAddressList->current()->getEmail());
