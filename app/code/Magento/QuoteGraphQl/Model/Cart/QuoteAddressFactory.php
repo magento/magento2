@@ -61,7 +61,7 @@ class QuoteAddressFactory
     public function createBasedOnInputData(array $addressInput): QuoteAddress
     {
         $addressInput['country_id'] = $addressInput['country_code'] ?? '';
-        if ($addressInput['country_id'] && !ctype_upper($addressInput['country_code'] )) {
+        if ($addressInput['country_id'] && !ctype_upper($addressInput['country_code'])) {
             throw new GraphQlInputException(
                 __('"Country Code" cannot contain lowercase characters.')
             );

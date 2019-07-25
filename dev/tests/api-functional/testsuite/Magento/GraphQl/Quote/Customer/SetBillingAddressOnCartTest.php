@@ -645,7 +645,7 @@ QUERY;
      * @expectedException \Exception
      * @expectedExceptionMessage "Country Code" cannot contain lowercase characters.
      */
-    public function testSetNewBillingAddressWithLowercaseCountryCode()
+    public function testSetBillingAddressWithLowerCaseCountry()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 

@@ -607,63 +607,10 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     */
-    public function testSetShippingAddressWithLowerCaseCountry()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "{$maskedQuoteId}"
-      shipping_addresses: [
-        {
-          address: {
-            firstname: "John"
-            lastname: "Doe"
-            street: ["6161 West Centinella Avenue"]
-            city: "Culver City"
-            region: "CA"
-            postcode: "90230"
-            country_code: "us"
-            telephone: "555-555-55-55"
-          }
-        }
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        region {
-            code
-        }
-        country {
-            code
-        }
-      }
-    }
-  }
-}
-QUERY;
-        $result = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-
-        self::assertCount(1, $result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
-        $address = reset($result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
-
-        $this->assertEquals('US', $address['country']['code']);
-        $this->assertEquals('CA', $address['region']['code']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @expectedException \Exception
      * @expectedExceptionMessage "Country Code" cannot contain lowercase characters.
      */
-    public function testSetNewShippingAddressOnCartWithLowercaseCountryCode()
+    public function testSetShippingAddressWithLowerCaseCountry()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
