@@ -67,9 +67,11 @@ class QueryProcessor
             $contextValue,
             $variableValues,
             $operationName
-        )->setErrorFormatter(function(Error $error) {
-            return $this->exceptionFormatter->create($error);
-        })->toArray(
+        )->setErrorFormatter(
+            function (Error $error) {
+                return $this->exceptionFormatter->create($error, $error->getMessage());
+            }
+        )->toArray(
             $this->exceptionFormatter->shouldShowDetail() ?
                 \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE : false
         );
