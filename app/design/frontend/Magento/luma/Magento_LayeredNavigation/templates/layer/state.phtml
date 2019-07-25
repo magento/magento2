@@ -40,7 +40,7 @@
                     </a>
                 <?php else : ?>
                     <a class="action remove" href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('Remove')) . " " . $currentFilterName ?>">
+                       title="<?= /* @noEscape */ $block->escapeHtmlAttr(__('Remove')) . " " . $currentFilterName ?>">
                         <span><?= $block->escapeHtml(__('Remove This Item')) ?></span>
                     </a>
                 <?php endif; ?>
