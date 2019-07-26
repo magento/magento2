@@ -510,13 +510,18 @@ class Config
         $attributes = $this->loadAttributes($entityTypeCode);
         $attribute = isset($attributes[$code]) ? $attributes[$code] : null;
         if (!$attribute) {
-            $attribute = $this->createAttributeByAttributeCode($entityType, $code);
-            $this->_addAttributeReference(
-                $attribute->getAttributeId(),
-                $attribute->getAttributeCode(),
-                $entityTypeCode
-            );
-            $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
+            // Get attributes from EAV cache.
+            $attributes = $this->getEntityAttributes($entityType);
+            $attribute = $attributes[$code] ?? null;
+            if (!$attribute) {
+                $attribute = $this->createAttributeByAttributeCode($entityType, $code);
+                $this->_addAttributeReference(
+                    $attribute->getAttributeId(),
+                    $attribute->getAttributeCode(),
+                    $entityTypeCode
+                );
+                $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
+            }
         }
         \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
         return $attribute;

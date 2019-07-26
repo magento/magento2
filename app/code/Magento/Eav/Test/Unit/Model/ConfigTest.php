@@ -108,9 +108,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setData', 'loadByCode', 'toArray'])
             ->disableOriginalConstructor()
             ->getMock();
+        $entityAttributeMock->expects($this->atLeastOnce())->method('toArray')
+            ->willReturn($attributeData);
         $entityAttributeMock->expects($this->atLeastOnce())->method('setData')
-            ->willReturnSelf();
-        $entityAttributeMock->expects($this->atLeastOnce())->method('loadByCode')
             ->willReturnSelf();
 
         $factoryCalls = [
