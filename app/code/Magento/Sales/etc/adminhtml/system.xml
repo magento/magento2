@@ -92,6 +92,7 @@
                 </field>
                 <field id="amount" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Amount</label>
+                    <validate>validate-number</validate>
                     <comment>Subtotal after discount</comment>
                 </field>
                 <field id="include_discount_amount" translate="label" sortOrder="12" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
