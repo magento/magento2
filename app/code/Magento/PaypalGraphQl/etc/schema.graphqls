@@ -31,7 +31,7 @@ type PayflowLinkToken {
     paypal_url: String @doc(description:"PayPal URL used for requesting Payflow form")
 }
 
-input PaymentMethodAdditionalDataInput {
+input PaymentMethodInput {
     paypal_express: PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments")
     payflow_express: PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments")
     payflow_link: PayflowLinkAdditionalDataInput @doc(description:"Required input for PayPal Payflow Link payments")
