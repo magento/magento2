@@ -41,8 +41,9 @@
         <element name="contentDropDownIfNotShowing" type="button" selector="//div[@data-index='content']//div[contains(@class, '_hide')]"/>
         <element name="longDescription" type="input" selector="#product_form_description"/>
         <element name="shortDescription" type="input" selector="#product_form_short_description"/>
-        <!--BundleOptinsDropDown-->
+        <!--BundleOptionsDropDown-->
         <element name="bundleOptionsDropDown" type="button" selector="div[data-index='bundle-items']" timeout="30"/>
+        <element name="currentBundleOption" type="text" selector="//div[@data-index='bundle-items']//div[contains(@class, 'admin__collapsible-title')]/span"/>
         <!--AddingAnOption-->
         <element name="addOptions" type="button" selector="//tr[@data-repeat-index='0']//td[4]" timeout="30"/>
         <!--SEODropdownTab-->
