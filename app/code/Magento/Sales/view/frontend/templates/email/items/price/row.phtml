@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /** @var \Magento\Sales\Block\Order\Email\Items\DefaultItems $block */
@@ -16,4 +13,4 @@ $_item = $block->getItem();
 $_order = $_item->getOrder();
 ?>
 
-<?= /* @escapeNotVerified */  $_order->formatPrice($_item->getRowTotal()) ?>
+<?= /* @noEscape */ $_order->formatPrice($_item->getRowTotal()) ?>

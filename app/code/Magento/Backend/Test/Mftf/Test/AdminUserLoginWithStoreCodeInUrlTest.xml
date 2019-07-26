@@ -11,9 +11,11 @@
     <test name="AdminUserLoginWithStoreCodeInUrlTest">
         <annotations>
             <features value="Backend"/>
+            <stories value="Admin Panel URL with Store Code"/>
             <title value="Admin panel should be accessible with Add Store Code to URL setting enabled"/>
             <description value="Admin panel should be accessible with Add Store Code to URL setting enabled"/>
-            <testCaseId value="MC-14279" />
+            <testCaseId value="MC-14279"/>
+            <severity value="CRITICAL"/>
             <group value="backend"/>
             <group value="mtf_migrated"/>
         </annotations>

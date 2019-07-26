@@ -45,7 +45,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      */
     public function extractValue(RequestInterface $request)
     {
-        $value = $this->_getRequestValue($request);
+        $value = trim($this->_getRequestValue($request));
         return $this->_applyInputFilter($value);
     }
 

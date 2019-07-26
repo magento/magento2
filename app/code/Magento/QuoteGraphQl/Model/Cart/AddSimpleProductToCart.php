@@ -21,11 +21,6 @@ use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 class AddSimpleProductToCart
 {
     /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
-    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
@@ -36,16 +31,13 @@ class AddSimpleProductToCart
     private $buyRequestBuilder;
 
     /**
-     * @param ArrayManager $arrayManager
      * @param ProductRepositoryInterface $productRepository
      * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
-        ArrayManager $arrayManager,
         ProductRepositoryInterface $productRepository,
         BuyRequestBuilder $buyRequestBuilder
     ) {
-        $this->arrayManager = $arrayManager;
         $this->productRepository = $productRepository;
         $this->buyRequestBuilder = $buyRequestBuilder;
     }

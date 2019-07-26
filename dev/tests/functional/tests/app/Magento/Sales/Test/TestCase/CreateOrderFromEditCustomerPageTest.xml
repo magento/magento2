@@ -21,6 +21,7 @@
                 <item name="grandTotal" xsi:type="string">19.00</item>
             </data>
             <data name="issue" xsi:type="string">MAGETWO-65165: Unable to add product to wish list using 'create order' interface</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, mftf_migrated:yes</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertProductInCustomerShoppingCartOnBackendGrid" />

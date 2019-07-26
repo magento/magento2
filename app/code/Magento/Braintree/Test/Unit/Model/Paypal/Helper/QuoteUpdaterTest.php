@@ -159,21 +159,21 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
             'phone' => '312-123-4567',
             'countryCode' => 'US',
             'shippingAddress' => [
-                'streetAddress' => '123 Division Street',
-                'extendedAddress' => 'Apt. #1',
-                'locality' => 'Chicago',
-                'region' => 'IL',
+                'line1' => '123 Division Street',
+                'line2' => 'Apt. #1',
+                'city' => 'Chicago',
+                'state' => 'IL',
                 'postalCode' => '60618',
-                'countryCodeAlpha2' => 'US',
+                'countryCode' => 'US',
                 'recipientName' => 'Jane Smith',
             ],
             'billingAddress' => [
-                'streetAddress' => '123 Billing Street',
-                'extendedAddress' => 'Apt. #1',
-                'locality' => 'Chicago',
-                'region' => 'IL',
+                'line1' => '123 Billing Street',
+                'line2' => 'Apt. #1',
+                'city' => 'Chicago',
+                'state' => 'IL',
                 'postalCode' => '60618',
-                'countryCodeAlpha2' => 'US',
+                'countryCode' => 'US',
             ],
         ];
     }
@@ -206,13 +206,13 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
     private function updateAddressDataStep(MockObject $address, array $addressData): void
     {
         $address->method('setStreet')
-            ->with([$addressData['streetAddress'], $addressData['extendedAddress']]);
+            ->with([$addressData['line1'], $addressData['line2']]);
         $address->method('setCity')
-            ->with($addressData['locality']);
+            ->with($addressData['city']);
         $address->method('setRegionCode')
-            ->with($addressData['region']);
+            ->with($addressData['state']);
         $address->method('setCountryId')
-            ->with($addressData['countryCodeAlpha2']);
+            ->with($addressData['countryCode']);
         $address->method('setPostcode')
             ->with($addressData['postalCode']);
     }
