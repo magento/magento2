@@ -8,7 +8,7 @@ namespace Magento\AdminAnalytics\Model\Viewer;
 use Magento\Framework\DataObject;
 
 /**
- * Release notification viewer log resource
+ * Admin Analytics log resource
  */
 class Log extends DataObject
 {
@@ -23,32 +23,12 @@ class Log extends DataObject
     }
 
     /**
-     * Get viewer id
-     *
-     * @return int
-     */
-    public function getViewerId()
-    {
-        return $this->getData('viewer_id');
-    }
-
-    /**
      * Get last viewed product version
      *
      * @return string
      */
     public function getLastViewVersion()
     {
-        return $this->getData('last_view_version');
-    }
-
-    /**
-     * Get admin usage enabled
-     *
-     * @return int
-     */
-    public function getIsAdminUsageEnabled()
-    {
-        return $this->getData('is_admin_usage_enabled');
+        return $this->getData('last_viewed_in_version');
     }
 }

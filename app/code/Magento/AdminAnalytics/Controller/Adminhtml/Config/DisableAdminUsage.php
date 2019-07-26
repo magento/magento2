@@ -7,20 +7,18 @@
 namespace Magento\AdminAnalytics\Controller\Adminhtml\Config;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Config\Model\Config\Factory;
 
 /**
- * Controller to record that the current admin user has seen the release notification content
+ * Controller to record Admin analytics usage log
  */
 class DisableAdminUsage extends Action
 {
-
-
     private $configFactory;
 
     /**
@@ -39,11 +37,12 @@ class DisableAdminUsage extends Action
     private $logger;
 
     /**
-     * MarkUserNotified constructor.
+     * DisableAdminUsage constructor.
      *
      * @param Action\Context $context
      * @param ProductMetadataInterface $productMetadata
      * @param NotificationLogger $notificationLogger
+     * @param Factory $configFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -59,6 +58,10 @@ class DisableAdminUsage extends Action
         $this->notificationLogger = $notificationLogger;
         $this->logger = $logger;
     }
+
+    /**
+     * Changes the value of config/admin/usage/enabled
+     */
     public function disableAdminUsage()
     {
         $configModel = $this->configFactory->create();
@@ -66,13 +69,16 @@ class DisableAdminUsage extends Action
         $configModel->save();
     }
 
+    /**
+     * Log information about the last admin usage selection
+     *
+     * @return ResultInterface
+     */
     public function markUserNotified()
     {
         $responseContent = [
             'success' => $this->notificationLogger->log(
-                $this->_auth->getUser()->getId(),
-                $this->productMetadata->getVersion(),
-                0
+                $this->productMetadata->getVersion()
             ),
             'error_message' => ''
         ];
@@ -80,10 +86,11 @@ class DisableAdminUsage extends Action
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         return $resultJson->setData($responseContent);
     }
+
     /**
      * Log information about the last shown advertisement
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {

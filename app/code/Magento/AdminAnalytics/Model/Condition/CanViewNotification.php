@@ -10,9 +10,11 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\App\CacheInterface;
+use function Magento\PAT\Reports\Utils\readResponseTimeReport;
 
 /**
  * Dynamic validator for UI release notification, manage UI component visibility.
+ *
  * Return true if the logged in user has not seen the notification.
  */
 class CanViewNotification implements VisibilityConditionInterface
@@ -37,11 +39,6 @@ class CanViewNotification implements VisibilityConditionInterface
     private $viewerLogger;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @var ProductMetadataInterface
      */
     private $productMetadata;
@@ -55,18 +52,15 @@ class CanViewNotification implements VisibilityConditionInterface
      * CanViewNotification constructor.
      *
      * @param Logger $viewerLogger
-     * @param Session $session
      * @param ProductMetadataInterface $productMetadata
      * @param CacheInterface $cacheStorage
      */
     public function __construct(
         Logger $viewerLogger,
-        Session $session,
         ProductMetadataInterface $productMetadata,
         CacheInterface $cacheStorage
     ) {
         $this->viewerLogger = $viewerLogger;
-        $this->session = $session;
         $this->productMetadata = $productMetadata;
         $this->cacheStorage = $cacheStorage;
     }
@@ -78,20 +72,18 @@ class CanViewNotification implements VisibilityConditionInterface
      */
     public function isVisible(array $arguments)
     {
-        $userId = $this->session->getUser()->getId();
-        $cacheKey = self::$cachePrefix . $userId;
+        $currentProductVersion = $this->productMetadata->getVersion();
+        $cacheKey = self::$cachePrefix.$currentProductVersion;
         $value = $this->cacheStorage->load($cacheKey);
-        if ($value === false) {
-            $value = version_compare(
-                $this->viewerLogger->get($userId)->getLastViewVersion(),
-                $this->productMetadata->getVersion(),
-                '<'
-            );
-            $this->cacheStorage->save(false, $cacheKey);
+        if ($value != $currentProductVersion) {
+            $versionViewed = $this->viewerLogger->get($currentProductVersion)->getLastViewVersion();
+            $versionExists = isset($versionViewed);
+            if ($versionExists) {
+                $this->cacheStorage->save($versionViewed, $cacheKey);
+            }
+            return !$versionExists;
         }
-
-        return (bool)$value;
-
+        return false;
     }
 
     /**

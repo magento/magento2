@@ -13,7 +13,7 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
- * Data Provider for the Release Notifications UI component.
+ * Data Provider for the Admin usage UI component.
  */
 class NotificationDataProvider implements DataProviderInterface
 {
@@ -164,7 +164,7 @@ class NotificationDataProvider implements DataProviderInterface
      */
     public function getPrimaryFieldName()
     {
-        return 'release_notification';
+        return 'admin_analytics';
     }
 
     /**
@@ -172,7 +172,7 @@ class NotificationDataProvider implements DataProviderInterface
      */
     public function getRequestFieldName()
     {
-        return 'release_notification';
+        return 'admin_analytics';
     }
 
     /**

@@ -7,24 +7,17 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="admin_usage_viewer_log" resource="default" engine="innodb"
+    <table name="admin_analytics_usage_version_log" resource="default" engine="innodb"
            comment="Admin Notification Viewer Log Table">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Log ID"/>
-        <column xsi:type="int" name="viewer_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Viewer admin user ID"/>
-        <column xsi:type="varchar" name="last_view_version" nullable="false" length="16"
-                comment="Viewer last view on product version"/>
-        <column xsi:type="smallint" name="is_admin_usage_enabled" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Flag if admin usage is enabled"/>
+        <column xsi:type="varchar" name="last_viewed_in_version" nullable="false" length="50"
+                comment="Viewer last viewed on product version"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="ADMIN_NOTIFICATION_VIEWER_LOG_VIEWER_ID_ADMIN_USER_USER_ID"
-                    table="admin_notification_viewer_log" column="viewer_id" referenceTable="admin_user"
-                    referenceColumn="user_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="ADMIN_NOTIFICATION_VIEWER_LOG_VIEWER_ID">
-            <column name="viewer_id"/>
+        <constraint xsi:type="unique" referenceId="ADMIN_ANALYTICS_USAGE_VERSION_LOG_LAST_VIEWED_IN_VERSION">
+            <column name="last_viewed_in_version"/>
         </constraint>
     </table>
 </schema>

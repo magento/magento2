@@ -7,15 +7,15 @@
 namespace Magento\AdminAnalytics\Controller\Adminhtml\Config;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Config\Model\Config\Factory;
 
 /**
- * Controller to record that the current admin user has seen the release notification content
+ * Controller to record that the current admin user has responded to Admin Analytics notice
  */
 class EnableAdminUsage extends Action
 {
@@ -42,6 +42,7 @@ class EnableAdminUsage extends Action
      * @param Action\Context $context
      * @param ProductMetadataInterface $productMetadata
      * @param NotificationLogger $notificationLogger
+     * @param Factory $configFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -57,6 +58,10 @@ class EnableAdminUsage extends Action
         $this->notificationLogger = $notificationLogger;
         $this->logger = $logger;
     }
+
+    /**
+     * Changes the value of config/admin/usage/enabled
+     */
     public function enableAdminUsage()
     {
         $configModel = $this->configFactory->create();
@@ -64,13 +69,16 @@ class EnableAdminUsage extends Action
         $configModel->save();
     }
 
+    /**
+     * Log information about the last user response
+     *
+     * @return ResultInterface
+     */
     public function markUserNotified()
     {
         $responseContent = [
             'success' => $this->notificationLogger->log(
-                $this->_auth->getUser()->getId(),
-                $this->productMetadata->getVersion(),
-                1
+                $this->productMetadata->getVersion()
             ),
             'error_message' => ''
         ];
@@ -78,6 +86,7 @@ class EnableAdminUsage extends Action
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         return $resultJson->setData($responseContent);
     }
+
     /**
      * Log information about the last shown advertisement
      *
@@ -88,8 +97,10 @@ class EnableAdminUsage extends Action
         $this->enableAdminUsage();
         $this->markUserNotified();
     }
-
+    
     /**
+     * IsAllow allows function to be visible
+     *
      * @return bool
      */
     protected function _isAllowed()

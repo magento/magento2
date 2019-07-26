@@ -2,14 +2,11 @@
     "admin_usage_viewer_log": {
         "column": {
             "id": true,
-            "viewer_id": true,
-            "last_view_version": true,
-            "is_admin_usage_enabled": true
+            "last_viewed_in_version": true
         },
         "constraint": {
             "PRIMARY": true,
-            "ADMIN_USAGE_VIEWER_LOG_VIEWER_ID_ADMIN_USER_USER_ID": true,
-            "ADMIN_USAGE_VIEWER_LOG_VIEWER_ID": true
+            "ADMIN_ANALYTICS_USAGE_VERSION_LOG_LAST_VIEWED_IN_VERSION": true
         }
     }
 }

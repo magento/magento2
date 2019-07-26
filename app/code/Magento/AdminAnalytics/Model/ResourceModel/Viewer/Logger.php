@@ -12,7 +12,7 @@ use Magento\AdminAnalytics\Model\Viewer\LogFactory;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Release notification viewer log data logger.
+ * Admin Analytics log data logger.
  *
  * Saves and retrieves release notification viewer log data.
  */
@@ -21,7 +21,7 @@ class Logger
     /**
      * Log table name
      */
-    const LOG_TABLE_NAME = 'admin_usage_viewer_log';
+    const LOG_TABLE_NAME = 'admin_analytics_usage_version_log';
 
     /**
      * @var Resource
@@ -49,53 +49,48 @@ class Logger
     /**
      * Save (insert new or update existing) log.
      *
-     * @param int $viewerId
      * @param string $lastViewVersion
-     * @param int $isAdminUsageEnabled
      * @return bool
      */
-    public function log(int $viewerId, string $lastViewVersion, int $isAdminUsageEnabled) : bool
+    public function log(string $lastViewVersion) : bool
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
         $connection = $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
         $connection->insertOnDuplicate(
             $this->resource->getTableName(self::LOG_TABLE_NAME),
             [
-                'viewer_id' => $viewerId,
-                'last_view_version' => $lastViewVersion,
-                'is_admin_usage_enabled' => $isAdminUsageEnabled
+                'last_viewed_in_version' => $lastViewVersion,
             ],
             [
-                'last_view_version',
-                'is_admin_usage_enabled'
+                'last_viewed_in_version',
             ]
         );
         return true;
     }
 
     /**
-     * Get log by viewer Id.
+     * Get log by the last view version.
      *
-     * @param int $viewerId
+     * @param string $lastViewVersion
      * @return Log
      */
-    public function get(int $viewerId) : Log
+    public function get(string $lastViewVersion) : Log
     {
-        return $this->logFactory->create(['data' => $this->loadLogData($viewerId)]);
+        return $this->logFactory->create(['data' => $this->loadLogData($lastViewVersion)]);
     }
 
     /**
-     * Load release notification viewer log data by viewer id
+     * Load release notification viewer log data by last view version
      *
-     * @param int $viewerId
+     * @param string $lastViewVersion
      * @return array
      */
-    private function loadLogData(int $viewerId) : array
+    private function loadLogData(string $lastViewVersion) : array
     {
         $connection = $this->resource->getConnection();
         $select = $connection->select()
             ->from($this->resource->getTableName(self::LOG_TABLE_NAME))
-            ->where('viewer_id = ?', $viewerId);
+            ->where('last_viewed_in_version = ?', $lastViewVersion);
 
         $data = $connection->fetchRow($select);
         if (!$data) {
