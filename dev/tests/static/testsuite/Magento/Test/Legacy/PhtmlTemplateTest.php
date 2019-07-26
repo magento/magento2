@@ -77,4 +77,27 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
         );
     }
+
+    public function testJqueryUiLibraryIsNotUsedInTemplates()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker(
+        /**
+         * 'jquery/ui' library is not obligatory to use in phtml files.
+         * It's better to use needed jquery ui widget instead.
+         *
+         * @param string $file
+         */
+            function ($file) {
+                if (strpos($file, '/view/frontend/templates/') || strpos($file, '/view/base/templates/')) {
+                    $this->assertNotRegexp(
+                        '/(["\'])jquery\/ui\1/',
+                        file_get_contents($file),
+                        'Please do not use "jquery/ui" library in templates. Use needed jquery ui widget instead.'
+                    );
+                }
+            },
+            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+        );
+    }
 }

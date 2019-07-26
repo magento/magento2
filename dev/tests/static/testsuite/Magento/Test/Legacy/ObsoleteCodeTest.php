@@ -127,6 +127,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
                 $this->_testObsoleteActions($content);
                 $this->_testObsoleteConstants($content);
                 $this->_testObsoletePropertySkipCalculate($content);
+                $this->_testJqueryUiLibraryIsNotUsedInPhp($content);
             },
             $changedFiles
         );
@@ -184,6 +185,11 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
             function ($file) {
                 $content = file_get_contents($file);
                 $this->_testObsoletePropertySkipCalculate($content);
+                if (!strpos($file, 'requirejs-config.js')
+                    && (strpos($file, '/view/frontend/web/') || strpos($file, '/view/base/web/'))
+                ) {
+                    $this->_testJqueryUiLibraryIsNotUsedInJs($content);
+                }
             },
             Files::init()->getJsFiles()
         );
@@ -946,5 +952,33 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
             }
         }
         return $ignored;
+    }
+
+    /**
+     * Assert that jquery/ui library is not used in JS content.
+     *
+     * @param string $fileContent
+     */
+    private function _testJqueryUiLibraryIsNotUsedInJs($fileContent)
+    {
+        $this->_assertNotRegexp(
+            '/(["\'])jquery\/ui\1/',
+            $fileContent,
+            $this->_suggestReplacement(sprintf("Dependency '%s' is redundant.", 'jquery/ui'), 'Use separate jquery ui widget instead of all library.')
+        );
+    }
+
+    /**
+     * Assert that jquery/ui library is not used in PHP content.
+     *
+     * @param string $fileContent
+     */
+    private function _testJqueryUiLibraryIsNotUsedInPhp($fileContent)
+    {
+        $this->_assertNotRegExp(
+            '/(["\'])jquery\/ui\1/',
+            $fileContent,
+            $this->_suggestReplacement(sprintf("Dependency '%s' is redundant.", 'jquery/ui'), 'Use separate jquery ui widget instead of all library.')
+        );
     }
 }
