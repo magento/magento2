@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteAdminUserEntityTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Delete Admin User"/>
+            <title value="Admin user is not able to delete the own account"/>
+            <description value="Admin user is not able to delete the own account"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+
+        <!--Create New User-->
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
+
+        <!--Create New Role-->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
+            <argument name="role" value="restrictedRole"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
+
+        <!--Assign New Role-->
+        <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openUserEditPage">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateUserRoleActionGroup" stepKey="assignNewUserRole">
+            <argument name="role" value="restrictedRole"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveUser"/>
+        <actionGroup ref="logout" stepKey="logOutAsDefaultAdminUser"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
+            <argument name="adminUser" value="NewAdminUser"/>
+        </actionGroup>
+
+        <!--Assert Impossible Delete Your Own Account-->
+        <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openUserEditPageForDeleting">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+        <actionGroup ref="AssertImpossibleDeleteYourOwnAccountActionGroup" stepKey="assertErrorMessage"/>
+        <actionGroup ref="AssertUserInGridActionGroup" stepKey="assertUserInGrid">
+            <argument name="userName" value="{{NewAdminUser.username}}"/>
+        </actionGroup>
+
+        <actionGroup ref="logout" stepKey="logOutAsNewUser"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
+
+        <!--Delete New Role-->
+        <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRole">
+            <argument name="roleName" value="{{restrictedRole.name}}"/>
+        </actionGroup>
+
+        <!--Delete New User-->
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You deleted the user."/>
+        </actionGroup>
+        <actionGroup ref="AssertUserNotInGridActionGroup" stepKey="assertUserNotInGrid">
+            <argument name="userName" value="{{NewAdminUser.username}}"/>
+        </actionGroup>
+    </test>
+</tests>
