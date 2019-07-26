@@ -157,9 +157,14 @@ abstract class AbstractDb extends AbstractResource
      * Provide variables to serialize
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff($properties, ['_resources', '_connections']);
         return $properties;
@@ -169,9 +174,14 @@ abstract class AbstractDb extends AbstractResource
      * Restore global dependencies
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\App\ResourceConnection::class);
     }
@@ -220,9 +230,10 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Set main entity table name and primary key field name
+     * Main table setter.
      *
-     * If field name is omitted {table_name}_id will be used
+     * Set main entity table name and primary key field name.
+     * If field name is omitted {table_name}_id will be used.
      *
      * @param string $mainTable
      * @param string|null $idFieldName
@@ -255,7 +266,10 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Returns main table name - extracted from "module/table" style and validated by db adapter
+     * Main table getter.
+     *
+     * Returns main table name - extracted from "module/table" style and
+     * validated by db adapter.
      *
      * @throws LocalizedException
      * @return string
@@ -544,7 +558,7 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Check that model data fields that can be saved has really changed comparing with origData
+     * Check that model data fields that can be saved has really changed comparing with origData.
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool

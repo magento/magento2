@@ -64,4 +64,29 @@ class OrderProcessor
             ]]>
         </example>
     </rule>
+    <rule name="SerializationAware"
+          class="Magento\CodeMessDetector\Rule\Design\SerializationAware"
+          message="{1} has {0} method and is PHP serialization aware - PHP serialization must be avoided.">
+        <description>
+            <![CDATA[
+Using PHP serialization must be avoided in Magento for security reasons and for prevention of unexpected behaviour.
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class MyModel extends AbstractModel
+{
+
+    .......
+
+    public function __sleep()
+    {
+        .....
+    }
+}
+            ]]>
+        </example>
+    </rule>
 </ruleset>

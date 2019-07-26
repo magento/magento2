@@ -725,9 +725,14 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return array
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         $properties = parent::__sleep();
         $properties = array_diff($properties, ['_storeManager']);
         return $properties;
@@ -738,9 +743,14 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
+        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
+
         parent::__wakeup();
         $this->_storeManager = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);
