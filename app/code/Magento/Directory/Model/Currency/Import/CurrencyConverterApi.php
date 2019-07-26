@@ -55,7 +55,7 @@ class CurrencyConverterApi extends AbstractImport
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function fetchRates(): array
     {
@@ -217,7 +217,7 @@ class CurrencyConverterApi extends AbstractImport
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _convert($currencyFrom, $currencyTo)
     {
