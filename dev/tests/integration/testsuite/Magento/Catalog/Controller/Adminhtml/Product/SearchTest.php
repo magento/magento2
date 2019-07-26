@@ -57,6 +57,20 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('{"options":[],"total":0}', $responseBody);
+        $this->assertContains('"total":1}', $responseBody);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     */
+    public function testExecuteEnabledAndDisabledProducts() : void
+    {
+        $this->getRequest()
+            ->setPostValue('searchKey', 'simple')
+            ->setPostValue('page', 1)
+            ->setPostValue('limit', 50);
+        $this->dispatch('backend/catalog/product/search');
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertContains('"total":3}', $responseBody);
     }
 }

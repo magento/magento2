@@ -10,7 +10,9 @@ namespace Magento\Catalog\Model\ProductLink;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 
-/** Returns collection of product visible in catalog by search key */
+/**
+ * Returns collection of product visible in catalog by search key
+ */
 class Search
 {
     /**
