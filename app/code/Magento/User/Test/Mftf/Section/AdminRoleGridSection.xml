@@ -13,6 +13,7 @@
         <element name="resetButton" type="button" selector="button[title='Reset Filter']"/>
         <element name="roleNameInFirstRow" type="text" selector=".col-role_name"/>
         <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
+        <element name="emptyRecords" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
     </section>
 
     <section name="AdminDeleteRoleSection">

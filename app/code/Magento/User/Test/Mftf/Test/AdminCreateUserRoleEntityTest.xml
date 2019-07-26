@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateUserRoleEntityTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Create User Role"/>
+            <title value="Creating a new role with different data sets"/>
+            <description value="Creating a new role with different data sets"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+
+        <!--Create a new role with custom access-->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
+            <argument name="role" value="roleSales"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You saved the role."/>
+        </actionGroup>
+        <actionGroup ref="AssertRoleInGridActionGroup" stepKey="assertRoleInGrid">
+            <argument name="roleName" value="{{roleSales.name}}"/>
+        </actionGroup>
+
+        <!--Create a new role with full access-->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePageSecondTime"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleFormSecondTime">
+            <argument name="role" value="roleAdministrator"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRoleSecondTime"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessageSecondTime">
+            <argument name="message" value="You saved the role."/>
+        </actionGroup>
+        <actionGroup ref="AssertRoleInGridActionGroup" stepKey="assertRoleInGridSecondTime">
+            <argument name="roleName" value="{{roleAdministrator.name}}"/>
+        </actionGroup>
+
+        <!--Create a new role using incorrect current_password-->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePageThirdTime"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleFormThirdTime">
+            <argument name="role" value="roleAdmin"/>
+            <argument name="currentAdminPassword" value="WrongPassword"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRoleThirdTime"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again."/>
+        </actionGroup>
+        <actionGroup ref="AssertRoleNotInGridActionGroup" stepKey="assertRoleNotInGrid">
+            <argument name="roleName" value="{{roleAdmin.name}}"/>
+        </actionGroup>
+
+        <!--Delete New Roles-->
+        <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteSaleRole">
+            <argument name="roleName" value="{{roleSales.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteAdministratorRole">
+            <argument name="roleName" value="{{roleAdministrator.name}}"/>
+        </actionGroup>
+    </test>
+</tests>
