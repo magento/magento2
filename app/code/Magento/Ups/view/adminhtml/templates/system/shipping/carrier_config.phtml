@@ -67,6 +67,7 @@ require(["prototype"], function(){
     upsXml.prototype = {
         initialize: function()
         {
+            this.carriersUpsActiveId = 'carriers_ups_active';
             this.carriersUpsTypeId = 'carriers_ups_type';
             if (!$(this.carriersUpsTypeId)) {
                 return;
@@ -94,6 +95,7 @@ require(["prototype"], function(){
 
             this.setFormValues();
             Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
+            Event.observe($(this.carriersUpsActiveId), 'change', this.setFormValues.bind(this));
         },
         updateAllowedMethods: function(originShipmentTitle)
         {
@@ -148,7 +150,8 @@ require(["prototype"], function(){
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
                 for (a = 0; a < this.checkingUpsId.length; a++) {
-                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                    $(this.checkingUpsId[a]).addClassName('required-entry');
+                    this.changeFieldsDisabledState(this.checkingUpsId, a);
                 }
                 Event.stopObserving($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
                 showRowArrayElements(this.onlyUpsElements);
@@ -157,9 +160,10 @@ require(["prototype"], function(){
             } else {
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                    this.changeFieldsDisabledState(this.checkingUpsXmlId, a);
                 }
                 for (a = 0; a < this.checkingUpsId.length; a++) {
-                    $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
+                    $(this.checkingUpsId[a]).removeClassName('required-entry');
                 }
                 Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
                 showRowArrayElements(this.onlyUpsXmlElements);
@@ -171,6 +175,16 @@ require(["prototype"], function(){
         {
             this.originShipmentTitle = key ? key : $F('carriers_ups_origin_shipment');
             this.updateAllowedMethods(this.originShipmentTitle);
+        },
+        changeFieldsDisabledState: function (fields, key) {
+            $(fields[key]).disabled = $F(this.carriersUpsActiveId) !== '1'
+                || $(fields[key] + '_inherit') !== null
+                && $F(fields[key] + '_inherit') === '1';
+
+            if ($(fields[key]).next() !== undefined) {
+                $(fields[key]).removeClassName('mage-error').next().remove();
+                $(fields[key]).removeAttribute('style');
+            }
         }
     };
     xml = new upsXml();

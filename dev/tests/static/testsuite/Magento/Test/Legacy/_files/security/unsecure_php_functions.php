@@ -66,7 +66,12 @@ return [
                 'type' => 'module',
                 'name' => 'Magento_Catalog',
                 'path' => 'view/adminhtml/templates/catalog/product/edit/serializer.phtml'
-            ]
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Authorizenet',
+                'path' => 'Model/Directpost/Response.php',
+            ],
         ],
     ],
     'srand' => [

@@ -53,11 +53,10 @@ class View extends Action\Action
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
-            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
-        }
-        if (!$this->formKeyValidator->validate($this->getRequest())) {
-            return $this->resultRedirectFactory->create()->setPath('*/*/form/');
+        if ($this->getRequest()->isPost()) {
+            if (!$this->formKeyValidator->validate($this->getRequest())) {
+                return $this->resultRedirectFactory->create()->setPath('*/*/form/');
+            }
         }
 
         $result = $this->guestHelper->loadValidOrder($this->getRequest());
