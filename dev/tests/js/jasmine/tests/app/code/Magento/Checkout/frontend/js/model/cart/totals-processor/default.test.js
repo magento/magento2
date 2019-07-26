@@ -23,9 +23,6 @@ define([
         result = {
             totals: 10
         },
-        totals = {
-            grandTotal: 5
-        },
         address = {
             countryId: 'US',
             region: null,
