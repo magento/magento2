@@ -754,7 +754,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfirmationEmailWithSpecialCharacters(): void
     {
-        $email = 'customer+confirmation@example.com';
+        $email = 'John Smith <customer+confirmation@example.com>';
         $this->dispatch('customer/account/confirmation/email/customer%2Bconfirmation%40email.com');
         $this->getRequest()->setPostValue('email', $email);
         $this->dispatch('customer/account/confirmation/email/customer%2Bconfirmation%40email.com');
