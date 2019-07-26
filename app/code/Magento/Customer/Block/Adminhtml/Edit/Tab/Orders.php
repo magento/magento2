@@ -160,8 +160,10 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('sales/order/view',
-            ['order_id' => $row->getId(), 'customer_id' =>  $this->getRequest()->getParam('id')]);
+        return $this->getUrl(
+            'sales/order/view',
+            ['order_id' => $row->getId(), 'customer_id' =>  $this->getRequest()->getParam('id')]
+        );
     }
 
     /**
