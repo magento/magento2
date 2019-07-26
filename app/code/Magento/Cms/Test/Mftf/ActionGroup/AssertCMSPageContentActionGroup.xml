@@ -23,4 +23,14 @@
         <executeJS function="(el = document.querySelector('[name=\'identifier\']')) &amp;&amp; el['se' + 'tAt' + 'tribute']('data-value', el.value.split('-')[0]);" stepKey="setAttribute" />
         <seeElement selector="{{CmsNewPagePageBasicFieldsSection.duplicatedURLKey(_duplicatedCMSPage.title)}}" stepKey="see"/>
     </actionGroup>
+    <actionGroup name="AssertStoreFrontCMSPage">
+        <arguments>
+            <argument name="cmsTitle" type="string"/>
+            <argument name="cmsContent" type="string"/>
+            <argument name="cmsContentHeading" type="string"/>
+        </arguments>
+        <see selector="{{StorefrontCMSPageSection.title}}" userInput="{{cmsTitle}}" stepKey="seeTitle"/>
+        <see selector="{{StorefrontCMSPageSection.mainTitle}}" userInput="{{cmsContentHeading}}" stepKey="seeContentHeading"/>
+        <see selector="{{StorefrontCMSPageSection.mainContent}}" userInput="{{cmsContent}}" stepKey="seeContent"/>
+    </actionGroup>
 </actionGroups>

@@ -702,7 +702,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         $rowData = include __DIR__ . '/_files/row_data_no_custom_option.php';
         $this->_bypassModelMethodGetMultiRowFormat($rowData);
-        $this->assertFalse($this->modelMock->validateRow($rowData, 0));
+        $this->assertTrue($this->modelMock->validateRow($rowData, 0));
     }
 
     /**

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Check the product in recently viewed widget -->
+    <actionGroup name="StorefrontAssertProductInRecentlyViewedWidgetActionGroup">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" stepKey="waitWidgetRecentlyViewedProductsGrid"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyViewedWidget"/>
+    </actionGroup>
+
+    <!-- Check the product in recently compared widget -->
+    <actionGroup name="StorefrontAssertProductInRecentlyComparedWidgetActionGroup">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" stepKey="waitWidgetRecentlyComparedProductsGrid"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyComparedWidget"/>
+    </actionGroup>
+
+    <!-- Check the product in recently ordered widget -->
+    <actionGroup name="StorefrontAssertProductInRecentlyOrderedWidgetActionGroup">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" stepKey="waitWidgetRecentlyOrderedProductsGrid"/>
+        <see selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyOrderedWidget"/>
+    </actionGroup>
+</actionGroups>

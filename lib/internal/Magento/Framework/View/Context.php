@@ -14,6 +14,7 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Session\SessionManager;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
@@ -144,6 +145,7 @@ class Context
      * @param Logger $logger
      * @param AppState $appState
      * @param LayoutInterface $layout
+     * @param SessionManagerInterface|null $sessionManager
      *
      * @todo reduce parameter number
      *
@@ -163,7 +165,8 @@ class Context
         CacheState $cacheState,
         Logger $logger,
         AppState $appState,
-        LayoutInterface $layout
+        LayoutInterface $layout,
+        SessionManagerInterface $sessionManager = null
     ) {
         $this->request = $request;
         $this->eventManager = $eventManager;
@@ -171,7 +174,7 @@ class Context
         $this->translator = $translator;
         $this->cache = $cache;
         $this->design = $design;
-        $this->session = $session;
+        $this->session = $sessionManager ?: $session;
         $this->scopeConfig = $scopeConfig;
         $this->frontController = $frontController;
         $this->viewConfig      = $viewConfig;
@@ -332,6 +335,8 @@ class Context
     }
 
     /**
+     * Get Front Name
+     *
      * @see getModuleName
      */
     public function getFrontName()

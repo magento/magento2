@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateSearchTermEntityTest">
+        <annotations>
+            <stories value="Storefront Search"/>
+            <title value="Update Storefront Search Results"/>
+            <description value="You should see the updated Search Term on the Storefront via the Admin."/>
+            <testCaseId value="MC-13987"/>
+            <severity value="CRITICAL"/>
+            <group value="search"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory1"/>
+            <createData entity="SimpleProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+
+            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage1"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+
+            <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+        </after>
+
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName1">
+            <argument name="phrase" value="$$createProduct1.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
+        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+
+        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByFirstSearchQuery1">
+            <argument name="searchQuery" value="$$createProduct1.name$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminGridRow.editByValue($$createProduct1.name$$)}}" stepKey="clickOnSearchResult1"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <actionGroup ref="AdminFillAllSearchTermFieldsActionGroup" stepKey="searchForSearchTerm1">
+            <argument name="searchTerm" value="UpdatedSearchTermData1"/>
+        </actionGroup>
+
+        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage2"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+
+        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByFirstSearchQuery2">
+            <argument name="searchQuery" value="{{UpdatedSearchTermData1.query_text}}"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage2"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName2">
+            <argument name="phrase" value="{{UpdatedSearchTermData1.query_text}}"/>
+        </actionGroup>
+    </test>
+</tests>

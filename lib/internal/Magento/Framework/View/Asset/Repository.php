@@ -10,6 +10,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * A repository service for view assets
@@ -126,6 +127,7 @@ class Repository
      * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function updateDesignParams(array &$params)
     {
@@ -146,7 +148,12 @@ class Repository
         }
 
         if ($theme) {
-            $params['themeModel'] = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $theme);
+            if (is_numeric($theme)) {
+                $params['themeModel'] = $this->getThemeProvider()->getThemeById($theme);
+            } else {
+                $params['themeModel'] = $this->getThemeProvider()->getThemeByFullPath($area . '/' . $theme);
+            }
+
             if (!$params['themeModel']) {
                 throw new \UnexpectedValueException("Could not find theme '$theme' for area '$area'");
             }
@@ -167,6 +174,8 @@ class Repository
     }
 
     /**
+     * Get theme provider
+     *
      * @return ThemeProviderInterface
      */
     private function getThemeProvider()
@@ -196,6 +205,7 @@ class Repository
      * @param string $fileId
      * @param array $params
      * @return File
+     * @throws LocalizedException
      */
     public function createAsset($fileId, array $params = [])
     {
@@ -440,6 +450,8 @@ class Repository
     }
 
     /**
+     * Get repository files map
+     *
      * @param string $fileId
      * @param array $params
      * @return RepositoryMap

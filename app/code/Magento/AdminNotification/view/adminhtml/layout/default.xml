@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="notifications">
-            <uiComponent name="notification_area"/>
+            <uiComponent name="notification_area" aclResource="Magento_AdminNotification::show_list"/>
             <block class="Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup"
                    name="unread_system_messages"
                    as="unread_system_messages"

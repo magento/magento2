@@ -12,13 +12,14 @@
             <argument name="customer"/>
         </arguments>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>
         <fillField userInput="{{customer.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEdit"/>
-        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
     </actionGroup>
     <actionGroup name="OpenEditCustomerAddressFromAdminActionGroup">
         <arguments>

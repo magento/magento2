@@ -23,4 +23,8 @@
         <data key="name" unique="suffix">Custom Website</data>
         <data key="code" unique="suffix">custom_website</data>
     </entity>
+    <entity name="updateCustomWebsite" extends="customWebsite">
+        <data key="name" unique="suffix">website_upd</data>
+        <data key="code" unique="suffix">code_upd</data>
+    </entity>
 </entities>

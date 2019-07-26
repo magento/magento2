@@ -18,14 +18,14 @@
         <testsuite name="Less Static Code Analysis">
             <file>testsuite/Magento/Test/Less/LiveCodeTest.php</file>
         </testsuite>
+        <testsuite name="HTML Static Code Analysis">
+            <file>testsuite/Magento/Test/Html/LiveCodeTest.php</file>
+        </testsuite>
         <testsuite name="PHP Coding Standard Verification">
             <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
         </testsuite>
         <testsuite name="Code Integrity Tests">
             <directory>testsuite/Magento/Test/Integrity</directory>
-        </testsuite>
-        <testsuite name="Xss Unsafe Output Test">
-            <file>testsuite/Magento/Test/Php/XssPhtmlTemplateTest.php</file>
         </testsuite>
     </testsuites>
     <php>

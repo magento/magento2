@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="GuestAuthorizenetCheckoutSection">
+        <element name="firstName" type="input" selector="div[name='billingAddressauthorizenet_acceptjs.firstname'] input"/>
+        <element name="lastName" type="input" selector="div[name='billingAddressauthorizenet_acceptjs.lastname'] input"/>
+        <element name="street" type="input" selector="div[name='billingAddressauthorizenet_acceptjs.street.0'] input"/>
+        <element name="city" type="input" selector="div[name='billingAddressauthorizenet_acceptjs.city'] input"/>
+        <element name="state" type="select" selector="div[name='billingAddressauthorizenet_acceptjs.region_id'] select"/>
+        <element name="postcode" type="input" selector="div[name='billingAddressauthorizenet_acceptjs.postcode'] input"/>
+        <element name="country" type="select" selector="div[name='billingAddressauthorizenet_acceptjs.country_id'] select"/>
+        <element name="telephone" type="input" selector="div[name='billingAddressauthorizenet_acceptjs.telephone'] input"/>
+        <element name="update" type="button" selector=".payment-method._active button.action-update" />
+    </section>
+</sections>

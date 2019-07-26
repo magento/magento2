@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUKCustomerCheckoutWithCouponTest">
+        <annotations>
+            <stories value="Checkout"/>
+            <title value="Verify UK customer checkout with Virtual and Downloadable products using coupon"/>
+            <description value="Checkout as UK Customer with virtual product and downloadable product using coupon"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14705"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct">
+                <field key="price">20.00</field>
+            </createData>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <createData entity="downloadableLink2" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="virtualProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="UKCustomer" stepKey="createCustomer"/>
+            <createData entity="SalesRuleSpecificCouponAndByPercent" stepKey="createSalesRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createSalesRule"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Open Downloadable Product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="OpenStoreFrontProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Add Downloadable product to the cart -->
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToTheCart">
+            <argument name="productName" value="$$createDownloadableProduct.name$$" />
+        </actionGroup>
+
+        <!--Open Product page in StoreFront and assert product and price range -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openVirtualProductPageAndVerifyProduct">
+            <argument name="product" value="$$virtualProduct$$"/>
+        </actionGroup>
+
+        <!-- Add Product to the cart -->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+            <argument name="productName" value="$$virtualProduct.name$$"/>
+        </actionGroup>
+
+        <!--Open View and edit -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+
+        <!-- Apply Coupon -->
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyDiscount">
+            <argument name="coupon" value="$$createCouponForCartPriceRule$$"/>
+        </actionGroup>
+
+        <!-- Assert Discount and proceed to checkout -->
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$15.00" stepKey="seeDiscountTotal"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+
+        <!--Fill the pop up sign form -->
+        <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="customerSignIn">
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+            <argument name="customerPwd" value="$$createCustomer.password$$"/>
+        </actionGroup>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
+        <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
+
+        <!-- Click and open order summary tab-->
+        <conditionalClick selector="{{CheckoutOrderSummarySection.miniCartTab}}" dependentSelector="{{CheckoutOrderSummarySection.miniCartTabClosed}}" visible="true" stepKey="clickOnOrderSummaryTab"/>
+        <waitForPageLoad stepKey="waitForPageToLoad5"/>
+
+        <!-- Assert Product displayed in Order Summary -->
+        <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct3InOrderSummary">
+            <argument name="productName" value="$$virtualProduct.name$$"/>
+            <argument name="qty" value="1"/>
+            <argument name="price" value="$10.00"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.update}}" stepKey="waitForUpdateButton"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
+
+        <!-- Place the order and Verify Success message -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+
+        <!-- Assert empty Mini Cart -->
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
+
+        <!-- Open Order Index Page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
+
+        <!-- Filter Order using orderId and assert order-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$$createCustomer.fullname$$" stepKey="seeCustomerNameInGrid"/>
+        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$15.00" stepKey="seeGrandTotalInGrid"/>
+        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="Pending" stepKey="seeStatusIdInGrid"/>
+        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnOrderViewLink"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <!-- Assert order buttons -->
+        <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
+
+        <!-- Assert Grand Total -->
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$15.00" stepKey="seeGrandTotal"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderStatus"/>
+    </test>
+</tests>

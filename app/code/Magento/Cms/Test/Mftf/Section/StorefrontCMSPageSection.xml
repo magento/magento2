@@ -14,5 +14,6 @@
         <element name="mainTitle" type="text" selector="#maincontent .page-title"/>
         <element name="mainContent" type="text" selector="#maincontent"/>
         <element name="footerTop" type="text" selector="footer.page-footer"/>
+        <element name="title" type="text" selector="//div[@class='breadcrumbs']//ul/li[@class='item cms_page']"/>
     </section>
 </sections>

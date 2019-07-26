@@ -7,6 +7,9 @@ namespace Magento\Backend\Test\Unit\Model\Locale;
 
 use Magento\Framework\Locale\Resolver;
 
+/**
+ * Class ManagerTest
+ */
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**

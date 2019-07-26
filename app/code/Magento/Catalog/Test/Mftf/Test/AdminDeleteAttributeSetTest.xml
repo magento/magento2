@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteAttributeSetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Attribute sets"/>
+            <title value="Delete Attribute Set"/>
+            <description value="Admin should be able to delete an attribute set"/>
+            <testCaseId value="MC-10889"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="SimpleProductWithCustomAttributeSet" stepKey="SimpleProductWithCustomAttributeSet">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createAttributeSet"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetsPage"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="filterByAttributeName"/>
+        <!-- Filter the grid to find created below attribute set -->
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <!-- Delete attribute set and confirm the modal -->
+        <click selector="{{AdminProductAttributeSetSection.deleteBtn}}" stepKey="clickDelete"/>
+        <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForDeleteToFinish"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="The attribute set has been removed." stepKey="deleteMessage"/>
+        <!-- Assert the attribute set is not in the grid -->
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="filterByAttributeName2"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch2"/>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+        <!-- Search for the product by sku and name on the product page -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndex"/>
+        <waitForPageLoad stepKey="waitForAdminProductIndex"/>
+        <actionGroup ref="filterProductGridBySkuAndName" stepKey="filerProductsBySkuAndName">
+            <argument name="product" value="SimpleProductWithCustomAttributeSet"/>
+        </actionGroup>
+        <!-- Should not see the product -->
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
+    </test>
+</tests>

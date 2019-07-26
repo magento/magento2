@@ -167,12 +167,8 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getAttributeCollection()
     {
-        $collection = $this->_attributeFactory->create()->getCollection();
-        $objectsModel = $this->getAttributeModel();
-        if ($objectsModel) {
-            $collection->setModel($objectsModel);
-        }
-
+        $collection = $this->_universalFactory->create($this->getEntityAttributeCollection());
+        $collection->setItemObjectClass($this->getAttributeModel());
         return $collection;
     }
 

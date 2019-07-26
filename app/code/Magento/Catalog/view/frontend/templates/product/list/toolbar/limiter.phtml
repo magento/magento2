@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -13,21 +10,22 @@
  *
  * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
  */
-use Magento\Catalog\Model\Product\ProductList\Toolbar;
 ?>
 <div class="field limiter">
     <label class="label" for="limiter">
-        <span><?= /* @escapeNotVerified */ __('Show') ?></span>
+        <span><?= $block->escapeHtml(__('Show')) ?></span>
     </label>
     <div class="control">
         <select id="limiter" data-role="limiter" class="limiter-options">
-            <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
-                <option value="<?= /* @escapeNotVerified */ $_key ?>"<?php if ($block->isLimitCurrent($_key)): ?>
-                    selected="selected"<?php endif ?>>
-                    <?= /* @escapeNotVerified */ $_limit ?>
+            <?php foreach ($block->getAvailableLimit() as $_key => $_limit) :?>
+                <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+                    <?php if ($block->isLimitCurrent($_key)) :?>
+                        selected="selected"
+                    <?php endif ?>>
+                    <?= $block->escapeHtml($_limit) ?>
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
-    <span class="limiter-text"><?= /* @escapeNotVerified */ __('per page') ?></span>
+    <span class="limiter-text"><?= $block->escapeHtml(__('per page')) ?></span>
 </div>

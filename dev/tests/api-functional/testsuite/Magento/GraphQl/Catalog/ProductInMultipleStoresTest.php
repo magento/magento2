@@ -10,10 +10,13 @@ namespace Magento\GraphQl\Catalog;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Class ProductInMultipleStoresTest
+ */
 class ProductInMultipleStoresTest extends GraphQlAbstract
 {
-
     /**
+     * Test a product from a specific and a default store
      *
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
@@ -94,7 +97,7 @@ QUERY;
         $nonExistingStoreCode = "non_existent_store";
         $headerMapInvalidStoreCode = ['Store' => $nonExistingStoreCode];
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Store code non_existent_store does not exist');
+        $this->expectExceptionMessage('Requested store is not found');
         $this->graphQlQuery($query, [], '', $headerMapInvalidStoreCode);
     }
 }

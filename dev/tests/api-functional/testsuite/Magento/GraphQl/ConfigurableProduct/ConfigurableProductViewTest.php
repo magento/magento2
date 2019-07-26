@@ -204,7 +204,6 @@ QUERY;
         /**
          * @var ProductRepositoryInterface $productRepository
          */
-
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
 
@@ -407,6 +406,7 @@ QUERY;
                 $variantArray['product']['price']
             );
             $configurableOptions = $this->getConfigurableOptions();
+            $this->assertEquals(1, count($variantArray['attributes']));
             foreach ($variantArray['attributes'] as $attribute) {
                 $hasAssertion = false;
                 foreach ($configurableOptions as $option) {

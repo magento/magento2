@@ -19,6 +19,7 @@
         <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteWebsiteButtonOnEditWebsitePage"/>
+        <waitForPageLoad stepKey="waitForDeleteStoreGroupSectionLoad" time="30"/>
         <selectOption userInput="No" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteStoreGroupSection.deleteStoreGroupButton}}" stepKey="clickDeleteWebsiteButton"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>

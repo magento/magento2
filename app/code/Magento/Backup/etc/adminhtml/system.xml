@@ -26,6 +26,7 @@
                     <label>Scheduled Backup Type</label>
                     <depends>
                         <field id="enabled">1</field>
+                        <field id="functionality_enabled">1</field>
                     </depends>
                     <source_model>Magento\Backup\Model\Config\Source\Type</source_model>
                 </field>
@@ -33,12 +34,14 @@
                     <label>Start Time</label>
                     <depends>
                         <field id="enabled">1</field>
+                        <field id="functionality_enabled">1</field>
                     </depends>
                 </field>
                 <field id="frequency" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Frequency</label>
                     <depends>
                         <field id="enabled">1</field>
+                        <field id="functionality_enabled">1</field>
                     </depends>
                     <source_model>Magento\Cron\Model\Config\Source\Frequency</source_model>
                     <backend_model>Magento\Backup\Model\Config\Backend\Cron</backend_model>
@@ -48,6 +51,7 @@
                     <comment>Please put your store into maintenance mode during backup.</comment>
                     <depends>
                         <field id="enabled">1</field>
+                        <field id="functionality_enabled">1</field>
                     </depends>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

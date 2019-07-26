@@ -18,8 +18,8 @@
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
         <fillField userInput="{{customerGroupName}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('customer_group_code')}}" stepKey="fillNameFieldOnFiltersSection"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
-        <click selector="{{AdminCustomerGroupGridActionsSection.selectButton('customerGroupName')}}" stepKey="clickSelectButton"/>
-        <click selector="{{AdminCustomerGroupGridActionsSection.deleteAction('customerGroupName')}}" stepKey="clickOnDeleteItem"/>
+        <click selector="{{AdminCustomerGroupGridActionsSection.selectButton(customerGroupName)}}" stepKey="clickSelectButton"/>
+        <click selector="{{AdminCustomerGroupGridActionsSection.deleteAction(customerGroupName)}}" stepKey="clickOnDeleteItem"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDeleteCustomerGroup"/>
         <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage"/>
     </actionGroup>

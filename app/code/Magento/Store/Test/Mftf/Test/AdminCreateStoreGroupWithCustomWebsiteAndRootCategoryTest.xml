@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateStoreGroupWithCustomWebsiteAndRootCategoryTest">
+        <annotations>
+            <stories value="Create Store Group"/>
+            <title value="Create Store Group with Custom Website and Root Category"/>
+            <description value="Test log in to Stores and Create Store Group with Custom Website and Root Category Test"/>
+            <testCaseId value="MC-14299"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create root category-->
+            <createData entity="NewRootCategory" stepKey="rootCategory"/>
+            <createData entity="SimpleRootSubCategory" stepKey="category">
+                <requiredEntity createDataKey="rootCategory"/>
+            </createData>
+            <!--Create website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete website-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Delete root category-->
+            <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create custom store group with custom website and root category and verify AssertStoreGroupSuccessSaveMessage-->
+        <actionGroup ref="CreateCustomStore" stepKey="createCustomStoreGroup">
+            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="store" value="{{customStoreGroup.name}}"/>
+            <argument name="rootCategory" value="$$rootCategory.name$$"/>
+        </actionGroup>
+
+        <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid-->
+        <actionGroup ref="AssertStoreGroupInGrid" stepKey="seeCreatedStoreGroupInGrid">
+            <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+
+        <!--Go to store group form page and verify AssertStoreGroupForm and AssertStoreGroupOnStoreViewForm-->
+        <actionGroup ref="AssertStoreGroupForm" stepKey="seeCreatedStoreGroupInForm">
+            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+            <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            <argument name="rootCategory" value="$$rootCategory.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

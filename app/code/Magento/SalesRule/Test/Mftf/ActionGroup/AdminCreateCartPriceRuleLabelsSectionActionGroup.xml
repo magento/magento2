@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleLabelsSectionActionGroup">
+        <arguments>
+            <argument name="rule" type="entity"/>
+        </arguments>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.labelsHeader}}" visible="true" stepKey="clickToExpandLabels"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.defaultRuleLabelAllStoreViews}}" userInput="{{rule.defaultRuleLabelAllStoreViews}}" stepKey="fillDefaultRuleLabelAllStoreViews"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{rule.defaultStoreView}}" stepKey="fillDefaultStoreView"/>
+    </actionGroup>
+</actionGroups>
