@@ -395,6 +395,7 @@
         <!--Assert configurable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForConfig"/>
+        <click selector="{{AdminProductGridSection.columnHeader('ID')}}" stepKey="clickIdHeaderToSortAsc"/>
         <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySkuFroConfig">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
