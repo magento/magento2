@@ -37,6 +37,20 @@ class Url
      * Get full url with base path from a path
      *
      * @param string $path
+     * @return bool
+     */
+    public function isPath(string $path): bool
+    {
+        if (preg_match("|^(https?:)?\/\/|i", $path)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Get full url with base path from a path
+     *
+     * @param string $path
      * @param StoreInterface $store
      * @param bool $isSecure
      * @return string
@@ -44,8 +58,8 @@ class Url
      */
     public function getUrlFromPath(string $path, StoreInterface $store): string
     {
-        if (preg_match("|^(https?:)?\/\/|i", $path)
-        ) {
+        //if it's a url then don't proceed with further validation
+        if (!$this->isPath($path)) {
             throw new ValidationException(__('Invalid Url.'));
         }
 
