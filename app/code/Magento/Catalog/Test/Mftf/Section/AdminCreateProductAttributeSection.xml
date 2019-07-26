@@ -48,6 +48,7 @@
         <element name="EnableWYSIWYG" type="select" selector="#enabled"/>
         <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
         <element name="StorefrontPropertiesSectionToggle" type="button" selector="#front_fieldset-wrapper"/>
+        <element name="visibleOnCatalogPagesOnStorefront" type="select" selector="#is_visible_on_front"/>
     </section>
     <section name="WYSIWYGProductAttributeSection">
         <element name="ShowHideBtn" type="button" selector="#toggledefault_value_texteditor"/>

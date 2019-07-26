@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingGuestInfoSection">
-        <element name="email" type="input" selector="#checkout-customer-email"/>
+        <element name="email" type="input" selector="#customer-email"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
         <element name="lastName" type="input" selector="input[name=lastname]"/>
         <element name="company" type="input" selector="input[name=company]"/>
