@@ -51,7 +51,12 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
             'customer_group_id',
             ['label' => __('Customer Group'), 'renderer' => $this->_getGroupRenderer()]
         );
-        $this->addColumn('min_sale_qty', ['label' => __('Minimum Qty')]);
+        $this->addColumn('min_sale_qty',
+            [
+                'label' => __('Minimum Qty'),
+                'class' => 'required-entry validate-number validate-greater-than-zero'
+            ]
+        );
         $this->_addAfter = false;
         $this->_addButtonLabel = __('Add Minimum Qty');
     }
