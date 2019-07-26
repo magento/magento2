@@ -754,7 +754,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfirmationEmailWithSpecialCharacters(): void
     {
-        $email = 'John Smith <customer+confirmation@example.com>';
+        $email = 'customer+confirmation@example.com';
         $this->dispatch('customer/account/confirmation/email/customer%2Bconfirmation%40email.com');
         $this->getRequest()->setPostValue('email', $email);
         $this->dispatch('customer/account/confirmation/email/customer%2Bconfirmation%40email.com');
@@ -769,7 +769,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        $this->assertContains('To: ' . $email, $rawMessage);
+        $this->assertContains('To: John Smith <' . $email . '>', $rawMessage);
 
         $content = $message->getBody()->getParts()[0]->getRawContent();
         $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
