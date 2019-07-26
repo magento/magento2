@@ -997,8 +997,6 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         /** @var CategoryRepositoryInterface $categoryRepository */
         $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
         $categoryIds  = [3, 4, 5];
