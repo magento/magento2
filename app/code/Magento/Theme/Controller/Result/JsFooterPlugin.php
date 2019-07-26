@@ -16,7 +16,7 @@ use Magento\Framework\App\Response\Http;
  */
 class JsFooterPlugin
 {
-    private const XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_inline_to_bottom';
+    private const XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_script_to_bottom';
 
     /**
      * @var ScopeConfigInterface

@@ -138,10 +138,6 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
-    additional_data: PaymentMethodAdditionalDataInput @doc(description: "Additional payment data")
-}
-
-input PaymentMethodAdditionalDataInput {
 }
 
 input SetGuestEmailOnCartInput {
@@ -198,7 +194,7 @@ type Cart {
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
     shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: BillingCartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
-    available_payment_methods: [AvailablePaymentMethod]  @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
+    available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
 }
