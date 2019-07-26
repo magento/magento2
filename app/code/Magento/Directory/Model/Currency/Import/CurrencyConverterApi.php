@@ -7,38 +7,47 @@ declare(strict_types=1);
 
 namespace Magento\Directory\Model\Currency\Import;
 
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfig;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
+use Exception;
+
+/**
+ * Currency rate converter (free.currconv.com).
+ */
 class CurrencyConverterApi extends AbstractImport
 {
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra'; //@codingStandardsIgnoreLine
+    public const CURRENCY_CONVERTER_URL = 'https://free.currconv.com/api/v7/convert?apiKey={{ACCESS_KEY}}'
+        . '&q={{CURRENCY_RATES}}&compact=ultra';
 
     /**
      * Http Client Factory
      *
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var ZendClientFactory
      */
     private $httpClientFactory;
 
     /**
      * Core scope config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfig
      */
     private $scopeConfig;
 
     /**
-     * Initialize dependencies
-     *
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param CurrencyFactory $currencyFactory
+     * @param ScopeConfig $scopeConfig
+     * @param ZendClientFactory $httpClientFactory
      */
     public function __construct(
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+        CurrencyFactory $currencyFactory,
+        ScopeConfig $scopeConfig,
+        ZendClientFactory $httpClientFactory
     ) {
         parent::__construct($currencyFactory);
         $this->scopeConfig = $scopeConfig;
@@ -48,7 +57,7 @@ class CurrencyConverterApi extends AbstractImport
     /**
      * {@inheritdoc}
      */
-    public function fetchRates()
+    public function fetchRates(): array
     {
         $data = [];
         $currencies = $this->_getCurrencyCodes();
@@ -72,32 +81,72 @@ class CurrencyConverterApi extends AbstractImport
      * @param array $currenciesTo
      * @return array
      */
-    private function convertBatch($data, $currencyFrom, $currenciesTo)
+    private function convertBatch(array $data, string $currencyFrom, array $currenciesTo): array
     {
+        $url = $this->getServiceURL($currencyFrom, $currenciesTo);
+        if (empty($url)) {
+            $data[$currencyFrom] = $this->makeEmptyResponse($currenciesTo);
+            return $data;
+        }
+
+        set_time_limit(0);
+        try {
+            $response = $this->getServiceResponse($url);
+        } finally {
+            ini_restore('max_execution_time');
+        }
+
+        if (!$this->validateResponse($response)) {
+            $data[$currencyFrom] = $this->makeEmptyResponse($currenciesTo);
+            return $data;
+        }
+
         foreach ($currenciesTo as $to) {
-            set_time_limit(0);
-            try {
-                $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
-                $url = str_replace('{{CURRENCY_TO}}', $to, $url);
-                $response = $this->getServiceResponse($url);
-                if ($currencyFrom == $to) {
-                    $data[$currencyFrom][$to] = $this->_numberFormat(1);
+            if ($currencyFrom === $to) {
+                $data[$currencyFrom][$to] = $this->_numberFormat(1);
+            } else {
+                if (empty($response)) {
+                    $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $to);
+                    $data[$currencyFrom][$to] = null;
                 } else {
-                    if (empty($response)) {
-                        $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $to);
-                        $data[$currencyFrom][$to] = null;
-                    } else {
-                        $data[$currencyFrom][$to] = $this->_numberFormat(
-                            (double)$response[$currencyFrom . '_' . $to]
-                        );
-                    }
+                    $data[$currencyFrom][$to] = $this->_numberFormat(
+                        (double)$response[$currencyFrom . '_' . $to]
+                    );
                 }
-            } finally {
-                ini_restore('max_execution_time');
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Return service URL.
+     *
+     * @param string $currencyFrom
+     * @param array $currenciesTo
+     * @return string
+     */
+    private function getServiceURL(string $currencyFrom, array $currenciesTo): string
+    {
+        // Get access key
+        $accessKey = $this->scopeConfig->getValue('currency/currencyconverterapi/api_key', ScopeInterface::SCOPE_STORE);
+        if (empty($accessKey)) {
+            $this->_messages[] = __('No API Key was specified or an invalid API Key was specified.');
+            return '';
+        }
+
+        // Get currency rates request
+        $currencyQueryParts = [];
+        foreach ($currenciesTo as $currencyTo) {
+            $currencyQueryParts[] = sprintf('%s_%s', $currencyFrom, $currencyTo);
+        }
+        $currencyRates = implode(',', $currencyQueryParts);
+
+        return str_replace(
+            ['{{ACCESS_KEY}}', '{{CURRENCY_RATES}}'],
+            [$accessKey, $currencyRates],
+            self::CURRENCY_CONVERTER_URL
+        );
     }
 
     /**
@@ -107,9 +156,9 @@ class CurrencyConverterApi extends AbstractImport
      * @param int $retry
      * @return array
      */
-    private function getServiceResponse($url, $retry = 0)
+    private function getServiceResponse($url, $retry = 0): array
     {
-        /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
+        /** @var ZendClient $httpClient */
         $httpClient = $this->httpClientFactory->create();
         $response = [];
 
@@ -120,7 +169,7 @@ class CurrencyConverterApi extends AbstractImport
                 [
                     'timeout' => $this->scopeConfig->getValue(
                         'currency/currencyconverterapi/timeout',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        ScopeInterface::SCOPE_STORE
                     ),
                 ]
             )->request(
@@ -128,12 +177,43 @@ class CurrencyConverterApi extends AbstractImport
             )->getBody();
 
             $response = json_decode($jsonResponse, true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($retry == 0) {
                 $response = $this->getServiceResponse($url, 1);
             }
         }
         return $response;
+    }
+
+    /**
+     * Validate rates response.
+     *
+     * @param array $response
+     * @return bool
+     */
+    private function validateResponse(array $response): bool
+    {
+        if (!isset($response['error'])) {
+            return true;
+        }
+
+        $errorCodes = [
+            400 => __('No API Key was specified or an invalid API Key was specified.')
+        ];
+        $this->_messages[] = $errorCodes[$response['status']] ?? __('Currency rates can\'t be retrieved.');
+
+        return false;
+    }
+
+    /**
+     * Make empty rates for provided currencies.
+     *
+     * @param array $currenciesTo
+     * @return array
+     */
+    private function makeEmptyResponse(array $currenciesTo): array
+    {
+        return array_fill_keys($currenciesTo, null);
     }
 
     /**
