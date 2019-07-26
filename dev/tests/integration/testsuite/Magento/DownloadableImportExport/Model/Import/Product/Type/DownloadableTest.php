@@ -68,7 +68,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
         $this->domainManager = $this->objectManager->get(DomainManagerInterface::class);
-        $this->domainManager->addDomains(['www.google.com', 'www.yahoo.com']);
+        $this->domainManager->addDomains(['www.bing.com', 'www.google.com', 'www.yahoo.com']);
     }
 
     /**
@@ -76,7 +76,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown()
     {
-        $this->domainManager->removeDomains(['www.google.com', 'www.yahoo.com']);
+        $this->domainManager->removeDomains(['www.bing.com', 'www.google.com', 'www.yahoo.com']);
     }
 
     /**
