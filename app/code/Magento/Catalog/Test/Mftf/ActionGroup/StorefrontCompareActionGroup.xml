@@ -70,12 +70,13 @@
 
     <actionGroup name="RemoveProductFromComparisonList">
         <arguments>
-            <argument name="productVar"/>
+            <argument name="product"/>
         </arguments>
-        <click selector="{{StorefrontProductCompareMainSection.removeProduct}}" stepKey="clickRemoveProductButton"/>
+        <click selector="{{StorefrontProductCompareMainSection.removeProduct(product.name)}}" stepKey="clickRemoveProductButton"/>
+        <waitForElementVisible selector="{{StorefrontModalConfirmationSection.okButton}}" stepKey="waitForConfirmationPopup"/>
         <click selector="{{StorefrontModalConfirmationSection.okButton}}" stepKey="confirmProductRemove"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}" stepKey="waitForProductRemoveSuccessMessage"/>
-        <see selector="{{StorefrontMessagesSection.successMessage}}" userInput="You removed product {{productVar.name}} from the comparison list." stepKey="assertProductRemoveSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.successMessage}}" userInput="You removed product {{product.name}} from the comparison list." stepKey="assertProductRemoveSuccessMessage"/>
     </actionGroup>
 
     <actionGroup name="StorefrontCheckCompareOutOfStockProductActionGroup" extends="StorefrontCheckCompareSimpleProductActionGroup">

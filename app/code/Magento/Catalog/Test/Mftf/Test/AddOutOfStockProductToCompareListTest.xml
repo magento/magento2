@@ -20,14 +20,14 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock" arguments="0" stepKey="doNotDisplayOutOfStockProducts"/>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="OutOfStockProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
         </before>
         <after>
-            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock" arguments="0" stepKey="setOutOfStockToNo"/>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
@@ -38,7 +38,7 @@
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="doNotSeeAddToCompareLink"/>
 
         <!--Turn on 'out on stock' config-->
-        <magentoCLI command="config:set cataloginventory/options/show_out_of_stock" arguments="1" stepKey="displayOutOfStockYes"/>
+        <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Add product to comparison list -->
@@ -74,7 +74,7 @@
         </actionGroup>
 
         <actionGroup ref="RemoveProductFromComparisonList" stepKey="removeProductFromComparisonList">
-            <argument name="productVar" value="$$createProduct$$"/>
+            <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
     </test>
 </tests>
