@@ -167,6 +167,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $arrayUtility;
 
     /**
+     * @var array
+     */
+    private $cacheChildrenIds = [];
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -283,7 +288,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        return $this->_bundleSelection->getChildrenIds($parentId, $required);
+        $cacheKey = $parentId . '-' . ($required ? 1 : 0);
+        if (!isset($this->cacheChildrenIds[$cacheKey])) {
+            $this->cacheChildrenIds[$cacheKey] = $this->_bundleSelection->getChildrenIds($parentId, $required);
+        }
+
+        return $this->cacheChildrenIds[$cacheKey];
     }
 
     /**

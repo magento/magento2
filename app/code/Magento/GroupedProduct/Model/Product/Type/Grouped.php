@@ -87,6 +87,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $msrpData;
 
     /**
+     * @var array
+     */
+    private $cacheChildrenIds = [];
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -174,10 +179,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        return $this->productLinks->getChildrenIds(
-            $parentId,
-            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
-        );
+        $cacheKey = $parentId . '-' . ($required ? 1 : 0);
+        if (!isset($this->cacheChildrenIds[$cacheKey])) {
+            $this->cacheChildrenIds[$cacheKey] = $this->productLinks->getChildrenIds(
+                $parentId,
+                \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
+            );
+        }
+
+        return $this->cacheChildrenIds[$cacheKey];
     }
 
     /**

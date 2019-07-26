@@ -195,6 +195,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $salableProcessor;
 
     /**
+     * @var array
+     */
+    private $cacheChildrenIds = [];
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -324,7 +329,15 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        return $this->_catalogProductTypeConfigurable->getChildrenIds($parentId, $required);
+        $cacheKey = (is_array($parentId) ? implode(',', $parentId) : $parentId) . '-' . ($required ? 1 : 0);
+        if (!isset($this->cacheChildrenIds[$cacheKey])) {
+            $this->cacheChildrenIds[$cacheKey] = $this->_catalogProductTypeConfigurable->getChildrenIds(
+                $parentId,
+                $required
+            );
+        }
+
+        return $this->cacheChildrenIds[$cacheKey];
     }
 
     /**
