@@ -21,8 +21,10 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -214,6 +216,11 @@ class Eav extends AbstractModifier
     private $scopeConfig;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $auth;
+
+    /**
      * Eav constructor.
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
@@ -237,6 +244,7 @@ class Eav extends AbstractModifier
      * @param CompositeConfigProcessor|null $wysiwygConfigProcessor
      * @param ScopeConfigInterface|null $scopeConfig
      * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param AuthorizationInterface|null $auth
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -261,7 +269,8 @@ class Eav extends AbstractModifier
         $attributesToEliminate = [],
         CompositeConfigProcessor $wysiwygConfigProcessor = null,
         ScopeConfigInterface $scopeConfig = null,
-        AttributeCollectionFactory $attributeCollectionFactory = null
+        AttributeCollectionFactory $attributeCollectionFactory = null,
+        ?AuthorizationInterface $auth = null
     ) {
         $this->locator = $locator;
         $this->catalogEavValidationRules = $catalogEavValidationRules;
@@ -282,12 +291,12 @@ class Eav extends AbstractModifier
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
-        $this->wysiwygConfigProcessor = $wysiwygConfigProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(CompositeConfigProcessor::class);
-        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
-        ->get(ScopeConfigInterface::class);
+        $this->wysiwygConfigProcessor = $wysiwygConfigProcessor
+            ?: ObjectManager::getInstance()->get(CompositeConfigProcessor::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->attributeCollectionFactory = $attributeCollectionFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+            ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
+        $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -651,6 +660,7 @@ class Eav extends AbstractModifier
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @api
      * @since 101.0.0
      */
@@ -658,58 +668,65 @@ class Eav extends AbstractModifier
     {
         $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
         $attributeCode = $attribute->getAttributeCode();
-        $meta = $this->arrayManager->set($configPath, [], [
-            'dataType' => $attribute->getFrontendInput(),
-            'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
-            'visible' => $attribute->getIsVisible(),
-            'required' => $attribute->getIsRequired(),
-            'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
-            'default' => (!$this->isProductExists()) ? $this->getAttributeDefaultValue($attribute) : null,
-            'label' => __($attribute->getDefaultFrontendLabel()),
-            'code' => $attributeCode,
-            'source' => $groupCode,
-            'scopeLabel' => $this->getScopeLabel($attribute),
-            'globalScope' => $this->isScopeGlobal($attribute),
-            'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
-        ]);
+        $meta = $this->arrayManager->set(
+            $configPath,
+            [],
+            [
+                'dataType' => $attribute->getFrontendInput(),
+                'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
+                'visible' => $attribute->getIsVisible(),
+                'required' => $attribute->getIsRequired(),
+                'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
+                'default' => (!$this->isProductExists()) ? $this->getAttributeDefaultValue($attribute) : null,
+                'label' => __($attribute->getDefaultFrontendLabel()),
+                'code' => $attributeCode,
+                'source' => $groupCode,
+                'scopeLabel' => $this->getScopeLabel($attribute),
+                'globalScope' => $this->isScopeGlobal($attribute),
+                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
+            ]
+        );
 
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
             $options = $attributeModel->getSource()->getAllOptions(true, true);
-            $meta = $this->arrayManager->merge($configPath, $meta, [
-                'options' => $this->convertOptionsValueToString($options),
-            ]);
+            foreach ($options as &$option) {
+                $option['__disableTmpl'] = true;
+            }
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                ['options' => $this->convertOptionsValueToString($options)]
+            );
         }
 
         if ($this->canDisplayUseDefault($attribute)) {
-            $meta = $this->arrayManager->merge($configPath, $meta, [
-                'service' => [
-                    'template' => 'ui/form/element/helper/service',
+            $meta = $this->arrayManager->merge(
+                $configPath,
+                $meta,
+                [
+                    'service' => [
+                        'template' => 'ui/form/element/helper/service',
+                    ]
                 ]
-            ]);
+            );
         }
 
         if (!$this->arrayManager->exists($configPath . '/componentType', $meta)) {
-            $meta = $this->arrayManager->merge($configPath, $meta, [
-                'componentType' => Field::NAME,
-            ]);
+            $meta = $this->arrayManager->merge($configPath, $meta, ['componentType' => Field::NAME]);
         }
 
         $product = $this->locator->getProduct();
         if (in_array($attributeCode, $this->attributesToDisable)
             || $product->isLockedAttribute($attributeCode)) {
-            $meta = $this->arrayManager->merge($configPath, $meta, [
-                'disabled' => true,
-            ]);
+            $meta = $this->arrayManager->merge($configPath, $meta, ['disabled' => true]);
         }
 
         // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
         $childData = $this->arrayManager->get($configPath, $meta, []);
         if (($rules = $this->catalogEavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
-            $meta = $this->arrayManager->merge($configPath, $meta, [
-                'validation' => $rules,
-            ]);
+            $meta = $this->arrayManager->merge($configPath, $meta, ['validation' => $rules]);
         }
 
         $meta = $this->addUseDefaultValueCheckbox($attribute, $meta);
@@ -728,6 +745,23 @@ class Eav extends AbstractModifier
                 // Gallery attribute is being handled by "Images And Videos" section
                 $meta = [];
                 break;
+        }
+
+        //Checking access to design config.
+        $designDesignGroups = ['design', 'schedule-design-update'];
+        if (in_array($groupCode, $designDesignGroups, true)) {
+            if (!$this->auth->isAllowed('Magento_Catalog::edit_product_design')) {
+                $meta = $this->arrayManager->merge(
+                    $configPath,
+                    $meta,
+                    [
+                        'disabled' => true,
+                        'validation' => ['required' => false],
+                        'required' => false,
+                        'serviceDisabled' => true,
+                    ]
+                );
+            }
         }
 
         return $meta;
@@ -760,11 +794,14 @@ class Eav extends AbstractModifier
      */
     private function convertOptionsValueToString(array $options) : array
     {
-        array_walk($options, function (&$value) {
-            if (isset($value['value']) && is_scalar($value['value'])) {
-                $value['value'] = (string)$value['value'];
+        array_walk(
+            $options,
+            function (&$value) {
+                if (isset($value['value']) && is_scalar($value['value'])) {
+                    $value['value'] = (string)$value['value'];
+                }
             }
-        });
+        );
 
         return $options;
     }

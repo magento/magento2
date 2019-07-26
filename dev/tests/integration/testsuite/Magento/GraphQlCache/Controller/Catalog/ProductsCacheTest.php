@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Controller\Catalog;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\Request\Http;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
@@ -27,18 +26,12 @@ class ProductsCacheTest extends AbstractGraphqlCacheTest
     private $graphqlController;
 
     /**
-     * @var Http
-     */
-    private $request;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
     }
 
     /**
@@ -51,7 +44,6 @@ class ProductsCacheTest extends AbstractGraphqlCacheTest
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
-        /** @var ProductInterface $product */
         $product = $productRepository->get('simple1');
 
         $query
@@ -71,10 +63,8 @@ class ProductsCacheTest extends AbstractGraphqlCacheTest
        }
 QUERY;
 
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setQueryValue('query', $query);
-        $response = $this->graphqlController->dispatch($this->request);
+        $request = $this->prepareRequest($query);
+        $response = $this->graphqlController->dispatch($request);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
@@ -103,10 +93,8 @@ QUERY;
        }
 
 QUERY;
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setQueryValue('query', $query);
-        $response = $this->graphqlController->dispatch($this->request);
+        $request = $this->prepareRequest($query);
+        $response = $this->graphqlController->dispatch($request);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['FPC'];

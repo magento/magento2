@@ -55,7 +55,10 @@ class CreateCustomer implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
-        $customer = $this->createCustomerAccount->execute($args['input']);
+        $customer = $this->createCustomerAccount->execute(
+            $args['input'],
+            $context->getExtensionAttributes()->getStore()
+        );
 
         $data = $this->extractCustomerData->execute($customer);
         return ['customer' => $data];
