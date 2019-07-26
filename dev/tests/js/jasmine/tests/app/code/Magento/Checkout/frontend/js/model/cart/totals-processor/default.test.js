@@ -115,7 +115,7 @@ define([
                 return deferral.resolve(result);
             });
             expect(defaultProcessor.estimateTotals(address)).toBe(deferral);
-            expect(mocks['Magento_Checkout/js/model/quote'].setTotals).toHaveBeenCalledWith(totals);
+            expect(mocks['Magento_Checkout/js/model/quote'].setTotals).toHaveBeenCalledWith(result);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(0)[0]).toBe(true);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(1)[0]).toBe(false);
             expect(mocks['mage/storage'].post).toHaveBeenCalled();
