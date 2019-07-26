@@ -10,7 +10,7 @@
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">admin_usage_notification.admin_usage_notification_data_source</item>
         </item>
-        <item name="label" xsi:type="string" translate="true">Release Notification</item>
+        <item name="label" xsi:type="string" translate="true">Admin Usage Notification</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
     </argument>
     <settings>
@@ -21,6 +21,17 @@
         </deps>
     </settings>
     <dataSource name="admin_usage_notification_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="data" xsi:type="array">
+                        <item name="enableLogAction" xsi:type="url" path="adminAnalytics/config/enableAdminUsage"/>
+                        <item name="disableLogAction" xsi:type="url" path="adminAnalytics/config/disableAdminUsage"/>
+
+                    </item>
+                </item>
+            </argument>
+        </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
@@ -39,12 +50,27 @@
             <options>
                 <option name="modalClass" xsi:type="string">admin-usage-notification</option>
                 <option name="title" xsi:type="string" translate="true">Allow admin usage data collection</option>
-                <option name="autoOpen" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="array">true</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="clickableOverlay" xsi:type="boolean">false</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">false</option>
-
+                <option name="buttons" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="text" xsi:type="string" translate="true">Don't Allow</item>
+                        <item name="class" xsi:type="string">action-secondary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="string">disableAdminUsage</item>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="text" xsi:type="string" translate="true">Allow</item>
+                        <item name="class" xsi:type="string">action-primary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="string">enableAdminUsage</item>
+                        </item>
+                    </item>
+                </option>
             </options>
         </settings>
         <fieldset name="notification_fieldset">
@@ -64,59 +90,6 @@
                     </item>
                 </argument>
             </container>
-            <container name="notification_buttons">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="onCancel" xsi:type="string">actionCancel</item>
-                        <item name="options" xsi:type="array">
-                            <item name="buttons" xsi:type="array">
-                                <item name="0" xsi:type="array">
-                                    <item name="text" xsi:type="string">Don't Allow</item>
-                                    <item name="class" xsi:type="string">action-secondary</item>
-                                    <item name="actions" xsi:type="array">
-                                        <item name="0" xsi:type="string">actionCancel</item>
-                                    </item>
-                                </item>
-                                <item name="2" xsi:type="array">
-                                    <item name="text" xsi:type="string">Allow</item>
-                                    <item name="class" xsi:type="string">action-primary</item>
-                                    <item name="actions" xsi:type="array">
-                                        <item name="0" xsi:type="string">actionDone</item>
-                                    </item>
-                                </item>
-                            </item>
-                        </item>
-                    </item>
-                </argument>
-
-                <button name="dont_allow_modal_button">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="title" xsi:type="string">Don't Allow</item>
-                            <item name="actions" xsi:type="array">
-                                <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">${ $.parentName}.notification_modal_1</item>
-                                    <item name="actionName" xsi:type="string">dontAllow</item>
-                                </item>
-                            </item>
-                        </item>
-                    </argument>
-                </button>
-                <button name="allow_modal_button">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="title" xsi:type="string">Allow</item>
-                            <item name="actions" xsi:type="array">
-                                <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">${ $.parentName}.notification_modal_1</item>
-                                    <item name="actionName" xsi:type="string">actionDone</item>
-                                </item>
-                            </item>
-                        </item>
-                    </argument>
-                </button>
-            </container>
         </fieldset>
     </modal>
-
 </form>

@@ -78,18 +78,20 @@ class CanViewNotification implements VisibilityConditionInterface
      */
     public function isVisible(array $arguments)
     {
-//        $userId = $this->session->getUser()->getId();
-//        $cacheKey = self::$cachePrefix . $userId;
-//        $value = $this->cacheStorage->load($cacheKey);
-//        if ($value === false) {
-//            $value = version_compare(
-//                $this->viewerLogger->get($userId)->getLastViewVersion(),
-//                $this->productMetadata->getVersion(),
-//                '<'
-//            );
-//            $this->cacheStorage->save(false, $cacheKey);
-//        }
-        return true;
+        $userId = $this->session->getUser()->getId();
+        $cacheKey = self::$cachePrefix . $userId;
+        $value = $this->cacheStorage->load($cacheKey);
+        if ($value === false) {
+            $value = version_compare(
+                $this->viewerLogger->get($userId)->getLastViewVersion(),
+                $this->productMetadata->getVersion(),
+                '<'
+            );
+            $this->cacheStorage->save(false, $cacheKey);
+        }
+
+        return (bool)$value;
+
     }
 
     /**
