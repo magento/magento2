@@ -462,6 +462,21 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             return $this;
         }
 
+        // Walk all updates and extract handles before the merge step.
+        foreach ($this->updates as $update) {
+            $updateXml = null;
+
+            try {
+                $updateXml = $this->_loadXmlString($update);
+            } catch (\Exception $exception) {
+                // ignore invalid
+            }
+
+            if ($updateXml && strtolower($updateXml->getName()) == 'update' && isset($updateXml['handle'])) {
+                $this->addHandle((string)$updateXml['handle']);
+            }
+        }
+
         foreach ($this->getHandles() as $handle) {
             $this->_merge($handle);
         }
