@@ -88,4 +88,16 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+
+    <!-- Checkout Config: Display Cart Summary -->
+    <entity name="DisplayItemsQuantities">
+        <data key="path">checkout/cart_link/use_qty</data>
+        <data key="label">Display items quantities</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayUniqueItems">
+        <data key="path">checkout/cart_link/use_qty</data>
+        <data key="label">Display number of items in cart</data>
+        <data key="value">0</data>
+    </entity>
 </entities>
