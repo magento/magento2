@@ -9,6 +9,7 @@ namespace Magento\Rule\Model\ResourceModel\Rule\Collection;
 /**
  * Abstract Rule entity resource collection model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -137,11 +138,11 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     }
 
     /**
-     * Retrieve correspondent entity information (associations table name, columns names)
-     * of rule's associated entity by specified entity type
+     * Retrieve correspondent entity information of rule's associated entity by specified entity type
+     *
+     * (associations table name, columns names)
      *
      * @param string $entityType
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */
