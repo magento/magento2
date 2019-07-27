@@ -14,8 +14,7 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 
 /**
- * Class ApplyAttributesUpdate
- * @package Magento\Bundle\Setup\Patch
+ * Class \Magento\Bundle\Setup\Patch\ApplyAttributesUpdate
  */
 class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
 {
