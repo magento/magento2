@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml;
 
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Store\Model\Store;
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * Test class for \Magento\Catalog\Controller\Adminhtml\Category.
+ *
  * @magentoAppArea adminhtml
  */
 class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
@@ -36,6 +42,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Test save action.
+     *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDbIsolation enabled
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
@@ -48,7 +56,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     public function testSaveAction($inputData, $defaultAttributes, $attributesSaved = [], $isSuccess = true)
     {
         /** @var $store \Magento\Store\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+        $store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
         $store->load('fixturestore', 'code');
         $storeId = $store->getId();
 
@@ -61,14 +69,12 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         if ($isSuccess) {
             $this->assertSessionMessages(
                 $this->equalTo(['You saved the category.']),
-                \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+                MessageInterface::TYPE_SUCCESS
             );
         }
 
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class
-        );
+        $category = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
         $category->setStoreId($storeId);
         $category->load(2);
 
@@ -95,6 +101,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Test save action from product creation page.
+     *
      * @param array $postData
      * @dataProvider categoryCreatedFromProductCreationPageDataProvider
      * @magentoDbIsolation enabled
@@ -377,11 +385,13 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
             $this->equalTo(['The "Name" attribute value is empty. Set the attribute and try again.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            MessageInterface::TYPE_ERROR
         );
     }
 
     /**
+     * Test move action.
+     *
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @dataProvider moveActionDataProvider
      *
@@ -433,6 +443,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Test save category with product position.
+     *
      * @magentoDataFixture Magento/Catalog/_files/products_in_different_stores.php
      * @magentoDbIsolation disabled
      * @dataProvider saveActionWithDifferentWebsitesDataProvider
@@ -541,7 +553,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
-     * Get items count from catalog_category_product
+     * Get items count from catalog_category_product.
      *
      * @return int
      */
@@ -553,6 +565,38 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
         return count(
             $this->productResource->getConnection()->fetchAll($oldCategoryProducts)
+        );
+    }
+
+    /**
+     * Verify that the category cannot be saved if the category url matches the admin url.
+     *
+     * @magentoConfigFixture admin/url/use_custom_path 1
+     * @magentoConfigFixture admin/url/custom_path backend
+     */
+    public function testSaveWithCustomBackendNameAction()
+    {
+        $frontNameResolver = Bootstrap::getObjectManager()->create(FrontNameResolver::class);
+        $urlKey = $frontNameResolver->getFrontName();
+        $inputData = [
+            'id' => '2',
+            'url_key' => $urlKey,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1
+            ]
+        ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($inputData);
+        $this->dispatch('backend/catalog/category/save');
+        $this->assertSessionMessages(
+            $this->equalTo(
+                [
+                    'URL key "backend" conflicts with reserved endpoint names: '
+                    . 'admin, soap, rest, graphql, backend. Try another url key.'
+                ]
+            ),
+            MessageInterface::TYPE_ERROR
         );
     }
 }
