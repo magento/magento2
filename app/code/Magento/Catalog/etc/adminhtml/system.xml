@@ -41,11 +41,11 @@
                 <label>Recently Viewed/Compared Products</label>
                 <field id="recently_viewed_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lifetime of products in Recently Viewed Widget</label>
-                    <validate>validate-digits validate-zero-or-greater</validate>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="recently_compared_lifetime" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Lifetime of products in Recently Compared Widget</label>
-                    <validate>validate-digits validate-zero-or-greater</validate>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="synchronize_with_backend" translate="label" type="select" showInDefault="1" canRestore="1">
                     <label>Synchronize widget products with backend storage</label>
