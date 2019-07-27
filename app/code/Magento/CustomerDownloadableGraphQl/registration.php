@@ -6,4 +6,4 @@
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_DownloadableGraphQl', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_CustomerDownloadableGraphQl', __DIR__);

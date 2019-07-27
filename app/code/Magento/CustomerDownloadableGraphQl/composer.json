@@ -22,7 +22,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\DownloadableGraphQl\\": ""
+            "Magento\\CustomerDownloadableGraphQl\\": ""
         }
     }
 }
