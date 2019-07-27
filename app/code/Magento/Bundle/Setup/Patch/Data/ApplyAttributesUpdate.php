@@ -44,7 +44,7 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
@@ -66,8 +66,8 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
                 ',',
                 $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to')
             );
-            if (!in_array('bundle', $applyTo)) {
-                $applyTo[] = 'bundle';
+            if (!in_array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $applyTo)) {
+                $applyTo[] = \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE;
                 $eavSetup->updateAttribute(
                     \Magento\Catalog\Model\Product::ENTITY,
                     $field,
@@ -78,7 +78,7 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
         }
 
         $applyTo = explode(',', $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'cost', 'apply_to'));
-        unset($applyTo[array_search('bundle', $applyTo)]);
+        unset($applyTo[array_search(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $applyTo)]);
         $eavSetup->updateAttribute(\Magento\Catalog\Model\Product::ENTITY, 'cost', 'apply_to', implode(',', $applyTo));
 
         /**
@@ -106,7 +106,7 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => true,
                 'unique' => false,
-                'apply_to' => 'bundle'
+                'apply_to' => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ]
         );
 
@@ -131,7 +131,7 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
                 'comparable' => false,
                 'visible_on_front' => false,
                 'unique' => false,
-                'apply_to' => 'bundle'
+                'apply_to' => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ]
         );
 
@@ -157,7 +157,7 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => true,
                 'unique' => false,
-                'apply_to' => 'bundle'
+                'apply_to' => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ]
         );
 
@@ -184,7 +184,7 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => true,
                 'unique' => false,
-                'apply_to' => 'bundle'
+                'apply_to' => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ]
         );
 
@@ -210,13 +210,13 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => true,
                 'unique' => false,
-                'apply_to' => 'bundle'
+                'apply_to' => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ]
         );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -224,7 +224,7 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -232,7 +232,7 @@ class ApplyAttributesUpdate implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
