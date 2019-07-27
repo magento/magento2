@@ -28,10 +28,10 @@ class BraintreeAdapter extends \Magento\Braintree\Model\Adapter\BraintreeAdapter
     private $mockResponseDataProvider;
 
     /**
-     * @param $merchantId
-     * @param $publicKey
-     * @param $privateKey
-     * @param $environment
+     * @param string $merchantId
+     * @param string $publicKey
+     * @param string $privateKey
+     * @param string $environment
      * @param MockResponseDataProvider $mockResponseDataProvider
      */
     public function __construct(
