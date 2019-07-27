@@ -10,6 +10,9 @@ namespace Magento\ConfigurableProductGraphQl\Model\Cart\BuyRequest;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 
+/**
+ * DataProvider for building super attribute options in buy requests
+ */
 class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 {
     /**

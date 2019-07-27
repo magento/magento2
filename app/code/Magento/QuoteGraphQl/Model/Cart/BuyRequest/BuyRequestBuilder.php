@@ -10,6 +10,9 @@ namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
 
+/**
+ * Build buy request for adding products to cart
+ */
 class BuyRequestBuilder
 {
     /**
@@ -22,6 +25,10 @@ class BuyRequestBuilder
      */
     private $dataObjectFactory;
 
+    /**
+     * @param DataObjectFactory $dataObjectFactory
+     * @param array $providers
+     */
     public function __construct(
         DataObjectFactory $dataObjectFactory,
         array $providers = []
@@ -30,6 +37,12 @@ class BuyRequestBuilder
         $this->providers = $providers;
     }
 
+    /**
+     * Build buy request for adding product to cart
+     *
+     * @param array $cartItemData
+     * @return DataObject
+     */
     public function build(array $cartItemData): DataObject
     {
         $requestData = [];

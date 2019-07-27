@@ -19,8 +19,14 @@ use Magento\Quote\Model\Quote\Item;
  */
 class ConfigurableCartItemOptions implements ResolverInterface
 {
+    /**
+     * @var Configuration
+     */
     private $configurationHelper;
 
+    /**
+     * @param Configuration $configurationHelper
+     */
     public function __construct(
         Configuration $configurationHelper
     ) {
@@ -30,7 +36,14 @@ class ConfigurableCartItemOptions implements ResolverInterface
     /**
      * Fetch and format configurable variants.
      *
-     * {@inheritdoc}
+     * @param Field $field
+     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return array|\Magento\Framework\GraphQl\Query\Resolver\Value|mixed
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {

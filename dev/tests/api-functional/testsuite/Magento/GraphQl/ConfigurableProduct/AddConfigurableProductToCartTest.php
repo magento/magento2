@@ -90,7 +90,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
             1
         );
 
-        $response = $this->graphQlMutation($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -117,7 +117,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
             2000
         );
 
-        $response = $this->graphQlMutation($query);
+        $this->graphQlMutation($query);
     }
 
     /**

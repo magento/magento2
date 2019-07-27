@@ -10,6 +10,9 @@ namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Stdlib\ArrayManager;
 
+/**
+ * Provides QTY buy request data for adding products to cart
+ */
 class QuantityDataProvider implements BuyRequestDataProviderInterface
 {
     /**
