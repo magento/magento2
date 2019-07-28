@@ -478,9 +478,9 @@ class Option extends Widget
     public function getPriceValue($value, $type)
     {
         if ($type == 'percent') {
-            return number_format($value, 2, null, '');
+            return number_format((float)$value, 2, null, '');
         } elseif ($type == 'fixed') {
-            return number_format($value, 2, null, '');
+            return number_format((float)$value, 2, null, '');
         }
     }
 
