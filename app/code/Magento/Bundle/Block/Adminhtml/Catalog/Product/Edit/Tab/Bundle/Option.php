@@ -6,8 +6,11 @@
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Store\Model\Store;
 
 /**
+ * Block for rendering option of bundle product
+ *
  * Class \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option
  */
 class Option extends \Magento\Backend\Block\Widget
@@ -343,6 +346,6 @@ class Option extends \Magento\Backend\Block\Widget
      */
     public function isDefaultStore()
     {
-        return $this->getProduct()->getStoreId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        return $this->getProduct()->getStoreId() == Store::DEFAULT_STORE_ID;
     }
 }

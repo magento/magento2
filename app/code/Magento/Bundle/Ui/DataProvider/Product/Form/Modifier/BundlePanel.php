@@ -16,6 +16,7 @@ use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
+use Magento\Store\Model\Store;
 
 /**
  * Create Ship Bundle Items and Affect Bundle Product Selections fields
@@ -814,6 +815,6 @@ class BundlePanel extends AbstractModifier
      */
     protected function isDefaultStore()
     {
-        return $this->locator->getProduct()->getStoreId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        return $this->locator->getProduct()->getStoreId() == Store::DEFAULT_STORE_ID;
     }
 }
