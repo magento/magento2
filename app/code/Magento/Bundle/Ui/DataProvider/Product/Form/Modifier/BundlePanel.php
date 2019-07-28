@@ -814,6 +814,6 @@ class BundlePanel extends AbstractModifier
      */
     protected function isDefaultStore()
     {
-        return $this->locator->getProduct()->getStoreId() == 0;
+        return $this->locator->getProduct()->getStoreId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID;
     }
 }

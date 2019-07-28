@@ -7,6 +7,9 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option
+ */
 class Option extends \Magento\Backend\Block\Widget
 {
     /**
@@ -79,6 +82,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return Field Id
+     *
      * @return string
      */
     public function getFieldId()
@@ -87,6 +92,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return Field Name
+     *
      * @return string
      */
     public function getFieldName()
@@ -108,6 +115,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Render
+     *
      * @param AbstractElement $element
      * @return string
      */
@@ -118,6 +127,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Set Element
+     *
      * @param AbstractElement $element
      * @return $this
      */
@@ -128,6 +139,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Element
+     *
      * @return AbstractElement|null
      */
     public function getElement()
@@ -136,6 +149,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return Is Multi Websites
+     *
      * @return bool
      */
     public function isMultiWebsites()
@@ -144,6 +159,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Prepare Layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -184,6 +201,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Add Button Html
+     *
      * @return string
      */
     public function getAddButtonHtml()
@@ -192,6 +211,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Close Search Button Html
+     *
      * @return string
      */
     public function getCloseSearchButtonHtml()
@@ -200,6 +221,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Add Selection Button Html
+     *
      * @return string
      */
     public function getAddSelectionButtonHtml()
@@ -239,6 +262,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Add Button Id
+     *
      * @return mixed
      */
     public function getAddButtonId()
@@ -248,6 +273,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Options Delete Button Html
+     *
      * @return string
      */
     public function getOptionDeleteButtonHtml()
@@ -256,6 +283,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Selection Html
+     *
      * @return string
      */
     public function getSelectionHtml()
@@ -264,6 +293,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Type Select Html
+     *
      * @return mixed
      */
     public function getTypeSelectHtml()
@@ -286,6 +317,8 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get Require Select Html
+     *
      * @return mixed
      */
     public function getRequireSelectHtml()
@@ -304,10 +337,12 @@ class Option extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return Is Default Store
+     *
      * @return bool
      */
     public function isDefaultStore()
     {
-        return $this->getProduct()->getStoreId() == '0';
+        return $this->getProduct()->getStoreId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID;
     }
 }

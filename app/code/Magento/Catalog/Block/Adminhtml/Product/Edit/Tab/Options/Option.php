@@ -14,6 +14,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
 /**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Option extends Widget
@@ -105,6 +107,8 @@ class Option extends Widget
     }
 
     /**
+     * Get Item Count
+     *
      * @return int
      */
     public function getItemCount()
@@ -113,6 +117,8 @@ class Option extends Widget
     }
 
     /**
+     * Set Item Count
+     *
      * @param int $itemCount
      * @return $this
      */
@@ -142,6 +148,8 @@ class Option extends Widget
     }
 
     /**
+     * Set Product
+     *
      * @param Product $product
      * @return $this
      */
@@ -182,6 +190,8 @@ class Option extends Widget
     }
 
     /**
+     * Prepare Layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -194,6 +204,8 @@ class Option extends Widget
     }
 
     /**
+     * Get Add Button Id
+     *
      * @return mixed
      */
     public function getAddButtonId()
@@ -203,6 +215,8 @@ class Option extends Widget
     }
 
     /**
+     * Get Type Select Html
+     *
      * @return mixed
      */
     public function getTypeSelectHtml()
@@ -224,6 +238,8 @@ class Option extends Widget
     }
 
     /**
+     * Get Require Select Html
+     *
      * @return mixed
      */
     public function getRequireSelectHtml()
@@ -272,10 +288,13 @@ class Option extends Widget
     }
 
     /**
+     * Get Option Values
+     *
      * @return \Magento\Framework\DataObject[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function getOptionValues()
     {
@@ -307,7 +326,7 @@ class Option extends Widget
                 $value['sort_order'] = $option->getSortOrder();
                 $value['can_edit_price'] = $this->getCanEditPrice();
 
-                if ($this->getProduct()->getStoreId() != '0') {
+                if ($this->getProduct()->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                     $value['checkboxScopeTitle'] = $this->getCheckboxScopeHtml(
                         $option->getOptionId(),
                         'title',
@@ -335,7 +354,7 @@ class Option extends Widget
                             'sort_order' => $_value->getSortOrder(),
                         ];
 
-                        if ($this->getProduct()->getStoreId() != '0') {
+                        if ($this->getProduct()->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                             $value['optionValues'][$i]['checkboxScopeTitle'] = $this->getCheckboxScopeHtml(
                                 $_value->getOptionId(),
                                 'title',
@@ -371,7 +390,7 @@ class Option extends Widget
                     $value['file_extension'] = $option->getFileExtension();
                     $value['image_size_x'] = $option->getImageSizeX();
                     $value['image_size_y'] = $option->getImageSizeY();
-                    if ($this->getProduct()->getStoreId() != '0'
+                    if ($this->getProduct()->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID
                         && $scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
                     ) {
                         $value['checkboxScopePrice'] = $this->getCheckboxScopeHtml(
@@ -431,6 +450,8 @@ class Option extends Widget
     }
 
     /**
+     * Get Price Value
+     *
      * @param float $value
      * @param string $type
      * @return string
