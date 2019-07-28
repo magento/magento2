@@ -152,6 +152,17 @@ define([
                 name: 'CVC',
                 size: 3
             }
+        },
+		{
+            title: 'Troy',
+            type: 'TR',
+            pattern: '^97[0-9]{14}|^65[0-9]{14}$',
+            gaps: [4, 8, 12],
+            lengths: [16],
+            code: {
+                name: 'CVC',
+                size: 3
+            }
         }
     ];
 
