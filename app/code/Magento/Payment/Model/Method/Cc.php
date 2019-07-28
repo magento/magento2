@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\DataObject;
@@ -114,14 +116,15 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         $ccType = '';
 
         if (in_array($info->getCcType(), $availableTypes)) {
-            if ($this->validateCcNum(
-                $ccNumber
-            ) || $this->otherCcType(
-                $info->getCcType()
-            ) && $this->validateCcNumOther(
-                // Other credit card type number validation
-                $ccNumber
-            )
+            if (
+                $this->validateCcNum(
+                    $ccNumber
+                ) || $this->otherCcType(
+                    $info->getCcType()
+                ) && $this->validateCcNumOther(
+                    // Other credit card type number validation
+                    $ccNumber
+                )
             ) {
                 $ccTypeRegExpList = [
                     //Solo, Switch or Maestro. International safe
@@ -134,7 +137,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                     // Visa
                     'VI' => '/^4[0-9]{12}([0-9]{3})?$/',
                     // Master Card
-                    'MC' => '/^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$/',
+                    'MC' => '/^(?:5[1-5,8][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$/',
                     // American Express
                     'AE' => '/^3[47][0-9]{13}$/',
                     // Discover
@@ -150,9 +153,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                     'MD' => '/^(6759(?!24|38|40|6[3-9]|70|76)|676770|676774)\d*$/',
                 ];
 
-                $ccNumAndTypeMatches = isset(
-                    $ccTypeRegExpList[$info->getCcType()]
-                ) && preg_match(
+                $ccNumAndTypeMatches = isset($ccTypeRegExpList[$info->getCcType()]) && preg_match(
                     $ccTypeRegExpList[$info->getCcType()],
                     $ccNumber
                 );
@@ -198,7 +199,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         if ($configData === null) {
             return true;
         }
-        return (bool)$configData;
+        return (bool) $configData;
     }
 
     /**
@@ -233,8 +234,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     protected function _validateExpDate($expYear, $expMonth)
     {
         $date = new \DateTime();
-        if (!$expYear || !$expMonth || (int)$date->format('Y') > $expYear
-            || (int)$date->format('Y') == $expYear && (int)$date->format('m') > $expMonth
+        if (
+            !$expYear || !$expMonth || (int) $date->format('Y') > $expYear
+            || (int) $date->format('Y') == $expYear && (int) $date->format('m') > $expMonth
         ) {
             return false;
         }
