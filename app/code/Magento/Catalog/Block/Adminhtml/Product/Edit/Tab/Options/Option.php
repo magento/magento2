@@ -7,6 +7,8 @@
 /**
  * Customers defined options
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options;
 
 use Magento\Backend\Block\Widget;
