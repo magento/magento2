@@ -4,6 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Controller\Advanced;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -13,6 +15,8 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\UrlFactory;
 
 /**
+ * Class \Magento\CatalogSearch\Controller\Advanced\Result
+ *
  * Advanced search result.
  */
 class Result extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface, HttpPostActionInterface
@@ -58,6 +62,7 @@ class Result extends \Magento\Framework\App\Action\Action implements HttpGetActi
      */
     public function execute()
     {
+        $this->getRequest()->setQueryValue($this->trimData($this->getRequest()->getQueryValue()));
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQueryValue());
             $this->_view->getPage()->initLayout();
@@ -73,6 +78,25 @@ class Result extends \Magento\Framework\App\Action\Action implements HttpGetActi
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
             return $resultRedirect;
+        }
+    }
+
+    /**
+     * Trim all values in data
+     *
+     * @param array|string|null $data
+     * @return array|string|null
+     */
+    private function trimData($data)
+    {
+        if (!$data) {
+            return '';
+        }
+
+        if ($data && is_array($data)) {
+            return array_map([$this, 'trimData'], $data);
+        } else {
+            return trim($data);
         }
     }
 }
