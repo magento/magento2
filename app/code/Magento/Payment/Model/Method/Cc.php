@@ -166,7 +166,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                         '(6516(5[2-9]|6[0-9]|7[0-9]))|(6550(0[0-9]|1[0-9]))|' .
                         '(6550(2[1-9]|3[0-9]|4[0-9]|5[0-8])))\d*$/',
                     //Aura
-                    'AU' => '/^5078\d*$/'
+                    'AU' => '/^5078\d*$/',
+                    //Troy
+					'TR' => '^97[0-9]{14}|^65[0-9]{14}$',
                 ];
 
                 $ccNumAndTypeMatches = isset(
