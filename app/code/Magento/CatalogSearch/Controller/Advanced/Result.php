@@ -62,9 +62,8 @@ class Result extends \Magento\Framework\App\Action\Action implements HttpGetActi
      */
     public function execute()
     {
-        $this->getRequest()->setQueryValue($this->trimData($this->getRequest()->getQueryValue()));
         try {
-            $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQueryValue());
+            $this->_catalogSearchAdvanced->addFilters($this->trimData($this->getRequest()->getQueryValue()));
             $this->_view->getPage()->initLayout();
             $handles = $this->_view->getLayout()->getUpdate()->getHandles();
             $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
@@ -73,7 +72,7 @@ class Result extends \Magento\Framework\App\Action\Action implements HttpGetActi
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $defaultUrl = $this->_urlFactory->create()
-                ->addQueryParams($this->getRequest()->getQueryValue())
+                ->addQueryParams($this->trimData($this->getRequest()->getQueryValue()))
                 ->getUrl('*/*/');
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
