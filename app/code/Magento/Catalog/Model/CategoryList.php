@@ -52,7 +52,7 @@ class CategoryList implements CategoryListInterface
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CategorySearchResultsInterfaceFactory $categorySearchResultsFactory
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         CollectionFactory $categoryCollectionFactory,
@@ -76,7 +76,6 @@ class CategoryList implements CategoryListInterface
         /** @var Collection $collection */
         $collection = $this->categoryCollectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
-
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         $items = [];
