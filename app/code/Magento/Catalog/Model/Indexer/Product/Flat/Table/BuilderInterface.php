@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Table;
  * Interface BuilderInterface
  *
  * @api
+ * @since 101.0.4
  */
 interface BuilderInterface
 {
@@ -32,11 +33,13 @@ interface BuilderInterface
      * @param string $comment column description
      * @return $this
      * @throws \Zend_Db_Exception
+     * @since 101.0.4
      */
     public function addColumn($name, $type, $size = null, $options = [], $comment = null);
 
     /**
      * @return \Magento\Framework\DB\Ddl\Table
+     * @since 101.0.4
      */
     public function getTable();
 }

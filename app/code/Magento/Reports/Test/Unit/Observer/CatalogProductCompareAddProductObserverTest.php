@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_TestCase
+class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Observer\CatalogProductCompareAddProductObserver
@@ -51,6 +51,11 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_Tes
     protected $productCompModelMock;
 
     /**
+     * @var \Magento\Reports\Model\ReportStatus|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $reportStatusMock;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp()
@@ -72,7 +77,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_Tes
             ->willReturn($this->reportEventMock);
 
         /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject $storeManager */
-        $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -98,13 +103,19 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_Tes
             ->setMethods(['save'])
             ->getMock();
 
+        $this->reportStatusMock = $this->getMockBuilder(\Magento\Reports\Model\ReportStatus::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isReportEnabled'])
+            ->getMock();
+
         $this->observer = $objectManager->getObject(
             \Magento\Reports\Observer\CatalogProductCompareAddProductObserver::class,
             [
                 'productCompFactory' => $this->productCompFactoryMock,
                 'customerSession' => $this->customerSessionMock,
                 'customerVisitor' => $this->customerVisitorMock,
-                'eventSaver' => $this->eventSaverMock
+                'eventSaver' => $this->eventSaverMock,
+                'reportStatus' => $this->reportStatusMock
             ]
         );
     }
@@ -127,6 +138,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_Tes
         ];
         $observerMock = $this->getObserverMock($productId);
 
+        $this->reportStatusMock->expects($this->once())->method('isReportEnabled')->willReturn(true);
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn($isLoggedIn);
         $this->customerSessionMock->expects($this->any())->method('getCustomerId')->willReturn($customerId);
 

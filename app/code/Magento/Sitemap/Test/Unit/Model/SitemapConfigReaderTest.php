@@ -10,7 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sitemap\Model\SitemapConfigReader;
 use Magento\Store\Model\ScopeInterface;
 
-class SitemapConfigReaderTest extends \PHPUnit_Framework_TestCase
+class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetValidPaths()
     {

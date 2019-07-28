@@ -139,7 +139,7 @@ class ImageProcessor implements ImageProcessorInterface
     public function processImageContent($entityType, $imageContent)
     {
         if (!$this->contentValidator->isValid($imageContent)) {
-            throw new InputException(new Phrase('The image content is not valid.'));
+            throw new InputException(new Phrase('The image content is invalid. Verify the content and try again.'));
         }
 
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
@@ -172,7 +172,7 @@ class ImageProcessor implements ImageProcessorInterface
      */
     protected function getMimeTypeExtension($mimeType)
     {
-        return isset($this->mimeTypeExtensionMap[$mimeType]) ? $this->mimeTypeExtensionMap[$mimeType] : '';
+        return $this->mimeTypeExtensionMap[$mimeType] ?? '';
     }
 
     /**

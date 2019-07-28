@@ -7,10 +7,10 @@ namespace Magento\Cms\Model\ResourceModel;
 
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\Store;
@@ -95,9 +95,11 @@ class Block extends AbstractDb
     }
 
     /**
+     * Get block id.
+     *
      * @param AbstractModel $object
      * @param mixed $value
-     * @param null $field
+     * @param string $field
      * @return bool|int|string
      * @throws LocalizedException
      * @throws \Exception
@@ -183,10 +185,12 @@ class Block extends AbstractDb
         $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
         $linkField = $entityMetadata->getLinkField();
 
-        if ($this->_storeManager->hasSingleStore()) {
-            $stores = [Store::DEFAULT_STORE_ID];
-        } else {
-            $stores = (array)$object->getData('stores');
+        $stores = (array)$object->getData('store_id');
+        $isDefaultStore = $this->_storeManager->isSingleStoreMode()
+            || array_search(Store::DEFAULT_STORE_ID, $stores) !== false;
+
+        if (!$isDefaultStore) {
+            $stores[] = Store::DEFAULT_STORE_ID;
         }
 
         $select = $this->getConnection()->select()
@@ -196,8 +200,11 @@ class Block extends AbstractDb
                 'cb.' . $linkField . ' = cbs.' . $linkField,
                 []
             )
-            ->where('cb.identifier = ?', $object->getData('identifier'))
-            ->where('cbs.store_id IN (?)', $stores);
+            ->where('cb.identifier = ?  ', $object->getData('identifier'));
+
+        if (!$isDefaultStore) {
+            $select->where('cbs.store_id IN (?)', $stores);
+        }
 
         if ($object->getId()) {
             $select->where('cb.' . $entityMetadata->getIdentifierField() . ' <> ?', $object->getId());
@@ -230,12 +237,14 @@ class Block extends AbstractDb
                 'cbs.' . $linkField . ' = cb.' . $linkField,
                 []
             )
-            ->where('cb.' . $entityMetadata->getIdentifierField()  . ' = :block_id');
+            ->where('cb.' . $entityMetadata->getIdentifierField() . ' = :block_id');
 
         return $connection->fetchCol($select, ['block_id' => (int)$id]);
     }
 
     /**
+     * Save an object.
+     *
      * @param AbstractModel $object
      * @return $this
      * @throws \Exception

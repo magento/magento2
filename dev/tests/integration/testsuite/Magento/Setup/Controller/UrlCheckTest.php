@@ -9,7 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Zend\Stdlib\RequestInterface as Request;
 use Zend\View\Model\JsonModel;
 
-class UrlCheckTest extends \PHPUnit_Framework_TestCase
+class UrlCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UrlCheck

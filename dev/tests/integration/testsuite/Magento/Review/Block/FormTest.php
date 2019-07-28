@@ -12,7 +12,7 @@ use Magento\Framework\App\ReinitableConfig;
 use Magento\Framework\App\State;
 use Magento\TestFramework\ObjectManager;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager;

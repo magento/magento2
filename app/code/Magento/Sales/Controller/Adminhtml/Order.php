@@ -154,11 +154,11 @@ abstract class Order extends \Magento\Backend\App\Action
         try {
             $order = $this->orderRepository->get($id);
         } catch (NoSuchEntityException $e) {
-            $this->messageManager->addError(__('This order no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This order no longer exists.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         } catch (InputException $e) {
-            $this->messageManager->addError(__('This order no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This order no longer exists.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }

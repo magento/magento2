@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Model\ResourceModel;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -91,7 +92,9 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         $bookmark = $this->bookmarkFactory->create();
         $this->bookmarkResourceModel->load($bookmark, $bookmarkId);
         if (!$bookmark->getId()) {
-            throw new NoSuchEntityException(__('Bookmark with id "%1" does not exist.', $bookmarkId));
+            throw new NoSuchEntityException(
+                __('The bookmark with "%1" ID doesn\'t exist. Verify your information and try again.', $bookmarkId)
+            );
         }
         return $bookmark;
     }
@@ -159,7 +162,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 100.2.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -173,7 +176,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

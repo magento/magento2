@@ -15,10 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Model\Oauth\Token as IntegrationToken;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class SignUpCommandTest
- */
-class SignUpCommandTest extends \PHPUnit_Framework_TestCase
+class SignUpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SignUpCommand
@@ -60,6 +57,9 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $responseResolverMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
@@ -94,6 +94,10 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @throws \Zend_Http_Exception
+     * @return void
+     */
     public function testExecuteSuccess()
     {
         $this->integrationManagerMock->expects($this->once())
@@ -127,6 +131,9 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->signUpCommand->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteFailureCannotGenerateToken()
     {
         $this->integrationManagerMock->expects($this->once())
@@ -137,6 +144,10 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->signUpCommand->execute());
     }
 
+    /**
+     * @throws \Zend_Http_Exception
+     * @return void
+     */
     public function testExecuteFailureResponseIsEmpty()
     {
         $this->integrationManagerMock->expects($this->once())
@@ -166,7 +177,6 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
             'url' => 'http://www.mystore.com',
             'access-token' => 'thisisaccesstoken',
             'integration-token' => 'thisisintegrationtoken',
-            'headers' => [JsonConverter::CONTENT_TYPE_HEADER],
             'method' => \Magento\Framework\HTTP\ZendClient::POST,
             'body'=> ['token' => 'thisisintegrationtoken','url' => 'http://www.mystore.com'],
         ];

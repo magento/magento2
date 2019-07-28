@@ -14,6 +14,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
  * This class may be extended if logic fo country selection should be modified.
  *
  * @api
+ * @since 100.0.2
  */
 class CountryProvider
 {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
-class CountryValidatorTest extends \PHPUnit_Framework_TestCase
+class CountryValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Gateway\Validator\CountryValidator */
     protected $model;
@@ -62,12 +62,15 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid, 'failsDescription' => []])
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
+    /**
+     * @return array
+     */
     public function validateAllowspecificTrueDataProvider()
     {
         return [
@@ -90,12 +93,15 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid, 'failsDescription' => []])
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
+    /**
+     * @return array
+     */
     public function validateAllowspecificFalseDataProvider()
     {
         return [

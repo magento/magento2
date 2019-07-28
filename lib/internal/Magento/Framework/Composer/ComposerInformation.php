@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Composer;
 
 use Composer\Package\Link;
@@ -63,9 +64,7 @@ class ComposerInformation
     const PARAM_AVAILABLE = '--available';
     /**#@-*/
 
-    /**
-     * @var \Composer\Composer
-     */
+    /**#@-*/
     private $composer;
 
     /**
@@ -73,7 +72,9 @@ class ComposerInformation
      */
     private $locker;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private static $packageTypes = [
         self::THEME_PACKAGE_TYPE,
         self::LANGUAGE_PACKAGE_TYPE,
@@ -126,6 +127,7 @@ class ComposerInformation
         }
 
         if (!isset($requiredPhpVersion)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Cannot find php version requirement in \'composer.lock\' file');
         }
         return $requiredPhpVersion;
@@ -148,7 +150,6 @@ class ComposerInformation
             /** @var CompletePackageInterface $package */
             foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
-                $requires = array_merge($requires, array_keys($package->getDevRequires()));
                 $allPlatformReqs = array_merge($allPlatformReqs, $requires);
             }
         }
@@ -301,6 +302,8 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve magento packages types.
+     *
      * @return array
      */
     public function getPackagesTypes()
@@ -309,6 +312,8 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve magento packages requirements.
+     *
      * @param string $name
      * @param string $version
      * @return array
@@ -341,7 +346,7 @@ class ComposerInformation
      * Load composerFactory
      *
      * @return ComposerFactory
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getComposerFactory()
     {

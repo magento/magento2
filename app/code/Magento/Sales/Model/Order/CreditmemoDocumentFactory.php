@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order;
  * Class CreditmemoDocumentFactory
  *
  * @api
+ * @since 100.1.3
  */
 class CreditmemoDocumentFactory
 {
@@ -98,17 +99,21 @@ class CreditmemoDocumentFactory
             ->setCreditmemo($creditmemo)
             ->setIsCustomerNotified($appendComment);
         $creditmemo->setComments([$comment]);
+        $creditmemo->setCustomerNote($comment->getComment());
+        $creditmemo->setCustomerNoteNotify($appendComment);
         return $creditmemo;
     }
 
     /**
      * Create new Creditmemo
+     *
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @since 100.1.3
      */
     public function createFromOrder(
         \Magento\Sales\Api\Data\OrderInterface $order,
@@ -126,12 +131,15 @@ class CreditmemoDocumentFactory
     }
 
     /**
+     * Create credit memo from invoice
+     *
      * @param \Magento\Sales\Api\Data\InvoiceInterface $invoice
      * @param \Magento\Sales\Api\Data\CreditmemoItemCreationInterface[] $items
      * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
      * @param bool|null $appendComment
      * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @since 100.1.3
      */
     public function createFromInvoice(
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,

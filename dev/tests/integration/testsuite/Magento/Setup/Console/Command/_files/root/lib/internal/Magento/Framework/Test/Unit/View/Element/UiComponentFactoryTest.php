@@ -7,7 +7,7 @@ namespace Magento\Framework\Test\Unit\View\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class UiComponentFactoryTest extends \PHPUnit_Framework_TestCase
+class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\View\Element\UiComponentFactory */
     protected $model;
@@ -57,7 +57,7 @@ class UiComponentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->safeReflectionClassMock2 = $this->getMockBuilder(\SafeReflectionClass::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataMock = $this->getMock(\Magento\Framework\Config\DataInterface::class);
+        $this->dataMock = $this->createMock(\Magento\Framework\Config\DataInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Framework\View\Element\UiComponentFactory::class,
@@ -76,7 +76,7 @@ class UiComponentFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateRootComponent()
     {
         $identifier = "product_listing";
-        $context = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
+        $context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $bundleComponents = [
             'attributes' => [
                 'class' => 'Some\Class\Component',
@@ -88,7 +88,7 @@ class UiComponentFactoryTest extends \PHPUnit_Framework_TestCase
             ],
             'children' => []
         ];
-        $uiConfigMock = $this->getMock(\Magento\Framework\Config\DataInterface::class);
+        $uiConfigMock = $this->createMock(\Magento\Framework\Config\DataInterface::class);
         $this->dataInterfaceFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($uiConfigMock);
@@ -119,7 +119,7 @@ class UiComponentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $identifier = "custom_select";
         $name = "fieldset";
-        $context = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
+        $context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $arguments = ['context' => $context];
         $defintionArguments = [
             'componentType' => 'select',

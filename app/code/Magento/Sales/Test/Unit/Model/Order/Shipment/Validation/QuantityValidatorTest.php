@@ -13,7 +13,7 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 /**
  * Class QuantityValidatorTest
  */
-class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
+class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QuantityValidator

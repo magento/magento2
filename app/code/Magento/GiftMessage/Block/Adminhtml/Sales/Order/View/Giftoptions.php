@@ -11,6 +11,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Giftoptions extends \Magento\Backend\Block\Template
 {

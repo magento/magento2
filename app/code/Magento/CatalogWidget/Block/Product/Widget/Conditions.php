@@ -51,7 +51,7 @@ class Conditions extends Template implements RendererInterface
     /**
      * @var string
      */
-    protected $_template = 'product/widget/conditions.phtml';
+    protected $_template = 'Magento_CatalogWidget::product/widget/conditions.phtml';
 
     /**
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory

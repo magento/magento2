@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class CreditCardTokenFactoryTest
  */
-class CreditCardTokenFactoryTest extends \PHPUnit_Framework_TestCase
+class CreditCardTokenFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface|MockObject
@@ -32,7 +32,7 @@ class CreditCardTokenFactoryTest extends \PHPUnit_Framework_TestCase
      * @var CreditCardTokenFactory
      */
     private $factory;
-    
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -43,7 +43,7 @@ class CreditCardTokenFactoryTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->paymentToken = $objectManager->getObject(PaymentToken::class);
-        $this->objectManager = $this->getMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->paymentTokenFactory = new PaymentTokenFactory($this->objectManager, $tokenTypes);
         $this->factory = new CreditCardTokenFactory($this->objectManager, $this->paymentTokenFactory);

@@ -12,7 +12,7 @@ use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PriceBackendTest extends \PHPUnit_Framework_TestCase
+class PriceBackendTest extends \PHPUnit\Framework\TestCase
 {
     const CLOSURE_VALUE = 'CLOSURE';
 

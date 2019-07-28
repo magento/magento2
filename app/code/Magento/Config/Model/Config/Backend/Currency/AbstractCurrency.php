@@ -14,7 +14,10 @@
 namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
+ * Base currency class
+ *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
 {
@@ -25,18 +28,19 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      */
     protected function _getAllowedCurrencies()
     {
-        if (!$this->isFormData() || $this->getData('groups/options/fields/allow/inherit')) {
-            return explode(
+        $allowValue = $this->getData('groups/options/fields/allow/value');
+        $allowedCurrencies = $allowValue === null || $this->getData('groups/options/fields/allow/inherit')
+            ? explode(
                 ',',
                 (string)$this->_config->getValue(
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW,
                     $this->getScope(),
                     $this->getScopeId()
                 )
-            );
-        }
+            )
+            : (array) $allowValue;
 
-        return (array)$this->getData('groups/options/fields/allow/value');
+        return $allowedCurrencies;
     }
 
     /**
@@ -70,7 +74,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
                 $this->getScopeId()
             );
         }
-        return strval($value);
+        return (string)$value;
     }
 
     /**
@@ -87,7 +91,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
                 $this->getScopeId()
             );
         }
-        return strval($value);
+        return (string)$value;
     }
 
     /**

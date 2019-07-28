@@ -7,10 +7,13 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
+use Magento\Sales\Model\ConfigInterface;
+
 /**
  * Adminhtml sales order view
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -45,14 +48,14 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param ConfigInterface $salesConfig
      * @param \Magento\Sales\Helper\Reorder $reorderHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Sales\Model\Config $salesConfig,
+        ConfigInterface $salesConfig,
         \Magento\Sales\Helper\Reorder $reorderHelper,
         array $data = []
     ) {
@@ -181,7 +184,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'class' => __('unhold'),
                     'id' => 'order-view-unhold-button',
                     'data_attribute' => [
-                        'url' => $this->getUnHoldUrl()
+                        'url' => $this->getUnholdUrl()
                     ]
                 ]
             );
@@ -465,6 +468,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get edit message
+     *
      * @param \Magento\Sales\Model\Order $order
      * @return \Magento\Framework\Phrase
      */
@@ -485,6 +490,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get non editable types
+     *
      * @param \Magento\Sales\Model\Order $order
      * @return array
      */

@@ -16,7 +16,7 @@ use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 /**
  * Test for page config generator model
  */
-class HeadTest extends \PHPUnit_Framework_TestCase
+class HeadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Head
@@ -60,12 +60,15 @@ class HeadTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testProcess()
     {
-        $generatorContextMock = $this->getMock(Context::class, [], [], '', false);
+        $generatorContextMock = $this->createMock(Context::class);
         $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
-        $structureMock = $this->getMock(Structure::class, [], [], '', false);
-        $readerContextMock = $this->getMock(ReaderContext::class, [], [], '', false);
+        $structureMock = $this->createMock(Structure::class);
+        $readerContextMock = $this->createMock(ReaderContext::class);
         $readerContextMock->expects($this->any())->method('getPageConfigStructure')->willReturn($structureMock);
 
         $structureMock->expects($this->once())->method('processRemoveAssets');
@@ -81,6 +84,20 @@ class HeadTest extends \PHPUnit_Framework_TestCase
                 'src_type' => 'url',
                 'content_type' => 'css',
                 'media' => 'all',
+            ],
+            'remoteCssOrderedLast' => [
+                'src' => 'file-url-css-last',
+                'src_type' => 'url',
+                'content_type' => 'css',
+                'media' => 'all',
+                'order' => 30,
+            ],
+            'remoteCssOrderedFirst' => [
+                'src' => 'file-url-css-first',
+                'src_type' => 'url',
+                'content_type' => 'css',
+                'media' => 'all',
+                'order' => 10,
             ],
             'remoteLink' => [
                 'src' => 'file-url-link',
@@ -106,8 +123,14 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             ->with('file-url-css', 'css', ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->at(1))
             ->method('addRemotePageAsset')
-            ->with('file-url-link', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+            ->with('file-url-css-last', 'css', ['attributes' => ['media' => 'all' ] , 'order' => 30]);
         $this->pageConfigMock->expects($this->at(2))
+            ->method('addRemotePageAsset')
+            ->with('file-url-css-first', 'css', ['attributes' => ['media' => 'all'] , 'order' => 10]);
+        $this->pageConfigMock->expects($this->at(3))
+            ->method('addRemotePageAsset')
+            ->with('file-url-link', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+        $this->pageConfigMock->expects($this->at(4))
             ->method('addRemotePageAsset')
             ->with('http://magento.dev/customcss/render/css', 'css', ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->once())

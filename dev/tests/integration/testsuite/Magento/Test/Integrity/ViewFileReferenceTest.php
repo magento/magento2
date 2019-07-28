@@ -25,7 +25,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
+class ViewFileReferenceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface

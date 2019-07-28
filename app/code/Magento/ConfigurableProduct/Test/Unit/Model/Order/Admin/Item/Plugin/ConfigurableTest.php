@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Order\Admin\Item\Plugin;
 
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable
@@ -39,25 +39,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->itemMock = $this->getMock(
+        $this->itemMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
-            ['getProductType', 'getProductOptions', '__wakeup'],
-            [],
-            '',
-            false
+            ['getProductType', 'getProductOptions', '__wakeup']
         );
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->productFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->subjectMock = $this->getMock(\Magento\Sales\Model\Order\Admin\Item::class, [], [], '', false);
+        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->subjectMock = $this->createMock(\Magento\Sales\Model\Order\Admin\Item::class);
         $this->configurable = new \Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable(
             $this->productFactoryMock
         );

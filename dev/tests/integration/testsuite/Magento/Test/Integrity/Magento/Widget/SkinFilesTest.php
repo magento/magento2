@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Integrity\Magento\Widget;
 
-class SkinFilesTest extends \PHPUnit_Framework_TestCase
+class SkinFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider widgetPlaceholderImagesDataProvider

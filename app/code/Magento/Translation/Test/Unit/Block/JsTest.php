@@ -7,7 +7,7 @@ namespace Magento\Translation\Test\Unit\Block;
 
 use Magento\Translation\Block\Js;
 
-class JsTest extends \PHPUnit_Framework_TestCase
+class JsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Js
@@ -64,5 +64,15 @@ class JsTest extends \PHPUnit_Framework_TestCase
             ->method('getTranslationFilePath')
             ->willReturn('frontend/Magento/luma/en_EN');
         $this->assertEquals('frontend/Magento/luma/en_EN', $this->model->getTranslationFilePath());
+    }
+
+    public function testGetTranslationFileVersion()
+    {
+        $version = sha1('translationFile');
+
+        $this->fileManagerMock->expects($this->once())
+            ->method('getTranslationFileVersion')
+            ->willReturn($version);
+        $this->assertEquals($version, $this->model->getTranslationFileVersion());
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\Eav\Api\Data;
 /**
  * Interface AttributeOptionLabelInterface
  * @api
+ * @since 100.0.2
  */
 interface AttributeOptionLabelInterface
 {

@@ -11,7 +11,7 @@ use Magento\Framework\Pricing\Amount\Base;
  * Class BaseTest
  *
  */
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test getValue() without exclude argument

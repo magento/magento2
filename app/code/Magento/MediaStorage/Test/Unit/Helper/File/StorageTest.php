@@ -7,7 +7,7 @@ namespace Magento\MediaStorage\Test\Unit\Helper\File;
 
 use Magento\MediaStorage\Helper\File\Storage;
 
-class StorageTest extends \PHPUnit_Framework_TestCase
+class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -77,6 +77,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->helper->isInternalStorage($storage));
     }
 
+    /**
+     * @return array
+     */
     public function isInternalStorageDataProvider()
     {
         return [
@@ -146,6 +149,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->helper->processStorageFile($filename));
     }
 
+    /**
+     * @return array
+     */
     public function processStorageFileDataProvider()
     {
         return [

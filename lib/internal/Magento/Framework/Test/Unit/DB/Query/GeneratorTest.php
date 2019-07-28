@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Test\Unit\DB\Query;
 
 use Magento\Framework\DB\Query\BatchIterator;
@@ -11,7 +12,7 @@ use Magento\Framework\DB\Query\BatchRangeIteratorFactory;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Generator
@@ -43,10 +44,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->factoryMock = $this->getMock(BatchIteratorFactory::class, [], [], '', false, false);
-        $this->rangeFactoryMock = $this->getMock(BatchRangeIteratorFactory::class, ['create'], [], '', false, false);
-        $this->selectMock = $this->getMock(Select::class, [], [], '', false, false);
-        $this->iteratorMock = $this->getMock(BatchIterator::class, [], [], '', false, false);
+        $this->factoryMock = $this->createMock(BatchIteratorFactory::class);
+        $this->rangeFactoryMock = $this->createPartialMock(BatchRangeIteratorFactory::class, ['create']);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->iteratorMock = $this->createMock(BatchIterator::class);
         $this->model = new Generator($this->factoryMock, $this->rangeFactoryMock);
     }
 
@@ -87,7 +88,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      * Test batch generation with invalid select object.
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage  Select object must have correct "FROM" part
+     * @expectedExceptionMessage The select object must have the correct "FROM" part. Verify and try again.
      * @return void
      */
     public function testGenerateWithoutFromPart()

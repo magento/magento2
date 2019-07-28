@@ -10,10 +10,18 @@ namespace Magento\Catalog\Model\ResourceModel\Indexer;
  */
 class ActiveTableSwitcher
 {
-    /** Suffix for replica index table. */
+    /**
+     * Suffix for replica index table.
+     *
+     * @var string
+     */
     private $additionalTableSuffix = '_replica';
 
-    /** Suffix for outdated index table. */
+    /**
+     * Suffix for outdated index table.
+     *
+     * @var string
+     */
     private $outdatedTableSuffix = '_outdated';
 
     /**

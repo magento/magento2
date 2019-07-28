@@ -21,7 +21,7 @@ use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ChangeDetector|\PHPUnit_Framework_MockObject_MockObject

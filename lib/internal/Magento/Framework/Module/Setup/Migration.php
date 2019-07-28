@@ -49,11 +49,7 @@ class Migration
 
     /**#@-*/
 
-    /**
-     * Config key for path to aliases map file
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_confPathToMapFile;
 
     /**

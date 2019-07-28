@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Test\Unit\Console\Command;
 
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
@@ -21,7 +22,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @see ConfigSetCommand
  */
-class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSetCommand
@@ -94,7 +95,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->processorFacadeMock);
         $this->processorFacadeMock->expects($this->once())
-            ->method('process')
+            ->method('processWithLockTarget')
             ->willReturn('Some message');
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')

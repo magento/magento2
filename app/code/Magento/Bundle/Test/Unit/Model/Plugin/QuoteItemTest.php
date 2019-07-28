@@ -10,7 +10,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Catalog\Model\Product;
 
-class QuoteItemTest extends \PHPUnit_Framework_TestCase
+class QuoteItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Product
@@ -51,8 +51,8 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
             true,
             ['getProduct']
         );
-        $this->subjectMock = $this->getMock(ToOrderItem::class, [], [], '', false);
-        $this->productMock = $this->getMock(Product::class, [], [], '', false);
+        $this->subjectMock = $this->createMock(ToOrderItem::class);
+        $this->productMock = $this->createMock(Product::class);
         $this->model = new \Magento\Bundle\Model\Plugin\QuoteItem();
     }
 
@@ -65,13 +65,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         ];
         $expectedOptions = $productOptions + ['bundle_selection_attributes' => $attributeValue];
 
-        $bundleAttribute = $this->getMock(
-            \Magento\Catalog\Model\Product\Configuration\Item\Option::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $bundleAttribute = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\Option::class);
         $bundleAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn($attributeValue);

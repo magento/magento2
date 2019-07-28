@@ -9,8 +9,6 @@
     <indexer id="catalogsearch_fulltext" view_id="catalogsearch_fulltext" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Catalog Search</title>
         <description translate="true">Rebuild Catalog product fulltext search index</description>
-
-        <saveHandler class="Magento\CatalogSearch\Model\Indexer\IndexHandler" />
         <structure class="Magento\CatalogSearch\Model\Indexer\IndexStructure" />
     </indexer>
 </config>

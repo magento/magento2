@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Indexer processor mock
@@ -33,14 +33,10 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ruleProductProcessor = $this->getMock(
-            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
-            [],
-            [],
-            '',
-            false
+        $this->ruleProductProcessor = $this->createMock(
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class
         );
-        $this->subject = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
+        $this->subject = $this->createMock(\Magento\Store\Model\Website::class);
 
         $this->plugin = (new ObjectManager($this))->getObject(
             \Magento\CatalogRule\Plugin\Indexer\Website::class,

@@ -10,6 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Load extends \Magento\Framework\View\Element\Template
 {
@@ -28,7 +29,7 @@ class Load extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\View\Helper\Js $adminhtmlJs
+     * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param array $data
      */
     public function __construct(

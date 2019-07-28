@@ -19,7 +19,7 @@ use Magento\Deploy\Strategy\DeployStrategyFactory;
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MinifierTest extends \PHPUnit_Framework_TestCase
+class MinifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
@@ -212,12 +212,12 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $fileToBePublished = $staticPath . '/frontend/FrameworkViewMinifier/default/en_US/css/styles.min.css';
         $fileToTestPublishing = dirname(__DIR__) . '/_files/static/theme/web/css/styles.css';
 
-        $omFactory = $this->getMock(\Magento\Framework\App\ObjectManagerFactory::class, ['create'], [], '', false);
+        $omFactory = $this->createPartialMock(\Magento\Framework\App\ObjectManagerFactory::class, ['create']);
         $omFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->objectManager));
 
-        $filesUtil = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
+        $filesUtil = $this->createMock(\Magento\Framework\App\Utility\Files::class);
         $filesUtil->expects($this->any())
             ->method('getStaticLibraryFiles')
             ->will($this->returnValue([]));
@@ -245,12 +245,9 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ['output' => $output]
         );
 
-        $versionStorage = $this->getMock(
+        $versionStorage = $this->createPartialMock(
             \Magento\Framework\App\View\Deployment\Version\StorageInterface::class,
-            ['save', 'load'],
-            [],
-            '',
-            false
+            ['save', 'load']
         );
 
         /** @var \Magento\Deploy\Service\DeployStaticContent $deployService */

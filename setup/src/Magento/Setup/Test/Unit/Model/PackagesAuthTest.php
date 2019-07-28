@@ -11,7 +11,7 @@ use \Magento\Setup\Model\PackagesAuth;
 /**
  * Tests Magento\Setup\Model\PackagesAuth
  */
-class PackagesAuthTest extends \PHPUnit_Framework_TestCase
+class PackagesAuthTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Client\Curl
@@ -33,7 +33,7 @@ class PackagesAuthTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $zendServiceLocator = $this->getMock(\Zend\ServiceManager\ServiceLocatorInterface::class, [], [], '', false);
+        $zendServiceLocator = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
         $zendServiceLocator
             ->expects($this->any())
             ->method('get')
@@ -43,8 +43,8 @@ class PackagesAuthTest extends \PHPUnit_Framework_TestCase
                     'check_credentials_url' => 'some_url'
                 ]
             ]);
-        $this->curl = $this->getMock(\Magento\Framework\HTTP\Client\Curl::class, [], [], '', false);
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->curl = $this->createMock(\Magento\Framework\HTTP\Client\Curl::class, [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
         $this->serializerMock->expects($this->any())

@@ -11,6 +11,7 @@ use Magento\Ui\Component\AbstractComponent;
  * Class AbstractElement
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractElement extends AbstractComponent implements ElementInterface
 {

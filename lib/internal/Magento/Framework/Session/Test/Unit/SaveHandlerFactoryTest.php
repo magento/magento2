@@ -7,21 +7,15 @@ namespace Magento\Framework\Session\Test\Unit;
 
 use \Magento\Framework\Session\SaveHandlerFactory;
 
-class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider createDataProvider
      */
     public function testCreate($handlers, $saveClass, $saveMethod)
     {
-        $saveHandler = $this->getMock($saveClass);
-        $objectManager = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $saveHandler = $this->createMock($saveClass);
+        $objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $objectManager->expects(
             $this->once()
         )->method(

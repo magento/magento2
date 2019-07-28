@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Authorization\Test\Unit\Policy;
 
-class AclTest extends \PHPUnit_Framework_TestCase
+class AclTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Authorization\Policy\Acl
@@ -24,8 +24,8 @@ class AclTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_aclMock = $this->getMock(\Magento\Framework\Acl::class);
-        $this->_aclBuilderMock = $this->getMock(\Magento\Framework\Acl\Builder::class, [], [], '', false);
+        $this->_aclMock = $this->createMock(\Magento\Framework\Acl::class);
+        $this->_aclBuilderMock = $this->createMock(\Magento\Framework\Acl\Builder::class);
         $this->_aclBuilderMock->expects($this->any())->method('getAcl')->will($this->returnValue($this->_aclMock));
         $this->_model = new \Magento\Framework\Authorization\Policy\Acl($this->_aclBuilderMock);
     }

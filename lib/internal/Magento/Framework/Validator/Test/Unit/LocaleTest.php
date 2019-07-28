@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Validator\Test\Unit;
 
-class LocaleTest extends \PHPUnit_Framework_TestCase
+class LocaleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -20,7 +20,7 @@ class LocaleTest extends \PHPUnit_Framework_TestCase
 
     public function testIsValid()
     {
-        $lists = $this->getMock(\Magento\Framework\Setup\Lists::class, [], [], '', false);
+        $lists = $this->createMock(\Magento\Framework\Setup\Lists::class);
         $lists->expects($this->any())->method('getLocaleList')->will($this->returnValue($this->expectedLocales));
         $locale = new \Magento\Framework\Validator\Locale($lists);
         $this->assertEquals(true, $locale->isValid('en_US'));

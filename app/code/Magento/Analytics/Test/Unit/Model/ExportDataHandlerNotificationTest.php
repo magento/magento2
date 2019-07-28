@@ -10,10 +10,7 @@ use Magento\Analytics\Model\ExportDataHandler;
 use Magento\Analytics\Model\ExportDataHandlerNotification;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class ExportDataHandlerNotificationTest
- */
-class ExportDataHandlerNotificationTest extends \PHPUnit_Framework_TestCase
+class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

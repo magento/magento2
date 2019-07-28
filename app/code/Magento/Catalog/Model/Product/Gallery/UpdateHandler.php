@@ -11,11 +11,14 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
  * Update handler for catalog product gallery.
  *
  * @api
+ * @since 101.0.0
  */
 class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @since 101.0.0
      */
     protected function processDeletedImages($product, array &$images)
     {
@@ -29,10 +32,15 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 
         foreach ($images as &$image) {
             if (!empty($image['removed'])) {
-                if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
+                if (!empty($image['value_id'])) {
+                    if (preg_match('/\.\.(\\\|\/)/', $image['file'])) {
+                        continue;
+                    }
                     $recordsToDelete[] = $image['value_id'];
-                    // only delete physical files if they are not used by any other products
-                    if (!$this->resourceModel->countImageUses($image['file']) > 1) {
+                    $catalogPath = $this->mediaConfig->getBaseMediaPath();
+                    $isFile = $this->mediaDirectory->isFile($catalogPath . $image['file']);
+                    // only delete physical files if they are not used by any other products and if this file exist
+                    if ($isFile && !($this->resourceModel->countImageUses($image['file']) > 1)) {
                         $filesToDelete[] = ltrim($image['file'], '/');
                     }
                 }
@@ -45,7 +53,9 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @since 101.0.0
      */
     protected function processNewImage($product, array &$image)
     {
@@ -71,8 +81,11 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
     }
 
     /**
+     * Retrieve store ids from product.
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
+     * @since 101.0.0
      */
     protected function extractStoreIds($product)
     {
@@ -88,8 +101,11 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
     }
 
     /**
+     * Remove deleted images.
+     *
      * @param array $files
      * @return null
+     * @since 101.0.0
      */
     protected function removeDeletedImages(array $files)
     {

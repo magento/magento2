@@ -86,6 +86,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get resource model.
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     public function getResource()
@@ -175,6 +177,9 @@ class Price extends AbstractFilter
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
+        $fromPrice = empty($fromPrice) ? 0 : $fromPrice * $this->getCurrencyRate();
+        $toPrice = empty($toPrice) ? $toPrice : $toPrice * $this->getCurrencyRate();
+
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
         if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
@@ -220,6 +225,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get 'to' part of the filter.
+     *
      * @param float $from
      * @return float
      */
@@ -234,6 +241,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Get 'from' part of the filter.
+     *
      * @param float $from
      * @return float
      */
@@ -248,6 +257,8 @@ class Price extends AbstractFilter
     }
 
     /**
+     * Prepare filter data.
+     *
      * @param string $key
      * @param int $count
      * @return array
@@ -261,10 +272,7 @@ class Price extends AbstractFilter
         if ($to == '*') {
             $to = $this->getTo($to);
         }
-        $label = $this->_renderRangeLabel(
-            empty($from) ? 0 : $from * $this->getCurrencyRate(),
-            empty($to) ? $to : $to * $this->getCurrencyRate()
-        );
+        $label = $this->_renderRangeLabel($from, $to);
         $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
 
         $data = [

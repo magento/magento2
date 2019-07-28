@@ -12,13 +12,14 @@ use Magento\Backend\Block\Widget\Grid\Extended;
  * Sign up for an alert when the product price changes grid
  *
  * @api
+ * @since 100.0.2
  */
 class Price extends Extended
 {
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -31,14 +32,14 @@ class Price extends Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ProductAlert\Model\PriceFactory $priceFactory
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ProductAlert\Model\PriceFactory $priceFactory,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_priceFactory = $priceFactory;
@@ -47,6 +48,8 @@ class Price extends Extended
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -62,6 +65,8 @@ class Price extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -79,6 +84,8 @@ class Price extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -115,6 +122,8 @@ class Price extends Extended
     }
 
     /**
+     * @inheritDoc
+     *
      * @return string
      */
     public function getGridUrl()

@@ -1,20 +1,22 @@
 {
     "name": "magento/module-catalog-widget",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-catalog": "101.2.*",
-        "magento/module-widget": "100.3.*",
-        "magento/module-backend": "100.3.*",
-        "magento/module-rule": "100.3.*",
-        "magento/module-eav": "100.3.*",
-        "magento/module-customer": "100.3.*",
-        "magento/module-store": "100.3.*",
-        "magento/module-wishlist": "100.3.*",
-        "magento/framework": "100.3.*"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-customer": "*",
+        "magento/module-eav": "*",
+        "magento/module-rule": "*",
+        "magento/module-store": "*",
+        "magento/module-widget": "*",
+        "magento/module-wishlist": "*"
     },
     "type": "magento2-module",
-    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class VaultConfigProviderTest
  */
-class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
+class VaultConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var VaultPaymentInterface|MockObject
@@ -57,7 +57,7 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->vaultPaymentList = $this->getMock(PaymentMethodListInterface::class);
+        $this->vaultPaymentList = $this->createMock(PaymentMethodListInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->vaultConfigProvider = new VaultConfigProvider($this->storeManager, $this->session);

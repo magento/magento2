@@ -5,7 +5,7 @@
  */
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
     private $eavConfig;
@@ -18,19 +18,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eavConfig = $this->getMock(
+        $this->eavConfig = $this->createPartialMock(
             \Magento\Eav\Model\Config::class,
-            ['getEntityAttributeCodes', 'getAttribute'],
-            [],
-            '',
-            false
+            ['getEntityAttributeCodes', 'getAttribute']
         );
-        $this->swatchHelper = $this->getMock(
+        $this->swatchHelper = $this->createPartialMock(
             \Magento\Swatches\Helper\Data::class,
-            ['isVisualSwatch', 'isTextSwatch'],
-            [],
-            '',
-            false
+            ['isVisualSwatch', 'isTextSwatch']
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -47,22 +41,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)->getMock();
 
-        $subject = $this->getMock(
+        $subject = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            ['getUsedProductAttributes'],
-            [],
-            '',
-            false
+            ['getUsedProductAttributes']
         );
-        $result = $this->getMock(
+        $result = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class,
-            ['getEntity', 'addAttributeToSelect'],
-            [],
-            '',
-            false
+            ['getEntity', 'addAttributeToSelect']
         );
 
-        $attribute = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
+        $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
 
         $subject->expects($this->once())->method('getUsedProductAttributes')->with($product)
             ->willReturn(['size' => $attribute, 'color' => $attribute, 'swatch1' => $attribute]);

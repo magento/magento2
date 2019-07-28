@@ -6,9 +6,10 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Precondition:
@@ -30,14 +31,48 @@ class ForgotPasswordOnFrontendTest extends Injectable
     /* end tags */
 
     /**
+     * Step factory.
+     *
+     * @var TestStepFactory
+     */
+    private $stepFactory;
+
+    /**
+     * Configuration setting.
+     *
+     * @var string
+     */
+    private $configData;
+
+    /**
+     * Injection data.
+     *
+     * @param TestStepFactory $stepFactory
+     * @return void
+     */
+    public function __inject(
+        TestStepFactory $stepFactory
+    ) {
+        $this->stepFactory = $stepFactory;
+    }
+
+    /**
      * Create customer.
      *
      * @param Customer $customer
      * @param CustomerAccountForgotPassword $forgotPassword
+     * @param null|string $configData
      * @return void
      */
-    public function test(Customer $customer, CustomerAccountForgotPassword $forgotPassword)
+    public function test(Customer $customer, CustomerAccountForgotPassword $forgotPassword, $configData)
     {
+        $this->configData = $configData;
+
+        // Preconditions
+        $this->stepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData]
+        )->run();
         // Precondition
         $customer->persist();
 

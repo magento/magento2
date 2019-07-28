@@ -15,7 +15,7 @@ use Magento\Framework\Event\Manager as EventManager;
  *
  * @package Magento\Framework\Event
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -60,8 +60,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->invokerMock = $this->getMock(InvokerInterface::class);
-        $this->eventConfigMock = $this->getMock(ConfigInterface::class);
+        $this->invokerMock = $this->createMock(InvokerInterface::class);
+        $this->eventConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->eventManager = $this->objectManagerHelper->getObject(
             EventManager::class,

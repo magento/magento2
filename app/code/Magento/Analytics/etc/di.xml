@@ -23,11 +23,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Analytics\Controller\Adminhtml\Subscription\Activate">
-        <arguments>
-            <argument name="configValueResource" xsi:type="object">Magento\Config\Model\ResourceModel\Config\Data</argument>
-        </arguments>
-    </type>
     <!--Configuration for \Magento\Analytics\ReportXml\Config-->
     <type name="Magento\Analytics\ReportXml\Config">
         <arguments>
@@ -257,6 +252,24 @@
     <type name="Magento\Analytics\Model\Connector\NotifyDataChangedCommand">
         <arguments>
             <argument name="responseResolver" xsi:type="object">NotifyDataChangedResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="analytics/url/signup" xsi:type="string">1</item>
+                <item name="analytics/url/update" xsi:type="string">1</item>
+                <item name="analytics/url/bi_essentials" xsi:type="string">1</item>
+                <item name="analytics/url/otp" xsi:type="string">1</item>
+                <item name="analytics/url/report" xsi:type="string">1</item>
+                <item name="analytics/url/notify_data_changed" xsi:type="string">1</item>
+                <item name="analytics/general/token" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="crontab/default/jobs/analytics_collect_data/schedule/cron_expr" xsi:type="string">1</item>
+                <item name="crontab/default/jobs/analytics_update/schedule/cron_expr" xsi:type="string">1</item>
+                <item name="crontab/default/jobs/analytics_subscribe/schedule/cron_expr" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>

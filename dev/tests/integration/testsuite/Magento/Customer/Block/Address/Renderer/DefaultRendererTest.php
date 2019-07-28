@@ -10,7 +10,7 @@ use Magento\Eav\Model\AttributeDataFactory;
 /**
  * DefaultRenderer
  */
-class DefaultRendererTest extends \PHPUnit_Framework_TestCase
+class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Address\Config

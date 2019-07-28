@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Model;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     const ORIG_CUSTOMER_ID = 1;
     const ORIG_PARENT_ID = 2;
@@ -82,7 +82,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomer()
     {
-        $this->address->unsetData('cusomer_id');
+        $this->address->unsetData('customer_id');
         $this->assertFalse($this->address->getCustomer());
 
         $this->address->setCustomerId(self::ORIG_CUSTOMER_ID);

@@ -26,6 +26,11 @@ class Retry extends Action
     private $subscriptionHandler;
 
     /**
+     * @inheritdoc
+     */
+    const ADMIN_RESOURCE = 'Magento_Analytics::analytics_settings';
+
+    /**
      * @param Context $context
      * @param SubscriptionHandler $subscriptionHandler
      */
@@ -35,16 +40,6 @@ class Retry extends Action
     ) {
         $this->subscriptionHandler = $subscriptionHandler;
         parent::__construct($context);
-    }
-
-    /**
-     * Check admin permissions for this controller
-     *
-     * @return boolean
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Analytics::analytics_settings');
     }
 
     /**

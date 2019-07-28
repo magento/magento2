@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Unit test for \Magento\Integration\Model\Oauth\Token\Provider
  */
-class ProviderTest extends \PHPUnit_Framework_TestCase
+class ProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Integration\Model\Oauth\Token\Provider */
     protected $tokenProvider;
@@ -340,7 +340,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionMessage Token is not the correct length
+     * @expectedExceptionMessage The token length is invalid. Check the length and try again.
      */
     public function testValidateRequestTokenIncorrectLengthToken()
     {

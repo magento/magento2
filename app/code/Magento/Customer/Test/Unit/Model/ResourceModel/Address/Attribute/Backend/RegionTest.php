@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address\Attribute\Backe
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region;
 
-class RegionTest extends \PHPUnit_Framework_TestCase
+class RegionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $regionFactory;
@@ -24,21 +24,15 @@ class RegionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->regionFactory = $this->getMock(\Magento\Directory\Model\RegionFactory::class, ['create'], [], '', false);
-        $this->region = $this->getMock(
+        $this->regionFactory = $this->createPartialMock(\Magento\Directory\Model\RegionFactory::class, ['create']);
+        $this->region = $this->createPartialMock(
             \Magento\Directory\Model\Region::class,
-            ['load', 'getId', 'getCountryId', 'getName'],
-            [],
-            '',
-            false
+            ['load', 'getId', 'getCountryId', 'getName']
         );
         $this->model = new Region($this->regionFactory);
-        $this->object = $this->getMock(
+        $this->object = $this->createPartialMock(
             \Magento\Framework\DataObject::class,
-            ['getData', 'getCountryId', 'setRegionId', 'setRegion'],
-            [],
-            '',
-            false
+            ['getData', 'getCountryId', 'setRegionId', 'setRegion']
         );
     }
 

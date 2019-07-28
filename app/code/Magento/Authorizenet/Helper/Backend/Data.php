@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Helper\Backend;
 
 use Magento\Authorizenet\Helper\Data as FrontendDataHelper;
@@ -15,6 +17,8 @@ use Magento\Backend\Model\UrlInterface;
  * Authorize.net Backend Data Helper
  *
  * @api
+ * @since 100.0.2
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
 class Data extends FrontendDataHelper
 {

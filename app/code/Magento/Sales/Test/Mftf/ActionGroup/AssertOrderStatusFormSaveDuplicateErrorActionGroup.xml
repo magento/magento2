@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Assert that order status is not saved with duplication error message -->
+    <actionGroup name="AssertOrderStatusFormSaveDuplicateError">
+        <see selector="{{AdminMessagesSection.error}}" userInput="We found another order status with the same order status code." stepKey="seeError"/>
+    </actionGroup>
+</actionGroups>

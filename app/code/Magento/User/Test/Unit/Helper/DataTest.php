@@ -9,7 +9,7 @@ namespace Magento\User\Test\Unit\Helper;
 /**
  * Test class for \Magento\User\Helper\Data testing
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\User\Helper\Data

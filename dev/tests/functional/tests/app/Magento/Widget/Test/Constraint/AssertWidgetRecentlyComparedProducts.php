@@ -89,7 +89,7 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
         $this->addProducts($products);
         $this->removeCompareProducts();
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $this->catalogProductCompare->getWidgetView()->isWidgetVisible($widget, 'Recently Compared'),
             'Widget is absent on Product Compare page.'
         );

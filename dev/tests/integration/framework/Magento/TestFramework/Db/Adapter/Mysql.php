@@ -50,14 +50,4 @@ class Mysql extends \Magento\Framework\DB\Adapter\Pdo\Mysql implements \Magento\
         $this->_levelAdjustment -= 1;
         return $this->rollback();
     }
-
-    /**
-     * Adjust transaction level with "transparent" counter
-     *
-     * @return int
-     */
-    public function getTransactionLevel()
-    {
-        return parent::getTransactionLevel() - $this->_levelAdjustment;
-    }
 }

@@ -13,13 +13,14 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Main extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/set/toolbar/main.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/set/toolbar/main.phtml';
 
     /**
      * @return $this

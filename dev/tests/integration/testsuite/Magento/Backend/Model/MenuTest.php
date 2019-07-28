@@ -10,7 +10,7 @@ namespace Magento\Backend\Model;
  *
  * @magentoAppArea adminhtml
  */
-class MenuTest extends \PHPUnit_Framework_TestCase
+class MenuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu
@@ -96,6 +96,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
                     'title' => 'Extended System',
                     'module' => 'Magento_Backend',
                     'resource' => 'Magento_Backend::system3',
+                    'dependsOnConfig' => 'dev/test/system',
                 ]
             )
         );
@@ -114,12 +115,13 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             'Magento_Backend::system3'
         );
         $serializedString = $menu->serialize();
-        $expected = '[{"parent_id":null,"module_name":"Magento_Backend","sort_index":null,"depends_on_config":null,'
+        $expected = '[{"parent_id":null,"module":"Magento_Backend","sort_index":null,'
+            . '"dependsOnConfig":"dev\/test\/system",'
             . '"id":"Magento_Backend::system3","resource":"Magento_Backend::system3","path":"","action":null,'
-            . '"depends_on_module":null,"tooltip":"","title":"Extended System",'
-            . '"target":null,"sub_menu":[{"parent_id":null,"module_name":"Magento_Backend","sort_index":null,'
-            . '"depends_on_config":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
-            . '"path":"","action":"admin\/backend\/acl\/index","depends_on_module":null,"tooltip":"","title":"Acl",'
+            . '"dependsOnModule":null,"toolTip":null,"title":"Extended System",'
+            . '"target":null,"sub_menu":[{"parent_id":null,"module":"Magento_Backend","sort_index":null,'
+            . '"dependsOnConfig":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
+            . '"path":"","action":"admin\/backend\/acl\/index","dependsOnModule":null,"toolTip":null,"title":"Acl",'
             . '"target":null,"sub_menu":null}]}]';
         $this->assertEquals($expected, $serializedString);
     }
@@ -129,12 +131,12 @@ class MenuTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnserialize()
     {
-        $serializedMenu = '[{"parent_id":null,"module_name":"Magento_Backend","sort_index":null,'
-            . '"depends_on_config":null,"id":"Magento_Backend::system3","resource":"Magento_Backend::system3",'
-            . '"path":"","action":null,"depends_on_module":null,"tooltip":"","title":"Extended System",'
-            . '"target":null,"sub_menu":[{"parent_id":null,"module_name":"Magento_Backend","sort_index":null,'
-            . '"depends_on_config":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
-            . '"path":"","action":"admin\/backend\/acl\/index","depends_on_module":null,"tooltip":"","title":"Acl",'
+        $serializedMenu = '[{"parent_id":null,"module":"Magento_Backend","sort_index":null,'
+            . '"dependsOnConfig":"dev\/test","id":"Magento_Backend::system3","resource":"Magento_Backend::system3",'
+            . '"path":"","action":null,"dependsOnModule":null,"toolTip":null,"title":"Extended System",'
+            . '"target":null,"sub_menu":[{"parent_id":null,"module":"Magento_Backend","sort_index":null,'
+            . '"dependsOnConfig":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
+            . '"path":"","action":"admin\/backend\/acl\/index","dependsOnModule":null,"toolTip":null,"title":"Acl",'
             . '"target":null,"sub_menu":null}]}]';
         /** @var Menu $menu */
         $menu = $this->objectManager->get(\Magento\Backend\Model\MenuFactory::class)->create();
@@ -142,30 +144,30 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $expected = [
             [
                 'parent_id' => null,
-                'module_name' => 'Magento_Backend',
+                'module' => 'Magento_Backend',
                 'sort_index' => null,
-                'depends_on_config' => null,
+                'dependsOnConfig' => 'dev/test',
                 'id' => 'Magento_Backend::system3',
                 'resource' => 'Magento_Backend::system3',
                 'path' => '',
                 'action' => null,
-                'depends_on_module' => null,
-                'tooltip' => '',
+                'dependsOnModule' => null,
+                'toolTip' => null,
                 'title' => 'Extended System',
                 'target' => null,
                 'sub_menu' =>
                     [
                         [
                             'parent_id' => null,
-                            'module_name' => 'Magento_Backend',
+                            'module' => 'Magento_Backend',
                             'sort_index' => null,
-                            'depends_on_config' => null,
+                            'dependsOnConfig' => null,
                             'id' => 'Magento_Backend::system3_acl',
                             'resource' => 'Magento_Backend::system3_acl',
                             'path' => '',
                             'action' => 'admin/backend/acl/index',
-                            'depends_on_module' => null,
-                            'tooltip' => '',
+                            'dependsOnModule' => null,
+                            'toolTip' => null,
                             'title' => 'Acl',
                             'sub_menu' => null,
                             'target' => null

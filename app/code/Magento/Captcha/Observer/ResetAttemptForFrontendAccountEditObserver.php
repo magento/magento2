@@ -19,7 +19,7 @@ class ResetAttemptForFrontendAccountEditObserver implements ObserverInterface
      */
     protected $helper;
 
-    /*
+    /**
      * @var \Magento\Captcha\Model\ResourceModel\LogFactory
      */
     public $resLogFactory;

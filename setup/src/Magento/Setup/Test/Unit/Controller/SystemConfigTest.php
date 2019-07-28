@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\SystemConfig;
 
-class SystemConfigTest extends \PHPUnit_Framework_TestCase
+class SystemConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Magento\Setup\Controller\SystemConfig::indexAction

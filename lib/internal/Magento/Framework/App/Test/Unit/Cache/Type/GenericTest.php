@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
-class GenericTest extends \PHPUnit_Framework_TestCase
+class GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $className
@@ -17,9 +17,10 @@ class GenericTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor($className)
     {
-        $frontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $frontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
 
-        $poolMock = $this->getMock(\Magento\Framework\App\Cache\Type\FrontendPool::class, [], [], '', false);
+        $poolMock = $this->createMock(\Magento\Framework\App\Cache\Type\FrontendPool::class);
+        /** @noinspection PhpUndefinedFieldInspection */
         $poolMock->expects(
             $this->atLeastOnce()
         )->method(
@@ -33,6 +34,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $model = new $className($poolMock);
 
         // Test initialization was done right
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->assertEquals($className::CACHE_TAG, $model->getTag(), 'The tag is wrong');
 
         // Test that frontend is now engaged in operations

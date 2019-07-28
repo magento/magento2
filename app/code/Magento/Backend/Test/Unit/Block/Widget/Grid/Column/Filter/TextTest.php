@@ -8,7 +8,10 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+/**
+ * Unit test for \Magento\Backend\Block\Widget\Grid\Column\Filter\Text
+ */
+class TextTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\Text*/
     protected $block;
@@ -31,8 +34,11 @@ class TextTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getEscaper'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
-        $this->helper = $this->getMock(\Magento\Framework\DB\Helper::class, [], [], '', false);
+        $this->escaper = $this->createPartialMock(
+            \Magento\Framework\Escaper::class,
+            ['escapeHtml', 'escapeHtmlAttr']
+        );
+        $this->helper = $this->createMock(\Magento\Framework\DB\Helper::class);
 
         $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
 
@@ -60,6 +66,13 @@ class TextTest extends \PHPUnit_Framework_TestCase
         $this->block->setColumn($column);
 
         $this->escaper->expects($this->any())->method('escapeHtml')->willReturn('escapedHtml');
+        $this->escaper->expects($this->once())
+            ->method('escapeHtmlAttr')
+            ->willReturnCallback(
+                function ($string) {
+                    return $string;
+                }
+            );
         $column->expects($this->any())->method('getId')->willReturn('id');
         $column->expects($this->once())->method('getHtmlId')->willReturn('htmlId');
 

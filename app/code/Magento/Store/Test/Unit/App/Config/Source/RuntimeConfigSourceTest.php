@@ -11,7 +11,11 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\App\Config\Source\RuntimeConfigSource;
 
-class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -35,8 +39,8 @@ class RuntimeConfigSourceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->connection = $this->getMock(AdapterInterface::class);
-        $this->resourceConnection = $this->getMock(ResourceConnection::class, [], [], '', false);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->resourceConnection = $this->createMock(ResourceConnection::class);
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();

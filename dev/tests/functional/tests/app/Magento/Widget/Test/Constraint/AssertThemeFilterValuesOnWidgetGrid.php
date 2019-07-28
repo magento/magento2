@@ -30,7 +30,7 @@ class AssertThemeFilterValuesOnWidgetGrid extends AbstractConstraint
         }
         $widgetInstanceIndex->open();
         $actualValues = $widgetInstanceIndex->getWidgetGrid()->getThemeIdValues();
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             array_diff($expectedValues, $actualValues),
             'Widget grid theme filter doesn\'t contain all possible values from created widgets.'
         );

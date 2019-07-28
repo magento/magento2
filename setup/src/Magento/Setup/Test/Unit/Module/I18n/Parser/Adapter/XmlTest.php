@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -53,6 +53,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                     ['phrase' => 'Phrase 2', 'file' => $default, 'line' => '', 'quote' => ''],
                     ['phrase' => 'Phrase 3', 'file' => $default, 'line' => '', 'quote' => ''],
                     ['phrase' => 'Phrase 1', 'file' => $default, 'line' => '', 'quote' => ''],
+                    ['phrase' => 'Comment from new line.', 'file' => $default, 'line' => '', 'quote' => ''],
                 ],
             ],
             [

@@ -22,25 +22,39 @@ use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
  */
 class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     */
     protected $categoryUrlRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $scopeConfig;
 
-    /** @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
+     */
     protected $urlRewriteHandler;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer
+     */
     private $urlRewriteBunchReplacer;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool
+     */
     private $databaseMapPool;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private $dataUrlRewriteClassNames;
 
     /**
@@ -60,8 +74,8 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
         UrlRewriteBunchReplacer $urlRewriteBunchReplacer,
         DatabaseMapPool $databaseMapPool,
         $dataUrlRewriteClassNames = [
-        DataCategoryUrlRewriteDatabaseMap::class,
-        DataProductUrlRewriteDatabaseMap::class
+            DataCategoryUrlRewriteDatabaseMap::class,
+            DataProductUrlRewriteDatabaseMap::class
         ]
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
@@ -74,6 +88,8 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
     }
 
     /**
+     * Execute observer functional
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
@@ -91,8 +107,12 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
             $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category, true);
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
-            $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
-            $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+
+            if ($this->isCategoryRewritesEnabled()) {
+                $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            }
+
             //frees memory for maps that are self-initialized in multiple classes that were called by the generators
             $this->resetUrlRewritesDataMaps($category);
         }
@@ -109,5 +129,15 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
         foreach ($this->dataUrlRewriteClassNames as $className) {
             $this->databaseMapPool->resetMap($className, $category->getEntityId());
         }
+    }
+
+    /**
+     * Check config value of generate_category_product_rewrites
+     *
+     * @return bool
+     */
+    private function isCategoryRewritesEnabled()
+    {
+        return (bool)$this->scopeConfig->getValue('catalog/seo/generate_category_product_rewrites');
     }
 }

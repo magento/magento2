@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Model\Config\Backend\Image;
 
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Backend\Image\Adapter

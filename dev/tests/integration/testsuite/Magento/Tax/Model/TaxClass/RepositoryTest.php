@@ -11,7 +11,7 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Repository
@@ -91,8 +91,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->taxClassRepository->save($taxClassDataObject);
         } catch (InputException $e) {
             $errors = $e->getErrors();
-            $this->assertEquals('class_name is a required field.', $errors[0]->getMessage());
-            $this->assertEquals('class_type is a required field.', $errors[1]->getMessage());
+            $this->assertEquals('"class_name" is required. Enter and try again.', $errors[0]->getMessage());
+            $this->assertEquals('"class_type" is required. Enter and try again.', $errors[1]->getMessage());
         }
     }
 
@@ -160,10 +160,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->taxClassRepository->deleteById($taxClassId));
 
         // Verify if the tax class is deleted
-        $this->setExpectedException(
-            \Magento\Framework\Exception\NoSuchEntityException::class,
-            "No such entity with class_id = $taxClassId"
-        );
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage("No such entity with class_id = $taxClassId");
         $this->taxClassRepository->deleteById($taxClassId);
     }
 

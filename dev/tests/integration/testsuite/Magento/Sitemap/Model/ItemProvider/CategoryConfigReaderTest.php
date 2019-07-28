@@ -9,7 +9,7 @@ namespace Magento\Sitemap\Model\ItemProvider;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CategoryConfigReaderTest extends \PHPUnit_Framework_TestCase
+class CategoryConfigReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CategoryConfigReader

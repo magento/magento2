@@ -1,0 +1,97 @@
+{
+    "oauth_consumer": {
+        "column": {
+            "entity_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "name": true,
+            "key": true,
+            "secret": true,
+            "callback_url": true,
+            "rejected_callback_url": true
+        },
+        "index": {
+            "OAUTH_CONSUMER_CREATED_AT": true,
+            "OAUTH_CONSUMER_UPDATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "OAUTH_CONSUMER_KEY": true,
+            "OAUTH_CONSUMER_SECRET": true
+        }
+    },
+    "oauth_token": {
+        "column": {
+            "entity_id": true,
+            "consumer_id": true,
+            "admin_id": true,
+            "customer_id": true,
+            "type": true,
+            "token": true,
+            "secret": true,
+            "verifier": true,
+            "callback_url": true,
+            "revoked": true,
+            "authorized": true,
+            "user_type": true,
+            "created_at": true
+        },
+        "index": {
+            "OAUTH_TOKEN_CONSUMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "OAUTH_TOKEN_ADMIN_ID_ADMIN_USER_USER_ID": true,
+            "OAUTH_TOKEN_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID": true,
+            "OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "OAUTH_TOKEN_TOKEN": true
+        }
+    },
+    "oauth_nonce": {
+        "column": {
+            "nonce": true,
+            "timestamp": true,
+            "consumer_id": true
+        },
+        "constraint": {
+            "OAUTH_NONCE_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID": true,
+            "OAUTH_NONCE_NONCE_CONSUMER_ID": true
+        },
+        "index": {
+            "OAUTH_NONCE_TIMESTAMP": true
+        }
+    },
+    "integration": {
+        "column": {
+            "integration_id": true,
+            "name": true,
+            "email": true,
+            "endpoint": true,
+            "status": true,
+            "consumer_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "setup_type": true,
+            "identity_link_url": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "INTEGRATION_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID": true,
+            "INTEGRATION_NAME": true,
+            "INTEGRATION_CONSUMER_ID": true
+        }
+    },
+    "oauth_token_request_log": {
+        "column": {
+            "log_id": true,
+            "user_name": true,
+            "user_type": true,
+            "failures_count": true,
+            "lock_expires_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "OAUTH_TOKEN_REQUEST_LOG_USER_NAME_USER_TYPE": true
+        }
+    }
+}

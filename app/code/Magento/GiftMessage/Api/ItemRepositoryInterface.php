@@ -8,6 +8,7 @@ namespace Magento\GiftMessage\Api;
 /**
  * Interface ItemRepositoryInterface
  * @api
+ * @since 100.0.2
  */
 interface ItemRepositoryInterface
 {

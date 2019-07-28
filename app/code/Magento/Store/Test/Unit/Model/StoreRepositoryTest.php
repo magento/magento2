@@ -19,7 +19,7 @@ use Magento\Framework\App\Config;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
+class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StoreFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -76,7 +76,7 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested store is not found
+     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
      */
     public function testGetWithException()
     {
@@ -128,7 +128,7 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested store is not found
+     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
      */
     public function testGetByIdWithException()
     {
@@ -146,14 +146,14 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $storeMock1 = $this->getMock(StoreInterface::class);
+        $storeMock1 = $this->createMock(StoreInterface::class);
         $storeMock1->expects($this->once())
             ->method('getCode')
             ->willReturn('some_code');
         $storeMock1->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $storeMock2 = $this->getMock(StoreInterface::class);
+        $storeMock2 = $this->createMock(StoreInterface::class);
         $storeMock2->expects($this->once())
             ->method('getCode')
             ->willReturn('some_code_2');

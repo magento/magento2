@@ -10,7 +10,7 @@ use Magento\Framework\Locale\Resolver;
 /**
  * @magentoAppArea adminhtml
  */
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface

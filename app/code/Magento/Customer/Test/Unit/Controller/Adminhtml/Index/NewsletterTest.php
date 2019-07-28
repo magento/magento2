@@ -10,7 +10,7 @@ namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewsletterTest extends \PHPUnit_Framework_TestCase
+class NewsletterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Request mock instance
@@ -238,13 +238,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
 
     public function testNewsletterAction()
     {
-        $subscriberMock = $this->getMock(
-            \Magento\Newsletter\Model\Subscriber::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
         $this->resultLayoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultLayoutMock);

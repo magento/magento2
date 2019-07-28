@@ -9,7 +9,7 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RangeTest extends \PHPUnit_Framework_TestCase
+class RangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Metrics|\PHPUnit_Framework_MockObject_MockObject

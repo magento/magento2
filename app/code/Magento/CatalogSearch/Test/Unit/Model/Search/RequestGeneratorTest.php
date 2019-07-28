@@ -9,7 +9,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 
-class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for \Magento\CatalogSearch\Model\Search\RequestGenerator
+ */
+class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
@@ -61,7 +64,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'quick_search_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0],
+                    'quick_search_container' => ['queries' => 1, 'filters' => 0, 'aggregations' => 0],
                     'advanced_search_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0],
                     'catalog_view_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0]
                 ],
@@ -239,6 +242,10 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
         return $attribute;
     }
 
+    /**
+     * @param $value
+     * @return int|void
+     */
     private function countVal(&$value)
     {
         return !empty($value) ? count($value) : 0;

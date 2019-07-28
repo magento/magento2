@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model\Report;
 
-class SettlementTest extends \PHPUnit_Framework_TestCase
+class SettlementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDbIsolation enabled
@@ -16,7 +16,7 @@ class SettlementTest extends \PHPUnit_Framework_TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Paypal\Model\Report\Settlement::class
         );
-        $connection = $this->getMock(\Magento\Framework\Filesystem\Io\Sftp::class, ['rawls', 'read'], [], '', false);
+        $connection = $this->createPartialMock(\Magento\Framework\Filesystem\Io\Sftp::class, ['rawls', 'read']);
         $filename = 'STL-00000000.00.abc.CSV';
         $connection->expects($this->once())->method('rawls')->will($this->returnValue([$filename => []]));
         $connection->expects($this->once())->method('read')->with($filename, $this->anything());

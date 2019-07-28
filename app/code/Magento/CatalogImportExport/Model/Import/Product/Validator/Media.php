@@ -42,13 +42,15 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      */
     const ADDITIONAL_IMAGES_DELIMITER = ',';
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
     /**
      * @param string $string
      * @return bool
-     * @deprecated As this method doesn't give guarantee of correct url validation.
+     * @deprecated 100.2.0 As this method doesn't give guarantee of correct url validation.
      * @see \Magento\Framework\Url\Validator::isValid() It provides better url validation.
      */
     protected function checkValidUrl($string)

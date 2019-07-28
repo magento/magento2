@@ -10,11 +10,12 @@ namespace Magento\Customer\Model\Address;
  * Interface AddressInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface AddressModelInterface
 {
     /**
-     * Get steet line by number
+     * Get street line by number
      *
      * @param int $number
      * @return string

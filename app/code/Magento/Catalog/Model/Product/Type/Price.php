@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
@@ -11,12 +13,15 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Product type price model
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @since 100.0.2
  */
 class Price
 {
@@ -89,6 +94,11 @@ class Price
     private $tierPriceExtensionFactory;
 
     /**
+     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
+     */
+    private $ruleDateFormatter;
+
+    /**
      * Constructor
      *
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
@@ -101,6 +111,7 @@ class Price
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
+     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,7 +124,8 @@ class Price
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
+        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null,
+        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
@@ -126,6 +138,8 @@ class Price
         $this->config = $config;
         $this->tierPriceExtensionFactory = $tierPriceExtensionFactory ?: ObjectManager::getInstance()
             ->get(ProductTierPriceExtensionFactory::class);
+        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -183,6 +197,8 @@ class Price
     }
 
     /**
+     * Retrieve final price for child product
+     *
      * @param Product $product
      * @param float $productQty
      * @param Product $childProduct
@@ -340,7 +356,7 @@ class Price
             }
         }
 
-        return $prices ? $prices : [];
+        return $prices ?: [];
     }
 
     /**
@@ -427,6 +443,8 @@ class Price
     }
 
     /**
+     * Retrieve customer group id from product
+     *
      * @param Product $product
      * @return int
      */
@@ -452,7 +470,7 @@ class Price
             $product->getSpecialPrice(),
             $product->getSpecialFromDate(),
             $product->getSpecialToDate(),
-            $product->getStore()
+            WebsiteInterface::ADMIN_CODE
         );
     }
 
@@ -473,14 +491,15 @@ class Price
      *
      * @param   float $qty
      * @param   Product $product
+     *
      * @return  array|float
      */
-    public function getFormatedTierPrice($qty, $product)
+    public function getFormattedTierPrice($qty, $product)
     {
         $price = $product->getTierPrice($qty);
         if (is_array($price)) {
             foreach (array_keys($price) as $index) {
-                $price[$index]['formated_price'] = $this->priceCurrency->convertAndFormat(
+                $price[$index]['formatted_price'] = $this->priceCurrency->convertAndFormat(
                     $price[$index]['website_price']
                 );
             }
@@ -492,14 +511,44 @@ class Price
     }
 
     /**
+     * Get formatted by currency tier price
+     *
+     * @param float $qty
+     * @param Product $product
+     *
+     * @return array|float
+     *
+     * @deprecated
+     * @see getFormattedTierPrice()
+     */
+    public function getFormatedTierPrice($qty, $product)
+    {
+        return $this->getFormattedTierPrice($qty, $product);
+    }
+
+    /**
      * Get formatted by currency product price
      *
      * @param   Product $product
-     * @return  array || float
+     * @return  array|float
+     */
+    public function getFormattedPrice($product)
+    {
+        return $this->priceCurrency->format($product->getFinalPrice());
+    }
+
+    /**
+     * Get formatted by currency product price
+     *
+     * @param Product $product
+     * @return array || float
+     *
+     * @deprecated
+     * @see getFormattedPrice()
      */
     public function getFormatedPrice($product)
     {
-        return $this->priceCurrency->format($product->getFinalPrice());
+        return $this->getFormattedPrice($product);
     }
 
     /**
@@ -569,11 +618,11 @@ class Price
             $specialPrice,
             $specialPriceFrom,
             $specialPriceTo,
-            $sId
+            WebsiteInterface::ADMIN_CODE
         );
 
         if ($rulePrice === false) {
-            $date = $this->_localeDate->scopeDate($sId);
+            $date = $this->ruleDateFormatter->getDate($sId);
             $rulePrice = $this->_ruleFactory->create()->getRulePrice($date, $wId, $gId, $productId);
         }
 

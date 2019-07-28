@@ -10,7 +10,7 @@ use \Magento\Framework\Data\AbstractSearchResult;
 /**
  * Class AbstractSearchResultTest
  */
-class AbstractSearchResultTest extends \PHPUnit_Framework_TestCase
+class AbstractSearchResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AbstractSearchResult

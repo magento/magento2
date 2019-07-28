@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
 
-class CsvfileTest extends \PHPUnit_Framework_TestCase
+class CsvfileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider constructorProvider

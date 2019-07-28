@@ -13,6 +13,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 /**
  * Allows to extract configurations from environment variables.
  * @api
+ * @since 100.1.2
  */
 class EnvironmentPlaceholder implements PreProcessorInterface
 {
@@ -49,6 +50,7 @@ class EnvironmentPlaceholder implements PreProcessorInterface
      * If environment variable is matching the desired rule - it's being used as value.
      *
      * {@inheritdoc}
+     * @since 100.1.2
      */
     public function process(array $config)
     {

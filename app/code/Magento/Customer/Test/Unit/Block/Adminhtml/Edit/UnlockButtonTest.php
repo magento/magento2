@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class UnlockButtonTest
  * @package Magento\Customer\Block\Adminhtml\Edit
  */
-class UnlockButtonTest extends \PHPUnit_Framework_TestCase
+class UnlockButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\CustomerRegistry
@@ -47,34 +47,13 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(
-            \Magento\Backend\Block\Widget\Context::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->customerRegistryMock = $this->getMock(
+        $this->contextMock = $this->createMock(\Magento\Backend\Block\Widget\Context::class);
+        $this->customerRegistryMock = $this->createPartialMock(
             \Magento\Customer\Model\CustomerRegistry::class,
-            ['retrieve'],
-            [],
-            '',
-            false
+            ['retrieve']
         );
-        $this->customerModelMock = $this->getMock(
-            \Magento\Customer\Model\Customer::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->registryMock = $this->getMock(
-            \Magento\Framework\Registry::class,
-            ['registry'],
-            [],
-            '',
-            false
-        );
+        $this->customerModelMock = $this->createMock(\Magento\Customer\Model\Customer::class);
+        $this->registryMock = $this->createPartialMock(\Magento\Framework\Registry::class, ['registry']);
 
         $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->setMethods(['getUrl'])

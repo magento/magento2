@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Module\Status;
+use Magento\Framework\Console\Cli;
 
 abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 {
@@ -77,14 +78,14 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         if (!empty($messages)) {
             $output->writeln(implode(PHP_EOL, $messages));
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
         try {
             $modulesToChange = $this->getStatus()->getModulesToChange($isEnable, $modules);
         } catch (\LogicException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
         if (!empty($modulesToChange)) {
             $force = $input->getOption(self::INPUT_KEY_FORCE);
@@ -96,7 +97,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                     );
                     $output->writeln('<error>' . implode("</error>\n<error>", $constraints) . '</error>');
                     // we must have an exit code higher than zero to indicate something was wrong
-                    return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+                    return Cli::RETURN_FAILURE;
                 }
             }
             $this->setIsEnabled($isEnable, $modulesToChange, $output);
@@ -111,6 +112,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         } else {
             $output->writeln('<info>No modules were changed.</info>');
         }
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -178,7 +180,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get deployment config
      *
      * @return DeploymentConfig
-     * @deprecated
+     * @deprecated 2.0.6
      */
     private function getDeploymentConfig()
     {
@@ -192,7 +194,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get deployment config
      *
      * @return GeneratedFiles
-     * @deprecated
+     * @deprecated 2.1.0
      */
     private function getGeneratedFiles()
     {

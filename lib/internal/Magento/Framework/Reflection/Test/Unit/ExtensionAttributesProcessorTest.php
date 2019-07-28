@@ -17,7 +17,7 @@ use Magento\Framework\Reflection\TypeCaster;
 /**
  * ExtensionAttributesProcessor test
  */
-class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ExtensionAttributesProcessor
@@ -154,6 +154,9 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function buildOutputDataArrayWithPermissionProvider()
     {
         return [

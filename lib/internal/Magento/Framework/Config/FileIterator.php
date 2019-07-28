@@ -66,7 +66,6 @@ class FileIterator implements \Iterator, \Countable
      */
     public function current()
     {
-        /** @var \Magento\Framework\Filesystem\File\Read $fileRead */
         $fileRead = $this->fileReadFactory->create($this->key(), DriverPool::FILE);
         return $fileRead->readAll();
     }

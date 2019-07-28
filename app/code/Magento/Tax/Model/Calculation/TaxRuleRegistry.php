@@ -12,7 +12,9 @@ use Magento\Tax\Model\Calculation\RuleFactory as TaxRuleModelFactory;
 
 class TaxRuleRegistry
 {
-    /** @var  TaxRuleModelFactory */
+    /**
+     * @var \Magento\Tax\Model\Calculation\RuleFactory
+     */
     private $taxRuleModelFactory;
 
     /**

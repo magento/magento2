@@ -9,7 +9,7 @@ use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove;
 use Magento\Checkout\Helper\Cart;
 use Magento\Quote\Model\Quote\Item;
 
-class RemoveTest extends \PHPUnit_Framework_TestCase
+class RemoveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Remove

@@ -7,7 +7,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit;
 
 require __DIR__ . '/_files/Proxy.php';
 
-class InterceptableValidatorTest extends \PHPUnit_Framework_TestCase
+class InterceptableValidatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testValidate()
     {

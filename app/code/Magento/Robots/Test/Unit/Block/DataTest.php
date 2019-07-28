@@ -5,7 +5,7 @@
  */
 namespace Magento\Robots\Test\Unit\Block;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Robots\Block\Data
@@ -28,13 +28,26 @@ class DataTest extends \PHPUnit_Framework_TestCase
     private $storeResolver;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManager;
+
+    /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $eventManagerMock;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
     protected function setUp()
     {
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\Context::class)
@@ -45,6 +58,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getEventManager')
             ->willReturn($this->eventManagerMock);
 
+        $this->context->expects($this->any())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
+
         $this->robots = $this->getMockBuilder(\Magento\Robots\Model\Robots::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -53,10 +70,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+
         $this->block = new \Magento\Robots\Block\Data(
             $this->context,
             $this->robots,
-            $this->storeResolver
+            $this->storeResolver,
+            $this->storeManager
         );
     }
 
@@ -68,6 +89,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $data = 'test';
 
         $this->initEventManagerMock($data);
+
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->robots->expects($this->once())
             ->method('getData')
@@ -83,8 +106,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
 
-        $this->storeResolver->expects($this->once())
-            ->method('getCurrentStoreId')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMock();
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $storeMock->expects($this->once())
+            ->method('getId')
             ->willReturn($storeId);
 
         $expected = [

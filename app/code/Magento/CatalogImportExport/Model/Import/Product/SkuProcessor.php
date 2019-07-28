@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * Class SkuProcessor
  *
  * @api
+ * @since 100.0.2
  */
 class SkuProcessor
 {
@@ -141,7 +142,7 @@ class SkuProcessor
     {
         if ($sku !== null) {
             $sku = strtolower($sku);
-            return isset($this->newSkus[$sku]) ? $this->newSkus[$sku] : null;
+            return $this->newSkus[$sku] ?? null;
         }
         return $this->newSkus;
     }

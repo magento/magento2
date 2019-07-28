@@ -12,13 +12,14 @@ use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
  * Sales order history block
  *
  * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'order/history.phtml';
+    protected $_template = 'Magento_Sales::order/history.phtml';
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
@@ -35,7 +36,9 @@ class History extends \Magento\Framework\View\Element\Template
      */
     protected $_orderConfig;
 
-    /** @var \Magento\Sales\Model\ResourceModel\Order\Collection */
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
+     */
     protected $orders;
 
     /**
@@ -64,7 +67,7 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function _construct()
     {
@@ -73,9 +76,10 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return CollectionFactoryInterface
+     * Provide order collection factory
      *
-     * @deprecated
+     * @return CollectionFactoryInterface
+     * @deprecated 100.1.1
      */
     private function getOrderCollectionFactory()
     {
@@ -86,6 +90,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer orders
+     *
      * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getOrders()
@@ -108,7 +114,7 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      */
     protected function _prepareLayout()
     {
@@ -127,6 +133,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get Pager child block output
+     *
      * @return string
      */
     public function getPagerHtml()
@@ -135,6 +143,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order view URL
+     *
      * @param object $order
      * @return string
      */
@@ -144,15 +154,23 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get order track URL
+     *
      * @param object $order
      * @return string
+     * @deprecated Action does not exist
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)
     {
-        return $this->getUrl('sales/order/track', ['order_id' => $order->getId()]);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+        return '';
     }
 
     /**
+     * Get reorder URL
+     *
      * @param object $order
      * @return string
      */
@@ -162,6 +180,8 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get customer account URL
+     *
      * @return string
      */
     public function getBackUrl()

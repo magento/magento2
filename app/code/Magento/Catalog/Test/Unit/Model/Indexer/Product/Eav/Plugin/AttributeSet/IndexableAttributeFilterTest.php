@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Plugin\AttributeSet;
 
-class IndexableAttributeFilterTest extends \PHPUnit_Framework_TestCase
+class IndexableAttributeFilterTest extends \PHPUnit\Framework\TestCase
 {
     public function testFilter()
     {

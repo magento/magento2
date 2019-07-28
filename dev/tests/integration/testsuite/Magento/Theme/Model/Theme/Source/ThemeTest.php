@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Theme Test
  *
  */
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetAllOptions()
     {

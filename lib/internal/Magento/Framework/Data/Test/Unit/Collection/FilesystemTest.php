@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Data\Test\Unit\Collection;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Data\Collection\Filesystem */
     private $model;

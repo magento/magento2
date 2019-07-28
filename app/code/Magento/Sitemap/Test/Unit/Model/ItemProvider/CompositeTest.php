@@ -10,7 +10,7 @@ use Magento\Sitemap\Model\ItemProvider\Composite as CompositeItemResolver;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\SitemapItemInterface;
 
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     public function testNoResolvers()
     {

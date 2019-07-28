@@ -5,6 +5,7 @@
  */
 namespace Magento\SendFriend\Block;
 
+use Magento\Captcha\Block\Captcha;
 use Magento\Customer\Model\Context;
 
 /**
@@ -12,6 +13,7 @@ use Magento\Customer\Model\Context;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Send extends \Magento\Framework\View\Element\Template
 {
@@ -169,6 +171,7 @@ class Send extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve Current Product Id
      *
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      * @return int
      */
     public function getProductId()
@@ -179,6 +182,7 @@ class Send extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve current category id for product
      *
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      * @return int
      */
     public function getCategoryId()
@@ -220,5 +224,25 @@ class Send extends \Magento\Framework\View\Element\Template
     public function canSend()
     {
         return !$this->sendfriend->isExceedLimit();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareLayout()
+    {
+        if (!$this->getChildBlock('captcha')) {
+            $this->addChild(
+                'captcha',
+                Captcha::class,
+                [
+                    'cacheable' => false,
+                    'after' => '-',
+                    'form_id' => 'product_sendtofriend_form',
+                    'image_width' => 230,
+                    'image_height' => 230
+                ]
+            );
+        }
     }
 }

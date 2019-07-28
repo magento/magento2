@@ -47,7 +47,7 @@ Sending,Sending
 Paused,Paused
 View,View
 Unknown,Unknown
-Order,Order
+"Order #","Order #"
 Purchased,Purchased
 "Bill-to Name","Bill-to Name"
 "Ship-to Name","Ship-to Name"
@@ -400,12 +400,12 @@ Password:,Password:
 "If you did not make this request, you can ignore this email and your password will remain the same.","If you did not make this request, you can ignore this email and your password will remain the same."
 "Your %store_name password has been changed","Your %store_name password has been changed"
 "We have received a request to change the following information associated with your account at %store_name: password.","We have received a request to change the following information associated with your account at %store_name: password."
-"Checkout out as a new customer","Checkout out as a new customer"
+"Checkout as a new customer","Checkout as a new customer"
 "Creating an account has many benefits:","Creating an account has many benefits:"
 "See order and shipping status","See order and shipping status"
 "Track order history","Track order history"
 "Check out faster","Check out faster"
-"Checkout out using your account","Checkout out using your account"
+"Checkout using your account","Checkout using your account"
 "Email Address","Email Address"
 "Are you sure you want to do this?","Are you sure you want to do this?"
 "Are you sure you want to delete this address?","Are you sure you want to delete this address?"
@@ -479,9 +479,9 @@ Strong,Strong
 "The title that goes before name (Mr., Mrs., etc.)","The title that goes before name (Mr., Mrs., etc.)"
 "Prefix Dropdown Options","Prefix Dropdown Options"
 "
-                        Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.
+                        Semicolon (;) separated values.<br/>Leave empty for open text field.
                     ","
-                        Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.
+                        Semicolon (;) separated values.<br/>Leave empty for open text field.
                     "
 "Show Middle Name (initial)","Show Middle Name (initial)"
 "Always optional.","Always optional."
@@ -500,16 +500,17 @@ Strong,Strong
 "Address Templates","Address Templates"
 "Online Customers Options","Online Customers Options"
 "Online Minutes Interval","Online Minutes Interval"
+"Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed","Only 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul' tags are allowed"
 "Leave empty for default (15 minutes).","Leave empty for default (15 minutes)."
 "Customer Notification","Customer Notification"
 "Customer Grid","Customer Grid"
 "Rebuild Customer grid index","Rebuild Customer grid index"
 Group,Group
 "Add New Customer","Add New Customer"
-"Are you sure to delete selected customers?","Are you sure to delete selected customers?"
+"Are you sure you want to delete the selected customers?","Are you sure you want to delete the selected customers?"
 "Delete items","Delete items"
 "Subscribe to Newsletter","Subscribe to Newsletter"
-"Are you sure to unsubscribe selected customers from newsletter?","Are you sure to unsubscribe selected customers from newsletter?"
+"Are you sure you want to unsubscribe the selected customers from the newsletter?","Are you sure you want to unsubscribe the selected customers from the newsletter?"
 "Unsubscribe from Newsletter","Unsubscribe from Newsletter"
 "Assign a Customer Group","Assign a Customer Group"
 Phone,Phone
@@ -531,8 +532,10 @@ Type,Type
 "Send Welcome Email From","Send Welcome Email From"
 "Are you sure you want to delete this item?","Are you sure you want to delete this item?"
 Addresses,Addresses
-"Account Dashboard","Account Dashboard"
 "Edit Account Information","Edit Account Information"
 "Password forgotten","Password forgotten"
-"My Dashboard","My Dashboard"
 "You are signed out","You are signed out"
+"Associate to Website","Associate to Website"
+"Prefix","Prefix"
+"Middle Name/Initial","Middle Name/Initial"
+"Suffix","Suffix"

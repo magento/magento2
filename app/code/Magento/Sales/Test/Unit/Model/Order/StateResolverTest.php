@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order\StateResolver;
 /**
  * Class StateCheckerTest
  */
-class StateResolverTest extends \PHPUnit_Framework_TestCase
+class StateResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Order

@@ -16,6 +16,7 @@ use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Form extends \Magento\Framework\View\Element\Template
 {
@@ -138,7 +139,7 @@ class Form extends \Magento\Framework\View\Element\Template
             );
         }
 
-        $this->setTemplate('form.phtml');
+        $this->setTemplate('Magento_Review::form.phtml');
     }
 
     /**

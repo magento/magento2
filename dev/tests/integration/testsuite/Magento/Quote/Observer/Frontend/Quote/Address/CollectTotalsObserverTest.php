@@ -7,7 +7,7 @@ namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
+class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver

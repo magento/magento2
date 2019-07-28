@@ -166,6 +166,7 @@ class File implements MergeableInterface
      * Get source content type
      *
      * @return string
+     * @since 100.2.0
      */
     public function getSourceContentType()
     {

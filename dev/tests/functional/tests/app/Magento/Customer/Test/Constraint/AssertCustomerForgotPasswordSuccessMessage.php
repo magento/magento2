@@ -29,7 +29,7 @@ class AssertCustomerForgotPasswordSuccessMessage extends AbstractConstraint
         CustomerAccountLogin $customerLogin,
         Customer $customer
     ) {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf(self::SUCCESS_MESSAGE, $customer->getEmail()),
             $customerLogin->getMessages()->getSuccessMessage(),
             'Wrong forgot password message is displayed.'

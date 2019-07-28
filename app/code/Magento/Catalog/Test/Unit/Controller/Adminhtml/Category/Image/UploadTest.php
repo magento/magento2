@@ -14,7 +14,7 @@ use Magento\Framework\DataObject;
 /**
  * Class UploadTest
  */
-class UploadTest extends \PHPUnit_Framework_TestCase
+class UploadTest extends \PHPUnit\Framework\TestCase
 {
     private $objectManager;
 
@@ -23,6 +23,9 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [
@@ -42,9 +45,9 @@ class UploadTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->objectManager->getObject(Request::class);
 
-        $uploader = $this->getMock(ImageUploader::class, ['saveFileToTmpDir'], [], '', false);
+        $uploader = $this->createPartialMock(ImageUploader::class, ['saveFileToTmpDir']);
 
-        $resultFactory = $this->getMock(ResultFactory::class, ['create'], [], '', false);
+        $resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
 
         $resultFactory->expects($this->once())
             ->method('create')

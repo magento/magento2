@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Model\System\Message;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Notifications class
  */
@@ -14,7 +16,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Store manager object
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.3
      */
     protected $storeManager;
 
@@ -34,7 +36,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Stores with invalid display settings
      *
      * @var array
-     * @deprecated
+     * @deprecated 100.1.3
      * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors
      */
     protected $storesWithInvalidDisplaySettings;
@@ -43,7 +45,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Websites with invalid discount settings
      *
      * @var array
-     * @deprecated
+     * @deprecated 100.1.3
      * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors
      */
     protected $storesWithInvalidDiscountSettings;
@@ -54,21 +56,29 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     private $notifications = [];
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param NotificationInterface[] $notifications
+     * @param \Magento\Framework\Escaper|null $escaper
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Tax\Model\Config $taxConfig,
-        $notifications = []
+        $notifications = [],
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->storeManager = $storeManager;
         $this->urlBuilder = $urlBuilder;
         $this->taxConfig = $taxConfig;
         $this->notifications = $notifications;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
     }
 
     /**
@@ -79,11 +89,12 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      */
     public function getIdentity()
     {
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return md5('TAX_NOTIFICATION');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isDisplayed()
     {
@@ -96,7 +107,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getText()
     {
@@ -135,7 +146,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      */
     public function getInfoUrl()
     {
-        return $this->taxConfig->getInfoUrl();
+        return $this->escaper->escapeUrl($this->taxConfig->getInfoUrl());
     }
 
     /**
@@ -157,7 +168,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::checkSettings
      */
     public function checkDisplaySettings($store = null)
@@ -184,7 +195,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::checkSettings
      */
     public function checkDiscountSettings($store = null)
@@ -197,7 +208,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @param string $section
      * @return string
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function getIgnoreTaxNotificationUrl($section)
     {
@@ -206,10 +217,11 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
 
     /**
      * Return list of store names which have not compatible tax calculation type and price display settings.
+     *
      * Return true if settings are wrong for default store.
      *
      * @return array
-     * @deprecated
+     * @deprecated 100.1.3
      * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::getStoresWithWrongSettings
      */
     public function getStoresWithWrongDisplaySettings()
@@ -227,10 +239,11 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
 
     /**
      * Return list of store names where tax discount settings are compatible.
+     *
      * Return true if settings are wrong for default store.
      *
      * @return array
-     * @deprecated
+     * @deprecated 100.1.3
      * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::getStoresWithWrongSettings
      */
     public function getStoresWithWrongDiscountSettings()

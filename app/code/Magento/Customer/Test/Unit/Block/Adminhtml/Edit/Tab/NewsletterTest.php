@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Model\Session;
@@ -14,7 +12,7 @@ use Magento\Customer\Controller\RegistryConstants;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewsletterTest extends \PHPUnit_Framework_TestCase
+class NewsletterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter
@@ -58,24 +56,15 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->formFactoryMock = $this->getMock(\Magento\Framework\Data\FormFactory::class, [], [], '', false);
-        $this->subscriberFactoryMock = $this->getMock(
+        $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->formFactoryMock = $this->createMock(\Magento\Framework\Data\FormFactory::class);
+        $this->subscriberFactoryMock = $this->createPartialMock(
             \Magento\Newsletter\Model\SubscriberFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->accountManagementMock = $this->getMock(
-            \Magento\Customer\Api\AccountManagementInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $this->accountManagementMock = $this->createMock(\Magento\Customer\Api\AccountManagementInterface::class);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->backendSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->setMethods(['getCustomerFormData'])
             ->disableOriginalConstructor()
@@ -103,21 +92,12 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
 
-        $subscriberMock = $this->getMock(\Magento\Newsletter\Model\Subscriber::class, [], [], '', false);
-        $fieldsetMock = $this->getMock(\Magento\Framework\Data\Form\Element\Fieldset::class, [], [], '', false);
-        $elementMock = $this->getMock(
-            \Magento\Framework\Data\Form\Element\Checkbox::class,
-            ['setIsChecked'],
-            [],
-            '',
-            false
-        );
-        $formMock = $this->getMock(
+        $subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
+        $fieldsetMock = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
+        $elementMock = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Checkbox::class, ['setIsChecked']);
+        $formMock = $this->createPartialMock(
             \Magento\Framework\Data\Form::class,
-            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl'],
-            [],
-            '',
-            false
+            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl']
         );
         $this->registryMock->expects($this->exactly(3))
             ->method('registry')
@@ -160,21 +140,12 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
 
-        $subscriberMock = $this->getMock(\Magento\Newsletter\Model\Subscriber::class, [], [], '', false);
-        $fieldsetMock = $this->getMock(\Magento\Framework\Data\Form\Element\Fieldset::class, [], [], '', false);
-        $elementMock = $this->getMock(
-            \Magento\Framework\Data\Form\Element\Checkbox::class,
-            ['setIsChecked'],
-            [],
-            '',
-            false
-        );
-        $formMock = $this->getMock(
+        $subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
+        $fieldsetMock = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
+        $elementMock = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Checkbox::class, ['setIsChecked']);
+        $formMock = $this->createPartialMock(
             \Magento\Framework\Data\Form::class,
-            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl'],
-            [],
-            '',
-            false
+            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl']
         );
         $this->registryMock->expects($this->exactly(3))
             ->method('registry')

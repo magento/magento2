@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 /**
  * Class AbstractElementTest
  */
-abstract class AbstractElementTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -46,6 +46,9 @@ abstract class AbstractElementTest extends \PHPUnit_Framework_TestCase
      */
     abstract protected function getModelName();
 
+    /**
+     * @return mixed
+     */
     abstract public function testGetComponentName();
 
     /**

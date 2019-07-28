@@ -13,7 +13,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 /**
  * MethodsMap test
  */
-class MethodsMapTest extends \PHPUnit_Framework_TestCase
+class MethodsMapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MethodsMap
@@ -51,7 +51,7 @@ class MethodsMapTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $fieldNamerMock,
             ]
         );
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->object,
             'serializer',

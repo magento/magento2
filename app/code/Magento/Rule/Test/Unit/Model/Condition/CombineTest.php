@@ -8,7 +8,7 @@ namespace Magento\Rule\Test\Unit\Model\Condition;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class CombineTest extends \PHPUnit_Framework_TestCase
+class CombineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Rule\Model\Condition\Combine | \PHPUnit_Framework_MockObject_MockObject

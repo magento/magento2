@@ -19,13 +19,13 @@ class Multiselect implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @var GroupManagementInterface
      */
     protected $_groupManagement;
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @var \Magento\Framework\Convert\DataObject
      */
     protected $_converter;

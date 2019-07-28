@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteCustomWebsiteActionGroup">
+        <arguments>
+            <argument name="websiteName" defaultValue="customWebsite.name"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnTheStorePage"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton" />
+        <see userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="verifyThatCorrectWebsiteFound"/>
+        <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingWebsite"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterWebsiteSelected" time="30"/>
+        <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteWebsiteButtonOnEditStorePage"/>
+        <selectOption userInput="No" selector="{{AdminStoresDeleteWebsiteSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
+        <click selector="{{AdminStoresDeleteWebsiteSection.deleteButton}}" stepKey="clickDeleteButtonOnDeleteWebsitePage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the website." stepKey="checkSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

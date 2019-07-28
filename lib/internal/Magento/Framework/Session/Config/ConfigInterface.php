@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Session\Config;
 
+/**
+ * Interface \Magento\Framework\Session\Config\ConfigInterface
+ *
+ */
 interface ConfigInterface
 {
     /**

@@ -27,8 +27,10 @@ use Magento\Framework\DB\Select;
  * Test for \Magento\CatalogSearch\Model\Search\IndexBuilder
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
-class IndexBuilderTest extends \PHPUnit_Framework_TestCase
+class IndexBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DimensionsProcessor|\PHPUnit_Framework_MockObject_MockObject

@@ -9,8 +9,9 @@ namespace Magento\Catalog\Block\Product;
  * Test class for \Magento\Catalog\Block\Product\New.
  *
  * @magentoDataFixture Magento/Catalog/_files/products_new.php
+ * @magentoDbIsolation disabled
  */
-class NewTest extends \PHPUnit_Framework_TestCase
+class NewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\NewProduct

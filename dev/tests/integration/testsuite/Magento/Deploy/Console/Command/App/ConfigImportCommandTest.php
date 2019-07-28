@@ -25,7 +25,7 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

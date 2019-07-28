@@ -8,8 +8,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="dashboard">
-          <block class="Magento\Search\Block\Adminhtml\Dashboard\Last" as="lastSearches" />
-          <block class="Magento\Search\Block\Adminhtml\Dashboard\Top" as="topSearches" />
+          <block class="Magento\Search\Block\Adminhtml\Dashboard\Last" name="dashboard.lastSearches" as="lastSearches" />
+          <block class="Magento\Search\Block\Adminhtml\Dashboard\Top" name="dashboard.topSearches" as="topSearches" />
         </referenceBlock>
     </body>
 </page>

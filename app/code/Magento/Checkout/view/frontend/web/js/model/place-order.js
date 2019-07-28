@@ -9,9 +9,10 @@ define(
     [
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Customer/js/customer-data'
     ],
-    function (storage, errorProcessor, fullScreenLoader) {
+    function (storage, errorProcessor, fullScreenLoader, customerData) {
         'use strict';
 
         return function (serviceUrl, payload, messageContainer) {
@@ -22,6 +23,23 @@ define(
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
+                }
+            ).success(
+                function (response) {
+                    var clearData = {
+                        'selectedShippingAddress': null,
+                        'shippingAddressFromData': null,
+                        'newCustomerShippingAddress': null,
+                        'selectedShippingRate': null,
+                        'selectedPaymentMethod': null,
+                        'selectedBillingAddress': null,
+                        'billingAddressFromData': null,
+                        'newCustomerBillingAddress': null
+                    };
+
+                    if (response.responseType !== 'error') {
+                        customerData.set('checkout-data', clearData);
+                    }
                 }
             ).always(
                 function () {

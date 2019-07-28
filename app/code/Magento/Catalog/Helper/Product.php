@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 /**
  * Catalog category helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Product extends \Magento\Framework\Url\Helper\Data
 {
@@ -88,7 +89,9 @@ class Product extends \Magento\Framework\Url\Helper\Data
      */
     protected $categoryRepository;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $_storeManager;
 
     /**
@@ -266,6 +269,8 @@ class Product extends \Magento\Framework\Url\Helper\Data
     }
 
     /**
+     * Retrieve email to friend url
+     *
      * @param ModelProduct $product
      * @return string
      */
@@ -280,6 +285,8 @@ class Product extends \Magento\Framework\Url\Helper\Data
     }
 
     /**
+     * Get statuses
+     *
      * @return array
      */
     public function getStatuses()
@@ -474,6 +481,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
 
     /**
      * Prepares product options by buyRequest: retrieves values and assigns them as default.
+     *
      * Also parses and adds product management related values - e.g. qty
      *
      * @param ModelProduct $product
@@ -491,6 +499,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
 
     /**
      * Process $buyRequest and sets its options before saving configuration to some product item.
+     *
      * This method is used to attach additional parameters to processed buyRequest.
      *
      * $params holds parameters of what operation must be performed:
@@ -538,8 +547,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
 
     /**
      * Set flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
-     *
-     * For instance, during order creation in the backend admin has ability to add any products to order
      *
      * @param bool $skipSaleableCheck
      * @return Product

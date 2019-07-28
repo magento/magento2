@@ -7,10 +7,9 @@ namespace Magento\Framework\Composer\Test\Unit;
 
 use Composer\Composer;
 use Composer\Package\Locker;
-use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ComposerInformationTest extends \PHPUnit_Framework_TestCase
+class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
@@ -28,12 +27,12 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     private $lockerMock;
 
     /**
-     * @var \Composer\Repository\RepositoryInterface|\PHPUnit_Framework_MockObject_Builder_InvocationMocker:
+     * @var \Composer\Repository\RepositoryInterface|\PHPUnit\Framework\MockObject\Builder\InvocationMocker
      */
     private $lockerRepositoryMock;
 
     /**
-     * @var \Composer\Package\CompletePackageInterface|\PHPUnit_Framework_MockObject_Builder_InvocationMocker:
+     * @var \Composer\Package\CompletePackageInterface|\PHPUnit\Framework\MockObject\Builder\InvocationMocker
      */
     private $packageMock;
 
@@ -92,6 +91,9 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->composerInformation->isMagentoRoot());
     }
 
+    /**
+     * @return array
+     */
     public function isMagentoRootDataProvider()
     {
         return [

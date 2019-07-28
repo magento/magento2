@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class SaveHandlerTest
  */
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveHandler
@@ -196,6 +196,21 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
                     ['category_id' => 3, 'position' => 10],
                 ],
                 [], //affected category_ids
+            ],
+            [
+                [3], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 4, 'position' => 30],
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10],
+                ],
+                [
+                    ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 4, 'position' => 30],
+                ],
+                [3, 4], //affected category_ids
             ],
         ];
     }

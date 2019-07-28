@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Stock;
 
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDbIsolation disabled

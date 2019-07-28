@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
 use \Magento\Framework\App\Response\HeaderProvider\XFrameOptions;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
+class XFrameOptionsTest extends \PHPUnit\Framework\TestCase
 {
     /** X-Frame-Option Header name */
     const HEADER_NAME = 'X-Frame-Options';

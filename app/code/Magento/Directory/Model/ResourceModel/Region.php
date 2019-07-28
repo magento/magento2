@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Directory\Model\ResourceModel;
 
 /**
  * Region Resource Model
  *
  * @api
+ * @since 100.0.2
  */
 class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

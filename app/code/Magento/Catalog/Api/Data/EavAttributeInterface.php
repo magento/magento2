@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
 {
@@ -144,6 +145,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isUsedInGrid
      * @return $this
+     * @since 101.1.0
      */
     public function setIsUsedInGrid($isUsedInGrid);
 
@@ -152,6 +154,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isVisibleInGrid
      * @return $this
+     * @since 101.1.0
      */
     public function setIsVisibleInGrid($isVisibleInGrid);
 
@@ -160,6 +163,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      *
      * @param bool|null $isFilterableInGrid
      * @return $this
+     * @since 101.1.0
      */
     public function setIsFilterableInGrid($isFilterableInGrid);
 

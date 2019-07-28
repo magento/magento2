@@ -16,7 +16,7 @@ use Magento\Framework\EntityManager\Operation\Create\CreateMain;
 use Magento\Framework\EntityManager\Sequence\SequenceApplier;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
@@ -71,10 +71,10 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     public function testDuplicateExceptionProcessingOnExecute()
     {
-        $metadata = $this->getMock(EntityMetadataInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
 
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
         $this->resourceConnection->expects($this->any())->method('getConnectionByName')->willReturn($connection);
 

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Observer;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class SwitchPriceAttributeScopeOnConfigChangeTest extends \PHPUnit_Framework_TestCase
+class SwitchPriceAttributeScopeOnConfigChangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

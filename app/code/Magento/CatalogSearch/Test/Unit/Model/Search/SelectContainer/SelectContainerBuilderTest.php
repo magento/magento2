@@ -24,7 +24,7 @@ use Magento\Framework\Search\Request\Filter\Term;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SelectContainerBuilderTest extends \PHPUnit_Framework_TestCase
+class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SelectContainerFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -190,6 +190,9 @@ class SelectContainerBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function mockQuery()
     {
         return $this->getMockBuilder(QueryInterface::class)
@@ -197,6 +200,9 @@ class SelectContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
     }
 
+    /**
+     * @return array
+     */
     private function mockFilters()
     {
         $visibilityFilter = $this->getMockBuilder(Term::class)

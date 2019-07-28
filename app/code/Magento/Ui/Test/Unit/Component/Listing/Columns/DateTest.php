@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class DateTest
  */
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TIME = '2000-04-12 16:34:12';
 
@@ -88,5 +88,15 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->model->prepareDataSource(['data' => ['items' => [$item]]]);
         $this->assertEquals(self::TEST_TIME, $result['data']['items'][0]['field_name']);
+    }
+
+    public function testPrepareDataSourceWithZeroDate()
+    {
+        $zeroDate = '0000-00-00 00:00:00';
+        $item = ['test_data' => 'some_data', 'field_name' => $zeroDate];
+        $this->timezoneMock->expects($this->never())->method('date');
+
+        $result = $this->model->prepareDataSource(['data' => ['items' => [$item]]]);
+        $this->assertEquals($zeroDate, $result['data']['items'][0]['field_name']);
     }
 }

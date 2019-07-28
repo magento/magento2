@@ -8,7 +8,12 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\ConcealInProductionConfigList;
 use Magento\Framework\App\State;
 
-class ConcealInProductionConfigListTest extends \PHPUnit_Framework_TestCase
+/**
+ * @deprecated Original class has changed the location
+ * @see \Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction
+ * @see \Magento\Config\Test\Unit\Model\Config\Structure\ElementVisibility\ConcealInProductionTest
+ */
+class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var State|\PHPUnit_Framework_MockObject_MockObject
@@ -43,6 +48,8 @@ class ConcealInProductionConfigListTest extends \PHPUnit_Framework_TestCase
      * @param string $mageMode
      * @param bool $expectedResult
      * @dataProvider disabledDataProvider
+     *
+     * @deprecated
      */
     public function testIsDisabled($path, $mageMode, $expectedResult)
     {
@@ -54,6 +61,8 @@ class ConcealInProductionConfigListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     *
+     * @deprecated
      */
     public function disabledDataProvider()
     {
@@ -78,6 +87,8 @@ class ConcealInProductionConfigListTest extends \PHPUnit_Framework_TestCase
      * @param string $mageMode
      * @param bool $expectedResult
      * @dataProvider hiddenDataProvider
+     *
+     * @deprecated
      */
     public function testIsHidden($path, $mageMode, $expectedResult)
     {
@@ -89,6 +100,8 @@ class ConcealInProductionConfigListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     *
+     * @deprecated
      */
     public function hiddenDataProvider()
     {

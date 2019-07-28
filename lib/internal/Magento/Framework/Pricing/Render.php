@@ -22,7 +22,7 @@ use Magento\Framework\View\Element\Template;
  */
 class Render extends AbstractBlock
 {
-    /**@#+
+    /**#@+
      * Zones where prices displaying can be configured
      */
     const ZONE_ITEM_VIEW = 'item_view';
@@ -32,13 +32,9 @@ class Render extends AbstractBlock
     const ZONE_EMAIL     = 'email';
     const ZONE_CART      = 'cart';
     const ZONE_DEFAULT   = null;
-    /**@#-*/
+    /**#@-*/
 
-    /**
-     * Default type renderer
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $defaultTypeRender = 'default';
 
     /**

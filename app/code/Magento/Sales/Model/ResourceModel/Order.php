@@ -155,7 +155,11 @@ class Order extends SalesResource implements OrderResourceInterface
         }
         $object->setData(
             'protect_code',
-            substr(md5(uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)), 5, 6)
+            substr(
+                hash('sha256', uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)),
+                5,
+                32
+            )
         );
         $isNewCustomer = !$object->getCustomerId() || $object->getCustomerId() === true;
         if ($isNewCustomer && $object->getCustomer()) {

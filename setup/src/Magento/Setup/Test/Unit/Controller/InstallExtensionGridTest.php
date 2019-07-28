@@ -10,7 +10,7 @@ use Magento\Setup\Controller\InstallExtensionGrid;
 use Magento\Setup\Model\PackagesData;
 use Magento\Framework\Composer\ComposerInformation;
 
-class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
+class InstallExtensionGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Controller

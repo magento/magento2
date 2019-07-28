@@ -5,7 +5,7 @@
  */
 namespace Magento\Captcha\Block\Adminhtml\Captcha;
 
-class DefaultCaptchaTest extends \PHPUnit_Framework_TestCase
+class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Captcha\Block\Captcha\DefaultCaptcha

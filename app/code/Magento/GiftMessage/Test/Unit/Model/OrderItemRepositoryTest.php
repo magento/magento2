@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -13,7 +14,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
  * Test class for \Magento\GiftMessage\Model\OrderItemRepository
  * * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GiftMessage\Model\OrderItemRepository|\PHPUnit_Framework_MockObject_MockObject
@@ -169,7 +170,10 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->orderItemRepository->get($orderId, $orderItemId);
             $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals('There is no item with provided id in the order', $exception->getMessage());
+            $this->assertEquals(
+                'No item with the provided ID was found in the Order. Verify the ID and try again.',
+                $exception->getMessage()
+            );
         }
     }
 
@@ -206,7 +210,8 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
             $this->assertEquals(
-                'There is no item with provided id in the order or gift message isn\'t allowed',
+                "No item with the provided ID was found in the Order, or a gift message isn't allowed. "
+                . "Verify and try again.",
                 $exception->getMessage()
             );
         }
@@ -248,7 +253,10 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->orderItemRepository->get($orderId, $orderItemId);
             $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals('There is no item with provided id in the order', $exception->getMessage());
+            $this->assertEquals(
+                'No item with the provided ID was found in the Order. Verify the ID and try again.',
+                $exception->getMessage()
+            );
         }
     }
 
@@ -336,7 +344,10 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);
             $this->fail('Expected NoSuchEntityException not caught');
         } catch (NoSuchEntityException $exception) {
-            $this->assertEquals('There is no item with provided id in the order', $exception->getMessage());
+            $this->assertEquals(
+                'No item with the provided ID was found in the Order. Verify the ID and try again.',
+                $exception->getMessage()
+            );
         }
     }
 
@@ -375,7 +386,7 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);
             $this->fail('Expected InvalidTransitionException not caught');
         } catch (InvalidTransitionException $exception) {
-            $this->assertEquals('Gift Messages are not applicable for virtual products', $exception->getMessage());
+            $this->assertEquals("Gift messages can't be used for virtual products.", $exception->getMessage());
         }
     }
 
@@ -418,7 +429,7 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);
             $this->fail('Expected CouldNotSaveException not caught');
         } catch (CouldNotSaveException $exception) {
-            $this->assertEquals('Gift Message is not available', $exception->getMessage());
+            $this->assertEquals("The gift message isn't available.", $exception->getMessage());
         }
     }
 
@@ -482,7 +493,7 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->fail('Expected CouldNotSaveException not caught');
         } catch (CouldNotSaveException $exception) {
             $this->assertEquals(
-                'Could not add gift message to order: "' . $excep->getMessage() . '"',
+                'The gift message couldn\'t be added to the "' . $excep->getMessage() . '" order.',
                 $exception->getMessage()
             );
         }

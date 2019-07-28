@@ -7,7 +7,7 @@ namespace Magento\Cms\Test\Unit\Controller\Block;
 
 use Magento\Cms\Controller\Adminhtml\Block\InlineEdit;
 
-class InlineEditTest extends \PHPUnit_Framework_TestCase
+class InlineEditTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -40,13 +40,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->cmsBlock = $this->getMock(
-            \Magento\Cms\Model\Block::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->cmsBlock = $this->createMock(\Magento\Cms\Model\Block::class);
         $this->context = $helper->getObject(
             \Magento\Backend\App\Action\Context::class,
             [
@@ -59,13 +53,10 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resultJson = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
-        $this->jsonFactory = $this->getMock(
+        $this->resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->jsonFactory = $this->createPartialMock(
             \Magento\Framework\Controller\Result\JsonFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->controller = new InlineEdit(
             $this->context,

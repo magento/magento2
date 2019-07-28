@@ -187,7 +187,7 @@ define([
             },
 
             /**
-             * Function to check the location of the child popoup window.
+             * Function to check the location of the child popup window.
              * Once detected if the callback is successful, parent window will be reloaded
              */
             fnCheckLocation: function () {
@@ -200,7 +200,7 @@ define([
                     if (IdentityLogin.win.closed ||
                         IdentityLogin.win.location.href == IdentityLogin.successCallbackUrl //eslint-disable-line eqeqeq
                     ) {
-                        //Stop the the polling
+                        //Stop the polling
                         clearInterval(IdentityLogin.checker);
                         $('body').trigger('processStart');
                         //Check for window closed

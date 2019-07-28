@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\Bootstrap;
 
 /**
@@ -20,7 +22,13 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/user/index');
         $response = $this->getResponse()->getBody();
         $this->assertContains('Users', $response);
-        $this->assertSelectCount('#permissionsUserGrid_table', 1, $response);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="permissionsUserGrid_table"]',
+                $response
+            )
+        );
     }
 
     /**
@@ -28,6 +36,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testSaveActionNoData()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/admin/user/save');
         $this->assertRedirect($this->stringContains('backend/admin/user/index/'));
     }
@@ -48,6 +57,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $userId = $user->getId();
         $this->assertNotEmpty($userId, 'Broken fixture');
         $user->delete();
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue('user_id', $userId);
         $this->dispatch('backend/admin/user/save');
         $this->assertSessionMessages(
@@ -65,6 +75,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testSaveActionMissingCurrentAdminPassword()
     {
         $fixture = uniqid();
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'username' => $fixture,
@@ -76,7 +87,11 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ]
         );
         $this->dispatch('backend/admin/user/save');
-        $this->assertSessionMessages($this->equalTo(['You have entered an invalid password for current user.']));
+        $this->assertSessionMessages(
+            $this->equalTo(
+                ['The password entered for the current user is invalid. Verify the password and try again.']
+            )
+        );
         $this->assertRedirect($this->stringContains('backend/admin/user/edit'));
     }
 
@@ -88,6 +103,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testSaveAction()
     {
         $fixture = uniqid();
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'username' => $fixture,
@@ -115,6 +131,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testSaveActionDuplicateUser()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'username' => 'adminUser',
@@ -136,13 +153,17 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * Verify password change properly updates fields when the request is valid
+     * Verify password change properly updates fields when the request is valid.
+     *
+     * @param array $postData
+     * @param bool $isPasswordCorrect
      *
      * @magentoDbIsolation enabled
      * @dataProvider saveActionPasswordChangeDataProvider
      */
     public function testSaveActionPasswordChange($postData, $isPasswordCorrect)
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/admin/user/save');
 
@@ -233,7 +254,13 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         //check "User Information" header and fieldset
         $this->assertContains('data-ui-id="adminhtml-user-edit-tabs-title"', $response);
         $this->assertContains('User Information', $response);
-        $this->assertSelectCount('#user_base_fieldset', 1, $response);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="user_base_fieldset"]',
+                $response
+            )
+        );
     }
 
     /**

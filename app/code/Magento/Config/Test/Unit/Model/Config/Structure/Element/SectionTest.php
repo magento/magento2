@@ -8,7 +8,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
-class SectionTest extends \PHPUnit_Framework_TestCase
+class SectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Section
@@ -35,8 +35,8 @@ class SectionTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
-        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
-        $this->_authorizationMock = $this->getMock(\Magento\Framework\AuthorizationInterface::class);
+        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->_authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
 
         $this->_model = $objectManager->getObject(
             \Magento\Config\Model\Config\Structure\Element\Section::class,

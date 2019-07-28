@@ -50,6 +50,9 @@ define([
                     'method_code': 'flatrate',
                     'carrier_code': 'flatrate'
                 }),
+                totals: ko.observable({
+                    'subtotal': 4
+                }),
                 setTotals: jasmine.createSpy()
             },
             'mage/storage': {
@@ -86,6 +89,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Checkout/js/model/cart/totals-processor/default', function () {
 
         it('estimateTotals if data was cached', function () {
@@ -103,6 +113,8 @@ define([
         });
 
         it('estimateTotals if data wasn\'t cached and request was successfully sent', function () {
+            var deferral = new $.Deferred();
+
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(true);
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
                 ko.observable({
@@ -114,9 +126,9 @@ define([
                 data.shippingMethodCode = mocks['Magento_Checkout/js/model/quote'].shippingMethod()['method_code'];
                 data.shippingCarrierCode = mocks['Magento_Checkout/js/model/quote'].shippingMethod()['carrier_code'];
 
-                return new $.Deferred().resolve(result);
+                return deferral.resolve(result);
             });
-            expect(defaultProcessor.estimateTotals(address)).toBeUndefined();
+            expect(defaultProcessor.estimateTotals(address)).toBe(deferral);
             expect(mocks['Magento_Checkout/js/model/quote'].setTotals).toHaveBeenCalledWith(totals);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(0)[0]).toBe(true);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(1)[0]).toBe(false);
@@ -126,6 +138,8 @@ define([
         });
 
         it('estimateTotals if data wasn\'t cached and request returns error', function () {
+            var deferral = new $.Deferred();
+
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(true);
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
                 ko.observable({
@@ -134,9 +148,9 @@ define([
             );
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'get');
             spyOn(mocks['mage/storage'], 'post').and.callFake(function () {
-                return new $.Deferred().reject('Error Message');
+                return deferral.reject('Error Message');
             });
-            expect(defaultProcessor.estimateTotals(address)).toBeUndefined();
+            expect(defaultProcessor.estimateTotals(address)).toBe(deferral);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(0)[0]).toBe(true);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(1)[0]).toBe(false);
             expect(mocks['mage/storage'].post).toHaveBeenCalled();

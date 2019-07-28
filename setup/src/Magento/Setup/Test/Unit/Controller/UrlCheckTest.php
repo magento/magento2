@@ -11,7 +11,7 @@ use Zend\View\Model\JsonModel;
 use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class UrlCheckTest extends \PHPUnit_Framework_TestCase
+class UrlCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $requestJson

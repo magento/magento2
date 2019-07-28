@@ -10,7 +10,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
  *
  * @magentoDataFixture Magento/SalesRule/_files/order_with_coupon.php
  */
-class CreatedatTest extends \PHPUnit_Framework_TestCase
+class CreatedatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider orderParamsDataProvider()

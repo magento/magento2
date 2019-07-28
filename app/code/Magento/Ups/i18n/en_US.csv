@@ -103,6 +103,8 @@ Title,Title
 "Weight Unit","Weight Unit"
 "User ID","User ID"
 "Enable Negotiated Rates","Enable Negotiated Rates"
+"Request Tax-Inclusive Rate","Request Tax-Inclusive Rate"
+"When applicable, taxes (sales tax, VAT etc.) are included in the rate","When applicable, taxes (sales tax, VAT etc.) are included in the rate"
 "Shipper Number","Shipper Number"
 "Required for negotiated rates; 6-character UPS","Required for negotiated rates; 6-character UPS"
 "Ship to Applicable Countries","Ship to Applicable Countries"

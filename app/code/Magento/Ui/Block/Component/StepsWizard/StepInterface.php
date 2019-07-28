@@ -9,6 +9,7 @@ namespace Magento\Ui\Block\Component\StepsWizard;
  * Interface for multi-step wizard blocks
  *
  * @api
+ * @since 100.0.2
  */
 interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
 {

@@ -9,6 +9,7 @@ namespace Magento\Bundle\Model\ResourceModel;
  * Bundle Resource Model
  *
  * @api
+ * @since 100.0.2
  */
 class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -149,6 +150,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param int $childId
      * @return $this
+     * @since 100.1.0
      */
     public function addProductRelation($parentId, $childId)
     {

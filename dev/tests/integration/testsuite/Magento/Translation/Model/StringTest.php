@@ -6,7 +6,7 @@
 
 namespace Magento\Translation\Model;
 
-class StringTest extends \PHPUnit_Framework_TestCase
+class StringTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Translation\Model\StringUtils

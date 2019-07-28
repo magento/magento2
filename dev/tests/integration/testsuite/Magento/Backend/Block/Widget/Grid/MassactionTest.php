@@ -12,7 +12,7 @@ use Magento\TestFramework\App\State;
  * @magentoComponentsDir Magento/Backend/Block/_files/design
  * @magentoDbIsolation enabled
  */
-class MassactionTest extends \PHPUnit_Framework_TestCase
+class MassactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Massaction
@@ -85,41 +85,6 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('[]', $blockEmpty->getItemsJson());
 
         $this->assertFalse($blockEmpty->isAvailable());
-    }
-
-    public function testGetJavaScript()
-    {
-        $this->loadLayout();
-
-        $javascript = $this->_block->getJavaScript();
-
-        $expectedItemFirst = '#"option_id1":{"label":"Option One",' .
-            '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/(?:key\\\/([\w\d]+)\\\/)?",' .
-            '"complete":"Test","id":"option_id1"}#';
-        $this->assertRegExp($expectedItemFirst, $javascript);
-
-        $expectedItemSecond = '#"option_id2":{"label":"Option Two",' .
-            '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/(?:key\\\/([\w\d]+)\\\/)?",' .
-            '"confirm":"Are you sure\?","id":"option_id2"}#';
-        $this->assertRegExp($expectedItemSecond, $javascript);
-    }
-
-    public function testGetJavaScriptWithAddedItem()
-    {
-        $this->loadLayout();
-
-        $input = [
-            'id' => 'option_id3',
-            'label' => 'Option Three',
-            'url' => '*/*/option3',
-            'block_name' => 'admin.test.grid.massaction.option3',
-        ];
-        $expected = '#"option_id3":{"id":"option_id3","label":"Option Three",' .
-            '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/(?:key\\\/([\w\d]+)\\\/)?",' .
-            '"block_name":"admin.test.grid.massaction.option3"}#';
-
-        $this->_block->addItem($input['id'], $input);
-        $this->assertRegExp($expected, $this->_block->getJavaScript());
     }
 
     /**
@@ -212,22 +177,5 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-    }
-
-    public function testGridContainsMassactionColumn()
-    {
-        $this->loadLayout();
-        $this->_layout->getBlock('admin.test.grid')->toHtml();
-
-        $gridMassactionColumn = $this->_layout->getBlock('admin.test.grid')
-            ->getColumnSet()
-            ->getChildBlock('massaction');
-
-        $this->assertNotNull($gridMassactionColumn, 'Massaction column does not exist in the grid column set');
-        $this->assertInstanceOf(
-            \Magento\Backend\Block\Widget\Grid\Column::class,
-            $gridMassactionColumn,
-            'Massaction column is not an instance of \Magento\Backend\Block\Widget\Column'
-        );
     }
 }

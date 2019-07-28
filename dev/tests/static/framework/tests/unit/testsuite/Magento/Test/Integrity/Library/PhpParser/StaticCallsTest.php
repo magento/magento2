@@ -9,7 +9,7 @@ use Magento\TestFramework\Integrity\Library\PhpParser\StaticCalls;
 
 /**
  */
-class StaticCallsTest extends \PHPUnit_Framework_TestCase
+class StaticCallsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StaticCalls

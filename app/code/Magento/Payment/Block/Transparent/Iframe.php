@@ -9,6 +9,7 @@ namespace Magento\Payment\Block\Transparent;
  * Iframe block for register specific params in layout
  *
  * @api
+ * @since 100.0.2
  */
 class Iframe extends \Magento\Framework\View\Element\Template
 {

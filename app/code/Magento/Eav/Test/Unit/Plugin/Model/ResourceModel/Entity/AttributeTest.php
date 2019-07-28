@@ -14,7 +14,7 @@ use Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute as AttributeResource
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
 
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -44,10 +44,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->cacheMock = $this->getMock(CacheInterface::class);
-        $this->cacheStateMock = $this->getMock(StateInterface::class);
-        $this->attributeResourceMock = $this->getMock(AttributeResource::class, [], [], '', false);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->cacheStateMock = $this->createMock(StateInterface::class);
+        $this->attributeResourceMock = $this->createMock(AttributeResource::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->attributeResourcePlugin = $objectManager->getObject(
             AttributeResourcePlugin::class,
             [

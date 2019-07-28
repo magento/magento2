@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Class \Magento\Customer\Model\Config\Source\Group\Multiselect
  */
-class MultiselectTest extends \PHPUnit_Framework_TestCase
+class MultiselectTest extends \PHPUnit\Framework\TestCase
 {
     public function testToOptionArray()
     {
@@ -33,10 +33,26 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
             $this->assertContains(
                 $item,
                 [
-                    ['value' => 1, 'label' => 'Default (General)'],
-                    ['value' => 1, 'label' => 'General'],
-                    ['value' => 2, 'label' => 'Wholesale'],
-                    ['value' => 3, 'label' => 'Retailer'],
+                    [
+                        'value' => 1,
+                        'label' => 'Default (General)',
+                        '__disableTmpl' => true,
+                    ],
+                    [
+                        'value' => 1,
+                        'label' => 'General',
+                        '__disableTmpl' => true,
+                    ],
+                    [
+                        'value' => 2,
+                        'label' => 'Wholesale',
+                        '__disableTmpl' => true,
+                    ],
+                    [
+                        'value' => 3,
+                        'label' => 'Retailer',
+                        '__disableTmpl' => true,
+                    ],
                 ]
             );
         }

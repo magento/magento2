@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-class RendererProxyTest extends \PHPUnit_Framework_TestCase
+class RendererProxyTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {

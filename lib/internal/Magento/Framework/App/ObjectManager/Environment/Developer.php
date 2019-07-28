@@ -17,8 +17,10 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
      * Mode name
      */
     const MODE = 'developer';
-    protected $mode = self::MODE;
     /**#@- */
+
+    /**#@- */
+    protected $mode = self::MODE;
 
     /**
      * @var ConfigInterface

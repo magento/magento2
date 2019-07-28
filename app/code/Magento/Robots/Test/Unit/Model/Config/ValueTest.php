@@ -5,7 +5,7 @@
  */
 namespace Magento\Robots\Test\Unit\Model\Config;
 
-class ValueTest extends \PHPUnit_Framework_TestCase
+class ValueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Robots\Model\Config\Value
@@ -37,6 +37,11 @@ class ValueTest extends \PHPUnit_Framework_TestCase
      */
     private $storeResolver;
 
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManager;
+
     protected function setUp()
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
@@ -57,12 +62,16 @@ class ValueTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+
         $this->model = new \Magento\Robots\Model\Config\Value(
             $this->context,
             $this->registry,
             $this->scopeConfig,
             $this->typeList,
-            $this->storeResolver
+            $this->storeResolver,
+            $this->storeManager
         );
     }
 
@@ -73,8 +82,14 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
 
-        $this->storeResolver->expects($this->once())
-            ->method('getCurrentStoreId')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $storeMock->expects($this->once())
+            ->method('getId')
             ->willReturn($storeId);
 
         $expected = [

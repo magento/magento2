@@ -54,7 +54,7 @@ class AssertImagesAreVisibleOnProductPage extends AbstractAssertForm
         $this->productView = $catalogProductView->getViewBlock();
 
         $errors = $this->verify();
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $errors,
             "\nFound the following errors:\n" . implode(" \n", $errors)
         );

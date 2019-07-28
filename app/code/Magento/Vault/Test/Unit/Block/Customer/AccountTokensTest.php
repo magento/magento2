@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class AccountTokensTest
  */
-class AccountTokensTest extends \PHPUnit_Framework_TestCase
+class AccountTokensTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerTokenManagement|MockObject

@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Backup data collection
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
@@ -114,7 +115,8 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         if (isset($row['display_name']) && $row['display_name'] == '') {
             $row['display_name'] = 'WebSetupWizard';
         }
-        $row['id'] = $row['time'] . '_' . $row['type'] . (isset($row['display_name']) ? $row['display_name'] : '');
+        $row['id'] = $row['time'] . '_' . $row['type']
+            . (isset($row['display_name']) ? '_' . $row['display_name'] : '');
         return $row;
     }
 }

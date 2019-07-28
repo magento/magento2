@@ -10,7 +10,10 @@ use Magento\Framework\Search\Adapter\OptionsInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Catalog search config.
+ *
  * @api
+ * @since 100.0.2
  */
 class Options implements OptionsInterface
 {
@@ -32,7 +35,7 @@ class Options implements OptionsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get()
     {

@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="catalog" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="catalog" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
             <group id="layered_navigation" translate="label" sortOrder="490" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Layered Navigation</label>
                 <field id="display_product_count" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -20,7 +20,7 @@
                 </field>
                 <field id="price_range_step" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Price Navigation Step</label>
-                    <validate>validate-number validate-number-range number-range-0.01-1000000000</validate>
+                    <validate>validate-number validate-number-range number-range-0.01-9999999999999999</validate>
                     <depends>
                         <field id="price_range_calculation">manual</field>
                     </depends>

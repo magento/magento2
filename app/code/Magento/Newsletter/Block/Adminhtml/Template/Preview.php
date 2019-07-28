@@ -9,6 +9,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
  * Newsletter template preview block
  *
  * @api
+ * @since 100.0.2
  */
 class Preview extends \Magento\Backend\Block\Widget
 {
@@ -83,7 +84,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $template->revertDesign();
 
         if ($template->isPlain()) {
-            $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
+            $templateProcessed = "<pre>" . $this->escapeHtml($templateProcessed) . "</pre>";
         }
 
         \Magento\Framework\Profiler::stop($this->profilerName);
@@ -141,6 +142,8 @@ class Preview extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return template
+     *
      * @param \Magento\Newsletter\Model\Template $template
      * @param string $id
      * @return $this

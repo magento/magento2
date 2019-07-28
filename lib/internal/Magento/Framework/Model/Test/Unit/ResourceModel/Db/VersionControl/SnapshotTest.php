@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class SnapshotTest
  */
-class SnapshotTest extends \PHPUnit_Framework_TestCase
+class SnapshotTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
@@ -33,20 +33,11 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $this->getMock(
-            \Magento\Framework\Model\AbstractModel::class,
-            ['getId'],
-            [],
-            '',
-            false
-        );
+        $this->model = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, ['getId']);
 
-        $this->entityMetadata = $this->getMock(
+        $this->entityMetadata = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class,
-            ['getFields'],
-            [],
-            '',
-            false
+            ['getFields']
         );
 
         $this->entitySnapshot = $objectManager->getObject(

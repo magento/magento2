@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Autocomplete;
 use Magento\CatalogSearch\Model\Autocomplete\DataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider
@@ -29,6 +29,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Search\Model\ResourceModel\Query\Collection |\PHPUnit_Framework_MockObject_MockObject
      */
     private $suggestCollection;
+
+    /**
+     * @var integer
+     */
+    private $limit = 3;
 
     protected function setUp()
     {
@@ -60,11 +65,20 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturn($this->limit);
+
         $this->model = $helper->getObject(
             \Magento\CatalogSearch\Model\Autocomplete\DataProvider::class,
             [
                 'queryFactory' => $queryFactory,
-                'itemFactory' => $this->itemFactory
+                'itemFactory' => $this->itemFactory,
+                'scopeConfig' => $scopeConfig
             ]
         );
     }
@@ -103,10 +117,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expected));
 
         $this->itemFactory->expects($this->any())->method('create')->willReturn($itemMock);
+
         $result = $this->model->getItems();
         $this->assertEquals($expected, $result[0]->toArray());
+        $this->assertEquals($this->limit, count($result));
     }
 
+    /**
+     * @param array $data
+     */
     private function buildCollection(array $data)
     {
         $collectionData = [];

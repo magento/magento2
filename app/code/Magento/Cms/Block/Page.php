@@ -11,6 +11,7 @@ use Magento\Store\Model\ScopeInterface;
  * Cms page content block
  *
  * @api
+ * @since 100.0.2
  */
 class Page extends \Magento\Framework\View\Element\AbstractBlock implements
     \Magento\Framework\DataObject\IdentityInterface

@@ -12,7 +12,7 @@ use Magento\Integration\Model\Integration;
  * @magentoAppArea adminhtml
  * @magentoDataFixture Magento/Integration/_files/integration_all_permissions.php
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Edit
@@ -40,7 +40,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('title="Edit"', $buttonHtml);
         $this->assertContains('class="action edit"', $buttonHtml);
         $this->assertContains(
-            'onclick="window.location.href=\'http://localhost/index.php/backend/admin/integration/edit/id/'
+            'onclick="window.location.href=&#039;http://localhost/index.php/backend/admin/integration/edit/id/'
             . $integration->getId(),
             $buttonHtml
         );

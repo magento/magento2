@@ -8,7 +8,13 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class BatchIndexTest extends \PHPUnit_Framework_TestCase
+/**
+ * @magentoAppIsolation enabled
+ * @magentoAppArea adminhtml
+ * @magentoDataFixture Magento/CatalogRule/_files/two_rules.php
+ * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+ */
+class BatchIndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductRepository
@@ -54,7 +60,7 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @dataProvider dataProvider
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
@@ -96,17 +102,20 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
             ->setUrlKey(null)
             ->setSku(uniqid($this->product->getSku() . '-'))
             ->setName(uniqid($this->product->getName() . '-'))
-            ->setWebsiteIds([1]);
-        $productSecond->save();
-        $productSecond->setPrice($price)->save();
+            ->setWebsiteIds([1])
+            ->save();
+        $productSecond->setPrice($price);
+        $this->productRepository->save($productSecond);
         $productThird = clone $this->product;
         $productThird->setId(null)
             ->setUrlKey(null)
-            ->setSku(uniqid($this->product->getSku() . '-'))
-            ->setName(uniqid($this->product->getName() . '-'))
+            ->setSku(uniqid($this->product->getSku() . '--'))
+            ->setName(uniqid($this->product->getName() . '--'))
             ->setWebsiteIds([1])
             ->save();
-        $productThird->setPrice($price)->save();
+        $productThird->setPrice($price);
+        $this->productRepository->save($productThird);
+
         return [
             $productSecond->getEntityId(),
             $productThird->getEntityId(),

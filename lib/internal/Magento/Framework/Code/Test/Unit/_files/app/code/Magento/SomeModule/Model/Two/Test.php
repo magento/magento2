@@ -14,6 +14,11 @@ class Test extends \Magento\SomeModule\Model\One\Test
      */
     protected $_proxy;
 
+    /**
+     * Test constructor.
+     * @param \Magento\SomeModule\Model\Proxy $proxy
+     * @param array $data
+     */
     public function __construct(\Magento\SomeModule\Model\Proxy $proxy, $data = [])
     {
         $this->_proxy = $proxy;

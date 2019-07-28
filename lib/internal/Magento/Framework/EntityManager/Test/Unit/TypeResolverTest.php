@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\EntityManager\Test\Unit;
 
-class TypeResolverTest extends \PHPUnit_Framework_TestCase
+class TypeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -26,13 +26,13 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->metadataPoolMock =
-            $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->resolver = new \Magento\Framework\EntityManager\TypeResolver($this->metadataPoolMock);
     }
 
     /**
      * @param object $dataObject
-     * @param string $interfaceNames
+     * @param string $interfaceName
      * @dataProvider resolveDataProvider
      */
     public function testResolve($dataObject, $interfaceName)

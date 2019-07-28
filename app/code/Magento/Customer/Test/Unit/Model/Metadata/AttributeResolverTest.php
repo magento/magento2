@@ -10,7 +10,7 @@ use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Metadata\AttributeResolver;
 
-class AttributeResolverTest extends \PHPUnit_Framework_TestCase
+class AttributeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AttributeResolver */
     protected $model;

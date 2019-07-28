@@ -69,7 +69,7 @@
     </type>
     <type name="Magento\Framework\App\Area">
         <arguments>
-            <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
+            <argument name="translator" xsi:type="object">Magento\Framework\TranslateInterface</argument>
             <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
@@ -108,6 +108,7 @@
         <arguments>
              <argument name="collections" xsi:type="array">
                  <item name="design_config_listing_data_source" xsi:type="string">Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection</item>
+                 <item name="design_theme_listing_data_source" xsi:type="string">Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult</item>
              </argument>
          </arguments>
      </type>
@@ -213,6 +214,10 @@
                     <item name="path" xsi:type="string">design/footer/absolute_footer</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>
                 </item>
+                <item name="footer_report_bugs" xsi:type="array">
+                    <item name="path" xsi:type="string">design/footer/report_bugs</item>
+                    <item name="fieldset" xsi:type="string">other_settings/footer</item>
+                </item>
                 <item name="default_robots" xsi:type="array">
                     <item name="path" xsi:type="string">design/search_engine_robots/default_robots</item>
                     <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
@@ -268,9 +273,16 @@
     <type name="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
         <plugin name="designConfigTheme" type="Magento\Theme\Model\Design\Config\Plugin\Dump" sortOrder="50"/>
     </type>
-    <type name="\Magento\Theme\Model\Design\Config\Plugin\Dump">
+    <type name="Magento\Theme\Model\Design\Config\Plugin\Dump">
         <arguments>
             <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Ui\Component\Theme\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">theme</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Theme\Model\ResourceModel\Theme</argument>
+            <argument name="identifierName" xsi:type="string">theme_id</argument>
         </arguments>
     </type>
 </config>

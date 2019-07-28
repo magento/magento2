@@ -6,14 +6,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Test\Unit\Model\App;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmulationTest extends \PHPUnit_Framework_TestCase
+class EmulationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
@@ -161,7 +159,11 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
             ->method('setCurrentStore')->with(self::NEW_STORE_ID);
 
         // Test
-        $this->model->startEnvironmentEmulation(self::NEW_STORE_ID, \Magento\Framework\App\Area::AREA_FRONTEND);
+        $result = $this->model->startEnvironmentEmulation(
+            self::NEW_STORE_ID,
+            \Magento\Framework\App\Area::AREA_FRONTEND
+        );
+        $this->assertNull($result);
     }
 
     public function testStop()
@@ -208,6 +210,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->translateMock->expects($this->once())->method('loadData')->with($initArea);
 
         // Test
-        $this->model->stopEnvironmentEmulation();
+        $result = $this->model->stopEnvironmentEmulation();
+        $this->assertNotNull($result);
     }
 }

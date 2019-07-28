@@ -8,6 +8,7 @@ namespace Magento\CheckoutAgreements\Api;
 /**
  * Interface CheckoutAgreementsRepositoryInterface
  * @api
+ * @since 100.0.2
  */
 interface CheckoutAgreementsRepositoryInterface
 {
@@ -24,6 +25,8 @@ interface CheckoutAgreementsRepositoryInterface
      * Lists active checkout agreements.
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[]
+     * @deprecated
+     * @see \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::getList
      */
     public function getList();
 

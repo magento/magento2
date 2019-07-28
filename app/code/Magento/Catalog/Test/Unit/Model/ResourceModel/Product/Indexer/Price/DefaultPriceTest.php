@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DefaultPriceTest extends \PHPUnit_Framework_TestCase
+class DefaultPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice

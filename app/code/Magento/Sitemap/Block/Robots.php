@@ -18,14 +18,10 @@ use Magento\Store\Model\StoreResolver;
  * Prepares sitemap links to add to the robots.txt file
  *
  * @api
+ * @since 100.2.0
  */
 class Robots extends AbstractBlock implements IdentityInterface
 {
-    /**
-     * @var StoreResolver
-     */
-    private $storeResolver;
-
     /**
      * @var CollectionFactory
      */
@@ -48,6 +44,8 @@ class Robots extends AbstractBlock implements IdentityInterface
      * @param SitemapHelper $sitemapHelper
      * @param StoreManagerInterface $storeManager
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -57,7 +55,6 @@ class Robots extends AbstractBlock implements IdentityInterface
         StoreManagerInterface $storeManager,
         array $data = []
     ) {
-        $this->storeResolver = $storeResolver;
         $this->sitemapCollectionFactory = $sitemapCollectionFactory;
         $this->sitemapHelper = $sitemapHelper;
         $this->storeManager = $storeManager;
@@ -73,14 +70,14 @@ class Robots extends AbstractBlock implements IdentityInterface
      * and adds links for this sitemap files into result data.
      *
      * @return string
+     * @since 100.2.0
      */
     protected function _toHtml()
     {
-        $defaultStoreId = $this->storeResolver->getCurrentStoreId();
-        $defalutStore = $this->storeManager->getStore($defaultStoreId);
+        $defaultStore = $this->storeManager->getDefaultStoreView();
 
         /** @var \Magento\Store\Model\Website $website */
-        $website = $this->storeManager->getWebsite($defalutStore->getWebsiteId());
+        $website = $this->storeManager->getWebsite($defaultStore->getWebsiteId());
 
         $storeIds = [];
         foreach ($website->getStoreIds() as $storeId) {
@@ -105,6 +102,7 @@ class Robots extends AbstractBlock implements IdentityInterface
      *
      * @param int[] $storeIds
      * @return array
+     * @since 100.2.0
      */
     protected function getSitemapLinks(array $storeIds)
     {
@@ -130,11 +128,12 @@ class Robots extends AbstractBlock implements IdentityInterface
      * Get unique page cache identities
      *
      * @return array
+     * @since 100.2.0
      */
     public function getIdentities()
     {
         return [
-            Value::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
+            Value::CACHE_TAG . '_' . $this->storeManager->getDefaultStoreView()->getId(),
         ];
     }
 }

@@ -40,7 +40,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope)
     {
@@ -91,6 +91,12 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 ]
             ),
             []
+        )->joinLeft(
+            ['attribute_option' => $this->attributeResource->getTable('eav_attribute_option')],
+            'attribute_option.option_id = entity_value.value',
+            []
+        )->order(
+            'attribute_option.sort_order ASC'
         )->where(
             'super_attribute.product_id = ?',
             $productId

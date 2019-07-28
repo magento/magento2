@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Block;
 use Magento\Catalog\Model\FrontendStorageConfigurationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FrontendStorageManagerTest extends \PHPUnit_Framework_TestCase
+class FrontendStorageManagerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Block\FrontendStorageManager */
     protected $model;

@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Edit
@@ -63,6 +63,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected $session;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $presentation;
+
+    /**
      * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $pageTitle;
@@ -82,26 +87,18 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultPageFactory;
 
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManager;
-
     protected function setUp()
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)->getMock();
 
-        $this->eavAttribute = $this->getMock(
+        $this->eavAttribute = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            ['setEntityTypeId', 'load', 'getId', 'getEntityTypeId', 'addData', 'getName'],
-            [],
-            '',
-            false
+            ['setEntityTypeId', 'load', 'getId', 'getEntityTypeId', 'addData', 'getName']
         );
 
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
 
         $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
@@ -125,24 +122,33 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layout = $this->getMock(\Magento\Framework\View\Layout::class, ['getBlock'], [], '', false);
+        $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
 
         $this->session = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->presentation = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class
+        )->disableOriginalConstructor()
+            ->getMock();
+
         $this->blockTemplate = $this->getMockBuilder(\Magento\Backend\Block\Template::class)
+            ->setMethods(['setIsPopup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
+        $this->context = $this->createPartialMock(
+            \Magento\Backend\App\Action\Context::class,
+            ['getRequest', 'getObjectManager', 'getResultPageFactory', 'getSession']
+        );
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->context->expects($this->any())->method('getResultPageFactory')->willReturn($this->resultPageFactory);
         $this->context->expects($this->any())->method('getSession')->willReturn($this->session);
 
-        $this->objectManager = new ObjectManager($this);
-        $this->editController = $this->objectManager->getObject(
+        $objectManager = new ObjectManager($this);
+        $this->editController = $objectManager->getObject(
             \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Edit::class,
             [
                 'context' => $this->context,
@@ -168,9 +174,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->willReturn($this->eavAttribute);
         $this->objectManagerMock->expects($this->any())->method('get')
-            ->with(\Magento\Backend\Model\Session::class)
-            ->willReturn($this->session);
-
+            ->willReturnMap([
+                [\Magento\Backend\Model\Session::class, $this->session],
+                [\Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class, $this->presentation]
+            ]);
         $this->eavAttribute->expects($this->once())->method('setEntityTypeId')->willReturnSelf();
         $this->eavAttribute->expects($this->once())->method('addData')->with($attributesData)->willReturnSelf();
         $this->eavAttribute->expects($this->any())->method('getName')->willReturn(null);
@@ -218,8 +225,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->willReturn($this->eavAttribute);
         $this->objectManagerMock->expects($this->any())->method('get')
-            ->with(\Magento\Backend\Model\Session::class)
-            ->willReturn($this->session);
+            ->willReturnMap([
+                [\Magento\Backend\Model\Session::class, $this->session],
+                [\Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class, $this->presentation]
+            ]);
 
         $this->eavAttribute->expects($this->once())->method('setEntityTypeId')->willReturnSelf();
         $this->eavAttribute->expects($this->once())->method('addData')->with($attributesData)->willReturnSelf();

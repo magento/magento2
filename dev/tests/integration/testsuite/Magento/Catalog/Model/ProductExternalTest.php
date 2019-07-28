@@ -16,7 +16,7 @@ namespace Magento\Catalog\Model;
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductExternalTest extends \PHPUnit_Framework_TestCase
+class ProductExternalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -69,7 +69,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->_model->getCategoryId());
         $category = new \Magento\Framework\DataObject(['id' => 5]);
-
+        $this->_model->setCategoryIds([5]);
         $this->objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
         try {
             $this->assertEquals(5, $this->_model->getCategoryId());
@@ -83,6 +83,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
     public function testGetCategory()
     {
         $this->assertEmpty($this->_model->getCategory());
+        $this->_model->setCategoryIds([3]);
 
         $this->objectManager->get(\Magento\Framework\Registry::class)
             ->register('current_category', new \Magento\Framework\DataObject(['id' => 3]));

@@ -10,7 +10,7 @@ use Magento\Theme\Controller\Adminhtml\Design\Config\Edit;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Edit

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
-class OptionManagementTest extends \PHPUnit_Framework_TestCase
+class OptionManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\OptionManagement
@@ -19,7 +19,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eavOptionManagementMock = $this->getMock(\Magento\Eav\Api\AttributeOptionManagementInterface::class);
+        $this->eavOptionManagementMock = $this->createMock(\Magento\Eav\Api\AttributeOptionManagementInterface::class);
         $this->model = new \Magento\Catalog\Model\Product\Attribute\OptionManagement(
             $this->eavOptionManagementMock
         );
@@ -38,7 +38,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
     public function testAdd()
     {
         $attributeCode = 42;
-        $optionMock = $this->getMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class);
+        $optionMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class);
         $this->eavOptionManagementMock->expects($this->once())->method('add')->with(
             \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
             $attributeCode,

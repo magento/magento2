@@ -12,13 +12,19 @@ use Magento\Framework\App\ResourceConnection;
  */
 class DataCategoryUsedInProductsHashMap implements HashMapInterface
 {
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     private $hashMap = [];
 
-    /** @var HashMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\HashMapPool
+     */
     private $hashMapPool;
 
-    /** @var ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $connection;
 
     /**

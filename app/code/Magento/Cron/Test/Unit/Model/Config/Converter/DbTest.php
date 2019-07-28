@@ -5,7 +5,7 @@
  */
 namespace Magento\Cron\Test\Unit\Model\Config\Converter;
 
-class DbTest extends \PHPUnit_Framework_TestCase
+class DbTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cron\Model\Config\Converter\Db

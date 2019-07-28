@@ -20,7 +20,7 @@ use Magento\SalesInventory\Model\Order\ReturnProcessor;
  * Class ReturnProcessorTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReturnProcessorTest extends \PHPUnit_Framework_TestCase
+class ReturnProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|OrderInterface

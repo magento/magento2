@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductRender\ButtonInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRender\ButtonInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Url */
     protected $model;
@@ -74,7 +74,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->getMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
         $this->catalogProductHelperMock
             ->expects($this->once())
             ->method('getPostDataParams')

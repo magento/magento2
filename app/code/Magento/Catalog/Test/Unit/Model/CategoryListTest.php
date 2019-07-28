@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -20,7 +23,7 @@ use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryListTest extends \PHPUnit_Framework_TestCase
+class CategoryListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CategoryList
@@ -52,18 +55,21 @@ class CategoryListTest extends \PHPUnit_Framework_TestCase
      */
     private $collectionProcessorMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->categoryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->extensionAttributesJoinProcessor = $this->getMock(JoinProcessorInterface::class);
+        $this->extensionAttributesJoinProcessor = $this->createMock(JoinProcessorInterface::class);
         $this->categorySearchResultsFactory = $this->getMockBuilder(CategorySearchResultsInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->categoryRepository = $this->getMock(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
@@ -89,27 +95,29 @@ class CategoryListTest extends \PHPUnit_Framework_TestCase
         $categorySecond = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
 
         /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteria */
-        $searchCriteria = $this->getMock(SearchCriteriaInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
         $collection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
-        $collection->expects($this->once())->method('getAllIds')->willReturn([$categoryIdFirst, $categoryIdSecond]);
+        $collection->expects($this->once())->method('getData')->willReturn(
+            [['entity_id' => $categoryIdFirst], ['entity_id' => $categoryIdSecond]]
+        );
+        $collection->expects($this->any())->method('getEntity')->willReturn(
+            new \Magento\Framework\DataObject(['id_field_name' => 'entity_id'])
+        );
 
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')
             ->with($searchCriteria, $collection);
 
-        $searchResult = $this->getMock(CategorySearchResultsInterface::class);
+        $searchResult = $this->createMock(CategorySearchResultsInterface::class);
         $searchResult->expects($this->once())->method('setSearchCriteria')->with($searchCriteria);
         $searchResult->expects($this->once())->method('setItems')->with([$categoryFirst, $categorySecond]);
         $searchResult->expects($this->once())->method('setTotalCount')->with($totalCount);
 
         $this->categoryRepository->expects($this->exactly(2))
             ->method('get')
-            ->willReturnMap([
-                [$categoryIdFirst, $categoryFirst],
-                [$categoryIdSecond, $categorySecond],
-            ])
+            ->willReturnMap([[$categoryIdFirst, $categoryFirst], [$categoryIdSecond, $categorySecond]])
             ->willReturn($categoryFirst);
 
         $this->categorySearchResultsFactory->expects($this->once())->method('create')->willReturn($searchResult);

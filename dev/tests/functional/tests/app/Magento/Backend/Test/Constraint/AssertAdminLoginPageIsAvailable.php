@@ -23,7 +23,7 @@ class AssertAdminLoginPageIsAvailable extends AbstractConstraint
     public function processAssert(AdminAuthLogin $adminAuthLogin)
     {
         $adminAuthLogin->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $adminAuthLogin->getLoginBlock()->isVisible(),
             'Admin session does not expire properly.'
         );

@@ -9,7 +9,7 @@ use \Magento\Sales\Model\Status\ListStatus;
 
 use Magento\CatalogInventory\Helper\Data;
 
-class ListStatusTest extends \PHPUnit_Framework_TestCase
+class ListStatusTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Model\Status\ListStatus */
     private $listStatus;

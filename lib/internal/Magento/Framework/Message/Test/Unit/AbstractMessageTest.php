@@ -5,12 +5,10 @@
  */
 namespace Magento\Framework\Message\Test\Unit;
 
-use Magento\Framework\Message\MessageInterface;
-
 /**
  * \Magento\Framework\Message\AbstractMessage test case
  */
-class AbstractMessageTest extends \PHPUnit_Framework_TestCase
+class AbstractMessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\AbstractMessage

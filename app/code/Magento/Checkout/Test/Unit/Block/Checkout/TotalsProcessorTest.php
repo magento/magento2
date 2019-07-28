@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Unit\Block\Checkout;
 
-class TotalsProcessorTest extends \PHPUnit_Framework_TestCase
+class TotalsProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\Block\Checkout\TotalsProcessor
@@ -20,13 +20,7 @@ class TotalsProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->model = new \Magento\Checkout\Block\Checkout\TotalsProcessor($this->scopeConfigMock);
     }

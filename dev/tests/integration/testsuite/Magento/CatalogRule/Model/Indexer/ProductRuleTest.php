@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class ProductRuleTest extends \PHPUnit_Framework_TestCase
+class ProductRuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\Rule
@@ -67,7 +67,7 @@ class ProductRuleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             7.5,
             $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()),
-            "Catalog price rule doesn't apply to to product with visibility value \"Not Visibility Individually\""
+            "Catalog price rule doesn't apply to product with visibility value \"Not Visibility Individually\""
         );
     }
 }

@@ -9,7 +9,7 @@ namespace Magento\Persistent\Model\Checkout;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GuestPaymentInformationManagementPluginTest extends \PHPUnit_Framework_TestCase
+class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Helper\Session

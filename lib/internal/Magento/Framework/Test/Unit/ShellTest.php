@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Test\Unit;
 
-class ShellTest extends \PHPUnit_Framework_TestCase
+class ShellTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Shell\CommandRendererInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -83,6 +83,9 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         // backtick symbol (`) has to be replaced with environment-dependent quote character

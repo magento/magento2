@@ -9,11 +9,9 @@ namespace Magento\ImportExport\Model;
  * Import history model
  *
  * @api
- *
- * @method \Magento\ImportExport\Model\ResourceModel\History _getResource()
- * @method \Magento\ImportExport\Model\ResourceModel\History getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\Model\AbstractModel
 {
@@ -43,6 +41,11 @@ class History extends \Magento\Framework\Model\AbstractModel
      * @var \Magento\ImportExport\Helper\Report
      */
     protected $reportHelper;
+
+    /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    protected $session;
 
     /**
      * Class constructor
@@ -295,6 +298,8 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load the last inserted item
+     *
      * @return $this
      */
     public function loadLastInsertItem()

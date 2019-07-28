@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\CustomerGroup;
 /**
  * Class CustomerGroupTest
  */
-class CustomerGroupTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerGroup

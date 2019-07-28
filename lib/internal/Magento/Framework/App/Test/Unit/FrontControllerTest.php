@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\Exception\NotFoundException;
 
-class FrontControllerTest extends \PHPUnit_Framework_TestCase
+class FrontControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\FrontController
@@ -41,9 +41,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
             ->getMock();
 
-        $this->router = $this->getMock(\Magento\Framework\App\RouterInterface::class);
-        $this->routerList = $this->getMock(\Magento\Framework\App\RouterList::class, [], [], '', false);
-        $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->router = $this->createMock(\Magento\Framework\App\RouterInterface::class);
+        $this->routerList = $this->createMock(\Magento\Framework\App\RouterList::class);
+        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->model = new \Magento\Framework\App\FrontController($this->routerList, $this->response);
     }
 
@@ -79,7 +79,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->method('valid')
             ->will($this->returnValue(true));
 
-        $response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -113,7 +113,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->method('valid')
             ->will($this->returnValue(true));
 
-        $response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
             ->disableOriginalConstructor()
             ->getMock();

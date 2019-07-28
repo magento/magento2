@@ -16,7 +16,11 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FilterContextTest extends \PHPUnit_Framework_TestCase
+/**
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
+class FilterContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FilterContext|\PHPUnit_Framework_MockObject_MockObject

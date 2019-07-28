@@ -13,7 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class HintTest
  */
-class HintTest extends \PHPUnit_Framework_TestCase
+class HintTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Hint

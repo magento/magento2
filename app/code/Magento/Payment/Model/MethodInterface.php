@@ -11,9 +11,36 @@ use Magento\Quote\Api\Data\CartInterface;
 /**
  * Payment interface
  * @api
+ * @since 100.0.2
  */
 interface MethodInterface
 {
+    /**
+     * Different payment actions.
+     */
+    const ACTION_ORDER = 'order';
+
+    const ACTION_AUTHORIZE = 'authorize';
+
+    const ACTION_AUTHORIZE_CAPTURE = 'authorize_capture';
+
+    /**
+     * Different payment method checks.
+     */
+    const CHECK_USE_FOR_COUNTRY = 'country';
+
+    const CHECK_USE_FOR_CURRENCY = 'currency';
+
+    const CHECK_USE_CHECKOUT = 'checkout';
+
+    const CHECK_USE_INTERNAL = 'internal';
+
+    const CHECK_ORDER_TOTAL_MIN_MAX = 'total';
+
+    const CHECK_ZERO_TOTAL = 'zero_total';
+
+    const GROUP_OFFLINE = 'offline';
+
     /**
      * Retrieve payment method code
      *
@@ -27,7 +54,7 @@ interface MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getFormBlockType();
 
@@ -203,7 +230,7 @@ interface MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getInfoBlockType();
 
@@ -213,7 +240,7 @@ interface MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getInfoInstance();
 
@@ -223,7 +250,7 @@ interface MethodInterface
      * @param InfoInterface $info
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function setInfoInstance(InfoInterface $info);
 

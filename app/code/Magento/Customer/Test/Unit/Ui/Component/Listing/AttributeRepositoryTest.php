@@ -7,7 +7,10 @@ namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
 
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 
-class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test AttributeRepository Class
+ */
+class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\CustomerMetadataManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerMetadataManagement;
@@ -65,15 +68,9 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->option = $this->getMock(\Magento\Customer\Api\Data\OptionInterface::class, [], [], '', false);
+        $this->option = $this->createMock(\Magento\Customer\Api\Data\OptionInterface::class);
 
-        $this->attributeFilter = $this->getMock(
-            \Magento\Customer\Model\Indexer\Attribute\Filter::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->attributeFilter = $this->createMock(\Magento\Customer\Model\Indexer\Attribute\Filter::class);
 
         $this->component = new AttributeRepository(
             $this->customerMetadataManagement,
@@ -150,7 +147,8 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                     'options' => [
                         [
                             'label' => 'Label',
-                            'value' => 'Value'
+                            'value' => 'Value',
+                            '__disableTmpl' => true
                         ]
                     ],
                     'is_used_in_grid' => true,

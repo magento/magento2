@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Indexer;
 
-class ActiveTableSwitcherTest extends \PHPUnit_Framework_TestCase
+class ActiveTableSwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher

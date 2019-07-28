@@ -18,7 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  * Tests dev:query-log:enable command.
  * Tests that the correct configuration is passed to the deployment config writer with and without parameters.
  */
-class QueryLogEnableCommandTest extends \PHPUnit_Framework_TestCase
+class QueryLogEnableCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer

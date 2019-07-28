@@ -15,6 +15,7 @@ use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
@@ -275,6 +276,18 @@ abstract class AbstractEntity
                 if (\Magento\ImportExport\Model\Export::FILTER_TYPE_SELECT == $attrFilterType) {
                     if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
                         $collection->addAttributeToFilter($attrCode, ['eq' => $exportFilter[$attrCode]]);
+                    }
+                } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_MULTISELECT == $attrFilterType) {
+                    if (is_array($exportFilter[$attrCode])) {
+                        array_filter($exportFilter[$attrCode]);
+                        if (!empty($exportFilter[$attrCode])) {
+                            foreach ($exportFilter[$attrCode] as $val) {
+                                $collection->addAttributeToFilter(
+                                    $attrCode,
+                                    ['finset' => $val]
+                                );
+                            }
+                        }
                     }
                 } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_INPUT == $attrFilterType) {
                     if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
@@ -548,6 +561,7 @@ abstract class AbstractEntity
 
     /**
      * Clean cached values
+     * @since 100.1.2
      */
     public function __destruct()
     {

@@ -10,7 +10,11 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * System Configuration Abstract Controller
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
@@ -27,7 +31,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_configStructure;
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_sectionChecker;
 
@@ -109,6 +113,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      * @param array $configState
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 100.1.0
      */
     protected function sanitizeConfigState($configState)
     {

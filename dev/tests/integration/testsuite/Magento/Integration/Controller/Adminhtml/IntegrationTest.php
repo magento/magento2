@@ -7,6 +7,7 @@
 namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\TestFramework\Bootstrap;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * \Magento\Integration\Controller\Adminhtml\Integration
@@ -20,6 +21,9 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
     /** @var \Magento\Integration\Model\Integration  */
     private $_integration;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -29,15 +33,27 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->_integration = $integration->load('Fixture Integration', 'name');
     }
 
+    /**
+     * Test view page.
+     */
     public function testIndexAction()
     {
         $this->dispatch('backend/admin/integration/index');
         $response = $this->getResponse()->getBody();
 
         $this->assertContains('Integrations', $response);
-        $this->assertSelectCount('#integrationGrid', 1, $response);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="integrationGrid"]',
+                $response
+            )
+        );
     }
 
+    /**
+     * Test creation form.
+     */
     public function testNewAction()
     {
         $this->dispatch('backend/admin/integration/new');
@@ -46,9 +62,18 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->assertEquals('new', $this->getRequest()->getActionName());
         $this->assertContains('entry-edit form-inline', $response);
         $this->assertContains('New Integration', $response);
-        $this->assertSelectCount('#integration_properties_base_fieldset', 1, $response);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="integration_properties_base_fieldset"]',
+                $response
+            )
+        );
     }
 
+    /**
+     * Test update form.
+     */
     public function testEditAction()
     {
         $integrationId = $this->_integration->getId();
@@ -60,16 +85,32 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->assertContains('entry-edit form-inline', $response);
         $this->assertContains('Edit &quot;' . $this->_integration->getName() . '&quot; Integration', $response);
         $this->assertContains($saveLink, $response);
-        $this->assertSelectCount('#integration_properties_base_fieldset', 1, $response);
-        $this->assertSelectCount('#integration_edit_tabs_info_section_content', 1, $response);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="integration_properties_base_fieldset"]',
+                $response
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="integration_edit_tabs_info_section_content"]',
+                $response
+            )
+        );
     }
 
+    /**
+     * Test saving.
+     */
     public function testSaveActionUpdateIntegration()
     {
         $integrationId = $this->_integration->getId();
         $integrationName = $this->_integration->getName();
         $this->getRequest()->setParam('id', $integrationId);
         $url = 'http://magento.ll/endpoint_url';
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'name' => $integrationName,
@@ -87,10 +128,14 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->assertRedirect($this->stringContains('backend/admin/integration/index/'));
     }
 
+    /**
+     * Test saving.
+     */
     public function testSaveActionNewIntegration()
     {
         $url = 'http://magento.ll/endpoint_url';
         $integrationName = md5(rand());
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             [
                 'name' => $integrationName,

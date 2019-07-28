@@ -10,12 +10,15 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Directory\Model\Country\Format;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer address helper
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -65,26 +68,36 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_formatTemplate = [];
 
-    /** @var \Magento\Framework\View\Element\BlockFactory */
+    /**
+     * @var \Magento\Framework\View\Element\BlockFactory
+     */
     protected $_blockFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $_storeManager;
 
     /**
      * @var CustomerMetadataInterface
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_customerMetadataService;
 
-    /** @var AddressMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     */
     protected $_addressMetadataService;
 
-    /** @var \Magento\Customer\Model\Address\Config*/
+    /**
+     * @var \Magento\Customer\Model\Address\Config
+     */
     protected $_addressConfig;
 
     /**
+     * Address constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -118,6 +131,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve edit url.
+     *
      * @return void
      */
     public function getEditUrl()
@@ -125,6 +140,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve delete url.
+     *
      * @return void
      */
     public function getDeleteUrl()
@@ -132,6 +149,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve create url.
+     *
      * @return void
      */
     public function getCreateUrl()
@@ -139,6 +158,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve block renderer.
+     *
      * @param string $renderer
      * @return \Magento\Framework\View\Element\BlockInterface
      */
@@ -156,7 +177,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $key
      * @param \Magento\Store\Model\Store|int|string $store
+     *
      * @return string|null
+     * @throws NoSuchEntityException
      */
     public function getConfig($key, $store = null)
     {
@@ -165,7 +188,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         if (!isset($this->_config[$websiteId])) {
             $this->_config[$websiteId] = $this->scopeConfig->getValue(
                 'customer/address',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
@@ -176,7 +199,10 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Return Number of Lines in a Street Address for store
      *
      * @param \Magento\Store\Model\Store|int|string $store
+     *
      * @return int
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getStreetLines($store = null)
     {
@@ -195,6 +221,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve address format.
+     *
      * @param string $code
      * @return Format|string
      */
@@ -223,7 +251,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Determine if specified address config value can be shown
      *
      * @param string $key
+     *
      * @return bool
+     * @throws NoSuchEntityException
      */
     public function canShowConfig($key)
     {
@@ -234,9 +264,11 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Get string with frontend validation classes for attribute
      *
      * @param string $attributeCode
+     *
      * @return string
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributeValidationClass($attributeCode)
     {
@@ -304,9 +336,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isVatValidationEnabled($store = null)
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VAT_VALIDATION_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -318,9 +350,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isDisableAutoGroupAssignDefaultValue()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -332,9 +364,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function hasValidateOnEachTransaction($store = null)
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VIV_ON_EACH_TRANSACTION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -349,7 +381,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->scopeConfig->getValue(
             self::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -361,9 +393,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isVatAttributeVisible()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VAT_FRONTEND_VISIBILITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -371,7 +403,11 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve attribute visibility
      *
      * @param string $code
+     *
      * @return bool
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.0
      */
     public function isAttributeVisible($code)
     {

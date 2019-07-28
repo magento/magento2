@@ -18,7 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SensitiveConfigSetFacade|MockObject

@@ -13,7 +13,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\Framework\Url\Validator;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Media */
     protected $media;
@@ -76,13 +76,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     public function testIsValidClearMessagesCall()
     {
-        $media = $this->getMock(
-            Media::class,
-            ['_clearMessages'],
-            [],
-            '',
-            false
-        );
+        $media = $this->createPartialMock(Media::class, ['_clearMessages']);
         $media->expects($this->once())->method('_clearMessages');
 
         $media->isValid([]);

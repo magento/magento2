@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Console;
 
 use Magento\Setup\Console\CommandList;
 
-class CommandListTest extends \PHPUnit_Framework_TestCase
+class CommandListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Console\CommandList
@@ -22,7 +22,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->serviceManager = $this->getMock(\Zend\ServiceManager\ServiceManager::class, [], [], '', false);
+        $this->serviceManager = $this->createMock(\Zend\ServiceManager\ServiceManager::class);
         $this->commandList = new CommandList($this->serviceManager);
     }
 

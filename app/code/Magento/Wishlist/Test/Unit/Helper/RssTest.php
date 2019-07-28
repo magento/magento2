@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Helper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RssTest extends \PHPUnit_Framework_TestCase
+class RssTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Helper\Rss
@@ -46,7 +46,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManagerMock;
 
@@ -80,7 +80,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
         $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

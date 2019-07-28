@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Sku.
  * @magentoAppArea adminhtml
  */
-class SkuTest extends \PHPUnit_Framework_TestCase
+class SkuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php

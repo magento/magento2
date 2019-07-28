@@ -6,7 +6,7 @@
 
 namespace Magento\Eav\Model;
 
-class AttributeManagementTest extends \PHPUnit_Framework_TestCase
+class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Api\AttributeManagementInterface

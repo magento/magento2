@@ -12,7 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @magentoAppArea adminhtml
  */
-class DomainTest extends \PHPUnit_Framework_TestCase
+class DomainTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $value

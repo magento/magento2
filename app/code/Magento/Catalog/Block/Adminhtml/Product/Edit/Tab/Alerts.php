@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Product alerts tab
  *
@@ -18,7 +16,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/tab/alert.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/tab/alert.phtml';
 
     /**
      * @return $this
@@ -26,11 +24,18 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
     protected function _prepareLayout()
     {
         $accordion = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Accordion::class)->setId('productAlerts');
+            \Magento\Backend\Block\Widget\Accordion::class
+        )->setId('productAlerts');
         /* @var $accordion \Magento\Backend\Block\Widget\Accordion */
 
-        $alertPriceAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_price', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-        $alertStockAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_stock', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $alertPriceAllow = $this->_scopeConfig->getValue(
+            'catalog/productalert/allow_price',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $alertStockAllow = $this->_scopeConfig->getValue(
+            'catalog/productalert/allow_stock',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
 
         if ($alertPriceAllow) {
             $accordion->addItem(
@@ -77,8 +82,14 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
      */
     public function canShowTab()
     {
-        $alertPriceAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_price', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-        $alertStockAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_stock', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $alertPriceAllow = $this->_scopeConfig->getValue(
+            'catalog/productalert/allow_price',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $alertStockAllow = $this->_scopeConfig->getValue(
+            'catalog/productalert/allow_stock',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return ($alertPriceAllow || $alertStockAllow) && parent::canShowTab();
     }
 }

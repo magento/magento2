@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order;
 /**
  * Class UnavailableProductsProviderTest
  */
-class UnavailableProductsProviderTest extends \PHPUnit_Framework_TestCase
+class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject

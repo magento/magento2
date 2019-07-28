@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 
-class WeightTest extends \PHPUnit_Framework_TestCase
+class WeightTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Backend\Weight
@@ -29,7 +29,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $currencyFactory = $this->getMock(\Magento\Directory\Model\CurrencyFactory::class, [], [], '', false);
+        $currencyFactory = $this->createMock(\Magento\Directory\Model\CurrencyFactory::class);
         $localeFormat = $objectHelper->getObject(
             \Magento\Framework\Locale\Format::class,
             [
@@ -61,7 +61,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($value)
     {
-        $object = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Catalog\Model\Product::class);
         $object->expects($this->once())->method('getData')->willReturn($value);
 
         $this->assertTrue($this->model->validate($object));
@@ -91,7 +91,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateForFailure($value)
     {
-        $object = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Catalog\Model\Product::class);
         $object->expects($this->once())->method('getData')->willReturn($value);
 
         $this->model->validate($object);

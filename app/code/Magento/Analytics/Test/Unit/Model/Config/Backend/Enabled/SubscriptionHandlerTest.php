@@ -9,15 +9,11 @@ namespace Magento\Analytics\Test\Unit\Model\Config\Backend\Enabled;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class SubscriptionHandlerTest
- */
-class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
+class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
@@ -35,11 +31,6 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
     private $tokenMock;
 
     /**
-     * @var NotificationTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $notificationTimeMock;
-
-    /**
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
@@ -54,9 +45,6 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $subscriptionHandler;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
@@ -71,10 +59,6 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->notificationTimeMock = $this->getMockBuilder(NotificationTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->subscriptionHandler = $this->objectManagerHelper->getObject(
@@ -84,14 +68,10 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
                 'configWriter' => $this->configWriterMock,
                 'attemptsInitValue' => $this->attemptsInitValue,
                 'analyticsToken' => $this->tokenMock,
-                'notificationTime' => $this->notificationTimeMock,
             ]
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessEnabledTokenExist()
     {
         $this->tokenMock
@@ -104,17 +84,11 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
         $this->flagManagerMock
             ->expects($this->never())
             ->method('saveFlag');
-        $this->notificationTimeMock
-            ->expects($this->never())
-            ->method('unsetLastTimeNotificationValue');
         $this->assertTrue(
             $this->subscriptionHandler->processEnabled()
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessEnabledTokenDoesNotExist()
     {
         $this->tokenMock
@@ -130,18 +104,11 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('saveFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue)
             ->willReturn(true);
-        $this->notificationTimeMock
-            ->expects($this->once())
-            ->method('unsetLastTimeNotificationValue')
-            ->willReturn(true);
         $this->assertTrue(
             $this->subscriptionHandler->processEnabled()
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessDisabledTokenDoesNotExist()
     {
         $this->configWriterMock
@@ -162,9 +129,6 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessDisabledTokenExists()
     {
         $this->configWriterMock

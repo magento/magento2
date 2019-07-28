@@ -12,6 +12,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -178,7 +179,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Framework\DataObject
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -222,6 +223,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Get collection instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
+     * @deprecated 101.1.0 because collections should be used directly via factory
      */
     public function getResourceCollection()
     {
@@ -280,11 +282,11 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * Default value existing is flag for using store value in data
      *
-     * @param   string $attributeCode
-     * @param   mixed  $value
-     * @return  $this
+     * @param string $attributeCode
+     * @param mixed $value
+     * @return $this
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function setAttributeDefaultValue($attributeCode, $value)
     {
@@ -297,7 +299,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @return \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getAttributeScopeOverriddenValue()
     {
@@ -314,7 +316,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param   string $attributeCode
      * @return  array|boolean
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function getAttributeDefaultValue($attributeCode)
     {
@@ -330,13 +332,12 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     }
 
     /**
-     * Set attribute code flag if attribute has value in current store and does not use
-     * value of default store as value
+     * Set attribute code flag if attribute has value in current store and does not use value of default store as value
      *
-     * @param   string $attributeCode
-     * @return  $this
+     * @param string $attributeCode
+     * @return $this
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function setExistsStoreValueFlag($attributeCode)
     {
@@ -351,7 +352,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return  bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function getExistsStoreValueFlag($attributeCode)
     {

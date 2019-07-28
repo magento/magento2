@@ -10,7 +10,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\Scope;
 
-class ScopeTest extends \PHPUnit_Framework_TestCase
+class ScopeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Scope

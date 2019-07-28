@@ -13,10 +13,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class EnabledTest
- */
-class EnabledTest extends \PHPUnit_Framework_TestCase
+class EnabledTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SubscriptionHandler|\PHPUnit_Framework_MockObject_MockObject

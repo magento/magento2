@@ -14,7 +14,12 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 
 /**
+ * Catalog search indexer handler.
+ *
  * @api
+ * @since 100.0.2
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class IndexerHandler implements IndexerInterface
 {
@@ -74,7 +79,7 @@ class IndexerHandler implements IndexerInterface
         Batch $batch,
         IndexScopeResolverInterface $indexScopeResolver,
         array $data,
-        $batchSize = 100
+        $batchSize = 500
     ) {
         $this->indexScopeResolver = $indexScopeResolver;
         $this->indexStructure = $indexStructure;
@@ -89,7 +94,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function saveIndex($dimensions, \Traversable $documents)
     {
@@ -99,7 +104,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
@@ -110,7 +115,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function cleanIndex($dimensions)
     {
@@ -119,14 +124,20 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function isAvailable()
+    public function isAvailable($dimensions = [])
     {
-        return true;
+        if (empty($dimensions)) {
+            return true;
+        }
+
+        return $this->resource->getConnection()->isTableExists($this->getTableName($dimensions));
     }
 
     /**
+     * Returns table name.
+     *
      * @param Dimension[] $dimensions
      * @return string
      */
@@ -136,6 +147,8 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
+     * Returns index name.
+     *
      * @return string
      */
     private function getIndexName()
@@ -144,6 +157,8 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
+     * Add documents to storage.
+     *
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
@@ -162,6 +177,8 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
+     * Searchable filter preparation.
+     *
      * @param array $documents
      * @return array
      */
@@ -182,6 +199,8 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
+     * Prepare fields.
+     *
      * @return void
      */
     private function prepareFields()

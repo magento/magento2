@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Block;
 
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

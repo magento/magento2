@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class MassActionTest
  */
-class MassActionTest extends \PHPUnit_Framework_TestCase
+class MassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -93,6 +93,9 @@ class MassActionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['actions' => [$action->getConfiguration()]], $massAction->getConfiguration());
     }
 
+    /**
+     * @return array
+     */
     public function getPrepareDataProvider()
     {
         return [

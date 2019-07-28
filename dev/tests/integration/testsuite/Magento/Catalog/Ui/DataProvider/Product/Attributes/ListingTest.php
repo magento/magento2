@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Attributes;
 
-class ListingTest extends \PHPUnit_Framework_TestCase
+class ListingTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Ui\DataProvider\Product\Attributes\Listing */
     private $dataProvider;

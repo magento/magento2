@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
  * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\Url\Helper\Data
 {
@@ -35,7 +36,9 @@ class Data extends \Magento\Framework\Url\Helper\Data
      */
     protected $_layout;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $_storeManager;
 
     /**

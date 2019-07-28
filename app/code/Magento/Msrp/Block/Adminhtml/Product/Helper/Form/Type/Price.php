@@ -14,7 +14,9 @@ use Magento\Framework\Escaper;
  */
 class Price extends \Magento\Framework\Data\Form\Element\Select
 {
-    /** @var \Magento\Msrp\Model\Config */
+    /**
+     * @var \Magento\Msrp\Model\Config
+     */
     protected $config;
 
     /**

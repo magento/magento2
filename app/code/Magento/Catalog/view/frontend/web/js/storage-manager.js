@@ -66,7 +66,12 @@ define([
                 'product_data_storage': {
                     namespace: 'product_data_storage',
                     className: 'DataStorage',
-                    allowToSendRequest: 0
+                    allowToSendRequest: 0,
+                    updateRequestConfig: {
+                        url: '',
+                        method: 'GET',
+                        dataType: 'json'
+                    }
                 }
             },
             requestConfig: {
@@ -156,7 +161,9 @@ define([
          */
         initUpdateStorageDataListener: function () {
             _.each(this.storagesNamespace, function (name) {
-                this[name].data.subscribe(this.updateDataHandler.bind(this, name));
+                if (this[name].data) {
+                    this[name].data.subscribe(this.updateDataHandler.bind(this, name));
+                }
             }.bind(this));
         },
 

@@ -15,10 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class FileRecorderTest
- */
-class FileRecorderTest extends \PHPUnit_Framework_TestCase
+class FileRecorderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FileInfoManager|\PHPUnit_Framework_MockObject_MockObject

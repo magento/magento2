@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget\Grid;
 /**
  * @magentoAppArea adminhtml
  */
-class ExtendedTest extends \PHPUnit_Framework_TestCase
+class ExtendedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Extended

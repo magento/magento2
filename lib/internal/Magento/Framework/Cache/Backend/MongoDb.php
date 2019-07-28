@@ -26,9 +26,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     const COMPARISON_MODE_MATCHING_ANY_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
     /**#@-*/
 
-    /**
-     * @var \MongoCollection|null
-     */
+    /**#@-*/
     protected $_collection = null;
 
     /**

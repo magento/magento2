@@ -9,7 +9,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ReadHandlerTest extends \PHPUnit_Framework_TestCase
+class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -110,11 +110,14 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $attributeMock->method('getAttributeCode')
             ->willReturn('attributeCode');
         $this->configMock->expects($this->exactly($callNum))
-            ->method('getAttributes')
+            ->method('getEntityAttributes')
             ->willReturn([$attributeMock]);
         $this->assertEquals($expected, $this->readHandler->execute('entity_type', $entityData));
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

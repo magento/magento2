@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see Structure
  */
-class StructureTest extends \PHPUnit_Framework_TestCase
+class StructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Structure|Mock
@@ -221,6 +221,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         return $elementMock;
     }
 
+    /**
+     * @return array
+     */
     public function emptyElementDataProvider()
     {
         return [
@@ -389,6 +392,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($paths, $this->_model->getFieldPathsByAttribute($attributeName, $attributeValue));
     }
 
+    /**
+     * @return array
+     */
     public function getFieldPathsByAttributeDataProvider()
     {
         return [
@@ -412,6 +418,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
                 'field_2'
             ],
             'field_3' => [
+                'field_3',
                 'field_3'
             ],
             'field_3_1' => [

@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
  */
-class ReadHandlerTest extends \PHPUnit_Framework_TestCase
+class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager

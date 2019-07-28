@@ -10,7 +10,7 @@ use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Reader\Head;
 
-class HeadTest extends \PHPUnit_Framework_TestCase
+class HeadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Head
@@ -59,7 +59,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
         $structureMock->expects($this->at(4))
             ->method('addAssets')
-            ->with('path/file.css', ['src' => 'path/file.css', 'media' => 'all', 'content_type' => 'css'])
+            ->with('path/file-3.css', ['src' => 'path/file-3.css', 'media' => 'all', 'content_type' => 'css'])
             ->willReturnSelf();
 
         $structureMock->expects($this->at(5))
@@ -80,6 +80,22 @@ class HeadTest extends \PHPUnit_Framework_TestCase
         $structureMock->expects($this->at(8))
             ->method('setElementAttribute')
             ->with(Config::ELEMENT_TYPE_HEAD, 'head_attribute_name', 'head_attribute_value')
+            ->willReturnSelf();
+
+        $structureMock->expects($this->at(9))
+            ->method('addAssets')
+            ->with(
+                'path/file-1.css',
+                ['src' => 'path/file-1.css', 'media' => 'all', 'content_type' => 'css', 'order' => 10]
+            )
+            ->willReturnSelf();
+
+        $structureMock->expects($this->at(10))
+            ->method('addAssets')
+            ->with(
+                'path/file-2.css',
+                ['src' => 'path/file-2.css', 'media' => 'all', 'content_type' => 'css', 'order' => 30]
+            )
             ->willReturnSelf();
 
         $this->assertEquals($this->model, $this->model->interpret($readerContextMock, $element->children()[0]));

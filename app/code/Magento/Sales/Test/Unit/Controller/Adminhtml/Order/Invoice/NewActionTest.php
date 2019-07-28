@@ -6,14 +6,16 @@
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * Class NewActionTest
  * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class NewActionTest extends \PHPUnit_Framework_TestCase
+class NewActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -90,6 +92,11 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $invoiceServiceMock;
 
+    /**
+     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderRepositoryMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -103,8 +110,8 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
@@ -152,7 +159,20 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(
+                [
+                    'getRequest',
+                    'getResponse',
+                    'getObjectManager',
+                    'getTitle',
+                    'getSession',
+                    'getHelper',
+                    'getActionFlag',
+                    'getMessageManager',
+                    'getResultRedirectFactory',
+                    'getView'
+                ]
+            )
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
@@ -202,12 +222,15 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+
         $this->controller = $objectManager->getObject(
             \Magento\Sales\Controller\Adminhtml\Order\Invoice\NewAction::class,
             [
                 'context' => $contextMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'invoiceService' => $this->invoiceServiceMock
+                'invoiceService' => $this->invoiceServiceMock,
+                'orderRepository' => $this->orderRepositoryMock
             ]
         );
     }
@@ -237,18 +260,16 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
 
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'canInvoice'])
+            ->setMethods(['load', 'canInvoice'])
             ->getMock();
-        $orderMock->expects($this->once())
-            ->method('load')
-            ->with($orderId)
-            ->willReturnSelf();
-        $orderMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($orderId);
         $orderMock->expects($this->once())
             ->method('canInvoice')
             ->willReturn(true);
+
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($orderId)
+            ->willReturn($orderMock);
 
         $this->invoiceServiceMock->expects($this->once())
             ->method('prepareInvoice')
@@ -272,11 +293,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->will($this->returnValue($commentText));
 
-        $this->objectManagerMock->expects($this->at(0))
-            ->method('create')
-            ->with(\Magento\Sales\Model\Order::class)
-            ->willReturn($orderMock);
-        $this->objectManagerMock->expects($this->at(1))
+        $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Backend\Model\Session::class)
             ->will($this->returnValue($this->sessionMock));
@@ -305,19 +322,12 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
 
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'canInvoice'])
+            ->setMethods(['canInvoice'])
             ->getMock();
-        $orderMock->expects($this->once())
-            ->method('load')
-            ->with($orderId)
-            ->willReturnSelf();
-        $orderMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(null);
 
-        $this->objectManagerMock->expects($this->at(0))
-            ->method('create')
-            ->with(\Magento\Sales\Model\Order::class)
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($orderId)
             ->willReturn($orderMock);
 
         $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)

@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -16,6 +18,8 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class PageRepository
@@ -69,6 +73,16 @@ class PageRepository implements PageRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
@@ -78,6 +92,7 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourcePage $resource,
@@ -102,19 +117,73 @@ class PageRepository implements PageRepositoryInterface
     }
 
     /**
+     * Get user context.
+     *
+     * @return UserContextInterface
+     */
+    private function getUserContext(): UserContextInterface
+    {
+        if (!$this->userContext) {
+            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
+        }
+
+        return $this->userContext;
+    }
+
+    /**
+     * Get authorization service.
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization(): AuthorizationInterface
+    {
+        if (!$this->authorization) {
+            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        }
+
+        return $this->authorization;
+    }
+
+    /**
      * Save Page data
      *
-     * @param \Magento\Cms\Api\Data\PageInterface $page
+     * @param \Magento\Cms\Api\Data\PageInterface|Page $page
      * @return Page
      * @throws CouldNotSaveException
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
-        if (empty($page->getStoreId())) {
+        if ($page->getStoreId() === null) {
             $storeId = $this->storeManager->getStore()->getId();
             $page->setStoreId($storeId);
         }
         try {
+            //Validate changing of design.
+            $userType = $this->getUserContext()->getUserType();
+            if ((
+                    $userType === UserContextInterface::USER_TYPE_ADMIN
+                    || $userType === UserContextInterface::USER_TYPE_INTEGRATION
+                )
+                && !$this->getAuthorization()->isAllowed('Magento_Cms::save_design')
+            ) {
+                if (!$page->getId()) {
+                    $page->setLayoutUpdateXml(null);
+                    $page->setPageLayout(null);
+                    $page->setCustomTheme(null);
+                    $page->setCustomLayoutUpdateXml(null);
+                    $page->setCustomThemeTo(null);
+                    $page->setCustomThemeFrom(null);
+                } else {
+                    $savedPage = $this->getById($page->getId());
+                    $page->setLayoutUpdateXml($savedPage->getLayoutUpdateXml());
+                    $page->setPageLayout($savedPage->getPageLayout());
+                    $page->setCustomTheme($savedPage->getCustomTheme());
+                    $page->setCustomLayoutUpdateXml($savedPage->getCustomLayoutUpdateXml());
+                    $page->setCustomThemeTo($savedPage->getCustomThemeTo());
+                    $page->setCustomThemeFrom($savedPage->getCustomThemeFrom());
+                }
+            }
+
             $this->resource->save($page);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
@@ -137,7 +206,7 @@ class PageRepository implements PageRepositoryInterface
         $page = $this->pageFactory->create();
         $page->load($pageId);
         if (!$page->getId()) {
-            throw new NoSuchEntityException(__('CMS Page with id "%1" does not exist.', $pageId));
+            throw new NoSuchEntityException(__('The CMS page with the "%1" ID doesn\'t exist.', $pageId));
         }
         return $page;
     }
@@ -177,10 +246,9 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->delete($page);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__(
-                'Could not delete the page: %1',
-                $exception->getMessage()
-            ));
+            throw new CouldNotDeleteException(
+                __('Could not delete the page: %1', $exception->getMessage())
+            );
         }
         return true;
     }
@@ -201,7 +269,7 @@ class PageRepository implements PageRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

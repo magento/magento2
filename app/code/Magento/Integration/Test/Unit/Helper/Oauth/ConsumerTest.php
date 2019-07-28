@@ -10,7 +10,7 @@ namespace Magento\Integration\Test\Unit\Helper\Oauth;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConsumerTest extends \PHPUnit_Framework_TestCase
+class ConsumerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManagerMock;
@@ -197,6 +197,10 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($oauthVerifier, $verifier, 'Checking Oauth Verifier');
     }
 
+    /**
+     * @param $length
+     * @return bool|string
+     */
     private function _generateRandomString($length)
     {
         return substr(

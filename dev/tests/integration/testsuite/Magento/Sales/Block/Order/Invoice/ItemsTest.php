@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Order\Invoice;
 
-class ItemsTest extends \PHPUnit_Framework_TestCase
+class ItemsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\LayoutInterface

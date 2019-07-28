@@ -5,7 +5,7 @@
  */
 namespace Magento\Store\Model\App;
 
-class EmulationTest extends \PHPUnit_Framework_TestCase
+class EmulationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\App\Emulation

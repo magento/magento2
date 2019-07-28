@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface ProductCustomOptionRepositoryInterface
 {
@@ -23,6 +24,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param bool $requiredOnly
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     * @since 101.0.0
      */
     public function getProductOptions(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -52,6 +54,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Catalog\Api\Data\ProductInterface $duplicate
      * @return mixed
+     * @since 101.0.0
      */
     public function duplicate(
         \Magento\Catalog\Api\Data\ProductInterface $product,

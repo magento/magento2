@@ -12,7 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class GalleryTest
  */
-class GalleryTest extends \PHPUnit_Framework_TestCase
+class GalleryTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testAfterGetOptions()

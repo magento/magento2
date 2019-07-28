@@ -9,7 +9,7 @@ use Magento\Customer\Block\CustomerData;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template\Context;
 
-class CustomerDataTest extends \PHPUnit_Framework_TestCase
+class CustomerDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject

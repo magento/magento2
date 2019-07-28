@@ -10,6 +10,12 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * MySQL search data provider.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 interface DataProviderInterface
 {
     /**

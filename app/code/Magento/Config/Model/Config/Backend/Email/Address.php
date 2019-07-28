@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Address extends \Magento\Framework\App\Config\Value
 {
@@ -24,7 +25,9 @@ class Address extends \Magento\Framework\App\Config\Value
     {
         $value = $this->getValue();
         if (!\Zend_Validate::is($value, \Magento\Framework\Validator\EmailAddress::class)) {
-            throw new LocalizedException(__('Please correct the email address: "%1".', $value));
+            throw new LocalizedException(
+                __('The "%1" email address is incorrect. Verify the email address and try again.', $value)
+            );
         }
         return $this;
     }

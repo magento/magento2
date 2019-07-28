@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Form;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -11,7 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
  * Eav Form Element Model
  *
  * @api
- * @method \Magento\Eav\Model\ResourceModel\Form\Element getResource()
  * @method int getTypeId()
  * @method \Magento\Eav\Model\Form\Element setTypeId(int $value)
  * @method int getFieldsetId()
@@ -20,6 +20,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @method \Magento\Eav\Model\Form\Element setAttributeId(int $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Element setSortOrder(int $value)
+ * @since 100.0.2
  */
 class Element extends \Magento\Framework\Model\AbstractModel
 {
@@ -68,28 +69,6 @@ class Element extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Eav\Model\ResourceModel\Form\Element
-     * @codeCoverageIgnore
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
-    }
-
-    /**
-     * Retrieve resource collection instance wrapper
-     *
-     * @return \Magento\Eav\Model\ResourceModel\Form\Element\Collection
-     * @codeCoverageIgnore
-     */
-    public function getCollection()
-    {
-        return parent::getCollection();
-    }
-
-    /**
      * Validate data before save data
      *
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -98,10 +77,10 @@ class Element extends \Magento\Framework\Model\AbstractModel
     public function beforeSave()
     {
         if (!$this->getTypeId()) {
-            throw new LocalizedException(__('Invalid form type.'));
+            throw new LocalizedException(__('The form type is invalid. Reset the type and try again.'));
         }
         if (!$this->getAttributeId()) {
-            throw new LocalizedException(__('Invalid EAV attribute'));
+            throw new LocalizedException(__('The EAV attribute is invalid. Verify the attribute and try again.'));
         }
 
         return parent::beforeSave();

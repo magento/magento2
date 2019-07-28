@@ -4,9 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var $block \Magento\Checkout\Block\Onepage\Failure */
 ?>
-<?php if ($block->getRealOrderId()) : ?><p><?= /* @escapeNotVerified */ __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
-<?php if ($error = $block->getErrorMessage()) : ?><p><?= /* @escapeNotVerified */ $error ?></p><?php endif ?>
-<p><?= /* @escapeNotVerified */ __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?></p>
+<?php if ($block->getRealOrderId()) :?>
+    <p><?= $block->escapeHtml(__('Order #') . $block->getRealOrderId()) ?></p>
+<?php endif ?>
+<?php if ($error = $block->getErrorMessage()) :?>
+    <p><?= $block->escapeHtml($error) ?></p>
+<?php endif ?>
+<p><?= $block->escapeHtml(
+    __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())),
+    ['a']
+) ?>
+</p>

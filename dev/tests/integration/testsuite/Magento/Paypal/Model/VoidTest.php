@@ -8,7 +8,7 @@ namespace Magento\Paypal\Model;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VoidTest extends \PHPUnit_Framework_TestCase
+class VoidTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Paypal/_files/order_payflowpro.php
@@ -25,27 +25,12 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $order->loadByIncrementId('100000001');
         $payment = $order->getPayment();
 
-        $gatewayMock = $this->getMock(
-            \Magento\Paypal\Model\Payflow\Service\Gateway::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $gatewayMock = $this->createMock(\Magento\Paypal\Model\Payflow\Service\Gateway::class);
 
-        $configMock = $this->getMock(
-            \Magento\Paypal\Model\PayflowConfig::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $configFactoryMock = $this->getMock(
+        $configMock = $this->createMock(\Magento\Paypal\Model\PayflowConfig::class);
+        $configFactoryMock = $this->createPartialMock(
             \Magento\Payment\Model\Method\ConfigInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $configFactoryMock->expects($this->once())
@@ -63,28 +48,29 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             );
 
         /** @var \Magento\Paypal\Model\Payflowpro|\PHPUnit_Framework_MockObject_MockObject $instance */
-        $instance = $this->getMock(
-            \Magento\Paypal\Model\Payflowpro::class,
-            ['setStore'],
-            [
-                $objectManager->get(\Magento\Framework\Model\Context::class),
-                $objectManager->get(\Magento\Framework\Registry::class),
-                $objectManager->get(\Magento\Framework\Api\ExtensionAttributesFactory::class),
-                $objectManager->get(\Magento\Framework\Api\AttributeValueFactory::class),
-                $objectManager->get(\Magento\Payment\Helper\Data::class),
-                $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
-                $objectManager->get(\Magento\Payment\Model\Method\Logger::class),
-                $objectManager->get(\Magento\Framework\Module\ModuleListInterface::class),
-                $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class),
-                $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
-                $configFactoryMock,
-                $gatewayMock,
-                $objectManager->get(\Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface::class),
-                null,
-                null,
-                []
-            ]
-        );
+        $instance = $this->getMockBuilder(\Magento\Paypal\Model\Payflowpro::class)
+            ->setMethods(['setStore'])
+            ->setConstructorArgs(
+                [
+                    $objectManager->get(\Magento\Framework\Model\Context::class),
+                    $objectManager->get(\Magento\Framework\Registry::class),
+                    $objectManager->get(\Magento\Framework\Api\ExtensionAttributesFactory::class),
+                    $objectManager->get(\Magento\Framework\Api\AttributeValueFactory::class),
+                    $objectManager->get(\Magento\Payment\Helper\Data::class),
+                    $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                    $objectManager->get(\Magento\Payment\Model\Method\Logger::class),
+                    $objectManager->get(\Magento\Framework\Module\ModuleListInterface::class),
+                    $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class),
+                    $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
+                    $configFactoryMock,
+                    $gatewayMock,
+                    $objectManager->get(\Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface::class),
+                    null,
+                    null,
+                    []
+                ]
+            )
+            ->getMock();
 
         $response = new \Magento\Framework\DataObject(
             [

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Model\Entity;
 
-class HydratorTest extends \PHPUnit_Framework_TestCase
+class HydratorTest extends \PHPUnit\Framework\TestCase
 {
     const CUSTOM_ATTRIBUTE_CODE = 'description';
 

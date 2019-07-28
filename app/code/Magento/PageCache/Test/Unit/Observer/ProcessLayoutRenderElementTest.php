@@ -5,13 +5,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PageCache\Test\Unit\Observer;
 
 use Magento\Framework\View\EntitySpecificHandlesList;
 
-class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
+class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\PageCache\Observer\ProcessLayoutRenderElement */
     private $_model;
@@ -39,14 +37,8 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_configMock = $this->getMock(
-            \Magento\PageCache\Model\Config::class,
-            ['getType', 'isEnabled'],
-            [],
-            '',
-            false
-        );
-        $this->entitySpecificHandlesListMock = $this->getMock(EntitySpecificHandlesList::class, [], [], '', false);
+        $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
+        $this->entitySpecificHandlesListMock = $this->createMock(EntitySpecificHandlesList::class);
 
         $this->_model = new \Magento\PageCache\Observer\ProcessLayoutRenderElement(
             $this->_configMock,
@@ -54,19 +46,10 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\Serialize\Serializer\Json(),
             new \Magento\Framework\Serialize\Serializer\Base64Json()
         );
-        $this->_observerMock = $this->getMock(
-            \Magento\Framework\Event\Observer::class,
-            ['getEvent'],
-            [],
-            '',
-            false
-        );
-        $this->_layoutMock = $this->getMock(
+        $this->_observerMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
+        $this->_layoutMock = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
-            ['isCacheable', 'getBlock', 'getUpdate', 'getHandles'],
-            [],
-            '',
-            false
+            ['isCacheable', 'getBlock', 'getUpdate', 'getHandles']
         );
         $this->_blockMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\AbstractBlock::class,
@@ -95,12 +78,9 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
         $blockTtl,
         $expectedOutput
     ) {
-        $eventMock = $this->getMock(
+        $eventMock = $this->createPartialMock(
             \Magento\Framework\Event::class,
-            ['getLayout', 'getElementName', 'getTransport'],
-            [],
-            '',
-            false
+            ['getLayout', 'getElementName', 'getTransport']
         );
         $this->_observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
         $eventMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->_layoutMock));
@@ -142,8 +122,16 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                     ->will($this->returnValue($blockTtl));
                 $this->_blockMock->expects($this->any())
                     ->method('getUrl')
-                    ->with('page_cache/block/esi', ['blocks' => '[null]', 'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='])
-                    ->will($this->returnValue('page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='));
+                    ->with(
+                        'page_cache/block/esi',
+                        ['blocks' => '[null]',
+                            'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==']
+                    )
+                    ->will(
+                        $this->returnValue(
+                            'page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='
+                        )
+                    );
             }
             if ($scopeIsPrivate) {
                 $this->_blockMock->expects($this->once())
@@ -163,12 +151,9 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWithBase64Encode()
     {
         $expectedOutput = '<esi:include src="page_cache/block/wrapesi/with/handles/YW5kL290aGVyL3N0dWZm" />';
-        $eventMock = $this->getMock(
-            'Magento\Framework\Event',
-            ['getLayout', 'getElementName', 'getTransport'],
-            [],
-            '',
-            false
+        $eventMock = $this->createPartialMock(
+            \Magento\Framework\Event::class,
+            ['getLayout', 'getElementName', 'getTransport']
         );
         $expectedUrl = 'page_cache/block/wrapesi/with/handles/' . base64_encode('and/other/stuff');
 
@@ -236,7 +221,8 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                 true,
                 false,
                 360,
-                '<esi:include src="page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==" />',
+                '<esi:include src="page_cache/block/wrapesi/with/handles/'
+                . 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==" />',
             ],
             'full_page type and Varnish enabled, public scope, ttl is not set' => [
                 true,

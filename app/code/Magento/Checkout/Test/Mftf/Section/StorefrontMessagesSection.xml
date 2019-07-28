@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontMessagesSection">
+        <!-- @TODO: Use general message selector after MQE-694 is fixed -->
+        <element name="messageProductAddedToCart" type="text"
+                 selector="//main//div[contains(@class, 'messages')]//div[contains(@class, 'message')]/div[contains(text(), 'You added {{var1}} to your') and a[contains(., 'shopping cart')]]"
+                 parameterized="true"
+        />
+    </section>
+</sections>

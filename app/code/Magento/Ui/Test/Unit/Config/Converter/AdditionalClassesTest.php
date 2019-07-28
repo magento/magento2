@@ -8,7 +8,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 use Magento\Ui\Config\Converter\AdditionalClasses;
 use Magento\Ui\Config\ConverterUtils;
 
-class AdditionalClassesTest extends \PHPUnit_Framework_TestCase
+class AdditionalClassesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AdditionalClasses

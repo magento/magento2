@@ -16,7 +16,7 @@ use Magento\TestFramework\ObjectManager;
  *
  * @magentoDbIsolation enabled
  */
-class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
+class PaymentTokenRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentTokenRepository

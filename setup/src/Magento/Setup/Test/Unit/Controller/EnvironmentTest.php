@@ -14,7 +14,7 @@ use Zend\View\Model\JsonModel;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EnvironmentTest extends \PHPUnit_Framework_TestCase
+class EnvironmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
@@ -43,16 +43,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->permissions = $this->getMock(\Magento\Framework\Setup\FilePermissions::class, [], [], '', false);
-        $this->cronScriptReadinessCheck = $this->getMock(
-            \Magento\Setup\Model\CronScriptReadinessCheck::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->phpReadinessCheck = $this->getMock(\Magento\Setup\Model\PhpReadinessCheck::class, [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->permissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);
+        $this->cronScriptReadinessCheck = $this->createMock(\Magento\Setup\Model\CronScriptReadinessCheck::class);
+        $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
         $this->environment = new Environment(
             $this->permissions,
             $this->filesystem,
@@ -63,11 +57,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function testFilePermissionsInstaller()
     {
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
@@ -80,11 +74,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpVersionActionInstaller()
     {
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
@@ -98,11 +92,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpVersionActionUpdater()
     {
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
@@ -122,11 +116,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpSettingsActionInstaller()
     {
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
@@ -140,11 +134,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpSettingsActionUpdater()
     {
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
@@ -164,11 +158,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpExtensionsActionInstaller()
     {
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
@@ -182,11 +176,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpExtensionsActionUpdater()
     {
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);

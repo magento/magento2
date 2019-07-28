@@ -7,6 +7,9 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
+/**
+ * Class TableBuilder
+ */
 class TableBuilder
 {
     /**
@@ -33,13 +36,6 @@ class TableBuilder
      * @var BuilderInterfaceFactory
      */
     private $tableBuilderFactory;
-
-    /**
-     * Check whether builder was executed
-     *
-     * @var bool
-     */
-    protected $_isExecuted = false;
 
     /**
      * Constructor
@@ -70,9 +66,6 @@ class TableBuilder
      */
     public function build($storeId, $changedIds, $valueFieldSuffix)
     {
-        if ($this->_isExecuted) {
-            return;
-        }
         $entityTableName = $this->_productIndexerHelper->getTable('catalog_product_entity');
         $attributes = $this->_productIndexerHelper->getAttributes();
         $eavAttributes = $this->_productIndexerHelper->getTablesStructure($attributes);
@@ -117,13 +110,12 @@ class TableBuilder
             //Fill temporary tables with attributes grouped by it type
             $this->_fillTemporaryTable($tableName, $columns, $changedIds, $valueFieldSuffix, $storeId);
         }
-        $this->_isExecuted = true;
     }
 
     /**
      * Create empty temporary table with given columns list
      *
-     * @param string $tableName  Table name
+     * @param string $tableName Table name
      * @param array $columns array('columnName' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute, ...)
      * @param string $valueFieldSuffix
      *
@@ -148,13 +140,23 @@ class TableBuilder
             );
             $flatColumns = $this->_productIndexerHelper->getFlatColumns();
 
-            $temporaryTableBuilder->addColumn('entity_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
+            $temporaryTableBuilder->addColumn(
+                'entity_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned'=>true]
+            );
 
             $temporaryTableBuilder->addColumn('type_id', \Magento\Framework\DB\Ddl\Table::TYPE_TEXT);
 
             $temporaryTableBuilder->addColumn('attribute_set_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
 
-            $valueTemporaryTableBuilder->addColumn('entity_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
+            $valueTemporaryTableBuilder->addColumn(
+                'entity_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned'=>true]
+            );
 
             /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             foreach ($columns as $columnName => $attribute) {
@@ -209,9 +211,10 @@ class TableBuilder
      * Fill temporary entity table
      *
      * @param string $tableName
-     * @param array  $columns
-     * @param array  $changedIds
+     * @param array $columns
+     * @param array $changedIds
      * @return void
+     * @throws \Exception
      */
     protected function _fillTemporaryEntityTable($tableName, array $columns, array $changedIds = [])
     {
@@ -255,11 +258,12 @@ class TableBuilder
      * Fill temporary table by data from products EAV attributes by type
      *
      * @param string $tableName
-     * @param array  $tableColumns
-     * @param array  $changedIds
+     * @param array $tableColumns
+     * @param array $changedIds
      * @param string $valueFieldSuffix
      * @param int $storeId
      * @return void
+     * @throws \Exception
      */
     protected function _fillTemporaryTable(
         $tableName,
@@ -300,12 +304,16 @@ class TableBuilder
 
                 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 foreach ($columnsList as $columnName => $attribute) {
-                    $countTableName = 't' . $iterationNum++;
+                    $countTableName = 't' . ($iterationNum++);
                     $joinCondition = sprintf(
-                        'e.%3$s = %1$s.%3$s AND %1$s.attribute_id = %2$d AND %1$s.store_id = 0',
+                        'e.%3$s = %1$s.%3$s' .
+                        ' AND %1$s.attribute_id = %2$d' .
+                        ' AND (%1$s.store_id = %4$d' .
+                        ' OR %1$s.store_id = 0)',
                         $countTableName,
                         $attribute->getId(),
-                        $metadata->getLinkField()
+                        $metadata->getLinkField(),
+                        $storeId
                     );
 
                     $select->joinLeft(
@@ -319,9 +327,10 @@ class TableBuilder
                         $columnValueName = $attributeCode . $valueFieldSuffix;
                         if (isset($flatColumns[$columnValueName])) {
                             $valueJoinCondition = sprintf(
-                                'e.%1$s = %2$s.option_id AND %2$s.store_id = 0',
+                                'e.%1$s = %2$s.option_id AND (%2$s.store_id = %3$d OR %2$s.store_id = 0)',
                                 $attributeCode,
-                                $countTableName
+                                $countTableName,
+                                $storeId
                             );
                             $selectValue->joinLeft(
                                 [
@@ -356,8 +365,10 @@ class TableBuilder
     }
 
     /**
+     * Get Metadata Pool
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private function getMetadataPool()
     {

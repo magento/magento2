@@ -8,7 +8,7 @@ namespace Magento\Framework\Shell\Test\Unit;
 
 use \Magento\Framework\Shell\ComplexParameter;
 
-class ComplexParameterTest extends \PHPUnit_Framework_TestCase
+class ComplexParameterTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetFromArray()
     {

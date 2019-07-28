@@ -13,6 +13,7 @@ use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends AbstractCollection implements OrderSearchResultInterface
 {
@@ -47,7 +48,7 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\DB\Helper $coreResourceHelper
-     * @param string|null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
@@ -137,6 +138,7 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
 
     /**
      * Join table sales_order_address to select for billing and shipping order addresses.
+     *
      * Create correlation map
      *
      * @return $this

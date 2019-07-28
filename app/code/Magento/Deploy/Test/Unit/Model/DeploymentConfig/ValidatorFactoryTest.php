@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Config\Validator;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
+class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ValidatorFactory
@@ -56,7 +56,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $className = 'className';
 
-        $stdMock = $this->getMockBuilder(\StdClass::class)
+        $stdMock = $this->getMockBuilder(\stdClass::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock->expects($this->once())

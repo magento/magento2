@@ -11,7 +11,7 @@ use Magento\Contact\Model\Mail;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
-class MailTest extends \PHPUnit_Framework_TestCase
+class MailTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -47,7 +47,7 @@ class MailTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
-        $this->urlMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $this->urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->transportBuilderMock = $this->getMockBuilder(
             \Magento\Framework\Mail\Template\TransportBuilder::class
         )->disableOriginalConstructor(
@@ -57,7 +57,7 @@ class MailTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor(
         )->getMock();
 
-        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->mail = new Mail(
             $this->configMock,
@@ -72,9 +72,9 @@ class MailTest extends \PHPUnit_Framework_TestCase
         $email = 'reply-to@example.com';
         $templateVars = ['comment' => 'Comment'];
 
-        $transport = $this->getMock(\Magento\Framework\Mail\TransportInterface::class, [], [], '', false);
+        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
-        $store = $this->getMock(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->expects($this->once())->method('getId')->willReturn(555);
 
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);

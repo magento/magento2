@@ -13,7 +13,7 @@ use Magento\Setup\Model\Complex\Generator;
  * Class ComplexGeneratorTest
  *
  */
-class ComplexGeneratorTest extends \PHPUnit_Framework_TestCase
+class ComplexGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Pattern instance

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -102,7 +103,7 @@ abstract class Validator
                     break;
                 case \Zend_Validate_File_ImageSize::NOT_DETECTED:
                     $result[] = __(
-                        "The file '%1' is empty. Please choose another one",
+                        'The file "%1" is empty. Select another file and try again.',
                         $fileInfo['title']
                     );
                     break;

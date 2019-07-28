@@ -12,13 +12,14 @@ use Magento\Newsletter\Model\ResourceModel\Problem\Collection;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Problem extends \Magento\Backend\Block\Template
 {
     /**
      * @var string
      */
-    protected $_template = 'problem/list.phtml';
+    protected $_template = 'Magento_Newsletter::problem/list.phtml';
 
     /**
      * @var \Magento\Newsletter\Model\ResourceModel\Problem\Collection
@@ -40,7 +41,7 @@ class Problem extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return void
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _construct()
@@ -82,7 +83,7 @@ class Problem extends \Magento\Backend\Block\Template
     /**
      * Get the html element for unsubscribe button
      *
-     * @return $string
+     * @return string
      */
     public function getUnsubscribeButtonHtml()
     {
@@ -92,7 +93,7 @@ class Problem extends \Magento\Backend\Block\Template
     /**
      * Get the html element for delete button
      *
-     * @return $string
+     * @return string
      */
     public function getDeleteButtonHtml()
     {

@@ -8,7 +8,7 @@ namespace Magento\Framework\Filesystem\Test\Unit;
 
 use \Magento\Framework\Filesystem\DriverPool;
 
-class DriverPoolTest extends \PHPUnit_Framework_TestCase
+class DriverPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetDriver()
     {

@@ -9,6 +9,8 @@
  */
 namespace Magento\ConfigurableProduct\Controller;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
@@ -31,17 +33,21 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertSelectCount(
-            'button[type="submit"][title="Update Cart"]',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//button[@type="submit" and @title="Update Cart"]',
+                $response->getBody()
+            ),
             'Response for configurable product doesn\'t contain "Update Cart" button'
         );
 
-        $this->assertSelectCount(
-            'select.super-attribute-select',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//select[contains(@class,"super-attribute-select")]',
+                $response->getBody()
+            ),
             'Response for configurable product doesn\'t contain select for super attribute'
         );
     }
@@ -81,13 +87,14 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'remove' => 0,
             'coupon_code' => 'test'
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($inputData);
         $this->dispatch(
             'checkout/cart/couponPost/'
         );
 
         $this->assertSessionMessages(
-            $this->equalTo(['The coupon code "test" is not valid.']),
+            $this->equalTo(['The coupon code &quot;test&quot; is not valid.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

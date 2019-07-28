@@ -18,7 +18,7 @@ use Magento\TestFramework\Utility\ChangedFiles;
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
+class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**@#+
      * Lists of obsolete entities from fixtures
@@ -112,7 +112,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/../_files/changed_files*');
         $blacklistFiles = $this->getBlacklistFiles();
         foreach ($blacklistFiles as $blacklistFile) {
-            unset($changedFiles[BP . $blacklistFile]);
+            unset($changedFiles[$blacklistFile]);
         }
         $invoker(
             function ($file) {
@@ -501,8 +501,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         $classPathParts = explode('\\', $class);
         $classPartialPath = '';
-        for ($i = count($classPathParts) - 1; $i >= 0; $i--) {
-            if ($i === (count($classPathParts) - 1)) {
+        for ($count = count($classPathParts), $i = $count - 1; $i >= 0; $i--) {
+            if ($i === ($count - 1)) {
                 $classPartialPath = $classPathParts[$i] . $classPartialPath;
             } else {
                 $classPartialPath = $classPathParts[$i] . '\\' . $classPartialPath;
@@ -920,7 +920,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
         $fileSet = glob($appPath . DIRECTORY_SEPARATOR . $pattern, GLOB_NOSORT);
         foreach ($fileSet as $file) {
-            $files[] = substr($file, $relativePathStart);
+            $files[] = ltrim(substr($file, $relativePathStart), '/');
         }
 
         return $files;

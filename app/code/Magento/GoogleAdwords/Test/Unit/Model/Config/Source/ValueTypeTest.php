@@ -5,7 +5,7 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Config\Source;
 
-class ValueTypeTest extends \PHPUnit_Framework_TestCase
+class ValueTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GoogleAdwords\Model\Config\Source\ValueType

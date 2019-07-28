@@ -8,7 +8,7 @@ namespace Magento\Framework\DB\Test\Unit\Select;
 use Magento\Framework\DB\Select\LikeQueryModifier;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class LikeQueryModifierTest extends \PHPUnit_Framework_TestCase
+class LikeQueryModifierTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManager */
     private $objectManager;

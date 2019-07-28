@@ -13,10 +13,14 @@ use Magento\Store\Model\ScopeInterface;
 
 class Plugin
 {
-    /** @var EventManager */
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
     protected $eventManager;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
     /**

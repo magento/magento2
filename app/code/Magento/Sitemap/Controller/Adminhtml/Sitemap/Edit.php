@@ -1,12 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+/**
+ * Controller class Edit. Responsible for rendering of a sitemap edit page
+ */
+class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpGetActionInterface
 {
     /**
      * Core registry
@@ -41,7 +46,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This sitemap no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This sitemap no longer exists.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             }

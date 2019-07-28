@@ -11,7 +11,11 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectFullT
 use \Magento\CatalogSearch\Model\Search\BaseSelectStrategy\StrategyMapper;
 use \Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 
-class StrategyMapperTest extends \PHPUnit_Framework_TestCase
+/**
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
+class StrategyMapperTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  BaseSelectAttributesSearchStrategy|\PHPUnit_Framework_MockObject_MockObject */
     private $baseSelectAttributeSearchStrategyMock;
@@ -91,6 +95,9 @@ class StrategyMapperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [

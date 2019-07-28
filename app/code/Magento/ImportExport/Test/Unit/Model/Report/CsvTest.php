@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Report;
 
-class CsvTest extends \PHPUnit_Framework_TestCase
+class CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Helper\Report|\PHPUnit_Framework_MockObject_MockObject
@@ -45,35 +45,41 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $testDelimiter = 'some_delimiter';
 
-        $this->reportHelperMock = $this->getMock(\Magento\ImportExport\Helper\Report::class, [], [], '', false);
+        $this->reportHelperMock = $this->createMock(\Magento\ImportExport\Helper\Report::class);
+        $this->reportHelperMock->expects($this->any())->method('getDelimiter')->willReturn($testDelimiter);
 
-        $this->outputCsvFactoryMock = $this->getMock(
+        $this->outputCsvFactoryMock = $this->createPartialMock(
             \Magento\ImportExport\Model\Export\Adapter\CsvFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->outputCsvMock = $this->getMock(\Magento\ImportExport\Model\Export\Adapter\Csv::class, [], [], '', false);
+        $this->outputCsvMock = $this->createMock(\Magento\ImportExport\Model\Export\Adapter\Csv::class);
         $this->outputCsvFactoryMock->expects($this->any())->method('create')->willReturn($this->outputCsvMock);
 
-        $this->sourceCsvFactoryMock = $this->getMock(
+        $this->sourceCsvFactoryMock = $this->createPartialMock(
             \Magento\ImportExport\Model\Import\Source\CsvFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->sourceCsvMock = $this->getMock(\Magento\ImportExport\Model\Import\Source\Csv::class, [], [], '', false);
+        $this->sourceCsvMock = $this->createMock(\Magento\ImportExport\Model\Import\Source\Csv::class);
         $this->sourceCsvMock->expects($this->any())->method('valid')->willReturnOnConsecutiveCalls(true, true, false);
         $this->sourceCsvMock->expects($this->any())->method('current')->willReturnOnConsecutiveCalls(
             [23 => 'first error'],
             [27 => 'second error']
         );
-        $this->sourceCsvFactoryMock->expects($this->any())->method('create')->willReturn($this->sourceCsvMock);
+        $this->sourceCsvFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->with(
+                [
+                    'file' => 'some_file_name',
+                    'directory' => null,
+                    'delimiter' => $testDelimiter
+                ]
+            )
+            ->willReturn($this->sourceCsvMock);
 
-        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 
         $this->csvModel = $objectManager->getObject(
             \Magento\ImportExport\Model\Report\Csv::class,
@@ -88,19 +94,12 @@ class CsvTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateReport()
     {
-        $errorAggregatorMock = $this->getMock(
-            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class,
-            [],
-            [],
-            '',
-            false
+        $errorAggregatorMock = $this->createMock(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
         );
-        $errorProcessingMock = $this->getMock(
-            \Magento\ImportExport\Model\Import\ErrorProcessing::class,
-            ['getErrorMessage'],
-            [],
-            '',
-            false
+        $errorProcessingMock = $this->createPartialMock(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class,
+            ['getErrorMessage']
         );
         $errorProcessingMock->expects($this->any())->method('getErrorMessage')->willReturn('some_error_message');
         $errorAggregatorMock->expects($this->any())->method('getErrorByRowNumber')->willReturn([$errorProcessingMock]);

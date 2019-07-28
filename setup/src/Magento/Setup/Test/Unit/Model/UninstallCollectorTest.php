@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\UninstallCollector;
 
-class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
+class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UninstallCollector
@@ -26,22 +26,22 @@ class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager =
             $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
-        $setup = $this->getMock(\Magento\Setup\Module\DataSetup::class, [], [], '', false);
+        $setup = $this->createMock(\Magento\Setup\Module\DataSetup::class);
         $this->adapterInterface = $this->getMockForAbstractClass(
             \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false
         );
-        $select = $this->getMock(\Magento\Framework\DB\Select::class, ['from'], [], '', false);
+        $select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from']);
         $this->adapterInterface->expects($this->once())->method('select')->willReturn($select);
         $setup->expects($this->exactly(2))->method('getConnection')->willReturn($this->adapterInterface);
-        $this->result = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->result = $this->createMock(\Magento\Framework\DB\Select::class);
         $select->expects($this->once())->method('from')->willReturn($this->result);
 
         $uninstallA = 'Uninstall Class A';
@@ -54,7 +54,7 @@ class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
                     ['Magento\B\Setup\Uninstall', [], $uninstallB],
                 ])
             );
-        $setupFactory = $this->getMock(\Magento\Setup\Module\DataSetupFactory::class, [], [], '', false);
+        $setupFactory = $this->createMock(\Magento\Setup\Module\DataSetupFactory::class);
         $setupFactory->expects($this->once())->method('create')->willReturn($setup);
 
         $this->collector = new UninstallCollector($objectManagerProvider, $setupFactory);

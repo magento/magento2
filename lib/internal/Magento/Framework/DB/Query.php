@@ -142,7 +142,7 @@ class Query implements QueryInterface
             $sql = $this->getSelectCountSql();
             $this->totalRecords = $this->getConnection()->fetchOne($sql, $this->bindParams);
         }
-        return intval($this->totalRecords);
+        return (int)$this->totalRecords;
     }
 
     /**

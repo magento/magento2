@@ -9,10 +9,12 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\ProductVideo\Block\Product\View;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 {
@@ -27,7 +29,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\ProductVideo\Helper\Media $mediaHelper
      * @param array $data
-     * @param \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface|null $imagesConfigFactory
      * @param array $galleryImagesConfig
      */
     public function __construct(
@@ -86,9 +88,10 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     /**
      * Return media gallery for product options
      * @return string
+     * @since 100.1.0
      */
     public function getOptionsMediaGalleryDataJson()
     {
-        return  $this->jsonEncoder->encode([]);
+        return $this->jsonEncoder->encode([]);
     }
 }

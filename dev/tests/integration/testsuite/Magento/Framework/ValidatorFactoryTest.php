@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework;
 
-class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
+class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\ValidatorFactory */
     private $model;

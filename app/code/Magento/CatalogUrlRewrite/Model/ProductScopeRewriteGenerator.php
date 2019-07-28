@@ -5,17 +5,19 @@
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
+use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
-use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ProductScopeRewriteGenerator
@@ -32,6 +34,11 @@ class ProductScopeRewriteGenerator
      * @var StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $config;
 
     /**
      * @var ObjectRegistryFactory
@@ -58,8 +65,15 @@ class ProductScopeRewriteGenerator
      */
     private $canonicalUrlRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
 
     /**
      * @param StoreViewService $storeViewService
@@ -70,6 +84,9 @@ class ProductScopeRewriteGenerator
      * @param CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
+     * @param CategoryRepositoryInterface|null $categoryRepository
+     * @param ScopeConfigInterface|null $config
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StoreViewService $storeViewService,
@@ -79,7 +96,9 @@ class ProductScopeRewriteGenerator
         CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator,
         CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator,
         AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator,
-        MergeDataProviderFactory $mergeDataProviderFactory = null
+        MergeDataProviderFactory $mergeDataProviderFactory = null,
+        CategoryRepositoryInterface $categoryRepository = null,
+        ScopeConfigInterface $config = null
     ) {
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
@@ -92,6 +111,9 @@ class ProductScopeRewriteGenerator
             $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
         }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
+        $this->categoryRepository = $categoryRepository ?:
+            ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        $this->config = $config ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -148,18 +170,26 @@ class ProductScopeRewriteGenerator
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $categories = [];
         foreach ($productCategories as $category) {
-            if ($this->isCategoryProperForGenerating($category, $storeId)) {
-                $categories[] = $category;
+            if (!$this->isCategoryProperForGenerating($category, $storeId)) {
+                continue;
             }
+
+            // category should be loaded per appropriate store if category's URL key has been changed
+            $categories[] = $this->getCategoryWithOverriddenUrlKey($storeId, $category);
         }
+
         $productCategories = $this->objectRegistryFactory->create(['entities' => $categories]);
 
         $mergeDataProvider->merge(
             $this->canonicalUrlRewriteGenerator->generate($storeId, $product)
         );
-        $mergeDataProvider->merge(
-            $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
-        );
+
+        if ($this->isCategoryRewritesEnabled()) {
+            $mergeDataProvider->merge(
+                $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+            );
+        }
+
         $mergeDataProvider->merge(
             $this->currentUrlRewritesRegenerator->generate(
                 $storeId,
@@ -168,9 +198,13 @@ class ProductScopeRewriteGenerator
                 $rootCategoryId
             )
         );
-        $mergeDataProvider->merge(
-            $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
-        );
+
+        if ($this->isCategoryRewritesEnabled()) {
+            $mergeDataProvider->merge(
+                $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
+            );
+        }
+
         $mergeDataProvider->merge(
             $this->currentUrlRewritesRegenerator->generateAnchor(
                 $storeId,
@@ -179,6 +213,7 @@ class ProductScopeRewriteGenerator
                 $rootCategoryId
             )
         );
+
         return $mergeDataProvider->getData();
     }
 
@@ -191,10 +226,45 @@ class ProductScopeRewriteGenerator
      */
     public function isCategoryProperForGenerating(Category $category, $storeId)
     {
-        if ($category->getParentId() != \Magento\Catalog\Model\Category::TREE_ROOT_ID) {
-            list(, $rootCategoryId) = $category->getParentIds();
+        $parentIds = $category->getParentIds();
+        if (is_array($parentIds) && count($parentIds) >= 2) {
+            $rootCategoryId = $parentIds[1];
             return $rootCategoryId == $this->storeManager->getStore($storeId)->getRootCategoryId();
         }
         return false;
+    }
+
+    /**
+     * Check if URL key has been changed
+     *
+     * Checks if URL key has been changed for provided category and returns reloaded category,
+     * in other case - returns provided category.
+     *
+     * @param int $storeId
+     * @param Category $category
+     * @return Category
+     */
+    private function getCategoryWithOverriddenUrlKey($storeId, Category $category)
+    {
+        $isUrlKeyOverridden = $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+            $storeId,
+            $category->getEntityId(),
+            Category::ENTITY
+        );
+
+        if (!$isUrlKeyOverridden) {
+            return $category;
+        }
+        return $this->categoryRepository->get($category->getEntityId(), $storeId);
+    }
+
+    /**
+     * Check config value of generate_category_product_rewrites
+     *
+     * @return bool
+     */
+    private function isCategoryRewritesEnabled()
+    {
+        return (bool)$this->config->getValue('catalog/seo/generate_category_product_rewrites');
     }
 }

@@ -16,6 +16,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -106,7 +107,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Return Allowed Countries reader
      *
      * @return \Magento\Directory\Model\AllowedCountries
-     * @deprecated
+     * @deprecated 100.1.4
      */
     private function getAllowedCountriesReader()
     {
@@ -123,6 +124,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
+     * @since 100.1.4
      */
     public function addAllowedCountriesFilter($store = null)
     {

@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends \PHPUnit_Framework_TestCase
+class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -40,14 +38,16 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $template = $this->getMockBuilder(\Magento\Email\Model\Template::class)
-            ->setMethods([
-                'setDesignConfig',
-                'getDesignConfig',
-                '__wakeup',
-                'getProcessedTemplate',
-                'getAppState',
-                'revertDesign'
-            ])
+            ->setMethods(
+                [
+                    'setDesignConfig',
+                    'getDesignConfig',
+                    '__wakeup',
+                    'getProcessedTemplate',
+                    'getAppState',
+                    'revertDesign'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $template->expects($this->once())
@@ -57,20 +57,18 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $designConfigData = [];
         $template->expects($this->atLeastOnce())
             ->method('getDesignConfig')
-            ->willReturn(new \Magento\Framework\DataObject(
-                $designConfigData
-            ));
-        $emailFactory = $this->getMock(\Magento\Email\Model\TemplateFactory::class, ['create'], [], '', false);
+            ->willReturn(new \Magento\Framework\DataObject($designConfigData));
+        $emailFactory = $this->createPartialMock(\Magento\Email\Model\TemplateFactory::class, ['create']);
         $emailFactory->expects($this->any())
             ->method('create')
             ->willReturn($template);
 
-        $request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $request->expects($this->any())->method('getParam')->willReturnMap($requestParamMap);
-        $eventManage = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $design = $this->getMock(\Magento\Framework\View\DesignInterface::class);
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
+        $eventManage = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $design = $this->createMock(\Magento\Framework\View\DesignInterface::class);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->willReturn($storeId);
         $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -81,9 +79,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())->method('getDefaultStoreView')->willReturn(null);
         $storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
         $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->setConstructorArgs([
-                $scopeConfig
-            ])
+            ->setConstructorArgs([$scopeConfig])
             ->setMethods(['emulateAreaCode'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,10 +88,9 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA, [$template, 'getProcessedTemplate'])
             ->willReturn($template->getProcessedTemplate());
 
-        $context = $this->getMock(
+        $context = $this->createPartialMock(
             \Magento\Backend\Block\Template\Context::class,
-            ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState'],
-            [], '', false
+            ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState']
         );
         $context->expects($this->any())->method('getRequest')->willReturn($request);
         $context->expects($this->any())->method('getEventManager')->willReturn($eventManage);
@@ -104,13 +99,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
         $context->expects($this->once())->method('getAppState')->willReturn($appState);
 
-        $maliciousCode = $this->getMock(
-            \Magento\Framework\Filter\Input\MaliciousCode::class,
-            ['filter'],
-            [],
-            '',
-            false
-        );
+        $maliciousCode = $this->createPartialMock(\Magento\Framework\Filter\Input\MaliciousCode::class, ['filter']);
         $maliciousCode->expects($this->once())
             ->method('filter')
             ->with($this->equalTo($requestParamMap[1][2]))
@@ -137,16 +126,6 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['data 1' => [
-                ['type', null, ''],
-                ['text', null, sprintf('<javascript>%s</javascript>', self::MALICIOUS_TEXT)],
-                ['styles', null, ''],
-            ]],
-            ['data 2' => [
-                ['type', null, ''],
-                ['text', null, sprintf('<iframe>%s</iframe>', self::MALICIOUS_TEXT)],
-                ['styles', null, ''],
-            ]],
-            ['data 3' => [
                 ['type', null, ''],
                 ['text', null, self::MALICIOUS_TEXT],
                 ['styles', null, ''],

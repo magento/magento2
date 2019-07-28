@@ -9,6 +9,7 @@ namespace Magento\Customer\Api;
 /**
  * Interface for managing customer groups.
  * @api
+ * @since 100.0.2
  */
 interface GroupManagementInterface
 {

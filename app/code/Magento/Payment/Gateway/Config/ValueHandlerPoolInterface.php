@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NotFoundException;
  * Interface ValueHandlerPoolInterface
  * @package Magento\Payment\Gateway\Config
  * @api
+ * @since 100.0.2
  */
 interface ValueHandlerPoolInterface
 {

@@ -8,7 +8,7 @@ namespace Magento\SalesSequence\Test\Unit\Model;
 /**
  * Class BuilderTest
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesSequence\Model\Builder
@@ -66,55 +66,25 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             true,
             ['query']
         );
-        $this->resourceSequenceMeta = $this->getMock(
+        $this->resourceSequenceMeta = $this->createPartialMock(
             \Magento\SalesSequence\Model\ResourceModel\Meta::class,
-            ['loadByEntityTypeAndStore', 'save', 'createSequence'],
-            [],
-            '',
-            false
+            ['loadByEntityTypeAndStore', 'save', 'createSequence']
         );
-        $this->meta = $this->getMock(
+        $this->meta = $this->createPartialMock(
             \Magento\SalesSequence\Model\Meta::class,
-            ['getId', 'setData', 'save', 'getSequenceTable'],
-            [],
-            '',
-            false
+            ['getId', 'setData', 'save', 'getSequenceTable']
         );
-        $this->sequence = $this->getMock(
-            \Magento\Framework\DB\Ddl\Sequence::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->resourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->profile = $this->getMock(
+        $this->sequence = $this->createMock(\Magento\Framework\DB\Ddl\Sequence::class);
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->profile = $this->createPartialMock(
             \Magento\SalesSequence\Model\Profile::class,
-            ['getId', 'setData', 'getStartValue'],
-            [],
-            '',
-            false
+            ['getId', 'setData', 'getStartValue']
         );
-        $this->metaFactory = $this->getMock(
-            \Magento\SalesSequence\Model\MetaFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->metaFactory = $this->createPartialMock(\Magento\SalesSequence\Model\MetaFactory::class, ['create']);
         $this->metaFactory->expects($this->any())->method('create')->willReturn($this->meta);
-        $this->profileFactory = $this->getMock(
+        $this->profileFactory = $this->createPartialMock(
             \Magento\SalesSequence\Model\ProfileFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->profileFactory->expects($this->any())->method('create')->willReturn($this->profile);
         $this->resourceMock->expects($this->atLeastOnce())

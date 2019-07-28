@@ -25,7 +25,7 @@ class AssertSynonymMergeErrorMessage extends AbstractConstraint
     public function processAssert(SynonymGroupNew $synonymGroupNew)
     {
         $actualMessage = $synonymGroupNew->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit\Framework\Assert::assertContains(
             self::ERROR_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

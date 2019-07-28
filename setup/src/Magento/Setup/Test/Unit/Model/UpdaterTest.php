@@ -9,11 +9,11 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Phrase;
 use Magento\Setup\Model\Updater;
 
-class UpdaterTest extends \PHPUnit_Framework_TestCase
+class UpdaterTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateUpdaterTaskUpdate()
     {
-        $queue = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, [], [], '', false);
+        $queue = $this->createMock(\Magento\Setup\Model\Cron\Queue::class);
         $queue->expects($this->once())
             ->method('addJobs')
             ->with(
@@ -33,7 +33,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateUpdaterTaskUninstall()
     {
-        $queue = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, [], [], '', false);
+        $queue = $this->createMock(\Magento\Setup\Model\Cron\Queue::class);
         $queue->expects($this->once())
             ->method('addJobs')
             ->with(

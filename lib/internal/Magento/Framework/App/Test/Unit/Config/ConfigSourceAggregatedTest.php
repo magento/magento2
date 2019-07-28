@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Config;
 use Magento\Framework\App\Config\ConfigSourceAggregated;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 
-class ConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
+class ConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject

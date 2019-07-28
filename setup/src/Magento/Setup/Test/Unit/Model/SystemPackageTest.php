@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Composer\InfoCommand;
 use Magento\Setup\Model\SystemPackage;
 
-class SystemPackageTest extends \PHPUnit_Framework_TestCase
+class SystemPackageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Composer\InfoCommand
@@ -115,41 +115,29 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerAppFactory = $this->getMock(
-            \Magento\Framework\Composer\MagentoComposerApplicationFactory::class,
-            [],
-            [],
-            '',
-            false
+        $this->composerAppFactory = $this->createMock(
+            \Magento\Framework\Composer\MagentoComposerApplicationFactory::class
         );
 
-        $this->infoCommand = $this->getMock(
-            \Magento\Composer\InfoCommand::class,
-            [],
-            [],
-            '',
-            false
+        $this->infoCommand = $this->createMock(
+            \Magento\Composer\InfoCommand::class
         );
 
         $this->magentoComposerApp =
-            $this->getMock(\Magento\Composer\MagentoComposerApplication::class, [], [], '', false);
-        $this->locker = $this->getMock(\Composer\Package\Locker::class, [], [], '', false);
-        $this->repository = $this->getMock(\Composer\Repository\ArrayRepository::class, [], [], '', false);
-        $this->composer = $this->getMock(\Composer\Composer::class, [], [], '', false);
-        $this->composerInformation = $this->getMock(
-            \Magento\Framework\Composer\ComposerInformation::class,
-            [],
-            [],
-            '',
-            false
+            $this->createMock(\Magento\Composer\MagentoComposerApplication::class);
+        $this->locker = $this->createMock(\Composer\Package\Locker::class);
+        $this->repository = $this->createMock(\Composer\Repository\ArrayRepository::class);
+        $this->composer = $this->createMock(\Composer\Composer::class);
+        $this->composerInformation = $this->createMock(
+            \Magento\Framework\Composer\ComposerInformation::class
         );
     }
 
     public function testGetPackageVersions()
     {
-        $communityPackage = $this->getMock(\Composer\Package\Package::class, [], [], '', false);
+        $communityPackage = $this->createMock(\Composer\Package\Package::class);
         $communityPackage->expects($this->once())->method('getName')->willReturn(SystemPackage::EDITION_COMMUNITY);
-        $enterprisePackage = $this->getMock(\Composer\Package\Package::class, [], [], '', false);
+        $enterprisePackage = $this->createMock(\Composer\Package\Package::class);
         $enterprisePackage->expects($this->once())->method('getName')->willReturn(SystemPackage::EDITION_ENTERPRISE);
         $this->composerInformation->expects($this->any())->method('isSystemPackage')->willReturn(true);
         $this->composerInformation->expects($this->once())->method('isPackageInComposerJson')->willReturn(true);
@@ -225,7 +213,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPackageVersionGitCloned()
     {
-        $package = $this->getMock(\Composer\Package\Package::class, [], [], '', false);
+        $package = $this->createMock(\Composer\Package\Package::class);
         $this->repository
             ->expects($this->once())
             ->method('getPackages')
@@ -254,8 +242,8 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPackageVersionsFailed()
     {
-        $communityPackage = $this->getMock(\Composer\Package\Package::class, [], [], '', false);
-        $enterprisePackage = $this->getMock(\Composer\Package\Package::class, [], [], '', false);
+        $communityPackage = $this->createMock(\Composer\Package\Package::class);
+        $enterprisePackage = $this->createMock(\Composer\Package\Package::class);
 
         $communityPackage->expects($this->once())->method('getName')->willReturn(SystemPackage::EDITION_COMMUNITY);
         $enterprisePackage->expects($this->once())->method('getName')->willReturn(SystemPackage::EDITION_ENTERPRISE);
@@ -306,8 +294,8 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
             ->method('run')
             ->with(SystemPackage::EDITION_ENTERPRISE)
             ->willReturn([InfoCommand::AVAILABLE_VERSIONS => ['1.0.0', '1.0.1', '1.0.2']]);
-        $require = $this->getMock(\Composer\Package\Link::class, [], [], '', false);
-        $constraintMock = $this->getMock(\Composer\Semver\Constraint\Constraint::class, [], [], '', false);
+        $require = $this->createMock(\Composer\Package\Link::class);
+        $constraintMock = $this->createMock(\Composer\Semver\Constraint\Constraint::class);
         $constraintMock->expects($this->any())->method('getPrettyString')
             ->willReturn('1.0.1');
         $require->expects($this->any())

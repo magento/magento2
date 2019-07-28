@@ -10,7 +10,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config
@@ -64,7 +64,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                                     '\\' . LocalizedException::class
                                 ]
                             ]
-                        ]
+                        ],
+                        'parameters' => []
                     ]
                 ],
                 'class' => AccountManagementInterface::class,
@@ -88,8 +89,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'isSecure' => false,
             'resources' => [
                 'Magento_Customer::customer',
-                'self'
             ],
+            'parameters' => []
         ];
         $actual = $this->soapConfig->getServiceMethodInfo(
             'customerCustomerRepositoryV1GetById',

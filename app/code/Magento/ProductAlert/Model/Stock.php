@@ -10,8 +10,6 @@ use Magento\ProductAlert\Model\ResourceModel\Stock\Customer\Collection;
 /**
  * ProductAlert for back in stock model
  *
- * @method \Magento\ProductAlert\Model\ResourceModel\Stock _getResource()
- * @method \Magento\ProductAlert\Model\ResourceModel\Stock getResource()
  * @method int getCustomerId()
  * @method \Magento\ProductAlert\Model\Stock setCustomerId(int $value)
  * @method int getProductId()
@@ -26,10 +24,13 @@ use Magento\ProductAlert\Model\ResourceModel\Stock\Customer\Collection;
  * @method \Magento\ProductAlert\Model\Stock setSendCount(int $value)
  * @method int getStatus()
  * @method \Magento\ProductAlert\Model\Stock setStatus(int $value)
+ * @method int getStoreId()
+ * @method \Magento\ProductAlert\Model\Stock setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 100.0.2
  */
 class Stock extends \Magento\Framework\Model\AbstractModel
 {
@@ -59,6 +60,8 @@ class Stock extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Class constructor.
+     *
      * @return void
      */
     protected function _construct()
@@ -67,6 +70,8 @@ class Stock extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Create customer collection.
+     *
      * @return Collection
      */
     public function getCustomerCollection()
@@ -75,6 +80,8 @@ class Stock extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load by param.
+     *
      * @return $this
      */
     public function loadByParam()
@@ -86,6 +93,8 @@ class Stock extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Method for deleting customer from website.
+     *
      * @param int $customerId
      * @param int $websiteId
      * @return $this

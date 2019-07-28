@@ -23,20 +23,14 @@ class OrderSenderTest extends AbstractSenderTest
     {
         $this->stepMockSetup();
 
-        $this->orderResourceMock = $this->getMock(
+        $this->orderResourceMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order::class,
-            ['saveAttribute'],
-            [],
-            '',
-            false
+            ['saveAttribute']
         );
 
-        $this->identityContainerMock = $this->getMock(
+        $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\OrderIdentity::class,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
-            [],
-            '',
-            false
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -59,17 +53,18 @@ class OrderSenderTest extends AbstractSenderTest
      * @param int $configValue
      * @param bool|null $forceSyncMode
      * @param bool|null $emailSendingResult
-     * @dataProvider sendDataProvider
+     * @param $senderSendException
      * @return void
+     * @dataProvider sendDataProvider
      */
-    public function testSend($configValue, $forceSyncMode, $emailSendingResult)
+    public function testSend($configValue, $forceSyncMode, $emailSendingResult, $senderSendException)
     {
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -77,18 +72,12 @@ class OrderSenderTest extends AbstractSenderTest
             ->willReturn($configValue);
 
         if (!$configValue || $forceSyncMode) {
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
-                $addressMock = $this->getMock(
-                    \Magento\Sales\Model\Order\Address::class,
-                    [],
-                    [],
-                    '',
-                    false
-                );
+                $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 
                 $this->addressRenderer->expects($this->any())
                     ->method('format')
@@ -122,19 +111,23 @@ class OrderSenderTest extends AbstractSenderTest
 
                 $this->senderMock->expects($this->once())->method('send');
 
-                $this->senderMock->expects($this->once())->method('sendCopyTo');
+                if ($senderSendException) {
+                    $this->checkSenderSendExceptionCase();
+                } else {
+                    $this->senderMock->expects($this->once())->method('sendCopyTo');
 
-                $this->orderMock->expects($this->once())
-                    ->method('setEmailSent')
-                    ->with(true);
+                    $this->orderMock->expects($this->once())
+                        ->method('setEmailSent')
+                        ->with($emailSendingResult);
 
-                $this->orderResourceMock->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($this->orderMock, ['send_email', 'email_sent']);
+                    $this->orderResourceMock->expects($this->once())
+                        ->method('saveAttribute')
+                        ->with($this->orderMock, ['send_email', 'email_sent']);
 
-                $this->assertTrue(
-                    $this->sender->send($this->orderMock)
-                );
+                    $this->assertTrue(
+                        $this->sender->send($this->orderMock)
+                    );
+                }
             } else {
                 $this->orderResourceMock->expects($this->once())
                     ->method('saveAttribute')
@@ -159,18 +152,41 @@ class OrderSenderTest extends AbstractSenderTest
     }
 
     /**
+     * Methods check case when method "send" in "senderMock" throw exception.
+     *
+     * @return void
+     */
+    protected function checkSenderSendExceptionCase()
+    {
+        $this->senderMock->expects($this->once())
+            ->method('send')
+            ->willThrowException(new \Exception('exception'));
+
+        $this->orderResourceMock->expects($this->once())
+            ->method('saveAttribute')
+            ->with($this->orderMock, 'send_email');
+
+        $this->assertFalse(
+            $this->sender->send($this->orderMock)
+        );
+    }
+
+    /**
      * @return array
      */
     public function sendDataProvider()
     {
         return [
-            [0, 0, true],
-            [0, 0, true],
-            [0, 0, false],
-            [0, 0, false],
-            [0, 1, true],
-            [0, 1, true],
-            [1, null, null, null]
+            [0, 0, true, false],
+            [0, 0, true, false],
+            [0, 0, true, true],
+            [0, 0, false, false],
+            [0, 0, false, false],
+            [0, 0, false, true],
+            [0, 1, true, false],
+            [0, 1, true, false],
+            [0, 1, true, false],
+            [1, null, null, false]
         ];
     }
 
@@ -194,11 +210,11 @@ class OrderSenderTest extends AbstractSenderTest
             ->with('sales_email/general/async_sending')
             ->willReturn(false);
 
-        $this->identityContainerMock->expects($this->once())
+        $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(true);
 
-        $addressMock = $this->getMock(\Magento\Sales\Model\Order\Address::class, [], [], '', false);
+        $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 
         $this->addressRenderer->expects($this->exactly($formatCallCount))
             ->method('format')

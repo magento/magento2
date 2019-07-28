@@ -5,13 +5,39 @@
  */
 namespace Magento\Directory\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Country Resource Model
  *
  * @api
+ * @since 100.0.2
  */
 class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param Context $context
+     * @param null|string $connectionName
+     * @param Escaper|null $escaper
+     */
+    public function __construct(
+        Context $context,
+        ?string $connectionName = null,
+        Escaper $escaper = null
+    ) {
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
+        parent::__construct($context, $connectionName);
+    }
+
     /**
      * Resource initialization
      *
@@ -43,7 +69,7 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please correct the country code: %1.', $code)
+                    __('Please correct the country code: %1.', $this->escaper->escapeHtml($code))
                 );
         }
 

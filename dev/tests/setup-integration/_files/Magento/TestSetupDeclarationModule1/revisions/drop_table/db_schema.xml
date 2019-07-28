@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="auto_increment_test" resource="default">
+        <column xsi:type="int" name="int_auto_increment_with_nullable" identity="true" padding="12" unsigned="true"
+                nullable="true"/>
+        <column xsi:type="smallint" name="int_disabled_auto_increment" default="0" identity="false" padding="12"
+                unsigned="true" nullable="true"/>
+        <constraint xsi:type="unique" referenceId="AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE">
+            <column name="int_auto_increment_with_nullable"/>
+        </constraint>
+    </table>
+</schema>

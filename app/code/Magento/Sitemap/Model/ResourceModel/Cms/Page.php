@@ -6,44 +6,60 @@
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Cms\Api\GetUtilityPageIdentifiersInterface;
 use Magento\Cms\Model\Page as CmsPage;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Sitemap cms page collection model
  *
  * @api
+ * @since 100.0.2
  */
-class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Page extends AbstractDb
 {
     /**
      * @var MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
     /**
      * @var EntityManager
+     * @since 100.1.0
      */
     protected $entityManager;
 
     /**
-     * @param Context $context
-     * @param MetadataPool $metadataPool
-     * @param EntityManager $entityManager
-     * @param string $connectionName
+     * @var GetUtilityPageIdentifiersInterface
+     * @since 100.2.0
+     */
+    private $getUtilityPageIdentifiers;
+
+    /**
+     * @param Context                            $context
+     * @param MetadataPool                       $metadataPool
+     * @param EntityManager                      $entityManager
+     * @param string                             $connectionName
+     * @param GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers
      */
     public function __construct(
         Context $context,
         MetadataPool $metadataPool,
         EntityManager $entityManager,
-        $connectionName = null
+        $connectionName = null,
+        GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
     ) {
-        $this->metadataPool = $metadataPool;
-        $this->entityManager = $entityManager;
+        $this->metadataPool      = $metadataPool;
+        $this->entityManager     = $entityManager;
+        $this->getUtilityPageIdentifiers = $getUtilityPageIdentifiers ?:
+            ObjectManager::getInstance()->get(GetUtilityPageIdentifiersInterface::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -59,6 +75,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 100.1.0
      */
     public function getConnection()
     {
@@ -86,8 +103,8 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'main_table.is_active = 1'
         )->where(
-            'main_table.identifier != ?',
-            \Magento\Cms\Model\Page::NOROUTE_PAGE_ID
+            'main_table.identifier NOT IN (?)',
+            $this->getUtilityPageIdentifiers->execute()
         )->where(
             'store_table.store_id IN(?)',
             [0, $storeId]
@@ -126,6 +143,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
+     * @since 100.1.0
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
@@ -156,6 +174,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 100.1.0
      */
     public function save(AbstractModel $object)
     {
@@ -195,6 +214,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 100.1.0
      */
     public function delete(AbstractModel $object)
     {

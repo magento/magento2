@@ -10,7 +10,7 @@ use \Magento\Framework\Config\FileIterator;
 /**
  * Class FileIteratorTest
  */
-class FileIteratorTest extends \PHPUnit_Framework_TestCase
+class FileIteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FileIterator
@@ -37,14 +37,8 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filePaths = ['/file1', '/file2'];
-        $this->fileReadFactory = $this->getMock(
-            \Magento\Framework\Filesystem\File\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->fileRead = $this->getMock(\Magento\Framework\Filesystem\File\Read::class, [], [], '', false);
+        $this->fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
+        $this->fileRead = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
         $this->fileIterator = new FileIterator($this->fileReadFactory, $this->filePaths);
     }
 

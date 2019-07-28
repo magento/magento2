@@ -5,11 +5,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View;
 
 use Magento\Framework\App\State;
 
-class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
+class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
@@ -81,13 +82,16 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \OutOfBoundsException
-     * @expectedExceptionMessage No element found with ID 'nonexisting_element'
      * @magentoAppIsolation enabled
      */
     public function testRenderNonExistentElementShouldThrowException()
     {
         $layout = $this->_getLayoutModel('render.xml');
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
+
+        $this->expectExceptionMessage(
+            'The element with the "nonexisting_element" ID wasn\'t found. Verify the ID and try again.'
+        );
     }
 
     /**
@@ -254,7 +258,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testRemoveBroken()
     {
         if ($this->state->getMode() === State::MODE_DEVELOPER) {
-            $this->setExpectedException('OutOfBoundsException');
+            $this->expectException('OutOfBoundsException');
         }
         $this->_getLayoutModel('remove_broken.xml');
     }

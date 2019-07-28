@@ -12,6 +12,7 @@ use Magento\Backend\Block\Widget\Grid as BackendGrid;
 /**
  * @api
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Grid extends BackendGrid
 {

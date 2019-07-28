@@ -10,6 +10,7 @@ namespace Magento\Reports\Block\Adminhtml\Customer;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Accounts extends \Magento\Backend\Block\Widget\Grid\Container
 {

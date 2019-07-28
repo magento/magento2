@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order;
 /**
  * Test for \Magento\Sales\Model\Order\OrderValidator class
  */
-class CanInvoiceTest extends \PHPUnit_Framework_TestCase
+class CanInvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Validation\CanInvoice|\PHPUnit_Framework_MockObject_MockObject

@@ -16,7 +16,7 @@ use \Magento\Quote\Model\Quote\Payment;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Payment
@@ -45,8 +45,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             SpecificationFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->eventManager = $this->getMock(ManagerInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
         $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(['unserialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $serializer->expects($this->any())
@@ -112,7 +113,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $quoteId = 1;
         $storeId = 1;
 
-        $paymentMethod = $this->getMock(MethodInterface::class);
+        $paymentMethod = $this->createMock(MethodInterface::class);
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();

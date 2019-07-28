@@ -41,7 +41,7 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
     ) {
         $this->decoder = $decoder;
         $this->_appState = $appState;
-        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 

@@ -9,7 +9,7 @@ namespace Magento\Framework\Indexer\Test\Unit;
  * Class StrategyTest
  * @package Magento\Indexer\Test\Unit\Model\Indexer\Table
  */
-class StrategyTest extends \PHPUnit_Framework_TestCase
+class StrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Strategy object
@@ -30,13 +30,7 @@ class StrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->_model = new \Magento\Framework\Indexer\Table\Strategy(
             $this->_resourceMock
         );

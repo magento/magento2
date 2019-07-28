@@ -77,6 +77,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="downloadable" xsi:type="object">Magento\Downloadable\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="Magento\Downloadable\Api\LinkRepositoryInterface" type="Magento\Downloadable\Model\LinkRepository" />
     <preference for="Magento\Downloadable\Api\SampleRepositoryInterface" type="Magento\Downloadable\Model\SampleRepository" />
     <preference for="Magento\Downloadable\Api\Data\LinkInterface" type="Magento\Downloadable\Model\Link" />

@@ -9,8 +9,6 @@ namespace Magento\Authorization\Model;
  * Admin Role Model
  *
  * @api
- * @method \Magento\Authorization\Model\ResourceModel\Role _getResource()
- * @method \Magento\Authorization\Model\ResourceModel\Role getResource()
  * @method int getParentId()
  * @method \Magento\Authorization\Model\Role setParentId(int $value)
  * @method int getTreeLevel()
@@ -26,6 +24,7 @@ namespace Magento\Authorization\Model;
  * @method string getRoleName()
  * @method \Magento\Authorization\Model\Role setRoleName(string $value)
  * @api
+ * @since 100.0.2
  */
 class Role extends \Magento\Framework\Model\AbstractModel
 {
@@ -41,7 +40,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Authorization\Model\ResourceModel\Role\Collection $resourceCollection
      * @param array $data
      */
-    public function __construct(
+    public function __construct( //phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Authorization\Model\ResourceModel\Role $resource,
@@ -52,7 +51,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function __sleep()
     {
@@ -61,7 +60,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function __wakeup()
     {

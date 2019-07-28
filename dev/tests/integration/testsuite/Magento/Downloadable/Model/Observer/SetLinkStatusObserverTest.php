@@ -9,7 +9,7 @@ namespace Magento\Downloadable\Model\Observer;
  * Integration test for case, when customer is able to download
  * downloadable product, after order was canceled.
  */
-class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
+class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object manager
@@ -31,6 +31,7 @@ class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product.php
+     * @magentoDbIsolation disabled
      */
     public function testCheckStatusOnOrderCancel()
     {

@@ -14,9 +14,9 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * BlockActionsTest contains unit tests for \Magento\Cms\Ui\Component\Listing\Column\BlockActions class
+ * BlockActionsTest contains unit tests for \Magento\Cms\Ui\Component\Listing\Column\BlockActions class.
  */
-class BlockActionsTest extends \PHPUnit_Framework_TestCase
+class BlockActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockActions
@@ -33,36 +33,42 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
      */
     private $urlBuilder;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
-        $context = $this->getMock(ContextInterface::class);
+        $context = $this->createMock(ContextInterface::class);
 
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects(static::never())
+        $context->expects($this->never())
             ->method('getProcessor')
             ->willReturn($processor);
 
-        $this->urlBuilder = $this->getMock(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->setMethods(['escapeHtmlAttr'])
             ->getMock();
 
-        $this->blockActions = $objectManager->getObject(BlockActions::class, [
-            'context' => $context,
-            'urlBuilder' => $this->urlBuilder
-        ]);
+        $this->blockActions = $objectManager->getObject(
+            BlockActions::class,
+            ['context' => $context, 'urlBuilder' => $this->urlBuilder]
+        );
 
         $objectManager->setBackwardCompatibleProperty($this->blockActions, 'escaper', $this->escaper);
     }
 
     /**
+     * Unit test for prepareDataSource method.
+     *
      * @covers \Magento\Cms\Ui\Component\Listing\Column\BlockActions::prepareDataSource
+     * @return void
      */
     public function testPrepareDataSource()
     {
@@ -73,10 +79,10 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
                 'items' => [
                     [
                         'block_id' => $blockId,
-                        'title' => $title
-                    ]
-                ]
-            ]
+                        'title' => $title,
+                    ],
+                ],
+            ],
         ];
         $name = 'item_name';
         $expectedItems = [
@@ -93,33 +99,34 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete %1', $title),
-                            'message' => __('Are you sure you want to delete a %1 record?', $title)
+                            'message' => __('Are you sure you want to delete a %1 record?', $title),
                         ],
-                    ]
+                        'post' => true,
+                    ],
                 ],
-            ]
+            ],
         ];
 
-        $this->escaper->expects(static::once())
-            ->method('escapeHtml')
+        $this->escaper->expects($this->once())
+            ->method('escapeHtmlAttr')
             ->with($title)
             ->willReturn($title);
 
-        $this->urlBuilder->expects(static::exactly(2))
+        $this->urlBuilder->expects($this->exactly(2))
             ->method('getUrl')
             ->willReturnMap(
                 [
                     [
                         BlockActions::URL_PATH_EDIT,
                         [
-                            'block_id' => $blockId
+                            'block_id' => $blockId,
                         ],
                         'test/url/edit',
                     ],
                     [
                         BlockActions::URL_PATH_DELETE,
                         [
-                            'block_id' => $blockId
+                            'block_id' => $blockId,
                         ],
                         'test/url/delete',
                     ],
@@ -129,6 +136,6 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
         $this->blockActions->setData('name', $name);
 
         $actual = $this->blockActions->prepareDataSource($items);
-        static::assertEquals($expectedItems, $actual['data']['items']);
+        $this->assertEquals($expectedItems, $actual['data']['items']);
     }
 }

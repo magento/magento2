@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Simplexml\Test\Unit;
 
-class ElementTest extends \PHPUnit_Framework_TestCase
+class ElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider xmlDataProvider
@@ -108,6 +108,9 @@ XML;
         $this->assertEquals($xml->getAttribute($name), $value);
     }
 
+    /**
+     * @return array
+     */
     public function setAttributeDataProvider()
     {
         return [

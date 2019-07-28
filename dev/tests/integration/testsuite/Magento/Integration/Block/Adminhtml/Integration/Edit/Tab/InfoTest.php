@@ -12,7 +12,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 /**
  * Test for \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info
  */
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info

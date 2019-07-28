@@ -18,7 +18,7 @@ use Magento\Store\Model\StoreManager;
 /**
  * Unit test for \Magento\Setup\Fixtures\EavVariationsFixture.
  */
-class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
+class EavVariationsFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FixtureModel|\PHPUnit_Framework_MockObject_MockObject

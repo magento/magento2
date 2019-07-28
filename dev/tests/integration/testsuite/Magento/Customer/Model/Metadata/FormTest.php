@@ -7,7 +7,7 @@ namespace Magento\Customer\Model\Metadata;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Form

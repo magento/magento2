@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Email\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -13,14 +14,17 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
- * Template model class
+ * Template model class.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractTemplate extends AbstractModel implements TemplateTypesInterface
 {
@@ -162,6 +166,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     private $urlModel;
 
     /**
+     * @var Database
+     */
+    private $fileStorageDatabase;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
@@ -175,6 +184,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param array $data
+     * @param Database $fileStorageDatabase
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -191,7 +201,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
-        array $data = []
+        array $data = [],
+        Database $fileStorageDatabase = null
     ) {
         $this->design = $design;
         $this->area = isset($data['area']) ? $data['area'] : null;
@@ -205,6 +216,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->templateFactory = $templateFactory;
         $this->filterManager = $filterManager;
         $this->urlModel = $urlModel;
+        $this->fileStorageDatabase = $fileStorageDatabase ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
         parent::__construct($context, $registry, null, null, $data);
     }
 
@@ -288,7 +301,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         /**
          * trim copyright message
          */
-        if (preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches) && strpos($matches[0], 'Copyright') > 0) {
+        if (preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches) && strpos($matches[0], 'Copyright') !== false) {
             $templateText = str_replace($matches[0], '', $templateText);
         }
 
@@ -392,6 +405,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if ($fileName) {
             $uploadDir = \Magento\Email\Model\Design\Backend\Logo::UPLOAD_DIR;
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            if ($this->fileStorageDatabase->checkDbUsage() &&
+                !$mediaDirectory->isFile($uploadDir . '/' . $fileName)
+            ) {
+                $this->fileStorageDatabase->saveFileToFilesystem($uploadDir . '/' . $fileName);
+            }
             if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
                 return $this->storeManager->getStore()->getBaseUrl(
                     \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
@@ -488,7 +506,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
     /**
      * Apply design config so that emails are processed within the context of the appropriate area/store/theme.
-     * Can be called multiple times without issue.
      *
      * @return bool
      */
@@ -529,14 +546,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param string $templateId
      * @return $this
-     * @throws \Magento\Framework\Exception\MailException
      */
     public function setForcedArea($templateId)
     {
-        if ($this->area) {
-            throw new \LogicException(__('Area is already set'));
+        if ($this->area === null) {
+            $this->area = $this->emailConfig->getTemplateArea($templateId);
         }
-        $this->area = $this->emailConfig->getTemplateArea($templateId);
+
         return $this;
     }
 
@@ -604,7 +620,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function setDesignConfig(array $config)
     {
         if (!isset($config['area']) || !isset($config['store'])) {
-            throw new LocalizedException(__('Design config must have area and store.'));
+            throw new LocalizedException(
+                __('The design config needs an area and a store. Verify that both are set and try again.')
+            );
         }
         $this->getDesignConfig()->setData($config);
         return $this;
@@ -661,8 +679,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Save current design config and replace with design config from specified store
-     * Event is not dispatched.
+     * Save current design config and replace with design config from specified store. Event is not dispatched.
      *
      * @param null|bool|int|string $storeId
      * @param string $area

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit;
 
-class SelectFactoryTest extends \PHPUnit_Framework_TestCase
+class SelectFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {

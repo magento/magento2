@@ -13,7 +13,7 @@ use Magento\Ui\Component\Filters\Type\Range;
 /**
  * Class RangeTest
  */
-class RangeTest extends \PHPUnit_Framework_TestCase
+class RangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -46,26 +46,11 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->uiComponentFactory = $this->getMock(
-            \Magento\Framework\View\Element\UiComponentFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterBuilderMock = $this->getMock(
-            \Magento\Framework\Api\FilterBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterModifierMock = $this->getMock(
+        $this->uiComponentFactory = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
+        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $this->filterModifierMock = $this->createPartialMock(
             \Magento\Ui\Component\Filters\FilterModifier::class,
-            ['applyFilterModifier'],
-            [],
-            '',
-            false
+            ['applyFilterModifier']
         );
     }
 
@@ -103,14 +88,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
-        $filter = $this->getMock(
-            \Magento\Framework\Api\Filter::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
         $this->filterBuilderMock->expects($this->any())
             ->method('setConditionType')
             ->willReturnSelf();

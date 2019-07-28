@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute

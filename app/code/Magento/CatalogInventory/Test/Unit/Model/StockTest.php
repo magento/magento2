@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model;
 /**
  * Class StockTest
  */
-class StockTest extends \PHPUnit_Framework_TestCase
+class StockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\Context
@@ -125,7 +125,10 @@ class StockTest extends \PHPUnit_Framework_TestCase
             sprintf('Event "%s" with object name "%s" doesn\'t dispatched properly', $eventName, $objectName)
         );
     }
-    
+
+    /**
+     * @return array
+     */
     public function eventsDataProvider()
     {
         return [

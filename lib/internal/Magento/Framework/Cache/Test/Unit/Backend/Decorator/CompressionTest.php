@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend\Decorator;
 
-class CompressionTest extends \PHPUnit_Framework_TestCase
+class CompressionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Cache\Backend\Decorator\Compression
@@ -29,7 +29,7 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $options = [
-            'concrete_backend' => $this->getMock(\Zend_Cache_Backend_File::class),
+            'concrete_backend' => $this->createMock(\Zend_Cache_Backend_File::class),
             'compression_threshold' => strlen($this->_testString),
         ];
         $this->_decorator = new \Magento\Framework\Cache\Backend\Decorator\Compression($options);
@@ -107,7 +107,7 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
     {
         $cacheId = 'cacheId' . rand(1, 100);
 
-        $backend = $this->getMock(\Zend_Cache_Backend_File::class, ['save', 'load']);
+        $backend = $this->createPartialMock(\Zend_Cache_Backend_File::class, ['save', 'load']);
         $backend->expects($this->once())->method('save')->will($this->returnCallback([__CLASS__, 'mockSave']));
 
         $backend->expects($this->once())->method('load')->will($this->returnCallback([__CLASS__, 'mockLoad']));
@@ -129,12 +129,21 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_testString, $loadedValue);
     }
 
+    /**
+     * @param $data
+     * @param $cacheId
+     * @return bool
+     */
     public static function mockSave($data, $cacheId)
     {
         self::$_cacheStorage[$cacheId] = $data;
         return true;
     }
 
+    /**
+     * @param $cacheId
+     * @return bool|mixed
+     */
     public static function mockLoad($cacheId)
     {
         return array_key_exists($cacheId, self::$_cacheStorage) ? self::$_cacheStorage[$cacheId] : false;

@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Class ConverterTest
  * @package Magento\Framework\ObjectManager\Code\Generator
  */
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -49,20 +49,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->sourceClassName = '\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample::class;
         $this->resultClassName = '\\' . \Magento\Framework\ObjectManager\Code\Generator\SampleConverter::class;
 
-        $this->ioObjectMock = $this->getMock(
-            \Magento\Framework\Code\Generator\Io::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->classGenerator = $this->getMock(
-            \Magento\Framework\Code\Generator\ClassGenerator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
+        $this->classGenerator = $this->createMock(\Magento\Framework\Code\Generator\ClassGenerator::class);
 
         $this->definedClassesMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\DefinedClasses::class)
             ->disableOriginalConstructor()->getMock();

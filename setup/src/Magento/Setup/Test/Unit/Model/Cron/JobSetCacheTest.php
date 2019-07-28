@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class JobSetCacheTest extends \PHPUnit_Framework_TestCase
+class JobSetCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider setCacheDataProvider
@@ -25,11 +25,11 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
     public function testSetCache($commandClass, $arrayInput, $jobName, $params)
     {
         $arrayInput = new ArrayInput($arrayInput);
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager =
             $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
-        $cleanupFiles = $this->getMock(\Magento\Framework\App\State\CleanupFiles::class, [], [], '', false);
-        $cache = $this->getMock(\Magento\Framework\App\Cache::class, [], [], '', false);
+        $cleanupFiles = $this->createMock(\Magento\Framework\App\State\CleanupFiles::class);
+        $cache = $this->createMock(\Magento\Framework\App\Cache::class);
         $valueMap = [
             [ \Magento\Framework\Module\PackageInfoFactory::class],
             [ \Magento\Framework\App\State\CleanupFiles::class, $cleanupFiles],
@@ -40,8 +40,8 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
 
         $output =
             $this->getMockForAbstractClass(\Symfony\Component\Console\Output\OutputInterface::class, [], '', false);
-        $status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
-        $command = $this->getMock($commandClass, [], [], '', false);
+        $status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
+        $command = $this->createMock($commandClass);
 
         $command->expects($this->once())
             ->method('run')
@@ -52,7 +52,7 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
             new InputArgument('command', InputArgument::REQUIRED),
         ]);
 
-        $inputDef = $this->getMock(\Symfony\Component\Console\Input\InputDefinition::class, [], [], '', false);
+        $inputDef = $this->createMock(\Symfony\Component\Console\Input\InputDefinition::class);
         $inputDef->expects($this->any())->method('hasArgument')->willReturn(true);
         $command->expects($this->any())->method('getDefinition')->willReturn($inputDef);
         $command->expects($this->any())->method('setDefinition')->with($definition);

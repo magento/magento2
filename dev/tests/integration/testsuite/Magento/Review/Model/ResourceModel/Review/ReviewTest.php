@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Class ReviewTest
  */
-class ReviewTest extends \PHPUnit_Framework_TestCase
+class ReviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

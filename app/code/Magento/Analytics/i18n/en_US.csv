@@ -5,7 +5,7 @@
 "Time value has an unsupported format","Time value has an unsupported format"
 "Cron settings can't be saved","Cron settings can't be saved"
 "There was an error save new configuration value.","There was an error save new configuration value."
-"Please select a vertical.","Please select a vertical."
+"Please select an industry.","Please select an industry."
 "--Please Select--","--Please Select--"
 "Command was not found.","Command was not found."
 "Input data must be string or convertible into string.","Input data must be string or convertible into string."
@@ -18,7 +18,7 @@
 "File is not ready yet.","File is not ready yet."
 "Your Base URL has been changed and your reports are being updated. Advanced Reporting will be available once this change has been processed. Please try again later.","Your Base URL has been changed and your reports are being updated. Advanced Reporting will be available once this change has been processed. Please try again later."
 "Failed to synchronize data to the Magento Business Intelligence service. ","Failed to synchronize data to the Magento Business Intelligence service. "
-"<a href=""%1"">Retry Synchronization</a>","<a href=""%1"">Retry Synchronization</a>"
+"Retry Synchronization","Retry Synchronization"
 TestMessage,TestMessage
 "Error message","Error message"
 "Apps and Games","Apps and Games"
@@ -34,13 +34,14 @@ API,API
 Configuration,Configuration
 "Business Intelligence","Business Intelligence"
 "BI Essentials","BI Essentials"
-"This service provides a suite of dynamic reports based on your product, order and
-                customer data. All reports are accessed securely on a personalized dashboard dedicated to your reports -
-                separate from your Admin Panel.</br> For more information, <a href=""#"">view details</a> or see our
-                <a href=""#"">terms and conditions</a>.","This service provides a suite of dynamic reports based on your product, order and
-                customer data. All reports are accessed securely on a personalized dashboard dedicated to your reports -
-                separate from your Admin Panel.</br> For more information, <a href=""#"">view details</a> or see our
-                <a href=""#"">terms and conditions</a>."
+"This service provides a dynamic suite of reports with rich insights about your business.
+                Your reports can be accessed securely on a personalized dashboard outside of the admin panel by clicking on the
+                ""Go to Advanced Reporting"" link. </br> For more information, see our
+                <a href=""https://magento.com/legal/terms/privacy"">terms and conditions</a>.
+                ","This service provides a dynamic suite of reports with rich insights about your business.
+                Your reports can be accessed securely on a personalized dashboard outside of the admin panel by clicking on the
+                ""Go to Advanced Reporting"" link. </br> For more information, see our
+                <a href=""https://magento.com/legal/terms/privacy"">terms and conditions</a>."
 "Advanced Reporting Service","Advanced Reporting Service"
 Industry,Industry
 "Time of day to send data","Time of day to send data"
@@ -70,27 +71,6 @@ Industry,Industry
 "Technology B2B","Technology B2B"
 "Analytics Subscription","Analytics Subscription"
 "powered by Magento Business Intelligence","powered by Magento Business Intelligence"
-"<p>When you turn on Advanced
-                        Reporting, you'll have access to a suite of dynamic reports tailored to your business. Example
-                        of the new data and trend reports, listed by category, include:</p><ul class=""list"">
-                        <li><strong>Order:</strong> Number of orders, total revenue, and AOV</li><li><strong>Customer:
-                        </strong> New registered accounts, unique customers, number of orders, AOV, revenue by email
-                        </li><li><strong>Product:</strong> Quantity sold, bestsellers by volume/revenue</li></ul><p>A
-                        personalized dashboard includes all reports - separate from your Admin Panel, yet still at your
-                        fingertips.</p><p>We're excited to offer these valuable tools that can help your business become
-                        more data-driven. For more information, <a href=""#"" target=""_blank"">view details</a> or see our
-                        <a href=""#"" target=""_blank"">terms and conditions</a>.</p>
-                        ","<p>When you turn on Advanced
-                        Reporting, you'll have access to a suite of dynamic reports tailored to your business. Example
-                        of the new data and trend reports, listed by category, include:</p><ul class=""list"">
-                        <li><strong>Order:</strong> Number of orders, total revenue, and AOV</li><li><strong>Customer:
-                        </strong> New registered accounts, unique customers, number of orders, AOV, revenue by email
-                        </li><li><strong>Product:</strong> Quantity sold, bestsellers by volume/revenue</li></ul><p>A
-                        personalized dashboard includes all reports - separate from your Admin Panel, yet still at your
-                        fingertips.</p><p>We're excited to offer these valuable tools that can help your business become
-                        more data-driven. For more information, <a href=""#"" target=""_blank"">view details</a> or see our
-                        <a href=""#"" target=""_blank"">terms and conditions</a>.</p>
-                        "
 "Are you sure you want to opt out?","Are you sure you want to opt out?"
 Cancel,Cancel
 "Opt out","Opt out"
@@ -101,3 +81,4 @@ Cancel,Cancel
                     free of charge, in your Magento software. When you opt out, we collect no product, order, and
                     customer data to generate our dynamic reports.</p><p>To opt in later: You can always turn on Advanced
                     Reporting in you Admin Panel.</p>"
+"In order to personalize your Advanced Reporting experience, please select your industry.","In order to personalize your Advanced Reporting experience, please select your industry."

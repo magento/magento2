@@ -48,14 +48,14 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
             $categoryName = $product->getCategoryIds()[0];
             $cmsIndexPage->getTopmenu()->selectCategoryByName($categoryName);
             $priceBlock = $catalogCategoryViewPage->getListProductBlock()->getProductItem($product)->getPriceBlock();
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $priceBlock->isVisible(),
                 'Price block is not displayed for product ' . $product->getName()
             );
             // Product price with applied rule displayed as usual price for Configurable products (MAGETWO-64882)
             $actualPrice['special'] = (float)$priceBlock->getPrice();
             $diff = $this->verifyData($actualPrice, $productPrice[$key]);
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 empty($diff),
                 implode(' ', $diff)
             );

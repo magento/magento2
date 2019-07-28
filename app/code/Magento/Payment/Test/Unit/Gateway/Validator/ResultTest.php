@@ -10,7 +10,7 @@ use Magento\Payment\Gateway\Validator\Result;
 /**
  * Class ResultTest
  */
-class ResultTest extends \PHPUnit_Framework_TestCase
+class ResultTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Result */
     protected $model;
@@ -29,6 +29,9 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedFailsDescription, $this->model->getFailsDescription());
     }
 
+    /**
+     * @return array
+     */
     public function resultDataProvider()
     {
         $phraseMock = $this->getMockBuilder(\Magento\Framework\Phrase::class)->disableOriginalConstructor()->getMock();

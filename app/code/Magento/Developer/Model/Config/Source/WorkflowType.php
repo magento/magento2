@@ -11,6 +11,7 @@ use Magento\Framework\Option\ArrayInterface;
  * Class WorkflowType
  *
  * @api
+ * @since 100.0.2
  */
 class WorkflowType implements ArrayInterface
 {

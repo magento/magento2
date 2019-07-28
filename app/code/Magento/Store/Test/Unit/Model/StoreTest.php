@@ -3,13 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
@@ -18,7 +16,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Store
@@ -41,15 +39,27 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $filesystemMock;
 
     /**
+     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configMock;
+
+    /**
+     * @var SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionMock;
+
+    /**
      * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $urlModifierMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->requestMock = $this->getMock(
-            \Magento\Framework\App\Request\Http::class, [
+        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, [
             'getRequestString',
             'getModuleName',
             'setModuleName',
@@ -60,16 +70,26 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'getDistroBaseUrl',
             'isSecure',
             'getServer',
-        ], [], '', false);
+        ]);
+
         $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
+            ->getMock();
+        $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
+            ->setMethods(['getCurrencyCode'])
+            ->getMockForAbstractClass();
         $this->store = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
-            ['filesystem' => $this->filesystemMock]
+            [
+                'filesystem' => $this->filesystemMock,
+                'config' => $this->configMock,
+                'session' => $this->sessionMock,
+            ]
         );
 
-        $this->urlModifierMock = $this->getMock(\Magento\Framework\Url\ModifierInterface::class);
+        $this->urlModifierMock = $this->createMock(\Magento\Framework\Url\ModifierInterface::class);
         $this->urlModifierMock->expects($this->any())
             ->method('execute')
             ->willReturnArgument(0);
@@ -84,12 +104,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testLoad($key, $field)
     {
         /** @var \Magento\Store\Model\ResourceModel\Store $resource */
-        $resource = $this->getMock(
+        $resource = $this->createPartialMock(
             \Magento\Store\Model\ResourceModel\Store::class,
-            ['load', 'getIdFieldName', '__wakeup'],
-            [],
-            '',
-            false
+            ['load', 'getIdFieldName', '__wakeup']
         );
         $resource->expects($this->atLeastOnce())->method('load')
             ->with($this->isInstanceOf(\Magento\Store\Model\Store::class), $this->equalTo($key), $this->equalTo($field))
@@ -100,6 +117,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $model->load($key);
     }
 
+    /**
+     * @return array
+     */
     public function loadDataProvider()
     {
         return [
@@ -108,9 +128,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testSetWebsite()
     {
-        $website = $this->getMock(\Magento\Store\Model\Website::class, ['getId', '__wakeup'], [], '', false);
+        $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', '__wakeup']);
         $website->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(2));
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(\Magento\Store\Model\Store::class);
@@ -118,12 +141,17 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $model->getWebsiteId());
     }
 
+    /**
+     * @return void
+     */
     public function testGetWebsite()
     {
         $websiteId = 2;
-        $website = $this->getMock(\Magento\Store\Api\Data\WebsiteInterface::class);
+        $website = $this->createMock(\Magento\Store\Api\Data\WebsiteInterface::class);
 
-        $websiteRepository = $this->getMock(\Magento\Store\Api\WebsiteRepositoryInterface::class);
+        $websiteRepository = $this->getMockBuilder(\Magento\Store\Api\WebsiteRepositoryInterface::class)
+            ->setMethods(['getById'])
+            ->getMockForAbstractClass();
         $websiteRepository->expects($this->once())
             ->method('getById')
             ->with($websiteId)
@@ -131,36 +159,46 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'websiteRepository' => $websiteRepository,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['websiteRepository' => $websiteRepository]
+        );
         $model->setWebsiteId($websiteId);
 
         $this->assertEquals($website, $model->getWebsite());
     }
 
+    /**
+     * @return void
+     */
     public function testGetWebsiteIfWebsiteIsNotExist()
     {
-        $websiteRepository = $this->getMock(\Magento\Store\Api\WebsiteRepositoryInterface::class);
+        $websiteRepository = $this->getMockBuilder(\Magento\Store\Api\WebsiteRepositoryInterface::class)
+            ->setMethods(['getById'])
+            ->getMockForAbstractClass();
         $websiteRepository->expects($this->never())
             ->method('getById');
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'websiteRepository' => $websiteRepository,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['websiteRepository' => $websiteRepository]
+        );
         $model->setWebsiteId(null);
 
         $this->assertFalse($model->getWebsite());
     }
 
+    /**
+     * @return void
+     */
     public function testGetGroup()
     {
         $groupId = 2;
-        $group = $this->getMock(\Magento\Store\Api\Data\GroupInterface::class);
+        $group = $this->createMock(\Magento\Store\Api\Data\GroupInterface::class);
 
-        $groupRepository = $this->getMock(\Magento\Store\Api\GroupRepositoryInterface::class);
+        $groupRepository = $this->getMockBuilder(\Magento\Store\Api\GroupRepositoryInterface::class)
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
         $groupRepository->expects($this->once())
             ->method('get')
             ->with($groupId)
@@ -168,34 +206,42 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'groupRepository' => $groupRepository,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['groupRepository' => $groupRepository]
+        );
         $model->setGroupId($groupId);
 
         $this->assertEquals($group, $model->getGroup());
     }
 
+    /**
+     * @return void
+     */
     public function testGetGroupIfGroupIsNotExist()
     {
-        $groupRepository = $this->getMock(\Magento\Store\Api\GroupRepositoryInterface::class);
+        $groupRepository = $this->getMockBuilder(\Magento\Store\Api\GroupRepositoryInterface::class)
+            ->setMethods(['getById'])
+            ->getMockForAbstractClass();
         $groupRepository->expects($this->never())
             ->method('getById');
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'groupRepository' => $groupRepository,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['groupRepository' => $groupRepository]
+        );
         $model->setGroupId(null);
 
         $this->assertFalse($model->getGroup());
     }
 
+    /**
+     * @return void
+     */
     public function testGetUrl()
     {
         $params = ['_scope_to_url' => true];
-        $defaultStore = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
+        $defaultStore = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $defaultStore->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(5));
 
         $url = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
@@ -263,6 +309,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedBaseUrl, $model->getBaseUrl($type, $secure));
     }
 
+    /**
+     * @return array
+     */
     public function getBaseUrlDataProvider()
     {
         return [
@@ -317,6 +366,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetBaseUrlEntryPoint()
     {
         $expectedPath = 'web/unsecure/base_link_url';
@@ -325,30 +377,31 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $configMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
-            ->will($this->returnCallback(
-                function ($path, $scope, $scopeCode) use ($expectedPath) {
-                    return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
-                }
-            ));
+            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
+                return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
+            });
+        $this->requestMock->expects($this->once())
+            ->method('getServer')
+            ->with('SCRIPT_FILENAME')
+            ->willReturn('test_script.php');
+
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class,
             [
                 'config' => $configMock,
                 'isCustomEntryPoint' => false,
+                'request' => $this->requestMock
             ]
         );
         $model->setCode('scopeCode');
 
         $this->setUrlModifier($model);
 
-        $server = $_SERVER;
-        $_SERVER['SCRIPT_FILENAME'] = 'test_script.php';
         $this->assertEquals(
             $expectedBaseUrl,
             $model->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, false)
         );
-        $_SERVER = $server;
     }
 
     /**
@@ -369,15 +422,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      * @param boolean $secure
      * @param string $url
      * @param string $expected
+     * @param bool|string $fromStore
      */
-    public function testGetCurrentUrl($secure, $url, $expected)
+    public function testGetCurrentUrl($secure, $url, $expected, $fromStore)
     {
-        $defaultStore = $this->getMock(
-            \Magento\Store\Model\Store::class, [
+        $defaultStore = $this->createPartialMock(Store::class, [
             'getId',
             'isCurrentlySecure',
             '__wakeup'
-        ], [], '', false);
+        ]);
         $defaultStore->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(5));
         $defaultStore->expects($this->atLeastOnce())->method('isCurrentlySecure')->will($this->returnValue($secure));
 
@@ -386,15 +439,31 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
 
-        $this->requestMock->expects($this->atLeastOnce())->method('getRequestString')->will($this->returnValue(''));
+        $requestString = preg_replace(
+            '/http(s?)\:\/\/[a-z0-9\-]+\//i',
+            '',
+            $url
+        );
+        $this->requestMock
+            ->expects($this->atLeastOnce())
+            ->method('getRequestString')
+            ->willReturn($requestString);
         $this->requestMock->expects($this->atLeastOnce())->method('getQueryValue')->will($this->returnValue([
             'SID' => 'sid'
         ]));
 
         $urlMock = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
-        $urlMock->expects($this->atLeastOnce())->method('setScope')->will($this->returnSelf());
-        $urlMock->expects($this->any())->method('getUrl')
-            ->will($this->returnValue($url));
+        $urlMock
+            ->expects($this->atLeastOnce())
+            ->method('setScope')
+            ->will($this->returnSelf());
+        $urlMock->expects($this->any())
+            ->method('getUrl')
+            ->will($this->returnValue(str_replace($requestString, '', $url)));
+        $urlMock
+            ->expects($this->atLeastOnce())
+            ->method('escape')
+            ->willReturnArgument(0);
 
         $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects($this->any())
@@ -409,7 +478,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $model->setStoreId(2);
         $model->setCode('scope_code');
 
-        $this->assertEquals($expected, $model->getCurrentUrl(false));
+        $this->assertEquals($expected, $model->getCurrentUrl($fromStore));
     }
 
     /**
@@ -418,9 +487,31 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function getCurrentUrlDataProvider()
     {
         return [
-            [true, 'http://test/url', 'http://test/url?SID=sid&amp;___store=scope_code'],
-            [true, 'http://test/url?SID=sid1&___store=scope', 'http://test/url?SID=sid&amp;___store=scope_code'],
-            [false, 'https://test/url', 'https://test/url?SID=sid&amp;___store=scope_code']
+            [
+                true,
+                'http://test/url',
+                'http://test/url?SID=sid&___store=scope_code',
+                false
+            ],
+            [
+                true,
+                'http://test/url?SID=sid1&___store=scope',
+                'http://test/url?SID=sid&___store=scope_code',
+                false
+            ],
+            [
+                false,
+                'https://test/url',
+                'https://test/url?SID=sid&___store=scope_code',
+                false
+            ],
+            [
+                true,
+                'http://test/u/u.2?___store=scope_code',
+                'http://test/u/u.2?'
+                . '___store=scope_code&SID=sid&___from_store=old-store',
+                'old-store'
+            ]
         ];
     }
 
@@ -452,19 +543,13 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 ],
             ]));
 
-        $currency = $this->getMock(\Magento\Directory\Model\Currency::class, [], [], '', false);
+        $currency = $this->createMock(\Magento\Directory\Model\Currency::class);
         $currency->expects($this->any())->method('load')->with($currencyCode)->will($this->returnSelf());
 
-        $currencyFactory = $this->getMock(
-            \Magento\Directory\Model\CurrencyFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $currencyFactory = $this->createPartialMock(\Magento\Directory\Model\CurrencyFactory::class, ['create']);
         $currencyFactory->expects($this->any())->method('create')->will($this->returnValue($currency));
 
-        $appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $appState = $this->createPartialMock(\Magento\Framework\App\State::class, ['isInstalled']);
         $appState->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
@@ -486,6 +571,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetAllowedCurrencies()
     {
         $currencyPath = 'cur/ren/cy/path';
@@ -504,10 +592,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'config' => $configMock,
-            'currencyInstalled' => $currencyPath,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['config' => $configMock, 'currencyInstalled' => $currencyPath]
+        );
 
         $this->assertEquals($expectedResult, $model->getAllowedCurrencies());
     }
@@ -569,6 +656,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function isCurrentlySecureDataProvider()
     {
         return [
@@ -577,7 +667,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'unsecure request, no secure base url registered' => [false, 443, false, true, null],
             'unsecure request, not using registered port' => [false, 80],
             'unsecure request, using registered port, not using secure in frontend' => [false, 443, false, false],
-            'unsecure request, no secure base url registered, not using secure in frontend' => [false, 443, false, false, null],
+            'unsecure request, no secure base url registered, not using secure in frontend' =>
+                [false, 443, false, false, null],
             'unsecure request, not using registered port, not using secure in frontend' => [false, 80, false, false],
         ];
     }
@@ -608,14 +699,94 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
     }
 
+    /**
+     * @return void
+     */
     public function testGetScopeType()
     {
         $this->assertEquals(ScopeInterface::SCOPE_STORE, $this->store->getScopeType());
     }
 
+    /**
+     * @return void
+     */
     public function testGetScopeTypeName()
     {
         $this->assertEquals('Store View', $this->store->getScopeTypeName());
+    }
+
+    /**
+     * @param array $availableCodes
+     * @param string $currencyCode
+     * @param string $defaultCode
+     * @param string $expectedCode
+     * @return void
+     * @dataProvider currencyCodeDataProvider
+     */
+    public function testGetCurrentCurrencyCode(
+        array $availableCodes,
+        string $currencyCode,
+        string $defaultCode,
+        string $expectedCode
+    ): void {
+        $this->store->setData('available_currency_codes', $availableCodes);
+        $this->sessionMock->method('getCurrencyCode')
+            ->willReturn($currencyCode);
+        $this->configMock->method('getValue')
+            ->with(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT)
+            ->willReturn($defaultCode);
+
+        $code = $this->store->getCurrentCurrencyCode();
+        $this->assertEquals($expectedCode, $code);
+    }
+
+    /**
+     * @return array
+     */
+    public function currencyCodeDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'USD',
+                ],
+                'USD',
+                'USD',
+                'USD',
+            ],
+            [
+                [
+                    'USD',
+                    'EUR',
+                ],
+                'EUR',
+                'USD',
+                'EUR',
+            ],
+            [
+                [
+                    'EUR',
+                    'USD',
+                ],
+                'GBP',
+                'USD',
+                'USD',
+            ],
+            [
+                [
+                    'USD',
+                ],
+                'GBP',
+                'EUR',
+                'USD',
+            ],
+            [
+                [],
+                'GBP',
+                'EUR',
+                'EUR',
+            ],
+        ];
     }
 
     /**

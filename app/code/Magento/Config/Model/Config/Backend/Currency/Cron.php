@@ -10,13 +10,18 @@
 namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
+ * Cron job configuration for currency
+ *
  * @api
+ * @since 100.0.2
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
 
-    /** @var \Magento\Framework\App\Config\ValueFactory */
+    /**
+     * @var \Magento\Framework\App\Config\ValueFactory
+     */
     protected $_configValueFactory;
 
     /**
@@ -44,6 +49,8 @@ class Cron extends \Magento\Framework\App\Config\Value
     }
 
     /**
+     * After save handler
+     *
      * @return $this
      * @throws \Exception
      */
@@ -56,8 +63,8 @@ class Cron extends \Magento\Framework\App\Config\Value
         $frequencyMonthly = \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY;
 
         $cronExprArray = [
-            intval($time[1]),                                 # Minute
-            intval($time[0]),                                 # Hour
+            (int)$time[1],                                 # Minute
+            (int)$time[0],                                 # Hour
             $frequency == $frequencyMonthly ? '1' : '*',      # Day of the Month
             '*',                                              # Month of the Year
             $frequency == $frequencyWeekly ? '1' : '*',        # Day of the Week

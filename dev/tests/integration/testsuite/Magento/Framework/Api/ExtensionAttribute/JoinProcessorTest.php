@@ -18,7 +18,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class JoinProcessorTest extends \PHPUnit_Framework_TestCase
+class JoinProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor

@@ -8,7 +8,7 @@ namespace Magento\Search\Model\Adminhtml\System\Config\Source;
 /**
  * @magentoAppArea adminhtml
  */
-class EngineTest extends \PHPUnit_Framework_TestCase
+class EngineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\Adminhtml\System\Config\Source\Engine

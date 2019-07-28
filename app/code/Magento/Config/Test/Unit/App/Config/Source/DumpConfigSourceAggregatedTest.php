@@ -12,7 +12,7 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
+class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSourceInterface|MockObject

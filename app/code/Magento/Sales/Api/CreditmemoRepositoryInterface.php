@@ -12,6 +12,7 @@ namespace Magento\Sales\Api;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases.
  * @api
+ * @since 100.0.2
  */
 interface CreditmemoRepositoryInterface
 {
@@ -19,7 +20,7 @@ interface CreditmemoRepositoryInterface
      * Lists credit memos that match specified search criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See http://devdocs.magento.com/codelinks/attributes.html#CreditmemoRepositoryInterface to
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#CreditmemoRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.

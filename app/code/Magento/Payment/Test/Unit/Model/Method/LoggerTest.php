@@ -9,7 +9,7 @@ namespace Magento\Payment\Test\Unit\Model\Method;
 use Magento\Payment\Model\Method\Logger;
 use Psr\Log\LoggerInterface;
 
-class LoggerTest extends \PHPUnit_Framework_TestCase
+class LoggerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Logger | \PHPUnit_Framework_MockObject_MockObject */
     private $logger;

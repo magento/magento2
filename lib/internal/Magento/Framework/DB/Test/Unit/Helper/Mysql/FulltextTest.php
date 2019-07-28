@@ -9,7 +9,7 @@ use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FulltextTest extends \PHPUnit_Framework_TestCase
+class FulltextTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetMatchQuery()
     {
@@ -64,6 +64,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($select, $result);
     }
 
+    /**
+     * @return array
+     */
     public function matchProvider()
     {
         return [[true], [false]];

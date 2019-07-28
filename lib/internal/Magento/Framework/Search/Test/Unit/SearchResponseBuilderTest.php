@@ -9,7 +9,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
+class SearchResponseBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\SearchResponseBuilder
@@ -67,7 +67,7 @@ class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
         /** @var QueryResponse|\PHPUnit_Framework_MockObject_MockObject $response */
         $response = $this->getMockBuilder(\Magento\Framework\Search\Response\QueryResponse::class)
-            ->setMethods(['getIterator', 'getAggregations'])
+            ->setMethods(['getIterator', 'getAggregations', 'getTotal'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $response->expects($this->any())
@@ -76,6 +76,9 @@ class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
         $response->expects($this->once())
             ->method('getAggregations')
             ->willReturn($aggregations);
+        $response->expects($this->any())
+            ->method('getTotal')
+            ->willReturn(1);
 
         $result = $this->model->build($response);
 

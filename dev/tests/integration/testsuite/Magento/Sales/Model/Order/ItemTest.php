@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $options

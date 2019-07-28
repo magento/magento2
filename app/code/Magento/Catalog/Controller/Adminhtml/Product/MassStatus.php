@@ -6,6 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\ResultFactory;
@@ -13,9 +14,10 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
+ * Updates status for a batch of products.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
+class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
@@ -86,7 +88,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $filterRequest = $this->getRequest()->getParam('filters', null);
         $status = (int) $this->getRequest()->getParam('status');
 
-        if (null !== $storeId && null !== $filterRequest) {
+        if (null === $storeId && null !== $filterRequest) {
             $storeId = (isset($filterRequest['store_id'])) ? (int) $filterRequest['store_id'] : 0;
         }
 
@@ -94,12 +96,17 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->_validateMassStatus($productIds, $status);
             $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class)
                 ->updateAttributes($productIds, ['status' => $status], (int) $storeId);
-            $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
+            $this->messageManager->addSuccessMessage(
+                __('A total of %1 record(s) have been updated.', count($productIds))
+            );
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Something went wrong while updating the product(s) status.')
+            );
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

@@ -11,6 +11,7 @@ namespace Magento\Sales\Api;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package.
  * @api
+ * @since 100.0.2
  */
 interface ShipmentRepositoryInterface
 {
@@ -18,7 +19,7 @@ interface ShipmentRepositoryInterface
      * Lists shipments that match specified search criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See http://devdocs.magento.com/codelinks/attributes.html#ShipmentRepositoryInterface to
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#ShipmentRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.

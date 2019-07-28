@@ -8,7 +8,10 @@
 namespace Magento\AdminNotification\Block;
 
 /**
+ * Admin notification window block
+ *
  * @api
+ * @since 100.0.2
  */
 class Window extends \Magento\Backend\Block\Template
 {
@@ -39,7 +42,7 @@ class Window extends \Magento\Backend\Block\Template
     protected $_criticalCollection;
 
     /**
-     * @var \Magento\Adminnotification\Model\Inbox
+     * @var \Magento\AdminNotification\Model\Inbox
      */
     protected $_latestItem;
 
@@ -91,16 +94,15 @@ class Window extends \Magento\Backend\Block\Template
     /**
      * Retrieve latest critical item
      *
-     * @return bool|\Magento\Adminnotification\Model\Inbox
+     * @return bool|\Magento\AdminNotification\Model\Inbox
      */
     protected function _getLatestItem()
     {
         if ($this->_latestItem == null) {
             $items = array_values($this->_criticalCollection->getItems());
+            $this->_latestItem = false;
             if (count($items)) {
                 $this->_latestItem = $items[0];
-            } else {
-                $this->_latestItem = false;
             }
         }
         return $this->_latestItem;

@@ -8,7 +8,7 @@ namespace Magento\Integration\Model\ResourceModel;
 /**
  * Integration test for \Magento\Integration\Model\ResourceModel\Integration
  */
-class IntegrationTest extends \PHPUnit_Framework_TestCase
+class IntegrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Model\Integration

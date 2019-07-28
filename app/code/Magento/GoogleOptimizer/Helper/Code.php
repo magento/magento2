@@ -9,6 +9,7 @@ namespace Magento\GoogleOptimizer\Helper;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Code
 {

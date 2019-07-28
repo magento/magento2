@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Category;
  * Product View block
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class View extends AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -29,7 +30,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $priceCurrency;
 
@@ -112,56 +113,11 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Return wishlist widget options
      *
      * @return array
-     * @deprecated
+     * @deprecated 101.0.1
      */
     public function getWishlistOptions()
     {
         return ['productType' => $this->getProduct()->getTypeId()];
-    }
-
-    /**
-     * Add meta information from product to head block
-     *
-     * @return \Magento\Catalog\Block\Product\View
-     */
-    protected function _prepareLayout()
-    {
-        $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
-        $product = $this->getProduct();
-        if (!$product) {
-            return parent::_prepareLayout();
-        }
-
-        $title = $product->getMetaTitle();
-        if ($title) {
-            $this->pageConfig->getTitle()->set($title);
-        }
-        $keyword = $product->getMetaKeyword();
-        $currentCategory = $this->_coreRegistry->registry('current_category');
-        if ($keyword) {
-            $this->pageConfig->setKeywords($keyword);
-        } elseif ($currentCategory) {
-            $this->pageConfig->setKeywords($product->getName());
-        }
-        $description = $product->getMetaDescription();
-        if ($description) {
-            $this->pageConfig->setDescription($description);
-        } else {
-            $this->pageConfig->setDescription($this->string->substr($product->getDescription(), 0, 255));
-        }
-        if ($this->_productHelper->canUseCanonicalTag()) {
-            $this->pageConfig->addRemotePageAsset(
-                $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
-                'canonical',
-                ['attributes' => ['rel' => 'canonical']]
-            );
-        }
-
-        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
-        if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle($product->getName());
-        }
-        return parent::_prepareLayout();
     }
 
     /**
@@ -213,8 +169,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     }
 
     /**
-     * Get JSON encoded configuration array which can be used for JS dynamic
-     * price calculation depending on product options
+     * Get JSON encoded configuration which can be used for JS dynamic price calculation depending on product options
      *
      * @return string
      */
@@ -232,24 +187,25 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         }
 
         $tierPrices = [];
-        $tierPricesList = $product->getPriceInfo()->getPrice('tier_price')->getTierPriceList();
+        $priceInfo = $product->getPriceInfo();
+        $tierPricesList = $priceInfo->getPrice('tier_price')->getTierPriceList();
         foreach ($tierPricesList as $tierPrice) {
-            $tierPrices[] = $tierPrice['price']->getValue();
+            $tierPrices[] = $tierPrice['price']->getValue() * 1;
         }
         $config = [
-            'productId'   => $product->getId(),
+            'productId'   => (int)$product->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
             'prices'      => [
                 'oldPrice'   => [
-                    'amount'      => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
+                    'amount'      => $priceInfo->getPrice('regular_price')->getAmount()->getValue() * 1,
                     'adjustments' => []
                 ],
                 'basePrice'  => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
+                    'amount'      => $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount() * 1,
                     'adjustments' => []
                 ],
                 'finalPrice' => [
-                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
+                    'amount'      => $priceInfo->getPrice('final_price')->getAmount()->getValue() * 1,
                     'adjustments' => []
                 ]
             ],
@@ -306,6 +262,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * Get default qty - either as preconfigured, or as 1.
+     *
      * Also restricts it by minimal qty.
      *
      * @param null|\Magento\Catalog\Model\Product $product
@@ -367,10 +324,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     public function getIdentities()
     {
         $identities = $this->getProduct()->getIdentities();
-        $category = $this->_coreRegistry->registry('current_category');
-        if ($category) {
-            $identities[] = Category::CACHE_TAG . '_' . $category->getId();
-        }
+
         return $identities;
     }
 

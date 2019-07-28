@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Magento\Core\Model\Fieldset;
 
-class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
+class FieldsetConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;

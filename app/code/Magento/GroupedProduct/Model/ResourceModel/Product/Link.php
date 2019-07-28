@@ -11,6 +11,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 {
@@ -18,6 +19,7 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 
     /**
      * @var MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 

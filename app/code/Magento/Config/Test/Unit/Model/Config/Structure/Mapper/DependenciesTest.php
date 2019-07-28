@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper;
 
-class DependenciesTest extends \PHPUnit_Framework_TestCase
+class DependenciesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Mapper\Dependencies

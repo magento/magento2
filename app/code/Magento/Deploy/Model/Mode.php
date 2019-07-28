@@ -6,6 +6,9 @@
 
 namespace Magento\Deploy\Model;
 
+use Magento\Deploy\App\Mode\ConfigProvider;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -14,7 +17,10 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
+use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * A class to manage Magento modes
@@ -50,12 +56,42 @@ class Mode
     private $filesystem;
 
     /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
+     * The factory for processor facade.
+     *
+     * @var ProcessorFacadeFactory
+     */
+    private $processorFacadeFactory;
+
+    /**
+     * Emulator adminhtml area for CLI command.
+     *
+     * @var EmulatedAdminhtmlAreaProcessor
+     */
+    private $emulatedAreaProcessor;
+
+    /**
+     * @var MaintenanceModeEnabler
+     */
+    private $maintenanceModeEnabler;
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param Writer $writer
      * @param Reader $reader
-     * @param MaintenanceMode $maintenanceMode
+     * @param MaintenanceMode $maintenanceMode deprecated, use $maintenanceModeEnabler instead
      * @param Filesystem $filesystem
+     * @param ConfigProvider $configProvider
+     * @param ProcessorFacadeFactory $processorFacadeFactory
+     * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor
+     * @param MaintenanceModeEnabler $maintenanceModeEnabler
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         InputInterface $input,
@@ -63,14 +99,26 @@ class Mode
         Writer $writer,
         Reader $reader,
         MaintenanceMode $maintenanceMode,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ConfigProvider $configProvider = null,
+        ProcessorFacadeFactory $processorFacadeFactory = null,
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
+        MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->input = $input;
         $this->output = $output;
         $this->writer = $writer;
         $this->reader = $reader;
-        $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
+
+        $this->configProvider =
+            $configProvider ?: ObjectManager::getInstance()->get(ConfigProvider::class);
+        $this->processorFacadeFactory =
+            $processorFacadeFactory ?: ObjectManager::getInstance()->get(ProcessorFacadeFactory::class);
+        $this->emulatedAreaProcessor =
+            $emulatedAreaProcessor ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
+        $this->maintenanceModeEnabler =
+            $maintenanceModeEnabler ?: ObjectManager::getInstance()->get(MaintenanceModeEnabler::class);
     }
 
     /**
@@ -81,19 +129,23 @@ class Mode
      */
     public function enableProductionMode()
     {
-        $this->enableMaintenanceMode($this->output);
-        $previousMode = $this->getMode();
-        try {
-            // We have to turn on production mode before generation.
-            // We need this to enable generation of the "min" files.
-            $this->setStoreMode(State::MODE_PRODUCTION);
-            $this->filesystem->regenerateStatic($this->output);
-        } catch (LocalizedException $e) {
-            // We have to return store mode to previous state in case of error.
-            $this->setStoreMode($previousMode);
-            throw $e;
-        }
-        $this->disableMaintenanceMode($this->output);
+        $this->maintenanceModeEnabler->executeInMaintenanceMode(
+            function () {
+                $previousMode = $this->getMode();
+                try {
+                    // We have to turn on production mode before generation.
+                    // We need this to enable generation of the "min" files.
+                    $this->setStoreMode(State::MODE_PRODUCTION);
+                    $this->filesystem->regenerateStatic($this->output);
+                } catch (LocalizedException $e) {
+                    // We have to return store mode to previous state in case of error.
+                    $this->setStoreMode($previousMode);
+                    throw $e;
+                }
+            },
+            $this->output,
+            false
+        );
     }
 
     /**
@@ -126,6 +178,25 @@ class Mode
     }
 
     /**
+     * Enable Default mode.
+     *
+     * @return void
+     */
+    public function enableDefaultMode()
+    {
+        $this->filesystem->cleanupFilesystem(
+            [
+                DirectoryList::CACHE,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
+                DirectoryList::TMP_MATERIALIZATION_DIR,
+                DirectoryList::STATIC_VIEW,
+            ]
+        );
+        $this->setStoreMode(State::MODE_DEFAULT);
+    }
+
+    /**
      * Get current mode information
      *
      * @return string
@@ -145,6 +216,7 @@ class Mode
      */
     protected function setStoreMode($mode)
     {
+        $this->saveAppConfigs($mode);
         $data = [
             ConfigFilePool::APP_ENV => [
                 State::PARAM_MODE => $mode
@@ -154,26 +226,25 @@ class Mode
     }
 
     /**
-     * Enable maintenance mode
+     * Save application configs while switching mode
      *
-     * @param OutputInterface $output
+     * @param string $mode
      * @return void
      */
-    protected function enableMaintenanceMode(OutputInterface $output)
+    private function saveAppConfigs($mode)
     {
-        $this->maintenanceMode->set(true);
-        $output->writeln('Enabled maintenance mode');
-    }
-
-    /**
-     * Disable maintenance mode
-     *
-     * @param OutputInterface $output
-     * @return void
-     */
-    protected function disableMaintenanceMode(OutputInterface $output)
-    {
-        $this->maintenanceMode->set(false);
-        $output->writeln('Disabled maintenance mode');
+        $configs = $this->configProvider->getConfigs($this->getMode(), $mode);
+        foreach ($configs as $path => $value) {
+            $this->emulatedAreaProcessor->process(function () use ($path, $value) {
+                $this->processorFacadeFactory->create()->processWithLockTarget(
+                    $path,
+                    $value,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    null,
+                    true
+                );
+            });
+            $this->output->writeln('Config "' . $path . ' = ' . $value . '" has been saved.');
+        }
     }
 }

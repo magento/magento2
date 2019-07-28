@@ -28,7 +28,7 @@ class AssertEmailErrorValidationMessage extends AbstractConstraint
     public function processAssert(
         CheckoutOnepage $checkoutOnepage
     ) {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::EMAIL_VALIDATION_MESSAGE,
             $checkoutOnepage->getShippingBlock()->getEmailError(),
             'Email validation message is not correct.'

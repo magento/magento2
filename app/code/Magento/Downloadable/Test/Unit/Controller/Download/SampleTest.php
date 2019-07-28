@@ -8,9 +8,11 @@ namespace Magento\Downloadable\Test\Unit\Controller\Download;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
+ * Unit tests for \Magento\Downloadable\Controller\Download\Sample.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SampleTest extends \PHPUnit_Framework_TestCase
+class SampleTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Downloadable\Controller\Download\Sample */
     protected $sample;
@@ -64,14 +66,19 @@ class SampleTest extends \PHPUnit_Framework_TestCase
     protected $urlInterface;
 
     /**
+     * @var \Magento\Catalog\Model\Product\SalabilityChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $salabilityCheckerMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->response = $this->getMock(
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             [
                 'setHttpResponseCode',
@@ -83,16 +90,11 @@ class SampleTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->helperData = $this->getMock(
+        $this->helperData = $this->createPartialMock(
             \Magento\Downloadable\Helper\Data::class,
-            [
-                'getIsShareable'
-            ],
-            [],
-            '',
-            false
+            ['getIsShareable']
         );
-        $this->downloadHelper = $this->getMock(
+        $this->downloadHelper = $this->createPartialMock(
             \Magento\Downloadable\Helper\Download::class,
             [
                 'setResource',
@@ -101,12 +103,9 @@ class SampleTest extends \PHPUnit_Framework_TestCase
                 'getFileSize',
                 'getContentDisposition',
                 'output'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->product = $this->getMock(
+        $this->product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             [
                 '_wakeup',
@@ -114,41 +113,15 @@ class SampleTest extends \PHPUnit_Framework_TestCase
                 'getId',
                 'getProductUrl',
                 'getName'
-            ],
-            [],
-            '',
-            false
+            ]
         );
-        $this->messageManager = $this->getMock(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->redirect = $this->getMock(
-            \Magento\Framework\App\Response\RedirectInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->urlInterface = $this->getMock(
-            \Magento\Framework\UrlInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectManager = $this->getMock(
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->salabilityCheckerMock = $this->createMock(\Magento\Catalog\Model\Product\SalabilityChecker::class);
+        $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
-            [
-                'create',
-                'get'
-            ],
-            [],
-            '',
-            false
+            ['create', 'get']
         );
         $this->sample = $this->objectManagerHelper->getObject(
             \Magento\Downloadable\Controller\Download\Sample::class,
@@ -157,12 +130,18 @@ class SampleTest extends \PHPUnit_Framework_TestCase
                 'request' => $this->request,
                 'response' => $this->response,
                 'messageManager' => $this->messageManager,
-                'redirect' => $this->redirect
+                'redirect' => $this->redirect,
+                'salabilityChecker' => $this->salabilityCheckerMock,
             ]
         );
     }
 
-    public function testExecuteLinkTypeUrl()
+    /**
+     * Execute Download sample action with Sample Url.
+     *
+     * @return void
+     */
+    public function testExecuteSampleWithUrlType()
     {
         $sampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
             ->disableOriginalConstructor()
@@ -176,6 +155,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($sampleMock);
         $sampleMock->expects($this->once())->method('load')->with('some_sample_id')->willReturnSelf();
         $sampleMock->expects($this->once())->method('getId')->willReturn('some_link_id');
+        $this->salabilityCheckerMock->expects($this->once())->method('isSalable')->willReturn(true);
         $sampleMock->expects($this->once())->method('getSampleType')->willReturn(
             \Magento\Downloadable\Helper\Download::LINK_TYPE_URL
         );
@@ -197,7 +177,12 @@ class SampleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->response, $this->sample->execute());
     }
 
-    public function testExecuteLinkTypeFile()
+    /**
+     * Execute Download sample action with Sample File.
+     *
+     * @return void
+     */
+    public function testExecuteSampleWithFileType()
     {
         $sampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
             ->disableOriginalConstructor()
@@ -215,6 +200,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($sampleMock);
         $sampleMock->expects($this->once())->method('load')->with('some_sample_id')->willReturnSelf();
         $sampleMock->expects($this->once())->method('getId')->willReturn('some_sample_id');
+        $this->salabilityCheckerMock->expects($this->once())->method('isSalable')->willReturn(true);
         $sampleMock->expects($this->any())->method('getSampleType')->willReturn(
             \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE
         );

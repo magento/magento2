@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SynchronizerTest extends \PHPUnit_Framework_TestCase
+class SynchronizerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer */
     protected $model;
@@ -80,6 +80,7 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterProductActions()
     {
+        $typeId = 'recently_compared_product';
         $productsData = [
             1 => [
                 'added_at' => 12,
@@ -87,14 +88,14 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
             ],
             2 => [
                 'added_at' => 13,
-                'product_id' => 2,
+                'product_id' => '2',
             ],
             3 => [
                 'added_at' => 14,
                 'product_id' => 3,
             ]
         ];
-        $frontendConfiguration = $this->getMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
+        $frontendConfiguration = $this->createMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
         $frontendConfiguration->expects($this->once())
             ->method('get')
             ->willReturn([
@@ -110,7 +111,7 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $action2 = $this->getMockBuilder(ProductFrontendActionInterface::class)
             ->getMockForAbstractClass();
 
-        $frontendAction = $this->getMock(ProductFrontendActionInterface::class);
+        $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,10 +127,12 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection->expects($this->any())
+        $collection->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->withConsecutive(['type_id'], ['product_id']);
-
+            ->with('type_id', $typeId);
+        $collection->expects($this->at(2))
+            ->method('addFieldToFilter')
+            ->with('product_id', [1, 2]);
         $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
         $collection->expects($this->once())
             ->method('getIterator')

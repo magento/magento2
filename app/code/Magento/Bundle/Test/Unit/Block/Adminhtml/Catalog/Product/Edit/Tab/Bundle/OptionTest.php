@@ -5,13 +5,13 @@
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetAddButtonId()
     {
         $button = new \Magento\Framework\DataObject();
 
-        $itemsBlock = $this->getMock(\Magento\Framework\DataObject::class, ['getChildBlock']);
+        $itemsBlock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getChildBlock']);
         $itemsBlock->expects(
             $this->atLeastOnce()
         )->method(
@@ -22,7 +22,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($button)
         );
 
-        $layout = $this->getMock(\Magento\Framework\DataObject::class, ['getBlock']);
+        $layout = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getBlock']);
         $layout->expects(
             $this->atLeastOnce()
         )->method(
@@ -33,12 +33,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($itemsBlock)
         );
 
-        $block = $this->getMock(
+        $block = $this->createPartialMock(
             \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option::class,
-            ['getLayout'],
-            [],
-            '',
-            false
+            ['getLayout']
         );
         $block->expects($this->atLeastOnce())->method('getLayout')->will($this->returnValue($layout));
 

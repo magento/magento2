@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Menu\Builder\Command;
 
-class RemoveTest extends \PHPUnit_Framework_TestCase
+class RemoveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu\Builder\Command\Remove

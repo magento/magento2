@@ -17,8 +17,16 @@
                         <table>
                             <tr>
                                 <td>
-                                    <p><a href="#">{{trans "About Us"}}</a></p>
-                                    <p><a href="#">{{trans "Customer Service"}}</a></p>
+                                    {{depend url_about_us}}
+                                    <p>
+                                        {{trans '<a href=%url_about_us>About Us</a>' url_about_us=$url_about_us |raw}}
+                                    </p>
+                                    {{/depend}}
+                                    {{depend url_customer_service}}
+                                    <p>
+                                        {{trans '<a href=url_customer_service>Customer Service</a>' url_customer_service=$url_customer_service |raw}}
+                                    </p>
+                                    {{/depend}}
                                 </td>
                                 <td>
                                     {{depend store_phone}}

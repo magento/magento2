@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Contains methods to test PayPal token Ui component provider
  */
-class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
+class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TokenUiComponentInterfaceFactory|MockObject
@@ -45,7 +45,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->urlBuilder = $this->getMock(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -86,7 +86,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getPayPalIcon')
             ->willReturn($icon);
 
-        $paymentToken = $this->getMock(PaymentTokenInterface::class);
+        $paymentToken = $this->createMock(PaymentTokenInterface::class);
         $paymentToken->expects(static::once())
             ->method('getTokenDetails')
             ->willReturn('{"payerEmail":" ' . $payerEmail . '"}');
@@ -98,7 +98,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->willReturn($nonceUrl);
 
-        $tokenComponent = $this->getMock(TokenUiComponentInterface::class);
+        $tokenComponent = $this->createMock(TokenUiComponentInterface::class);
         $tokenComponent->expects(static::once())
             ->method('getConfig')
             ->willReturn($expected);

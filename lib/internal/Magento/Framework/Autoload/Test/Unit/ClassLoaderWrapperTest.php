@@ -9,7 +9,7 @@ namespace Magento\Framework\Autoload\Test\Unit;
 use Composer\Autoload\ClassLoader;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ClassLoaderWrapperTest extends \PHPUnit_Framework_TestCase
+class ClassLoaderWrapperTest extends \PHPUnit\Framework\TestCase
 {
     const PREFIX = 'Namespace\\Prefix\\';
 
@@ -29,7 +29,7 @@ class ClassLoaderWrapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->autoloaderMock = $this->getMock(\Composer\Autoload\ClassLoader::class);
+        $this->autoloaderMock = $this->createMock(\Composer\Autoload\ClassLoader::class);
         $this->model = (new ObjectManager($this))->getObject(
             \Magento\Framework\Autoload\ClassLoaderWrapper::class,
             [

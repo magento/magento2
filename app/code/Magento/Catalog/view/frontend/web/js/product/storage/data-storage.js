@@ -34,6 +34,21 @@ define([
         };
     }
 
+    /**
+     * Set data to localStorage with support check.
+     *
+     * @param {String} namespace
+     * @param {Object} data
+     */
+    function setLocalStorageItem(namespace, data) {
+        try {
+            window.localStorage.setItem(namespace, JSON.stringify(data));
+        } catch (e) {
+            console.warn('localStorage is unavailable - skipping local caching of product data');
+            console.error(e);
+        }
+    }
+
     return {
 
         /**
@@ -118,7 +133,7 @@ define([
             if (_.isEmpty(data)) {
                 this.localStorage.removeAll();
             } else {
-                this.localStorage.set(data);
+                setLocalStorageItem(this.namespace, data);
             }
         },
 
@@ -228,7 +243,7 @@ define([
             this.updateRequestConfig.data = queryBuilder.buildQuery(prepareAjaxParams);
             this.updateRequestConfig.data['store_id'] = store;
             this.updateRequestConfig.data['currency_code'] = currency;
-            $.ajax(this.updateRequestConfig).success(function (data) {
+            $.ajax(this.updateRequestConfig).done(function (data) {
                 this.request = {};
                 this.providerHandler(getParsedDataFromServer(data));
             }.bind(this));

@@ -25,10 +25,10 @@ class CredentialsValidator
     {
         $exception = new InputException();
         if (!is_string($username) || strlen($username) == 0) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'username']));
+            $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'username']));
         }
         if (!is_string($password) || strlen($password) == 0) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'password']));
+            $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'password']));
         }
         if ($exception->wasErrorAdded()) {
             throw $exception;

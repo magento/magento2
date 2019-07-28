@@ -9,7 +9,7 @@ namespace Magento\Sitemap\Model;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SitemapConfigReaderTest extends \PHPUnit_Framework_TestCase
+class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SitemapConfigReader

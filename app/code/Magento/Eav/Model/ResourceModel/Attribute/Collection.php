@@ -11,6 +11,7 @@ use Magento\Store\Model\Website;
  * EAV additional attribute resource collection (Using Forms)
  *
  * @api
+ * @since 100.0.2
  */
 abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {

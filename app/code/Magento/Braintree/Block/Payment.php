@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Template\Context;
  * Class Payment
  *
  * @api
+ * @since 100.1.0
  */
 class Payment extends Template
 {
@@ -40,17 +41,23 @@ class Payment extends Template
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getPaymentConfig()
     {
         $payment = $this->config->getConfig()['payment'];
         $config = $payment[$this->getCode()];
         $config['code'] = $this->getCode();
+        $config['clientTokenUrl'] = $this->_urlBuilder->getUrl(
+            'braintree/payment/getClientToken',
+            ['_secure' => true]
+        );
         return json_encode($config, JSON_UNESCAPED_SLASHES);
     }
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getCode()
     {

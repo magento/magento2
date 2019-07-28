@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Filter\Builder
@@ -29,7 +29,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     private $preprocessor;
 
     /**
-     * @var ConditionManager|\PHPUnit_Framework_MockObject_MockObject $conditionManager
+     * @var ConditionManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $conditionManager;
 

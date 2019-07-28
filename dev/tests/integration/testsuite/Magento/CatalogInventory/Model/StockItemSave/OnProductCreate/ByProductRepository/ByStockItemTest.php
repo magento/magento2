@@ -20,7 +20,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDbIsolation enabled
  */
-class ByStockItemTest extends \PHPUnit_Framework_TestCase
+class ByStockItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterfaceFactory
@@ -58,8 +58,8 @@ class ByStockItemTest extends \PHPUnit_Framework_TestCase
     private $productData = [
         ProductInterface::TYPE_ID => Type::TYPE_SIMPLE,
         'website_ids' => [1],
-        ProductInterface::NAME => 'Simple',
-        ProductInterface::SKU => 'simple',
+        ProductInterface::NAME => 'simpleForByStockItemTest',
+        ProductInterface::SKU => 'simpleForByStockItemTest',
         ProductInterface::PRICE => 100,
         ProductInterface::EXTENSION_ATTRIBUTES_KEY => [],
     ];
@@ -103,7 +103,7 @@ class ByStockItemTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->populateWithArray($product, $productData, ProductInterface::class);
         $this->productRepository->save($product);
 
-        $this->stockItemDataChecker->checkStockItemData('simple', $this->stockItemData);
+        $this->stockItemDataChecker->checkStockItemData('simpleForByStockItemTest', $this->stockItemData);
     }
 
     /**
@@ -122,7 +122,7 @@ class ByStockItemTest extends \PHPUnit_Framework_TestCase
         $product->getExtensionAttributes()->setStockItem($stockItem);
         $this->productRepository->save($product);
 
-        $this->stockItemDataChecker->checkStockItemData('simple', $this->stockItemData);
+        $this->stockItemDataChecker->checkStockItemData('simpleForByStockItemTest', $this->stockItemData);
     }
 
     /**
@@ -139,6 +139,6 @@ class ByStockItemTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->populateWithArray($stockItem, $this->stockItemData, StockItemInterface::class);
         $this->stockItemRepository->save($stockItem);
 
-        $this->stockItemDataChecker->checkStockItemData('simple', $this->stockItemData);
+        $this->stockItemDataChecker->checkStockItemData('simpleForByStockItemTest', $this->stockItemData);
     }
 }

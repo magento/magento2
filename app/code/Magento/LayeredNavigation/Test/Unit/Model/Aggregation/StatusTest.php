@@ -8,7 +8,7 @@ namespace Magento\LayeredNavigation\Test\Unit\Model\Aggregation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\LayeredNavigation\Model\Aggregation\Status */
     private $resolver;

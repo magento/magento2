@@ -21,7 +21,7 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
  *
  * @see ValueProcessor
  */
-class ValueProcessorTest extends \PHPUnit_Framework_TestCase
+class ValueProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ValueFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -73,15 +73,15 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $hasBackendModel
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsGetBackendModel
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCreate
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsGetValue
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetPath
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetScope
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetScopeId
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetValue
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsAfterLoad
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSerialize
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsGetBackendModel
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsCreate
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsGetValue
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsSetPath
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsSetScope
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsSetScopeId
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsSetValue
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsAfterLoad
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectsSerialize
      * @param string $expectsValue
      * @param string $className
      * @param string $value

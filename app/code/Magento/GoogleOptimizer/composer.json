@@ -1,18 +1,20 @@
 {
     "name": "magento/module-google-optimizer",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-store": "100.3.*",
-        "magento/module-google-analytics": "100.3.*",
-        "magento/module-catalog": "101.2.*",
-        "magento/module-cms": "101.2.*",
-        "magento/module-backend": "100.3.*",
-        "magento/framework": "100.3.*",
-        "magento/module-ui": "100.3.*"
+        "php": "~7.1.3||~7.2.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-cms": "*",
+        "magento/module-google-analytics": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
-    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

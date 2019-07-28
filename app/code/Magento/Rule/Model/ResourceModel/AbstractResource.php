@@ -10,6 +10,7 @@ namespace Magento\Rule\Model\ResourceModel;
  * Abstract Rule entity resource model
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -80,7 +81,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
         try {
             $this->_multiplyBunchInsert($ruleIds, $entityIds, $entityType);
         } catch (\Exception $e) {
-            $this->getConnection()->rollback();
+            $this->getConnection()->rollBack();
             throw $e;
         }
 

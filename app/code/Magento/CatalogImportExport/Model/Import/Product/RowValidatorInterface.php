@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * Interface RowValidatorInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorInterface
 {
@@ -83,6 +84,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
     const ERROR_MEDIA_PATH_NOT_ACCESSIBLE = 'mediaPathNotAvailable';
 
     const ERROR_DUPLICATE_URL_KEY = 'duplicatedUrlKey';
+
+    const ERROR_DUPLICATE_MULTISELECT_VALUES = 'duplicatedMultiselectValues';
 
     /**
      * Value that means all entities (e.g. websites, groups etc.)

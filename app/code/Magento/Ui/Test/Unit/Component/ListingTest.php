@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class ListingTest
  */
-class ListingTest extends \PHPUnit_Framework_TestCase
+class ListingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -16,6 +16,9 @@ use Zend\Code\Reflection\ParameterReflection;
 
 /**
  * Class Repository
+ * @since 2.0.0
+ * @deprecated 2.2.0 As current implementation breaks Repository contract. Not removed from codebase to prevent
+ * possible backward incompatibilities if this functionality being used by 3rd party developers.
  */
 class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
 {
@@ -153,9 +156,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getPersistorClassName()
     {
         $target = $this->getSourceClassName();
-//        if (substr($target, -9) == 'Interface') {
-//            $target = substr($target, 1, strlen($target) -9);
-//        }
         return $target . 'Persistor';
     }
 
@@ -214,7 +214,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns get() method
      *
-     * @return string
+     * @return array
      */
     protected function _getGetMethod()
     {
@@ -223,13 +223,19 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         /** @var ParameterReflection $parameterReflection */
         $parameterReflection = $methodReflection->getParameters()[0];
         $body = "if (!\$id) {\n"
-            . "    throw new \\" . InputException::class . "('ID required');\n"
+            . "    throw new \\" . InputException::class . "(\n"
+            . "        new \\Magento\\Framework\\Phrase('An ID is needed. Set the ID and try again.')\n"
+            . "    );\n"
             . "}\n"
             . "if (!isset(\$this->registry[\$id])) {\n"
             . "    \$entity = \$this->" . $this->_getSourcePersistorPropertyName()
             . "->loadEntity(\$id);\n"
             . "    if (!\$entity->getId()) {\n"
-            . "        throw new \\" . NoSuchEntityException::class . "('Requested entity doesn\\'t exist');\n"
+            . "        throw new \\" . NoSuchEntityException::class . "(\n"
+            . "            new \\Magento\\Framework\\Phrase(\n"
+            . "                'The entity that was requested doesn\'t exist. Verify the entity and try again.'\n"
+            . "            )\n"
+            . "        );\n"
             . "    }\n"
             . "    \$this->registry[\$id] = \$entity;\n"
             . "}\n"
@@ -263,6 +269,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'name' => 'throws',
                         'description' => '\\' . NoSuchEntityException::class,
                     ],
+                    [
+                        'name' => 'deprecated'
+                    ],
                 ],
             ]
         ];
@@ -271,7 +280,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns register() method
      *
-     * @return string
+     * @return array
      */
     protected function _getCreateFromArrayMethod()
     {
@@ -296,6 +305,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'name' => 'return',
                         'description' => $this->_getResultClassName(),
                     ],
+                    [
+                        'name' => 'deprecated'
+                    ],
                 ],
             ]
         ];
@@ -304,7 +316,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns register() method
      *
-     * @return string
+     * @return array
      */
     protected function _getCreateMethod()
     {
@@ -329,6 +341,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'name' => 'return',
                         'description' => $this->getSourceClassName(),
                     ],
+                    [
+                        'name' => 'deprecated'
+                    ]
                 ],
             ]
         ];
@@ -337,7 +352,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns register() method
      *
-     * @return string
+     * @return array
      */
     protected function _getFlushMethod()
     {
@@ -351,7 +366,11 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'body' => $body,
             'docblock' => [
                 'shortDescription' => 'Perform persist operations',
-                'tags' => [],
+                'tags' => [
+                    [
+                        'name' => 'deprecated'
+                    ],
+                ],
             ]
         ];
     }
@@ -359,7 +378,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns persist() method
      *
-     * @return string
+     * @return array
      */
     protected function _getSaveMethod()
     {
@@ -386,6 +405,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     [
                         'name' => 'return',
                         'description' => $this->getSourceClassName(),
+                    ],
+                    [
+                        'name' => 'deprecated'
                     ],
                 ],
             ]
@@ -422,6 +444,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     [
                         'name' => 'return',
                         'description' => 'bool',
+                    ],
+                    [
+                        'name' => 'deprecated'
                     ],
                 ],
             ]
@@ -460,6 +485,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'name' => 'return',
                         'description' => 'bool',
                     ],
+                    [
+                        'name' => 'deprecated'
+                    ],
                 ],
             ]
         ];
@@ -489,6 +517,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'name' => 'param',
                         'description' => $this->getSourceClassName() . ' $entity',
                     ],
+                    [
+                        'name' => 'deprecated'
+                    ],
                 ],
             ]
         ];
@@ -497,7 +528,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns getList() method
      *
-     * @return string
+     * @return array
      */
     protected function _getGetListMethod()
     {
@@ -524,6 +555,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     [
                         'name' => 'return',
                         'description' => $this->getSourceClassName() . '[]',
+                    ],
+                    [
+                        'name' => 'deprecated'
                     ],
                 ],
             ]
@@ -619,6 +653,19 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             ->setClassDocBlock($this->_getClassDocBlock())
             ->setImplementedInterfaces([$this->getInterfaceName()]);
         return $this->_getGeneratedCode();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getClassDocBlock()
+    {
+        $docBlock = parent::_getClassDocBlock();
+        $docBlock['tags'] = [
+            ['name' => 'deprecated', 'description' => '2.2.0'],
+            ['name' => 'see', 'description' => '\\' . self::class]
+        ];
+        return $docBlock;
     }
 
     /**

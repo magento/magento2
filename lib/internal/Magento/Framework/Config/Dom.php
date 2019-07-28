@@ -83,6 +83,7 @@ class Dom
 
     /**
      * @var array
+     * @since 2.2.0
      */
     private static $resolvedSchemaPaths = [];
 
@@ -121,6 +122,7 @@ class Dom
      *
      * @param string $errorFormat
      * @return string[]
+     * @since 2.1.0
      */
     private static function getXmlErrors($errorFormat)
     {
@@ -188,9 +190,20 @@ class Dom
             /* override node value */
             if ($this->_isTextNode($node)) {
                 /* skip the case when the matched node has children, otherwise they get overridden */
-                if (!$matchedNode->hasChildNodes() || $this->_isTextNode($matchedNode)) {
+                if (!$matchedNode->hasChildNodes()
+                    || $this->_isTextNode($matchedNode)
+                    || $this->isCdataNode($matchedNode)
+                ) {
                     $matchedNode->nodeValue = $node->childNodes->item(0)->nodeValue;
                 }
+            } elseif ($this->isCdataNode($node) && $this->_isTextNode($matchedNode)) {
+                /* Replace text node with CDATA section */
+                if ($this->findCdataSection($node)) {
+                    $matchedNode->nodeValue = $this->findCdataSection($node)->nodeValue;
+                }
+            } elseif ($this->isCdataNode($node) && $this->isCdataNode($matchedNode)) {
+                /* Replace CDATA with new one */
+                $this->replaceCdataNode($matchedNode, $node);
             } else {
                 /* recursive merge for all child nodes */
                 foreach ($node->childNodes as $childNode) {
@@ -216,6 +229,56 @@ class Dom
     protected function _isTextNode($node)
     {
         return $node->childNodes->length == 1 && $node->childNodes->item(0) instanceof \DOMText;
+    }
+
+    /**
+     * Check if the node content is CDATA (probably surrounded with text nodes) or just text node
+     *
+     * @param \DOMNode $node
+     * @return bool
+     */
+    private function isCdataNode($node)
+    {
+        // If every child node of current is NOT \DOMElement
+        // It is arbitrary combination of text nodes and CDATA sections.
+        foreach ($node->childNodes as $childNode) {
+            if ($childNode instanceof \DOMElement) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Finds CDATA section from given node children
+     *
+     * @param \DOMNode $node
+     * @return \DOMCdataSection|null
+     */
+    private function findCdataSection($node)
+    {
+        foreach ($node->childNodes as $childNode) {
+            if ($childNode instanceof \DOMCdataSection) {
+                return $childNode;
+            }
+        }
+    }
+
+    /**
+     * Replaces CDATA section in $oldNode with $newNode's
+     *
+     * @param \DOMNode $oldNode
+     * @param \DOMNode $newNode
+     */
+    private function replaceCdataNode($oldNode, $newNode)
+    {
+        $oldCdata = $this->findCdataSection($oldNode);
+        $newCdata = $this->findCdataSection($newNode);
+
+        if ($oldCdata && $newCdata) {
+            $oldCdata->nodeValue = $newCdata->nodeValue;
+        }
     }
 
     /**
@@ -275,7 +338,10 @@ class Dom
         $node = null;
         if ($matchedNodes->length > 1) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("More than one node matching the query: %1", [$nodePath])
+                new \Magento\Framework\Phrase(
+                    "More than one node matching the query: %1, Xml is: %2",
+                    [$nodePath, $this->dom->saveXML()]
+                )
             );
         } elseif ($matchedNodes->length == 1) {
             $node = $matchedNodes->item(0);

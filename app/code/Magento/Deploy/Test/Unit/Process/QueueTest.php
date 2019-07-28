@@ -21,7 +21,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see Queue
  */
-class QueueTest extends \PHPUnit_Framework_TestCase
+class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Queue
@@ -58,27 +58,21 @@ class QueueTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->appState = $this->getMock(AppState::class, [], [], '', false);
+        $this->appState = $this->createMock(AppState::class);
         $this->localeResolver = $this->getMockForAbstractClass(
             LocaleResolver::class,
             ['setLocale'],
             '',
             false
         );
-        $this->resourceConnection = $this->getMock(
-            ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceConnection = $this->createMock(ResourceConnection::class);
         $this->logger = $this->getMockForAbstractClass(
             LoggerInterface::class,
             ['notice', 'info'],
             '',
             false
         );
-        $this->deployPackageService = $this->getMock(DeployPackage::class, ['deploy'], [], '', false);
+        $this->deployPackageService = $this->createPartialMock(DeployPackage::class, ['deploy']);
 
         $this->queue = new Queue(
             $this->appState,
@@ -96,7 +90,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdd()
     {
-        $package = $this->getMock(Package::class, [], [], '', false);
+        $package = $this->createMock(Package::class);
         $package->expects($this->once())->method('getPath')->willReturn('path');
 
         $this->assertEquals(true, $this->queue->add($package));
@@ -112,7 +106,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess()
     {
-        $package = $this->getMock(Package::class, [], [], '', false);
+        $package = $this->createMock(Package::class);
         $package->expects($this->any())->method('getState')->willReturn(0);
         $package->expects($this->exactly(2))->method('getParent')->willReturn(true);
         $package->expects($this->any())->method('getArea')->willReturn('area');

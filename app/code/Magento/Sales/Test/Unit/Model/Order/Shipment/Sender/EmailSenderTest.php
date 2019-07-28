@@ -11,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Sender;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmailSenderTest extends \PHPUnit_Framework_TestCase
+class EmailSenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
@@ -249,7 +249,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
 
         $this->shipmentMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         if (!$configValue || $forceSyncMode) {
             $transport = [
@@ -279,7 +279,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
                 ->method('setTemplateVars')
                 ->with($transport->getData());
 
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 

@@ -8,7 +8,7 @@ namespace Magento\Eav\Test\Unit\Model;
 /**
  * Class CustomAttributesMapperTest
  */
-class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
+class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -198,6 +198,9 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     private function getAttributes()
     {
         /* Attribute with the code we want to copy */

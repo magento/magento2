@@ -10,6 +10,7 @@ namespace Magento\Directory\Model\ResourceModel;
  * Currency Resource Model
  *
  * @api
+ * @since 100.0.2
  */
 class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -164,6 +165,8 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $path
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated because doesn't take into consideration scopes and system config values.
+     * @see \Magento\Directory\Model\CurrencyConfig::getConfigCurrencies()
      */
     public function getConfigCurrencies($model, $path)
     {
@@ -213,7 +216,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
         $bind = [':currency_from' => $code];
         $select = $connection->select()->from(
-            $this->getTable('directory_currency_rate'),
+            $this->_currencyRateTable,
             ['currency_to', 'rate']
         )->where(
             'currency_from = :currency_from'

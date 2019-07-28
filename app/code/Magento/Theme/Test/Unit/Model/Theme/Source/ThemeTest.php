@@ -7,10 +7,9 @@ namespace Magento\Theme\Test\Unit\Model\Theme\Source;
 
 use \Magento\Theme\Model\Theme\Source\Theme;
 
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @true
      * @return void
      * @covers \Magento\Theme\Model\Theme\Source\Theme::__construct
      * @covers \Magento\Theme\Model\Theme\Source\Theme::getAllOptions

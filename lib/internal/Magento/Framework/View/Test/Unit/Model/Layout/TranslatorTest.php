@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\Model\Layout;
 
 use Magento\Framework\Phrase;
 
-class TranslatorTest extends \PHPUnit_Framework_TestCase
+class TranslatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Model\Layout\Translator

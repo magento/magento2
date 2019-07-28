@@ -12,7 +12,7 @@ use Magento\Framework\Stdlib\BooleanUtils;
 /**
  * @covers \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils
  */
-class BaseStringUtilsTest extends \PHPUnit_Framework_TestCase
+class BaseStringUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils
@@ -29,7 +29,7 @@ class BaseStringUtilsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->booleanUtils = $this->getMock(BooleanUtils::class);
+        $this->booleanUtils = $this->createPartialMock(BooleanUtils::class, ['toBoolean']);
         $this->booleanUtils->expects(
             $this->any()
         )->method(
@@ -39,7 +39,9 @@ class BaseStringUtilsTest extends \PHPUnit_Framework_TestCase
         );
         $this->model = new BaseStringUtils($this->booleanUtils);
         /** @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject $translateRenderer */
-        $translateRenderer = $this->getMockForAbstractClass(RendererInterface::class);
+        $translateRenderer = $this->getMockBuilder(RendererInterface::class)
+          ->setMethods(['render'])
+          ->getMockForAbstractClass();
         $translateRenderer->expects(self::never())->method('render');
         \Magento\Framework\Phrase::setRenderer($translateRenderer);
     }

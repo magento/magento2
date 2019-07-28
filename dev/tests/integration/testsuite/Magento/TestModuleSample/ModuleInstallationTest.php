@@ -5,7 +5,7 @@
  */
 namespace Magento\TestModuleSample;
 
-class ModuleInstallationTest extends \PHPUnit_Framework_TestCase
+class ModuleInstallationTest extends \PHPUnit\Framework\TestCase
 {
     public function testSampleModuleInstallation()
     {

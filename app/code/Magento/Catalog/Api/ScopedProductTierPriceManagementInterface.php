@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 101.1.0
  */
 interface ScopedProductTierPriceManagementInterface
 {
@@ -19,6 +20,7 @@ interface ScopedProductTierPriceManagementInterface
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @since 101.1.0
      */
     public function add($sku, \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice);
 
@@ -30,6 +32,7 @@ interface ScopedProductTierPriceManagementInterface
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @since 101.1.0
      */
     public function remove($sku, \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice);
 
@@ -40,6 +43,7 @@ interface ScopedProductTierPriceManagementInterface
      * @param string $customerGroupId 'all' can be used to specify 'ALL GROUPS'
      * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 101.1.0
      */
     public function getList($sku, $customerGroupId);
 }

@@ -9,7 +9,7 @@ namespace Magento\ImportExport\Block\Adminhtml\Export\Edit;
  * Test class for block \Magento\ImportExport\Block\Adminhtml\Export\Edit\Form
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Testing model

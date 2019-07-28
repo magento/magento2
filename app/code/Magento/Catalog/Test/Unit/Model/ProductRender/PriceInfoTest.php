@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\ProductRender;
 
 use Magento\Catalog\Model\ProductRender\PriceInfo;
 
-class PriceInfoTest extends \PHPUnit_Framework_TestCase
+class PriceInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductRender\PriceInfo

@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Customer\Ui\Component\Listing\Column\AccountLock;
 
-class AccountLockTest extends \PHPUnit_Framework_TestCase
+class AccountLockTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AccountLock */
     protected $component;
@@ -26,13 +26,7 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $this->uiComponentFactory = $this->getMock(
-            \Magento\Framework\View\Element\UiComponentFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->uiComponentFactory = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
         $this->component = new AccountLock(
             $this->context,
             $this->uiComponentFactory

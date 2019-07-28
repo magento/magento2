@@ -3,97 +3,207 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogInventory\Model\Configuration as StockConfiguration;
 use Magento\CatalogInventory\Model\ResourceModel\Stock;
+use Magento\Framework\App\Config;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class StockTest
+ * Test for \Magento\CatalogInventory\Model\ResourceModel\Stock
  */
-class StockTest extends \PHPUnit_Framework_TestCase
+class StockTest extends \PHPUnit\Framework\TestCase
 {
+    const PRODUCT_TABLE = 'testProductTable';
+    const ITEM_TABLE = 'testItemTableName';
+
+    /**
+     * @var Stock|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stock;
+
+    /**
+     * @var Mysql|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $connectionMock;
+
+    /**
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
+     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeMock;
+
+    /**
+     * @var StockConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockConfigurationMock;
+
+    /**
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
+
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $contextMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $resourceMock;
+    private $selectMock;
 
     /**
-     * @var Stock
+     * @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stockModel;
-
-    public function setUp()
+    private $statementMock;
+    
+    protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
+        $objectManager = new ObjectManager($this);
+        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
-
-        $this->stockModel = (new ObjectManager($this))->getObject(
-            Stock::class,
-            [
-                'context' => $this->contextMock
-            ]
-        );
+        $this->contextMock = $objectManager->getObject(Context::class);
+        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->stockConfigurationMock = $this->getMockBuilder(StockConfiguration::class)
+            ->setMethods(['getIsQtyTypeIds', 'getDefaultScopeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->statementMock = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class);
+        $this->stock = $this->getMockBuilder(Stock::class)
+            ->setMethods(['getTable', 'getConnection'])
+            ->setConstructorArgs(
+                [
+                    'context' => $this->contextMock,
+                    'scopeConfig' => $this->scopeConfigMock,
+                    'dateTime' => $this->dateTimeMock,
+                    'stockConfiguration' => $this->stockConfigurationMock,
+                    'storeManager' => $this->storeManagerMock,
+                ]
+            )->getMock();
     }
 
-    public function testLockProductsStock()
+    /**
+     * Test Save Product Status per website with product ids.
+     *
+     * @dataProvider productsDataProvider
+     * @param int $websiteId
+     * @param array $productIds
+     * @param array $products
+     * @param array $result
+     *
+     * @return void
+     */
+    public function testLockProductsStock(int $websiteId, array $productIds, array $products, array $result)
     {
-        $productIds = [1, 2];
-        $websiteId = 1;
-        $itemTable = 'item_table';
-        $productTable = 'product_table';
-
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
-        $this->resourceMock->method('getConnection')->will($this->returnValue($connectionMock));
-
-        $this->resourceMock->method('getTableName')
-            ->withConsecutive(['cataloginventory_stock_item'], ['catalog_product_entity'])
-            ->willReturnOnConsecutiveCalls($itemTable, $productTable);
-
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $selectProductsMock = clone $selectMock;
-
-        $selectMock->expects($this->once())->method('forUpdate')->with(true)->willReturnSelf();
-        $selectMock->expects($this->once())->method('from')->with(['si' => $itemTable])->willReturnSelf();
-        $selectMock->expects($this->exactly(2))
+        $this->selectMock->expects($this->exactly(2))
+            ->method('from')
+            ->withConsecutive(
+                [$this->identicalTo(['si' => self::ITEM_TABLE])],
+                [$this->identicalTo(['p' => self::PRODUCT_TABLE]), $this->identicalTo([])]
+            )
+            ->willReturnSelf();
+        $this->selectMock->expects($this->exactly(3))
             ->method('where')
-            ->withConsecutive(['website_id=?', $websiteId], ['product_id IN(?)', $productIds])
+            ->withConsecutive(
+                [$this->identicalTo('website_id = ?'), $this->identicalTo($websiteId)],
+                [$this->identicalTo('product_id IN(?)'), $this->identicalTo($productIds)],
+                [$this->identicalTo('entity_id IN (?)'), $this->identicalTo($productIds)]
+            )
             ->willReturnSelf();
-        $connectionMock->expects($this->exactly(2))
+        $this->selectMock->expects($this->once())
+            ->method('forUpdate')
+            ->with($this->identicalTo(true))
+            ->willReturnSelf();
+        $this->selectMock->expects($this->once())
+            ->method('columns')
+            ->with($this->identicalTo(['product_id' => 'entity_id', 'type_id' => 'type_id']))
+            ->willReturnSelf();
+        $this->connectionMock->expects($this->exactly(2))
             ->method('select')
-            ->willReturnOnConsecutiveCalls($selectMock, $selectProductsMock);
+            ->willReturn($this->selectMock);
+        $this->connectionMock->expects($this->once())
+            ->method('query')
+            ->with($this->identicalTo($this->selectMock))
+            ->willReturn($this->statementMock);
+        $this->statementMock->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn($products);
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($this->identicalTo($this->selectMock))
+            ->willReturn($result);
+        $this->stock->expects($this->exactly(2))
+            ->method('getTable')
+            ->withConsecutive(
+                [$this->identicalTo('cataloginventory_stock_item')],
+                [$this->identicalTo('catalog_product_entity')]
+            )->will($this->onConsecutiveCalls(
+                self::ITEM_TABLE,
+                self::PRODUCT_TABLE
+            ));
+        $this->stock->expects($this->exactly(4))
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
 
-        $selectProductsMock->expects($this->once())->method('from')->with(['p' => $productTable], [])->willReturnSelf();
-        $selectProductsMock->expects($this->once())->method('where')
-            ->with('entity_id IN (?)', $productIds)
-            ->willReturnSelf();
-        $selectProductsMock->expects($this->once())->method('columns')->willReturnSelf();
+        $lockResult = $this->stock->lockProductsStock($productIds, $websiteId);
 
-        $connectionMock->expects($this->once())->method('query')->with($selectMock);
-        $connectionMock->expects($this->once())->method('fetchAll')->with($selectProductsMock)->willReturn([]);
-
-        $this->assertEquals([], $this->stockModel->lockProductsStock($productIds, $websiteId));
+        $this->assertEquals($result, $lockResult);
     }
 
-    public function testLockNoProductsStock()
+    /**
+     * @return array
+     */
+    public function productsDataProvider(): array
     {
-        $productIds = [];
-        $websiteId = 1;
-
-        $this->assertEquals([], $this->stockModel->lockProductsStock($productIds, $websiteId));
+        return [
+            [
+                0,
+                [1, 2, 3],
+                [
+                    1 => ['product_id' => 1],
+                    2 => ['product_id' => 2],
+                    3 => ['product_id' => 3],
+                ],
+                [
+                    1 => [
+                        'product_id' => 1,
+                        'type_id' => 'simple',
+                    ],
+                    2 => [
+                        'product_id' => 2,
+                        'type_id' => 'simple',
+                    ],
+                    3 => [
+                        'product_id' => 3,
+                        'type_id' => 'simple',
+                    ],
+                ],
+            ],
+        ];
     }
 }

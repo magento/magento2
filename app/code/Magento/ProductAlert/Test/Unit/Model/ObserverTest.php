@@ -5,9 +5,16 @@
  */
 namespace Magento\ProductAlert\Test\Unit\Model;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ProductAlert\Model\ProductSalability;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class ObserverTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -104,6 +111,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManagerMock;
 
+    /**
+     * @var ProductSalability|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productSalabilityMock;
+
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
@@ -122,14 +137,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->inlineTranslationMock = $this->getMockBuilder(\Magento\Framework\Translate\Inline\StateInterface::class)
             ->getMock();
-        $this->sitemapCollectionMock = $this->getMock(
+        $this->sitemapCollectionMock = $this->createPartialMock(
             \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class,
-            ['getIterator'],
-            [],
-            '',
-            false
+            ['getIterator']
         );
-        $this->sitemapMock = $this->getMock(\Magento\Sitemap\Model\Sitemap::class, ['generateXml'], [], '', false);
+        $this->sitemapMock = $this->createPartialMock(\Magento\Sitemap\Model\Sitemap::class, ['generateXml']);
 
         $this->emailFactoryMock = $this->getMockBuilder(
             \Magento\ProductAlert\Model\EmailFactory::class
@@ -150,12 +162,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create', 'addWebsiteFilter', 'setCustomerOrder', 'addStatusFilter'])
             ->getMock();
 
-        $this->websiteMock = $this->getMock(
+        $this->websiteMock = $this->createPartialMock(
             \Magento\Store\Model\Website::class,
-            ['getDefaultGroup', 'getDefaultStore'],
-            [],
-            '',
-            false
+            ['getDefaultGroup', 'getDefaultStore']
         );
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
@@ -171,9 +180,10 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 [
                     'setCustomerGroupId',
                     'getFinalPrice',
-                    'isSalable',
                 ]
             )->getMock();
+
+        $this->productSalabilityMock = $this->createPartialMock(ProductSalability::class, ['isSalable']);
 
         $this->objectManager = new ObjectManager($this);
         $this->observer = $this->objectManager->getObject(
@@ -188,7 +198,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'priceColFactory' => $this->priceColFactoryMock,
                 'stockColFactory' => $this->stockColFactoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
-                'productRepository' => $this->productRepositoryMock
+                'productRepository' => $this->productRepositoryMock,
+                'productSalability' => $this->productSalabilityMock
             ]
         );
     }
@@ -202,7 +213,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
 
-        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willThrowException(new \Exception);
+        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -222,7 +233,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(true);
 
-        $this->priceColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception);
+        $this->priceColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -254,7 +265,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerOrder')
             ->willReturn(new \ArrayIterator($items));
 
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception);
+        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -289,14 +300,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerOrder')
             ->willReturn(new \ArrayIterator($items));
 
-        $customer = new \Magento\Framework\DataObject(['group_id' => $id]);
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customer);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customerMock);
 
         $this->productMock->expects($this->once())->method('setCustomerGroupId')->willReturnSelf();
         $this->productMock->expects($this->once())->method('getFinalPrice')->willReturn('655.99');
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($this->productMock);
 
-        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception);
+        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -317,7 +328,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->at(0))->method('getValue')->willReturn(false);
         $this->scopeConfigMock->expects($this->at(1))->method('getValue')->willReturn(true);
 
-        $this->stockColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception);
+        $this->stockColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -351,7 +362,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerOrder')
             ->willReturn(new \ArrayIterator($items));
 
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception);
+        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -361,7 +372,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessStockEmailThrowsException()
     {
-        $id = 1;
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -388,14 +398,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerOrder')
             ->willReturn(new \ArrayIterator($items));
 
-        $customer = new \Magento\Framework\DataObject(['group_id' => $id]);
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customer);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customerMock);
 
         $this->productMock->expects($this->once())->method('setCustomerGroupId')->willReturnSelf();
-        $this->productMock->expects($this->once())->method('isSalable')->willReturn(false);
+        $this->productSalabilityMock->expects($this->once())->method('isSalable')->willReturn(false);
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($this->productMock);
 
-        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception);
+        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception());
 
         $this->observer->process();
     }

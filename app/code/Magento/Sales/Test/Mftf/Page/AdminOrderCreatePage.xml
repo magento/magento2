@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminOrderCreatePage" url="sales/order_create/index" area="admin" module="Magento_Sales">
+        <section name="AdminOrderFormActionSection"/>
+        <section name="AdminOrderFormItemsSection"/>
+        <section name="AdminOrderFormConfigureProductSection"/>
+        <section name="AdminOrderFormAccountSection"/>
+        <section name="AdminOrderFormBillingAddressSection"/>
+        <section name="AdminOrderFormShippingAddressSection"/>
+        <section name="AdminOrderFormPaymentSection"/>
+        <section name="AdminOrderFormTotalSection"/>
+        <section name="AdminOrderFormStoreSelectorSection"/>
+        <section name="AdminOrderFormDiscountSection"/>
+    </page>
+</pages>

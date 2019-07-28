@@ -48,7 +48,7 @@ class GeneratedFiles
      *
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Framework\Code\GeneratedFiles::cleanGeneratedFiles
      */
     public function regenerate()
@@ -180,7 +180,7 @@ class GeneratedFiles
     }
 
     /**
-     * Enables apppropriate cache types in app/etc/env.php based on the passed in $cacheTypes array
+     * Enables appropriate cache types in app/etc/env.php based on the passed in $cacheTypes array
      * TODO: to be removed in scope of MAGETWO-53476
      *
      * @param string[] $cacheTypes

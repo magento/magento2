@@ -11,7 +11,7 @@ use Magento\Quote\Api\Data\AddressInterface;
 /**
  * Class AddressAdapterTest
  */
-class AddressAdapterTest extends \PHPUnit_Framework_TestCase
+class AddressAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AddressAdapter */
     protected $model;
@@ -46,7 +46,7 @@ class AddressAdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $street array|null
      * @param $expected string
-     * @dataProvider testStreetLine1DataProvider
+     * @dataProvider streetLine1DataProvider
      */
     public function testStreetLine1($street, $expected)
     {
@@ -54,7 +54,10 @@ class AddressAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getStreetLine1());
     }
 
-    public function testStreetLine1DataProvider()
+    /**
+     * @return array
+     */
+    public function streetLine1DataProvider()
     {
         return [
             [['Street Line 1'], 'Street Line 1'], //$street, $expected
@@ -65,7 +68,7 @@ class AddressAdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $street array|null
      * @param $expected string
-     * @dataProvider testStreetLine2DataProvider
+     * @dataProvider streetLine2DataProvider
      */
     public function testStreetLine2($street, $expected)
     {
@@ -73,7 +76,10 @@ class AddressAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getStreetLine2());
     }
 
-    public function testStreetLine2DataProvider()
+    /**
+     * @return array
+     */
+    public function streetLine2DataProvider()
     {
         return [
             [['Street Line 1', 'Street Line 2',], 'Street Line 2'], //$street, $expected

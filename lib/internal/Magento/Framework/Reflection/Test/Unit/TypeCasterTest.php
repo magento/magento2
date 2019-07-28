@@ -8,12 +8,12 @@ namespace Magento\Framework\Reflection\Test\Unit;
 use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Type caster Test
  */
-class TypeCasterTest extends \PHPUnit_Framework_TestCase
+class TypeCasterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TypeCaster

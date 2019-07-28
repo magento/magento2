@@ -14,7 +14,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 /**
  * Class AbstractColumnTest
  */
-abstract class AbstractColumnTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Column

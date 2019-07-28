@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Checks that cron job was set if error handler was set and appropriate http error code was returned.
  */
-class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
+class ReSignUpResponseResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResponseResolver

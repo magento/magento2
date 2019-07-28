@@ -8,6 +8,7 @@ namespace Magento\Backup\Model\Config\Backend;
 /**
  * Backup by cron backend model
  * @api
+ * @since 100.0.2
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {
@@ -21,10 +22,14 @@ class Cron extends \Magento\Framework\App\Config\Value
 
     const XML_PATH_BACKUP_FREQUENCY = 'groups/backup/fields/frequency/value';
 
-    /** @var \Magento\Framework\App\Config\ValueFactory */
+    /**
+     * @var \Magento\Framework\App\Config\ValueFactory
+     */
     protected $_configValueFactory;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_runModelPath = '';
 
     /**
@@ -71,8 +76,8 @@ class Cron extends \Magento\Framework\App\Config\Value
 
         if ($enabled) {
             $cronExprArray = [
-                intval($time[1]),                                 # Minute
-                intval($time[0]),                                 # Hour
+                (int) $time[1],                                 # Minute
+                (int) $time[0],                                 # Hour
                 $frequency == $frequencyMonthly ? '1' : '*',      # Day of the Month
                 '*',                                              # Month of the Year
                 $frequency == $frequencyWeekly ? '1' : '*',        # Day of the Week

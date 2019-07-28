@@ -10,6 +10,7 @@ namespace Magento\Variable\Controller\Adminhtml\System\Variable;
  * Display Variables edit form page
  *
  * @api
+ * @since 100.0.2
  */
 class Edit extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {

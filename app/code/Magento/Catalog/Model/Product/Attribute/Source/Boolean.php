@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
  * Product attribute source model for enable/disable option
  *
  * @api
+ * @since 100.0.2
  */
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\Boolean
 {

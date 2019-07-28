@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Compiler;
 
-class ConstructorArgumentTest extends \PHPUnit_Framework_TestCase
+class ConstructorArgumentTest extends \PHPUnit\Framework\TestCase
 {
     public function testInterface()
     {

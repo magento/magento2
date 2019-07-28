@@ -6,8 +6,8 @@
 
 return [
     'view_manager' => [
-        'display_not_found_reason' => true,
-        'display_exceptions'       => true,
+        'display_not_found_reason' => false,
+        'display_exceptions'       => false,
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
@@ -32,7 +32,12 @@ return [
     ],
     'service_manager' => [
         'aliases' => [
-            'translator' => 'MvcTranslator',
+            'translator' => 'MvcTranslator'
+        ]
+    ],
+    'controllers' => [
+        'abstract_factories' => [
+            \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
         ],
     ],
 ];

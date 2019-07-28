@@ -10,7 +10,7 @@ use Magento\Sales\Api\Data\OrderInterfaceFactory;
 /**
  * Class UnavailableProductsProviderTest
  */
-class UnavailableProductsProviderTest extends \PHPUnit_Framework_TestCase
+class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Sales/_files/order_item_with_configurable_for_reorder.php

@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Address\Renderer;
  * Class Sender
  * @api
  *
+ * @since 100.0.2
  */
 abstract class Sender
 {
@@ -64,6 +65,8 @@ abstract class Sender
     }
 
     /**
+     * Send order email if it is enabled in configuration.
+     *
      * @param Order $order
      * @return bool
      */
@@ -80,15 +83,21 @@ abstract class Sender
 
         try {
             $sender->send();
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            return false;
+        }
+        try {
             $sender->sendCopyTo();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }
-
         return true;
     }
 
     /**
+     * Populate order email template with customer information.
+     *
      * @param Order $order
      * @return void
      */
@@ -110,6 +119,8 @@ abstract class Sender
     }
 
     /**
+     * Create Sender object using appropriate template and identity.
+     *
      * @return Sender
      */
     protected function getSender()
@@ -123,6 +134,8 @@ abstract class Sender
     }
 
     /**
+     * Get template options.
+     *
      * @return array
      */
     protected function getTemplateOptions()
@@ -134,6 +147,8 @@ abstract class Sender
     }
 
     /**
+     * Render shipping address into html.
+     *
      * @param Order $order
      * @return string|null
      */
@@ -145,6 +160,8 @@ abstract class Sender
     }
 
     /**
+     * Render billing address into html.
+     *
      * @param Order $order
      * @return string|null
      */

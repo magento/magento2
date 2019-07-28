@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 /**
@@ -10,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddCommentTest extends \PHPUnit_Framework_TestCase
+class AddCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\AddComment
@@ -93,8 +94,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+            ->setMethods(['getRequest', 'getResponse', 'getObjectManager', 'getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -214,7 +216,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteNoComment()
     {
-        $message = 'Please enter a comment.';
+        $message = 'The comment is missing. Enter and try again.';
         $response = ['error' => true, 'message' => $message];
         $data = [];
 

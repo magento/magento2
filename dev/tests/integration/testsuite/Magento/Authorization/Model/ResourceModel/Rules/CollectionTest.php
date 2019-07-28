@@ -8,7 +8,7 @@ namespace Magento\Authorization\Model\ResourceModel\Rules;
 /**
  * @magentoAppArea adminhtml
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Authorization\Model\ResourceModel\Rules\Collection

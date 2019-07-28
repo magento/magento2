@@ -9,6 +9,7 @@ namespace Magento\Shipping\Block\Adminhtml;
  * Adminhtml shipment create
  *
  * @api
+ * @since 100.0.2
  */
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {

@@ -25,7 +25,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
+class PreparedValueFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StructureFactory|Mock

@@ -11,7 +11,7 @@ use \Magento\Authorization\Model\CompositeUserContext;
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CompositeUserContextTest extends \PHPUnit_Framework_TestCase
+class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CompositeUserContext

@@ -12,7 +12,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class StoreConfigurationProviderTest extends \PHPUnit_Framework_TestCase
+class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject

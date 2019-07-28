@@ -9,7 +9,7 @@ namespace Magento\SalesRule\Model\ResourceModel;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/SalesRule/_files/rule_custom_product_attribute.php

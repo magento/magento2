@@ -15,7 +15,7 @@ use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 
-class CmsPageTest extends \PHPUnit_Framework_TestCase
+class CmsPageTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetItemsEmpty()
     {

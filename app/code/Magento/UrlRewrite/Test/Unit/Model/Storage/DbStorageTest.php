@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class DbStorageTest extends \PHPUnit_Framework_TestCase
+class DbStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -49,14 +48,12 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
         $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->dataObjectHelper = $this->getMock(
-            \Magento\Framework\Api\DataObjectHelper::class, [], [], '',
-            false);
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->select = $this->getMock(
-            \Magento\Framework\DB\Select::class, ['from', 'where', 'deleteFromSelect'], [], '',
-            false);
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
         $this->resource->expects($this->any())
             ->method('getConnection')
@@ -65,7 +62,8 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->storage = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Model\Storage\DbStorage::class,
+        $this->storage = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Model\Storage\DbStorage::class,
             [
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,
@@ -438,76 +436,47 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testReplace()
     {
-        $urlFirst = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
-        $urlSecond = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $urlFirst = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
+        $urlSecond = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         // delete
-
         $urlFirst->expects($this->any())
-            ->method('getByKey')
-            ->will($this->returnValueMap([
-                [UrlRewrite::ENTITY_TYPE, 'product'],
-                [UrlRewrite::ENTITY_ID, 'entity_1'],
-                [UrlRewrite::STORE_ID, 'store_id_1'],
-            ]));
-        $urlFirst->expects($this->any())->method('getEntityType')->willReturn('product');
+            ->method('getEntityType')
+            ->willReturn('product');
+        $urlFirst->expects($this->any())
+            ->method('getEntityId')
+            ->willReturn('entity_1');
+        $urlFirst->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn('store_id_1');
+
         $urlSecond->expects($this->any())
-            ->method('getByKey')
-            ->will($this->returnValueMap([
-                [UrlRewrite::ENTITY_TYPE, 'category'],
-                [UrlRewrite::ENTITY_ID, 'entity_2'],
-                [UrlRewrite::STORE_ID, 'store_id_2'],
-            ]));
-        $urlSecond->expects($this->any())->method('getEntityType')->willReturn('category');
+            ->method('getEntityType')
+            ->willReturn('category');
+        $urlSecond->expects($this->any())
+            ->method('getEntityId')
+            ->willReturn('entity_2');
+        $urlSecond->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn('store_id_2');
 
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
 
-        $this->select->expects($this->at(1))
-            ->method('where')
-            ->with('entity_id IN (?)', ['entity_1']);
-
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('store_id IN (?)', ['store_id_1']);
-
-        $this->select->expects($this->at(3))
-            ->method('where')
-            ->with('entity_type IN (?)', 'product');
-
-        $this->select->expects($this->at(4))
-            ->method('deleteFromSelect')
-            ->with('table_name')
-            ->will($this->returnValue('sql delete query'));
-
-        $this->select->expects($this->at(6))
-            ->method('where')
-            ->with('entity_id IN (?)', ['entity_2']);
-
-        $this->select->expects($this->at(7))
-            ->method('where')
-            ->with('store_id IN (?)', ['store_id_2']);
-
-        $this->select->expects($this->at(8))
-            ->method('where')
-            ->with('entity_type IN (?)', 'category');
-
-        $this->select->expects($this->at(9))
-            ->method('deleteFromSelect')
-            ->with('table_name')
-            ->will($this->returnValue('sql delete query'));
+        $this->select->expects($this->any())
+            ->method($this->anything())
+            ->willReturnSelf();
 
         $this->resource->expects($this->any())
             ->method('getTableName')
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
-
-        $this->connectionMock->expects($this->any())
-            ->method('query')
-            ->with('sql delete query');
 
         // insert
 
@@ -523,10 +492,6 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
 
-        $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->with('table_name', [['row1'], ['row2']]);
-
         $this->storage->replace([$urlFirst, $urlSecond]);
     }
 
@@ -535,7 +500,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplaceIfThrewExceptionOnDuplicateUrl()
     {
-        $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         $url->expects($this->any())
             ->method('toArray')
@@ -568,7 +533,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplaceIfThrewExceptionOnDuplicateEntry()
     {
-        $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         $url->expects($this->any())
             ->method('toArray')
@@ -590,7 +555,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplaceIfThrewCustomException()
     {
-        $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         $url->expects($this->any())
             ->method('toArray')

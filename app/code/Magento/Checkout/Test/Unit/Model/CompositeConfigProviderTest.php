@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Test\Unit\Model;
 
-class CompositeConfigProviderTest extends \PHPUnit_Framework_TestCase
+class CompositeConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class CompositeConfigProviderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->configProviderMock = $this->getMock(\Magento\Checkout\Model\ConfigProviderInterface::class);
+        $this->configProviderMock = $this->createMock(\Magento\Checkout\Model\ConfigProviderInterface::class);
         $this->model = $objectManager->getObject(
             \Magento\Checkout\Model\CompositeConfigProvider::class,
             ['configProviders' => [$this->configProviderMock]]

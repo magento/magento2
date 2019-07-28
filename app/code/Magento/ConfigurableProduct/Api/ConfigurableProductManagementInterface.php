@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Api;
 /**
  * Interface ConfigurableProductManagementInterface
  * @api
+ * @since 100.0.2
  */
 interface ConfigurableProductManagementInterface
 {

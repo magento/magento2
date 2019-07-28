@@ -12,6 +12,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractSave implements ObserverInterface
 {

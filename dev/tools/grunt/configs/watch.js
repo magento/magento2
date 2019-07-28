@@ -11,7 +11,7 @@ var combo  = require('./combo'),
 
 var themeOptions = {};
 
-_.each(themes, function(theme, name) {
+_.each(themes, function (theme, name) {
     themeOptions[name] = {
         'files': [
             '<%= combo.autopath(\''+name+'\', path.pub) %>/**/*.less'

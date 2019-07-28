@@ -12,6 +12,7 @@ namespace Magento\Reports\Block\Adminhtml\Filter;
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -30,7 +31,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_fieldVisibility = [];
 
     /**
-     * Report field opions
+     * Report field options
      *
      * @var array
      */

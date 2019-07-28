@@ -105,8 +105,13 @@ class Bundle
             if ($result['bundle_options'] && !$compositeReadonly) {
                 $product->setBundleOptionsData($result['bundle_options']);
             }
+
             $this->processBundleOptionsData($product);
             $this->processDynamicOptionsData($product);
+        } elseif (!$compositeReadonly) {
+            $extension = $product->getExtensionAttributes();
+            $extension->setBundleProductOptions([]);
+            $product->setExtensionAttributes($extension);
         }
 
         $affectProductSelections = (bool)$this->request->getPost('affect_bundle_product_selections');
@@ -127,7 +132,7 @@ class Bundle
         }
         $options = [];
         foreach ($bundleOptionsData as $key => $optionData) {
-            if ((bool)$optionData['delete']) {
+            if (!empty($optionData['delete'])) {
                 continue;
             }
 

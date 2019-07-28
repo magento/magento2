@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 /**
  * Class ContextTest
  */
-class ContextTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Context

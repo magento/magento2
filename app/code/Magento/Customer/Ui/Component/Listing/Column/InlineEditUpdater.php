@@ -9,7 +9,9 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 class InlineEditUpdater
 {
-    /** @var ValidationRules  */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\Column\ValidationRules
+     */
     protected $validationRules;
 
     /**

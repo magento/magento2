@@ -17,6 +17,7 @@ use Magento\Search\Model\ResourceModel\Query\CollectionFactory;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Term extends Template
 {
@@ -70,6 +71,7 @@ class Term extends Template
      * Load terms and try to sort it by names
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _loadTerms()
     {
@@ -94,8 +96,8 @@ class Term extends Template
                     continue;
                 }
                 $term->setRatio(($term->getPopularity() - $this->_minPopularity) / $range);
-                $temp[$term->getName()] = $term;
-                $termKeys[] = $term->getName();
+                $temp[$term->getQueryText()] = $term;
+                $termKeys[] = $term->getQueryText();
             }
             natcasesort($termKeys);
 
@@ -108,6 +110,7 @@ class Term extends Template
 
     /**
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getTerms()
     {
@@ -127,7 +130,7 @@ class Term extends Template
          * url encoding will be done in Url.php http_build_query
          * so no need to explicitly called urlencode for the text
          */
-        $url->setQueryParam('q', $obj->getName());
+        $url->setQueryParam('q', $obj->getQueryText());
         return $url->getUrl('catalogsearch/result');
     }
 

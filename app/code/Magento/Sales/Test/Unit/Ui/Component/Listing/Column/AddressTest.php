@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\Address;
 /**
  * Class AddressTest
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Address
@@ -33,7 +33,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
+        $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
         $this->model = $objectManager->getObject(
             \Magento\Sales\Ui\Component\Listing\Column\Address::class,
             [
@@ -47,7 +47,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $itemName = 'itemName';
         $oldItemValue = "itemValue\n";
-        $newItemValue = 'itemValue<br/>';
+        $newItemValue = "itemValue<br />\n";
         $dataSource = [
             'data' => [
                 'items' => [
@@ -57,7 +57,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->model->setData('name', $itemName);
-        $this->escaper->expects($this->once())->method('escapeHtml')->with($newItemValue)->willReturnArgument(0);
+        $this->escaper->expects($this->any())->method('escapeHtml')->with($oldItemValue)->willReturnArgument(0);
         $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }

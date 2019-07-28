@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Backend;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Filename extends \Magento\Framework\App\Config\Value
 {

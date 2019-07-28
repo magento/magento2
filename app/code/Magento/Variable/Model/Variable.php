@@ -8,14 +8,13 @@ namespace Magento\Variable\Model;
 /**
  * Custom variable model
  *
- * @method \Magento\Variable\Model\ResourceModel\Variable _getResource()
- * @method \Magento\Variable\Model\ResourceModel\Variable getResource()
  * @method string getCode()
  * @method \Magento\Variable\Model\Variable setCode(string $value)
  * @method string getName()
  * @method \Magento\Variable\Model\Variable setName(string $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Variable extends \Magento\Framework\Model\AbstractModel
 {
@@ -154,11 +153,11 @@ class Variable extends \Magento\Framework\Model\AbstractModel
         foreach ($collection->toOptionArray() as $variable) {
             $variables[] = [
                 'value' => '{{customVar code=' . $variable['value'] . '}}',
-                'label' => __('%1', $variable['label']),
+                'label' => __('%1', $this->_escaper->escapeHtml($variable['label'])),
             ];
         }
         if ($withGroup && $variables) {
-            $variables = ['label' => __('Custom Variables'), 'value' => $variables];
+            $variables = [['label' => __('Custom Variables'), 'value' => $variables]];
         }
         return $variables;
     }

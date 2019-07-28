@@ -73,12 +73,6 @@
         cursor: default;
         opacity: @disabled__opacity;
         pointer-events: none;
-
-        .ie9 & {
-            background-color: @btn__base__disabled__background-color;
-            opacity: 1;
-            text-shadow: none;
-        }
     }
 }
 
@@ -99,8 +93,8 @@
     background-color: transparent;
     border: none;
     color: @link__color;
-    font-family: @btn__base__font-size;
-    font-size: 1.5rem; // ToDo UI: Check font-size and standardize
+    font-family: @font-family__base;
+    font-size: @base__font-size;
 
     &:hover,
     &:active,
@@ -135,22 +129,6 @@
         );
         color: @btn-prime__color;
     }
-
-    //  Disabled state for IE9
-    &[disabled],
-    &.disabled {
-        .ie9 & {
-            background-color: @btn-prime__disabled__background-color;
-        }
-
-        &:hover,
-        &:active {
-            .ie9 & {
-                background-color: @btn-prime__disabled__background-color;
-                filter: none;
-            }
-        }
-    }
 }
 
 .btn-secondary {
@@ -166,21 +144,6 @@
     &:focus {
         background-color: @btn-secondary__active__background-color;
         color: @btn-secondary__color;
-    }
-
-    //  Disabled state for IE9
-    &[disabled],
-    &.disabled {
-        .ie9 & {
-            background-color: @btn-secondary__disabled__background-color;
-        }
-
-        &:active {
-            .ie9 & {
-                background-color: @btn-secondary__disabled__background-color;
-                filter: none;
-            }
-        }
     }
 }
 
@@ -239,26 +202,6 @@
                 left: 1px;
             }
         }
-
-        //  Disabled state for IE9
-        &[disabled],
-        &.disabled {
-            &:after {
-                .ie9 & {
-                    border-color: transparent transparent transparent @btn__base__disabled__background-color;
-                }
-            }
-
-            &:focus,
-            &:hover,
-            &:active {
-                &:after {
-                    .ie9 & {
-                        border-left-color: @btn__base__disabled__background-color;
-                    }
-                }
-            }
-        }
     }
 
     .btn-prime {
@@ -283,25 +226,6 @@
         &:not(.disabled) {
             &:active {
                 left: 1px;
-            }
-        }
-
-        //  Disabled state for IE9
-        &[disabled],
-        &.disabled {
-            &:after {
-                .ie9 & {
-                    border-color: transparent transparent transparent @btn-prime__disabled__background-color;
-                }
-            }
-
-            &:hover,
-            &:active {
-                &:after {
-                    .ie9 & {
-                        border-left-color: @btn-prime__disabled__background-color;
-                    }
-                }
             }
         }
     }
@@ -342,25 +266,6 @@
                 right: 1px;
             }
         }
-
-        //  Disabled state for IE9
-        &[disabled],
-        &.disabled {
-            &:after {
-                .ie9 & {
-                    border-color: transparent @btn__base__disabled__background-color transparent transparent;
-                }
-            }
-
-            &:hover,
-            &:active {
-                &:after {
-                    .ie9 & {
-                        border-right-color: @btn__base__disabled__background-color;
-                    }
-                }
-            }
-        }
     }
 
     .btn-prime {
@@ -385,25 +290,6 @@
         &:not(.disabled) {
             &:active {
                 right: 1px;
-            }
-        }
-
-        //  Disabled state for IE9
-        &[disabled],
-        &.disabled {
-            &:after {
-                .ie9 & {
-                    border-color: transparent @btn-prime__disabled__background-color transparent transparent;
-                }
-            }
-
-            &:hover,
-            &:active {
-                &:after {
-                    .ie9 & {
-                        border-right-color: @btn-prime__disabled__background-color;
-                    }
-                }
             }
         }
     }

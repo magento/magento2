@@ -23,6 +23,19 @@
         <xs:attributeGroup ref="ui_element_attributes"/>
     </xs:complexType>
 
+    <xs:complexType name="formElementFileUploader">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="componentFileUploaderSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
     <xs:group name="componentFileUploaderSettings">
         <xs:choice>
             <xs:group ref="abstractSettings"/>

@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * Free shipping model
  *
  * @api
+ * @since 100.0.2
  */
 class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -79,7 +80,7 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
 
         $this->_updateFreeMethodQuote($request);
 
-        if ($request->getFreeShipping() || $request->getBaseSubtotalInclTax() >= $this->getConfigData(
+        if ($request->getFreeShipping() || $request->getPackageValueWithDiscount() >= $this->getConfigData(
             'free_shipping_subtotal'
         )
         ) {
@@ -96,8 +97,18 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
             $method->setCost('0.00');
 
             $result->append($method);
+        } elseif ($this->getConfigData('showmethod')) {
+            $error = $this->_rateErrorFactory->create();
+            $error->setCarrier($this->_code);
+            $error->setCarrierTitle($this->getConfigData('title'));
+            $errorMsg = $this->getConfigData('specificerrmsg');
+            $error->setErrorMessage(
+                $errorMsg ? $errorMsg : __(
+                    'Sorry, but we can\'t deliver to the destination country with this shipping module.'
+                )
+            );
+            return $error;
         }
-
         return $result;
     }
 
@@ -127,6 +138,8 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
     }
 
     /**
+     * Returns allowed shipping methods
+     *
      * @return array
      */
     public function getAllowedMethods()

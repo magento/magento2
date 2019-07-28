@@ -15,7 +15,9 @@ abstract class AbstractProcessor
      */
     const INDEXER_ID = '';
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

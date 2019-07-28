@@ -20,7 +20,7 @@ use Magento\Sales\Api\RefundOrderInterface;
 /**
  * Class ReturnToStockOrderTest
  */
-class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
+class ReturnToStockOrderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  ReturnToStockOrder */
     private $returnTOStock;
@@ -68,7 +68,7 @@ class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCreationArgumentsInterface
      */
-    private $extencionAttributesMock;
+    private $extensionAttributesMock;
 
     protected function setUp()
     {
@@ -87,10 +87,10 @@ class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoCreationArgumentsMock = $this->getMockBuilder(CreditmemoCreationArgumentsInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extencionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
+        $this->extensionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getReturnToStockItems'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -117,9 +117,9 @@ class ReturnToStockOrderTest extends \PHPUnit_Framework_TestCase
         $returnToStockItems = [1];
         $this->creditmemoCreationArgumentsMock->expects($this->exactly(3))
             ->method('getExtensionAttributes')
-            ->willReturn($this->extencionAttributesMock);
+            ->willReturn($this->extensionAttributesMock);
 
-        $this->extencionAttributesMock->expects($this->exactly(2))
+        $this->extensionAttributesMock->expects($this->exactly(2))
             ->method('getReturnToStockItems')
             ->willReturn($returnToStockItems);
 

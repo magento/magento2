@@ -15,7 +15,7 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 /**
  * Test class for checking settings that defined in config file
  */
-class DocumentRootTest extends \PHPUnit_Framework_TestCase
+class DocumentRootTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject

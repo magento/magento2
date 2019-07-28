@@ -13,13 +13,14 @@ namespace Magento\Wishlist\Block\Share\Email;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Items extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
      * @var string
      */
-    protected $_template = 'email/items.phtml';
+    protected $_template = 'Magento_Wishlist::email/items.phtml';
 
     /**
      * Retrieve Product View URL

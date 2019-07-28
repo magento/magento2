@@ -15,6 +15,7 @@ use Magento\LayeredNavigation\Block\Navigation\FilterRendererInterface;
  * Catalog layer filter renderer
  *
  * @api
+ * @since 100.0.2
  */
 class FilterRenderer extends Template implements FilterRendererInterface
 {

@@ -11,7 +11,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
+class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\GroupRegistry|\PHPUnit_Framework_MockObject_MockObject
@@ -37,6 +37,11 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $group;
+
+    /**
+     * @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $factoryCreatedGroup;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Group|\PHPUnit_Framework_MockObject_MockObject
@@ -77,23 +82,14 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Model\ResourceModel\GroupRepository
      */
     protected $model;
-    
+
     protected function setUp()
     {
         $this->setupGroupObjects();
-        $this->dataObjectProcessor = $this->getMock(
-            \Magento\Framework\Reflection\DataObjectProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchResultsFactory = $this->getMock(
+        $this->dataObjectProcessor = $this->createMock(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->searchResultsFactory = $this->createPartialMock(
             \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->searchResults = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
@@ -131,45 +127,30 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
 
     private function setupGroupObjects()
     {
-        $this->groupRegistry = $this->getMock(
-            \Magento\Customer\Model\GroupRegistry::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->groupFactory = $this->getMock(
-            \Magento\Customer\Model\GroupFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->groupModel = $this->getMock(
-            \Magento\Customer\Model\Group::class,
-            [
-                'getTaxClassId',
-                'getTaxClassName',
-                'getId',
-                'getCode',
-                'setDataUsingMethod',
-                'setCode',
-                'setTaxClassId',
-                'usesAsDefault',
-                'delete',
-                'getCollection',
-                'getData',
-            ],
-            [],
-            'groupModel',
-            false
-        );
-        $this->groupDataFactory = $this->getMock(
+        $this->groupRegistry = $this->createMock(\Magento\Customer\Model\GroupRegistry::class);
+        $this->groupFactory = $this->createPartialMock(\Magento\Customer\Model\GroupFactory::class, ['create']);
+        $this->groupModel = $this->getMockBuilder(\Magento\Customer\Model\Group::class)
+            ->setMethods(
+                [
+                    'getTaxClassId',
+                    'getTaxClassName',
+                    'getId',
+                    'getCode',
+                    'setDataUsingMethod',
+                    'setCode',
+                    'setTaxClassId',
+                    'usesAsDefault',
+                    'delete',
+                    'getCollection',
+                    'getData',
+                ]
+            )
+            ->setMockClassName('groupModel')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->groupDataFactory = $this->createPartialMock(
             \Magento\Customer\Api\Data\GroupInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->group = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\GroupInterface::class,
@@ -177,14 +158,14 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             'group',
             false
         );
-
-        $this->groupResourceModel = $this->getMock(
-            \Magento\Customer\Model\ResourceModel\Group::class,
+        $this->factoryCreatedGroup = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\GroupInterface::class,
             [],
-            [],
-            '',
+            'group',
             false
         );
+
+        $this->groupResourceModel = $this->createMock(\Magento\Customer\Model\ResourceModel\Group::class);
     }
 
     public function testSave()
@@ -192,16 +173,22 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $groupId = 0;
 
         $taxClass = $this->getMockForAbstractClass(\Magento\Tax\Api\Data\TaxClassInterface::class, [], '', false);
+        $extensionAttributes = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\GroupExtensionInterface::class
+        );
 
-        $this->group->expects($this->once())
+        $this->group->expects($this->atLeastOnce())
             ->method('getCode')
             ->willReturn('Code');
         $this->group->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($groupId);
-        $this->group->expects($this->once())
+        $this->group->expects($this->atLeastOnce())
             ->method('getTaxClassId')
             ->willReturn(17);
+        $this->group->expects($this->atLeastOnce())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
 
         $this->groupModel->expects($this->atLeastOnce())
             ->method('getId')
@@ -215,22 +202,33 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->groupModel->expects($this->atLeastOnce())
             ->method('getTaxClassName')
             ->willReturn('Tax class name');
-        $this->group->expects($this->once())
+
+        $this->factoryCreatedGroup->expects($this->once())
             ->method('setId')
             ->with($groupId)
             ->willReturnSelf();
-        $this->group->expects($this->once())
+        $this->factoryCreatedGroup->expects($this->once())
             ->method('setCode')
             ->with('Code')
             ->willReturnSelf();
-        $this->group->expects($this->once())
+        $this->factoryCreatedGroup->expects($this->once())
             ->method('setTaxClassId')
             ->with(234)
             ->willReturnSelf();
-        $this->group->expects($this->once())
+        $this->factoryCreatedGroup->expects($this->once())
             ->method('setTaxClassName')
             ->with('Tax class name')
             ->willReturnSelf();
+        $this->factoryCreatedGroup->expects($this->once())
+            ->method('setExtensionAttributes')
+            ->with($extensionAttributes)
+            ->willReturnSelf();
+        $this->factoryCreatedGroup->expects($this->atLeastOnce())
+            ->method('getCode')
+            ->willReturn('Code');
+        $this->factoryCreatedGroup->expects($this->atLeastOnce())
+            ->method('getTaxClassId')
+            ->willReturn(17);
 
         $this->taxClassRepository->expects($this->once())
             ->method('get')
@@ -259,9 +257,12 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($groupId);
         $this->groupDataFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->group);
+            ->willReturn($this->factoryCreatedGroup);
 
-        $this->assertSame($this->group, $this->model->save($this->group));
+        $updatedGroup = $this->model->save($this->group);
+
+        $this->assertSame($this->group->getCode(), $updatedGroup->getCode());
+        $this->assertSame($this->group->getTaxClassId(), $updatedGroup->getTaxClassId());
     }
 
     /**
@@ -366,8 +367,8 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $groupId = 86;
 
-        $groupExtension = $this->getMock(\Magento\Customer\Api\Data\GroupExtensionInterface::class, [], [], '', false);
-        $collection = $this->getMock(\Magento\Customer\Model\ResourceModel\Group\Collection::class, [], [], '', false);
+        $groupExtension = $this->createMock(\Magento\Customer\Api\Data\GroupExtensionInterface::class);
+        $collection = $this->createMock(\Magento\Customer\Model\ResourceModel\Group\Collection::class);
         $searchCriteria = $this->getMockForAbstractClass(
             \Magento\Framework\Api\SearchCriteriaInterface::class,
             [],

@@ -27,7 +27,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see Delete
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeleteTest extends \PHPUnit_Framework_TestCase
+class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Delete
@@ -244,8 +244,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('test')
             ->willReturn($this->storeMock);
-        $this->storeResourceMock->expects($this->once())
-            ->method('addCommitCallback');
 
         $this->registryMock->expects($this->once())
             ->method('unregister')

@@ -9,7 +9,7 @@ namespace Magento\Framework\Test\Unit;
 /**
  * Test case for \Magento\Framework\Validator
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Validator
@@ -69,7 +69,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $value = 'test';
 
         // Case 1. Validators fails without breaking chain
-        $validatorA = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
         $validatorA->expects(
             $this->once()
@@ -79,7 +79,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(['foo' => ['Foo message 1'], 'bar' => ['Foo message 2']])
         );
 
-        $validatorB = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
         $validatorB->expects(
             $this->once()
@@ -97,7 +97,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Case 2. Validators fails with breaking chain
-        $validatorA = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
         $validatorA->expects(
             $this->once()
@@ -107,17 +107,17 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(['field' => 'Error message'])
         );
 
-        $validatorB = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorB->expects($this->never())->method('isValid');
 
         $result[] = [$value, [$validatorA, $validatorB], false, ['field' => 'Error message'], true];
 
         // Case 3. Validators succeed
-        $validatorA = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorA = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(true));
         $validatorA->expects($this->never())->method('getMessages');
 
-        $validatorB = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $validatorB = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(true));
         $validatorB->expects($this->never())->method('getMessages');
 

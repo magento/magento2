@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\DeploymentConfig;
 
-class StoreManagerTest extends \PHPUnit_Framework_TestCase
+class StoreManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManager
@@ -97,6 +97,9 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedStores, $this->model->getStores($withDefault, $codeKey));
     }
 
+    /**
+     * @return array
+     */
     public function getStoresDataProvider()
     {
         $defaultStoreMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)

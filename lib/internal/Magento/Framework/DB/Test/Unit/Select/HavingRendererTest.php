@@ -11,7 +11,7 @@ use Magento\Framework\DB\Select;
 /**
  * Class HavingRendererTest
  */
-class HavingRendererTest extends \PHPUnit_Framework_TestCase
+class HavingRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Select\HavingRenderer
@@ -31,7 +31,7 @@ class HavingRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, ['getPart'], [], '', false);
+        $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['getPart']);
         $this->model = $objectManager->getObject(\Magento\Framework\DB\Select\HavingRenderer::class);
     }
 

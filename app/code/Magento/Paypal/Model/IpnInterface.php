@@ -5,6 +5,10 @@
  */
 namespace Magento\Paypal\Model;
 
+/**
+ * Interface \Magento\Paypal\Model\IpnInterface
+ *
+ */
 interface IpnInterface
 {
     /**

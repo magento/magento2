@@ -24,6 +24,9 @@ use Magento\Store\Model\StoreManagerInterface;
  * which will apply them to the Select
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class TableMapper
 {
@@ -105,7 +108,7 @@ class TableMapper
      * This method is deprecated.
      * Please use \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver::getAlias() instead.
      *
-     * @deprecated
+     * @deprecated 100.1.6
      * @see AliasResolver::getAlias()
      *
      * @param FilterInterface $filter

@@ -13,7 +13,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
+class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockRepository

@@ -10,6 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
+ * @since 100.1.0
  */
 interface EmailNotificationInterface
 {
@@ -40,6 +41,7 @@ interface EmailNotificationInterface
      * @param string $origCustomerEmail
      * @param bool $isPasswordChanged
      * @return void
+     * @since 100.1.0
      */
     public function credentialsChanged(
         CustomerInterface $savedCustomer,
@@ -52,6 +54,7 @@ interface EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
+     * @since 100.1.0
      */
     public function passwordReminder(CustomerInterface $customer);
 
@@ -60,6 +63,7 @@ interface EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
+     * @since 100.1.0
      */
     public function passwordResetConfirmation(CustomerInterface $customer);
 
@@ -69,10 +73,11 @@ interface EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $type
      * @param string $backUrl
-     * @param string $storeId
+     * @param int $storeId
      * @param string $sendemailStoreId
      * @return void
      * @throws LocalizedException
+     * @since 100.1.0
      */
     public function newAccount(
         CustomerInterface $customer,

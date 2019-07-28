@@ -12,7 +12,7 @@ use Magento\Downloadable\Api\SampleRepositoryInterface;
 use Magento\Downloadable\Model\Sample\CreateHandler;
 use Magento\Downloadable\Model\Product\Type;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CreateHandler */
     protected $model;

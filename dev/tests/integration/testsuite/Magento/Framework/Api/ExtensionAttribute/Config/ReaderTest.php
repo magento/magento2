@@ -8,7 +8,7 @@ namespace Magento\Framework\Api\ExtensionAttribute\Config;
 /**
  * Tests for \Magento\Framework\Api\ExtensionAttribute\Config\Reader
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\Config\Reader

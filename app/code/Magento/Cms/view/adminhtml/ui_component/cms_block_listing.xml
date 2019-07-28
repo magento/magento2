@@ -31,6 +31,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Cms::block</aclResource>
         <dataProvider class="Magento\Cms\Ui\Component\DataProvider" name="cms_block_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -145,7 +146,6 @@
                 <editor>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
-                        <rule name="validate-xml-identifier" xsi:type="boolean">true</rule>
                     </validation>
                     <editorType>text</editorType>
                 </editor>

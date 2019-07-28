@@ -9,8 +9,6 @@ namespace Magento\Analytics\ReportXml;
 use Magento\Framework\Api\SearchCriteria;
 
 /**
- * Class ReportProvider
- *
  * Providers for reports data
  */
 class ReportProvider
@@ -57,7 +55,7 @@ class ReportProvider
     private function getIteratorName(Query $query)
     {
         $config = $query->getConfig();
-        return isset($config['iterator']) ? $config['iterator'] : null;
+        return $config['iterator'] ?? null;
     }
 
     /**

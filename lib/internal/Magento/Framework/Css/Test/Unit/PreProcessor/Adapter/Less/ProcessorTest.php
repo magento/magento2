@@ -15,7 +15,7 @@ use Magento\Framework\Css\PreProcessor\Adapter\Less\Processor;
 /**
  * Class ProcessorTest
  */
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_CONTENT = 'test-content';
 

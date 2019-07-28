@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
-class ServerAddressTest extends \PHPUnit_Framework_TestCase
+class ServerAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\ServerAddress

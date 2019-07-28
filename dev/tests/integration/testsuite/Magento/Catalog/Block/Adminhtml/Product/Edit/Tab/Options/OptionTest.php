@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options;
 /**
  * @magentoAppArea adminhtml
  */
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetOptionValuesCaching()
     {

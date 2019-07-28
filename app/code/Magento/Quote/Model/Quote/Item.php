@@ -12,8 +12,6 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * Sales Quote Item Model
  *
  * @api
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
@@ -95,6 +93,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {
@@ -172,7 +171,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $stockRegistry;
 
@@ -271,7 +270,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getAddress()
     {
-        if ($this->getQuote()->getItemsQty() == $this->getQuote()->getVirtualItemsQty()) {
+        if ($this->getQuote()->isVirtual()) {
             $address = $this->getQuote()->getBillingAddress();
         } else {
             $address = $this->getQuote()->getShippingAddress();
@@ -283,7 +282,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Declare quote model object
      *
-     * @param   \Magento\Quote\Model\Quote $quote
+     * @param  \Magento\Quote\Model\Quote $quote
      * @return $this
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
@@ -720,6 +719,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Checks that item model has data changes.
+     *
      * Call save item options if model isn't need to save in DB
      *
      * @return boolean
@@ -746,6 +746,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
                 unset($this->_options[$index]);
                 unset($this->_optionsByCode[$option->getCode()]);
             } else {
+                if (!$option->getItem() || !$option->getItem()->getId()) {
+                    $option->setItem($this);
+                }
                 $option->save();
             }
         }
@@ -811,8 +814,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * Returns formatted buy request - object, holding request received from
-     * product view page with keys and options for configured product
+     * Get formatted buy request.
+     *
+     * Returns object, holding request received from product view page with keys and options for configured product.
      *
      * @return \Magento\Framework\DataObject
      */
@@ -861,6 +865,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Clears list of errors, associated with this quote item.
+     *
      * Also automatically removes error-flag from oneself.
      *
      * @return $this
@@ -874,6 +879,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Adds error information to the quote item.
+     *
      * Automatically sets error flag.
      *
      * @param string|null $origin Usually a name of module, that embeds error
@@ -928,9 +934,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
+     * @inheritdoc
      * @codeCoverageIgnoreStart
-     *
-     * {@inheritdoc}
      */
     public function getItemId()
     {
@@ -938,7 +943,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setItemId($itemID)
     {
@@ -946,7 +951,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -954,7 +959,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -962,7 +967,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQty()
     {
@@ -970,7 +975,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -978,7 +983,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -986,7 +991,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrice()
     {
@@ -994,7 +999,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrice($price)
     {
@@ -1002,7 +1007,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductType($productType)
     {
@@ -1010,7 +1015,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQuoteId()
     {
@@ -1018,7 +1023,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQuoteId($quoteId)
     {
@@ -1049,7 +1054,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     //@codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Quote\Api\Data\CartItemExtensionInterface|null
      */
@@ -1059,7 +1064,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes
      * @return $this

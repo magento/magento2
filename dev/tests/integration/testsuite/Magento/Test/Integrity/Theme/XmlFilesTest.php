@@ -7,7 +7,7 @@ namespace Magento\Test\Integrity\Theme;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class XmlFilesTest extends \PHPUnit_Framework_TestCase
+class XmlFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Config\ValidationStateInterface
@@ -16,13 +16,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->validationStateMock = $this->getMock(
-            \Magento\Framework\Config\ValidationStateInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $this->validationStateMock->method('isValidationRequired')
             ->willReturn(true);
     }

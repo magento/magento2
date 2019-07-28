@@ -1,19 +1,19 @@
 <?php
 /**
- * Framework for unit tests containing helper methods
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- *
- * Number of fields is necessary because of the number of fields used by multiple layers
- * of parent classes.
- *
  */
 namespace Magento\Framework\TestFramework\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
+/**
+ * Framework for unit tests containing helper methods
+ *
+ * Number of fields is necessary because of the number of fields used by multiple layers
+ * of parent classes.
+ */
+abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * ObjectManager available since setUp()

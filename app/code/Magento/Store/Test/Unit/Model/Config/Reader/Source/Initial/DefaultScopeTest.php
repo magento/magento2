@@ -9,7 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Config\Reader\Source\Initial\DefaultScope;
 use Magento\Framework\App\Config\Scope\Converter;
 
-class DefaultScopeTest extends \PHPUnit_Framework_TestCase
+class DefaultScopeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {

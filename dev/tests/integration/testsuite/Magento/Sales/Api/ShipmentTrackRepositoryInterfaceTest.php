@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ShipmentTrackRepositoryInterfaceTest extends \PHPUnit_Framework_TestCase
+class ShipmentTrackRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ShipmentTrackRepositoryInterface

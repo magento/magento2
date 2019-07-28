@@ -7,8 +7,6 @@
 /**
  * Tax Rate Title Model
  *
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate\Title _getResource()
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate\Title getResource()
  * @method int getTaxCalculationRateId()
  *
  * @author      Magento Core Team <core@magentocommerce.com>

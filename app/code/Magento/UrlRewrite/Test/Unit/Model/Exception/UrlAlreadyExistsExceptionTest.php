@@ -11,7 +11,7 @@ use Magento\Framework\Phrase;
 /**
  * Class UrlAlreadyExistsExceptionTest
  */
-class UrlAlreadyExistsExceptionTest extends \PHPUnit_Framework_TestCase
+class UrlAlreadyExistsExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Phrase\RendererInterface */
     private $defaultRenderer;

@@ -48,7 +48,7 @@
 
 @data-grid-file-uploader-menu-button__width: 2rem;
 
-@data-grid-file-uploader-upload-icon__color: @color-darkie-gray;
+@data-grid-file-uploader-upload-icon__color: @color-darker-gray;
 @data-grid-file-uploader-upload-icon__hover__color: @color-very-dark-gray;
 @data-grid-file-uploader-upload-icon__line-height: 48px;
 
@@ -66,11 +66,20 @@
         opacity: 0;
         overflow: hidden;
         position: absolute;
+        visibility: hidden;
         width: 0;
 
         &:focus {
             + .file-uploader-button {
                 box-shadow: 0 0 0 1px @file-uploader-preview-focus__color;
+            }
+        }
+
+        &:disabled {
+            + .file-uploader-button {
+                cursor: default;
+                opacity: .5;
+                pointer-events: none;
             }
         }
     }
@@ -241,7 +250,7 @@
     }
 }
 
-// Placeholder for multiple uploader
+//  Placeholder for multiple uploader
 .file-uploader-placeholder {
     &.placeholder-document {
         .lib-icon-font(

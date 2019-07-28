@@ -10,7 +10,7 @@ namespace Magento\Webapi\Test\Unit\Controller;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SoapTest extends \PHPUnit_Framework_TestCase
+class SoapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Webapi\Controller\Soap
@@ -65,7 +65,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
 
         $this->_soapServerMock = $this->getMockBuilder(\Magento\Webapi\Model\Soap\Server::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getApiCharset', 'generateUri', 'handle'])
+            ->setMethods(['getApiCharset', 'generateUri', 'handle', 'setWSDL', 'setEncoding', 'setReturnResponse'])
             ->getMock();
         $this->_wsdlGeneratorMock = $this->getMockBuilder(\Magento\Webapi\Model\Soap\Wsdl\Generator::class)
             ->disableOriginalConstructor()
@@ -87,7 +87,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['maskException'])
             ->getMock();
 
-        $this->_appStateMock =  $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->_appStateMock =  $this->createMock(\Magento\Framework\App\State::class);
 
         $localeResolverMock = $this->getMockBuilder(
             \Magento\Framework\Locale\Resolver::class
@@ -102,7 +102,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->method('getHeaders')
             ->will($this->returnValue(new \Zend\Http\Headers()));
 
-        $appconfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+        $appconfig = $this->createMock(\Magento\Framework\App\Config::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->_requestMock,
             'appConfig',
@@ -112,9 +112,9 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->will($this->returnSelf());
-        $pathProcessorMock = $this->getMock(\Magento\Webapi\Controller\PathProcessor::class, [], [], '', false);
-        $areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
-        $areaMock = $this->getMock(\Magento\Framework\App\AreaInterface::class);
+        $pathProcessorMock = $this->createMock(\Magento\Webapi\Controller\PathProcessor::class);
+        $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
+        $areaMock = $this->createMock(\Magento\Framework\App\AreaInterface::class);
         $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
 
         $rendererMock = $this->getMockBuilder(\Magento\Framework\Webapi\Rest\Response\RendererFactory::class)

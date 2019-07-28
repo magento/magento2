@@ -5,7 +5,7 @@
  */
 namespace Magento\Widget\Model;
 
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Widget
@@ -61,7 +61,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             'custom image' => [\Magento\Catalog\Block\Product\Widget\NewWidget::class,
                 'Magento_Catalog/images/product_widget_new.png',
             ],
-            'default image' => ['non_existing_widget_type', 'Magento_Widget/placeholder.gif']
+            'default image' => ['non_existing_widget_type', 'Magento_Widget/placeholder.png']
         ];
     }
 }

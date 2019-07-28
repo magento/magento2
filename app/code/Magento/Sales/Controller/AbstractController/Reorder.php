@@ -1,15 +1,21 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Registry;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-abstract class Reorder extends Action\Action
+/**
+ * Abstract class for controllers Reorder(Customer) and Reorder(Guest)
+ *
+ * @package Magento\Sales\Controller\AbstractController
+ */
+abstract class Reorder extends Action\Action implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Sales\Controller\AbstractController\OrderLoaderInterface
@@ -59,13 +65,16 @@ abstract class Reorder extends Action\Action
                 $cart->addOrderItem($item);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 if ($this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true)) {
-                    $this->messageManager->addNotice($e->getMessage());
+                    $this->messageManager->addNoticeMessage($e->getMessage());
                 } else {
-                    $this->messageManager->addError($e->getMessage());
+                    $this->messageManager->addErrorMessage($e->getMessage());
                 }
                 return $resultRedirect->setPath('*/*/history');
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('We can\'t add this item to your shopping cart right now.')
+                );
                 return $resultRedirect->setPath('checkout/cart');
             }
         }

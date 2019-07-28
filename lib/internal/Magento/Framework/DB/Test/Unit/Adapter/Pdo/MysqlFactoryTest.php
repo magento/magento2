@@ -12,7 +12,7 @@ use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MysqlFactoryTest extends \PHPUnit_Framework_TestCase
+class MysqlFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SelectFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +37,7 @@ class MysqlFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->mysqlFactory = $objectManager->getObject(
             MysqlFactory::class,
             [
@@ -79,7 +79,7 @@ class MysqlFactoryTest extends \PHPUnit_Framework_TestCase
     public function createDataProvider()
     {
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->selectFactoryMock = $this->getMock(SelectFactory::class, [], [], '', false);
+        $this->selectFactoryMock = $this->createMock(SelectFactory::class);
         return [
             [
                 [

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Order;
 
-class CommentsTest extends \PHPUnit_Framework_TestCase
+class CommentsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Block\Order\Comments

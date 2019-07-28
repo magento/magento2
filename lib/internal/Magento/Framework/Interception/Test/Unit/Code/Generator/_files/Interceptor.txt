@@ -50,4 +50,43 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\Sample 
             return $this->___callPlugins('getReference', func_get_args(), $pluginInfo);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function firstVariadicParameter(... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'firstVariadicParameter');
+        if (!$pluginInfo) {
+            return parent::firstVariadicParameter(... $variadicValue);
+        } else {
+            return $this->___callPlugins('firstVariadicParameter', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function secondVariadicParameter($value, ... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'secondVariadicParameter');
+        if (!$pluginInfo) {
+            return parent::secondVariadicParameter($value, ... $variadicValue);
+        } else {
+            return $this->___callPlugins('secondVariadicParameter', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function byRefVariadic(&... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'byRefVariadic');
+        if (!$pluginInfo) {
+            return parent::byRefVariadic(... $variadicValue);
+        } else {
+            return $this->___callPlugins('byRefVariadic', func_get_args(), $pluginInfo);
+        }
+    }
 }

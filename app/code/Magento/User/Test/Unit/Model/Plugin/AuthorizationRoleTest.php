@@ -9,7 +9,7 @@ namespace Magento\User\Test\Unit\Model\Plugin;
 /**
  * Test class for \Magento\User\Model\Plugin\AuthorizationRole testing
  */
-class AuthorizationRoleTest extends \PHPUnit_Framework_TestCase
+class AuthorizationRoleTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\Plugin\AuthorizationRole */
     protected $model;

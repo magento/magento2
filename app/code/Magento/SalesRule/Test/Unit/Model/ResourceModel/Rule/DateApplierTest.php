@@ -10,10 +10,10 @@ use Magento\SalesRule\Model\ResourceModel\Rule\DateApplier;
 /**
  * Class DateApplierTest
  */
-class DateApplierTest extends \PHPUnit_Framework_TestCase
+class DateApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateApplier|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $model;
 
@@ -29,10 +29,7 @@ class DateApplierTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->model = $this->objectManager->getObject(
-            \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier::class,
-            []
-        );
+        $this->model = $this->objectManager->getObject(DateApplier::class, []);
     }
 
     /**
@@ -42,7 +39,7 @@ class DateApplierTest extends \PHPUnit_Framework_TestCase
     {
         $className = \Magento\Framework\DB\Select::class;
         /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
-        $select = $this->getMock($className, [], [], '', false);
+        $select = $this->createMock($className);
 
         $select->expects($this->exactly(2))
             ->method('where')

@@ -9,15 +9,14 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * Emtity attribute option model
+ * Entity attribute option model
  *
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option _getResource()
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option getResource()
  * @method int getAttributeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Option setAttributeId(int $value)
  *
  * @api
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Option extends AbstractModel implements AttributeOptionInterface
 {

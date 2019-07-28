@@ -9,6 +9,7 @@ namespace Magento\Directory\Api\Data;
  * Currency Information interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface CurrencyInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

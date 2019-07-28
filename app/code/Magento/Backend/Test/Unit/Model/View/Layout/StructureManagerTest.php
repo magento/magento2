@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class StructureManagerTest
  */
-class StructureManagerTest extends \PHPUnit_Framework_TestCase
+class StructureManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Structure|\PHPUnit_Framework_MockObject_MockObject

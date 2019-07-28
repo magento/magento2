@@ -11,6 +11,7 @@ use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 /**
  * System configuration scope
  * @api
+ * @since 100.0.2
  */
 class ScopeDefiner
 {

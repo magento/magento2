@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Magento\Payment\Config;
 
-class ReferentialTest extends \PHPUnit_Framework_TestCase
+class ReferentialTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string[] $usedGroups all payment groups used in store configuration

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\System\Config\Source;
 
-class InputtypeTest extends \PHPUnit_Framework_TestCase
+class InputtypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

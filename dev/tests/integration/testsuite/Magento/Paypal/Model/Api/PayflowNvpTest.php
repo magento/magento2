@@ -15,9 +15,12 @@ use Magento\Paypal\Model\Config;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 
-class PayflowNvpTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class PayflowNvpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PayflowNvp
@@ -78,6 +81,7 @@ class PayflowNvpTest extends \PHPUnit_Framework_TestCase
      * Checks a case when items and discount are present in the request.
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payflowpro.php
+     * @magentoDbIsolation disabled
      */
     public function testRequestLineItems()
     {

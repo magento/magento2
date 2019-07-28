@@ -7,13 +7,13 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use \Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Model\Order\CreditmemoRepository;
 
 /**
  * Class CreditmemoRepositoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
+class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CreditmemoRepository
@@ -34,17 +34,14 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessorMock;
-    
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->metadataMock = $this->getMock(\Magento\Sales\Model\ResourceModel\Metadata::class, [], [], '', false);
-        $this->searchResultFactoryMock = $this->getMock(
+        $this->metadataMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
+        $this->searchResultFactoryMock = $this->createPartialMock(
             \Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
@@ -56,7 +53,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
                 'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
-        $this->type = $this->getMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId'], [], '', false);
+        $this->type = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId']);
     }
 
     public function testGet()
@@ -84,7 +81,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Id required
+     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
      */
     public function testGetNoId()
     {
@@ -93,7 +90,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested entity doesn't exist
+     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEntityNoId()
     {
@@ -170,7 +167,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Could not delete credit memo
+     * @expectedExceptionMessage The credit memo couldn't be deleted.
      */
     public function testDeleteWithException()
     {
@@ -219,7 +216,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save credit memo
+     * @expectedExceptionMessage The credit memo couldn't be saved.
      */
     public function testSaveWithException()
     {

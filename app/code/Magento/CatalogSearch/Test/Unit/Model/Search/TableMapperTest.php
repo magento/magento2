@@ -18,9 +18,12 @@ use Magento\Framework\Search\Request\Filter\Term;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\TableMapper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
-class TableMapperTest extends \PHPUnit_Framework_TestCase
+class TableMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
@@ -275,6 +278,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $this->tableMapper->addTables($select, $request);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getSelectMock()
     {
         return $this->getMockBuilder(\Magento\Framework\DB\Select::class)
@@ -282,6 +288,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getRequestMock()
     {
         return $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
@@ -289,6 +298,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getQueryMock()
     {
         return $this->getMockBuilder(QueryInterface::class)
@@ -296,6 +308,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
     }
 
+    /**
+     * @return array
+     */
     private function getDifferentFiltersMock()
     {
         $visibilityFilter = $this->getMockBuilder(Term::class)
@@ -316,6 +331,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         return [$visibilityFilter, $customFilter, $nonCustomFilter];
     }
 
+    /**
+     * @return array
+     */
     private function getSameFiltersMock()
     {
         $visibilityFilter1 = $this->getMockBuilder(Term::class)

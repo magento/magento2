@@ -21,4 +21,11 @@
             <field name="password" xsi:type="string">AUTHORIZENET_PASSWORD</field>
         </dataset>
     </repository>
+
+    <repository class="Magento\Signifyd\Test\Repository\SignifydAccount">
+        <dataset name="sandbox_default">
+            <field name="email" xsi:type="string">SIGNIFYD_EMAIL</field>
+            <field name="password" xsi:type="string">SIGNIFYD_PASSWORD</field>
+        </dataset>
+    </repository>
 </config>

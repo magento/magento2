@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml;
+
+use Magento\Store\Model\Store;
 
 /**
  * Catalog category controller
@@ -18,9 +22,21 @@ abstract class Category extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Catalog::categories';
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
-    private $dateTimeFilter;
+    protected $dateFilter;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date|null $dateFilter
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter = null
+    ) {
+        $this->dateFilter = $dateFilter;
+        parent::__construct($context);
+    }
 
     /**
      * Initialize requested category and put it into registry.
@@ -32,7 +48,7 @@ abstract class Category extends \Magento\Backend\App\Action
     protected function _initCategory($getRootInstead = false)
     {
         $categoryId = $this->resolveCategoryId();
-        $storeId = (int)$this->getRequest()->getParam('store');
+        $storeId = $this->resolveStoreId();
         $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->setStoreId($storeId);
 
@@ -58,7 +74,7 @@ abstract class Category extends \Magento\Backend\App\Action
         $this->_objectManager->get(\Magento\Framework\Registry::class)->register('category', $category);
         $this->_objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
         $this->_objectManager->get(\Magento\Cms\Model\Wysiwyg\Config::class)
-            ->setStoreId($this->getRequest()->getParam('store'));
+            ->setStoreId($storeId);
         return $category;
     }
 
@@ -67,11 +83,26 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return int
      */
-    private function resolveCategoryId()
+    private function resolveCategoryId() : int
     {
         $categoryId = (int)$this->getRequest()->getParam('id', false);
 
         return $categoryId ?: (int)$this->getRequest()->getParam('entity_id', false);
+    }
+
+    /**
+     * Resolve store id
+     *
+     * Tries to take store id from store HTTP parameter
+     * @see Store
+     *
+     * @return int
+     */
+    private function resolveStoreId() : int
+    {
+        $storeId = (int)$this->getRequest()->getParam('store', false);
+
+        return $storeId ?: (int)$this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
     }
 
     /**
@@ -82,7 +113,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\Result\Json
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected function ajaxRequestResponse($category, $resultPage)
     {
@@ -126,20 +157,6 @@ abstract class Category extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     *
-     * @deprecated
-     */
-    private function getDateTimeFilter()
-    {
-        if ($this->dateTimeFilter === null) {
-            $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
-        }
-        return $this->dateTimeFilter;
-    }
-
-    /**
      * Datetime data preprocessing
      *
      * @param \Magento\Catalog\Model\Category $category
@@ -154,7 +171,7 @@ abstract class Category extends \Magento\Backend\App\Action
         foreach ($attributes as $attrKey => $attribute) {
             if ($attribute->getBackend()->getType() == 'datetime') {
                 if (array_key_exists($attrKey, $postData) && $postData[$attrKey] != '') {
-                    $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
+                    $dateFieldFilters[$attrKey] = $this->dateFilter;
                 }
             }
         }

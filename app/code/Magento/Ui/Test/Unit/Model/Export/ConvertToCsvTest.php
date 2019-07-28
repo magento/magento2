@@ -17,7 +17,7 @@ use Magento\Ui\Model\Export\MetadataProvider;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConvertToCsvTest extends \PHPUnit_Framework_TestCase
+class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConvertToCsv

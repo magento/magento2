@@ -7,7 +7,7 @@ namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Attr
 
 use Magento\Catalog\Model\Product;
 
-class ExtendTest extends \PHPUnit_Framework_TestCase
+class ExtendTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
@@ -55,16 +55,11 @@ class ExtendTest extends \PHPUnit_Framework_TestCase
     {
         $switchAttributeCode = 'test_code';
         $form = $this->getMockBuilder(\Magento\Framework\Data\Form::class)->disableOriginalConstructor()->getMock();
-        $and = new \PHPUnit_Framework_Constraint_And();
-        $and->setConstraints(
-            [
-                new \PHPUnit_Framework_Constraint_ArrayHasKey('value')
-            ]
-        );
+        $hasKey = new \PHPUnit\Framework\Constraint\ArrayHasKey('value');
         $form->expects($this->once())->method('addField')->with(
             $switchAttributeCode,
             'select',
-            $and
+            $hasKey
         );
 
         $this->formFactory->expects($this->once())->method('create')->with()->will($this->returnValue($form));

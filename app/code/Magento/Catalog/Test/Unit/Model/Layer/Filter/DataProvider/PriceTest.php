@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Catalog\Model\ResourceModel\Product\Collection|MockObject */
     private $productCollection;
@@ -152,7 +152,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->productCollection->expects($this->once())
             ->method('getMaxPrice')
             ->will($this->returnValue($maxPrice));
-        $this->assertSame(floatval($maxPrice), $this->target->getMaxPrice());
+        $this->assertSame((float)$maxPrice, $this->target->getMaxPrice());
     }
 
     /**
@@ -165,6 +165,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedResult, $this->target->validateFilter($filter));
     }
 
+    /**
+     * @return array
+     */
     public function validateFilterDataProvider()
     {
         return [

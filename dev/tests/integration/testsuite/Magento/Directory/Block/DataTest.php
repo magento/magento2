@@ -7,7 +7,7 @@ namespace Magento\Directory\Block;
 
 use Magento\TestFramework\Helper\CacheCleaner;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Block\Data

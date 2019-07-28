@@ -11,7 +11,7 @@ namespace Magento\Test\Integrity\Readme;
 
 use Magento\Framework\App\Utility\Files;
 
-class ReadmeTest extends \PHPUnit_Framework_TestCase
+class ReadmeTest extends \PHPUnit\Framework\TestCase
 {
     const README_FILENAME = 'README.md';
 
@@ -35,9 +35,9 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $dir
-         */
+            /**
+             * @param string $dir
+             */
             function ($dir) {
                 $file = $dir . DIRECTORY_SEPARATOR . self::README_FILENAME;
                 $this->assertFileExists(

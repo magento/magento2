@@ -22,11 +22,7 @@ class AttributeDataFactory
 
     // available only for multiply attributes
 
-    /**
-     * Array of attribute data models by input type
-     *
-     * @var array
-     */
+    // available only for multiply attributes
     protected $_dataModels = [];
 
     /**

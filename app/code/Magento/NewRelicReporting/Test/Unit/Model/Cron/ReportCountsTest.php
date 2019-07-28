@@ -12,10 +12,8 @@ use Magento\Catalog\Api\CategoryManagementInterface;
 
 /**
  * Class ReportCountsTest
- *
- * @codingStandardsIgnoreFile
  */
-class ReportCountsTest extends \PHPUnit_Framework_TestCase
+class ReportCountsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportCounts
@@ -53,7 +51,8 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
     protected $countsModelMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory
+     * |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $countsCollectionFactoryMock;
 
@@ -74,20 +73,24 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->productManagementMock = $this->getMockBuilder(\Magento\Catalog\Api\ProductManagementInterface::class)
+            ->setMethods(['getCount'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->configurableManagementMock = $this
             ->getMockBuilder(\Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface::class)
+            ->setMethods(['getCount'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->categoryManagementMock = $this->getMockBuilder(\Magento\Catalog\Api\CategoryManagementInterface::class)
+            ->setMethods(['getCount'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->countsFactoryMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\CountsFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->countsModelMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Counts::class)
+            ->setMethods(['getCount', 'load', 'setEntityId', 'setType', 'setCount', 'setUpdatedAt', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->countsCollectionFactoryMock = $this

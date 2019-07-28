@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Config;
 
 use Magento\Email\Model\Template;
@@ -10,7 +11,7 @@ use Magento\Email\Model\Template;
 /**
  * Class ValidatorTest to test \Magento\Theme\Model\Design\Config\Validator
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     const TEMPLATE_CODE = 'email_exception_fixture';
 
@@ -56,7 +57,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Email/Model/_files/email_template.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The email_header_template contains an incorrect configuration. The template has a
      */
     public function testValidateHasRecursiveReference()
     {
@@ -95,6 +95,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $designElementMock->expects($this->once())->method('getValue')->willReturn($this->templateModel->getId());
 
         $this->model->validate($designConfigMock);
+
+        $this->expectExceptionMessage(
+            'The "email_header_template" template contains an incorrect configuration, with a reference to itself. '
+            . 'Remove or change the reference, then try again.'
+        );
     }
 
     /**

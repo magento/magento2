@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit_Framework_TestCase
+class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Observer\updateOrderStatusForPaymentMethodsObserver */
     protected $updateOrderStatusForPaymentMethodsObserver;
@@ -37,15 +37,9 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit_Framework_
 
     protected function setUp()
     {
-        $this->orderConfigMock = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
-        $this->paymentConfigMock = $this->getMock(\Magento\Payment\Model\Config::class, [], [], '', false);
-        $this->coreResourceConfigMock = $this->getMock(
-            \Magento\Config\Model\ResourceModel\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->orderConfigMock = $this->createMock(\Magento\Sales\Model\Order\Config::class);
+        $this->paymentConfigMock = $this->createMock(\Magento\Payment\Model\Config::class);
+        $this->coreResourceConfigMock = $this->createMock(\Magento\Config\Model\ResourceModel\Config::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->updateOrderStatusForPaymentMethodsObserver = $this->objectManagerHelper->getObject(

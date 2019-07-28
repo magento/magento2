@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Config\Source\Product\Options;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Config\Source\Product\Options\Type

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="BraintreeConfiguraionSection">
+        <element name="titleForBraintreeSettings" type="input" selector="//input[@id='payment_us_braintree_section_braintree_braintree_required_title']"/>
+        <element name="environment" type="select" selector="//select[@id='payment_us_braintree_section_braintree_braintree_required_environment']"/>
+        <element name="sandbox" type="select" selector="//select[@id='payment_us_braintree_section_braintree_braintree_required_environment']/option[text()='Sandbox']"/>
+        <element name="paymentActionSelect" type="select" selector="//select[@id='payment_us_braintree_section_braintree_braintree_required_payment_action']"/>
+        <element name="paymentAction" type="button" selector="//select[@id='payment_us_braintree_section_braintree_braintree_required_payment_action']/option[text()='Authorize']"/>
+        <element name="merchantID" type="input" selector="//input[@id='payment_us_braintree_section_braintree_braintree_required_merchant_id']"/>
+        <element name="publicKey" type="input" selector="//input[@id='payment_us_braintree_section_braintree_braintree_required_public_key']"/>
+        <element name="privateKey" type="input" selector="//input[@id='payment_us_braintree_section_braintree_braintree_required_private_key']"/>
+        <element name="enableThisSolution" type="select" selector="//select[@id='payment_us_braintree_section_braintree_active']"/>
+        <element name="yesForEnable" type="button" selector="//select[@id='payment_us_braintree_section_braintree_active']/option[text()='Yes']"/>
+        <element name="payPalThroughBraintree" type="select" selector="//select[@id='payment_us_braintree_section_braintree_active_braintree_paypal']"/>
+        <element name="yesForPayPalThroughBraintree" type="input" selector="//select[@id='payment_us_braintree_section_braintree_active_braintree_paypal']/option[text()='Yes']"/>
+        <element name="advancedBraintreeSettings" type="button" selector="//a[@id='payment_us_braintree_section_braintree_braintree_advanced-head']"/>
+        <element name="merchantAccountID" type="text" selector="//input[@id='payment_us_braintree_section_braintree_braintree_advanced_merchant_account_id']"/>
+        <element name="CVVVerification" type="text" selector="//select[@id='payment_us_braintree_section_braintree_braintree_advanced_useccv']"/>
+        <element name="yesForCVV" type="text" selector="//select[@id='payment_us_braintree_section_braintree_braintree_advanced_useccv']/option[text()='Yes']"/>
+        <element name="payPalThroughBraintreeSelector" type="text" selector="//a[@id='payment_us_braintree_section_braintree_braintree_paypal-head']"/>
+        <element name="titleForPayPalThroughBraintree" type="text" selector="//input[@id='payment_us_braintree_section_braintree_braintree_paypal_title']"/>
+        <element name="paymentActionInPayPal" type="text" selector="//select[@id='payment_us_braintree_section_braintree_braintree_paypal_payment_action']"/>
+        <element name="actionAuthorize" type="text" selector="//select[@id='payment_us_braintree_section_braintree_braintree_paypal_payment_action']/option[text()='Authorize']"/>
+        <element name="save" type="button" selector="//span[text()='Save Config']"/>
+        <element name="successfulMessage" type="text" selector="//*[@data-ui-id='messages-message-success']"/>
+    </section>
+</sections>

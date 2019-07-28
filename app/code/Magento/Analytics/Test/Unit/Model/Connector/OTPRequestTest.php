@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 /**
  * A unit test for testing of the representation of a 'OTP' request.
  */
-class OTPRequestTest extends \PHPUnit_Framework_TestCase
+class OTPRequestTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OTPRequest

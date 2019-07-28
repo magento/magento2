@@ -19,7 +19,7 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
     {
         $this->mapperInterfaceName =
             $mapper ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\StockCriteriaMapper::class;
-        $this->data['initial_condition'] = true;
+        $this->data['initial_condition'] = [true];
     }
 
     /**
@@ -27,7 +27,7 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
      */
     public function setScopeFilter($scope)
     {
-        $this->data['website_filter'] = $scope;
+        $this->data['website_filter'] = [$scope];
         return true;
     }
 

@@ -7,6 +7,7 @@ namespace Magento\Ui\Component;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Container extends AbstractComponent
 {

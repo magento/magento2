@@ -56,7 +56,7 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
         $curl->write($url, $data);
         $response = $curl->read();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("URL Rewrite creation by curl handler was not successful! Response: $response");
         }
         $curl->close();

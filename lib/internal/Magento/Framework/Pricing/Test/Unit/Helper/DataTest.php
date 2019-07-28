@@ -8,7 +8,7 @@ namespace Magento\Framework\Pricing\Test\Unit\Helper;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -22,7 +22,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
@@ -50,6 +50,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $helper->currency($amount, $format, $includeContainer));
     }
 
+    /**
+     * @return array
+     */
     public function currencyDataProvider()
     {
         return [
@@ -84,6 +87,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $helper->currencyByStore($amount, $store, $format, $includeContainer));
     }
 
+    /**
+     * @return array
+     */
     public function currencyByStoreDataProvider()
     {
         return [

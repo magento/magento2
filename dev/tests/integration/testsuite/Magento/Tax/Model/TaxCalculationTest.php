@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxCalculationTest extends \PHPUnit_Framework_TestCase
+class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager
@@ -2192,7 +2192,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create the base results for the the multi rules test
+     * Create the base results for the multi rules test
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)

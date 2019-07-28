@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api;
  * Coupon CRUD interface
  *
  * @api
+ * @since 100.0.2
  */
 interface CouponRepositoryInterface
 {
@@ -37,7 +38,7 @@ interface CouponRepositoryInterface
      * Retrieve a coupon using the specified search criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See http://devdocs.magento.com/codelinks/attributes.html#CouponRepositoryInterface to
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#CouponRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

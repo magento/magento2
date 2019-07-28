@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SwitcherTest extends \PHPUnit_Framework_TestCase
+class SwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Store\Block\Switcher */
     protected $switcher;
@@ -25,14 +25,23 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlBuilder;
 
+    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $store;
+
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
-        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
-        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManager));
         $this->context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilder));
-        $this->corePostDataHelper = $this->getMock(\Magento\Framework\Data\Helper\PostHelper::class, [], [], '', false);
+        $this->corePostDataHelper = $this->createMock(\Magento\Framework\Data\Helper\PostHelper::class);
+        $this->store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->switcher = (new ObjectManager($this))->getObject(
             \Magento\Store\Block\Switcher::class,
             [
@@ -42,6 +51,9 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetTargetStorePostData()
     {
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
@@ -50,24 +62,34 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->any())
             ->method('getCode')
             ->willReturn('new-store');
-        $storeSwitchUrl = 'http://domain.com/stores/store/switch';
+        $storeSwitchUrl = 'http://domain.com/stores/store/redirect';
         $store->expects($this->atLeastOnce())
             ->method('getCurrentUrl')
             ->with(false)
             ->willReturn($storeSwitchUrl);
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->once())
+            ->method('getCode')
+            ->willReturn('old-store');
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->willReturn($storeSwitchUrl);
         $this->corePostDataHelper->expects($this->any())
             ->method('getPostData')
-            ->with($storeSwitchUrl, ['___store' => 'new-store']);
+            ->with($storeSwitchUrl, ['___store' => 'new-store', 'uenc' => null, '___from_store' => 'old-store']);
 
         $this->switcher->getTargetStorePostData($store);
     }
 
     /**
-     * @dataProvider testIsStoreInUrlDataProvider
+     * @dataProvider isStoreInUrlDataProvider
+     * @param bool $isUseStoreInUrl
      */
     public function testIsStoreInUrl($isUseStoreInUrl)
     {
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
         $storeMock->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue($isUseStoreInUrl));
 
@@ -81,7 +103,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
      * @see self::testIsStoreInUrlDataProvider()
      * @return array
      */
-    public function testIsStoreInUrlDataProvider()
+    public function isStoreInUrlDataProvider()
     {
         return [[true], [false]];
     }

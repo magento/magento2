@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Tax;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
+class IgnoreTaxNotificationTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecute()
     {
@@ -19,7 +19,7 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $cacheTypeList->expects($this->once())
             ->method('cleanType')
-            ->with('block_html')
+            ->with('config')
             ->willReturn(null);
 
         $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)

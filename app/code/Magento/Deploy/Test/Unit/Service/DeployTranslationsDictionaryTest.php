@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * Translation Dictionaries deploy service class unit tests
  */
-class DeployTranslationsDictionaryTest extends \PHPUnit_Framework_TestCase
+class DeployTranslationsDictionaryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DeployTranslationsDictionary
@@ -55,13 +55,7 @@ class DeployTranslationsDictionaryTest extends \PHPUnit_Framework_TestCase
         $theme = 'Magento/backend';
         $locale = 'uk_UA';
 
-        $this->jsTranslationConfig = $this->getMock(
-            JsTranslationConfig::class,
-            ['getDictionaryFileName'],
-            [],
-            '',
-            false
-        );
+        $this->jsTranslationConfig = $this->createPartialMock(JsTranslationConfig::class, ['getDictionaryFileName']);
         $this->jsTranslationConfig
             ->expects($this->exactly(2))
             ->method('getDictionaryFileName')

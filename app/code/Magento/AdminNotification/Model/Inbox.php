@@ -12,8 +12,6 @@ use Magento\AdminNotification\Model\InboxInterface;
 /**
  * AdminNotification Inbox model
  *
- * @method \Magento\AdminNotification\Model\ResourceModel\Inbox _getResource()
- * @method \Magento\AdminNotification\Model\ResourceModel\Inbox getResource()
  * @method int getSeverity()
  * @method \Magento\AdminNotification\Model\Inbox setSeverity(int $value)
  * @method string getDateAdded()
@@ -30,6 +28,7 @@ use Magento\AdminNotification\Model\InboxInterface;
  * @method \Magento\AdminNotification\Model\Inbox setIsRemove(int $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierInterface, InboxInterface
 {

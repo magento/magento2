@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class OrderStatusHistoryRepositoryInterfaceTest extends \PHPUnit_Framework_TestCase
+class OrderStatusHistoryRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderStatusHistoryRepositoryInterface

@@ -36,7 +36,7 @@ class AssertCustomerGroupOnCatalogPriceRuleForm extends AbstractConstraint
 
         /** @var RuleInformation $ruleInformationSection */
         $ruleInformationSection = $catalogRuleNew->getEditForm()->getSection('rule_information');
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $ruleInformationSection->isVisibleCustomerGroup($customerGroup),
             "Customer group {$customerGroup->getCustomerGroupCode()} not in catalog price rule page."
         );

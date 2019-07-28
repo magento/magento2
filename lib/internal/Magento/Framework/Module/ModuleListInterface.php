@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Module;
 
+/**
+ * Interface \Magento\Framework\Module\ModuleListInterface
+ *
+ */
 interface ModuleListInterface
 {
     /**

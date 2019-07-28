@@ -18,6 +18,7 @@
     <integration name="TestIntegration2">
         <email>test-integration2@magento.com</email>
         <resources>
+            <resource name="Magento_Backend::admin" />
             <resource name="Magento_Sales::sales" />
         </resources>
     </integration>

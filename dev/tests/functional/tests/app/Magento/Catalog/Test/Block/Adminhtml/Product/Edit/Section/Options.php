@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\Section;
@@ -75,6 +74,13 @@ class Options extends Section
      * @var string
      */
     protected $staticDataRow = '[data-index="container_type_static"] div:nth-child(%d)';
+
+    /**
+     * Locator for file_extension field.
+     *
+     * @var string
+     */
+    private $hintMessage = "div[data-index='file_extension'] div[id^='notice']";
 
     /**
      * Sort rows data.
@@ -341,10 +347,77 @@ class Options extends Section
     {
         $option = substr($inputType, strpos($inputType, "/") + 1);
         $option = str_replace([' ', '&'], "", $option);
-        if ($end = strpos($option, '-')) {
+        $end = strpos($option, '-');
+        if ($end !== false) {
             $option = substr($option, 0, $end) . ucfirst(substr($option, ($end + 1)));
         }
 
         return $option;
+    }
+
+    /**
+     * Get values data for option as array.
+     *
+     * @param array $options
+     * @param string $optionType
+     * @param string $optionTitle
+     * @return array
+     */
+    public function getValuesDataForOption(array $options, string $optionType, string $optionTitle)
+    {
+        $rootLocator = sprintf($this->customOptionRow, $optionTitle);
+        $rootElement = $this->_rootElement->find($rootLocator, Locator::SELECTOR_XPATH);
+
+        $formDataItem = [];
+        /** @var AbstractOptions $optionsForm */
+        $optionsForm = $this->blockFactory->create(
+            __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($optionType),
+            ['element' => $rootElement]
+        );
+        $context = $rootElement->find($this->addValue)->isVisible()
+            ? $this->dynamicDataRow
+            : $this->staticDataRow;
+        foreach (array_keys($options) as $key) {
+            $element = $rootElement->find(sprintf($context, $key + 1));
+
+            $dataOptions = $optionsForm->getDataOptions(null, $element);
+
+            $addBefore = $optionsForm->getTextForOptionValues(
+                [
+                    'add_before' => []
+                ],
+                $element
+            );
+            $formDataItem[$key] = array_merge($dataOptions, $addBefore);
+        }
+
+        return $formDataItem;
+    }
+
+    /**
+     * Returns notice-message elements for 'file_extension' fields.
+     *
+     * @return ElementInterface[]
+     */
+    public function getFileOptionElements()
+    {
+        return $this->_rootElement->getElements($this->hintMessage);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _fill(array $fields, SimpleElement $element = null)
+    {
+        $context = ($element === null) ? $this->_rootElement : $element;
+        foreach ($fields as $name => $field) {
+            $element = $this->getElement($context, $field);
+            if (!$element->isDisabled()) {
+                $element->getContext()->hover();
+                $element->setValue($field['value']);
+            } else {
+                throw new \Exception("Unable to set value to field '$name' as it's disabled.");
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Block\Account;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Block\Account\Customer */
     private $block;
@@ -22,6 +22,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->getObject(\Magento\Customer\Block\Account\Customer::class, ['httpContext' => $this->httpContext]);
     }
 
+    /**
+     * @return array
+     */
     public function customerLoggedInDataProvider()
     {
         return [

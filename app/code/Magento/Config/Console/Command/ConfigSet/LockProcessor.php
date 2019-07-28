@@ -16,7 +16,8 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Processes file lock flow of config:set command.
- * This processor saves the value of configuration and lock it for editing in Admin interface.
+ * This processor saves the value of configuration into app/etc/env.php
+ * and locks it for editing in Admin interface.
  *
  * {@inheritdoc}
  */
@@ -49,23 +50,30 @@ class LockProcessor implements ConfigSetProcessorInterface
      * @var ConfigPathResolver
      */
     private $configPathResolver;
+    /**
+     * @var string
+     */
+    private $target;
 
     /**
      * @param PreparedValueFactory $preparedValueFactory The factory for prepared value
      * @param DeploymentConfig\Writer $writer The deployment configuration writer
      * @param ArrayManager $arrayManager An array manager for different manipulations with arrays
      * @param ConfigPathResolver $configPathResolver The resolver for configuration paths according to source type
+     * @param string $target
      */
     public function __construct(
         PreparedValueFactory $preparedValueFactory,
         DeploymentConfig\Writer $writer,
         ArrayManager $arrayManager,
-        ConfigPathResolver $configPathResolver
+        ConfigPathResolver $configPathResolver,
+        $target = ConfigFilePool::APP_ENV
     ) {
         $this->preparedValueFactory = $preparedValueFactory;
         $this->deploymentConfigWriter = $writer;
         $this->arrayManager = $arrayManager;
         $this->configPathResolver = $configPathResolver;
+        $this->target = $target;
     }
 
     /**
@@ -97,7 +105,7 @@ class LockProcessor implements ConfigSetProcessorInterface
                  * we'll write value just after all validations are triggered.
                  */
                 $this->deploymentConfigWriter->saveConfig(
-                    [ConfigFilePool::APP_ENV => $this->arrayManager->set($configPath, [], $value)],
+                    [$this->target => $this->arrayManager->set($configPath, [], $value)],
                     false
                 );
             }

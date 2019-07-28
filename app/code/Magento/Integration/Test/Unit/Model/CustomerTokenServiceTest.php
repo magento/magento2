@@ -1,7 +1,5 @@
 <?php
 /**
- * Test for \Magento\Integration\Model\CustomerTokenService
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,10 +9,7 @@ namespace Magento\Integration\Test\Unit\Model;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Oauth\Token;
 
-/**
- * Test for \Magento\Integration\Model\CustomerTokenService
- */
-class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
+class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\CustomerTokenService */
     protected $_tokenService;
@@ -37,6 +32,9 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit_Framework_MockObject_MockObject */
     private $_tokenMock;
 
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $manager;
+
     protected function setUp()
     {
         $this->_tokenFactoryMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\TokenFactory::class)
@@ -57,7 +55,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection::class
         )->disableOriginalConstructor()->setMethods(
-            ['addFilterByCustomerId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator']
+            ['addFilterByCustomerId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
         )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
@@ -72,11 +70,14 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
             \Magento\Integration\Model\CredentialsValidator::class
         )->disableOriginalConstructor()->getMock();
 
+        $this->manager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+
         $this->_tokenService = new \Magento\Integration\Model\CustomerTokenService(
             $this->_tokenFactoryMock,
             $this->_accountManagementMock,
             $this->_tokenModelCollectionFactoryMock,
-            $this->validatorHelperMock
+            $this->validatorHelperMock,
+            $this->manager
         );
     }
 
@@ -122,7 +123,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The tokens could not be revoked.
+     * @expectedExceptionMessage The tokens couldn't be revoked.
      */
     public function testRevokeCustomerAccessTokenCannotRevoked()
     {

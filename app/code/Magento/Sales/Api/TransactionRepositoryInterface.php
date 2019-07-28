@@ -10,6 +10,7 @@ namespace Magento\Sales\Api;
  *
  * A transaction is an interaction between a merchant and a customer such as a purchase, a credit, a refund, and so on.
  * @api
+ * @since 100.0.2
  */
 interface TransactionRepositoryInterface
 {
@@ -17,7 +18,7 @@ interface TransactionRepositoryInterface
      * Lists transactions that match specified search criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See http://devdocs.magento.com/codelinks/attributes.html#TransactionRepositoryInterface to
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#TransactionRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.

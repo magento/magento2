@@ -12,7 +12,7 @@ use Magento\Framework\Phrase;
 /**
  * Class StateExceptionTest
  */
-class StateExceptionTest extends \PHPUnit_Framework_TestCase
+class StateExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

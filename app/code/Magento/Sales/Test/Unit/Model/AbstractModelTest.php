@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model;
 /**
  * Class AbstractModelTest
  */
-class AbstractModelTest extends \PHPUnit_Framework_TestCase
+class AbstractModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order

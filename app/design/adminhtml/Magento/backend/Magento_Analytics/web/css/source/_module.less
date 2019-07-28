@@ -83,91 +83,42 @@
 //  Modal on dashboard
 //  ---------------------------------------------
 
-.advanced-reports-decline-subscription-modal,
 .advanced-reports-subscription-modal {
     .modal-inner-wrap {
-        max-width: 80rem;
-    }
-}
+        margin-top: 13rem;
+        max-width: 75rem;
 
-.advanced-reports-subscription-modal {
+        .modal-content,
+        .modal-header {
+            padding-left: 4rem;
+            padding-right: 4rem;
+
+            .action-close {
+                display: none;
+            }
+        }
+    }
+
     .admin__fieldset {
         padding: 0;
     }
 }
 
-.advanced-reports-decline-subscription-modal {
-    .advanced-reports-subscription-text {
-        margin-bottom: 0;
-    }
-
-    .modal-content {
-        padding-bottom: 0;
-    }
-}
-
 .advanced-reports-subscription-text {
     line-height: @line-height__xl;
-
-    .list {
-        .lib-list-reset-styles(@_margin: @indent__m 0, @_padding: 0);
-
-        li {
-            padding-left: @indent__l;
-            position: relative;
-
-            &:before {
-                content: '\2022';
-                left: 1rem;
-                position: absolute;
-            }
-
-            + li {
-                margin-top: @indent__m;
-            }
-        }
-    }
+    padding-bottom: 8rem;
 }
 
-.advanced-reports-subscription-actions {
-    font-size: 0;
-    text-align: justify;
-
-    &:after {
-        content: '';
-        display: inline-block;
-        height: 0;
-        overflow: hidden;
-        visibility: hidden;
-        width: 100%;
-    }
-
-    .action-basic,
-    .action-additional {
-        &:extend(.abs-action-l all);
-    }
-
-    .advanced-reports-subscription-postpone,
-    .advanced-reports-subscription-disable,
-    .advanced-reports-subscription-enable {
-        display: inline-block;
-        vertical-align: top;
-    }
+.advanced-reports-subscription-close {
+    display: block;
+    float: right;
 }
 
-.advanced-reports-subscription-enable {
-    .admin__field {
-        max-width: 22rem;
-    }
-
-    .admin__field-label {
-        font-size: @font-size__s;
-        line-height: @line-height__l;
-    }
-
-    .action-basic {
-        &:extend(.abs-action-primary all);
-        margin-bottom: @indent__s;
+.advanced-reports-subscription-modal {
+    h1:first-of-type {
+        background: url("Magento_Analytics::images/analytics-icon.svg") no-repeat;
+        background-size: 55px 49.08px;
+        padding: 1.5rem 0 2rem 7rem;
     }
 }
 
@@ -176,17 +127,44 @@
 //  _____________________________________________
 
 .config-additional-comment {
-  border-color: @color-gray80;
-  border-style: solid;
-  border-width: 1px 0;
-  margin: @indent__l 0;
-  padding: @indent__m;
+    border-color: @color-gray80;
+    border-style: solid;
+    border-width: 1px 0;
+    margin: @indent__l 0;
+    padding: @indent__m;
 }
 
 .config-additional-comment-title {
-  margin-bottom: @indent__xs;
+    margin-bottom: @indent__xs;
 }
 
 .config-additional-comment-content {
-  line-height: @line-height__l;
+    line-height: @line-height__l;
+}
+
+.config-vertical-title {
+    clear: both;
+    color: rgb(48, 48, 48);
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: .025em;
+    padding: 1.9rem 2.8rem 1.9rem 0;
+    position: relative;
+}
+
+.config-vertical-comment {
+    line-height: 1.5;
+    margin-bottom: .5em;
+    margin-top: 1rem;
+}
+
+/**
+ * @codingStandardsIgnoreStart
+ */
+#row_analytics_general_vertical {
+    >td.config-vertical-label {
+        >label.admin__field-label {
+            padding-right: 0;
+        }
+    }
 }

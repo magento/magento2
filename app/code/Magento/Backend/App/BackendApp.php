@@ -9,6 +9,7 @@ namespace Magento\Backend\App;
 /**
  * Backend Application which uses Magento Backend authentication process
  * @api
+ * @since 100.0.2
  */
 class BackendApp
 {

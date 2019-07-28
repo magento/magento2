@@ -6,8 +6,9 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (_, registry, dynamicRows) {
+    'Magento_Ui/js/dynamic-rows/dynamic-rows',
+    'jquery'
+], function (_, registry, dynamicRows, $) {
     'use strict';
 
     return dynamicRows.extend({
@@ -217,6 +218,8 @@ define([
 
             _.each(tmpData, function (row, index) {
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + index);
+                row.attributes = $('<i></i>').text(row.attributes).html();
+                row.sku = $('<i></i>').text(row.sku).html();
                 this.source.set(path, row);
             }, this);
 
@@ -349,8 +352,6 @@ define([
             );
 
             _.each(data, function (row) {
-                var attributesText;
-
                 if (row.productId) {
                     index = _.indexOf(productIdsToDelete, row.productId);
 
@@ -364,36 +365,8 @@ define([
                         );
                     }
                 }
+                product = this.getProductData(row);
 
-                attributesText = '';
-                _.each(row.options, function (attribute) {
-                    if (attributesText) {
-                        attributesText += ', ';
-                    }
-                    attributesText += attribute['attribute_label'] + ': ' + attribute.label;
-                }, this);
-
-                product = {
-                    'id': row.productId,
-                    'product_link': row.productUrl,
-                    'name': row.name,
-                    'sku': row.sku,
-                    'status': row.status,
-                    'price': row.price,
-                    'price_currency': row.priceCurrency,
-                    'price_string': row.priceCurrency + row.price,
-                    'weight': row.weight,
-                    'qty': row.quantity,
-                    'variationKey': row.variationKey,
-                    'configurable_attribute': row.attribute,
-                    'thumbnail_image': row.images.preview,
-                    'media_gallery': row['media_gallery'],
-                    'swatch_image': row['swatch_image'],
-                    'small_image': row['small_image'],
-                    image: row.image,
-                    'thumbnail': row.thumbnail,
-                    'attributes': attributesText
-                };
                 product[this.changedFlag] = true;
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;
@@ -410,6 +383,47 @@ define([
             }, this);
 
             this.unionInsertData(tmpArray);
+        },
+
+        /**
+         *
+         * @param {Object} row
+         * @returns {Object}
+         */
+        getProductData: function (row) {
+            var product,
+                attributesText = '';
+
+            _.each(row.options, function (attribute) {
+                if (attributesText) {
+                    attributesText += ', ';
+                }
+                attributesText += attribute['attribute_label'] + ': ' + attribute.label;
+            }, this);
+
+            product = {
+                'id': row.productId,
+                'product_link': row.productUrl,
+                'name': $('<i></i>').text(row.name).html(),
+                'sku': $('<i></i>').text(row.sku).html(),
+                'status': row.status,
+                'price': row.price,
+                'price_currency': row.priceCurrency,
+                'price_string': row.priceCurrency + row.price,
+                'weight': row.weight,
+                'qty': row.quantity,
+                'variationKey': row.variationKey,
+                'configurable_attribute': row.attribute,
+                'thumbnail_image': row.images.preview,
+                'media_gallery': row['media_gallery'],
+                'swatch_image': row['swatch_image'],
+                'small_image': row['small_image'],
+                image: row.image,
+                'thumbnail': row.thumbnail,
+                'attributes': attributesText
+            };
+
+            return product;
         },
 
         /**

@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Model\ResourceModel;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\ResourceModel\Config

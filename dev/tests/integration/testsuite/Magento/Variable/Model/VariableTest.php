@@ -5,7 +5,7 @@
  */
 namespace Magento\Variable\Model;
 
-class VariableTest extends \PHPUnit_Framework_TestCase
+class VariableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Variable\Model\Variable
@@ -76,5 +76,21 @@ class VariableTest extends \PHPUnit_Framework_TestCase
 
         $collection->addValuesToResult();
         $this->assertContains('variable_value', (string)$collection->getSelect());
+    }
+
+    /**
+     * Test to verify that returned by getVariablesOptionArray()
+     * custom variable label is HTML escaped.
+     */
+    public function testGetVariablesOptionArrayWithHtmlLabel()
+    {
+        $expectedLabel = '&lt;b&gt;HTML Name value&lt;/b&gt;';
+        $data = [
+            'code' => 'html_name',
+            'name' => '<b>HTML Name value</b>'
+        ];
+        $this->_model->setData($data)->save();
+        $actualLabel = current(current($this->_model->getVariablesOptionArray())['label']->getArguments());
+        $this->assertEquals($expectedLabel, $actualLabel);
     }
 }

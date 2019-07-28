@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportOrderPlacedToNewRelic;
 /**
  * Class ReportOrderPlacedToNewRelicTest
  */
-class ReportOrderPlacedToNewRelicTest extends \PHPUnit_Framework_TestCase
+class ReportOrderPlacedToNewRelicTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportOrderPlacedToNewRelic

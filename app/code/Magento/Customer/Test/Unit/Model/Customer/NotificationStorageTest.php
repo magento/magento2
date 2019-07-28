@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Customer\Model\Customer\NotificationStorage;
 
-class NotificationStorageTest extends \PHPUnit_Framework_TestCase
+class NotificationStorageTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -28,12 +28,12 @@ class NotificationStorageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->notificationStorage = $objectManager->getObject(
             NotificationStorage::class,
             ['cache' => $this->cacheMock]
         );
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty($this->notificationStorage, 'serializer', $this->serializerMock);
     }
 

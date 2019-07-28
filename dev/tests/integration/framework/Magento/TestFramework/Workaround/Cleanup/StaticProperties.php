@@ -203,9 +203,9 @@ class StaticProperties
     /**
      * Handler for 'endTestSuite' event
      *
-     * @param \PHPUnit_Framework_TestSuite $suite
+     * @param \PHPUnit\Framework\TestSuite $suite
      */
-    public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
         $clearStatics = false;
         foreach ($suite->tests() as $test) {

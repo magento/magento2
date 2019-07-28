@@ -6,16 +6,16 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Config;
 
 use Magento\Braintree\Gateway\Config\CanVoidHandler;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment;
 
-class CanVoidHandlerTest extends \PHPUnit_Framework_TestCase
+class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleNotOrderPayment()
     {
-        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $subject = [
             'payment' => $paymentDO
         ];
@@ -28,7 +28,7 @@ class CanVoidHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('readPayment')
             ->willReturn($paymentDO);
 
-        $paymentMock = $this->getMock(InfoInterface::class);
+        $paymentMock = $this->createMock(InfoInterface::class);
 
         $paymentDO->expects(static::once())
             ->method('getPayment')
@@ -39,9 +39,9 @@ class CanVoidHandlerTest extends \PHPUnit_Framework_TestCase
         static::assertFalse($voidHandler->handle($subject));
     }
 
-    public function testHandleSomeAmoutWasPaid()
+    public function testHandleSomeAmountWasPaid()
     {
-        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $subject = [
             'payment' => $paymentDO
         ];

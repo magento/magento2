@@ -11,7 +11,7 @@ namespace Magento\Theme\Test\Unit\Model\Config;
 
 use Magento\Framework\App\Area;
 
-class CustomizationTest extends \PHPUnit_Framework_TestCase
+class CustomizationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -34,7 +34,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockBuilder
+     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit\Framework\MockObject_MockBuilder
      */
     protected $themeProviderMock;
 

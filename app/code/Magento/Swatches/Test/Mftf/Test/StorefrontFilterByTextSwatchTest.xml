@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFilterByTextSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="View swatches in product listing"/>
+            <title value="Customers can filter products using text swatches"/>
+            <description value="Customers can filter products using text swatches"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3462"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Begin creating a new product attribute -->
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+
+        <!-- Select text swatch -->
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_text" stepKey="selectInputType"/>
+
+        <!-- Create swatch #1 -->
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch0"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('0')}}" userInput="red" stepKey="fillSwatch0"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('0')}}" userInput="Something red." stepKey="fillDescription0"/>
+
+        <!-- Create swatch #2 -->
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('1')}}" userInput="blue" stepKey="fillSwatch1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('1')}}" userInput="Something blue." stepKey="fillDescription1"/>
+
+        <!-- Set scope to global -->
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+
+        <!-- Set Use In Layered Navigation -->
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="1" stepKey="selectUseInLayeredNavigation"/>
+
+        <!-- Workaround: click on the main tab again to ensure the values are saved, otherwise the swatches do not get saved -->
+        <scrollToTopOfPage stepKey="scrollToTop2"/>
+        <click selector="{{AttributePropertiesSection.propertiesTab}}" stepKey="goBackToPropertiesTab"/>
+
+        <!-- Save the new attribute -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
+
+        <!-- Create a configurable product to verify the storefront with -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+        <!-- Create configurations based off the text swatch we created earlier -->
+        <actionGroup ref="createConfigurationsForAttribute" stepKey="createConfigurations">
+            <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+
+        <!-- Go to the category page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPage"/>
+
+        <!-- Verify swatches are present in the layered navigation -->
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeInLayeredNav"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute"/>
+        <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" userInput="red" stepKey="seeRed"/>
+        <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" userInput="blue" stepKey="seeBlue"/>
+
+        <!-- Click a swatch and expect to see the configurable product, not see the simple product -->
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="filterBySwatch1"/>
+        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{BaseConfigurableProduct.name}}" stepKey="seeConfigurableProduct"/>
+        <dontSee selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeSimpleProduct"/>
+    </test>
+</tests>

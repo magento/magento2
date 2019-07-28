@@ -7,7 +7,6 @@
 /**
  * Eav attribute set model
  *
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set getResource()
  * @method int getEntityTypeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Set setEntityTypeId(int $value)
  * @method string getAttributeSetName()
@@ -38,11 +37,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_ENTITY_TYPE_ID = 'entity_type_id';
     /**#@-*/
 
-    /**
-     * Resource instance
-     *
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
-     */
+    /**#@-*/
     protected $_resource;
 
     /**
@@ -225,7 +220,12 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
             foreach ($data['not_attributes'] as $entityAttributeId) {
                 $entityAttribute = $this->_resourceAttribute->getEntityAttribute($entityAttributeId);
                 if (!$entityAttribute) {
-                    throw new LocalizedException(__('Entity attribute with id "%1" not found', $entityAttributeId));
+                    throw new LocalizedException(
+                        __(
+                            'The entity attribute with the "%1" ID isn\'t found. Reset the attribute and try again.',
+                            $entityAttributeId
+                        )
+                    );
                 }
                 $modelAttribute = $this->_eavConfig->getAttribute(
                     $this->getEntityTypeId(),
@@ -287,11 +287,13 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         $attributeSetName = $this->getAttributeSetName();
         if ($attributeSetName == '') {
-            throw new LocalizedException(__('Attribute set name is empty.'));
+            throw new LocalizedException(__('The attribute set name is empty. Enter the name and try again.'));
         }
 
         if (!$this->_getResource()->validate($this, $attributeSetName)) {
-            throw new LocalizedException(__('An attribute set named "%1" already exists.', $attributeSetName));
+            throw new LocalizedException(
+                __('A "%1" attribute set name already exists. Create a new name and try again.', $attributeSetName)
+            );
         }
 
         return true;
@@ -373,6 +375,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated 100.2.0 because resource models should be used directly
      */
     protected function _getResource()
     {

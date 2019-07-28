@@ -12,7 +12,7 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     \Magento\Checkout\Api\Data\PaymentDetailsInterface
 {
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getPaymentMethods()
     {
@@ -20,7 +20,7 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function setPaymentMethods($paymentMethods)
     {
@@ -28,7 +28,7 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getTotals()
     {
@@ -36,7 +36,7 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function setTotals($totals)
     {

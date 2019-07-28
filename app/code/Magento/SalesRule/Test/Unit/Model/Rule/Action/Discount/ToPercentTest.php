@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
-class ToPercentTest extends \PHPUnit_Framework_TestCase
+class ToPercentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Rule\Action\Discount\ToPercent

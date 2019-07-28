@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Tree;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ *
+ * @deprecated Not used anymore.
  */
 class Node
 {
@@ -49,11 +52,15 @@ class Node
 
     /**
      * @var bool
+     *
+     * @deprecated
      */
     public $hasChild = false;
 
     /**
      * @var float|int
+     *
+     * @deprecated
      */
     public $numChild = 0;
 
@@ -61,14 +68,20 @@ class Node
      * @param array $nodeData
      * @param array $keys
      * @throws LocalizedException
+     *
+     * @deprecated
      */
     public function __construct($nodeData, $keys)
     {
         if (empty($nodeData)) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Empty array of node information'));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('The node information is empty. Enter the information and try again.')
+            );
         }
         if (empty($keys)) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Empty keys array'));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase("The encryption key can't be empty. Enter the key and try again.")
+            );
         }
 
         $this->id = $nodeData[$keys['id']];
@@ -89,6 +102,8 @@ class Node
     /**
      * @param string $name
      * @return null|array
+     *
+     * @deprecated
      */
     public function getData($name)
     {
@@ -101,6 +116,8 @@ class Node
 
     /**
      * @return int
+     *
+     * @deprecated
      */
     public function getLevel()
     {
@@ -109,6 +126,8 @@ class Node
 
     /**
      * @return int
+     *
+     * @deprecated
      */
     public function getLeft()
     {
@@ -117,6 +136,8 @@ class Node
 
     /**
      * @return int
+     *
+     * @deprecated
      */
     public function getRight()
     {
@@ -125,6 +146,8 @@ class Node
 
     /**
      * @return string|int
+     *
+     * @deprecated
      */
     public function getPid()
     {
@@ -133,6 +156,8 @@ class Node
 
     /**
      * @return string|int
+     *
+     * @deprecated
      */
     public function getId()
     {
@@ -143,6 +168,8 @@ class Node
      * Return true if node has child
      *
      * @return bool
+     *
+     * @deprecated
      */
     public function isParent()
     {

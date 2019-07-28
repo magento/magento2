@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response\Renderer;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Webapi\Rest\Response\Renderer\Xml */
     protected $_restXmlRenderer;
@@ -75,6 +75,11 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                 ['7key' => 'value'],
                 '<?xml version="1.0"?><response><item_7key>value</item_7key></response>',
                 'Invalid XML render with numeric symbol in data index.'
+            ],
+            [
+                ['key' => 'test & foo'],
+                '<?xml version="1.0"?><response><key>test &amp; foo</key></response>',
+                'Invalid XML render with ampersand symbol in data index.'
             ],
             [
                 ['.key' => 'value'],

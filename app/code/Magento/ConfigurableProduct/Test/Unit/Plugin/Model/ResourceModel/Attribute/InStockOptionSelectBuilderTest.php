@@ -12,7 +12,7 @@ use Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOpti
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class InStockOptionSelectBuilderTest extends \PHPUnit_Framework_TestCase
+class InStockOptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InStockOptionSelectBuilder

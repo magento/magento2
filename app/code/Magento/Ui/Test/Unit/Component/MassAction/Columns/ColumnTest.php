@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class ColumnTest
  */
-class ColumnTest extends \PHPUnit_Framework_TestCase
+class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject

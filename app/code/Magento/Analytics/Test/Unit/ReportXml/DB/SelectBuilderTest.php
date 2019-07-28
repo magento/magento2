@@ -10,10 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 
-/**
- * Class SelectBuilderTest
- */
-class SelectBuilderTest extends \PHPUnit_Framework_TestCase
+class SelectBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SelectBuilder
@@ -67,12 +64,12 @@ class SelectBuilderTest extends \PHPUnit_Framework_TestCase
             ['link-type' => 'right', 'table' => 'attribute', 'condition' => 'neq'],
         ];
         $groups = ['id', 'name'];
-        $this->selectBuilder->setConnectionName($connectionName);
-        $this->selectBuilder->setFrom($from);
-        $this->selectBuilder->setColumns($columns);
-        $this->selectBuilder->setFilters([$filter]);
-        $this->selectBuilder->setJoins($joins);
-        $this->selectBuilder->setGroup($groups);
+        $this->selectBuilder->setConnectionName($connectionName)
+            ->setFrom($from)
+            ->setColumns($columns)
+            ->setFilters([$filter])
+            ->setJoins($joins)
+            ->setGroup($groups);
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->with($connectionName)

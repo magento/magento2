@@ -8,7 +8,7 @@ namespace Magento\Framework\Message;
 /**
  * \Magento\Framework\Message\Factory test case
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\Factory

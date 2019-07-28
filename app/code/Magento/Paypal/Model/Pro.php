@@ -4,16 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
 
 use Magento\Paypal\Model\Api\AbstractApi;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Paypal\Model\Info;
 
 /**
- * PayPal Website Payments Pro implementation for payment method instances
+ * PayPal Website Payments Pro implementation for payment method instances.
+ *
  * This model was created because right now PayPal Direct and PayPal Express payment methods cannot have same abstract
  */
 class Pro
@@ -125,7 +123,7 @@ class Pro
     /**
      * Config instance setter
      *
-     * @param \Magento\Paypal\Model\Config $instace
+     * @param \Magento\Paypal\Model\Config $instance
      * @param int|null $storeId
      * @return $this
      */
@@ -149,7 +147,8 @@ class Pro
     }
 
     /**
-     * API instance getter
+     * API instance getter.
+     *
      * Sets current store id to current config instance and passes it to API
      *
      * @return \Magento\Paypal\Model\Api\Nvp
@@ -231,19 +230,22 @@ class Pro
     public function void(\Magento\Framework\DataObject $payment)
     {
         $authTransactionId = $this->_getParentTransactionId($payment);
-        if ($authTransactionId) {
-            $api = $this->getApi();
-            $api->setPayment($payment)->setAuthorizationId($authTransactionId)->callDoVoid();
-            $this->importPaymentInfo($api, $payment);
-        } else {
+        if (empty($authTransactionId)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('You need an authorization transaction to void.')
             );
         }
+
+        $api = $this->getApi();
+        $api->setPayment($payment);
+        $api->setAuthorizationId($authTransactionId);
+        $api->callDoVoid();
+        $this->importPaymentInfo($api, $payment);
     }
 
     /**
-     * Attempt to capture payment
+     * Attempt to capture payment.
+     *
      * Will return false if the payment is not supposed to be captured
      *
      * @param \Magento\Framework\DataObject $payment
@@ -258,7 +260,7 @@ class Pro
         }
         $api = $this->getApi()
             ->setAuthorizationId($authTransactionId)
-            ->setIsCaptureComplete($payment->getShouldCloseParentTransaction())
+            ->setIsCaptureComplete($payment->isCaptureFinal($amount))
             ->setAmount($amount);
 
         $order = $payment->getOrder();
@@ -300,7 +302,9 @@ class Pro
             $isFullRefund = !$canRefundMore &&
                 0 == (double)$order->getBaseTotalOnlineRefunded() + (double)$order->getBaseTotalOfflineRefunded();
             $api->setRefundType(
-                $isFullRefund ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
+                $isFullRefund
+                    ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL
+                    : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
             );
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);

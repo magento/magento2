@@ -17,7 +17,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Tax\Ui\DataProvider\Product\Listing\Collector\Tax;
 
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Tax
@@ -54,6 +54,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     private $formattedPriceInfoBuilder;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
@@ -68,10 +71,12 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->priceInfoFactory = $this->getMockBuilder(PriceInfoInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->formattedPriceInfoBuilder = $this->getMockBuilder(FormattedPriceInfoBuilder::class)
@@ -86,6 +91,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testCollect()
     {
         $amountValue = 10;

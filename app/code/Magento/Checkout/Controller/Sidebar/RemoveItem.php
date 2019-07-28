@@ -5,7 +5,9 @@
  */
 namespace Magento\Checkout\Controller\Sidebar;
 
-class RemoveItem extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class RemoveItem extends \Magento\Framework\App\Action\Action implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Checkout\Model\Sidebar
@@ -91,7 +93,7 @@ class RemoveItem extends \Magento\Framework\App\Action\Action
 
     /**
      * @return \Magento\Framework\Data\Form\FormKey\Validator
-     * @deprecated
+     * @deprecated 100.0.9
      */
     private function getFormKeyValidator()
     {

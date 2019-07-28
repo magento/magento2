@@ -1,0 +1,67 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type Mutation {
+    addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+}
+
+type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
+    variants: [ConfigurableVariant] @doc(description: "An array of variants of products") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableVariant")
+    configurable_options: [ConfigurableProductOptions] @doc(description: "An array of linked simple product items") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Options")
+}
+
+type ConfigurableVariant @doc(description: "An array containing all the simple product variants of a configurable product") {
+    attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes") @doc(description: "")
+    product: SimpleProduct @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
+}
+
+type ConfigurableAttributeOption @doc(description: "ConfigurableAttributeOption contains the value_index (and other related information) assigned to a configurable product option") {
+    label: String @doc(description: "A string that describes the configurable attribute option")
+    code: String @doc(description: "The ID assigned to the attribute")
+    value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
+}
+
+type ConfigurableProductOptions @doc(description: "ConfigurableProductOptions defines configurable attributes for the specified product") {
+    id: Int @doc(description: "The configurable option ID number assigned by the system")
+    attribute_id: String @doc(description: "The ID assigned to the attribute")
+    attribute_code: String @doc(description: "A string that identifies the attribute")
+    label: String @doc(description: "A string that describes the configurable product option, which is displayed on the UI")
+    position: Int @doc(description: "A number that indicates the order in which the attribute is displayed")
+    use_default: Boolean @doc(description: "Indicates whether the option is the default")
+    values: [ConfigurableProductOptionsValues] @doc(description: "An array that defines the value_index codes assigned to the configurable product")
+    product_id: Int @doc(description: "This is the same as a product's id field")
+}
+
+type ConfigurableProductOptionsValues @doc(description: "ConfigurableProductOptionsValues contains the index number assigned to a configurable product option") {
+    value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
+    label: String @doc(description: "The label of the product")
+    default_label: String @doc(description: "The label of the product on the default store")
+    store_label: String @doc(description: "The label of the product on the current store")
+    use_default_value: Boolean @doc(description: "Indicates whether to use the default_label")
+}
+
+input AddConfigurableProductsToCartInput {
+    cart_id: String!
+    cart_items: [ConfigurableProductCartItemInput!]!
+}
+
+type AddConfigurableProductsToCartOutput {
+    cart: Cart!
+}
+
+input ConfigurableProductCartItemInput {
+    data: CartItemInput!
+    variant_sku: String!
+    customizable_options:[CustomizableOptionInput!]
+}
+
+type ConfigurableCartItem implements CartItemInterface {
+    customizable_options: [SelectedCustomizableOption]!
+    configurable_options: [SelectedConfigurableOption!]!
+}
+
+type SelectedConfigurableOption {
+    id: Int!
+    option_label: String!
+    value_id: Int!
+    value_label: String!
+}

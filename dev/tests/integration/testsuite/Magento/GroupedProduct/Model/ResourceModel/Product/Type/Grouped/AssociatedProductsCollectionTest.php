@@ -5,7 +5,7 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
-class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
+class AssociatedProductsCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php

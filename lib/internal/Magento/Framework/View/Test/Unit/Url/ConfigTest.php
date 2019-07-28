@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Url;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Url\Config

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ChangingSingleCustomerGroupViaGrid">
+        <annotations>
+            <title value="Change a single customer group via grid"/>
+            <description value="From the selection of All Customers select a single customer to change their group"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-10921"/>
+            <stories value="Change Customer Group"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created product-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="NavigateToCustomerGroupPage" stepKey="navToCustomers"/>
+            <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
+                <argument name="customerGroupName" value="{{CustomerGroupChange.code}}"/>
+            </actionGroup>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">
+            <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
+            <argument name="taxClass" value="{{CustomerGroupChange.tax_class_name}}"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToAllCustomerPage" stepKey="navToCustomers"/>
+        <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomer">
+            <argument name="customerName" value="{{Simple_US_Customer.fullname}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectCustomerByEmail" stepKey="selectCustomer">
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <actionGroup ref="SetCustomerGroupForSelectedCustomersViaGrid" stepKey="setCustomerGroup">
+            <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterCustomerByName" stepKey="filterCustomerAfterGroupChange">
+            <argument name="customerName" value="{{Simple_US_Customer.fullname}}"/>
+        </actionGroup>
+        <actionGroup ref="VerifyCustomerGroupForCustomer" stepKey="verifyCustomerGroupSet">
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+            <argument name="groupName" value="{{CustomerGroupChange.code}}"/>
+        </actionGroup>
+    </test>
+
+    <test name="ChangingAllCustomerGroupViaGrid" extends="ChangingSingleCustomerGroupViaGrid">
+        <annotations>
+            <title value="Change all customers' group via grid"/>
+            <description value="Select All customers to change their group"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-10924"/>
+            <stories value="Change Customer Group"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
+        </annotations>
+
+        <remove keyForRemoval="filterCustomer"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters" before="selectCustomer"/>
+        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer"/>
+    </test>
+</tests>

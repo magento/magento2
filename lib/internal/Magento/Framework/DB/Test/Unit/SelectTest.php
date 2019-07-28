@@ -7,13 +7,11 @@ namespace Magento\Framework\DB\Test\Unit;
 
 use \Magento\Framework\DB\Select;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
  * Class SelectTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SelectTest extends \PHPUnit_Framework_TestCase
+class SelectTest extends \PHPUnit\Framework\TestCase
 {
     public function testWhere()
     {
@@ -99,16 +97,13 @@ class SelectTest extends \PHPUnit_Framework_TestCase
      *
      * @param int $callCount
      * @param string|null $returnValue
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getConnectionMockWithMockedQuote($callCount, $returnValue = null)
     {
-        $connection = $this->getMock(
+        $connection = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['supportStraightJoin', 'quote'],
-            [],
-            '',
-            false
+            ['supportStraightJoin', 'quote']
         );
         $method = $connection->expects($this->exactly($callCount))->method('quote');
         if ($callCount > 0) {

@@ -20,7 +20,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
+class AttributeOptionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeOptionProvider

@@ -10,6 +10,7 @@ use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceSequenceMeta;
 /**
  * Class Manager
  * @api
+ * @since 100.0.2
  */
 class Manager
 {
@@ -40,7 +41,9 @@ class Manager
      *
      * @param string $entityType
      * @param int $storeId
+     *
      * @return \Magento\Framework\DB\Sequence\SequenceInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSequence($entityType, $storeId)
     {

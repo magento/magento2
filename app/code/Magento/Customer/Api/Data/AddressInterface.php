@@ -10,6 +10,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Customer address interface.
  * @api
+ * @since 100.0.2
  */
 interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {

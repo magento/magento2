@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
-class BeforeTest extends \PHPUnit_Framework_TestCase
+class BeforeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test model
@@ -54,12 +54,9 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $importModel = $this->getMock(
+        $importModel = $this->createPartialMock(
             \Magento\ImportExport\Model\Import::class,
-            ['getEntityBehaviors', 'getUniqueEntityBehaviors'],
-            [],
-            '',
-            false
+            ['getEntityBehaviors', 'getUniqueEntityBehaviors']
         );
         $importModel->expects(
             $this->any()

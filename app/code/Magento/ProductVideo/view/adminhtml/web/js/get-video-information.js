@@ -2,7 +2,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
 define([
     'jquery',
     'Magento_Ui/js/modal/alert',
@@ -87,6 +86,7 @@ define([
                 this._height = this.element.data('height');
                 this._autoplay = !!this.element.data('autoplay');
                 this._playing = this._autoplay || false;
+                this.useYoutubeNocookie = this.element.data('youtubenocookie') || false;
 
                 this._responsive = this.element.data('responsive') !== false;
 
@@ -164,6 +164,12 @@ define([
                      * @private
                      */
                     'youtubeapiready': function () {
+                        var host = 'https://www.youtube.com';
+
+                        if (self.useYoutubeNocookie) {
+                            host = 'https://www.youtube-nocookie.com';
+                        }
+
                         if (self._player !== undefined) {
                             return;
                         }
@@ -178,6 +184,7 @@ define([
                             width: self._width,
                             videoId: self._code,
                             playerVars: self._params,
+                            host: host,
                             events: {
 
                                 /**
@@ -303,7 +310,7 @@ define([
                     additionalParams += '&autoplay=1';
                 }
 
-                src = window.location.protocol + '//player.vimeo.com/video/' +
+                src = 'https://player.vimeo.com/video/' +
                     this._code + '?api=1&player_id=vimeo' +
                     this._code +
                     timestamp +
@@ -470,7 +477,8 @@ define([
                         description: tmp.snippet.description,
                         thumbnail: tmp.snippet.thumbnails.high.url,
                         videoId: videoInfo.id,
-                        videoProvider: videoInfo.type
+                        videoProvider: videoInfo.type,
+                        useYoutubeNocookie: videoInfo.useYoutubeNocookie
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -526,7 +534,7 @@ define([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json',
+                        url: 'https://www.vimeo.com/api/v2/video/' + id + '.json',
                         dataType: 'jsonp',
                         data: {
                             format: 'json'
@@ -601,7 +609,8 @@ define([
                 var id,
                     type,
                     ampersandPosition,
-                    vimeoRegex;
+                    vimeoRegex,
+                    useYoutubeNocookie = false;
 
                 if (typeof href !== 'string') {
                     return href;
@@ -621,9 +630,13 @@ define([
                         id = id.substring(0, ampersandPosition);
                     }
 
-                } else if (href.host.match(/youtube\.com|youtu\.be/)) {
+                } else if (href.host.match(/youtube\.com|youtu\.be|youtube-nocookie.com/)) {
                     id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
                     type = 'youtube';
+
+                    if (href.host.match(/youtube-nocookie.com/)) {
+                        useYoutubeNocookie = true;
+                    }
                 } else if (href.host.match(/vimeo\.com/)) {
                     type = 'vimeo';
                     vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
@@ -641,7 +654,7 @@ define([
                 }
 
                 return id ? {
-                    id: id, type: type, s: href.search.replace(/^\?/, '')
+                    id: id, type: type, s: href.search.replace(/^\?/, ''), useYoutubeNocookie: useYoutubeNocookie
                 } : false;
             }
         });

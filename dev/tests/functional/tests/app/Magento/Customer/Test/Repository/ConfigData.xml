@@ -60,7 +60,13 @@
                 <item name="value" xsi:type="string">0</item>
             </field>
         </dataset>
-
+        <dataset name="captcha_storefront_disable">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
         <dataset name="password_autocomplete_off">
             <field name="customer/password/autocomplete_on_storefront" xsi:type="array">
                 <item name="scope" xsi:type="string">customer</item>

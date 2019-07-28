@@ -14,7 +14,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\DB\Select;
 
-class CustomAttributeFilterTest extends \PHPUnit_Framework_TestCase
+class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
@@ -155,7 +155,6 @@ class CustomAttributeFilterTest extends \PHPUnit_Framework_TestCase
 
         $joinConditions = [
             '`some_index`.`entity_id` = `field1_filter`.`entity_id`',
-            '`some_index`.`source_id` = `field1_filter`.`source_id`',
             sprintf('`field1_filter`.`attribute_id` = %s', $firstAttribute->getId()),
             sprintf('`field1_filter`.`store_id` = %s', (int) $this->storeManager->getStore()->getId())
         ];
@@ -182,14 +181,12 @@ class CustomAttributeFilterTest extends \PHPUnit_Framework_TestCase
 
         $joinConditions1 = [
             '`some_index`.`entity_id` = `field1_filter`.`entity_id`',
-            '`some_index`.`source_id` = `field1_filter`.`source_id`',
             sprintf('`field1_filter`.`attribute_id` = %s', $firstAttribute->getId()),
             sprintf('`field1_filter`.`store_id` = %s', (int) $this->storeManager->getStore()->getId())
         ];
 
         $joinConditions2 = [
             '`some_index`.`entity_id` = `field2_filter`.`entity_id`',
-            '`some_index`.`source_id` = `field2_filter`.`source_id`',
             sprintf('`field2_filter`.`attribute_id` = %s', $secondAttribute->getId()),
             sprintf('`field2_filter`.`store_id` = %s', (int) $this->storeManager->getStore()->getId())
         ];

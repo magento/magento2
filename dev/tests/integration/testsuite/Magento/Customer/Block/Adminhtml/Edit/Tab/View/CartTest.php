@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\Escaper;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -13,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Shopping cart.
@@ -28,6 +30,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Registry
      */
     private $coreRegistry;
+
+    /**
+     * @var Escaper
+     */
+    private $escaper;
 
     /**
      * Execute per test initialization.
@@ -48,6 +55,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ['coreRegistry' => $this->coreRegistry, 'data' => ['website_id' => 1]]
         );
         $this->block->getPreparedCollection();
+        $this->escaper = $objectManager->get(Escaper::class);
     }
 
     /**
@@ -83,7 +91,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlEmptyCart()
     {
         $this->assertEquals(0, $this->block->getCollection()->getSize());
-        $this->assertContains('There are no items in customer\'s shopping cart.', $this->block->toHtml());
+        $this->assertContains(
+            $this->escaper->escapeHtml('There are no items in customer\'s shopping cart.'),
+            $this->block->toHtml()
+        );
     }
 
     /**
@@ -98,17 +109,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Simple Product', $html);
         $this->assertContains('simple', $html);
         $this->assertContains('$10.00', $html);
-        $this->assertContains('catalog/product/edit/id/1', $html);
-    }
-
-    /**
-     * Verify that the customer has a single item in his cart.
-     *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/quote.php
-     */
-    public function testGetCollection()
-    {
-        $this->assertEquals(1, $this->block->getCollection()->getSize());
+        $this->assertContains($this->escaper->escapeHtmlAttr('catalog/product/edit/id/1'), $html);
     }
 }

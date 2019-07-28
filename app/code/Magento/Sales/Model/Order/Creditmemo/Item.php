@@ -10,11 +10,12 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
+ * Creditmemo item model.
+ *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements CreditmemoItemInterface
 {
@@ -190,6 +191,8 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
+     * Calculate qty for creditmemo item.
+     *
      * @return int|float
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -213,6 +216,8 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
+     * Cancel creaditmemeo item.
+     *
      * @return $this
      */
     public function cancel()
@@ -237,7 +242,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Invoice item row total calculation
      *
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return $this
      */
     public function calcRowTotal()
     {
@@ -609,7 +614,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     //@codeCoverageIgnoreStart
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setParentId($id)
     {
@@ -617,7 +622,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBasePrice($price)
     {
@@ -625,7 +630,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxAmount($amount)
     {
@@ -633,7 +638,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseRowTotal($amount)
     {
@@ -641,7 +646,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountAmount($amount)
     {
@@ -649,7 +654,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRowTotal($amount)
     {
@@ -657,7 +662,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountAmount($amount)
     {
@@ -665,7 +670,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPriceInclTax($amount)
     {
@@ -673,7 +678,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxAmount($amount)
     {
@@ -681,7 +686,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBasePriceInclTax($amount)
     {
@@ -689,7 +694,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseCost($baseCost)
     {
@@ -697,7 +702,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrice($price)
     {
@@ -705,7 +710,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseRowTotalInclTax($amount)
     {
@@ -713,7 +718,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRowTotalInclTax($amount)
     {
@@ -721,7 +726,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductId($id)
     {
@@ -729,7 +734,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderItemId($id)
     {
@@ -737,7 +742,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAdditionalData($additionalData)
     {
@@ -745,7 +750,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -753,7 +758,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -761,7 +766,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -769,7 +774,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationAmount($amount)
     {
@@ -777,7 +782,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationAmount($amount)
     {
@@ -785,7 +790,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxDisposition($weeeTaxDisposition)
     {
@@ -793,7 +798,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxRowDisposition($weeeTaxRowDisposition)
     {
@@ -801,7 +806,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseWeeeTaxDisposition($baseWeeeTaxDisposition)
     {
@@ -809,7 +814,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition)
     {
@@ -817,7 +822,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxApplied($weeeTaxApplied)
     {
@@ -825,7 +830,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseWeeeTaxAppliedAmount($amount)
     {
@@ -833,7 +838,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseWeeeTaxAppliedRowAmnt($amnt)
     {
@@ -841,7 +846,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxAppliedAmount($amount)
     {
@@ -849,7 +854,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeeeTaxAppliedRowAmount($amount)
     {
@@ -857,7 +862,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface|null
      */
@@ -867,7 +872,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes
      * @return $this

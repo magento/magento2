@@ -1,0 +1,52 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products") @cache(cacheable: false)
+}
+
+type CustomerDownloadableProducts {
+    items: [CustomerDownloadableProduct] @doc(description: "List of purchased downloadable items")
+}
+
+type CustomerDownloadableProduct {
+    order_increment_id: String
+    date: String
+    status: String
+    download_url: String
+    remaining_downloads: String
+}
+
+type DownloadableProduct implements ProductInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the customer downloads") {
+    downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\Product\\DownloadableOptions") @doc(description: "An array containing information about samples of this downloadable product.")
+    downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Model\\Resolver\\Product\\DownloadableOptions") @doc(description: "An array containing information about the links for this downloadable product")
+    links_purchased_separately: Int @doc(description: "A value of 1 indicates that each link in the array must be purchased separately")
+    links_title: String @doc(description: "The heading above the list of downloadable products")
+}
+
+enum DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample") {
+    FILE
+    URL
+}
+
+type DownloadableProductLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
+    id: Int @deprecated(reason: "This information shoud not be exposed on frontend")
+    title: String @doc(description: "The display name of the link")
+    sort_order: Int @doc(description: "A number indicating the sort order")
+    is_shareable: Boolean @deprecated(reason: "This information shoud not be exposed on frontend")
+    price: Float @doc(description: "The price of the downloadable product")
+    number_of_downloads: Int @deprecated(reason: "This information shoud not be exposed on frontend")
+    link_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_url: String @doc(description: "URL to the downloadable sample")
+}
+
+type DownloadableProductSamples @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") {
+    id: Int @deprecated(reason: "This information shoud not be exposed on frontend")
+    title: String @doc(description: "The display name of the sample")
+    sort_order: Int @doc(description: "A number indicating the sort order")
+    sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_url: String @doc(description: "URL to the downloadable sample")
+}

@@ -15,12 +15,13 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
  * Class TypeTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Model\ResourceModel\BundleFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -86,6 +87,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @var Json
      */
     private $serializer;
+
+    /**
+     * @var ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $arrayUtility;
 
     /**
      * @return void
@@ -159,6 +165,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->arrayUtility = $this->getMockBuilder(ArrayUtils::class)
+            ->setMethods(['flatten'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject(
             \Magento\Bundle\Model\Product\Type::class,
@@ -175,6 +186,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'priceCurrency' => $this->priceCurrency,
                 'serializer' => $this->serializer,
                 'metadataPool' => $this->metadataPool,
+                'arrayUtility' => $this->arrayUtility
             ]
         );
     }
@@ -249,6 +261,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($productType);
         $optionCollection->expects($this->any())
             ->method('appendSelections')
+            ->with($selectionCollection, true, true)
             ->willReturn([$option]);
         $productType->expects($this->once())
             ->method('setStoreFilter');
@@ -420,6 +433,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                     return $resultValue;
                 }
             );
+        $bundleOptions = [3 => 5];
+
         $product->expects($this->any())
             ->method('getId')
             ->willReturn(333);
@@ -433,12 +448,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->method('getItemById')
             ->willReturn($option);
         $optionCollection->expects($this->once())
-            ->method('appendSelections');
+            ->method('appendSelections')
+            ->with($selectionCollection, true, true);
         $productType->expects($this->once())
             ->method('setStoreFilter');
-        $buyRequest->expects($this->once())
-            ->method('getBundleOption')
-            ->willReturn([3 => 5]);
+        $buyRequest->expects($this->once())->method('getBundleOption')->willReturn($bundleOptions);
         $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
@@ -489,6 +503,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $option->expects($this->once())
             ->method('getTitle')
             ->willReturn('Title for option');
+
+        $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
+
         $buyRequest->expects($this->once())
             ->method('getBundleOptionQty')
             ->willReturn([3 => 5]);
@@ -510,10 +527,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $productType->expects($this->once())
             ->method('getSelectionId')
             ->willReturn(314);
-
-        $this->priceCurrency->expects($this->once())
-            ->method('convert')
-            ->willReturn(3.14);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals([$product, $productType], $result);
@@ -655,6 +668,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                     return $resultValue;
                 }
             );
+        $bundleOptions = [3 => 5];
+
         $product->expects($this->any())
             ->method('getId')
             ->willReturn(333);
@@ -668,12 +683,16 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->method('getItemById')
             ->willReturn($option);
         $optionCollection->expects($this->once())
-            ->method('appendSelections');
+            ->method('appendSelections')
+            ->with($selectionCollection, true, true);
         $productType->expects($this->once())
             ->method('setStoreFilter');
         $buyRequest->expects($this->once())
             ->method('getBundleOption')
-            ->willReturn([3 => 5]);
+            ->willReturn($bundleOptions);
+
+        $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
+
         $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
@@ -733,10 +752,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $productType->expects($this->once())
             ->method('prepareForCart')
             ->willReturn([]);
-
-        $this->priceCurrency->expects($this->once())
-            ->method('convert')
-            ->willReturn(3.14);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals('We can\'t add this item to your shopping cart right now.', $result);
@@ -891,12 +906,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->method('getItemById')
             ->willReturn($option);
         $optionCollection->expects($this->once())
-            ->method('appendSelections');
+            ->method('appendSelections')
+            ->with($selectionCollection, true, true);
         $productType->expects($this->once())
             ->method('setStoreFilter');
-        $buyRequest->expects($this->once())
-            ->method('getBundleOption')
-            ->willReturn([3 => 5]);
+
+        $bundleOptions = [3 => 5];
+        $buyRequest->expects($this->once())->method('getBundleOption')->willReturn($bundleOptions);
+
         $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
@@ -947,6 +964,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $option->expects($this->once())
             ->method('getTitle')
             ->willReturn('Title for option');
+
+        $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
+
         $buyRequest->expects($this->once())
             ->method('getBundleOptionQty')
             ->willReturn([3 => 5]);
@@ -956,10 +976,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $productType->expects($this->once())
             ->method('prepareForCart')
             ->willReturn('string');
-
-        $this->priceCurrency->expects($this->once())
-            ->method('convert')
-            ->willReturn(3.14);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals('string', $result);
@@ -1061,12 +1077,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(333);
         $productType->expects($this->once())
             ->method('setStoreFilter');
-        $buyRequest->expects($this->once())
-            ->method('getBundleOption')
-            ->willReturn([]);
+
+        $bundleOptions = [];
+        $buyRequest->expects($this->once())->method('getBundleOption')->willReturn($bundleOptions);
         $buyRequest->expects($this->once())
             ->method('getBundleOptionQty')
             ->willReturn([3 => 5]);
+
+        $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product, 'single');
         $this->assertEquals([$product], $result);
@@ -1169,12 +1187,16 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 }
             );
         $optionCollection->expects($this->once())
-            ->method('appendSelections');
+            ->method('appendSelections')
+            ->with($selectionCollection, true, true);
         $productType->expects($this->once())
             ->method('setStoreFilter');
-        $buyRequest->expects($this->once())
-            ->method('getBundleOption')
-            ->willReturn([3 => 5]);
+
+        $bundleOptions = [3 => 5];
+        $buyRequest->expects($this->once())->method('getBundleOption')->willReturn($bundleOptions);
+
+        $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
+
         $selectionCollection->expects($this->at(0))
             ->method('getItems')
             ->willReturn([$selection]);
@@ -1296,9 +1318,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($option);
         $productType->expects($this->once())
             ->method('setStoreFilter');
-        $buyRequest->expects($this->once())
-            ->method('getBundleOption')
-            ->willReturn([3 => 5]);
+
+        $bundleOptions = [3 => 5];
+        $buyRequest->expects($this->once())->method('getBundleOption')->willReturn($bundleOptions);
+
+        $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
+
         $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
@@ -1360,7 +1385,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testPrepareForCartAdvancedAllrequiredOption()
+    public function testPrepareForCartAdvancedAllRequiredOption()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
         $group = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Type\DefaultType::class)
@@ -1525,21 +1550,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $identities = ['id1', 'id2'];
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $optionMock = $this->getMock(
-            \Magento\Bundle\Model\Option::class,
-            ['getSelections', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $optionCollectionMock = $this->getMock(
-            \Magento\Bundle\Model\ResourceModel\Option\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $optionMock = $this->createPartialMock(\Magento\Bundle\Model\Option::class, ['getSelections', '__wakeup']);
+        $optionCollectionMock = $this->createMock(\Magento\Bundle\Model\ResourceModel\Option\Collection::class);
         $cacheKey = '_cache_instance_options_collection';
         $productMock->expects($this->once())
             ->method('getIdentities')
@@ -1602,7 +1615,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $selectionItemMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->setMethods(['getSku', '__wakeup'])
+            ->setMethods(['getSku', 'getEntityId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1630,9 +1643,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($serializeIds));
         $selectionMock = $this->getSelectionsByIdsMock($selectionIds, $productMock, 5, 6);
         $selectionMock->expects(($this->any()))
-            ->method('getItems')
-            ->will($this->returnValue([$selectionItemMock]));
-        $selectionItemMock->expects($this->any())
+            ->method('getItemByColumnValue')
+            ->will($this->returnValue($selectionItemMock));
+        $selectionItemMock->expects($this->at(0))
+            ->method('getEntityId')
+            ->will($this->returnValue(1));
+        $selectionItemMock->expects($this->once())
             ->method('getSku')
             ->will($this->returnValue($itemSku));
 

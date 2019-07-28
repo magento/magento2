@@ -11,7 +11,7 @@ use Magento\CatalogSearch\Model\Search\RequestGenerator\General;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
-class GeneralTest extends \PHPUnit_Framework_TestCase
+class GeneralTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  General */
     private $general;

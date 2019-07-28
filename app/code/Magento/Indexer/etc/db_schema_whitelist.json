@@ -1,0 +1,34 @@
+{
+    "indexer_state": {
+        "column": {
+            "state_id": true,
+            "indexer_id": true,
+            "status": true,
+            "updated": true,
+            "hash_config": true
+        },
+        "index": {
+            "INDEXER_STATE_INDEXER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mview_state": {
+        "column": {
+            "state_id": true,
+            "view_id": true,
+            "mode": true,
+            "status": true,
+            "updated": true,
+            "version_id": true
+        },
+        "index": {
+            "MVIEW_STATE_VIEW_ID": true,
+            "MVIEW_STATE_MODE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

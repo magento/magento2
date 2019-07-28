@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Test\Unit\Model\Config;
 
 /**
  * Class ValidatorTest to test \Magento\Theme\Model\Design\Config\Validator
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Design\Config\Validator
@@ -39,7 +40,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The email_header_template contains an incorrect configuration. The template has a
      */
     public function testValidateHasRecursiveReference()
     {
@@ -54,7 +54,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
                 ->setMethods(['getDesignConfigData'])
-                ->getMock();
+                ->getMockForAbstractClass();
         $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -70,7 +70,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
         $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
-            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign'])
+            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
             ->getMock();
 
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($templateMock);
@@ -79,6 +79,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model->validate($designConfigMock);
+
+        $this->expectExceptionMessage(
+            'The "email_header_template" template contains an incorrect configuration, with a reference to itself. '
+            . 'Remove or change the reference, then try again.'
+        );
     }
 
     public function testValidateNoRecursiveReference()
@@ -94,7 +99,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
                 ->setMethods(['getDesignConfigData'])
-                ->getMock();
+                ->getMockForAbstractClass();
         $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -110,7 +115,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
         $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
-            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign'])
+            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
             ->getMock();
 
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($templateMock);

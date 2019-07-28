@@ -17,7 +17,7 @@ require __DIR__ . '/_files/Aggregate/AggregateParent.php';
 require __DIR__ . '/_files/Aggregate/Child.php';
 require __DIR__ . '/_files/Aggregate/WithOptional.php';
 
-class ObjectManagerTest extends \PHPUnit_Framework_TestCase
+class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\ObjectManager
@@ -358,7 +358,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
+        /** @var $result \Magento\Test\Di\Aggregate\Child */
         $result = $this->_object->create(\Magento\Test\Di\Aggregate\Child::class);
         $this->assertInstanceOf(\Magento\Test\Di\DiParent::class, $result->interface);
         $this->assertEquals('first_param_value', $result->scalar);
@@ -388,7 +388,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
+        /** @var $result \Magento\Test\Di\Aggregate\Child */
         $result = $this->_object->create(\Magento\Test\Di\Aggregate\Child::class);
         $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->interface);
         $this->assertEquals('second_param_value', $result->scalar);
@@ -400,7 +400,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             $this->_object->get(\Magento\Test\Di\Child::class),
-            $this->_object->get(\Magento\Test\Di\Child::class)
+            $this->_object->get('\\' . \Magento\Test\Di\Child::class)
         );
     }
 }

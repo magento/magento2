@@ -5,7 +5,7 @@
  */
 namespace Magento\Store\Model\ResourceModel;
 
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     public function testCountAll()
     {

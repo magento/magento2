@@ -6,7 +6,7 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\RiskDataHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @see \Magento\Braintree\Gateway\Response\RiskDataHandler
  */
-class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
+class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RiskDataHandler
@@ -27,19 +27,19 @@ class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SubjectReader|MockObject
      */
-    private $subjectReader;
+    private $subjectReaderMock;
 
     /**
-     * Set up
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->setMethods(['readPayment', 'readTransaction'])
             ->getMock();
 
-        $this->riskDataHandler = new RiskDataHandler($this->subjectReader);
+        $this->riskDataHandler = new RiskDataHandler($this->subjectReaderMock);
     }
 
     /**
@@ -57,7 +57,7 @@ class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setAdditionalInformation', 'setIsFraudDetected'])
             ->getMock();
         /** @var PaymentDataObjectInterface|MockObject $paymentDO */
-        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $paymentDO->expects(self::once())
             ->method('getPayment')
             ->willReturn($payment);
@@ -76,11 +76,11 @@ class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
             'payment' => $paymentDO,
         ];
 
-        $this->subjectReader->expects(static::once())
+        $this->subjectReaderMock->expects(static::once())
             ->method('readPayment')
             ->with($handlingSubject)
             ->willReturn($paymentDO);
-        $this->subjectReader->expects(static::once())
+        $this->subjectReaderMock->expects(static::once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);

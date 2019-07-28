@@ -9,16 +9,19 @@ namespace Magento\Security\Model\ResourceModel\AdminSessionInfo;
  * Admin Session Info collection
  *
  * @api
+ * @since 100.1.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var string
+     * @since 100.1.0
      */
     protected $_idFieldName = 'id';
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @since 100.1.0
      */
     protected $dateTime;
 
@@ -48,6 +51,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Define resource model
      *
      * @return void
+     * @since 100.1.0
      */
     protected function _construct()
     {
@@ -65,6 +69,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $sessionIdToExclude
      * @param int $updateOlderThen
      * @return int The number of affected rows.
+     * @since 100.1.0
      */
     public function updateActiveSessionsStatus(
         $status,
@@ -88,6 +93,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $status
      * @param null|string $sessionIdToExclude
      * @return $this
+     * @since 100.1.0
      */
     public function filterByUser(
         $userId,
@@ -107,6 +113,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $sessionLifeTime
      * @return $this
+     * @since 100.1.0
      */
     public function filterExpiredSessions($sessionLifeTime)
     {
@@ -124,6 +131,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $timestamp
      * @return $this
+     * @since 100.1.0
      */
     public function deleteSessionsOlderThen($timestamp)
     {

@@ -9,8 +9,7 @@ namespace Magento\SalesRule\Model;
  * SalesRule Coupon Model
  *
  * @api
- * @method \Magento\SalesRule\Model\ResourceModel\Coupon _getResource()
- * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
+ * @since 100.0.2
  */
 class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\SalesRule\Api\Data\CouponInterface
@@ -21,6 +20,9 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_USAGE_LIMIT = 'usage_limit';
     const KEY_USAGE_PER_CUSTOMER = 'usage_per_customer';
     const KEY_TIMES_USED = 'times_used';
+    /**
+     * @deprecated Coupon expiration must follow sales rule expiration date.
+     */
     const KEY_EXPIRATION_DATE = 'expiration_date';
     const KEY_IS_PRIMARY = 'is_primary';
     const KEY_CREATED_AT = 'created_at';
@@ -40,10 +42,10 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Set rule instance
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param Rule $rule
      * @return $this
      */
-    public function setRule(\Magento\SalesRule\Model\Rule $rule)
+    public function setRule(Rule $rule)
     {
         $this->setRuleId($rule->getId());
         return $this;
@@ -52,7 +54,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Load primary coupon for specified rule
      *
-     * @param \Magento\SalesRule\Model\Rule|int $rule
+     * @param Rule|int $rule
      * @return $this
      */
     public function loadPrimaryByRule($rule)
@@ -191,6 +193,8 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Set Times Used
+     *
      * @param int $timesUsed
      * @return $this
      */
@@ -203,6 +207,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get expiration date
      *
      * @return string|null
+     * @deprecated Coupon expiration must follow sales rule expiration date.
      */
     public function getExpirationDate()
     {
@@ -214,6 +219,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $expirationDate
      * @return $this
+     * @deprecated Coupon expiration must follow sales rule expiration date.
      */
     public function setExpirationDate($expirationDate)
     {
@@ -274,6 +280,8 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Set type
+     *
      * @param int $type
      * @return $this
      */

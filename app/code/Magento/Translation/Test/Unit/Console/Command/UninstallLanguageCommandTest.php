@@ -14,7 +14,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Translation\Console\Command\UninstallLanguageCommand;
 use Magento\Framework\Setup\BackupRollbackFactory;
 
-class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
+class UninstallLanguageCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DependencyChecker|\PHPUnit_Framework_MockObject_MockObject
@@ -53,23 +53,11 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dependencyChecker = $this->getMock(
-            \Magento\Framework\Composer\DependencyChecker::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->remove = $this->getMock(\Magento\Framework\Composer\Remove::class, [], [], '', false);
-        $this->composerInfo = $this->getMock(\Magento\Framework\Composer\ComposerInformation::class, [], [], '', false);
-        $this->cache = $this->getMock(\Magento\Framework\App\Cache::class, [], [], '', false);
-        $this->backupRollbackFactory = $this->getMock(
-            \Magento\Framework\Setup\BackupRollbackFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->dependencyChecker = $this->createMock(\Magento\Framework\Composer\DependencyChecker::class);
+        $this->remove = $this->createMock(\Magento\Framework\Composer\Remove::class);
+        $this->composerInfo = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
+        $this->cache = $this->createMock(\Magento\Framework\App\Cache::class);
+        $this->backupRollbackFactory = $this->createMock(\Magento\Framework\Setup\BackupRollbackFactory::class);
 
         $this->command = new UninstallLanguageCommand(
             $this->dependencyChecker,
@@ -99,7 +87,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $backupRollback = $this->getMock(\Magento\Framework\Setup\BackupRollback::class, [], [], '', false);
+        $backupRollback = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);
         $backupRollback->expects($this->once())->method('codeBackup');
 
         $this->backupRollbackFactory->expects($this->once())

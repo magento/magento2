@@ -9,7 +9,10 @@ use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
 
 class ConfigurableTest extends AbstractProductExportImportTestCase
 {
-    public function exportImportDataProvider()
+    /**
+     * @return array
+     */
+    public function exportImportDataProvider(): array
     {
         return [
             'configurable-product' => [
@@ -34,15 +37,16 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $expectedProduct
-     * @param \Magento\Catalog\Model\Product $actualProduct
+     * @inheritdoc
      */
-    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
-    {
-        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $prooductType */
-        $prooductType = $expectedProduct->getTypeInstance();
-        $expectedAssociatedProducts = $prooductType->getUsedProductCollection($expectedProduct);
-        $actualAssociatedProducts = iterator_to_array($prooductType->getUsedProductCollection($actualProduct));
+    protected function assertEqualsSpecificAttributes(
+        \Magento\Catalog\Model\Product $expectedProduct,
+        \Magento\Catalog\Model\Product $actualProduct
+    ): void {
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType */
+        $productType = $expectedProduct->getTypeInstance();
+        $expectedAssociatedProducts = $productType->getUsedProductCollection($expectedProduct);
+        $actualAssociatedProducts = iterator_to_array($productType->getUsedProductCollection($actualProduct));
 
         $expectedAssociatedProductSkus = [];
         $actualAssociatedProductSkus = [];
@@ -95,27 +99,16 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
         }
     }
 
-    public function importReplaceDataProvider()
-    {
-        $data = $this->exportImportDataProvider();
-        foreach ($data as $key => $value) {
-            $data[$key][2] = array_merge($value[2], ['_cache_instance_product_set_attributes']);
-        }
-        return $data;
-    }
-
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     *
-     * @param array $fixtures
-     * @param string[] $skus
-     * @param string[] $skippedAttributes
-     * @dataProvider importReplaceDataProvider
+     * @inheritdoc
      */
-    public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
-    {
-        parent::testImportReplace($fixtures, $skus, $skippedAttributes);
+    protected function executeImportReplaceTest(
+        $skus,
+        $skippedAttributes,
+        $usePagination = false,
+        string $csvfile = null
+    ) {
+        $skippedAttributes = array_merge($skippedAttributes, ['_cache_instance_product_set_attributes']);
+        parent::executeImportReplaceTest($skus, $skippedAttributes, $usePagination, $csvfile);
     }
 }

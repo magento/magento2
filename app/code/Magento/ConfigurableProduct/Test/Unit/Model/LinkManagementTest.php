@@ -12,7 +12,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinkManagementTest extends \PHPUnit_Framework_TestCase
+class LinkManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -46,14 +46,11 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->productFactory = $this->getMock(
+        $this->productFactory = $this->createPartialMock(
             \Magento\Catalog\Api\Data\ProductInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
@@ -102,14 +99,14 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->method('get')->with($productId)
             ->willReturn($product);
 
-        $attribute = $this->getMock(\Magento\Eav\Api\Data\AttributeInterface::class);
+        $attribute = $this->createMock(\Magento\Eav\Api\Data\AttributeInterface::class);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn('code');
         $childProduct->expects($this->once())->method('getDataUsingMethod')->with('code')->willReturn(false);
         $childProduct->expects($this->once())->method('getData')->with('code')->willReturn(10);
         $childProduct->expects($this->once())->method('getStoreId')->willReturn(1);
         $childProduct->expects($this->once())->method('getAttributes')->willReturn([$attribute]);
 
-        $productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
 
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
@@ -152,16 +149,19 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getData'])
             ->getMock();
-
         $extensionAttributesMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtension::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getConfigurableProductOptions', 'setConfigurableProductOptions', 'setConfigurableProductLinks'
-            ])
+            ->setMethods(
+                [
+                    'getConfigurableProductOptions',
+                    'setConfigurableProductOptions',
+                    'setConfigurableProductLinks'
+                ]
+            )
             ->getMock();
         $optionMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Api\Data\Option::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductAttribute', 'getAttributeId'])
+            ->setMethods(['getProductAttribute', 'getPosition', 'getAttributeId'])
             ->getMock();
         $productAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
@@ -192,7 +192,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getValue', 'getLabel'])
             ->getMock();
-
         $attributeCollectionMock = $this->getMockBuilder(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection::class
         )
@@ -219,26 +218,24 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('color');
         $simple->expects($this->any())->method('getData')->willReturn('color');
         $optionMock->expects($this->any())->method('getAttributeId')->willReturn('1');
+        $optionMock->expects($this->any())->method('getPosition')->willReturn('0');
 
         $optionsFactoryMock->expects($this->any())->method('create')->willReturn([$optionMock]);
         $attributeFactoryMock->expects($this->any())->method('create')->willReturn($attributeMock);
         $attributeMock->expects($this->any())->method('getCollection')->willReturn($attributeCollectionMock);
         $attributeCollectionMock->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
         $attributeCollectionMock->expects($this->any())->method('getItems')->willReturn([$attributeMock]);
-
+        $attributeMock->expects($this->any())->method('getId')->willReturn(1);
         $attributeMock->expects($this->any())->method('getOptions')->willReturn([$attributeOptionMock]);
-
         $extensionAttributesMock->expects($this->any())->method('setConfigurableProductOptions');
         $extensionAttributesMock->expects($this->any())->method('setConfigurableProductLinks');
-
         $this->productRepository->expects($this->once())->method('save');
-
         $this->assertTrue(true, $this->object->addChild($productSku, $childSku));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Product has been already attached
+     * @expectedExceptionMessage The product is already attached.
      */
     public function testAddChildStateException()
     {
@@ -320,7 +317,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
-        $product = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $product = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
 
         $product->expects($this->any())
             ->method('getTypeId')

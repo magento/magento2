@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ByStockItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class ByStockItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -56,6 +56,7 @@ class ByStockItemRepositoryTest extends \PHPUnit_Framework_TestCase
      * Test stock item saving via stock item repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSave()
     {

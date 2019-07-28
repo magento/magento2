@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class Version Control MetadataTest
  */
-class MetadataTest extends \PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
@@ -38,13 +38,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $this->getMock(
-            \Magento\Framework\Model\AbstractModel::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->model = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $this->resource = $this->getMockForAbstractClass(
             \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],

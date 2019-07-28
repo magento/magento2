@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Pricing\Price;
 
@@ -14,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
+class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Pricing\Price\CatalogRulePrice
@@ -77,16 +78,18 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
     protected $priceCurrencyMock;
 
     /**
+     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $ruleDateFormatter;
+
+    /**
      * Set up
      */
     protected function setUp()
     {
-        $this->saleableItemMock = $this->getMock(
+        $this->saleableItemMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getId', '__wakeup', 'getPriceInfo', 'hasData', 'getData'],
-            [],
-            '',
-            false
+            ['getId', '__wakeup', 'getPriceInfo', 'hasData', 'getData']
         );
         $this->dataTimeMock = $this->getMockForAbstractClass(
             \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
@@ -97,37 +100,29 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
+        $this->ruleDateFormatter = $this->getMockBuilder(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class)
+            ->setMethods([])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->coreStoreMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->coreStoreMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->coreStoreMock));
 
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->priceInfoMock = $this->getMock(
-            \Magento\Framework\Pricing\PriceInfo::class,
-            ['getAdjustments'],
-            [],
-            '',
-            false
-        );
-        $this->catalogRuleResourceFactoryMock = $this->getMock(
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo::class)
+            ->setMethods(['getAdjustments'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->catalogRuleResourceFactoryMock = $this->createPartialMock(
             \Magento\CatalogRule\Model\ResourceModel\RuleFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->catalogRuleResourceMock = $this->getMock(
-            \Magento\CatalogRule\Model\ResourceModel\Rule::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->catalogRuleResourceMock = $this->createMock(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
 
-        $this->coreWebsiteMock = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
+        $this->coreWebsiteMock = $this->createMock(\Magento\Store\Model\Website::class);
 
         $this->priceInfoMock->expects($this->any())
             ->method('getAdjustments')
@@ -145,7 +140,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $qty = 1;
 
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->object = new CatalogRulePrice(
             $this->saleableItemMock,
@@ -155,7 +150,8 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             $this->dataTimeMock,
             $this->storeManagerMock,
             $this->customerSessionMock,
-            $this->catalogRuleResourceFactoryMock
+            $this->catalogRuleResourceFactoryMock,
+            $this->ruleDateFormatter
         );
 
         (new ObjectManager($this))->setBackwardCompatibleProperty(
@@ -174,7 +170,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
         $coreWebsiteId = 1;
         $productId = 1;
         $customerGroupId = 1;
-        $dateTime = time();
+        $dateTime = new \DateTime();
 
         $catalogRulePrice = 55.12;
         $convertedPrice = 45.34;
@@ -185,8 +181,8 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
         $this->coreStoreMock->expects($this->once())
             ->method('getWebsiteId')
             ->will($this->returnValue($coreWebsiteId));
-        $this->dataTimeMock->expects($this->once())
-            ->method('scopeDate')
+        $this->ruleDateFormatter->expects($this->once())
+            ->method('getDate')
             ->with($this->equalTo($coreStoreId))
             ->will($this->returnValue($dateTime));
         $this->customerSessionMock->expects($this->once())

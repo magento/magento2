@@ -46,18 +46,15 @@ class AgreementTest extends \Magento\TestFramework\TestCase\AbstractController
          * Disable billing agreement placement using calls to remote system
          * in \Magento\Paypal\Model\Billing\Agreement::place()
          */
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $paymentMethodMock = $this->getMock(
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $paymentMethodMock = $this->createPartialMock(
             \Magento\Paypal\Model\Express::class,
-            ['getTitle', 'setStore', 'placeBillingAgreement'],
-            [],
-            '',
-            false
+            ['getTitle', 'setStore', 'placeBillingAgreement']
         );
         $paymentMethodMock->expects($this->any())->method('placeBillingAgreement')->will($this->returnSelf());
         $paymentMethodMock->expects($this->any())->method('getTitle')->will($this->returnValue($paymentMethod));
 
-        $paymentHelperMock = $this->getMock(\Magento\Payment\Helper\Data::class, ['getMethodInstance'], [], '', false);
+        $paymentHelperMock = $this->createPartialMock(\Magento\Payment\Helper\Data::class, ['getMethodInstance']);
         $paymentHelperMock
             ->expects($this->any())
             ->method('getMethodInstance')

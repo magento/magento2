@@ -16,6 +16,7 @@ use Magento\Framework\DataObject\Copy;
 /**
  * Class Builder
  * @api
+ * @since 100.1.0
  */
 class Builder
 {
@@ -72,6 +73,7 @@ class Builder
     /**
      * @param array $data
      * @return $this;
+     * @since 100.1.0
      */
     public function setData(array $data)
     {
@@ -83,6 +85,7 @@ class Builder
      * @param SampleInterface $sample
      * @return SampleInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.1.0
      */
     public function build(SampleInterface $sample)
     {

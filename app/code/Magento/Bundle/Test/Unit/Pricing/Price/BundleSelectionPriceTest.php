@@ -14,7 +14,7 @@ use Magento\Catalog\Pricing\Price\RegularPrice;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
+class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice
@@ -76,69 +76,36 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->productMock = $this->getMock(
+        $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'getPriceInfo', 'getSelectionPriceType', 'getSelectionPriceValue'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getPriceInfo', 'getSelectionPriceType', 'getSelectionPriceValue']
         );
 
-        $this->bundleMock = $this->getMock(
+        $this->bundleMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'getPriceType', 'getPriceInfo', 'setFinalPrice', 'getData'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getPriceType', 'getPriceInfo', 'setFinalPrice', 'getData']
         );
         $this->calculatorMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\CalculatorInterface::class)
             ->getMockForAbstractClass();
-        $this->eventManagerMock = $this->getMock(
-            \Magento\Framework\Event\Manager::class,
-            ['dispatch'],
-            [],
-            '',
-            false
-        );
-        $this->priceInfoMock = $this->getMock(
-            \Magento\Framework\Pricing\PriceInfo\Base::class,
-            ['getPrice'],
-            [],
-            '',
-            false
-        );
-        $this->discountCalculatorMock = $this->getMock(
-            \Magento\Bundle\Pricing\Price\DiscountCalculator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->finalPriceMock = $this->getMock(
-            \Magento\Catalog\Pricing\Price\FinalPrice::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->regularPriceMock = $this->getMock(
-            \Magento\Catalog\Pricing\Price\RegularPrice::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->eventManagerMock = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
+        $this->priceInfoMock = $this->createPartialMock(\Magento\Framework\Pricing\PriceInfo\Base::class, ['getPrice']);
+        $this->discountCalculatorMock = $this->createMock(\Magento\Bundle\Pricing\Price\DiscountCalculator::class);
+        $this->finalPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
+        $this->regularPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\RegularPrice::class);
         $this->productMock->expects($this->atLeastOnce())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
 
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->quantity = 1;
 
         $this->setupSelectionPrice();
     }
 
+    /**
+     * @param bool $useRegularPrice
+     */
     protected function setupSelectionPrice($useRegularPrice = false)
     {
         $this->selectionPrice = new \Magento\Bundle\Pricing\Price\BundleSelectionPrice(
@@ -154,7 +121,7 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *  test fro method getValue with dynamic productType
+     *  Test for method getValue with dynamic productType
      *
      * @param bool $useRegularPrice
      * @dataProvider useRegularPriceDataProvider
@@ -199,12 +166,14 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test for method getValue with type Fixed and selectionPriceType not null
+     * Test for method getValue with type Fixed and selectionPriceType not null.
      *
      * @param bool $useRegularPrice
      * @dataProvider useRegularPriceDataProvider
+     *
+     * @return void
      */
-    public function testGetValueTypeFixedWithSelectionPriceType($useRegularPrice)
+    public function testGetValueTypeFixedWithSelectionPriceType(bool $useRegularPrice)
     {
         $this->setupSelectionPrice($useRegularPrice);
         $regularPrice = 100.125;
@@ -214,53 +183,49 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->bundleMock->expects($this->once())
             ->method('getPriceType')
-            ->will($this->returnValue(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED));
+            ->willReturn(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED);
         $this->bundleMock->expects($this->atLeastOnce())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo(RegularPrice::PRICE_CODE))
-            ->will($this->returnValue($this->regularPriceMock));
+            ->with(RegularPrice::PRICE_CODE)
+            ->willReturn($this->regularPriceMock);
         $this->regularPriceMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($actualPrice));
+            ->willReturn($actualPrice);
         $this->bundleMock->expects($this->once())
             ->method('setFinalPrice')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch');
         $this->bundleMock->expects($this->exactly(2))
             ->method('getData')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['qty', null, 1],
-                        ['final_price', null, 100],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['qty', null, 1],
+                    ['final_price', null, 100],
+                    ['price', null, 100],
+                ]
             );
         $this->productMock->expects($this->once())
             ->method('getSelectionPriceType')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->productMock->expects($this->any())
             ->method('getSelectionPriceValue')
-            ->will($this->returnValue($actualPrice));
+            ->willReturn($actualPrice);
 
         if (!$useRegularPrice) {
             $this->discountCalculatorMock->expects($this->once())
                 ->method('calculateDiscount')
-                ->with(
-                    $this->equalTo($this->bundleMock),
-                    $this->equalTo($actualPrice)
-                )
-                ->will($this->returnValue($discountedPrice));
+                ->with($this->bundleMock, $actualPrice)
+                ->willReturn($discountedPrice);
         }
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('round')
             ->with($actualPrice)
-            ->will($this->returnValue($expectedPrice));
+            ->willReturn($expectedPrice);
 
         $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
     }
@@ -374,6 +339,9 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPrice, $selectionPrice->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function useRegularPriceDataProvider()
     {
         return [

@@ -15,5 +15,5 @@ class Banktransfer extends \Magento\OfflinePayments\Block\Form\AbstractInstructi
      *
      * @var string
      */
-    protected $_template = 'form/banktransfer.phtml';
+    protected $_template = 'Magento_OfflinePayments::form/banktransfer.phtml';
 }

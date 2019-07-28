@@ -8,7 +8,7 @@ namespace Magento\Framework\Message\Test\Unit;
 
 use Magento\Framework\Message\MessageInterface;
 
-class ExceptionMessageLookupFactoryTest extends \PHPUnit_Framework_TestCase
+class ExceptionMessageLookupFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\ExceptionMessageFactoryPool | \PHPUnit_Framework_MockObject_MockObject
@@ -27,12 +27,9 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->exceptionMessageFactoryPool = $this->getMock(
+        $this->exceptionMessageFactoryPool = $this->createPartialMock(
             \Magento\Framework\Message\ExceptionMessageFactoryPool::class,
-            ['getMessageFactory'],
-            [],
-            '',
-            false
+            ['getMessageFactory']
         );
 
         $this->messageFactory = $this->getMockBuilder(
@@ -51,7 +48,7 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit_Framework_TestCase
         $exceptionMessage = 'exception message';
         $exception = new \Exception($exceptionMessage);
 
-        $exceptionMessageFactory = $this->getMock(
+        $exceptionMessageFactory = $this->createMock(
             \Magento\Framework\Message\ExceptionMessageFactoryInterface::class
         );
 

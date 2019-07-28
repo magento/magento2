@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AddAttributeTest extends \PHPUnit_Framework_TestCase
+class AddAttributeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $resultFactory;
@@ -52,9 +52,9 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->resultFactory = $this->getMock(\Magento\Framework\Controller\ResultFactory::class, [], [], '', false);
-        $this->response = $this->getMock(
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             [
                 'sendResponse',
@@ -65,7 +65,7 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['build'])
             ->getMock();
-        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -97,7 +97,7 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->productBuilder->expects($this->once())->method('build')->with($this->request)->willReturn($product);
-        $resultLayout = $this->getMock(\Magento\Framework\View\Result\Layout::class, [], [], '', false);
+        $resultLayout = $this->createMock(\Magento\Framework\View\Result\Layout::class);
         $this->resultFactory->expects($this->once())->method('create')->with(ResultFactory::TYPE_LAYOUT)
             ->willReturn($resultLayout);
 

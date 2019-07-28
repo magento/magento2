@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
-class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
+class CleanStaticFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -35,7 +35,7 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -76,7 +76,7 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
             ->with('clean_static_files_cache_after');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('The static files cache has been cleaned.');
 
         $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)

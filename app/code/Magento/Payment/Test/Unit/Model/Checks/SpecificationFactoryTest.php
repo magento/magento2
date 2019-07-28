@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Model\Checks;
 
 use \Magento\Payment\Model\Checks\SpecificationFactory;
 
-class SpecificationFactoryTest extends \PHPUnit_Framework_TestCase
+class SpecificationFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Specification key

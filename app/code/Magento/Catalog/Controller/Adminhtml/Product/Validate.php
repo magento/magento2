@@ -6,6 +6,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
@@ -16,12 +18,12 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
+class Validate extends Product implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected $_dateFilter;
 
@@ -40,7 +42,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     protected $layoutFactory;
 
-    /** @var \Magento\Catalog\Model\ProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $productFactory;
 
     /**
@@ -135,7 +139,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             $response->setError(true);
             $response->setMessages([$e->getMessage()]);
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $layout = $this->layoutFactory->create();
             $layout->initMessages();
             $response->setError(true);
@@ -147,7 +151,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getStoreManager()
     {
@@ -160,7 +164,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return Initialization\Helper
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected function getInitializationHelper()
     {

@@ -8,7 +8,6 @@ namespace Magento\Store\Test\Unit\Console\Command;
 use Magento\Store\Console\Command\WebsiteListCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\TableHelper;
 use Magento\Store\Model\Website;
 use Magento\Framework\Console\Cli;
 use Magento\Store\Api\WebsiteRepositoryInterface;
@@ -16,7 +15,7 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 /**
  * @package Magento\Store\Test\Unit\Console\Command
  */
-class WebsiteListCommandTest extends \PHPUnit_Framework_TestCase
+class WebsiteListCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WebsiteListCommand
@@ -43,15 +42,6 @@ class WebsiteListCommandTest extends \PHPUnit_Framework_TestCase
             WebsiteListCommand::class,
             ['websiteManagement' => $this->websiteRepositoryMock]
         );
-
-        /** @var HelperSet $helperSet */
-        $helperSet = $this->objectManager->getObject(
-            HelperSet::class,
-            ['helpers' => [$this->objectManager->getObject(TableHelper::class)]]
-        );
-
-        //Inject table helper for output
-        $this->command->setHelperSet($helperSet);
     }
 
     public function testExecuteExceptionNoVerbosity()

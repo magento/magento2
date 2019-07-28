@@ -13,12 +13,15 @@ use Magento\Framework\Locale\Resolver;
 use Magento\Framework\View\Page\Config;
 
 /**
- * @covers Magento\Framework\View\Page\Config
+ * @covers \Magento\Framework\View\Page\Config
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
+
     /**
      * @var Config
      */
@@ -76,20 +79,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $this->pageAssets = $this->getMock(\Magento\Framework\View\Asset\GroupedCollection::class, [], [], '', false);
+        $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $this->pageAssets = $this->createMock(\Magento\Framework\View\Asset\GroupedCollection::class);
         $this->scopeConfig =
-            $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class, [], [], '', false);
-        $this->favicon = $this->getMock(\Magento\Framework\View\Page\FaviconInterface::class, [], [], '', false);
-        $this->builder = $this->getMock(\Magento\Framework\View\Layout\BuilderInterface::class, [], [], '', false);
-        $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
-        $this->remoteAsset = $this->getMock(\Magento\Framework\View\Asset\Remote::class, [], [], '', false);
-        $this->title = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->favicon = $this->createMock(\Magento\Framework\View\Page\FaviconInterface::class);
+        $this->builder = $this->createMock(\Magento\Framework\View\Layout\BuilderInterface::class);
+        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $this->remoteAsset = $this->createMock(\Magento\Framework\View\Asset\Remote::class);
+        $this->title = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $this->localeMock =
             $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class, [], '', false);
         $this->localeMock->expects($this->any())
             ->method('getLocale')
             ->willReturn(Resolver::DEFAULT_LOCALE);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $escaper = $this->objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
         $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
                 \Magento\Framework\View\Page\Config::class,
@@ -98,11 +105,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     'pageAssets' => $this->pageAssets,
                     'scopeConfig' => $this->scopeConfig,
                     'favicon' => $this->favicon,
-                    'localeResolver' => $this->localeMock
+                    'localeResolver' => $this->localeMock,
+                    'escaper' => $escaper
                 ]
             );
 
-        $this->areaResolverMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->areaResolverMock = $this->createMock(\Magento\Framework\App\State::class);
         $areaResolverReflection = (new \ReflectionClass(get_class($this->model)))->getProperty('areaResolver');
         $areaResolverReflection->setAccessible(true);
         $areaResolverReflection->setValue($this->model, $this->areaResolverMock);
@@ -139,6 +147,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'description' => null,
             'keywords' => null,
             'robots' => null,
+            'title' => null,
             'name' => 'test_value',
             'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
         ];
@@ -287,6 +296,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function pageAssetDataProvider()
     {
         return [
@@ -326,6 +338,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function remotePageAssetDataProvider()
     {
         return [
@@ -382,6 +397,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $this->model->getElementAttribute($elementType, $attribute));
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributeDataProvider()
     {
         return [
@@ -412,13 +430,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testElementAttributeException($elementType, $attribute, $value)
     {
-        $this->setExpectedException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            $elementType . " isn't allowed"
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage($elementType . " isn't allowed");
         $this->model->setElementAttribute($elementType, $attribute, $value);
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributeExceptionDataProvider()
     {
         return [
@@ -454,6 +473,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($attributes, $this->model->getElementAttributes($elementType));
     }
 
+    /**
+     * @return array
+     */
     public function elementAttributesDataProvider()
     {
         return [
@@ -478,6 +500,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($handle, $this->model->getPageLayout());
     }
 
+    /**
+     * @return array
+     */
     public function pageLayoutDataProvider()
     {
         return [
@@ -538,6 +563,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $model->getIncludes());
     }
 
+    /**
+     * @return array
+     */
     public function getIncludesDataProvider()
     {
         return [

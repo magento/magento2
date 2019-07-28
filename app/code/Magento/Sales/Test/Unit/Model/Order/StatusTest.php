@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 /**
@@ -10,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Model\Order;
  *
  * @package Magento\Sales\Model\Order
  */
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Status|\PHPUnit_Framework_MockObject_MockObject
@@ -38,27 +39,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->resourceMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->eventManagerMock = $this->getMock(
-            \Magento\Framework\Event\Manager::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->contextMock = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Status::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventManagerMock));
@@ -104,7 +87,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
      *  Test for method unassignState state is last
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The last status can't be unassigned from its current state.
+     * @expectedExceptionMessage The last status can't be changed and needs to stay assigned to its current state.
      */
     public function testUnassignStateStateIsLast()
     {
@@ -123,7 +106,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
      * Test for method unassignState status in use
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Status can't be unassigned, because it is used by existing order(s).
+     * @expectedExceptionMessage The status can't be unassigned because the status is currently used by an order.
      */
     public function testUnassignStateStatusUsed()
     {
@@ -152,10 +135,10 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     protected function _getPreparedModel($resource = null, $eventDispatcher = null)
     {
         if (!$resource) {
-            $resource = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Status::class, [], [], '', false);
+            $resource = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Status::class);
         }
         if (!$eventDispatcher) {
-            $eventDispatcher = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+            $eventDispatcher = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         }
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $helper->getObject(
@@ -174,7 +157,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $status = 'test_status';
         $visibleOnFront = true;
 
-        $resource = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Status::class, [], [], '', false);
+        $resource = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Status::class);
         $resource->expects($this->once())
             ->method('beginTransaction');
         $resource->expects($this->once())
@@ -185,7 +168,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             );
         $resource->expects($this->once())->method('commit');
 
-        $eventDispatcher = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $eventDispatcher = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
         $model = $this->_getPreparedModel($resource, $eventDispatcher);
         $model->setStatus($status);

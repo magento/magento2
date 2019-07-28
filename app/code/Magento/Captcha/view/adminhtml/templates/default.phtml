@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Captcha\Block\Captcha\DefaultCaptcha $block */
 
 /** @var \Magento\Captcha\Model\DefaultModel $captcha */
@@ -13,7 +11,7 @@ $captcha = $block->getCaptchaModel();
 ?>
 <div class="admin__field _required">
     <label for="captcha" class="admin__field-label">
-        <span><?= $block->escapeHtml(__('Please enter the letters from the image')) ?></span>
+        <span><?= $block->escapeHtml(__('Please enter the letters and numbers from the image')) ?></span>
     </label>
     <div class="admin__field-control">
         <input

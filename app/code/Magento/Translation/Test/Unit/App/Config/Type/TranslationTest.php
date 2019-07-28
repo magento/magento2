@@ -15,7 +15,7 @@ use Magento\Framework\DataObject;
 /**
  * @covers \Magento\Translation\App\Config\Type\Translation
  */
-class TranslationTest extends \PHPUnit_Framework_TestCase
+class TranslationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject

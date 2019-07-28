@@ -39,7 +39,7 @@ class AssertAcceptPaymentMessageInCommentsHistory extends AbstractConstraint
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
 
-        \PHPUnit_Framework_Assert::assertContains(self::$message, $latestComment['comment']);
+        \PHPUnit\Framework\Assert::assertContains(self::$message, $latestComment['comment']);
     }
 
     /**

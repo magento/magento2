@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
  * Order history block
  *
  * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Backend\Block\Template
 {
@@ -87,7 +88,8 @@ class History extends \Magento\Backend\Block\Template
      */
     public function canSendCommentEmail()
     {
-        return $this->_salesData->canSendOrderCommentEmail($this->getOrder()->getStore()->getId());
+        return $this->_salesData->canSendOrderCommentEmail($this->getOrder()->getStore()->getId())
+            && $this->_authorization->isAllowed('Magento_Sales::email');
     }
 
     /**

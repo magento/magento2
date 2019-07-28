@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Customer\Block\Widget\AbstractWidget;
 
-class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
+class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
 {
     /** Constants used in the various unit tests. */
     const KEY_FIELD_ID_FORMAT = 'field_id_format';
@@ -26,10 +26,10 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_addressHelper = $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false);
+        $this->_addressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
 
         $this->_block = new \Magento\Customer\Block\Widget\AbstractWidget(
-            $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false),
+            $this->createMock(\Magento\Framework\View\Element\Template\Context::class),
             $this->_addressHelper,
             $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)->getMockForAbstractClass()
         );

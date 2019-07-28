@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 /**
  * Unit test for Tierprice model.
  */
-class TierpriceTest extends \PHPUnit_Framework_TestCase
+class TierpriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
@@ -125,7 +125,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
                 'price_qty' => 1,
             ]
         ];
-        $object = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->attribute->expects($this->atLeastOnce())->method('getName')->willReturn($attributeName);
         $object->expects($this->atLeastOnce())->method('getData')->with($attributeName)->willReturn($tierPrices);
         $this->localeFormat->expects($this->once())->method('getNumber')->with(-10)->willReturnArgument(0);
@@ -142,6 +142,10 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $attributeName = 'tier_price';
         $tierPrices = [
             [
+                'price' => 0,
+                'all_groups' => 1,
+            ],
+            [
                 'price' => 10,
                 'all_groups' => 1,
             ],
@@ -153,6 +157,12 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $productPrice = 20;
         $allCustomersGroupId = 32000;
         $finalTierPrices = [
+            [
+                'price' => 0,
+                'all_groups' => 1,
+                'website_price' => 0,
+                'cust_group' => 32000,
+            ],
             [
                 'price' => 10,
                 'all_groups' => 1,
@@ -170,8 +180,11 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $allCustomersGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->disableOriginalConstructor()->getMock();
-        $this->groupManagement->expects($this->once())->method('getAllCustomersGroup')->willReturn($allCustomersGroup);
-        $allCustomersGroup->expects($this->once())->method('getId')->willReturn($allCustomersGroupId);
+        $this->groupManagement
+            ->expects($this->exactly(2))
+            ->method('getAllCustomersGroup')
+            ->willReturn($allCustomersGroup);
+        $allCustomersGroup->expects($this->exactly(2))->method('getId')->willReturn($allCustomersGroupId);
         $object->expects($this->once())->method('getPrice')->willReturn($productPrice);
         $this->attribute->expects($this->atLeastOnce())->method('isScopeGlobal')->willReturn(true);
         $object->expects($this->once())->method('getStoreId')->willReturn(null);

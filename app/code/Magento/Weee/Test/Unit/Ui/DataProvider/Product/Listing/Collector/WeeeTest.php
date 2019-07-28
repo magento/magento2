@@ -18,7 +18,7 @@ use Magento\Weee\Ui\DataProvider\Product\Listing\Collector\Weee;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class WeeeTest extends \PHPUnit_Framework_TestCase
+class WeeeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Weee */
     protected $model;
@@ -41,6 +41,9 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     /** @var FormattedPriceInfoBuilder|\PHPUnit_Framework_MockObject_MockObject */
     private $formattedPriceInfoBuilder;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
@@ -50,14 +53,16 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->weeeAdjustmentAttributeFactory = $this->getMockBuilder(WeeeAdjustmentAttributeInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->extensionAttributes = $this->getMockBuilder(PriceInfoExtensionInterface::class)
             ->setMethods(['setWeeeAttributes', 'setWeeeAdjustment'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
@@ -74,6 +79,9 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testCollect()
     {
         $productMock = $this->getMockBuilder(Product::class)
@@ -110,7 +118,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->getMock(AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
         $productRender->expects($this->exactly(5))
             ->method('getStoreId')
             ->willReturn(1);

@@ -13,6 +13,7 @@ use Magento\Directory\Model\Currency;
  * Adminhtml customer orders grid block
  *
  * @api
+ * @since 100.0.2
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -81,7 +82,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::_construct();
         $this->setUseAjax(true);
         $this->_parentTemplate = $this->getTemplate();
-        $this->setTemplate('tab/cart.phtml');
+        $this->setTemplate('Magento_Customer::tab/cart.phtml');
     }
 
     /**
@@ -219,7 +220,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

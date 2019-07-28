@@ -8,7 +8,7 @@ namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency;
 
-class CurrencyTest extends \PHPUnit_Framework_TestCase
+class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Currency
@@ -24,7 +24,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->localeCurrencyMock = $this->getMock(\Magento\Framework\Locale\CurrencyInterface::class);
+        $this->localeCurrencyMock = $this->createMock(\Magento\Framework\Locale\CurrencyInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->currency = $objectManager->getObject(

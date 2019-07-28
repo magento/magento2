@@ -8,7 +8,7 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Image

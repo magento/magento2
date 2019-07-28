@@ -3,10 +3,12 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @deprecated since version 2.2.0
+ */
 require.config({
     'waitSeconds': 0,
     'shim': {
-        'jquery/jquery.hashchange': ['jquery'],
         'jquery/jstree/jquery.hotkeys': ['jquery'],
         'jquery/hover-intent': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
@@ -25,7 +27,6 @@ require.config({
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/hover-intent': 'jquery/jquery.hoverIntent',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileupload-fp',
-        'jquery/jquery.hashchange': 'jquery/jquery.ba-hashchange.min',
         'prototype': 'prototype/prototype-amd',
         'text': 'requirejs/text',
         'domReady': 'requirejs/domReady',

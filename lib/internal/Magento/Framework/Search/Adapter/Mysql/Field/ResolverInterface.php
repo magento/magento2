@@ -5,10 +5,16 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
+/**
+ * MySQL search field resolver.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 interface ResolverInterface
 {
     /**
-     * Resolve field
+     * Resolve field.
      *
      * @param array $fields
      * @return FieldInterface[]

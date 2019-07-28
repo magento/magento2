@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework\Utility;
 
-class ClassNameExtractorTest extends \PHPUnit_Framework_TestCase
+class ClassNameExtractorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $file

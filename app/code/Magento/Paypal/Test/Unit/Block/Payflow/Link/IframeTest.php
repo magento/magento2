@@ -9,7 +9,7 @@ namespace Magento\Paypal\Test\Unit\Block\Payflow\Link;
  * Test for Iframe block
  *
  */
-class IframeTest extends \PHPUnit_Framework_TestCase
+class IframeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -58,21 +58,15 @@ class IframeTest extends \PHPUnit_Framework_TestCase
 
     public function prepare()
     {
-        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
-        $this->orderFactoryMock = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['getQuote'], [], '', false);
-        $this->hssHelperMock = $this->getMock(\Magento\Paypal\Helper\Hss::class, [], [], '', false);
-        $this->paymentDataMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
-        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, ['getPayment', '__wakeup'], [], '', false);
-        $this->paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
-        $this->reader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
-        $this->readFactory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->orderFactoryMock = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['getQuote']);
+        $this->hssHelperMock = $this->createMock(\Magento\Paypal\Helper\Hss::class);
+        $this->paymentDataMock = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getPayment', '__wakeup']);
+        $this->paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
+        $this->reader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')

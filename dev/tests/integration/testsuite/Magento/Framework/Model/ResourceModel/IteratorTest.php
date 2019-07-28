@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Model\ResourceModel;
 
-class IteratorTest extends \PHPUnit_Framework_TestCase
+class IteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Iterator

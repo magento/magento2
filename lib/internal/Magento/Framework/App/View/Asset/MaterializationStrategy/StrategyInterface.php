@@ -9,6 +9,10 @@ namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset;
 
+/**
+ * Interface \Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface
+ *
+ */
 interface StrategyInterface
 {
     /**

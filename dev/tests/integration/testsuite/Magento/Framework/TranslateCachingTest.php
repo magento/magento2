@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @package Magento\Framework
  * @magentoAppIsolation enabled
  */
-class TranslateCachingTest extends \PHPUnit_Framework_TestCase
+class TranslateCachingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Phrase\RendererInterface
@@ -48,7 +48,7 @@ class TranslateCachingTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Translate $model */
         $model = $this->objectManager->get(\Magento\Framework\Translate::class);
 
-        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND); // this is supposed to cache the fixture
+        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND, true); // this is supposed to cache the fixture
         $this->assertEquals('Fixture Db Translation', new Phrase('Fixture String'));
 
         /** @var \Magento\Translation\Model\ResourceModel\StringUtils $translateString */

@@ -9,7 +9,10 @@ namespace Magento\Customer\Block\Account\Dashboard;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class address test.
+ */
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Account\Dashboard\Address
@@ -66,7 +69,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomerMissingCustomer()
     {
-        $moduleManager = $this->objectManager->get(\Magento\Framework\Module\Manager::class);
+        $moduleManager = $this->objectManager->get(\Magento\Framework\Module\ModuleManagerInterface::class);
         if ($moduleManager->isEnabled('Magento_PageCache')) {
             $customerDataFactory = $this->objectManager->create(
                 \Magento\Customer\Api\Data\CustomerInterfaceFactory::class

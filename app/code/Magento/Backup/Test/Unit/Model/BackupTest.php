@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @covers \Magento\Backup\Model\Backup
  */
-class BackupTest extends \PHPUnit_Framework_TestCase
+class BackupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

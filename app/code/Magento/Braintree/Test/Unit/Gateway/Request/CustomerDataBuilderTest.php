@@ -9,20 +9,21 @@ use Magento\Braintree\Gateway\Request\CustomerDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class CustomerDataBuilderTest
+ * Tests \Magento\Braintree\Gateway\Request\CustomerDataBuilder.
  */
-class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
+class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PaymentDataObjectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentDataObjectInterface|MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var OrderAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAdapterInterface|MockObject
      */
     private $orderMock;
 
@@ -32,14 +33,14 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
     private $builder;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
     protected function setUp()
     {
-        $this->paymentDOMock = $this->getMock(PaymentDataObjectInterface::class);
-        $this->orderMock = $this->getMock(OrderAdapterInterface::class);
+        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -105,7 +106,7 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
                     'last_name' => 'Smith',
                     'company' => 'Magento',
                     'phone' => '555-555-555',
-                    'email' => 'john@magento.com'
+                    'email' => 'john@magento.com',
                 ],
                 [
                     CustomerDataBuilder::CUSTOMER => [
@@ -114,19 +115,19 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
                         CustomerDataBuilder::COMPANY => 'Magento',
                         CustomerDataBuilder::PHONE => '555-555-555',
                         CustomerDataBuilder::EMAIL => 'john@magento.com',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
     /**
      * @param array $billingData
-     * @return AddressAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return AddressAdapterInterface|MockObject
      */
     private function getBillingMock($billingData)
     {
-        $addressMock = $this->getMock(AddressAdapterInterface::class);
+        $addressMock = $this->createMock(AddressAdapterInterface::class);
 
         $addressMock->expects(static::once())
             ->method('getFirstname')

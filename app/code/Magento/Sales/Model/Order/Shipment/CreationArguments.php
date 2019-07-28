@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order\Shipment;
  * Creation arguments for Shipment.
  *
  * @api
+ * @since 100.1.2
  */
 class CreationArguments implements \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface
 {
@@ -19,6 +20,7 @@ class CreationArguments implements \Magento\Sales\Api\Data\ShipmentCreationArgum
 
     /**
      * {@inheritdoc}
+     * @since 100.1.2
      */
     public function getExtensionAttributes()
     {
@@ -27,6 +29,7 @@ class CreationArguments implements \Magento\Sales\Api\Data\ShipmentCreationArgum
 
     /**
      * {@inheritdoc}
+     * @since 100.1.2
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentCreationArgumentsExtensionInterface $extensionAttributes

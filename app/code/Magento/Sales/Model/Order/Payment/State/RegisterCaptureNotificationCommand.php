@@ -35,7 +35,7 @@ class RegisterCaptureNotificationCommand implements CommandInterface
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
-        $state = Order::STATE_PROCESSING;
+        $state = $order->getState() ?: Order::STATE_PROCESSING;
         $status = null;
         $message = 'Registered notification about captured amount of %1.';
 
@@ -61,7 +61,7 @@ class RegisterCaptureNotificationCommand implements CommandInterface
     }
 
     /**
-     * @deprecated Replaced by a StatusResolver class call.
+     * @deprecated 100.2.0 Replaced by a StatusResolver class call.
      *
      * @param Order $order
      * @param string $status

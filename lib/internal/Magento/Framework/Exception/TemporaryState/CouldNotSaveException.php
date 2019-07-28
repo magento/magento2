@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
  * CouldNotSaveException caused by recoverable error
  *
  * @api
+ * @since 100.2.0
  */
 class CouldNotSaveException extends LocalizedCouldNotSaveException implements TemporaryStateExceptionInterface
 {
@@ -22,6 +23,7 @@ class CouldNotSaveException extends LocalizedCouldNotSaveException implements Te
      * @param Phrase $phrase The Exception message to throw.
      * @param \Exception $previous [optional] The previous exception used for the exception chaining.
      * @param int $code [optional] The Exception code.
+     * @since 100.2.0
      */
     public function __construct(Phrase $phrase, \Exception $previous = null, $code = 0)
     {

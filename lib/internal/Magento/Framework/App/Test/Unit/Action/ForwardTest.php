@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * getRequest,getResponse of AbstractAction class is also tested
  */
-class ForwardTest extends \PHPUnit_Framework_TestCase
+class ForwardTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Action\Forward
@@ -35,7 +35,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
         $cookieMetadataFactoryMock = $this->getMockBuilder(
             \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )->disableOriginalConstructor()->getMock();
-        $cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $contextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)->disableOriginalConstructor()
             ->getMock();
         $this->response = $objectManager->getObject(

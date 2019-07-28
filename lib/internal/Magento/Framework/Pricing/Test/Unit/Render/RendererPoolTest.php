@@ -12,7 +12,7 @@ use Magento\Framework\Pricing\Render\RendererPool;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RendererPoolTest extends \PHPUnit_Framework_TestCase
+class RendererPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\Render\RendererPool | \PHPUnit_Framework_MockObject_MockObject

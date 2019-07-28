@@ -7,6 +7,7 @@ namespace Magento\Rule\Model\Condition;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Combine extends AbstractCondition
 {
@@ -45,10 +46,8 @@ class Combine extends AbstractCondition
         $this->loadAggregatorOptions();
         $options = $this->getAggregatorOptions();
         if ($options) {
-            foreach (array_keys($options) as $aggregator) {
-                $this->setAggregator($aggregator);
-                break;
-            }
+            reset($options);
+            $this->setAggregator(key($options));
         }
     }
 
@@ -89,9 +88,10 @@ class Combine extends AbstractCondition
     public function getAggregatorElement()
     {
         if ($this->getAggregator() === null) {
-            foreach (array_keys($this->getAggregatorOption()) as $key) {
-                $this->setAggregator($key);
-                break;
+            $options = $this->getAggregatorOption();
+            if ($options) {
+                reset($options);
+                $this->setAggregator(key($options));
             }
         }
         return $this->getForm()->addField(

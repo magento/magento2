@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
-class StoreGroupTest extends \PHPUnit_Framework_TestCase
+class StoreGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit_Framework_MockObject_MockObject
@@ -24,21 +24,15 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->processorMock = $this->getMock(
+        $this->processorMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
-            ['markIndexerAsInvalid'],
-            [],
-            '',
-            false
+            ['markIndexerAsInvalid']
         );
 
-        $this->subjectMock = $this->getMock(\Magento\Store\Model\ResourceModel\Group::class, [], [], '', false);
-        $this->storeGroupMock = $this->getMock(
+        $this->subjectMock = $this->createMock(\Magento\Store\Model\ResourceModel\Group::class);
+        $this->storeGroupMock = $this->createPartialMock(
             \Magento\Store\Model\Group::class,
-            ['getId', '__wakeup', 'dataHasChangedFor'],
-            [],
-            '',
-            false
+            ['getId', '__wakeup', 'dataHasChangedFor']
         );
     }
 

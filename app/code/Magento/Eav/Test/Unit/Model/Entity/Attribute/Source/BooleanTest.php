@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class BooleanTest extends \PHPUnit_Framework_TestCase
+class BooleanTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Source\Boolean
@@ -26,12 +24,9 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFlatColumns()
     {
-        $abstractAttributeMock = $this->getMock(
+        $abstractAttributeMock = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            ['getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
+            ['getAttributeCode', '__wakeup']
         );
 
         $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
@@ -63,7 +58,10 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedOrder
      */
     public function testAddValueSortToCollection(
-        $direction, $isScopeGlobal, $expectedJoinCondition, $expectedOrder
+        $direction,
+        $isScopeGlobal,
+        $expectedJoinCondition,
+        $expectedOrder
     ) {
         $attributeMock = $this->getAttributeMock();
         $attributeMock->expects($this->any())->method('isScopeGlobal')->will($this->returnValue($isScopeGlobal));
@@ -75,7 +73,7 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
         $attributeMock->expects($this->once())->method('getEntity')->willReturn($entity);
 
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
 
         $collectionMock = $this->getCollectionMock();
         $collectionMock->expects($this->any())->method('getSelect')->will($this->returnValue($selectMock));
@@ -103,13 +101,13 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
                 'expectedJoinCondition' => [
                     0 => [
                         'requisites' => ['code_t1' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123' AND code_t1.store_id='0'",
+                        'condition' => "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123'"
+                            . " AND code_t1.store_id='0'",
                     ],
                     1 => [
                         'requisites' => ['code_t2' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123' AND code_t2.store_id='12'",
+                        'condition' => "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123'"
+                            . " AND code_t2.store_id='12'",
                     ],
                 ],
                 'expectedOrder' => 'IF(code_t2.value_id > 0, code_t2.value, code_t1.value) ASC',
@@ -120,13 +118,13 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
                 'expectedJoinCondition' => [
                     0 => [
                         'requisites' => ['code_t1' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123' AND code_t1.store_id='0'",
+                        'condition' => "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123'"
+                            . " AND code_t1.store_id='0'",
                     ],
                     1 => [
                         'requisites' => ['code_t2' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123' AND code_t2.store_id='12'",
+                        'condition' => "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123'"
+                            . " AND code_t2.store_id='12'",
                     ],
                 ],
                 'expectedOrder' => 'IF(code_t2.value_id > 0, code_t2.value, code_t1.value) DESC',
@@ -137,8 +135,8 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
                 'expectedJoinCondition' => [
                     0 => [
                         'requisites' => ['code_t' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t.entity_id AND code_t.attribute_id='123' AND code_t.store_id='0'",
+                        'condition' => "e.entity_id=code_t.entity_id AND code_t.attribute_id='123'"
+                            . " AND code_t.store_id='0'",
                     ],
                 ],
                 'expectedOrder' => 'code_t.value DESC',
@@ -149,8 +147,8 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
                 'expectedJoinCondition' => [
                     0 => [
                         'requisites' => ['code_t' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t.entity_id AND code_t.attribute_id='123' AND code_t.store_id='0'",
+                        'condition' => "e.entity_id=code_t.entity_id AND code_t.attribute_id='123'"
+                            . " AND code_t.store_id='0'",
                     ],
                 ],
                 'expectedOrder' => 'code_t.value ASC',
@@ -164,11 +162,12 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     protected function getCollectionMock()
     {
         $collectionMethods = ['getSelect', 'getStoreId', 'getConnection'];
-        $collectionMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class, $collectionMethods, [], '', false
+        $collectionMock = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            $collectionMethods
         );
 
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['method'], [], '', false);
+        $connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['method']);
 
         $collectionMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $collectionMock->expects($this->any())->method('getStoreId')->will($this->returnValue('12'));
@@ -182,20 +181,11 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     protected function getAttributeMock()
     {
         $attributeMockMethods = ['getAttributeCode', 'getId', 'getBackend', 'isScopeGlobal', '__wakeup' , 'getEntity'];
-        $attributeMock = $this->getMock(
+        $attributeMock = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            $attributeMockMethods,
-            [],
-            '',
-            false
+            $attributeMockMethods
         );
-        $backendMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $backendMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
 
         $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
         $attributeMock->expects($this->any())->method('getId')->will($this->returnValue('123'));

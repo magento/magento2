@@ -27,7 +27,7 @@ abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
     /**
      * @return array
      */
-    public function testExecuteDataProvider()
+    public function executeDataProvider()
     {
         return [
             'implicit all' => [

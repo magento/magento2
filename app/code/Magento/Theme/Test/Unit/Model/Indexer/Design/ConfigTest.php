@@ -11,7 +11,7 @@ namespace Magento\Theme\Test\Unit\Model\Indexer\Design;
 
 use Magento\Theme\Model\Indexer\Design\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Config */
     protected $model;
@@ -103,6 +103,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFull()
     {
-        $this->model->executeFull();
+        $result = $this->model->executeFull();
+        $this->assertNull($result);
     }
 }

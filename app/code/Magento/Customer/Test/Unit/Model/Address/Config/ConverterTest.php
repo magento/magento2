@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Address\Config;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Address\Config\Converter

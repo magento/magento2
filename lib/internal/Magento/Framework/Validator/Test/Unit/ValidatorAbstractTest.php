@@ -9,7 +9,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 /**
  * Test case for \Magento\Framework\Validator\AbstractValidator
  */
-class ValidatorAbstractTest extends \PHPUnit_Framework_TestCase
+class ValidatorAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var null|\Magento\Framework\Translate\AdapterInterface

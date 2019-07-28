@@ -7,7 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\Fil
 
 use Magento\Cms\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\PageStoreFilter;
 
-class PageStoreFilterTest extends \PHPUnit_Framework_TestCase
+class PageStoreFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PageStoreFilter

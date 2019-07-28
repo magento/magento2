@@ -11,6 +11,7 @@ namespace Magento\Review\Model\ResourceModel\Rating;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -140,7 +141,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 'main_table.rating_id = store.rating_id',
                 []
             );
-            //        ->group('main_table.rating_id')
             $this->_isStoreJoined = true;
         }
         $inCondition = $connection->prepareSqlCondition('store.store_id', ['in' => $storeId]);

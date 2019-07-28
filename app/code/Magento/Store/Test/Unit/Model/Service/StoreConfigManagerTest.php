@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
+class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Service\StoreConfigManager
@@ -46,7 +46,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->model = new \Magento\Store\Model\Service\StoreConfigManager(
             $this->storeCollectionFactoryMock,
@@ -55,6 +55,10 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param array $storeConfig
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getStoreMock(array $storeConfig)
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
@@ -88,6 +92,9 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         return $storeMock;
     }
 
+    /**
+     * @return \Magento\Store\Model\Data\StoreConfig
+     */
     protected function createStoreConfigDataObject()
     {
         /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactoryMock */

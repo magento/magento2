@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\I18n\Dictionary\Phrase;
 
-class JsTest extends \PHPUnit_Framework_TestCase
+class JsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

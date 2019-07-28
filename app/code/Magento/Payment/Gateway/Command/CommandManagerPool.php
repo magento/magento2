@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
  * Class CommandManagerPool
  * @package Magento\Payment\Gateway\Command
  * @api
+ * @since 100.1.0
  */
 class CommandManagerPool implements CommandManagerPoolInterface
 {
@@ -43,12 +44,13 @@ class CommandManagerPool implements CommandManagerPoolInterface
      * @param string $paymentProviderCode
      * @return CommandManagerInterface
      * @throws NotFoundException
+     * @since 100.1.0
      */
     public function get($paymentProviderCode)
     {
         if (!isset($this->executors[$paymentProviderCode])) {
             throw new NotFoundException(
-                __('Command Executor for %1 is not defined.', $paymentProviderCode)
+                __('The "%1" command executor isn\'t defined. Verify the executor and try again.', $paymentProviderCode)
             );
         }
 

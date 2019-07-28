@@ -17,6 +17,7 @@
                 <url path="sales/order_create/start"/>
                 <class>primary</class>
                 <label translate="true">Create New Order</label>
+                <aclResource>Magento_Sales::create</aclResource>
             </button>
         </buttons>
         <spinner>sales_order_columns</spinner>
@@ -28,6 +29,7 @@
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Sales::sales_order</aclResource>
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sales_order_grid_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -138,7 +140,6 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">ID</label>
-                <sorting>desc</sorting>
             </settings>
         </column>
         <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
@@ -153,6 +154,7 @@
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
                 <label translate="true">Purchase Date</label>
+                <sorting>desc</sorting>
             </settings>
         </column>
         <column name="billing_name">

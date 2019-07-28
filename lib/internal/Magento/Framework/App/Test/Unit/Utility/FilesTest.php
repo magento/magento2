@@ -8,7 +8,12 @@ namespace Magento\Framework\App\Test\Unit\Utility;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class FilesTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for Utility/Files class.
+ *
+ * @package Magento\Framework\App\Test\Unit\Utility
+ */
+class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
@@ -18,7 +23,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->dirSearchMock = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+        $this->dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
         $fileUtilities = $objectManager->getObject(
             Files::class,
             [
@@ -44,6 +49,21 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $actual = Files::init()->getConfigFiles('some.file', ['some.other.file'], false);
         $this->assertSame($expected, $actual);
         // Check that the result is cached (collectFiles() is called only once)
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testGetDbSchemaFiles()
+    {
+        $this->dirSearchMock->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::MODULE, '/etc/db_schema.xml')
+            ->willReturn(['First/Module/etc/db_schema.xml', 'Second/Module/etc/db_schema.xml']);
+
+        $expected = [
+            'First/Module/etc/db_schema.xml' => ['First/Module/etc/db_schema.xml'],
+            'Second/Module/etc/db_schema.xml' => ['Second/Module/etc/db_schema.xml'],
+        ];
+        $actual = Files::init()->getDbSchemaFiles('db_schema.xml', ['Second/Module/etc/db_schema.xml']);
         $this->assertSame($expected, $actual);
     }
 

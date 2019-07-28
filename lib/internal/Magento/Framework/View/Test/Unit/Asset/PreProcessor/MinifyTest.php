@@ -11,7 +11,7 @@ use Magento\Framework\View\Asset\PreProcessor\Minify;
 /**
  * Unit test for Magento\Framework\View\Asset\PreProcessor\Minify
  */
-class MinifyTest extends \PHPUnit_Framework_TestCase
+class MinifyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\PreProcessor\Minify

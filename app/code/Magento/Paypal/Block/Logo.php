@@ -11,6 +11,7 @@ namespace Magento\Paypal\Block;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Logo extends \Magento\Framework\View\Element\Template
 {

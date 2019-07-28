@@ -14,10 +14,14 @@ use Magento\Framework\Api\DataObjectHelper;
  */
 abstract class AbstractStorage implements StorageInterface
 {
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var  DataObjectHelper */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $dataObjectHelper;
 
     /**

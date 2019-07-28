@@ -43,9 +43,9 @@ class InfoAdminUriCommand extends Command
         parent::configure();
     }
 
-     /**
-      * {@inheritdoc}
-      */
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(
@@ -53,5 +53,6 @@ class InfoAdminUriCommand extends Command
             . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
             . "\n"
         );
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

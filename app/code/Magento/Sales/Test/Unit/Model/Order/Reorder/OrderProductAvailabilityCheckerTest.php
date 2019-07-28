@@ -14,7 +14,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 /**
  * Class OrderProductAvailabilityCheckerTest
  */
-class OrderProductAvailabilityCheckerTest extends \PHPUnit_Framework_TestCase
+class OrderProductAvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderedProductAvailabilityCheckerInterface[]

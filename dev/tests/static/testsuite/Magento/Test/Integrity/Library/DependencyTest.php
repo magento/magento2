@@ -17,7 +17,7 @@ use Zend\Code\Reflection\FileReflection;
  * Test check if Magento library components contain incorrect dependencies to application layer
  *
  */
-class DependencyTest extends \PHPUnit_Framework_TestCase
+class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Collect errors
@@ -93,35 +93,6 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 }
             },
             $this->libraryDataProvider()
-        );
-    }
-
-    public function testAppCodeUsage()
-    {
-        $files = Files::init();
-        $componentRegistrar = new ComponentRegistrar();
-        $libPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
-        $invoker = new AggregateInvoker($this);
-        $invoker(
-            function ($file) use ($libPaths) {
-                $content = file_get_contents($file);
-                foreach ($libPaths as $libPath) {
-                    if (strpos($file, $libPath) === 0) {
-                        $this->assertSame(
-                            0,
-                            preg_match('~(?<![a-z\\d_:]|->|function\\s)__\\s*\\(~iS', $content),
-                            'Function __() is defined outside of the library and must not be used there. ' .
-                            'Replacement suggestion: new \\Magento\\Framework\\Phrase()'
-                        );
-                    }
-                }
-            },
-            $files->getPhpFiles(
-                Files::INCLUDE_PUB_CODE |
-                Files::INCLUDE_LIBS |
-                Files::AS_DATA_SET |
-                Files::INCLUDE_NON_CLASSES
-            )
         );
     }
 
