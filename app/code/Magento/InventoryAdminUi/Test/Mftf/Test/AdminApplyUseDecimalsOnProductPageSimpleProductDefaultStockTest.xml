@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyUseDecimalsOnProductPageSimpleProductDefaultStockTest">
+        <annotations>
+            <stories value="Simple Product Default Stock."/>
+            <title value="Simple Product Default Stock with 'Use Decimals' Applied on Product Page."/>
+            <description value="Verify, admin able to apply 'Use decimals' to Simple product in Advanced inventory on  product page."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/2726478"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/magento2/issues/23940"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!--Create Customer.-->
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <!--Create Additional Source and Stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create Product and Category.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Delete created data.-->
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+
+        <!--Set 'Qty Use Decimals' on product edit page.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+        <actionGroup ref="AdminApplyUseDecimalsOnProductEditPageActionGroup" stepKey="setQtyUseDecimals">
+            <argument name="useDecimals" value="Yes"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="saveProduct"/>
+        <!-- Login as customer -->
+        <comment userInput="Login to storefront as customer." stepKey="loginToStorefrontComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!--Try to buy product wit decimal quantity from storefront.-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$product$$"/>
+            <argument name="quantity" value="1.5"/>
+            <argument name="checkQuantity" value="1"/>
+        </actionGroup>
+
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitFroPaymentSelectionPageLoad"/>
+        <click selector=".continue" stepKey="clickOnNextPaymentPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadCheckoutSelectPayment"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <!--Verify, order placed successfully.-->
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchCheckOrderAfterCustomerSubmits"/>
+        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1.5')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1.5')}}" userInput="Ordered 1.5" stepKey="verifyOrderedQty"/>
+    </test>
+</tests>
