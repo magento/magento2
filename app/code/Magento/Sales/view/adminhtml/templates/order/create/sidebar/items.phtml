@@ -58,7 +58,7 @@
 
                         <?php if ($block->canDisplayItemQty()) : ?>
                             <td class="col-qty">
-                                <?= (int) $block->getItemQty($_item) ?>
+                                <?= (float) $block->getItemQty($_item) ?>
                             </td>
                         <?php endif; ?>
 
