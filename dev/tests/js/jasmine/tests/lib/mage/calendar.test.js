@@ -6,7 +6,6 @@
 /* eslint-disable max-nested-callbacks */
 define([
     'jquery',
-    'jquery/ui',
     'mage/calendar'
 ], function ($) {
     'use strict';

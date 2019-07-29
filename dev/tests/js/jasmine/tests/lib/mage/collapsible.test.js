@@ -7,7 +7,6 @@
 
 define([
     'jquery',
-    'jquery/ui',
     'mage/collapsible'
 ], function ($) {
     'use strict';
