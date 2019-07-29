@@ -78,7 +78,7 @@ class AttributeSet extends AbstractModifier
                 \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
             );
 
-        $collectionData = $collection->getData();
+        $collectionData = $collection->getData() ?? [];
 
         array_walk($collectionData, function (&$attribute) {
             $attribute['__disableTmpl'] = true;
