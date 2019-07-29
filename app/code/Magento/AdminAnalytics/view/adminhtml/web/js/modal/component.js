@@ -17,13 +17,18 @@ define(
                     imports: {
                         enableLogAction: '${ $.provider }:data.enableLogAction',
                         disableLogAction: '${ $.provider }:data.disableLogAction'
+                    },
+                    options: {
+                        keyEventHandlers: {
+                            escapeKey: function () { return; }
+                        }
                     }
                 },
-                keyEventHandlers: {
-                    escapeKey: function () {
-                    }
+                initModal: function () {
+                    this.options.opened = this.onOpened.bind(this);
+                    this._super();
                 },
-                opened: function () {
+                onOpened: function () {
                     $('.modal-header button.action-close').hide();
                 },
                 enableAdminUsage: function () {

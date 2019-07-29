@@ -50,7 +50,7 @@
             <options>
                 <option name="modalClass" xsi:type="string">admin-usage-notification</option>
                 <option name="title" xsi:type="string" translate="true">Allow admin usage data collection</option>
-                <option name="autoOpen" xsi:type="array">true</option>
+                <option name="autoOpen" xsi:type="boolean">true</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="clickableOverlay" xsi:type="boolean">false</option>
                 <option name="responsive" xsi:type="boolean">true</option>
