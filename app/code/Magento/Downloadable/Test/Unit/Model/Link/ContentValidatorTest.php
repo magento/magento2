@@ -31,6 +31,11 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $domainValidatorMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $linkFileMock;
 
     /**
@@ -52,6 +57,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->fileValidatorMock = $this->createMock(\Magento\Downloadable\Model\File\ContentValidator::class);
         $this->urlValidatorMock = $this->createMock(\Magento\Framework\Url\Validator::class);
+        $this->domainValidatorMock = $this->createMock(\Magento\Downloadable\Model\Url\DomainValidator::class);
         $this->linkFileMock = $this->createMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
         $this->sampleFileMock = $this->createMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
         $this->fileMock = $this->createMock(File::class);
@@ -62,6 +68,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
                 'fileContentValidator' => $this->fileValidatorMock,
                 'urlValidator' => $this->urlValidatorMock,
                 'fileHelper' => $this->fileMock,
+                'domainValidator' => $this->domainValidatorMock,
             ]
         );
     }
@@ -83,6 +90,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
         ];
         $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $this->urlValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
+        $this->domainValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $linkMock = $this->getLinkMock($linkData);
         $this->assertTrue($this->validator->isValid($linkMock));
     }
@@ -103,6 +111,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
         ];
         $this->fileValidatorMock->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $this->urlValidatorMock->expects($this->never())->method('isValid')->will($this->returnValue(true));
+        $this->domainValidatorMock->expects($this->never())->method('isValid')->will($this->returnValue(true));
         $linkMock = $this->getLinkMock($linkData);
         $this->assertTrue($this->validator->isValid($linkMock, false));
     }
@@ -123,6 +132,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
         ];
         $this->fileValidatorMock->expects($this->never())->method('isValid')->will($this->returnValue(true));
         $this->urlValidatorMock->expects($this->once())->method('isValid')->will($this->returnValue(true));
+        $this->domainValidatorMock->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $linkMock = $this->getLinkMock($linkData);
         $this->assertTrue($this->validator->isValid($linkMock, true, false));
     }
@@ -146,6 +156,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
         ];
         $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $this->urlValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
+        $this->domainValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $contentMock = $this->getLinkMock($linkContentData);
         $this->validator->isValid($contentMock);
     }
@@ -181,6 +192,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
         ];
         $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $this->urlValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
+        $this->domainValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $contentMock = $this->getLinkMock($linkContentData);
         $this->validator->isValid($contentMock);
     }
@@ -214,6 +226,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
             'sample_type' => 'file',
         ];
         $this->urlValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
+        $this->domainValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $contentMock = $this->getLinkMock($linkContentData);
         $this->validator->isValid($contentMock);
