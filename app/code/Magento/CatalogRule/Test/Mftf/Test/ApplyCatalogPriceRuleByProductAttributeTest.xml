@@ -84,24 +84,24 @@
         </before>
         <after>
 
-<!--            &lt;!&ndash;Delete created data&ndash;&gt;-->
-<!--            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>-->
-<!--            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>-->
-<!--            <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCategory"/>-->
+            <!--Delete created data-->
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCategory"/>
 
-<!--            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>-->
-<!--            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>-->
-<!--            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>-->
-<!--            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>-->
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
-<!--            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>-->
-<!--            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">-->
-<!--                <argument name="name" value="{{SimpleCatalogPriceRule.name}}"/>-->
-<!--                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>-->
-<!--            </actionGroup>-->
-<!--            <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>-->
+            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+                <argument name="name" value="{{SimpleCatalogPriceRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+            <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>
 
-<!--            <actionGroup ref="logout" stepKey="logout"/>-->
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!-- Add values to your attribute ( ex: red , green) -->
