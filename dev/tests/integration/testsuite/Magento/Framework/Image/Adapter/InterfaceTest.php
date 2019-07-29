@@ -736,7 +736,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
             ],
             'image_empty' => [
                 'fileName' => 'empty.png',
-                'expectedErrorMsg' => 'Disallowed file type.',
+                'expectedErrorMsg' => 'Wrong file size.',
                 'useFixture' => true
             ],
             'notanimage' => [
