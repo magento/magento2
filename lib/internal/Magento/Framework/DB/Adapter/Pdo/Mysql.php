@@ -274,6 +274,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function beginTransaction()
     {
         if ($this->_isRolledBack) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow.FoundDirectThrow
             throw new \Exception(AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE);
         }
         if ($this->_transactionLevel === 0) {
@@ -298,8 +299,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             parent::commit();
             $this->logger->logStats(LoggerInterface::TYPE_TRANSACTION, 'COMMIT');
         } elseif ($this->_transactionLevel === 0) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow.FoundDirectThrow
             throw new \Exception(AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE);
         } elseif ($this->_isRolledBack) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow.FoundDirectThrow
             throw new \Exception(AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE);
         }
         --$this->_transactionLevel;
@@ -320,6 +323,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $this->_isRolledBack = false;
             $this->logger->logStats(LoggerInterface::TYPE_TRANSACTION, 'ROLLBACK');
         } elseif ($this->_transactionLevel === 0) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow.FoundDirectThrow
             throw new \Exception(AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE);
         } else {
             $this->_isRolledBack = true;
@@ -352,7 +356,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Convert date and time to DB format
      *
-     * @param   int|string|\DateTimeInterface $datetime
+     * @param int|string|\DateTimeInterface $datetime
      * @return \Zend_Db_Expr
      */
     public function convertDateTime($datetime)
@@ -956,12 +960,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Using string as $definition is allowed only for concrete DB adapter.
      * Adds primary key if needed
      *
-     * @param   string $tableName
-     * @param   string $columnName
-     * @param   array|string $definition  string specific or universal array DB Server definition
-     * @param   string $schemaName
-     * @return  true|\Zend_Db_Statement_Pdo
-     * @throws  \Zend_Db_Exception
+     * @param string $tableName
+     * @param string $columnName
+     * @param array|string $definition string specific or universal array DB Server definition
+     * @param string $schemaName
+     * @return true|\Zend_Db_Statement_Pdo
+     * @throws \Zend_Db_Exception
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null)
     {
@@ -1076,7 +1080,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $oldColumnName
      * @param string $newColumnName
      * @param array $definition
-     * @param boolean $flushData        flush table statistic
+     * @param boolean $flushData flush table statistic
      * @param string $schemaName
      * @return \Zend_Db_Statement_Pdo
      * @throws \Zend_Db_Exception
@@ -1522,7 +1526,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Return false if cache does not exists
      *
      * @param string $tableCacheKey the table cache key
-     * @param int $ddlType          the DDL constant
+     * @param int $ddlType the DDL constant
      * @return string|array|int|false
      */
     public function loadDdlCache($tableCacheKey, $ddlType)
@@ -2035,10 +2039,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * - array of values, if $columns contains only one column
      *      array('value1', 'value2')
      *
-     * @param   string $table
-     * @param   string[] $columns
-     * @param   array $data
-     * @param   int $strategy
+     * @param string $table
+     * @param string[] $columns
+     * @param array $data
+     * @param int $strategy
      * @return int
      * @throws \Zend_Db_Exception
      */
@@ -2149,7 +2153,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param \Magento\Framework\DB\Ddl\Table $table
      * @throws \Zend_Db_Exception
-     * @return \Zend_Db_Pdo_Statement
+     * @return \Zend_Db_Statement_Pdo|void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function createTemporaryTable(\Magento\Framework\DB\Ddl\Table $table)
@@ -2659,8 +2663,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $tableName
      * @param string $indexName
-     * @param string|array $fields  the table column name or array of ones
-     * @param string $indexType     the index type
+     * @param string|array $fields the table column name or array of ones
+     * @param string $indexType the index type
      * @param string $schemaName
      * @return \Zend_Db_Statement_Interface
      * @throws \Zend_Db_Exception
@@ -2800,7 +2804,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $refTableName
      * @param string $refColumnName
      * @param string $onDelete
-     * @param bool $purge            trying remove invalid data
+     * @param bool $purge trying remove invalid data
      * @param string $schemaName
      * @param string $refSchemaName
      * @return \Zend_Db_Statement_Interface
@@ -3031,7 +3035,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * Return converted to column data type value
      *
-     * @param array $column     the column describe array
+     * @param array $column the column describe array
      * @param mixed $value
      * @return mixed
      *
@@ -3118,7 +3122,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Generate fragment of SQL, that check condition and return true or false value
      *
      * @param \Zend_Db_Expr|\Magento\Framework\DB\Select|string $expression
-     * @param string $true  true value
+     * @param string $true true value
      * @param string $false false value
      * @return \Zend_Db_Expr
      */
@@ -3256,7 +3260,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param int $interval
      * @param string $unit
      * @return \Zend_Db_Expr
@@ -3272,7 +3276,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @see INTERVAL_* constants for $expr
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param int|string $interval
      * @param string $unit
      * @return \Zend_Db_Expr
@@ -3295,7 +3299,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * %m   Month, numeric (00..12)
      * %Y   Year, numeric, four digits
      *
-     * @param string $date  quoted date value or non quoted SQL statement(field)
+     * @param string $date quoted date value or non quoted SQL statement(field)
      * @param string $format
      * @return \Zend_Db_Expr
      */
@@ -3308,7 +3312,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Extract the date part of a date or datetime expression
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @return \Zend_Db_Expr
      */
     public function getDatePartSql($date)
@@ -3335,7 +3339,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Prepare standard deviation sql function
      *
-     * @param \Zend_Db_Expr|string $expressionField   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $expressionField quoted field name or SQL statement
      * @return \Zend_Db_Expr
      */
     public function getStandardDeviationSql($expressionField)
@@ -3348,7 +3352,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param string $unit
      * @return \Zend_Db_Expr
      * @throws \Zend_Db_Exception
@@ -3378,9 +3382,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Build a trigger name based on table name and trigger details
      *
-     * @param string $tableName  The table which is the subject of the trigger
-     * @param string $time  Either "before" or "after"
-     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @param string $tableName The table which is the subject of the trigger
+     * @param string $time Either "before" or "after"
+     * @param string $event The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
      * @codeCoverageIgnore
      */
@@ -3396,7 +3400,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Check index name length and allowed symbols
      *
      * @param string $tableName
-     * @param string|string[] $fields  the columns list
+     * @param string|string[] $fields the columns list
      * @param string $indexType
      * @return string
      */
@@ -3474,7 +3478,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Get insert from Select object query
      *
      * @param Select $select
-     * @param string $table     insert into table
+     * @param string $table insert into table
      * @param array $fields
      * @param int|false $mode
      * @return string
