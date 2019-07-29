@@ -54,7 +54,7 @@ class ManagePrivateContent implements StoreSwitcherInterface
                 ->setHttpOnly(false);
             $this->cookieManager->setPublicCookie(
                 \Magento\Framework\App\PageCache\Version::COOKIE_NAME,
-                'should_be_updated',
+                \uniqid('should_be_updated-'),
                 $publicCookieMetadata
             );
         } catch (\Exception $e) {
