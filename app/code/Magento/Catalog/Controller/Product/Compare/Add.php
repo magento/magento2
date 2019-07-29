@@ -8,7 +8,6 @@ namespace Magento\Catalog\Controller\Product\Compare;
 
 use Magento\Catalog\ViewModel\Product\Checker\AddToCompareAvailability;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Result\PageFactory;
@@ -37,7 +36,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
      * @param Validator $formKeyValidator
      * @param PageFactory $resultPageFactory
      * @param ProductRepositoryInterface $productRepository
-     * @param AddToCompareAvailability $compareAvailability
+     * @param AddToCompareAvailability|null $compareAvailability
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -69,7 +68,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
         );
 
         $this->compareAvailability = $compareAvailability
-            ?: ObjectManager::getInstance()->get(AddToCompareAvailability::class);
+            ?: $this->_objectManager->get(AddToCompareAvailability::class);
     }
 
     /**
@@ -94,9 +93,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
                 $product = null;
             }
 
-            $isAvailableForCompare = $this->compareAvailability->isAvailableForCompare($product);
-
-            if ($product && $isAvailableForCompare) {
+            if ($product && $this->compareAvailability->isAvailableForCompare($product)) {
                 $this->_catalogProductCompareList->addProduct($product);
                 $productName = $this->_objectManager->get(
                     \Magento\Framework\Escaper::class
