@@ -95,7 +95,7 @@ class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
             ->method('userIsExpired')
             ->with($this->userMock)
             ->willReturn(true);
-        $this->userMock->expects(static::once())->method('getId')->willReturn($adminUserId);
+        $this->userMock->expects(static::exactly(2))->method('getId')->willReturn($adminUserId);
         $this->userExpirationManagerMock->expects(static::once())
             ->method('deactivateExpiredUsers')
             ->with([$adminUserId])
@@ -105,11 +105,12 @@ class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
 
     public function testWithNonExpiredUser()
     {
+        $adminUserId = 123;
         $username = 'testuser';
         $this->eventObserverMock->expects(static::once())->method('getEvent')->willReturn($this->eventMock);
         $this->eventMock->expects(static::once())->method('getUsername')->willReturn($username);
         $this->userMock->expects(static::once())->method('loadByUsername')->willReturn($this->userMock);
-
+        $this->userMock->expects(static::once())->method('getId')->willReturn($adminUserId);
         $this->userExpirationManagerMock->expects(static::once())
             ->method('userIsExpired')
             ->with($this->userMock)
