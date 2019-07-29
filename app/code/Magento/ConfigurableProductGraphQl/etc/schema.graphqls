@@ -50,6 +50,7 @@ type AddConfigurableProductsToCartOutput {
 
 input ConfigurableProductCartItemInput {
     data: CartItemInput!
+    variant_sku: String @deprecated(reason: "Use CartItemInput.sku instead")
     configurable_attributes: [ConfigurableCartItemAttributesInput]!
     customizable_options:[CustomizableOptionInput!]
 }
