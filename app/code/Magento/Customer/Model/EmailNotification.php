@@ -362,7 +362,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $type
      * @param string $backUrl
-     * @param string $storeId
+     * @param int $storeId
      * @param string $sendemailStoreId
      * @return void
      * @throws LocalizedException
