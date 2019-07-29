@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage;
+namespace Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\ImageFactory;
@@ -14,9 +14,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
 
 /**
- * Returns product's image url
+ * Returns media url
  */
 class Url implements ResolverInterface
 {
@@ -29,16 +30,20 @@ class Url implements ResolverInterface
      */
     private $placeholderProvider;
 
+    private $assetImageFactory;
+
     /**
      * @param ImageFactory $productImageFactory
      * @param PlaceholderProvider $placeholderProvider
      */
     public function __construct(
         ImageFactory $productImageFactory,
-        PlaceholderProvider $placeholderProvider
+        PlaceholderProvider $placeholderProvider,
+        AssetImageFactory $assetImageFactory
     ) {
         $this->productImageFactory = $productImageFactory;
         $this->placeholderProvider = $placeholderProvider;
+        $this->assetImageFactory = $assetImageFactory;
     }
 
     /**
@@ -51,7 +56,7 @@ class Url implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['image_type'])) {
+        if (!isset($value['image_type']) && !isset($value['file'])) {
             throw new LocalizedException(__('"image_type" value should be specified'));
         }
 
@@ -61,9 +66,19 @@ class Url implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $imagePath = $product->getData($value['image_type']);
+        if (isset($value['image_type'])) {
+            $imagePath = $product->getData($value['image_type']);
+            return $this->getImageUrl($value['image_type'], $imagePath);
+        }
+        if (isset($value['file'])) {
+            $asset = $this->assetImageFactory->create(
+                [
+                    'miscParams' => [],
+                    'filePath' => $value['file']
+                ]);
+            return $asset->getUrl();
+        }
 
-        return $this->getImageUrl($value['image_type'], $imagePath);
     }
 
     /**
