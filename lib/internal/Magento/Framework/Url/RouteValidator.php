@@ -58,7 +58,7 @@ class RouteValidator extends \Zend_Validate_Abstract
         $valid = $this->validator->isValid($value)
             && $this->validator->getUriHandler()->getQuery() === null
             //prevent directory traversal
-            && strpos('..', $value) === false;
+            && strpos($value, '..') === false;
 
         if (!$valid) {
             $this->_error(self::INVALID_URL);
