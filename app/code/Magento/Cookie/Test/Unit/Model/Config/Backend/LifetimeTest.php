@@ -1,18 +1,17 @@
 <?php
 /**
- * Unit test for Magento\Cookie\Model\Config\Backend\Lifetime
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\Session\Config\Validator\CookieLifetimeValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Unit test for Magento\Cookie\Model\Config\Backend\Lifetime.
+ */
 class LifetimeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | CookieLifetimeValidator */

@@ -27,6 +27,9 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $filter;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
@@ -46,6 +49,8 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test processing media directives.
+     *
      * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
      */
     public function testMediaDirective()
@@ -61,5 +66,28 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseMediaDir')
             ->willReturn($baseMediaDir);
         $this->assertEquals($expectedResult, $this->filter->mediaDirective($construction));
+    }
+
+    /**
+     * Test using media directive with relative path to image.
+     *
+     * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Image path must be absolute
+     *
+     * @return void
+     */
+    public function testMediaDirectiveRelativePath()
+    {
+        $baseMediaDir = 'pub/media';
+        $construction = [
+            '{{media url="wysiwyg/images/../image.jpg"}}',
+            'media',
+            ' url="wysiwyg/images/../image.jpg"'
+        ];
+        $this->storeMock->expects($this->any())
+            ->method('getBaseMediaDir')
+            ->willReturn($baseMediaDir);
+        $this->filter->mediaDirective($construction);
     }
 }

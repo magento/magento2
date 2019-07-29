@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
@@ -801,13 +799,15 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _validateMainRow(array $rowData, $rowNumber)
     {
-        if (!empty($rowData[self::COLUMN_STORE]) && !array_key_exists(
+        if (!empty($rowData[self::COLUMN_STORE])
+            && !array_key_exists(
                 $rowData[self::COLUMN_STORE],
                 $this->_storeCodeToId
             )
         ) {
             $this->_productEntity->addRowError(self::ERROR_INVALID_STORE, $rowNumber);
-        } elseif (!empty($rowData[self::COLUMN_TYPE]) && !array_key_exists(
+        } elseif (!empty($rowData[self::COLUMN_TYPE])
+            && !array_key_exists(
                 $rowData[self::COLUMN_TYPE],
                 $this->_specificTypes
             )
@@ -914,7 +914,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _validateSecondaryRow(array $rowData, $rowNumber)
     {
-        if (!empty($rowData[self::COLUMN_STORE]) && !array_key_exists(
+        if (!empty($rowData[self::COLUMN_STORE])
+            && !array_key_exists(
                 $rowData[self::COLUMN_STORE],
                 $this->_storeCodeToId
             )
@@ -955,7 +956,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $multiRowData = $this->_getMultiRowFormat($rowData);
 
         foreach ($multiRowData as $optionData) {
-
             $combinedData = array_merge($rowData, $optionData);
 
             if ($this->_isRowWithCustomOption($combinedData)) {
@@ -1356,7 +1356,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
     }
 
-
     /**
      * Load data of existed products
      *
@@ -1717,14 +1716,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _getPriceData(array $rowData, $optionId, $type)
     {
-        if (in_array(
-                'price',
-                $this->_specificTypes[$type]
-            ) && isset(
-                $rowData[self::COLUMN_PREFIX . 'price']
-            ) && strlen(
-                $rowData[self::COLUMN_PREFIX . 'price']
-            ) > 0
+        if (in_array('price', $this->_specificTypes[$type])
+            && isset($rowData[self::COLUMN_PREFIX . 'price'])
+            && strlen($rowData[self::COLUMN_PREFIX . 'price']) > 0
         ) {
             $priceData = [
                 'option_id' => $optionId,

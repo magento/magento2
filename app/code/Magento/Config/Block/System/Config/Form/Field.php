@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Block\System\Config\Form;
+
+use Magento\Backend\Block\Template;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Render field html element in Stores Configuration
@@ -16,7 +17,7 @@ namespace Magento\Config\Block\System\Config\Form;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
-class Field extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Field extends Template implements RendererInterface
 {
     /**
      * Retrieve element HTML markup

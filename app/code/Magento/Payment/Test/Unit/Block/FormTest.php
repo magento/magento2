@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Test\Unit\Block;
 
 use Magento\Framework\DataObject;
@@ -35,23 +33,21 @@ class FormTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_storeManager = $this->getMockBuilder(
-            \Magento\Store\Model\StoreManager::class
-        )->setMethods(
-                ['getStore']
-            )->disableOriginalConstructor()->getMock();
-        $this->_eventManager = $this->getMockBuilder(
-            \Magento\Framework\Event\ManagerInterface::class
-        )->setMethods(
-                ['dispatch']
-            )->disableOriginalConstructor()->getMock();
+        $this->_storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
+            ->setMethods(['getStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_eventManager = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+            ->setMethods(['dispatch'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_escaper = $helper->getObject(\Magento\Framework\Escaper::class);
         $context = $helper->getObject(
             \Magento\Framework\View\Element\Template\Context::class,
             [
                 'storeManager' => $this->_storeManager,
                 'eventManager' => $this->_eventManager,
-                'escaper' => $this->_escaper
+                'escaper' => $this->_escaper,
             ]
         );
         $this->_object = $helper->getObject(\Magento\Payment\Block\Form::class, ['context' => $context]);

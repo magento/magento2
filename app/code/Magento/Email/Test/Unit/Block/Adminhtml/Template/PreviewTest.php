@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
 /**
@@ -92,7 +90,10 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA, [$template, 'getProcessedTemplate'])
             ->willReturn($template->getProcessedTemplate());
 
-        $context = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState']);
+        $context = $this->createPartialMock(
+            \Magento\Backend\Block\Template\Context::class,
+            ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState']
+        );
         $context->expects($this->any())->method('getRequest')->willReturn($request);
         $context->expects($this->any())->method('getEventManager')->willReturn($eventManage);
         $context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
@@ -127,16 +128,6 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['data 1' => [
-                ['type', null, ''],
-                ['text', null, sprintf('<javascript>%s</javascript>', self::MALICIOUS_TEXT)],
-                ['styles', null, ''],
-            ]],
-            ['data 2' => [
-                ['type', null, ''],
-                ['text', null, sprintf('<iframe>%s</iframe>', self::MALICIOUS_TEXT)],
-                ['styles', null, ''],
-            ]],
-            ['data 3' => [
                 ['type', null, ''],
                 ['text', null, self::MALICIOUS_TEXT],
                 ['styles', null, ''],

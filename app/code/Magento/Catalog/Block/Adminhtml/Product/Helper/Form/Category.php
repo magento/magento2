@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
@@ -125,9 +123,8 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         $selectorOptions = $this->_jsonEncoder->encode($this->_getSelectorOptions());
         $newCategoryCaption = __('New Category');
 
-        $button = $this->_layout->createBlock(
-             \Magento\Backend\Block\Widget\Button::class
-        )->setData(
+        $button = $this->_layout->createBlock(\Magento\Backend\Block\Widget\Button::class)
+            ->setData(
                 [
                     'id' => 'add_category_button',
                     'label' => $newCategoryCaption,

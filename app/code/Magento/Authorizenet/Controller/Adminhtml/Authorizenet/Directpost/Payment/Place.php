@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
 use Magento\Framework\Escaper;
@@ -16,6 +17,7 @@ use Magento\Authorizenet\Helper\Backend\Data as DataHelper;
  * Class Place
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
