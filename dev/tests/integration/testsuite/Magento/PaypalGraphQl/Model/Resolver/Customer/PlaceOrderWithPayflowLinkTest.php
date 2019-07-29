@@ -124,13 +124,11 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data: {
             payflow_link: 
             {
            cancel_url:"{$baseUrl}paypal/payflow/cancelPayment"
            return_url:"{$baseUrl}paypal/payflow/returnUrl"
           }
-        }
       }
   }) {    
        cart {

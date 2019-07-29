@@ -33,6 +33,7 @@
         <element name="emailRequiredMessage" type="text" selector="//input[@name='customer[email]']/../label[contains(.,'This is a required field.')]"/>
         <element name="customAttribute" type="select" selector="//select[contains(@name, 'customer[{{attribute_code}}]')]" parameterized="true"/>
         <element name="disabledGroup" type="text" selector="//div[@class='admin__action-group-wrap admin__action-multiselect-wrap action-select-wrap _disabled']"/>
+        <element name="customerAttribute" type="input" selector="//input[contains(@name,'{{attributeCode}}')]" parameterized="true"/>
         <element name="attributeImage" type="block" selector="//div[contains(concat(' ',normalize-space(@class),' '),' file-uploader-preview ')]//img"/>
     </section>
 </sections>
