@@ -35,6 +35,7 @@ class Url implements ResolverInterface
     /**
      * @param ImageFactory $productImageFactory
      * @param PlaceholderProvider $placeholderProvider
+     * @param AssetImageFactory $assetImageFactory
      */
     public function __construct(
         ImageFactory $productImageFactory,
@@ -75,10 +76,11 @@ class Url implements ResolverInterface
                 [
                     'miscParams' => [],
                     'filePath' => $value['file']
-                ]);
+                ]
+            );
             return $asset->getUrl();
         }
-
+        return [];
     }
 
     /**

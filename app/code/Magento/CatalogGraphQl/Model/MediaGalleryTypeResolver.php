@@ -15,7 +15,10 @@ use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 class MediaGalleryTypeResolver implements TypeResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param array $data
+     * @return string
      */
     public function resolveType(array $data) : string
     {
