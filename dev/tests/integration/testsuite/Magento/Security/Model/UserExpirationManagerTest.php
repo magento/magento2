@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Security\Model;
 
 /**
- * TODO: test logging out sessions
+ * Tests for \Magento\Security\Model\UserExpirationManager
  */
 class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
 {
@@ -51,18 +51,6 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tear down
-     */
-    protected function tearDown()
-    {
-        $this->auth = null;
-        $this->authSession  = null;
-        $this->adminSessionInfo  = null;
-        $this->userExpirationManager = null;
-        $this->objectManager = null;
-    }
-
-    /**
      * @magentoDataFixture Magento/Security/_files/expired_users.php
      */
     public function testUserIsExpired()
@@ -74,6 +62,7 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Security/_files/expired_users.php
+     * @magentoAppIsolation enabled
      */
     public function testDeactivateExpiredUsersWithExpiredUser()
     {
@@ -89,16 +78,14 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(0, $user->getIsActive());
         static::assertNull($userExpirationModel->getId());
         static::assertEquals(AdminSessionInfo::LOGGED_OUT, (int)$this->adminSessionInfo->getStatus());
-        $this->auth->logout();
     }
 
     /**
      * @magentoDataFixture Magento/Security/_files/expired_users.php
+     * @magentoAppIsolation enabled
      */
     public function testDeactivateExpiredUsersWithNonExpiredUser()
     {
-        // TODO: login fails for the second test that tries to log a user in, doesn't matter which test
-        // it's trying to create a session for the user ID in the previous test
         $adminUsernameFromFixture = 'adminUserNotExpired';
         $this->loginUser($adminUsernameFromFixture);
         $user = $this->loadUserByUsername($adminUsernameFromFixture);
@@ -110,7 +97,6 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
         static::assertEquals(1, $user->getIsActive());
         static::assertEquals($user->getId(), $userExpirationModel->getId());
         static::assertEquals(AdminSessionInfo::LOGGED_IN, (int)$this->adminSessionInfo->getStatus());
-        $this->auth->logout();
     }
 
     /**

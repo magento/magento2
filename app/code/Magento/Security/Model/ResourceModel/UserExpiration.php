@@ -69,7 +69,7 @@ class UserExpiration extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
     {
         /** @var $userExpiration \Magento\Security\Model\UserExpiration */
         $expiresAt = $userExpiration->getExpiresAt();
-        $utcValue = $this->dateTime->gmtDate('Y-m-d H:i:s', $expiresAt);
+        $utcValue = $this->dateTime->gmtDate(null, $expiresAt);
         $userExpiration->setExpiresAt($utcValue);
 
         return $this;
@@ -87,7 +87,7 @@ class UserExpiration extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
         /** @var $userExpiration \Magento\Security\Model\UserExpiration */
         if ($userExpiration->getExpiresAt()) {
             $storeValue = $this->timezone->date($userExpiration->getExpiresAt());
-            $userExpiration->setExpiresAt($storeValue);
+            $userExpiration->setExpiresAt($storeValue->format('Y-m-d H:i:s'));
         }
 
         return $this;

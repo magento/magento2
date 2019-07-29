@@ -23,7 +23,7 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
     public function testSaveNewUserExpiration()
     {
         $adminUserNameFromFixture = 'dummy_username';
-        $testDate = $this->getExpiresDateTime();
+        $testDate = $this->getFutureDateInStoreTime();
         $user = Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $user->loadByUsername($adminUserNameFromFixture);
         $user->setExpiresAt($testDate);
@@ -67,7 +67,7 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
     public function testChangeUserExpiration()
     {
         $adminUserNameFromFixture = 'adminUserNotExpired';
-        $testDate = $this->getExpiresDateTime();
+        $testDate = $this->getFutureDateInStoreTime();
         $user = Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $user->loadByUsername($adminUserNameFromFixture);
 
@@ -90,10 +90,13 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
      * @return string
      * @throws \Exception
      */
-    private function getExpiresDateTime()
+    private function getFutureDateInStoreTime()
     {
+        /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface $locale */
+        $locale = Bootstrap::getObjectManager()->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $testDate = new \DateTime();
         $testDate->modify('+20 days');
-        return $testDate->format('Y-m-d H:i:s');
+        $storeDate = $locale->date($testDate);
+        return $storeDate->format('Y-m-d H:i:s');
     }
 }
