@@ -88,7 +88,7 @@ class CurrencyConverterApi extends AbstractImport
             $data[$currencyFrom] = $this->makeEmptyResponse($currenciesTo);
             return $data;
         }
-
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
         try {
             $response = $this->getServiceResponse($url);
