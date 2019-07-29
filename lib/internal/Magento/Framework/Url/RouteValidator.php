@@ -46,7 +46,6 @@ class RouteValidator extends \Zend_Validate_Abstract
      * Validate route/path
      *
      * @param string $value
-     * @param bool $allowQuery
      * @return bool
      */
     public function isValid($value)
