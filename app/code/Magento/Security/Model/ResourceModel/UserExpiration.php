@@ -26,27 +26,19 @@ class UserExpiration extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
     private $timezone;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    private $dateTime;
-
-    /**
      * UserExpiration constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->timezone = $timezone;
-        $this->dateTime = $dateTime;
     }
 
     /**
