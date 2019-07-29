@@ -38,7 +38,8 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('{"options":[],"total":0}', $responseBody);
+        $jsonResponse = json_decode($responseBody);
+        $this->assertEmpty($jsonResponse['options']);
     }
 
     /**
@@ -57,7 +58,8 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('"total":1}', $responseBody);
+        $jsonResponse = json_decode($responseBody);
+        $this->assertEquals(1, $jsonResponse['total']);
     }
 
     /**
@@ -71,6 +73,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('"total":3}', $responseBody);
+        $jsonResponse = json_decode($responseBody);
+        $this->assertEquals(7, $jsonResponse['total']);
     }
 }
