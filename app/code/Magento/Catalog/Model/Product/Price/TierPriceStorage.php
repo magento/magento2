@@ -104,7 +104,7 @@ class TierPriceStorage implements TierPriceStorageInterface
         $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
         $formattedPrices = $this->retrieveFormattedPrices($prices);
         $this->tierPricePersistence->update($formattedPrices);
-        $this->priceIndexProcessor->reindexList(array_keys($skuByIdLookup));
+        $this->reindexPrices(array_keys($skuByIdLookup));
 
         return $result->getFailedItems();
     }
@@ -119,7 +119,7 @@ class TierPriceStorage implements TierPriceStorageInterface
         $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
         $formattedPrices = $this->retrieveFormattedPrices($prices);
         $this->tierPricePersistence->replace($formattedPrices, $affectedIds);
-        $this->priceIndexProcessor->reindexList($affectedIds);
+        $this->reindexPrices($affectedIds);
 
         return $result->getFailedItems();
     }
@@ -134,7 +134,7 @@ class TierPriceStorage implements TierPriceStorageInterface
         $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
         $priceIds = $this->retrieveAffectedPriceIds($prices);
         $this->tierPricePersistence->delete($priceIds);
-        $this->priceIndexProcessor->reindexList($affectedIds);
+        $this->reindexPrices($affectedIds);
 
         return $result->getFailedItems();
     }
@@ -298,6 +298,19 @@ class TierPriceStorage implements TierPriceStorageInterface
         }
 
         return $lookup;
+    }
+
+    /**
+     * Reindex prices.
+     *
+     * @param array $ids
+     * @return void
+     */
+    private function reindexPrices(array $ids)
+    {
+        if (!empty($ids)) {
+            $this->priceIndexProcessor->reindexList($ids);
+        }
     }
 
     /**
