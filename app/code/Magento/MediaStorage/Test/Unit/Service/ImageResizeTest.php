@@ -248,7 +248,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
             ->with($this->testfilepath)
-            ->will($this->returnValue(false));
+            ->will($this->returnValue(true));
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')
