@@ -542,4 +542,21 @@
         <remove keyForRemoval="seeCheckboxForWebsite"/>
         <seeCheckboxIsChecked selector="{{ProductInWebsitesSection.website(website)}}" after="expandProductWebsitesSection" stepKey="seeCustomWebsiteIsChecked"/>
     </actionGroup>
+    <!-- You are on product Edit Page -->
+    <!-- Assert Product Name in admin Product page -->
+    <actionGroup name="AssertProductNameInProductEditForm">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{productName}}" stepKey="seeProductNameOnEditProductPage"/>
+    </actionGroup>
+    <!-- You are on product Edit Page -->
+    <!-- Assert Product Description in admin Product page -->
+    <actionGroup name="AssertProductDescriptionInProductEditForm">
+        <arguments>
+            <argument name="productDescription" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductContentSection.sectionHeader}}" dependentSelector="{{AdminProductContentSection.sectionHeaderShow}}" visible="false" stepKey="expandContentSection"/>
+        <seeInField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{productDescription}}" stepKey="seeProductDescription"/>
+    </actionGroup>
 </actionGroups>
