@@ -428,4 +428,8 @@
             <argument name="config" xsi:type="object">Magento\AuthorizenetAcceptjs\Gateway\Config</argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Framework\View\Asset\Minification">
+        <plugin name="excludeAcceptJsFromMin" type="Magento\AuthorizenetAcceptjs\Plugin\ExcludeFilesFromMinification" />
+    </type>
 </config>
