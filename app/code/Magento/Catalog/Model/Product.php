@@ -408,8 +408,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
      * @param \Magento\Eav\Model\Config|null $config
-     * @param UserContextInterface|null $userContext
-     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -449,9 +447,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = [],
-        \Magento\Eav\Model\Config $config = null,
-        UserContextInterface $userContext = null,
-        AuthorizationInterface $authorization = null
+        \Magento\Eav\Model\Config $config = null
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -491,8 +487,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $data
         );
         $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
-        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
-        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -867,6 +861,34 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Get user context.
+     *
+     * @return UserContextInterface
+     */
+    private function getUserContext(): UserContextInterface
+    {
+        if (!$this->userContext) {
+            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
+        }
+
+        return $this->userContext;
+    }
+
+    /**
+     * Get authorization service.
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization(): AuthorizationInterface
+    {
+        if (!$this->authorization) {
+            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        }
+
+        return $this->authorization;
+    }
+
+    /**
      * Check product options and type options and save them, too
      *
      * @return void
@@ -884,10 +906,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->getTypeInstance()->beforeSave($this);
 
         //Validate changing of design.
-        $userType = $this->userContext->getUserType();
+        $userType = $this->getUserContext()->getUserType();
         if (($userType === UserContextInterface::USER_TYPE_ADMIN
                 || $userType === UserContextInterface::USER_TYPE_INTEGRATION)
-            && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
+            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_product_design')
         ) {
             $this->setData('custom_design', $this->getOrigData('custom_design'));
             $this->setData('page_layout', $this->getOrigData('page_layout'));

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Helper;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -10,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class DataFactory
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 class DataFactory
 {

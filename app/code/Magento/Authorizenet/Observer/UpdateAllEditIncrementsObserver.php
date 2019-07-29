@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * Update all child and parent order's edit increment numbers.
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
+ */
 class UpdateAllEditIncrementsObserver implements ObserverInterface
 {
     /**

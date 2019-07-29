@@ -112,7 +112,7 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->method('canProcess')
             ->with($this->observerMock)
             ->will($this->returnValue(true));
-        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+        $this->persistentHelperMock->expects($this->exactly(2))->method('isEnabled')->will($this->returnValue(false));
         $this->eventManagerMock->expects($this->never())->method('dispatch');
         $this->model->execute($this->observerMock);
     }
@@ -139,7 +139,9 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->method('canProcess')
             ->with($this->observerMock)
             ->will($this->returnValue(true));
-        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
+        $this->persistentHelperMock->expects($this->atLeastOnce())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
         $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
         $this->checkoutSessionMock
             ->method('getQuote')
