@@ -208,6 +208,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      */
     public function __sleep()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $this->unsetData('entity_type');
@@ -225,6 +226,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      */
     public function __wakeup()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         parent::__wakeup();

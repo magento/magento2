@@ -363,6 +363,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function __sleep()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return array_diff(
@@ -387,6 +388,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function __wakeup()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         parent::__wakeup();

@@ -191,6 +191,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function __sleep()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return ['content', 'isRedirect', 'statusCode', 'context', 'headers'];
@@ -207,6 +208,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function __wakeup()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         $objectManager = ObjectManager::getInstance();

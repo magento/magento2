@@ -902,6 +902,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     public function __sleep()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         return array_diff(
@@ -919,6 +920,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     public function __wakeup()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         parent::__wakeup();

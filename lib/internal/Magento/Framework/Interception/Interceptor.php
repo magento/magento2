@@ -68,6 +68,7 @@ trait Interceptor
      */
     public function __sleep()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         if (method_exists(get_parent_class($this), '__sleep')) {
@@ -89,6 +90,7 @@ trait Interceptor
      */
     public function __wakeup()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
 
         if (method_exists(get_parent_class($this), '__wakeup')) {
