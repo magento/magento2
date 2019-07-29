@@ -60,6 +60,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $responseBody = $this->getResponse()->getBody();
         $jsonResponse = json_decode($responseBody);
         $this->assertEquals(1, $jsonResponse['total']);
+        $this->assertCount(1, $jsonResponse['options']);
     }
 
     /**
@@ -75,5 +76,6 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $responseBody = $this->getResponse()->getBody();
         $jsonResponse = json_decode($responseBody);
         $this->assertEquals(7, $jsonResponse['total']);
+        $this->assertCount(7, $jsonResponse['options']);
     }
 }
