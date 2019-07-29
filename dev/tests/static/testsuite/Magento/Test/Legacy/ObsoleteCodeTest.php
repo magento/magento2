@@ -127,7 +127,6 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
                 $this->_testObsoleteActions($content);
                 $this->_testObsoleteConstants($content);
                 $this->_testObsoletePropertySkipCalculate($content);
-                $this->_testJqueryUiLibraryIsNotUsedInPhp($content);
             },
             $changedFiles
         );
@@ -962,20 +961,6 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
     private function _testJqueryUiLibraryIsNotUsedInJs($fileContent)
     {
         $this->_assertNotRegexp(
-            '/(["\'])jquery\/ui\1/',
-            $fileContent,
-            $this->_suggestReplacement(sprintf("Dependency '%s' is redundant.", 'jquery/ui'), 'Use separate jquery ui widget instead of all library.')
-        );
-    }
-
-    /**
-     * Assert that jquery/ui library is not used in PHP content.
-     *
-     * @param string $fileContent
-     */
-    private function _testJqueryUiLibraryIsNotUsedInPhp($fileContent)
-    {
-        $this->_assertNotRegExp(
             '/(["\'])jquery\/ui\1/',
             $fileContent,
             $this->_suggestReplacement(sprintf("Dependency '%s' is redundant.", 'jquery/ui'), 'Use separate jquery ui widget instead of all library.')

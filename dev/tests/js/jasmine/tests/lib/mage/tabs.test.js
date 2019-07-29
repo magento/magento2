@@ -6,9 +6,10 @@
 /* eslint-disable max-nested-callbacks */
 define([
     'jquery',
+    'jquery/ui',
     'mage/tabs',
     'text!tests/assets/lib/web/mage/tabs.html'
-], function ($, tabs, tabsTmpl) {
+], function ($, ui, tabs, tabsTmpl) {
     'use strict';
 
     describe('mage/tabs', function () {
