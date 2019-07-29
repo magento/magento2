@@ -64,12 +64,13 @@ class UserExpiration extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
      *
      * @param \Magento\Framework\Model\AbstractModel $userExpiration
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $userExpiration)
     {
         /** @var $userExpiration \Magento\Security\Model\UserExpiration */
         $expiresAt = $userExpiration->getExpiresAt();
-        $utcValue = $this->dateTime->gmtDate(null, $expiresAt);
+        $utcValue = $this->timezone->convertConfigTimeToUtc($expiresAt);
         $userExpiration->setExpiresAt($utcValue);
 
         return $this;
