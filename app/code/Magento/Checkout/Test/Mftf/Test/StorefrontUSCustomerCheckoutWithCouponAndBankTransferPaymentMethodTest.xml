@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUSCustomerCheckoutWithCouponAndBankTransferPaymentMethodTest">
+        <annotations>
+            <stories value="Checkout"/>
+            <title value="Verify US customer checkout using coupon and bank transfer payment method"/>
+            <description value="Checkout as US customer using coupon and bank transfer payment method"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14706"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">50.00</field>
+            </createData>
+            <createData entity="SalesRuleSpecificCouponAndByPercent" stepKey="createSalesRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createSalesRule"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="disableBankTransferPayment"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Open Product page in StoreFront and assert product and price range -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Add product to the cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Open View and edit -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+
+        <!-- Fill the Estimate Shipping and Tax section -->
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
+
+        <!-- Apply Coupon -->
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyDiscount">
+            <argument name="coupon" value="$$createCouponForCartPriceRule$$"/>
+        </actionGroup>
+
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Fill the guest form -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestForm"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="waitForPlaceOrderButton"/>
+        <checkOption selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="selectBankTransfer"/>
+
+        <!-- Place order and Assert success message -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+
+        <!-- Assert empty Mini Cart -->
+        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
+
+        <!-- Open Order Index Page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Filter Order using orderId and assert order-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <!-- Assert Grand Total -->
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$25.00" stepKey="seeGrandTotal"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderStatus"/>
+
+        <!-- Ship the order and assert the status -->
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
+
+        <!-- Assert order buttons -->
+        <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
+    </test>
+</tests>

@@ -80,7 +80,6 @@ mutation {
     setPaymentMethodOnCart(input: {
         payment_method: {
           code: "{$paymentMethod}",
-          additional_data: {
             payflowpro: {
               cc_details: {
                  cc_exp_month: 12,
@@ -88,7 +87,6 @@ mutation {
                  cc_last_4: 1111,
                  cc_type: "IV",
               }
-            }
           }
         },
         cart_id: "{$cartId}"})
