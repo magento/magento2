@@ -10,41 +10,47 @@ namespace Magento\StoreGraphQl\Model\Resolver\Store;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Url\Validator as UrlValidator;
+use Magento\Framework\Url\RouteValidator as PathValidator;
 use Magento\Framework\Validation\ValidationException;
 
 /**
- * Service class for scoped urls
+ * Service class for scoped urls and paths
  */
 class Url
 {
     /** @var UrlValidator */
     private $urlValidator;
 
+    /** @var PathValidator */
+    private $pathValidator;
+
     /** @var UrlInterface */
     private $urlInterface;
 
     /**
      * @param UrlValidator $urlValidator
+     * @param PathValidator $pathValidator
      * @param UrlInterface $urlInterface
      */
-    public function __construct(UrlValidator $urlValidator, UrlInterface $urlInterface)
-    {
+    public function __construct(
+        UrlValidator $urlValidator,
+        PathValidator $pathValidator,
+        UrlInterface $urlInterface
+    ) {
         $this->urlValidator = $urlValidator;
+        $this->pathValidator = $pathValidator;
         $this->urlInterface = $urlInterface;
     }
 
     /**
-     * Get full url with base path from a path
+     * Validate path/route
      *
      * @param string $path
      * @return bool
      */
     public function isPath(string $path): bool
     {
-        if (preg_match("|^(https?:)?\/\/|i", $path)) {
-            return false;
-        }
-        return true;
+        return $this->pathValidator->isValid($path);
     }
 
     /**

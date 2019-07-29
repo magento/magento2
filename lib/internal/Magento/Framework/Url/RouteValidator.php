@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
- * Validate URL
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Validate route and paths
  */
 namespace Magento\Framework\Url;
 
-class Validator extends \Zend_Validate_Abstract
+class RouteValidator extends \Zend_Validate_Abstract
 {
     /**#@+
      * Error keys
@@ -32,7 +31,8 @@ class Validator extends \Zend_Validate_Abstract
         // set translated message template
         $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), self::INVALID_URL);
         $this->validator = $validator;
-        $this->validator->setAllowRelative(false);
+        $this->validator->setAllowRelative(true);
+        $this->validator->setAllowAbsolute(false);
     }
 
     /**
@@ -43,18 +43,22 @@ class Validator extends \Zend_Validate_Abstract
     protected $_messageTemplates = [self::INVALID_URL => "Invalid URL '%value%'."];
 
     /**
-     * Validate value
+     * Validate route/path
      *
      * @param string $value
+     * @param bool $allowQuery
      * @return bool
      */
     public function isValid($value)
     {
-        $this->validator->setAllowRelative(false);
-        $this->validator->setAllowAbsolute(true);
+        $this->validator->setAllowRelative(true);
+        $this->validator->setAllowAbsolute(false);
         $this->_setValue($value);
 
-        $valid = $this->validator->isValid($value);
+        $valid = $this->validator->isValid($value)
+            && $this->validator->getUriHandler()->getQuery() === null
+            //prevent directory traversal
+            && strpos('..', $value) === false;
 
         if (!$valid) {
             $this->_error(self::INVALID_URL);
