@@ -55,7 +55,7 @@ class ApiConfigFixture extends ConfigFixture
         foreach ($annotations['method'][$this->annotation] as $configPathAndValue) {
             if (preg_match('/^.+?(?=_store\s)/', $configPathAndValue, $matches)) {
                 /* Store-scoped config value */
-                $storeCode = $matches[0] != 'current' ? $matches[0] : null;
+                $storeCode = $matches[0];
                 $parts = preg_split('/\s+/', $configPathAndValue, 3);
                 list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
                 $originalValue = $this->_getConfigValue($configPath, $storeCode);
