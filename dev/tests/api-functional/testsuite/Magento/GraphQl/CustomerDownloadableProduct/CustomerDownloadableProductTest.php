@@ -60,11 +60,6 @@ QUERY;
         $orders = $orderRepository->getList($searchCriteria)->getItems();
         $order = array_pop($orders);
 
-        $builder = $objectManager->create(\Magento\Framework\Api\FilterBuilder::class);
-        $filter = $builder
-            ->setField('email')
-            ->setValue('customer@example.com');
-
         $searchCriteria = $objectManager->get(
             SearchCriteriaBuilder::class
         )->addFilter(
@@ -78,7 +73,6 @@ QUERY;
         $customer = array_pop($customers);
 
         $order->setCustomerId($customer->getId())->setCustomerIsGuest(false)->save();
-
         $response = $this->graphQlQuery($query, [], '', $this->headers);
 
         $expectedResponse = [
