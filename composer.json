@@ -338,10 +338,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/magento/composer"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/magento-techdivision/zf1.git"
         }
     ],
     "prefer-stable": true
