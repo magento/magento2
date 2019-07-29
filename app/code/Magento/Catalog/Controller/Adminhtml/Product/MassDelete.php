@@ -59,6 +59,8 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
     }
 
     /**
+     * Mass Delete Action
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
