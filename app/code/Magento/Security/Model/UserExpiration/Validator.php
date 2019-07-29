@@ -19,6 +19,11 @@ class Validator extends AbstractValidator
     /**@var \Magento\Framework\Stdlib\DateTime\DateTime */
     private $dateTime;
 
+    /**
+     * Validator constructor.
+     *
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
     ) {

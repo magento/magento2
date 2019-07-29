@@ -7,6 +7,7 @@ namespace Magento\Security\Model\Plugin;
 
 /**
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AuthSessionTest extends \PHPUnit\Framework\TestCase
 {

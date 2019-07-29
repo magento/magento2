@@ -9,6 +9,8 @@ namespace Magento\Security\Model;
 
 /**
  * Tests for \Magento\Security\Model\UserExpirationManager
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
 {
