@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -70,6 +71,46 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $quote->getVirtualItemsQty());
         $this->assertEquals(20, $quote->getGrandTotal());
         $this->assertEquals(20, $quote->getBaseGrandTotal());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
+     * @magentoDataFixture Magento/Quote/_files/empty_quote.php
+     * @return void
+     */
+    public function testGetAddressWithVirtualProduct()
+    {
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('reserved_order_id_1', 'reserved_order_id');
+        $billingAddress = $this->objectManager->create(AddressInterface::class);
+        $billingAddress->setFirstname('Joe')
+            ->setLastname('Doe')
+            ->setCountryId('US')
+            ->setRegion('TX')
+            ->setCity('Austin')
+            ->setStreet('1000 West Parmer Line')
+            ->setPostcode('11501')
+            ->setTelephone('123456789');
+        $quote->setBillingAddress($billingAddress);
+        $shippingAddress = $this->objectManager->create(AddressInterface::class);
+        $shippingAddress->setFirstname('Joe')
+            ->setLastname('Doe')
+            ->setCountryId('US')
+            ->setRegion('NJ')
+            ->setCity('Newark')
+            ->setStreet('2775  Granville Lane')
+            ->setPostcode('07102')
+            ->setTelephone('9734685221');
+        $quote->setShippingAddress($shippingAddress);
+        $productRepository = $this->objectManager->create(
+            ProductRepositoryInterface::class
+        );
+        $product = $productRepository->get('virtual-product', false, null, true);
+        $quote->addProduct($product);
+        $quote->save();
+        $expectedAddress = $quote->getBillingAddress();
+        $this->assertEquals($expectedAddress, $quote->getAllItems()[0]->getAddress());
     }
 
     /**

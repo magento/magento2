@@ -19,11 +19,13 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Framework\Session\Generic as Session;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
+ * Class for requesting the response result form the paypal controller.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
+class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * Core registry
@@ -112,6 +114,8 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
     }
 
     /**
+     * Saves the payment in quote
+     *
      * @return ResultInterface
      */
     public function execute()
@@ -120,7 +124,7 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         try {
             $response = $this->transaction->getResponseObject($this->getRequest()->getPostValue());
             $this->responseValidator->validate($response, $this->transparent);
-            $this->transaction->savePaymentInQuote($response);
+            $this->transaction->savePaymentInQuote($response, (int)$this->sessionTransparent->getQuoteId());
         } catch (LocalizedException $exception) {
             $parameters['error'] = true;
             $parameters['error_msg'] = $exception->getMessage();
