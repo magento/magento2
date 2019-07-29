@@ -4,6 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -13,6 +15,9 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\MassDelete
+ */
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
@@ -60,15 +65,26 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $productDeleted = 0;
+        $productDeletedError = 0;
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($collection->getItems() as $product) {
-            $this->productRepository->delete($product);
-            $productDeleted++;
+            try {
+                $this->productRepository->delete($product);
+                $productDeleted++;
+            } catch (\Exception $exception) {
+                $productDeletedError++;
+            }
         }
 
         if ($productDeleted) {
             $this->messageManager->addSuccessMessage(
                 __('A total of %1 record(s) have been deleted.', $productDeleted)
+            );
+        }
+
+        if ($productDeletedError) {
+            $this->messageManager->addErrorMessage(
+                __('A total of %1 record(s) haven\'t been deleted.', $productDeleted)
             );
         }
 
