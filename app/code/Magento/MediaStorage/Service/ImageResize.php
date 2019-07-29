@@ -177,19 +177,24 @@ class ImageResize
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
 
         foreach ($productImages as $image) {
+            $error = '';
             $originalImageName = $image['filepath'];
+
             $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
             $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
 
-            foreach ($viewImages as $viewImage) {
-                if ($this->fileStorageDatabase->checkDbUsage() &&
-                    !$this->mediaDirectory->isFile($mediastoragefilename)
-                ) {
-                    $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
+            if ($this->mediaDirectory->isFile($originalImagePath)) {
+                foreach ($viewImages as $viewImage) {
+                    if ($this->fileStorageDatabase->checkDbUsage()) {
+                        $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
+                    }
+                    $this->resize($viewImage, $originalImagePath, $originalImageName);
                 }
-                $this->resize($viewImage, $originalImagePath, $originalImageName);
+            } else {
+                $error = __('Cannot resize image "%1" - original image not found', $originalImagePath);
             }
-            yield $originalImageName => $count;
+
+            yield ['filename' => $originalImageName, 'error' => $error] => $count;
         }
     }
 

@@ -12,12 +12,23 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Url\Validator as UrlValidator;
+use Magento\Downloadable\Model\Url\DomainValidator;
 
 /**
  * Class to validate Link Content.
  */
 class ContentValidator
 {
+    /**
+     * @var DomainValidator
+     */
+    private $domainValidator;
+
+    /**
+     * @var File
+     */
+    private $fileHelper;
+
     /**
      * @var FileContentValidator
      */
@@ -29,22 +40,20 @@ class ContentValidator
     protected $urlValidator;
 
     /**
-     * @var File
-     */
-    private $fileHelper;
-
-    /**
      * @param FileContentValidator $fileContentValidator
      * @param UrlValidator $urlValidator
+     * @param DomainValidator $domainValidator
      * @param File|null $fileHelper
      */
     public function __construct(
         FileContentValidator $fileContentValidator,
         UrlValidator $urlValidator,
+        DomainValidator $domainValidator,
         File $fileHelper = null
     ) {
         $this->fileContentValidator = $fileContentValidator;
         $this->urlValidator = $urlValidator;
+        $this->domainValidator = $domainValidator;
         $this->fileHelper = $fileHelper ?? ObjectManager::getInstance()->get(File::class);
     }
 
@@ -94,6 +103,10 @@ class ContentValidator
             if (!$this->urlValidator->isValid($link->getLinkUrl())) {
                 throw new InputException(__('Link URL must have valid format.'));
             }
+
+            if (!$this->domainValidator->isValid($link->getLinkUrl())) {
+                throw new InputException(__('Link URL\'s domain is not in list of downloadable_domains in env.php.'));
+            }
         } elseif ($link->getLinkFileContent()) {
             if (!$this->fileContentValidator->isValid($link->getLinkFileContent())) {
                 throw new InputException(__('Provided file content must be valid base64 encoded data.'));
@@ -115,6 +128,10 @@ class ContentValidator
         if ($link->getSampleType() === 'url') {
             if (!$this->urlValidator->isValid($link->getSampleUrl())) {
                 throw new InputException(__('Sample URL must have valid format.'));
+            }
+
+            if (!$this->domainValidator->isValid($link->getSampleUrl())) {
+                throw new InputException(__('Sample URL\'s domain is not in list of downloadable_domains in env.php.'));
             }
         } elseif ($link->getSampleFileContent()) {
             if (!$this->fileContentValidator->isValid($link->getSampleFileContent())) {
