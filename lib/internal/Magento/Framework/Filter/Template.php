@@ -82,16 +82,16 @@ class Template implements \Zend_Filter_Interface
         'getdatausingmethod',
         '__destruct',
         '__call',
-        '__callStatic',
+        '__callstatic',
         '__set',
         '__unset',
         '__sleep',
         '__wakeup',
         '__invoke',
         '__set_state',
-        '__debugInfo',
-        '___callParent',
-        '___callPlugins'
+        '__debuginfo',
+        '___callparent',
+        '___callplugins'
     ];
 
     /**
