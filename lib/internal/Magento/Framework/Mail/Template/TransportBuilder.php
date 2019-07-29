@@ -166,7 +166,11 @@ class TransportBuilder
      */
     public function addTo($address, $name = '')
     {
-        $this->messageData['to'][$address] =  $name;
+        if (!$name) {
+            $this->messageData['to'][] = $address;
+        } else {
+            $this->messageData['to'][$address] =  $name;
+        }
 
         return $this;
     }
@@ -179,7 +183,7 @@ class TransportBuilder
      */
     public function addBcc($address)
     {
-        $this->messageData['bcc'] = [$address];
+        $this->messageData['bcc'] = $address;
 
         return $this;
     }
