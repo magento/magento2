@@ -11,7 +11,7 @@ use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
- *  SetPaymentMethod additional data provider model for Authorizenet payment method
+ * SetPaymentMethod additional data provider model for Authorizenet payment method
  */
 class AuthorizenetDataProvider implements AdditionalDataProviderInterface
 {
