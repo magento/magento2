@@ -392,6 +392,14 @@
         <waitForPageLoad stepKey="waitForSave"/>
     </actionGroup>
 
+    <!-- Action group assign to one website and unassign from another -->
+    <actionGroup name="AdminProcessProductWebsitesActionGroup" extends="CreatedProductConnectToWebsite">
+        <arguments>
+            <argument name="websiteToUnassign"/>
+        </arguments>
+        <uncheckOption selector="{{ProductInWebsitesSection.website(websiteToUnassign.name)}}" after="SelectWebsite" stepKey="uncheckWebsite"/>
+    </actionGroup>
+
     <!--Check tier price with a discount percentage on product-->
     <actionGroup name="AssertDiscountsPercentageOfProducts">
         <arguments>
@@ -542,6 +550,14 @@
         <remove keyForRemoval="seeCheckboxForWebsite"/>
         <seeCheckboxIsChecked selector="{{ProductInWebsitesSection.website(website)}}" after="expandProductWebsitesSection" stepKey="seeCustomWebsiteIsChecked"/>
     </actionGroup>
+
+    <!-- You are on product Edit Page -->
+    <!-- Assert checkbox is not checked for website in Product In Websites -->
+    <actionGroup name="AssertProductIsNotAssignedToWebsite" extends="AssertWebsiteIsAvailableInProductWebsites">
+        <remove keyForRemoval="seeCheckboxForWebsite"/>
+        <dontSeeCheckboxIsChecked selector="{{ProductInWebsitesSection.website(website)}}" after="expandProductWebsitesSection" stepKey="seeCustomWebsiteIsNotChecked"/>
+    </actionGroup>
+
     <!-- You are on product Edit Page -->
     <!-- Assert Product Name in admin Product page -->
     <actionGroup name="AssertProductNameInProductEditForm">
@@ -550,6 +566,7 @@
         </arguments>
         <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{productName}}" stepKey="seeProductNameOnEditProductPage"/>
     </actionGroup>
+
     <!-- You are on product Edit Page -->
     <!-- Assert Product Description in admin Product page -->
     <actionGroup name="AssertProductDescriptionInProductEditForm">
