@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontMiniCartSection">
-        <element name="payWithPayPal" type="button" selector=".braintree-paypal-button-hidden" timeout="30"/>
+        <element name="payWithPayPal" type="button" selector="[id^='braintree-paypal-mini-cart']" timeout="30"/>
         <element name="proceedWithSandboxPurchase" type="text" selector="#return_url"/>
     </section>
 </sections>

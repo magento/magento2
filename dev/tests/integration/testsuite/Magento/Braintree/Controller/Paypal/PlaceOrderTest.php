@@ -47,7 +47,7 @@ class PlaceOrderTest extends AbstractController
 
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'setLastOrderStatus', 'unsLastBillingAgreementReferenceId'])
+            ->setMethods(['getQuote', 'setLastOrderStatus', 'unsLastBillingAgreementReferenceId', 'getQuoteId'])
             ->getMock();
 
         $adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
@@ -76,6 +76,8 @@ class PlaceOrderTest extends AbstractController
     /**
      * Tests a negative scenario for a place order flow when exception throws after placing an order.
      *
+     * @magentoAppArea frontend
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Braintree/Fixtures/paypal_quote.php
      */
     public function testExecuteWithFailedOrder()
@@ -85,6 +87,8 @@ class PlaceOrderTest extends AbstractController
 
         $this->session->method('getQuote')
             ->willReturn($quote);
+        $this->session->method('getQuoteId')
+            ->willReturn($quote->getId());
 
         $this->adapter->method('sale')
             ->willReturn($this->getTransactionStub('authorized'));

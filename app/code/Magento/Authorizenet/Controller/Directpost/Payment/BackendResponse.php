@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
 use Magento\Authorizenet\Helper\DataFactory;
@@ -15,6 +16,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Psr\Log\LoggerInterface;
 
+/**
+ * DirectPost payment Backend Response controller.
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
+ */
 class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment
 {
     /**
