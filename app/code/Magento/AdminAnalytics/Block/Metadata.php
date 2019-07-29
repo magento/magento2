@@ -73,7 +73,7 @@ class Metadata extends Template
         return hash('sha512', 'ADMIN_USER' . $this->authSession->getUser()->getEmail());
     }
     /**
-     * Get Magento mode
+     * Get Magento mode that the user is using
      *
      * @return string
      */
