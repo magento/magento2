@@ -12,7 +12,6 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Url\Validator as UrlValidator;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
 use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
@@ -42,11 +41,6 @@ class PaypalExpressToken implements ResolverInterface
     private $checkoutProvider;
 
     /**
-     * @var UrlValidator
-     */
-    private $urlValidator;
-
-    /**
      * @var CheckoutHelper
      */
     private $checkoutHelper;
@@ -60,7 +54,6 @@ class PaypalExpressToken implements ResolverInterface
      * @param GetCartForUser $getCartForUser
      * @param CheckoutProvider $checkoutProvider
      * @param ConfigProvider $configProvider
-     * @param UrlValidator $urlValidator
      * @param CheckoutHelper $checkoutHelper
      * @param Url $urlService
      */
@@ -68,14 +61,12 @@ class PaypalExpressToken implements ResolverInterface
         GetCartForUser $getCartForUser,
         CheckoutProvider $checkoutProvider,
         ConfigProvider $configProvider,
-        UrlValidator $urlValidator,
         CheckoutHelper $checkoutHelper,
         Url $urlService
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->checkoutProvider = $checkoutProvider;
         $this->configProvider = $configProvider;
-        $this->urlValidator = $urlValidator;
         $this->checkoutHelper = $checkoutHelper;
         $this->urlService = $urlService;
     }
@@ -123,7 +114,7 @@ class PaypalExpressToken implements ResolverInterface
         }
 
         if (!empty($args['input']['urls'])) {
-            $this->validateUrls($args['input']['urls'], $store);
+            $args['input']['urls'] = $this->validateAndConvertPathsToUrls($args['input']['urls'], $store);
         }
         $checkout->prepareGiropayUrls(
             $args['input']['urls']['success_url'] ?? '',
@@ -151,22 +142,23 @@ class PaypalExpressToken implements ResolverInterface
     }
 
     /**
-     * Validate redirect Urls
+     * Validate and convert to redirect urls from given paths
      *
-     * @param string $urls
+     * @param string $path
      * @param StoreInterface $store
-     * @return boolean
+     * @return array
      * @throws GraphQlInputException
      */
-    private function validateUrls(array $urls, StoreInterface $store): bool
+    private function validateAndConvertPathsToUrls(array $paths, StoreInterface $store): array
     {
-        foreach ($urls as $url) {
+        $urls = [];
+        foreach ($paths as $key => $path) {
             try {
-                $this->urlService->getUrlFromPath($url, $store);
+                $urls[$key] = $this->urlService->getUrlFromPath($path, $store);
             } catch (ValidationException $e) {
                 throw new GraphQlInputException(__($e));
             }
         }
-        return true;
+        return $urls;
     }
 }
