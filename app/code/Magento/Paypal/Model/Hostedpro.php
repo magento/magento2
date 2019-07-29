@@ -274,7 +274,9 @@ class Hostedpro extends Direct
      */
     public function getReturnUrl($storeId = null)
     {
-        return $this->getUrl('paypal/hostedpro/return', $storeId);
+        $payment = $this->getInfoInstance();
+        $urlRoute = $payment->getAdditionalInformation('return_url') ?? 'paypal/hostedpro/return';
+        return $this->getUrl($urlRoute, $storeId);
     }
 
     /**
@@ -296,7 +298,9 @@ class Hostedpro extends Direct
      */
     public function getCancelUrl($storeId = null)
     {
-        return $this->getUrl('paypal/hostedpro/cancel', $storeId);
+        $payment = $this->getInfoInstance();
+        $urlRoute = $payment->getAdditionalInformation('cancel_url') ?? 'paypal/hostedpro/cancel';
+        return $this->getUrl($urlRoute, $storeId);
     }
 
     /**
