@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1451a5f0e75accb1dde62d4118dbe928",
+    "content-hash": "92b8c1f29c7180ee86e5afe4c4d9b934",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -553,22 +553,22 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.2.x-dev",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "6b406bc65690c1b28be9255249507e1c6572d815"
+                "reference": "0a37e32781f905e217380f15fca10a727a80fd25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/6b406bc65690c1b28be9255249507e1c6572d815",
-                "reference": "6b406bc65690c1b28be9255249507e1c6572d815",
+                "url": "https://api.github.com/repos/magento/composer/zipball/0a37e32781f905e217380f15fca10a727a80fd25",
+                "reference": "0a37e32781f905e217380f15fca10a727a80fd25",
                 "shasum": ""
             },
             "require": {
                 "composer/composer": "1.4.1",
                 "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0|~7.2.0",
-                "symfony/console": "~2.3, !=2.7.0"
+                "symfony/console": "~2.3 || ~3.4 || ~4.2, !=2.7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.1.0"
@@ -579,16 +579,13 @@
                     "Magento\\Composer\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "support": {
-                "source": "https://github.com/magento/composer/tree/1.2",
-                "issues": "https://github.com/magento/composer/issues"
-            },
-            "time": "2019-05-21T16:03:27+00:00"
+            "time": "2019-07-30T19:45:16+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -9183,17 +9180,9 @@
             "time": "2018-12-25T11:19:39+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "1.2.1",
-            "alias_normalized": "1.2.1.0",
-            "version": "1.2.9999999.9999999-dev",
-            "package": "magento/composer"
-        }
-    ],
-    "minimum-stability": "dev",
+    "aliases": [],
+    "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,

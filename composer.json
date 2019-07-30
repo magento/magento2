@@ -54,7 +54,7 @@
         "phpseclib/mcrypt_compat": "1.0.8",
         "phpseclib/phpseclib": "2.0.*",
         "tedivm/jshrink": "~1.3.0",
-        "magento/composer": "1.2.x-dev as 1.2.1",
+        "magento/composer": "~1.2.0",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
@@ -274,11 +274,5 @@
         }
     },
     "prefer-stable": true,
-    "minimum-stability": "dev",
-    "repositories": {
-        "magento.composer": {
-            "type": "vcs",
-            "url": "https://github.com/magento/composer.git"
-        }
-    }
+    "minimum-stability": "stable"
 }
