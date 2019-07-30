@@ -28,6 +28,15 @@
                     <label>Create Permanent Redirect for URLs if URL Key Changed</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="generate_category_product_rewrites" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Generate "category/product" URL Rewrites</label>
+                    <backend_model>Magento\CatalogUrlRewrite\Model\TableCleaner</backend_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[<strong style="color:red">Warning!</strong> Turning this option off will result in permanent removal of category/product URL rewrites without an ability to restore them.]]>
+                    </comment>
+                    <frontend_class>generate_category_product_rewrites</frontend_class>
+                </field>
             </group>
         </section>
     </system>

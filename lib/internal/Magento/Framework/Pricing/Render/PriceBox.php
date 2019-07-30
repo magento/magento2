@@ -8,8 +8,8 @@ namespace Magento\Framework\Pricing\Render;
 
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
@@ -21,7 +21,7 @@ use Magento\Framework\View\Element\Template;
 class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInterface
 {
     /** Default block lifetime */
-    const DEFAULT_LIFETIME = 3600;
+    const DEFAULT_LIFETIME = 86400;
 
     /**
      * @var SaleableInterface
@@ -39,11 +39,11 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     protected $rendererPool;
 
     /**
-     * @param Template\Context  $context
+     * @param Template\Context $context
      * @param SaleableInterface $saleableItem
-     * @param PriceInterface    $price
-     * @param RendererPool      $rendererPool
-     * @param array             $data
+     * @param PriceInterface $price
+     * @param RendererPool $rendererPool
+     * @param array $data
      */
     public function __construct(
         Template\Context $context,
@@ -59,7 +59,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     protected function _toHtml()
     {
@@ -70,9 +70,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     }
 
     /**
-     * Get Key for caching block content
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getCacheKey()
     {
@@ -80,17 +78,15 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     }
 
     /**
-     * Get block cache life time
-     *
-     * @return int
+     * @inheritdoc
      */
     protected function getCacheLifetime()
     {
-        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : null;
+        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : self::DEFAULT_LIFETIME;
     }
-    
+
     /**
-     * @return SaleableInterface
+     * @inheritdoc
      */
     public function getSaleableItem()
     {
@@ -98,7 +94,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     }
 
     /**
-     * @return PriceInterface
+     * @inheritdoc
      */
     public function getPrice()
     {
@@ -136,9 +132,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     }
 
     /**
-     * @param AmountInterface $amount
-     * @param array $arguments
-     * @return string
+     * @inheritdoc
      */
     public function renderAmount(AmountInterface $amount, array $arguments = [])
     {
@@ -149,6 +143,8 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     }
 
     /**
+     * Get amount render.
+     *
      * @param AmountInterface $amount
      * @param array $arguments
      * @return AmountRenderInterface
@@ -164,6 +160,8 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     }
 
     /**
+     * Get renderer pool.
+     *
      * @return RendererPool
      */
     public function getRendererPool()
@@ -172,9 +170,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     }
 
     /**
-     * Return unique ID(s) for each object in system
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getIdentities()
     {
