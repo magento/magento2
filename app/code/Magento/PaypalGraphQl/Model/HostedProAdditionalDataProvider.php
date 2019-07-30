@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\Url\Validator as UrlValidator;
+use Magento\StoreGraphQl\Model\Resolver\Store\Url as UrlService;
 use Magento\Paypal\Model\Config;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 
@@ -18,16 +18,16 @@ use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 class HostedProAdditionalDataProvider implements AdditionalDataProviderInterface
 {
     /**
-     * @var UrlValidator
+     * @var UrlService
      */
-    private $urlValidator;
+    private $urlService;
 
     /**
-     * @param UrlValidator $urlValidator
+     * @param UrlService $urlService
      */
-    public function __construct(UrlValidator $urlValidator)
+    public function __construct(UrlService $urlService)
     {
-        $this->urlValidator = $urlValidator;
+        $this->urlService = $urlService;
     }
 
     /**
@@ -40,26 +40,25 @@ class HostedProAdditionalDataProvider implements AdditionalDataProviderInterface
     public function getData(array $data): array
     {
         $additionalData = $data[Config::METHOD_HOSTEDPRO] ?? [];
-        $this->validateUrls($additionalData);
+        $this->validateUrlPaths($additionalData);
 
         return $additionalData;
     }
 
     /**
-     * Validate redirect urls
+     * Validate redirect url paths
      *
      * @param array $data
      * @throws GraphQlInputException
      */
-    private function validateUrls(array $data): void
+    private function validateUrlPaths(array $data): void
     {
-        $urlKeys = ['cancel', 'return'];
+        $urlKeys = ['cancel_url', 'return_url'];
 
         foreach ($urlKeys as $urlKey) {
             if (isset($data[$urlKey])) {
-                if (!$this->urlValidator->isValid($data[$urlKey])) {
-                    $errorMessage = $this->urlValidator->getMessages()['invalidUrl'] ?? "Invalid Url.";
-                    throw new GraphQlInputException(__($errorMessage));
+                if (!$this->urlService->isPath($data[$urlKey])) {
+                    throw new GraphQlInputException(__('Invalid Url.'));
                 }
             }
         }
