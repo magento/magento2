@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\StoreGraphQl\Model\Resolver\Store;
+namespace Magento\PaypalGraphQl\Model\Resolver\Store;
 
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\UrlInterface;

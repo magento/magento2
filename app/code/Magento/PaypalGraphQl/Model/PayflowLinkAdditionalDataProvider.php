@@ -10,7 +10,7 @@ namespace Magento\PaypalGraphQl\Model;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Paypal\Model\Config;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
-use Magento\StoreGraphQl\Model\Resolver\Store\Url;
+use Magento\PaypalGraphQl\Model\Resolver\Store\Url;
 
 /**
  * Get payment additional data for Paypal Payflow Link payment method
