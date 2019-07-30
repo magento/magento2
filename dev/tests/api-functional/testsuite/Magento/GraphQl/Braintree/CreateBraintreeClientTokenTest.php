@@ -17,7 +17,11 @@ class CreateBraintreeClientTokenTest extends GraphQlAbstract
     /**
      * Test creating Braintree client token
      *
-     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
+     * @magentoConfigFixture default_store payment/braintree/active 1
+     * @magentoConfigFixture default_store payment/braintree/environment sandbox
+     * @magentoConfigFixture default_store payment/braintree/merchant_id def_merchant_id
+     * @magentoConfigFixture default_store payment/braintree/public_key def_public_key
+     * @magentoConfigFixture default_store payment/braintree/private_key def_private_key
      */
     public function testCreateBraintreeClientToken()
     {

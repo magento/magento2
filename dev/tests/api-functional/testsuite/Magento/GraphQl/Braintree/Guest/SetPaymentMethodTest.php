@@ -59,15 +59,19 @@ class SetPaymentMethodTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store payment/braintree/active 1
+     * @magentoConfigFixture default_store payment/braintree/environment sandbox
+     * @magentoConfigFixture default_store payment/braintree/merchant_id def_merchant_id
+     * @magentoConfigFixture default_store payment/braintree/public_key def_public_key
+     * @magentoConfigFixture default_store payment/braintree/private_key def_private_key
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
      * @dataProvider dataProviderTestPlaceOrder
      */
     public function testPlaceOrder(string $nonce)
@@ -100,15 +104,19 @@ class SetPaymentMethodTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store payment/braintree/active 1
+     * @magentoConfigFixture default_store payment/braintree/environment sandbox
+     * @magentoConfigFixture default_store payment/braintree/merchant_id def_merchant_id
+     * @magentoConfigFixture default_store payment/braintree/public_key def_public_key
+     * @magentoConfigFixture default_store payment/braintree/private_key def_private_key
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
      * @expectedException \Exception
      */
     public function testSetPaymentMethodInvalidInput()
@@ -122,15 +130,19 @@ class SetPaymentMethodTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store payment/braintree/active 1
+     * @magentoConfigFixture default_store payment/braintree/environment sandbox
+     * @magentoConfigFixture default_store payment/braintree/merchant_id def_merchant_id
+     * @magentoConfigFixture default_store payment/braintree/public_key def_public_key
+     * @magentoConfigFixture default_store payment/braintree/private_key def_private_key
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Braintree/_files/enable_braintree_payment.php
      * @expectedException \Exception
      */
     public function testSetPaymentMethodInvalidMethodInput()
