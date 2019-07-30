@@ -14,6 +14,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface as PsrLogger;
 
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\MassDelete
@@ -38,10 +42,16 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
     private $productRepository;
 
     /**
+     * @var PsrLogger
+     */
+    protected $logger;
+
+    /**
      * @param Context $context
      * @param Builder $productBuilder
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @param PsrLogger $logger
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -49,12 +59,14 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
         Builder $productBuilder,
         Filter $filter,
         CollectionFactory $collectionFactory,
+        PsrLogger $logger,
         ProductRepositoryInterface $productRepository = null
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->productRepository = $productRepository
             ?: \Magento\Framework\App\ObjectManager::getInstance()->create(ProductRepositoryInterface::class);
+        $this->logger = $logger;
         parent::__construct($context, $productBuilder);
     }
 
@@ -73,7 +85,14 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
             try {
                 $this->productRepository->delete($product);
                 $productDeleted++;
-            } catch (\Exception $exception) {
+            } catch (CouldNotSaveException $exception) {
+                $this->logger->error($exception->getLogMessage());
+                $productDeletedError++;
+            } catch (StateException $exception) {
+                $this->logger->error($exception->getLogMessage());
+                $productDeletedError++;
+            } catch (LocalizedException $exception) {
+                $this->logger->error($exception->getLogMessage());
                 $productDeletedError++;
             }
         }
