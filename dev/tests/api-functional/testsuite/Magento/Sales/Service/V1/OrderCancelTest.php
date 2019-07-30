@@ -85,4 +85,14 @@ class OrderCancelTest extends WebapiAbstract
         $result = $this->sendCancelRequest($order);
         $this->assertFalse($result);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_shipping_and_invoice.php
+     */
+    public function testOrderWithStateCompleteShouldNotBeCanceled()
+    {
+        $order = $this->getOrder('100000001');
+        $result = $this->sendCancelRequest($order);
+        $this->assertFalse($result);
+    }
 }
