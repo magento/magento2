@@ -105,12 +105,12 @@ class TransportBuilder
      *
      * @var array
      */
-    private $messageData = [];
+    protected $messageData = [];
 
     /**
      * @var MailEnvelopeBuilder|null
      */
-    private $mailEnvelopeBuilder;
+    protected $mailEnvelopeBuilder;
 
     /**
      * @param FactoryInterface $templateFactory

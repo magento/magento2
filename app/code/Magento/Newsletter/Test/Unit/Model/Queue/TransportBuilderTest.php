@@ -68,11 +68,7 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->messageFactoryMock = $this->getMockBuilder(\Magento\Framework\Mail\MessageInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->messageFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($this->messageMock);
+
         $this->builder = $objectManagerHelper->getObject(
             $this->builderClassName,
             [
@@ -136,9 +132,6 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($template)
         );
-
-        $this->messageMock->expects($this->once())->method('setBodyHtml')->willReturnSelf();
-        $this->messageMock->expects($this->once())->method('setSubject')->willReturnSelf();
 
         $this->builder->setTemplateIdentifier(
             'identifier'

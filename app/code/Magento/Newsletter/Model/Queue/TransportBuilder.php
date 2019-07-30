@@ -47,12 +47,10 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
         /** @var AbstractTemplate $template */
         $template = $this->getTemplate()->setData($this->templateData);
         $this->setTemplateFilter($template);
-
-        $this->message->setBodyHtml(
-            $template->getProcessedTemplate($this->templateVars)
-        )->setSubject(
-            $template->getSubject()
-        );
+        $part['content'] = $template->getProcessedTemplate($this->templateVars);
+        $this->messageData['body'][] = $part;
+        $this->messageData['subject'] = $template->getSubject();
+        $this->message = $this->mailEnvelopeBuilder->buildByArray($this->messageData);
 
         return $this;
     }
