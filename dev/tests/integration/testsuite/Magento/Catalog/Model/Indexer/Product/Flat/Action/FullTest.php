@@ -78,13 +78,11 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
-     * @magentoDataFixture Magento/Catalog/_files/enable_catalog_product_flat_indexer.php
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
+     * @magentoConfigFixture fixturestore_store catalog/frontend/flat_catalog_product 1
      */
     public function testReindexAllMultipleStores()
     {
-        $this->_state = $this->objectManager->create(State::class);
-        $this->_processor = $this->objectManager->create(Processor::class);
-
         $this->assertTrue($this->_state->isFlatEnabled());
         $this->_processor->reindexAll();
 
@@ -119,7 +117,5 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
         }
 
         $storeManager->setCurrentStore($currentStore);
-        $this->objectManager->removeSharedInstance(State::class);
-        $this->objectManager->removeSharedInstance(Processor::class);
     }
 }
