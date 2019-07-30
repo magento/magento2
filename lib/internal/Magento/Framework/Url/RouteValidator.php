@@ -5,19 +5,13 @@
  */
 declare(strict_types=1);
 
+namespace Magento\Framework\Url;
+
 /**
  * Validate route and paths
  */
-namespace Magento\Framework\Url;
-
 class RouteValidator extends \Zend_Validate_Abstract
 {
-    /**#@+
-     * Error keys
-     */
-    const INVALID_URL = 'invalidUrl';
-    /**#@-*/
-
     /**
      * @var \Zend\Validator\Uri
      */
@@ -29,7 +23,7 @@ class RouteValidator extends \Zend_Validate_Abstract
     public function __construct(\Zend\Validator\Uri $validator)
     {
         // set translated message template
-        $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), self::INVALID_URL);
+        $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), Validator::INVALID_URL);
         $this->validator = $validator;
     }
 
@@ -38,7 +32,7 @@ class RouteValidator extends \Zend_Validate_Abstract
      *
      * @var array
      */
-    protected $_messageTemplates = [self::INVALID_URL => "Invalid URL '%value%'."];
+    protected $_messageTemplates = [Validator::INVALID_URL => "Invalid URL '%value%'."];
 
     /**
      * Validate route/path
@@ -58,7 +52,7 @@ class RouteValidator extends \Zend_Validate_Abstract
             && strpos($value, '..') === false;
 
         if (!$valid) {
-            $this->_error(self::INVALID_URL);
+            $this->_error(Validator::INVALID_URL);
         }
 
         return $valid;

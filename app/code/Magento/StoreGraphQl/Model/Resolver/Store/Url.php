@@ -58,7 +58,6 @@ class Url
      *
      * @param string $path
      * @param StoreInterface $store
-     * @param bool $isSecure
      * @return string
      * @throws ValidationException
      */
@@ -90,7 +89,7 @@ class Url
     /**
      * Validate redirect Urls
      *
-     * @param array $urls
+     * @param array $url
      * @return boolean
      */
     private function validateUrl(string $url): bool

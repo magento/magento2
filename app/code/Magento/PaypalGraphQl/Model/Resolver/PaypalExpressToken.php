@@ -144,7 +144,7 @@ class PaypalExpressToken implements ResolverInterface
     /**
      * Validate and convert to redirect urls from given paths
      *
-     * @param string $path
+     * @param string $paths
      * @param StoreInterface $store
      * @return array
      * @throws GraphQlInputException
