@@ -78,13 +78,11 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
-     * @magentoDataFixture Magento/Catalog/_files/enable_catalog_product_flat_indexer.php
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
+     * @magentoConfigFixture fixturestore_store catalog/frontend/flat_catalog_product 1
      */
     public function testReindexAllMultipleStores()
     {
-        $this->_state = $this->objectManager->create(State::class);
-        $this->_processor = $this->objectManager->create(Processor::class);
-
         $this->assertTrue($this->_state->isFlatEnabled());
         $this->_processor->reindexAll();
 
@@ -93,9 +91,10 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $store = $storeManager->getStore('fixturestore');
+        $defaultStore = $storeManager->getDefaultStoreView();
 
         $expectedData = [
-            $storeManager->getDefaultStoreView()->getId() => 'Simple Product One',
+            $defaultStore->getId() => 'Simple Product One',
             $store->getId() => 'StoreTitle',
         ];
 
@@ -116,5 +115,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
                 'Wrong product name specified per store.'
             );
         }
+
+        $storeManager->setCurrentStore($defaultStore->getId());
     }
 }
