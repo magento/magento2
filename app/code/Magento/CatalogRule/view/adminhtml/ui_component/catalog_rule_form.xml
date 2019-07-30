@@ -307,6 +307,7 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-number-range" xsi:type="string">0.00-100.00</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Discount Amount</label>

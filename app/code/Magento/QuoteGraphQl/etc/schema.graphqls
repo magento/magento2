@@ -138,7 +138,6 @@ input SetPaymentMethodOnCartInput {
 input PaymentMethodInput {
     code: String! @doc(description:"Payment method code")
     purchase_order_number: String @doc(description:"Purchase order number")
-    additional_data: PaymentMethodAdditionalDataInput @doc(description: "Additional payment data")
 }
 
 input SetGuestEmailOnCartInput {
@@ -328,7 +327,7 @@ type SelectedCustomizableOption {
 type SelectedCustomizableOptionValue {
     id: Int!
     label: String!
-    value: String
+    value: String!
     price: CartItemSelectedOptionValuePrice!
 }
 
