@@ -9,8 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="SelectBillingAddressPopupSection">
-        <element name="shippingAddressSearch" type="input" selector="//input[@class='admin__control-text admin__action-multiselect-search']"/>
-        <element name="selectButton" type="button" selector="//button[@class='action-primary action-select-billing-item']"/>
-        <element name="shippingAddressSearchParametrised" type="input" selector="(//input[@class='admin__control-text admin__action-multiselect-search'])[{{index}}]" parameterized="true"/>
+        <element name="shippingAddressSearch" type="input" selector="//input[contains(@class,'admin__control-text') and contains(@class, 'admin__action-multiselect-search')]"/>
+        <element name="selectButton" type="button" selector="//button[contains(@class,'action-primary') and contains(@class, 'action-select-billing-item')]"/>
+        <element name="shippingAddressSearchParametrised" type="input" selector="(//input[contains(@class,'admin__control-text') and contains(@class, 'admin__action-multiselect-search')])[{{index}}]" parameterized="true"/>
     </section>
 </sections>
