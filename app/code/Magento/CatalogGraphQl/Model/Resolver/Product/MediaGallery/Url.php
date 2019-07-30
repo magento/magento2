@@ -14,7 +14,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
 
 /**
  * Returns media url
@@ -30,21 +29,16 @@ class Url implements ResolverInterface
      */
     private $placeholderProvider;
 
-    private $assetImageFactory;
-
     /**
      * @param ImageFactory $productImageFactory
      * @param PlaceholderProvider $placeholderProvider
-     * @param AssetImageFactory $assetImageFactory
      */
     public function __construct(
         ImageFactory $productImageFactory,
-        PlaceholderProvider $placeholderProvider,
-        AssetImageFactory $assetImageFactory
+        PlaceholderProvider $placeholderProvider
     ) {
         $this->productImageFactory = $productImageFactory;
         $this->placeholderProvider = $placeholderProvider;
-        $this->assetImageFactory = $assetImageFactory;
     }
 
     /**
@@ -72,13 +66,10 @@ class Url implements ResolverInterface
             return $this->getImageUrl($value['image_type'], $imagePath);
         }
         if (isset($value['file'])) {
-            $asset = $this->assetImageFactory->create(
-                [
-                    'miscParams' => [],
-                    'filePath' => $value['file']
-                ]
-            );
-            return $asset->getUrl();
+            $image = $this->productImageFactory->create();
+            $image->setDestinationSubdir('image')->setBaseFile($value['file']);
+            $imageUrl = $image->getUrl();
+            return $imageUrl;
         }
         return [];
     }
