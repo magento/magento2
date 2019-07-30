@@ -11,6 +11,7 @@
     <test name="AdminEnableAttributeIsUndefinedCatalogPriceRuleTest">
         <annotations>
             <features value="CatalogRule"/>
+            <stories value="Catalog price rule"/>
             <title value="Enable 'is undefined' condition to Scope Catalog Price rules by custom product attribute"/>
             <description value="Enable 'is undefined' condition to Scope Catalog Price rules by custom product attribute"/>
             <severity value="CRITICAL"/>
@@ -62,6 +63,8 @@
             <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
 
             <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
         <!--Create catalog price rule-->

@@ -70,6 +70,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Gets image name from $value array.
+     *
      * Will return empty string in a case when $value is not an array
      *
      * @param array $value Attribute value
@@ -86,6 +87,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Avoiding saving potential upload data to DB
+     *
      * Will set empty image attribute value if image was not uploaded
      *
      * @param \Magento\Framework\DataObject $object
@@ -113,6 +115,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Get Instance of Category Image Uploader.
+     *
      * @return \Magento\Catalog\Model\ImageUploader
      *
      * @deprecated 101.0.0
@@ -153,9 +157,10 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $fileUrl = ltrim($value[0]['url'], '/');
         $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA);
 
-        $usingPathRelativeToBase = strpos($fileUrl, $baseMediaDir) === 0;
-
-        return $usingPathRelativeToBase;
+        if (!$baseMediaDir) {
+            return false;
+        }
+        return strpos($fileUrl, $baseMediaDir) === 0;
     }
 
     /**

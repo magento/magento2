@@ -24,6 +24,10 @@
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
+    <actionGroup name="AdminCreateCartPriceRuleAndStayOnEditActionGroup" extends="AdminCreateCartPriceRuleActionGroup" >
+        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveButton"/>
+    </actionGroup>
+
     <actionGroup name="AdminCreateCartPriceRuleWithCouponCode" extends="AdminCreateCartPriceRuleActionGroup">
         <arguments>
             <argument name="couponCode"  defaultValue="_defaultCoupon.code"/>
@@ -90,5 +94,9 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Second Website" stepKey="selectWebsites"/>
 
+    </actionGroup>
+
+    <actionGroup name="AdminInactiveCartPriceRuleActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <click selector="{{AdminCartPriceRulesFormSection.active}}" stepKey="clickActiveToDisable" after="fillRuleName"/>
     </actionGroup>
 </actionGroups>

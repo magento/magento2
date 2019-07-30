@@ -10,6 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontCustomerLogoutActionGroup">
         <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="storefrontSignOut"/>
+        <waitForPageLoad stepKey="waitForSignOut"/>
     </actionGroup>
 
     <actionGroup name="StorefrontSignOutActionGroup">

@@ -78,4 +78,21 @@
             </argument>
         </arguments>
     </virtualType>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
+                type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="product_url_suffix" xsi:type="string">catalog/seo/product_url_suffix</item>
+                <item name="category_url_suffix" xsi:type="string">catalog/seo/category_url_suffix</item>
+                <item name="title_separator" xsi:type="string">catalog/seo/title_separator</item>
+                <item name="list_mode" xsi:type="string">catalog/frontend/list_mode</item>
+                <item name="grid_per_page_values" xsi:type="string">catalog/frontend/grid_per_page_values</item>
+                <item name="list_per_page_values" xsi:type="string">catalog/frontend/list_per_page_values</item>
+                <item name="grid_per_page" xsi:type="string">catalog/frontend/grid_per_page</item>
+                <item name="list_per_page" xsi:type="string">catalog/frontend/list_per_page</item>
+                <item name="catalog_default_sort_by" xsi:type="string">catalog/frontend/default_sort_by</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -199,7 +199,7 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getNotLoggedInGroup')
             ->will($this->returnValue($this->groupInterfaceMock));
         $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->will($this->returnValue(0));
+            ->method('getId')->will($this->returnValue(null));
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -220,9 +220,6 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(false)
         );
 
-        $groupMock = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue(null));
 
         /** Assertions */

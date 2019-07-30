@@ -27,6 +27,10 @@ class AllPurposeAction extends AbstractRule implements ClassAware
      */
     public function apply(AbstractNode $node)
     {
+        // Skip validation for Abstract Controllers
+        if ($node->isAbstract()) {
+            return;
+        }
         try {
             $impl = class_implements($node->getFullQualifiedName(), true);
         } catch (\Throwable $exception) {

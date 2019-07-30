@@ -20,6 +20,7 @@ use Magento\Framework\Exception\BulkException;
 use Psr\Log\LoggerInterface;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Encryption\Encryptor;
 
 /**
  * Class MassSchedule used for adding multiple entities as Operations to Bulk Management with the status tracking
@@ -64,6 +65,11 @@ class MassSchedule
     private $userContext;
 
     /**
+     * @var Encryptor
+     */
+    private $encryptor;
+
+    /**
      * Initialize dependencies.
      *
      * @param IdentityGeneratorInterface $identityService
@@ -73,6 +79,7 @@ class MassSchedule
      * @param LoggerInterface $logger
      * @param OperationRepository $operationRepository
      * @param UserContextInterface $userContext
+     * @param Encryptor|null $encryptor
      */
     public function __construct(
         IdentityGeneratorInterface $identityService,
@@ -81,7 +88,8 @@ class MassSchedule
         BulkManagementInterface $bulkManagement,
         LoggerInterface $logger,
         OperationRepository $operationRepository,
-        UserContextInterface $userContext = null
+        UserContextInterface $userContext = null,
+        Encryptor $encryptor = null
     ) {
         $this->identityService = $identityService;
         $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
@@ -90,6 +98,7 @@ class MassSchedule
         $this->logger = $logger;
         $this->operationRepository = $operationRepository;
         $this->userContext = $userContext ?: ObjectManager::getInstance()->get(UserContextInterface::class);
+        $this->encryptor = $encryptor ?: ObjectManager::getInstance()->get(Encryptor::class);
     }
 
     /**
@@ -130,9 +139,13 @@ class MassSchedule
             $requestItem = $this->itemStatusInterfaceFactory->create();
 
             try {
-                $operations[] = $this->operationRepository->createByTopic($topicName, $entityParams, $groupId);
+                $operation = $this->operationRepository->createByTopic($topicName, $entityParams, $groupId);
+                $operations[] = $operation;
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
+                $requestItem->setDataHash(
+                    $this->encryptor->hash($operation->getSerializedData(), Encryptor::HASH_VERSION_SHA256)
+                );
                 $requestItems[] = $requestItem;
             } catch (\Exception $exception) {
                 $this->logger->error($exception);

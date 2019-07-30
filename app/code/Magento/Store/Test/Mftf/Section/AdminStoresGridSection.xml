@@ -21,8 +21,10 @@
         <element name="storeGrpNameInFirstRow" type="text" selector=".col-group_title>a"/>
         <element name="storeNameInFirstRow" type="text" selector=".col-store_title>a"/>
         <element name="firstRow" type="textarea" selector="(//*[@id='storeGrid_table']/tbody/tr)[1]"/>
+        <element name="nthRow" type="textarea" selector="(//*[@id='storeGrid_table']/tbody/tr)[{{rownum}}]" parameterized="true"/>
         <element name="successMessage" type="text" selector="//div[@class='message message-success success']/div"/>
         <element name="emptyText" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
         <element name="websiteName" type="text" selector="//td[@class='a-left col-website_title  ']/a[contains(.,'{{websiteName}}')]" parameterized="true"/>
+        <element name="gridCell" type="text" selector="//table[@class='data-grid']//tr[{{row}}]//td[count(//table[@class='data-grid']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
      </section>
 </sections>

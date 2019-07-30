@@ -12,7 +12,7 @@
         <element name="subtotalRow" type="text" selector=".order-subtotal-table tbody > tr:nth-of-type({{row}}) td span.price" parameterized="true"/>
         <element name="total" type="text" selector="//table[contains(@class,'order-subtotal-table')]/tbody/tr/td[contains(text(), '{{total}}')]/following-sibling::td//span[contains(@class, 'price')]" parameterized="true"/>
         <element name="refundShipping" type="input" selector=".order-subtotal-table tbody input[name='creditmemo[shipping_amount]']"/>
-        <element name="adjustmentRefund" type="input" selector=".order-subtotal-table tbody input[name='creditmemo[adjustment_positive]'"/>
+        <element name="adjustmentRefund" type="input" selector=".order-subtotal-table tbody input[name='creditmemo[adjustment_positive]']"/>
         <element name="adjustmentFee" type="input" selector=".order-subtotal-table tbody input[name='creditmemo[adjustment_negative]']"/>
         <element name="grandTotal" type="text" selector=".order-subtotal-table tfoot tr.col-0>td span.price"/>
         <element name="appendComments" type="checkbox" selector=".order-totals-actions #notify_customer"/>

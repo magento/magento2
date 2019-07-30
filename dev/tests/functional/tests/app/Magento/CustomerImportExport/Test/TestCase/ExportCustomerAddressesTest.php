@@ -87,7 +87,8 @@ class ExportCustomerAddressesTest extends Injectable
         $exportData->persist();
         $this->adminExportIndex->getExportForm()->fill($exportData);
         $this->adminExportIndex->getFilterExport()->clickContinue();
-
+        $this->cron->run();
+        $this->cron->run();
         return [
             'customer' => $customer
         ];

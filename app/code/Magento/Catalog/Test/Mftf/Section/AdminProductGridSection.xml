@@ -17,6 +17,7 @@
         <element name="productGridElement2" type="text" selector="#addselector" />
         <element name="productGridRows" type="text" selector="table.data-grid tr.data-row"/>
         <element name="firstProductRow" type="text" selector="table.data-grid tr.data-row:first-of-type"/>
+        <element name="firstProductRowName" type="text" selector="table.data-grid tr.data-row:first-of-type > td:nth-of-type(4)"/>
         <element name="firstProductRowEditButton" type="button" selector="table.data-grid tr.data-row td .action-menu-item:first-of-type"/>
         <element name="productThumbnail" type="text" selector="table.data-grid tr:nth-child({{row}}) td.data-grid-thumbnail-cell > img" parameterized="true"/>
         <element name="productThumbnailBySrc" type="text" selector="img.admin__control-thumbnail[src*='{{pattern}}']" parameterized="true"/>

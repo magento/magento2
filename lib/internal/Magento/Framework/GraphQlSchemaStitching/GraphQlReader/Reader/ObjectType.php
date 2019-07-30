@@ -11,6 +11,7 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterfa
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\FieldMetaReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\ImplementsReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheAnnotationReader;
 
 /**
  * Composite configuration reader to handle the object type meta
@@ -33,22 +34,32 @@ class ObjectType implements TypeMetaReaderInterface
     private $implementsAnnotation;
 
     /**
+     * @var CacheAnnotationReader
+     */
+    private $cacheAnnotationReader;
+
+    /**
+     * ObjectType constructor.
      * @param FieldMetaReader $fieldMetaReader
      * @param DocReader $docReader
      * @param ImplementsReader $implementsAnnotation
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
      */
     public function __construct(
         FieldMetaReader $fieldMetaReader,
         DocReader $docReader,
-        ImplementsReader $implementsAnnotation
+        ImplementsReader $implementsAnnotation,
+        CacheAnnotationReader $cacheAnnotationReader = null
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;
         $this->implementsAnnotation = $implementsAnnotation;
+        $this->cacheAnnotationReader = $cacheAnnotationReader ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CacheAnnotationReader::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -75,6 +86,10 @@ class ObjectType implements TypeMetaReaderInterface
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
                     $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
+            }
+
+            if ($this->docReader->read($typeMeta->astNode->directives)) {
+                $result['cache'] = $this->cacheAnnotationReader->read($typeMeta->astNode->directives);
             }
 
             return $result;

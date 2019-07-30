@@ -67,7 +67,8 @@ class SmartButtonConfig
             'locale' => $this->localeResolver->getLocale(),
             'allowedFunding' => $this->getAllowedFunding($page),
             'disallowedFunding' => $this->getDisallowedFunding(),
-            'styles' => $this->getButtonStyles($page)
+            'styles' => $this->getButtonStyles($page),
+            'isVisibleOnProductPage'  => (int)$this->config->getValue('visible_on_product')
         ];
     }
 

@@ -207,6 +207,6 @@
         <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <see userInput="$$createConfigProduct.name$$" stepKey="assertProductPresent"/>
-        <See userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
+        <see userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
     </test>
 </tests>
