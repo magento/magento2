@@ -405,6 +405,33 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check that no duplicate entities when multiple custom options used
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
+     */
+    public function testExportWithMultipleOptions()
+    {
+        $expectedCount = 1;
+        $resultsFilename = 'export_results.csv';
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+
+        $varDirectory = $this->objectManager->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
+        $varDirectory->writeFile($resultsFilename, $exportData);
+        /** @var \Magento\Framework\File\Csv $csv */
+        $csv = $this->objectManager->get(\Magento\Framework\File\Csv::class);
+        $data = $csv->getData($varDirectory->getAbsolutePath($resultsFilename));
+        $actualCount = count($data) - 1;
+
+        $this->assertSame($expectedCount, $actualCount);
+    }
+
+    /**
      * @param string $exportedCustomOption
      * @return array
      */
