@@ -8,8 +8,8 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="StorefrontCategoryProductSection">
-        <element name="priceToByProductId" type="text" selector="div[data-product-id='{{id}}'] .price-to" parameterized="true"/>
-        <element name="priceFromByProductId" type="text" selector="div[data-product-id='{{id}}'] .price-from" parameterized="true"/>
+    <section name="CurrencySetupSection">
+        <element name="baseCurrency" type="select" selector="#currency_options_base"/>
+        <element name="baseCurrencyUseDefault" type="checkbox" selector="#currency_options_base_inherit"/>
     </section>
 </sections>
