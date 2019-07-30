@@ -15,6 +15,7 @@ use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 /**
  * Catalog entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
