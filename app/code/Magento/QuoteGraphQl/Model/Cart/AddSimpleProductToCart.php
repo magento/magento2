@@ -13,7 +13,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Model\Quote;
+use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 
 /**
  * Add simple product to cart
@@ -21,25 +23,25 @@ use Magento\Quote\Model\Quote;
 class AddSimpleProductToCart
 {
     /**
-     * @var CreateBuyRequest
-     */
-    private $createBuyRequest;
-
-    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
 
     /**
+     * @var BuyRequestBuilder
+     */
+    private $buyRequestBuilder;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
-     * @param CreateBuyRequest $createBuyRequest
+     * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        CreateBuyRequest $createBuyRequest
+        BuyRequestBuilder $buyRequestBuilder
     ) {
         $this->productRepository = $productRepository;
-        $this->createBuyRequest = $createBuyRequest;
+        $this->buyRequestBuilder = $buyRequestBuilder;
     }
 
     /**
@@ -53,8 +55,6 @@ class AddSimpleProductToCart
     public function execute(Quote $cart, array $cartItemData): void
     {
         $sku = $this->extractSku($cartItemData);
-        $quantity = $this->extractQuantity($cartItemData);
-        $customizableOptions = $cartItemData['customizable_options'] ?? [];
 
         try {
             $product = $this->productRepository->get($sku);
@@ -68,6 +68,7 @@ class AddSimpleProductToCart
                 $product,
                 $this->createBuyRequest->execute($quantity, $customizableOptions, $linksData)
             );
+            $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
         } catch (Exception $e) {
             throw new GraphQlInputException(
                 __(
