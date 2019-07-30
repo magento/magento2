@@ -60,6 +60,10 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Mail\MailEnvelopeBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $mailEnvelopeBuilder;
+    /**
+     * @var \Magento\Framework\Mail\MessageEnvelopeInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $messageEnvelopeMock;
 
     /**
      * @return void
@@ -69,6 +73,7 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->templateFactoryMock = $this->createMock(\Magento\Framework\Mail\Template\FactoryInterface::class);
         $this->messageMock = $this->createMock(\Magento\Framework\Mail\Message::class);
+        $this->messageEnvelopeMock = $this->createMock(\Magento\Framework\Mail\MessageEnvelopeInterface::class);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->senderResolverMock = $this->createMock(\Magento\Framework\Mail\Template\SenderResolverInterface::class);
         $this->mailEnvelopeBuilder = $this->createMock(\Magento\Framework\Mail\MailEnvelopeBuilder::class);
@@ -121,26 +126,10 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('identifier'), $this->equalTo($templateNamespace))
             ->willReturn($template);
 
-        $this->messageMock->expects($this->once())
-            ->method('setSubject')
-            ->with($this->equalTo('Email Subject'))
-            ->willReturnSelf();
-
-        $this->messageMock->expects($this->exactly((int)($messageType === MimeInterface::TYPE_TEXT)))
-            ->method('setBodyText')
-            ->with($this->equalTo($bodyText))
-            ->willReturnSelf();
-
-        $this->messageMock->expects($this->exactly((int)($messageType === MimeInterface::TYPE_HTML)))
-            ->method('setBodyHtml')
-            ->with($this->equalTo($bodyText))
-            ->willReturnSelf();
-
         $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
         $this->mailTransportFactoryMock->expects($this->at(0))
             ->method('create')
-            ->with($this->equalTo(['message' => $this->messageMock]))
             ->willReturn($transport);
 
         $this->builder->setTemplateIdentifier('identifier')->setTemplateVars($vars)->setTemplateOptions($options);
