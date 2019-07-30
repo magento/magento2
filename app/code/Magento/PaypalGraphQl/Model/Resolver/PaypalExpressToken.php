@@ -16,7 +16,7 @@ use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
 use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\StoreGraphQl\Model\Resolver\Store\Url;
+use Magento\PaypalGraphQl\Model\Resolver\Store\Url;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\Validation\ValidationException;
 
@@ -144,7 +144,7 @@ class PaypalExpressToken implements ResolverInterface
     /**
      * Validate and convert to redirect urls from given paths
      *
-     * @param string $path
+     * @param string $paths
      * @param StoreInterface $store
      * @return array
      * @throws GraphQlInputException

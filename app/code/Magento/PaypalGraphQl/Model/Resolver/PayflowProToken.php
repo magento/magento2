@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\StoreGraphQl\Model\Resolver\Store\Url;
+use Magento\PaypalGraphQl\Model\Resolver\Store\Url;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\Validation\ValidationException;
 
@@ -97,7 +97,7 @@ class PayflowProToken implements ResolverInterface
     /**
      * Validate and convert to redirect urls from given paths
      *
-     * @param string $path
+     * @param string $paths
      * @param StoreInterface $store
      * @return array
      * @throws GraphQlInputException
