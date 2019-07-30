@@ -22,11 +22,6 @@ use Magento\Store\Model\StoreManagerInterface;
 class CreateBraintreeClientToken implements ResolverInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var Config
      */
     private $config;
@@ -37,16 +32,13 @@ class CreateBraintreeClientToken implements ResolverInterface
     private $adapterFactory;
 
     /**
-     * @param StoreManagerInterface $storeManager
      * @param Config $config
      * @param BraintreeAdapterFactory $adapterFactory
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
         Config $config,
         BraintreeAdapterFactory $adapterFactory
     ) {
-        $this->storeManager = $storeManager;
         $this->config = $config;
         $this->adapterFactory = $adapterFactory;
     }
@@ -61,7 +53,7 @@ class CreateBraintreeClientToken implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         if (!$this->config->isActive($storeId)) {
             throw new GraphQlInputException(__('The Braintree payment method is not active.'));
