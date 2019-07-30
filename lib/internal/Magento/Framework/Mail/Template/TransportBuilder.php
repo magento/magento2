@@ -376,7 +376,7 @@ class TransportBuilder
                 );
         }
         $this->messageData['body'][] = $part;
-        $this->messageData['subject'] = html_entity_decode($template->getSubject(), ENT_QUOTES);
+        $this->messageData['subject'] = html_entity_decode((string)$template->getSubject(), ENT_QUOTES);
         $this->message = $this->mailEnvelopeBuilder->buildByArray($this->messageData);
 
         return $this;
