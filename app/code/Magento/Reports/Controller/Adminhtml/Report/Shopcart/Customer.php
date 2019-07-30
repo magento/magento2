@@ -4,10 +4,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
-class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\Customer
+ */
+class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart implements HttpGetActionInterface
 {
+    /**
+     * Authorization of a customer report
+     */
+    const ADMIN_RESOURCE = null;
+
     /**
      * Customer shopping carts action
      *
