@@ -18,7 +18,7 @@ class ExcludeFilesFromMinification
      * @param Minification $subject
      * @param array $result
      * @param $contentType
-     * 
+     *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
