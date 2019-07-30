@@ -191,4 +191,12 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             [new \ReflectionException('Not Valid!')]
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        restore_error_handler();
+    }
 }
