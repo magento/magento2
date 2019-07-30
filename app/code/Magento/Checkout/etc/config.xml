@@ -33,5 +33,21 @@
                 <template>checkout_payment_failed_template</template>
             </payment_failed>
         </checkout>
+        <captcha>
+            <frontend>
+                <areas>
+                    <sales_rule_coupon_request>
+                        <label>Applying coupon code</label>
+                    </sales_rule_coupon_request>
+                </areas>
+            </frontend>
+        </captcha>
+        <customer>
+            <captcha>
+                <shown_to_logged_in_user>
+                    <sales_rule_coupon_request>1</sales_rule_coupon_request>
+                </shown_to_logged_in_user>
+            </captcha>
+        </customer>
     </default>
 </config>

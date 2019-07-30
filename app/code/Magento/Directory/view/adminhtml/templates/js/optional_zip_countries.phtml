@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * JS block for including Countries with Optional Zip
  *
@@ -19,7 +18,7 @@ require([
 ], function(){
 
 //<![CDATA[
-optionalZipCountries = <?= /* @noEscape */ $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>;
+optionalZipCountries = <?= /* @noEscape */ $this->helper(\Magento\Directory\Helper\Data::class)->getCountriesWithOptionalZip(true) ?>;
 
 function onAddressCountryChanged (countryElement) {
     var zipElementId = countryElement.id.replace(/country_id/, 'postcode');
