@@ -31,8 +31,6 @@ class RouteValidator extends \Zend_Validate_Abstract
         // set translated message template
         $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), self::INVALID_URL);
         $this->validator = $validator;
-        $this->validator->setAllowRelative(true);
-        $this->validator->setAllowAbsolute(false);
     }
 
     /**
