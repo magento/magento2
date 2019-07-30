@@ -89,10 +89,10 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->classReaderMock->expects(
-                $this->exactly(
-                    count($classes)
-                )
+            $this->exactly(
+                count($classes)
             )
+        )
             ->method('getParents')
             ->will(
                 $this->returnValueMap($parents)
