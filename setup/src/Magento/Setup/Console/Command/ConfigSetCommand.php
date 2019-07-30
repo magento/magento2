@@ -10,8 +10,10 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ConfigModel;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ConfigSetCommand extends AbstractSetupCommand
 {
@@ -81,10 +83,15 @@ class ConfigSetCommand extends AbstractSetupCommand
 
             $currentValue = $this->deploymentConfig->get($option->getConfigPath());
             if (($currentValue !== null) && ($inputOptions[$option->getName()] !== null)) {
-                $dialog = $this->getHelperSet()->get('dialog');
-                if (!$dialog->askConfirmation(
+                /** @var QuestionHelper $question */
+                $question = $this->getHelper('question');
+                if (!$question->ask(
+                    $input,
                     $output,
-                    '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y/n]</question>'
+                    new ConfirmationQuestion(
+                        '<question>Overwrite the existing configuration for '
+                        . $option->getName() . '?[Y/n]</question>'
+                    )
                 )) {
                     $inputOptions[$option->getName()] = null;
                 }
