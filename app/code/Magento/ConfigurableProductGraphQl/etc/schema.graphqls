@@ -1,7 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type Mutation {
-    addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+    addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\AddConfigurableProductsToCart")
 }
 
 type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
@@ -50,13 +50,19 @@ type AddConfigurableProductsToCartOutput {
 
 input ConfigurableProductCartItemInput {
     data: CartItemInput!
-    variant_sku: String!
+    variant_sku: String @deprecated(reason: "Use CartItemInput.sku instead")
+    configurable_attributes: [ConfigurableCartItemAttributesInput]!
     customizable_options:[CustomizableOptionInput!]
+}
+
+input ConfigurableCartItemAttributesInput {
+    id: Int!
+    value: Int!
 }
 
 type ConfigurableCartItem implements CartItemInterface {
     customizable_options: [SelectedCustomizableOption]!
-    configurable_options: [SelectedConfigurableOption!]!
+    configurable_options: [SelectedConfigurableOption!]! @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableCartItemOptions")
 }
 
 type SelectedConfigurableOption {
