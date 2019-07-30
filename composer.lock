@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a204d42a2e939155f13e31f3cb937c8b",
+    "content-hash": "730848a82ab55a2232a9b43474a5130b",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -948,16 +948,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "dev-master",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "e79070bc6fa9e3967b6db693e425c3f6fa493712"
+                "reference": "ea12b95be5c0833b3d9497aaefa08816c19e5dcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/e79070bc6fa9e3967b6db693e425c3f6fa493712",
-                "reference": "e79070bc6fa9e3967b6db693e425c3f6fa493712",
+                "url": "https://api.github.com/repos/magento/composer/zipball/ea12b95be5c0833b3d9497aaefa08816c19e5dcd",
+                "reference": "ea12b95be5c0833b3d9497aaefa08816c19e5dcd",
                 "shasum": ""
             },
             "require": {
@@ -980,7 +980,7 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2019-05-21T16:27:33+00:00"
+            "time": "2019-07-29T19:52:05+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -5563,16 +5563,16 @@
         },
         {
             "name": "consolidation/robo",
-            "version": "1.4.9",
+            "version": "1.4.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/Robo.git",
-                "reference": "5c6b3840a45afda1cbffbb3bb1f94dd5f9f83345"
+                "reference": "e5a6ca64cf1324151873672e484aceb21f365681"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/Robo/zipball/5c6b3840a45afda1cbffbb3bb1f94dd5f9f83345",
-                "reference": "5c6b3840a45afda1cbffbb3bb1f94dd5f9f83345",
+                "url": "https://api.github.com/repos/consolidation/Robo/zipball/e5a6ca64cf1324151873672e484aceb21f365681",
+                "reference": "e5a6ca64cf1324151873672e484aceb21f365681",
                 "shasum": ""
             },
             "require": {
@@ -5667,7 +5667,7 @@
                 }
             ],
             "description": "Modern task runner",
-            "time": "2019-03-19T18:07:19+00:00"
+            "time": "2019-07-29T15:40:50+00:00"
         },
         {
             "name": "consolidation/self-update",
@@ -9489,7 +9489,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
