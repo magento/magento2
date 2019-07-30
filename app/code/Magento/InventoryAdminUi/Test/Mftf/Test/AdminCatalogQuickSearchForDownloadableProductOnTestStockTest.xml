@@ -20,6 +20,7 @@
         </annotations>
         
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
@@ -32,6 +33,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
