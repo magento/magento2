@@ -79,7 +79,7 @@ class TransportBuilder
     /**
      * Message
      *
-     * @var \Magento\Framework\Mail\Message
+     * @var \Magento\Framework\Mail\MessageEnvelopeInterface
      */
     protected $message;
 
@@ -138,7 +138,6 @@ class TransportBuilder
         $this->mailTransportFactory = $mailTransportFactory;
         $this->messageFactory = $messageFactory ?: $this->objectManager
             ->get(MessageInterfaceFactory::class);
-        $this->message = $this->messageFactory->create();
         $this->mailEnvelopeBuilder = $mailEnvelopeBuilder ?: $this->objectManager
             ->get(MailEnvelopeBuilder::class);
     }
@@ -169,7 +168,7 @@ class TransportBuilder
         if (!$name) {
             $this->messageData['to'][] = $address;
         } else {
-            $this->messageData['to'][$address] =  $name;
+            $this->messageData['to'][$address] = $name;
         }
 
         return $this;
