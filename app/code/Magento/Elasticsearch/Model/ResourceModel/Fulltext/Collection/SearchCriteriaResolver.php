@@ -79,7 +79,7 @@ class SearchCriteriaResolver implements SearchCriteriaResolverInterface
         $this->builder->setPageSize($this->size);
         $searchCriteria = $this->builder->create();
         $searchCriteria->setRequestName($this->searchRequestName);
-        $searchCriteria->setSortOrders(array_merge(['relevance' => 'DESC'], $this->orders));
+        $searchCriteria->setSortOrders($this->orders);
         $searchCriteria->setCurrentPage($this->currentPage - 1);
 
         return $searchCriteria;

@@ -96,7 +96,6 @@ mutation {
     setPaymentMethodOnCart(input: {
         payment_method: {
           code: "{$paymentMethod}",
-          additional_data: {
             paypal_express: {
               payer_id: "$payerId",
               token: "$token"
@@ -105,7 +104,6 @@ mutation {
               payer_id: "$payerId",
               token: "$token"
             }
-          }
         },
         cart_id: "{$cartId}"})
       {
