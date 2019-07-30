@@ -66,7 +66,7 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
         $this->collectionFactory = $collectionFactory;
         $this->productRepository = $productRepository ?:
             \Magento\Framework\App\ObjectManager::getInstance()->create(ProductRepositoryInterface::class);
-        $this->logger = $logger ??
+        $this->logger = $logger ?:
             \Magento\Framework\App\ObjectManager::getInstance()->create(LoggerInterface::class);
         parent::__construct($context, $productBuilder);
     }
