@@ -101,11 +101,9 @@ class PlaceOrderWithHostedProTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$this->paymentMethod"
-          additional_data: {
-              hosted_pro: {
-                  cancel_url:"paypal/hostedpro/customcancel"
-                  return_url:"paypal/hostedpro/customreturn"
-              }
+          hosted_pro: {
+              cancel_url:"paypal/hostedpro/customcancel"
+              return_url:"paypal/hostedpro/customreturn"
           }
       }
   }) {    
@@ -126,8 +124,11 @@ QUERY;
         $apiRequestData = require __DIR__ . '/../../../_files/hosted_pro_nvp_request.php';
         $apiResponseData = require __DIR__ . '/../../../_files/hosted_pro_nvp_response.php';
 
-        $this->nvpMock->expects($this->once())->method('call')
-            ->with(Hostedpro::BM_BUTTON_METHOD, $apiRequestData)->willReturn($apiResponseData);
+        $this->nvpMock
+            ->expects($this->once())
+            ->method('call')
+            ->with(Hostedpro::BM_BUTTON_METHOD, $apiRequestData)
+            ->willReturn($apiResponseData);
 
         $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
@@ -174,11 +175,9 @@ QUERY;
       cart_id: "$cartId"
       payment_method: {
           code: "$this->paymentMethod"
-          additional_data: {
-            hosted_pro: {
-              cancel_url:"paypal/hostedpro/customCancel"
-              return_url:"paypal/hostedpro/customeReturnUrl"
-            }
+          hosted_pro: {
+            cancel_url:"paypal/hostedpro/customCancel"
+            return_url:"paypal/hostedpro/customReturnUrl"
           }
       }
   }) {    
@@ -206,10 +205,59 @@ QUERY;
         $responseData = $this->json->unserialize($response->getContent());
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
-        $this->assertEquals(
-            $expectedExceptionMessage,
-            $actualError['message']
-        );
+        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+    }
+
+    /**
+     * Test setPaymentMethodOnCart with invalid url inputs
+     *
+     * @magentoConfigFixture default_store payment/hosted_pro/active 1
+     * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
+     * @magentoConfigFixture default_store paypal/general/merchant_country GB
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
+     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @return void
+     */
+    public function testSetPaymentMethodInvalidUrls()
+    {
+        $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query
+            = <<<QUERY
+ mutation {
+  setPaymentMethodOnCart(input: {
+      cart_id: "$cartId"
+      payment_method: {
+          code: "$this->paymentMethod"
+          hosted_pro: {
+            cancel_url:"http://mysite.com/paypal/hostedpro/customCancel"
+            return_url:"http://mysite.com/paypal/hostedpro/customReturnUrl"
+          }
+      }
+  }) {    
+       cart {
+          selected_payment_method {
+          code
+      }
+    }
+  }
+}
+QUERY;
+
+        $expectedExceptionMessage = 'Invalid Url.';
+
+        $response = $this->graphQlRequest->send($query);
+        $responseData = $this->json->unserialize($response->getContent());
+        $this->assertArrayHasKey('errors', $responseData);
+        $actualError = $responseData['errors'][0];
+        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
         $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
     }
 }

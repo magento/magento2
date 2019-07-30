@@ -45,7 +45,7 @@ class GetHostedProSecureUrlTest extends TestCase
      * @magentoDataFixture Magento/Paypal/_files/quote_order_hostedpro.php
      * @return void
      */
-    public function testResolveHostedProUrl() : void
+    public function testResolveHostedProUrl(): void
     {
         $reservedQuoteId = 'test_quote';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedQuoteId);

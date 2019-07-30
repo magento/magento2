@@ -140,6 +140,7 @@ class Hostedpro extends Direct
 
     /**
      * Return available CC types for gateway based on merchant country.
+     *
      * We do not have to check the availability of card types.
      *
      * @return true
@@ -150,7 +151,8 @@ class Hostedpro extends Direct
     }
 
     /**
-     * Return merchant country code from config,
+     * Return merchant country code from config
+     *
      * use default country if it not specified in General settings
      *
      * @return string
