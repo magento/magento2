@@ -14,6 +14,7 @@
             <data name="customer/data/current_password" xsi:type="string">123123^q</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInfoSuccessSavedMessage" />
             <constraint name="Magento\Security\Test\Constraint\AssertCustomerEmailChanged" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
         <variation name="SecureChangingEmailV2" summary="Change Email checkbox is checked, enter new email, wrong password">
             <data name="tag" xsi:type="string">severity:S2</data>
@@ -21,6 +22,7 @@
             <data name="customer/data/email" xsi:type="string">JaneDoe_%isolation%@example.com</data>
             <data name="customer/data/current_password" xsi:type="string">123123123</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertChangePasswordFailMessage" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>
 </config>
