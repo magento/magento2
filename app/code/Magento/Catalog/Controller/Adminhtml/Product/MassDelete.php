@@ -51,22 +51,23 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
      * @param Builder $productBuilder
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @param LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         Builder $productBuilder,
         Filter $filter,
         CollectionFactory $collectionFactory,
-        LoggerInterface $logger,
-        ProductRepositoryInterface $productRepository = null
+        ProductRepositoryInterface $productRepository = null,
+        LoggerInterface $logger = null
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
-        $this->productRepository = $productRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->create(ProductRepositoryInterface::class);
-        $this->logger = $logger;
+        $this->productRepository = $productRepository ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->create(ProductRepositoryInterface::class);
+        $this->logger = $logger ?? 
+            \Magento\Framework\App\ObjectManager::getInstance()->create(LoggerInterface::class);
         parent::__construct($context, $productBuilder);
     }
 
@@ -99,8 +100,10 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
 
         if ($productDeletedError) {
             $this->messageManager->addErrorMessage(
-                __('A total of %1 record(s) haven\'t been deleted. Please see server logs for more details.'
-                    , $productDeletedError)
+                __(
+                    'A total of %1 record(s) haven\'t been deleted. Please see server logs for more details.',
+                    $productDeletedError
+                )
             );
         }
 
