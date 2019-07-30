@@ -17,7 +17,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface as PsrLogger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class \Magento\Catalog\Controller\Adminhtml\Product\MassDelete
@@ -42,16 +42,16 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
     private $productRepository;
 
     /**
-     * @var PsrLogger
+     * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @param Context $context
      * @param Builder $productBuilder
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @param PsrLogger $logger
+     * @param LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -59,7 +59,7 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
         Builder $productBuilder,
         Filter $filter,
         CollectionFactory $collectionFactory,
-        PsrLogger $logger,
+        LoggerInterface $logger,
         ProductRepositoryInterface $productRepository = null
     ) {
         $this->filter = $filter;
@@ -85,12 +85,6 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
             try {
                 $this->productRepository->delete($product);
                 $productDeleted++;
-            } catch (CouldNotSaveException $exception) {
-                $this->logger->error($exception->getLogMessage());
-                $productDeletedError++;
-            } catch (StateException $exception) {
-                $this->logger->error($exception->getLogMessage());
-                $productDeletedError++;
             } catch (LocalizedException $exception) {
                 $this->logger->error($exception->getLogMessage());
                 $productDeletedError++;
@@ -105,7 +99,8 @@ class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product implement
 
         if ($productDeletedError) {
             $this->messageManager->addErrorMessage(
-                __('A total of %1 record(s) haven\'t been deleted.', $productDeleted)
+                __('A total of %1 record(s) haven\'t been deleted. Please see server logs for more details.'
+                    , $productDeletedError)
             );
         }
 
