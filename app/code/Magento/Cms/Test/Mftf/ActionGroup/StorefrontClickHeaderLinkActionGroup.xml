@@ -7,10 +7,11 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontSeeHeaderLinksActionGroup">
+    <actionGroup name="StorefrontClickHeaderLinkActionGroup">
         <arguments>
             <argument name="LinkName" type="string" defaultValue="Create an Account"/>
         </arguments>
-        <see stepKey="SeeElement" selector="{{StorefrontHeaderSection.headerlinks}}" userInput="{{LinkName}}"/>
+        <click stepKey="ClickTheLink" selector="{{StorefrontHeaderSection.HeaderLinkByText(LinkName)}}"/>
+        <waitForPageLoad stepKey="Wait"/>
     </actionGroup>
 </actionGroups>
