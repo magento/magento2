@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\StoreGraphQl\Model\Resolver\Store\Url as UrlService;
+use Magento\PaypalGraphQl\Model\Resolver\Store\Url as UrlService;
 use Magento\Paypal\Model\Config;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 
