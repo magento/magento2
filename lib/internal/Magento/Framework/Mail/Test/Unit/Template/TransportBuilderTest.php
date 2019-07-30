@@ -99,12 +99,11 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getTransportDataProvider
      * @param int $templateType
-     * @param string $messageType
      * @param string $bodyText
      * @param string $templateNamespace
      * @return void
      */
-    public function testGetTransport($templateType, $messageType, $bodyText, $templateNamespace)
+    public function testGetTransport($templateType, $bodyText, $templateNamespace)
     {
         $this->builder->setTemplateModel($templateNamespace);
 
@@ -168,13 +167,11 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 TemplateTypesInterface::TYPE_TEXT,
-                MessageInterface::TYPE_TEXT,
                 'Plain text',
                 null
             ],
             [
                 TemplateTypesInterface::TYPE_HTML,
-                MessageInterface::TYPE_HTML,
                 '<h1>Html message</h1>',
                 'Test\Namespace\Template'
             ]
