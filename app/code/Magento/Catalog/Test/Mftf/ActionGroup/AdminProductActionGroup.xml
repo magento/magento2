@@ -249,6 +249,10 @@
         <waitForPageLoad time="60" stepKey="WaitForProductSave1"/>
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
+    <actionGroup name="ProductSetAdvancedTierFixedPricing" extends="ProductSetAdvancedPricing">
+        <remove keyForRemoval="selectProductTierPricePriceInput"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('0')}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput" after="selectProductTierPriceValueType"/>
+    </actionGroup>
 
     <!--Assert text in Related, Up-Sell or Cross-Sell section in Admin Product page-->
     <actionGroup name="AssertTextInAdminProductRelatedUpSellCrossSellSection">
@@ -275,8 +279,9 @@
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <checkOption selector="{{AdminProductModalSlideGridSection.productRowCheckboxBySku(sku)}}" stepKey="selectProduct"/>
+        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
+        <waitForElementNotVisible selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="waitForElementNotVisible"/>
     </actionGroup>
 
     <!--Click AddCrossSellProducts and adds product by SKU-->
@@ -387,6 +392,14 @@
         <waitForPageLoad stepKey="waitForSave"/>
     </actionGroup>
 
+    <!-- Action group assign to one website and unassign from another -->
+    <actionGroup name="AdminProcessProductWebsitesActionGroup" extends="CreatedProductConnectToWebsite">
+        <arguments>
+            <argument name="websiteToUnassign"/>
+        </arguments>
+        <uncheckOption selector="{{ProductInWebsitesSection.website(websiteToUnassign.name)}}" after="SelectWebsite" stepKey="uncheckWebsite"/>
+    </actionGroup>
+
     <!--Check tier price with a discount percentage on product-->
     <actionGroup name="AssertDiscountsPercentageOfProducts">
         <arguments>
@@ -495,6 +508,19 @@
         <click selector="{{AdminAddUpSellProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
     </actionGroup>
+    <actionGroup name="adminProductAdvancedPricingNewCustomerGroupPrice">
+        <arguments>
+            <argument name="qty" type="string" defaultValue="2"/>
+            <argument name="priceType" type="string" defaultValue="Discount"/>
+            <argument name="discount" type="string" defaultValue="75"/>
+            <argument name="customerGroup" type="string" defaultValue="0"/>
+        </arguments>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroup"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput(customerGroup)}}" userInput="{{qty}}" stepKey="fillProductTierPriceQtyInput1"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect(customerGroup)}}" userInput="{{priceType}}" stepKey="selectProductTierPriceValueType1"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput(customerGroup)}}" userInput="{{discount}}" stepKey="selectProductTierPricePriceInput"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
+    </actionGroup>
     <actionGroup name="AdminSetProductDisabled">
         <conditionalClick selector="{{AdminProductFormSection.enableProductLabel}}" dependentSelector="{{AdminProductFormSection.productStatusValue('1')}}" visible="true" stepKey="disableProduct"/>
         <seeElement selector="{{AdminProductFormSection.productStatusValue('2')}}" stepKey="assertThatProductSetToDisabled"/>
@@ -523,5 +549,12 @@
     <actionGroup name="AssertProductIsAssignedToWebsite" extends="AssertWebsiteIsAvailableInProductWebsites">
         <remove keyForRemoval="seeCheckboxForWebsite"/>
         <seeCheckboxIsChecked selector="{{ProductInWebsitesSection.website(website)}}" after="expandProductWebsitesSection" stepKey="seeCustomWebsiteIsChecked"/>
+    </actionGroup>
+
+    <!-- You are on product Edit Page -->
+    <!-- Assert checkbox is not checked for website in Product In Websites -->
+    <actionGroup name="AssertProductIsNotAssignedToWebsite" extends="AssertWebsiteIsAvailableInProductWebsites">
+        <remove keyForRemoval="seeCheckboxForWebsite"/>
+        <dontSeeCheckboxIsChecked selector="{{ProductInWebsitesSection.website(website)}}" after="expandProductWebsitesSection" stepKey="seeCustomWebsiteIsNotChecked"/>
     </actionGroup>
 </actionGroups>

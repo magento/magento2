@@ -11,6 +11,7 @@
     <test name="AdminCheckConfigurableProductAttributeValueUniquenessTest">
         <annotations>
             <features value="ConfigurableProduct"/>
+            <stories value="Configurable Product"/>
             <title value="Attribute value validation (check for uniqueness) in configurable products"/>
             <description value="Attribute value validation (check for uniqueness) in configurable products"/>
             <severity value="MAJOR"/>

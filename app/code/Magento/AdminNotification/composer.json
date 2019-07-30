@@ -11,7 +11,8 @@
         "magento/module-backend": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-config": "*"
     },
     "type": "magento2-module",
     "license": [

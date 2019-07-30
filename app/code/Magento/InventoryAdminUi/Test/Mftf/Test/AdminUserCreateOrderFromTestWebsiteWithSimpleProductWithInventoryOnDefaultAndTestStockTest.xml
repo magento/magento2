@@ -10,6 +10,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUserCreateOrderFromTestWebsiteWithSimpleProductWithInventoryOnDefaultAndTestStockTest">
         <annotations>
+            <skip>
+                <issueId value="MAGETWO-72172" />
+            </skip>
             <stories value="InventoryAdminUi stock option"/>
             <title value="Admin user create order from Test website with Simple product with inventory on Default and Test stock"/>
             <description

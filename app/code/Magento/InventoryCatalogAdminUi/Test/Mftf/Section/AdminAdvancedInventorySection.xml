@@ -18,5 +18,6 @@
         <element name="outOfStockThresholdUseDefault" type="checkbox" selector="input[name='product[stock_data][use_config_min_qty]']"/>
         <element name="backorders" type="select" selector="select[name='product[stock_data][backorders]']"/>
         <element name="backordersUseDefault" type="checkbox" selector="input[name='product[stock_data][use_config_backorders]']"/>
+        <element name="qtyUseDecimals" type="select" selector="select[name='product[stock_data][is_qty_decimal]']"/>
     </section>
 </sections>

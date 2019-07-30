@@ -16,7 +16,7 @@
         <element name="productName" type="text" selector=".product-item-name"/>
         <element name="productOptionsDetailsByName" type="button" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//span[.='See Details']"  parameterized="true"/>
         <element name="productOptionByNameAndAttribute" type="text" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//dt[@class='label' and .='{{var2}}']/following-sibling::dd[@class='values']//span"  parameterized="true"/>
-        <element name="showCart" type="button" selector="a.showcart"/>
+        <element name="showCart" type="button" selector="a.showcart" timeout="60"/>
         <element name="quantity" type="button" selector="span.counter-number"/>
         <element name="miniCartOpened" type="button" selector="a.showcart.active"/>
         <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminManageStockOnConfigurationPageTurnedOffForVirtualProductTest">
+        <annotations>
+            <stories value="Virtual Product Default Stock."/>
+            <title value="Manage Stock on configuration page turned off for Virtual Product in admin"/>
+            <description value="Verify, admin should be able to turn off Manage Stock option on configuration page for virtual product."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/911989/scenarios/2720787"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create Additional Source and Stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create Product and Category.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="VirtualProduct" stepKey="product"/>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Delete created data.-->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+            <!--Revert manage stock configuration.-->
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStock"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindexAfterManageStockRestored"/>
+            <magentoCLI command="cache:flush" stepKey="flushCacheAfterManageStockRestored"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+        <!--Set Product to 'Out of Stock'.-->
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setProductToOutOfStock"/>
+        <!--Assign product to category and save.-->
+        <scrollToTopOfPage stepKey="scrollOnTopOfPage"/>
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToProduct">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <!--Verify product is not visible on storefront.-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <dontSee userInput="$$product.name$$" stepKey="verifyProductIsNotPresentOnStorefront"/>
+        <!--Disable manage stock on configuration page.-->
+        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="disableManageStock"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindexAfterManageStockDisabled"/>
+        <magentoCLI command="cache:flush" stepKey="flushCacheAfterManageStockDisabled"/>
+        <!--Verify product is visible on storefront.-->
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsPresentOnCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+    </test>
+</tests>

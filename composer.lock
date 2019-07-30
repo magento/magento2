@@ -951,7 +951,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:magento/composer.git",
+                "url": "https://github.com/magento/composer.git",
                 "reference": "e79070bc6fa9e3967b6db693e425c3f6fa493712"
             },
             "dist": {
