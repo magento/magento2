@@ -8,8 +8,6 @@ namespace Magento\Framework\Mail\Test\Unit\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Mail\MessageInterface;
-use Magento\Framework\Mail\MessageInterfaceFactory;
-use Magento\Framework\Mail\MimeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -76,7 +74,6 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
         $this->messageEnvelopeMock = $this->createMock(\Magento\Framework\Mail\MessageEnvelopeInterface::class);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->senderResolverMock = $this->createMock(\Magento\Framework\Mail\Template\SenderResolverInterface::class);
-        $this->mailEnvelopeBuilder = $this->createMock(\Magento\Framework\Mail\MailEnvelopeBuilder::class);
         $this->mailTransportFactoryMock = $this->getMockBuilder(
             \Magento\Framework\Mail\TransportInterfaceFactory::class
         )->disableOriginalConstructor()
