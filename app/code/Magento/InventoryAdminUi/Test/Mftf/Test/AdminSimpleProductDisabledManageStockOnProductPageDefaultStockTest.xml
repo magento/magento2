@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductDisabledManageStockOnProductPageDefaultStockTest">
+        <annotations>
+            <stories value="Simple Product Default Stock."/>
+            <title value="Simple Product Default Stock with Disabled Manage Stock on Product Page."/>
+            <description value="Verify, simple product will be visible on storefront with out of stock status on default stock and turned off manage stock option in configuration."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/2717764"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create Additional Source and Stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create Product and Category.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Delete created data.-->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+
+        <!--Set Product to 'Out of Stock'.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setProductToOutOfStock"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="saveProduct"/>
+        <!--Verify product is not visible on storefront.-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <dontSee userInput="$$product.name$$" stepKey="verifyProductIsNotPresentOnStorefront"/>
+        <!--Disable manage stock on product edit page.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToDisableManageStock"/>
+        <actionGroup ref="AdminChangeManageStockStatusOnProductEditPageActionGroup" stepKey="disableMangeStockOnProductEditPage">
+            <argument name="manageStock" value="No"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="saveProductAfterDisableManageStock"/>
+        <!--Verify product is visible on storefront.-->
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsPresentOnCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -28,6 +28,12 @@
                 <requiredEntity createDataKey="additionalSource"/>
             </createData>
             <createData entity="_defaultCategory" stepKey="category"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
         </before>
         <after>
             <!--Disable additional source.-->
@@ -40,7 +46,6 @@
             <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
         </after>
         <!--Create configurable product.-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGrid"/>
         <waitForPageLoad time="30" stepKey="waitForProductGridLoad"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>

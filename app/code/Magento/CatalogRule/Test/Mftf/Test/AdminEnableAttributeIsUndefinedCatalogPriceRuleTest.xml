@@ -63,6 +63,8 @@
             <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
 
             <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
         <!--Create catalog price rule-->
