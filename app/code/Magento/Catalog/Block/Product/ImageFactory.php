@@ -160,6 +160,8 @@ class ImageFactory
             );
         }
 
+        $attributes = $attributes === null ? [] : $attributes;
+        
         $data = [
             'data' => [
                 'template' => 'Magento_Catalog::product/image_with_borders.phtml',
@@ -168,7 +170,7 @@ class ImageFactory
                 'height' => $imageMiscParams['image_height'],
                 'label' => $this->getLabel($product, $imageMiscParams['image_type']),
                 'ratio' => $this->getRatio($imageMiscParams['image_width'], $imageMiscParams['image_height']),
-                'custom_attributes' => $this->getStringCustomAttributes((array) $attributes),
+                'custom_attributes' => $this->getStringCustomAttributes($attributes),
                 'class' => $this->getClass($attributes),
                 'product_id' => $product->getId()
             ],
