@@ -151,7 +151,7 @@ class Url
     /**
      * Validate if path starts with port delimiter
      *
-     * @param array $url
+     * @param array $path
      * @return boolean
      */
     private function startsWithPortDelimiter(string $path): bool
