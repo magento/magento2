@@ -41,7 +41,7 @@ $_order = $block->getOrder() ?>
             <br /><?= $block->escapeHtml(__('Message:')) ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
             <?php endif; ?>
             </td>
-            <td align="center" valign="top" style="padding:3px 9px"><?= (int) $_item->getQtyOrdered() ?></td>
+            <td align="center" valign="top" style="padding:3px 9px"><?= (float) $_item->getQtyOrdered() ?></td>
             <td align="right" valign="top" style="padding:3px 9px"><?= /* @noEscape */ $_order->formatPrice($_item->getRowTotal()) ?></td>
         </tr>
 <?php endforeach; ?>
