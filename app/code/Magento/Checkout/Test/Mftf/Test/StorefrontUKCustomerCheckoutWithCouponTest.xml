@@ -18,6 +18,7 @@
         </annotations>
 
         <before>
+            <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
             <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct">
                 <field key="price">20.00</field>
@@ -38,6 +39,7 @@
             </createData>
         </before>
         <after>
+            <magentoCLI command="downloadable:domains:remove" arguments="example.com static.magento.com" stepKey="removeDownloadableDomain"/>
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
