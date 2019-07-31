@@ -363,7 +363,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->any())
             ->method('from')
             ->with(
-                ['catalog_category_product_index_store1'],
+                ['catalog_category_product_index_store'],
                 ['category_id', 'product_id', 'position', 'store_id']
             )->willReturnSelf();
 
