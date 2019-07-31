@@ -16,7 +16,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart implements HttpGetActionInterface
 {
     /**
-     * Authorization for an abandoned report
+     * Authorization of an abandoned report
      */
     const ADMIN_RESOURCE = 'Magento_Reports::abandoned';
 
