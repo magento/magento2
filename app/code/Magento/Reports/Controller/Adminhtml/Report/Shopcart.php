@@ -55,15 +55,4 @@ abstract class Shopcart extends \Magento\Backend\App\Action
         $this->_addBreadcrumb(__('Shopping Cart'), __('Shopping Cart'));
         return $this;
     }
-
-    /**
-     * Determine if action is allowed for reports module
-     *
-     * @return bool
-     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
-    }
 }

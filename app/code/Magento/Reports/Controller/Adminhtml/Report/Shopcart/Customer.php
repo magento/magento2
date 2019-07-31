@@ -16,11 +16,6 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart implements HttpGetActionInterface
 {
     /**
-     * Authorization of a customer report
-     */
-    const ADMIN_RESOURCE = null;
-
-    /**
      * Customer shopping carts action
      *
      * @return void
