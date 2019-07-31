@@ -39,11 +39,11 @@ class EnableAdminUsage extends Action
     /**
      * MarkUserNotified constructor.
      *
-     * @param Action\Context $context
+     * @param Action\Context           $context
      * @param ProductMetadataInterface $productMetadata
-     * @param NotificationLogger $notificationLogger
-     * @param Factory $configFactory
-     * @param LoggerInterface $logger
+     * @param NotificationLogger       $notificationLogger
+     * @param Factory                  $configFactory
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         Action\Context $context,
@@ -96,15 +96,5 @@ class EnableAdminUsage extends Action
     {
         $this->enableAdminUsage();
         $this->markUserNotified();
-    }
-    
-    /**
-     * IsAllow allows function to be visible
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
     }
 }

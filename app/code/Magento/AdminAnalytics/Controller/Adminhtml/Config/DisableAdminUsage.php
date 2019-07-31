@@ -39,11 +39,11 @@ class DisableAdminUsage extends Action
     /**
      * DisableAdminUsage constructor.
      *
-     * @param Action\Context $context
+     * @param Action\Context           $context
      * @param ProductMetadataInterface $productMetadata
-     * @param NotificationLogger $notificationLogger
-     * @param Factory $configFactory
-     * @param LoggerInterface $logger
+     * @param NotificationLogger       $notificationLogger
+     * @param Factory                  $configFactory
+     * @param LoggerInterface          $logger
      */
     public function __construct(
         Action\Context $context,
@@ -96,13 +96,5 @@ class DisableAdminUsage extends Action
     {
         $this->disableAdminUsage();
         $this->markUserNotified();
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
     }
 }

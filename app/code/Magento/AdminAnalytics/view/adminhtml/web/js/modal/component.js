@@ -38,6 +38,7 @@ define([
                     var data = {
                         'form_key': window.FORM_KEY
                     };
+
                     $.ajax(
                         {
                             type: 'POST',
@@ -59,6 +60,7 @@ define([
                     var data = {
                         'form_key': window.FORM_KEY
                     };
+
                     $.ajax(
                         {
                             type: 'POST',
@@ -77,12 +79,13 @@ define([
                     this.closeModal();
                 },
                 openReleasePopup: function () {
+                    var notificationModal = registry.get('release_notification.release_notification.notification_modal_1');
+
                     if (analyticsPopupConfig.releaseVisible) {
-                        var notificationModal = registry.get('release_notification.release_notification.notification_modal_1');
                         notificationModal.initializeContentAfterAnalytics();
                     }
                 },
             }
-        )
+        );
     }
 );

@@ -10,6 +10,7 @@ define(['jquery', 'analyticsPopupConfig'], function ($, analyticsPopupConfig) {
     var mixin = {
         initializeContent: function () {
             var initializeContent = this._super.bind(this);
+
             if (!analyticsPopupConfig.analyticsVisible) {
                 initializeContent();
             } else {
