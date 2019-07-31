@@ -153,7 +153,7 @@ class Hostedpro extends Direct
     /**
      * Return merchant country code from config
      *
-     * use default country if it not specified in General settings
+     * Use default country if it not specified in General settings
      *
      * @return string
      */
