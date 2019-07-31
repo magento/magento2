@@ -10,9 +10,6 @@
     <preference for="Magento\Framework\Mail\Template\FactoryInterface" type="Magento\Framework\Mail\Template\Factory" />
     <preference for="Magento\Framework\Mail\TransportInterface" type="Magento\Email\Model\Transport" />
     <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message" />
-    <preference for="Magento\Framework\Mail\MessageEnvelopeInterface" type="Magento\Framework\Mail\MessageEnvelope" />
-    <preference for="Magento\Framework\Mail\MimeMessageInterface" type="Magento\Framework\Mail\MimeMessage" />
-    <preference for="Magento\Framework\Mail\MimePartInterface" type="Magento\Framework\Mail\MimePart" />
     <preference for="Magento\Framework\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver" />
     <type name="Magento\Email\Model\BackendTemplate">
         <arguments>

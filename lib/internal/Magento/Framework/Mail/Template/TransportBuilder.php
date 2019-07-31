@@ -11,10 +11,16 @@ namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Mail\MailEnvelopeBuilder;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Mail\EmailMessageInterface;
+use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\MimeInterface;
+use Magento\Framework\Mail\MimeMessageInterfaceFactory;
+use Magento\Framework\Mail\MimePartInterfaceFactory;
+use Magento\Framework\Mail\TemplateInterface;
+use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
@@ -58,7 +64,7 @@ class TransportBuilder
     /**
      * Mail Transport
      *
-     * @var \Magento\Framework\Mail\TransportInterface
+     * @var TransportInterface
      */
     protected $transport;
 
@@ -72,55 +78,64 @@ class TransportBuilder
     /**
      * Object Manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * Message
      *
-     * @var \Magento\Framework\Mail\MessageEnvelopeInterface
+     * @var EmailMessageInterface
      */
     protected $message;
 
     /**
      * Sender resolver
      *
-     * @var \Magento\Framework\Mail\Template\SenderResolverInterface
+     * @var SenderResolverInterface
      */
     protected $_senderResolver;
 
     /**
-     * @var \Magento\Framework\Mail\TransportInterfaceFactory
+     * @var TransportInterfaceFactory
      */
     protected $mailTransportFactory;
-
-    /**
-     * @var \Magento\Framework\Mail\MessageInterfaceFactory
-     */
-    private $messageFactory;
 
     /**
      * Param that used for storing all message data until it will be used
      *
      * @var array
      */
-    protected $messageData = [];
+    private $messageData = [];
 
     /**
-     * @var MailEnvelopeBuilder|null
+     * @var EmailMessageInterfaceFactory
      */
-    protected $mailEnvelopeBuilder;
+    private $emailMessageInterfaceFactory;
 
     /**
+     * @var MimeMessageInterfaceFactory
+     */
+    private $mimeMessageInterfaceFactory;
+
+    /**
+     * @var MimePartInterfaceFactory
+     */
+    private $mimePartInterfaceFactory;
+
+    /**
+     * TransportBuilder constructor
+     *
      * @param FactoryInterface $templateFactory
      * @param MessageInterface $message
      * @param SenderResolverInterface $senderResolver
      * @param ObjectManagerInterface $objectManager
      * @param TransportInterfaceFactory $mailTransportFactory
-     * @param MessageInterfaceFactory $messageFactory
+     * @param MessageInterfaceFactory|null $messageFactory
+     * @param EmailMessageInterfaceFactory|null $emailMessageInterfaceFactory
+     * @param MimeMessageInterfaceFactory|null $mimeMessageInterfaceFactory
+     * @param MimePartInterfaceFactory|null $mimePartInterfaceFactory
      *
-     * @param MailEnvelopeBuilder|null $mailEnvelopeBuilder
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -130,16 +145,20 @@ class TransportBuilder
         ObjectManagerInterface $objectManager,
         TransportInterfaceFactory $mailTransportFactory,
         MessageInterfaceFactory $messageFactory = null,
-        MailEnvelopeBuilder $mailEnvelopeBuilder = null
+        EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
+        MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
+        MimePartInterfaceFactory $mimePartInterfaceFactory = null
     ) {
         $this->templateFactory = $templateFactory;
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
-        $this->messageFactory = $messageFactory ?: $this->objectManager
-            ->get(MessageInterfaceFactory::class);
-        $this->mailEnvelopeBuilder = $mailEnvelopeBuilder ?: $this->objectManager
-            ->get(MailEnvelopeBuilder::class);
+        $this->emailMessageInterfaceFactory = $emailMessageInterfaceFactory ?: $this->objectManager
+            ->get(EmailMessageInterfaceFactory::class);
+        $this->mimeMessageInterfaceFactory = $mimeMessageInterfaceFactory ?: $this->objectManager
+            ->get(MimeMessageInterfaceFactory::class);
+        $this->mimePartInterfaceFactory = $mimePartInterfaceFactory ?: $this->objectManager
+            ->get(MimePartInterfaceFactory::class);
     }
 
     /**
@@ -206,7 +225,7 @@ class TransportBuilder
      *
      * @param string|array $from
      * @return $this
-     * @throws \Magento\Framework\Exception\MailException
+     * @throws MailException
      * @see setFromByScope()
      *
      * @deprecated This function sets the from address but does not provide
@@ -223,38 +242,12 @@ class TransportBuilder
      * @param string|array $from
      * @param string|int $scopeId
      * @return $this
-     * @throws \Magento\Framework\Exception\MailException
+     * @throws MailException
      */
     public function setFromByScope($from, $scopeId = null)
     {
         $result = $this->_senderResolver->resolve($from, $scopeId);
         $this->messageData['from'][$result['email']] = $result['name'];
-        return $this;
-    }
-
-    /**
-     * Add mail attachment
-     *
-     * @param resource|string $content
-     * @param string $type
-     * @param string $fileName
-     * @param string $disposition
-     *
-     * @return $this
-     */
-    public function addAttachment(
-        $content,
-        string $type,
-        string $fileName,
-        string $disposition = MimeInterface::DISPOSITION_ATTACHMENT
-    ): self {
-        $this->messageData['body'][] = [
-            'content' => $content,
-            'type' => $type,
-            'fileName' => $fileName,
-            'disposition' => $disposition
-        ];
-
         return $this;
     }
 
@@ -309,7 +302,7 @@ class TransportBuilder
     /**
      * Get mail transport
      *
-     * @return \Magento\Framework\Mail\TransportInterface
+     * @return TransportInterface
      * @throws LocalizedException
      */
     public function getTransport()
@@ -341,7 +334,7 @@ class TransportBuilder
     /**
      * Get template
      *
-     * @return \Magento\Framework\Mail\TemplateInterface
+     * @return TemplateInterface
      */
     protected function getTemplate()
     {
@@ -374,9 +367,14 @@ class TransportBuilder
                     new Phrase('Unknown template type')
                 );
         }
-        $this->messageData['body'][] = $part;
-        $this->messageData['subject'] = html_entity_decode((string)$template->getSubject(), ENT_QUOTES);
-        $this->message = $this->mailEnvelopeBuilder->buildByArray($this->messageData);
+        $this->messageData['body'] = $this->mimeMessageInterfaceFactory
+            ->create(['parts' => [$this->mimePartInterfaceFactory->create([$part])]]);
+
+        $this->messageData['subject'] = html_entity_decode(
+            (string)$template->getSubject(),
+            ENT_QUOTES
+        );
+        $this->message = $this->emailMessageInterfaceFactory->create($this->messageData);
 
         return $this;
     }

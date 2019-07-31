@@ -95,7 +95,7 @@ interface MimePartInterface
      *
      * @return resource
      */
-    public function getEncodedStream($endOfLine = MimeInterface::LINEEND);
+    public function getEncodedStream($endOfLine = MimeInterface::LINE_END);
 
     /**
      * Get the Content of the current Mime Part in the given encoding.
@@ -104,7 +104,7 @@ interface MimePartInterface
      *
      * @return string|resource
      */
-    public function getContent($endOfLine = MimeInterface::LINEEND);
+    public function getContent($endOfLine = MimeInterface::LINE_END);
 
     /**
      * Get the RAW unencoded content from this part
@@ -120,7 +120,7 @@ interface MimePartInterface
      *
      * @return array
      */
-    public function getHeadersArray($endOfLine = MimeInterface::LINEEND): array;
+    public function getHeadersAsArray($endOfLine = MimeInterface::LINE_END): array;
 
     /**
      * Create and return the array of headers for this MIME part
@@ -129,5 +129,5 @@ interface MimePartInterface
      *
      * @return string
      */
-    public function getHeaders($endOfLine = MimeInterface::LINEEND): string;
+    public function getHeaders($endOfLine = MimeInterface::LINE_END): string;
 }

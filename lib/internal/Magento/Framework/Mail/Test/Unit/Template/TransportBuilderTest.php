@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Mail\Test\Unit\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Mail\MessageInterface;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class TransportBuilderTest
+ *
+ *  @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -55,13 +57,9 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     protected $mailTransportFactoryMock;
 
     /**
-     * @var \Magento\Framework\Mail\MailEnvelopeBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mail\EmailMessageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $mailEnvelopeBuilder;
-    /**
-     * @var \Magento\Framework\Mail\MessageEnvelopeInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $messageEnvelopeMock;
+    private $emailMessageMock;
 
     /**
      * @return void
@@ -71,7 +69,7 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->templateFactoryMock = $this->createMock(\Magento\Framework\Mail\Template\FactoryInterface::class);
         $this->messageMock = $this->createMock(\Magento\Framework\Mail\Message::class);
-        $this->messageEnvelopeMock = $this->createMock(\Magento\Framework\Mail\MessageEnvelopeInterface::class);
+        $this->emailMessageMock = $this->createMock(\Magento\Framework\Mail\EmailMessageInterface::class);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->senderResolverMock = $this->createMock(\Magento\Framework\Mail\Template\SenderResolverInterface::class);
         $this->mailTransportFactoryMock = $this->getMockBuilder(

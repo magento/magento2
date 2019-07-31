@@ -9,11 +9,12 @@ namespace Magento\Framework\Mail;
 
 use Zend\Mail\AddressList;
 use Zend\Mail\Message as ZendMessage;
+use Zend\Mime\Message as ZendMimeMessage;
 
 /**
- * Class MessageEnvelope
+ * Class EmailMessage
  */
-class MessageEnvelope implements MessageEnvelopeInterface
+class EmailMessage implements EmailMessageInterface
 {
     /**
      * @var ZendMessage
@@ -21,15 +22,15 @@ class MessageEnvelope implements MessageEnvelopeInterface
     private $message;
 
     /**
-     * @var MimeMessageFactory
+     * @var MimeMessageInterfaceFactory
      */
     private $mimeMessageFactory;
 
     /**
-     * MessageEnvelope constructor
+     * EmailMessage constructor
      *
      * @param MimeMessageInterface $body
-     * @param MimeMessageFactory $mimeMessageFactory
+     * @param MimeMessageInterfaceFactory $mimeMessageFactory
      * @param array|null $to
      * @param array|null $from
      * @param array|null $cc
@@ -39,11 +40,12 @@ class MessageEnvelope implements MessageEnvelopeInterface
      * @param string|null $senderName
      * @param string|null $subject
      * @param string|null $encoding
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         MimeMessageInterface $body,
-        MimeMessageFactory $mimeMessageFactory,
+        MimeMessageInterfaceFactory $mimeMessageFactory,
         ?array $to = [],
         ?array $from = [],
         ?array $cc = [],
@@ -55,7 +57,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
         ?string $encoding = ''
     ) {
         $this->message = new ZendMessage();
-        $mimeMessage = new \Zend\Mime\Message();
+        $mimeMessage = new ZendMimeMessage();
         $mimeMessage->setParts($body->getParts());
         $this->message->setBody($mimeMessage);
         if ($encoding) {
@@ -76,9 +78,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Get the message encoding
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getEncoding(): string
     {
@@ -86,9 +86,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Access headers collection
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getHeaders(): array
     {
@@ -96,9 +94,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Retrieve list of From senders
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getFrom(): array
     {
@@ -106,9 +102,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Access the address list of the To header
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getTo(): array
     {
@@ -116,9 +110,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Retrieve list of CC recipients
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getCc(): array
     {
@@ -136,9 +128,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Access the address list of the Reply-To header
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getReplyTo(): array
     {
@@ -146,9 +136,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Retrieve the sender address, if any
-     *
-     * @return null|string
+     * @inheritDoc
      */
     public function getSender(): ?string
     {
@@ -156,9 +144,7 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Get the message subject header value
-     *
-     * @return null|string
+     * @inheritDoc
      */
     public function getSubject(): ?string
     {
@@ -166,11 +152,9 @@ class MessageEnvelope implements MessageEnvelopeInterface
     }
 
     /**
-     * Return the currently set message body
-     *
-     * @return object|string|MimeMessageInterface
+     * @inheritDoc
      */
-    public function getBody(): MimeMessageInterface
+    public function getBody(): ?MimeMessageInterface
     {
         return $this->mimeMessageFactory->create(
             ['parts' => $this->message->getBody()->getParts()]

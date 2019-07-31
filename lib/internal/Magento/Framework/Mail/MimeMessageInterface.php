@@ -32,7 +32,7 @@ interface MimeMessageInterface
      *
      * @return string
      */
-    public function generateMessage(string $endOfLine = MimeInterface::LINEEND): string;
+    public function getMessage(string $endOfLine = MimeInterface::LINE_END): string;
 
     /**
      * Get the headers of a given part as an array
@@ -41,7 +41,7 @@ interface MimeMessageInterface
      *
      * @return array
      */
-    public function getPartHeadersArray(int $partNum): array;
+    public function getPartHeadersAsArray(int $partNum): array;
 
     /**
      * Get the headers of a given part as a string
@@ -51,7 +51,7 @@ interface MimeMessageInterface
      *
      * @return string
      */
-    public function getPartHeaders(int $partNum, string $endOfLine = MimeInterface::LINEEND): string;
+    public function getPartHeaders(int $partNum, string $endOfLine = MimeInterface::LINE_END): string;
 
     /**
      * Get the (encoded) content of a given part as a string
@@ -61,5 +61,5 @@ interface MimeMessageInterface
      *
      * @return string
      */
-    public function getPartContent(int $partNum, string $endOfLine = MimeInterface::LINEEND): string;
+    public function getPartContent(int $partNum, string $endOfLine = MimeInterface::LINE_END): string;
 }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
+use Magento\Framework\Exception\MailException;
 use Zend\Mime\Part as ZendMimePart;
 
 /**
@@ -34,12 +35,13 @@ class MimePart implements MimePartInterface
      * @param string|null $location
      * @param string|null $language
      * @param bool|null $isStream
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $content,
-        ?string $type = MimeInterface::TYPE_OCTETSTREAM,
+        ?string $type = MimeInterface::TYPE_OCTET_STREAM,
         ?string $fileName = null,
         ?string $disposition = null,
         ?string $encoding = MimeInterface::ENCODING_8BIT,
@@ -51,7 +53,11 @@ class MimePart implements MimePartInterface
         ?string $language = null,
         ?bool $isStream = null
     ) {
-        $this->mimePart = new ZendMimePart($content);
+        try {
+            $this->mimePart = new ZendMimePart($content);
+        } catch (\Zend\Mime\Exception\InvalidArgumentException $e) {
+            throw new MailException(__($e->getMessage()));
+        }
         $this->mimePart->setType($type);
         $this->mimePart->setEncoding($encoding);
         $this->mimePart->setFilters($filters);
@@ -172,7 +178,7 @@ class MimePart implements MimePartInterface
     /**
      * @inheritDoc
      */
-    public function getEncodedStream($endOfLine = MimeInterface::LINEEND)
+    public function getEncodedStream($endOfLine = MimeInterface::LINE_END)
     {
         return $this->mimePart->getEncodedStream($endOfLine);
     }
@@ -180,7 +186,7 @@ class MimePart implements MimePartInterface
     /**
      * @inheritDoc
      */
-    public function getContent($endOfLine = MimeInterface::LINEEND)
+    public function getContent($endOfLine = MimeInterface::LINE_END)
     {
         return $this->mimePart->getContent($endOfLine);
     }
@@ -196,7 +202,7 @@ class MimePart implements MimePartInterface
     /**
      * @inheritDoc
      */
-    public function getHeadersArray($endOfLine = MimeInterface::LINEEND): array
+    public function getHeadersAsArray($endOfLine = MimeInterface::LINE_END): array
     {
         return $this->mimePart->getHeadersArray($endOfLine);
     }
@@ -204,7 +210,7 @@ class MimePart implements MimePartInterface
     /**
      * @inheritDoc
      */
-    public function getHeaders($endOfLine = MimeInterface::LINEEND): string
+    public function getHeaders($endOfLine = MimeInterface::LINE_END): string
     {
         return $this->mimePart->getHeaders($endOfLine);
     }

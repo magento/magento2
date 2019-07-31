@@ -49,7 +49,7 @@ class MimeMessage implements MimeMessageInterface
     /**
      * @inheritDoc
      */
-    public function generateMessage(string $endOfLine = MimeInterface::LINEEND): string
+    public function getMessage(string $endOfLine = MimeInterface::LINE_END): string
     {
         return $this->mimeMessage->generateMessage($endOfLine);
     }
@@ -57,7 +57,7 @@ class MimeMessage implements MimeMessageInterface
     /**
      * @inheritDoc
      */
-    public function getPartHeadersArray(int $partNum): array
+    public function getPartHeadersAsArray(int $partNum): array
     {
         return $this->mimeMessage->getPartHeadersArray($partNum);
     }
@@ -65,7 +65,7 @@ class MimeMessage implements MimeMessageInterface
     /**
      * @inheritDoc
      */
-    public function getPartHeaders(int $partNum, string $endOfLine = MimeInterface::LINEEND): string
+    public function getPartHeaders(int $partNum, string $endOfLine = MimeInterface::LINE_END): string
     {
         return $this->mimeMessage->getPartHeaders($partNum, $endOfLine);
     }
@@ -73,7 +73,7 @@ class MimeMessage implements MimeMessageInterface
     /**
      * @inheritDoc
      */
-    public function getPartContent(int $partNum, string $endOfLine = MimeInterface::LINEEND): string
+    public function getPartContent(int $partNum, string $endOfLine = MimeInterface::LINE_END): string
     {
         return $this->mimeMessage->getPartContent($partNum, $endOfLine);
     }
