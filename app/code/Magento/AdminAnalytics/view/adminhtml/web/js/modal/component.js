@@ -20,7 +20,8 @@ define(
                     },
                     options: {
                         keyEventHandlers: {
-                            escapeKey: function () { return; }
+                            escapeKey: function () {
+                                return; }
                         }
                     }
                 },
@@ -32,6 +33,7 @@ define(
                     $('.modal-header button.action-close').hide();
                 },
                 enableAdminUsage: function () {
+
                     var data = {
                         'form_key': window.FORM_KEY
                     };

@@ -88,7 +88,7 @@ class EnableAdminUsage extends Action
     }
 
     /**
-     * Log information about the last shown advertisement
+     * Changes the admin usage to yes, and marks user notified
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
@@ -96,15 +96,5 @@ class EnableAdminUsage extends Action
     {
         $this->enableAdminUsage();
         $this->markUserNotified();
-    }
-    
-    /**
-     * IsAllow allows function to be visible
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
     }
 }

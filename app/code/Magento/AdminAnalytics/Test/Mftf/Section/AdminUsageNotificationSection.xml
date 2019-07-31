@@ -10,12 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminUsageNotificationSection">
         <element name="adminUsageDialogBox" type="text" selector="//*[@class='modal-inner-wrap'][last()]"/>
-        <element name="adminUsageAllowButton" type="text" selector=".modal-popup .action-secondary"/>
-        <element name="releaseNotificationCloseButton1" type="text" selector="//aside[1]/div[2]/header/button"/>
-        <element name="releaseNotificationCloseButton2" type="text" selector="//aside[2]/div[2]/header/button"/>
-        <element name="releaseNotificationCloseButton3" type="text" selector="//aside[3]/div[2]/header/button"/>
-        <element name="releaseNotificationCloseButton4" type="text" selector="//aside[4]/div[2]/header/button"/>
-        <element name="releaseNotificationCloseButton5" type="text" selector="//aside[5]/div[2]/header/button"/>
-        <element name="releaseNotificationCloseButton6" type="text" selector="//aside[6]/div[2]/header/button"/>
+        <element name="adminUsageDontAllowButton" type="text" selector=".modal-popup .action-secondary"/>
     </section>
 </sections>
