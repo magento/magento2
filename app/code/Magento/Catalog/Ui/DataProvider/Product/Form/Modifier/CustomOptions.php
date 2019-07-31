@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price as ProductOptionsPrice;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Ui\Component\Form\Element\Hidden;
 use Magento\Ui\Component\Modal;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\DynamicRows;
@@ -867,7 +868,7 @@ class CustomOptions extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => Field::NAME,
-                        'formElement' => Input::NAME,
+                        'formElement' => Hidden::NAME,
                         'dataScope' => static::FIELD_SORT_ORDER_NAME,
                         'dataType' => Number::NAME,
                         'visible' => false,

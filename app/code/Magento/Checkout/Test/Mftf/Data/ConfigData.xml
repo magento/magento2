@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Free shipping -->
+    <entity name="EnableFreeShippingConfigData">
+        <data key="path">carriers/freeshipping/active</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableFreeShippingToSpecificCountriesConfigData">
+        <data key="path">carriers/freeshipping/sallowspecific</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">Specific Countries</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableFreeShippingToAfghanistanConfigData">
+        <data key="path">carriers/freeshipping/specificcountry</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">Afghanistan</data>
+        <data key="value">AF</data>
+    </entity>
+    <entity name="EnableFreeShippingToAllAllowedCountriesConfigData">
+        <data key="path">carriers/freeshipping/sallowspecific</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">All Allowed Countries</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisableFreeShippingConfigData">
+        <data key="path">carriers/freeshipping/active</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+
+    <!-- Flat Rate shipping -->
+    <entity name="EnableFlatRateConfigData">
+        <data key="path">carriers/flatrate/active</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableFlatRateDefaultPriceConfigData">
+        <data key="path">carriers/flatrate/price</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">5.00</data>
+    </entity>
+    <entity name="EnableFlatRateToSpecificCountriesConfigData">
+        <data key="path">carriers/flatrate/sallowspecific</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">Specific Countries</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableFlatRateToAfghanistanConfigData">
+        <data key="path">carriers/flatrate/specificcountry</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">Afghanistan</data>
+        <data key="value">AF</data>
+    </entity>
+    <entity name="EnableFlatRateToAllAllowedCountriesConfigData">
+        <data key="path">carriers/flatrate/sallowspecific</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">All Allowed Countries</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisableFlatRateConfigData">
+        <data key="path">carriers/flatrate/active</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+
+    <!-- Checkout Config: Display Cart Summary -->
+    <entity name="DisplayItemsQuantities">
+        <data key="path">checkout/cart_link/use_qty</data>
+        <data key="label">Display items quantities</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayUniqueItems">
+        <data key="path">checkout/cart_link/use_qty</data>
+        <data key="label">Display number of items in cart</data>
+        <data key="value">0</data>
+    </entity>
+</entities>

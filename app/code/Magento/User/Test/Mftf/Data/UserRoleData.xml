@@ -13,4 +13,15 @@
         <data key="scope">1</data>
         <data key="access">1</data>
     </entity>
+
+    <entity name="roleAdministrator" type="role">
+        <data key="name" unique="suffix">Administrator </data>
+        <data key="resourceAccess">All</data>
+        <data key="resources">[]</data>
+    </entity>
+    <entity name="roleSales" type="role">
+        <data key="name" unique="suffix">Role Sales </data>
+        <data key="resourceAccess">Custom</data>
+        <data key="resources">['Magento_Sales::sales','Magento_Sales::sales_operation','Magento_Sales::actions','Magento_Sales::sales_order','Magento_Sales::create','Magento_Sales::actions_view','Magento_Sales::email','Magento_Sales::reorder','Magento_Sales::actions_edit','Magento_Sales::cancel','Magento_Sales::review_payment','Magento_Sales::capture','Magento_Sales::invoice','Magento_Sales::creditmemo','Magento_Sales::hold','Magento_Sales::unhold','Magento_Sales::ship','Magento_Sales::comment','Magento_Sales::emails','Magento_Backend::system','Magento_Backend::system_other_settings','Magento_AdminNotification::adminnotification','Magento_AdminNotification::show_list']</data>
+    </entity>
 </entities>

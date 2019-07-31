@@ -164,6 +164,31 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for save payment and place order with new billing address
+     *
+     * @return void
+     */
+    public function testSavePaymentInformationAndPlaceOrderWithNewBillingAddress(): void
+    {
+        $cartId = 100;
+        $quoteBillingAddressId = 1;
+        $customerId = 1;
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quoteBillingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $billingAddressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
+        $paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
+
+        $quoteBillingAddress->method('getCustomerId')->willReturn($customerId);
+        $quoteMock->method('getBillingAddress')->willReturn($quoteBillingAddress);
+        $quoteBillingAddress->method('getId')->willReturn($quoteBillingAddressId);
+        $this->cartRepositoryMock->method('getActive')->with($cartId)->willReturn($quoteMock);
+        
+        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+        $billingAddressMock->expects($this->once())->method('setCustomerId')->with($customerId);
+        $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock, $billingAddressMock));
+    }
+
+    /**
      * @param int $cartId
      * @param \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
      */
@@ -172,17 +197,21 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $billingAddressId = 1;
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quoteBillingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $shippingRate = $this->createPartialMock(\Magento\Quote\Model\Quote\Address\Rate::class, []);
+        $shippingRate->setCarrier('flatrate');
         $quoteShippingAddress = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Address::class,
-            ['setLimitCarrier', 'getShippingMethod']
+            ['setLimitCarrier', 'getShippingMethod', 'getShippingRateByCode']
         );
         $this->cartRepositoryMock->expects($this->any())->method('getActive')->with($cartId)->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($quoteBillingAddress);
+        $quoteMock->method('getBillingAddress')->willReturn($quoteBillingAddress);
         $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($quoteShippingAddress);
+        $quoteBillingAddress->expects($this->once())->method('getId')->willReturn($billingAddressId);
         $quoteBillingAddress->expects($this->once())->method('getId')->willReturn($billingAddressId);
         $quoteMock->expects($this->once())->method('removeAddress')->with($billingAddressId);
         $quoteMock->expects($this->once())->method('setBillingAddress')->with($billingAddressMock);
         $quoteMock->expects($this->once())->method('setDataChanges')->willReturnSelf();
+        $quoteShippingAddress->expects($this->any())->method('getShippingRateByCode')->willReturn($shippingRate);
         $quoteShippingAddress->expects($this->any())->method('getShippingMethod')->willReturn('flatrate_flatrate');
         $quoteShippingAddress->expects($this->once())->method('setLimitCarrier')->with('flatrate')->willReturnSelf();
     }

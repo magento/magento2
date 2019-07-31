@@ -9,6 +9,7 @@
     <testCase name="Magento\AdvancedPricingImportExport\Test\TestCase\ExportAdvancedPricingTest" summary="Export with advanced pricing entity type option">
         <variation name="ExportAdvancedPricingTestVariation1" summary="Trying export product data with advanced pricing option but without created products" ticketId="MAGETWO-46147">
             <data name="exportData" xsi:type="string">csv_with_advanced_pricing</data>
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertExportSubmittedMessage"/>
             <constraint name="Magento\ImportExport\Test\Constraint\AssertExportNoDataErrorMessage"/>
         </variation>
         <variation name="ExportAdvancedPricingTestVariation2" summary="Trying export product data with advanced pricing option" ticketId="MAGETWO-46120">

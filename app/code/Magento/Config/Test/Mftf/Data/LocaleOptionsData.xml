@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SetLocaleOptions" type="locale_options_config">
+        <requiredEntity type="code">setLocaleOptionsFrance</requiredEntity>
+    </entity>
+    <entity name="setLocaleOptionsFrance" type="code">
+        <data key="value">fr_FR</data>
+    </entity>
+
+    <entity name="DefaultLocaleOptions" type="locale_options_config">
+        <requiredEntity type="code">setLocaleOptionsUSA</requiredEntity>
+    </entity>
+    <entity name="setLocaleOptionsUSA" type="code">
+        <data key="value">en_US</data>
+    </entity>
+</entities>

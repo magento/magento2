@@ -105,7 +105,7 @@
                                                                     <item name="trigger" xsi:type="string">opc-new-shipping-address</item>
                                                                     <item name="buttons" xsi:type="array">
                                                                         <item name="save" xsi:type="array">
-                                                                            <item name="text" xsi:type="string" translate="true">Save Address</item>
+                                                                            <item name="text" xsi:type="string" translate="true">Ship here</item>
                                                                             <item name="class" xsi:type="string">action primary action-save-address</item>
                                                                         </item>
                                                                         <item name="cancel" xsi:type="array">
@@ -403,6 +403,10 @@
                                                                     <item name="subtotal" xsi:type="array">
                                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details/subtotal</item>
                                                                         <item name="displayArea" xsi:type="string">after_details</item>
+                                                                    </item>
+                                                                    <item name="message" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details/message</item>
+                                                                        <item name="displayArea" xsi:type="string">item_message</item>
                                                                     </item>
                                                                 </item>
                                                             </item>

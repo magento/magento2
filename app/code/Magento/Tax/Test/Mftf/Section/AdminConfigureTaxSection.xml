@@ -10,7 +10,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminConfigureTaxSection">
         <!-- on page /admin/admin/system_config/edit/section/tax/ -->
+        <element name="salesTax" type="button" selector="//a[contains(@class, 'admin__page-nav-link item-nav')]/span[text()='Tax']"/>
         <element name="taxClasses" type="block" selector="#tax_classes-head" timeout="30"/>
+        <element name="taxShippingClassSystem" type="checkbox" selector="#tax_classes_shipping_tax_class_inherit"/>
+        <element name="taxClassShipping" type="select" selector="#tax_classes_shipping_tax_class"/>
+        <element name="taxClassProduct" type="select" selector="#tax_classes_default_product_tax_class"/>
+        <element name="taxClassCustomer" type="select" selector="#tax_classes_default_customer_tax_class"/>
 
         <element name="taxCalculationSettings" type="block" selector="#tax_calculation-head" timeout="30"/>
         <element name="taxCalculationSettingsOpened" type="block" selector="#tax_calculation-head.open" timeout="30"/>
@@ -23,6 +28,8 @@
         <element name="taxCalculationPrices" type="select" selector="#tax_calculation_price_includes_tax"/>
         <element name="taxCalculationPricesDisabled" type="select" selector="#tax_calculation_price_includes_tax[disabled='disabled']"/>
         <element name="taxCalculationPricesInherit" type="checkbox" selector="#tax_calculation_price_includes_tax_inherit"/>
+        <element name="taxCalculationApplyTaxOn" type="select" selector="#tax_calculation_apply_tax_on"/>
+        <element name="taxCalculationApplyTaxOnInherit" type="checkbox" selector="#tax_calculation_apply_tax_on_inherit"/>
 
         <element name="defaultDestination" type="block" selector="#tax_defaults-head" timeout="30"/>
         <element name="systemValueDefaultState" type="checkbox" selector="#row_tax_defaults_region input[type='checkbox']"/>
@@ -52,5 +59,10 @@
         <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
         <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
         <element name="fixedProductTaxes" type="block" selector="#tax_weee-head" timeout="30"/>
+
+        <element name="taxClassesCondition" type="block" selector="//a[@id='tax_classes-head' and @class='open']" timeout="30"/>
+        <element name="useSystemValue" type="checkbox" selector="#tax_classes_default_product_tax_class_inherit"/>
+        <element name="productTaxClass" type="select" selector="#tax_classes_default_product_tax_class"/>
+        <element name="save" type="button" selector="#save"/>
     </section>
 </sections>

@@ -11,7 +11,7 @@ use Magento\Customer\Api\Data\GroupInterface as CustomerGroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Module\Manager as ModuleManager;
+use \Magento\Framework\Module\ModuleManagerInterface as ModuleManager;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -106,7 +106,9 @@ class AdvancedPricingTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(AdvancedPricing::class, [
+        return $this->objectManager->getObject(
+            AdvancedPricing::class,
+            [
             'locator' => $this->locatorMock,
             'storeManager' => $this->storeManagerMock,
             'groupRepository' => $this->groupRepositoryMock,
@@ -114,7 +116,8 @@ class AdvancedPricingTest extends AbstractModifierTest
             'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
             'moduleManager' => $this->moduleManagerMock,
             'directoryHelper' => $this->directoryHelperMock
-        ]);
+            ]
+        );
     }
 
     public function testModifyMeta()

@@ -13,6 +13,7 @@ $quote->setStoreId(1)
     ->setIsMultiShipping(false)
     ->setReservedOrderId('test_order_with_virtual_product_without_address')
     ->setEmail('store@example.com')
+    ->setCustomerEmail('store@example.com')
     ->addProduct(
         $product->load($product->getId()),
         1

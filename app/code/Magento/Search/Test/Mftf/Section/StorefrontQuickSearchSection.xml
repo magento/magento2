@@ -11,5 +11,8 @@
     <section name="StorefrontQuickSearchSection">
         <element name="searchPhrase" type="input" selector="#search"/>
         <element name="searchButton" type="button" selector="button.action.search" timeout="30"/>
+        <element name="searchMiniForm" type="input" selector="#search_mini_form"/>
+        <element name="searchDropDownSuggestion" type="text" selector="//div[@id='search_autocomplete']/ul/li/span"/>
+        <element name="searchDropDownName" type="text" selector="//div[@id='search_autocomplete']//span[contains(., '{{searchQuery}}')]" parameterized="true"/>
     </section>
 </sections>

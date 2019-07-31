@@ -28,5 +28,7 @@
         <element name="priceOfFirstRow" type="text" selector="//tr[@data-repeat-index='0']//div[contains(., '{{var1}}')]" parameterized="true"/>
         <element name="AllProductsNotOfBundleType" type="text" selector="//td[5]/div[text() != 'Bundle Product']"/>
         <element name="attributeSetOfFirstRow" type="text" selector="//tr[@data-repeat-index='0']//div[contains(., '{{var1}}')]" parameterized="true"/>
+        <element name="storeViewDropDown" type="multiselect" selector="//select[@name='store_id']" timeout="30"/>
+        <element name="storeViewOption" type="multiselect" selector="//select[@name='store_id']/option[contains(text(),'{{var1}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

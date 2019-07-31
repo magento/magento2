@@ -9,6 +9,7 @@
     <testCase name="Magento\Customer\Test\TestCase\LoginOnFrontendFailTest" summary="Check error message with wrong credentials" ticketId="MAGETWO-16883">
         <variation name="LoginOnFrontendFailTestVariation1">
             <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLoginErrorMessage" />
         </variation>
     </testCase>

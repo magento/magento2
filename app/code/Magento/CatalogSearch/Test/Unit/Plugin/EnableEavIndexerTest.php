@@ -9,6 +9,10 @@ namespace Magento\CatalogSearch\Test\Unit\Plugin;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class EnableEavIndexerTest extends \PHPUnit\Framework\TestCase
 {
     /**

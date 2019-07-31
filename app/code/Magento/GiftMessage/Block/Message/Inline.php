@@ -139,7 +139,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * Define checkout type
      *
-     * @param $type string
+     * @param string $type
      * @return $this
      * @codeCoverageIgnore
      */
@@ -238,7 +238,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getItems()
     {
-        if (!$this->getData('items')) {
+        if (!$this->hasData('items')) {
             $items = [];
 
             $entityItems = $this->getEntity()->getAllItems();
@@ -278,6 +278,8 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Call method getItemsHasMessages
+     *
      * @deprecated Misspelled method
      * @see getItemsHasMessages
      */
@@ -326,6 +328,20 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check availability of order level functionality
+     *
+     * @return bool
+     */
+    public function isMessagesOrderAvailable()
+    {
+        $entity = $this->getEntity();
+        if (!$entity->hasIsGiftOptionsAvailable()) {
+            $this->_eventManager->dispatch('gift_options_prepare', ['entity' => $entity]);
+        }
+        return $entity->getIsGiftOptionsAvailable();
+    }
+
+    /**
      * Check availability of giftmessages on order level
      *
      * @return bool
@@ -355,7 +371,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected function _toHtml()
     {
         // render HTML when messages are allowed for order or for items only
-        if ($this->isItemsAvailable() || $this->isMessagesAvailable()) {
+        if ($this->isItemsAvailable() || $this->isMessagesAvailable() || $this->isMessagesOrderAvailable()) {
             return parent::_toHtml();
         }
         return '';

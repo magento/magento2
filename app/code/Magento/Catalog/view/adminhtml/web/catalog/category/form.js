@@ -15,6 +15,7 @@ define([
                 categoryIdSelector: 'input[name="id"]',
                 categoryPathSelector: 'input[name="path"]',
                 categoryParentSelector: 'input[name="parent"]',
+                categoryLevelSelector: 'input[name="level"]',
                 refreshUrl: config.refreshUrl
             },
 
@@ -47,6 +48,7 @@ define([
                     $(this.options.categoryIdSelector).val(data.id).change();
                     $(this.options.categoryPathSelector).val(data.path).change();
                     $(this.options.categoryParentSelector).val(data.parentId).change();
+                    $(this.options.categoryLevelSelector).val(data.level).change();
                 }
             }
         };

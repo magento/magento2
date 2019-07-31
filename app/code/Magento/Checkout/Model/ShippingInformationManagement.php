@@ -19,6 +19,9 @@ use Magento\Quote\Model\ShippingFactory;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Class ShippingInformationManagement
+ *
+ * @package Magento\Checkout\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInformationManagementInterface
@@ -50,7 +53,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
     /**
      * @var QuoteAddressValidator
-     * @deprecated 100.2.0
      */
     protected $addressValidator;
 
@@ -99,8 +101,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
-     * @param CartExtensionFactory|null $cartExtensionFactory,
-     * @param ShippingAssignmentFactory|null $shippingAssignmentFactory,
+     * @param CartExtensionFactory|null $cartExtensionFactory
+     * @param ShippingAssignmentFactory|null $shippingAssignmentFactory
      * @param ShippingFactory|null $shippingFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -136,37 +138,49 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     }
 
     /**
-     * {@inheritDoc}
+     * Save address information.
+     *
+     * @param int $cartId
+     * @param \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
+     * @return \Magento\Checkout\Api\Data\PaymentDetailsInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
      */
     public function saveAddressInformation(
         $cartId,
         \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
     ) {
-        $address = $addressInformation->getShippingAddress();
-        $billingAddress = $addressInformation->getBillingAddress();
-        $carrierCode = $addressInformation->getShippingCarrierCode();
-        $methodCode = $addressInformation->getShippingMethodCode();
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->quoteRepository->getActive($cartId);
+        $this->validateQuote($quote);
 
+        $address = $addressInformation->getShippingAddress();
+        if (!$address || !$address->getCountryId()) {
+            throw new StateException(__('The shipping address is missing. Set the address and try again.'));
+        }
         if (!$address->getCustomerAddressId()) {
             $address->setCustomerAddressId(null);
         }
 
-        if (!$address->getCountryId()) {
-            throw new StateException(__('The shipping address is missing. Set the address and try again.'));
-        }
-
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->getActive($cartId);
-        $address->setLimitCarrier($carrierCode);
-        $quote = $this->prepareShippingAssignment($quote, $address, $carrierCode . '_' . $methodCode);
-        $this->validateQuote($quote);
-        $quote->setIsMultiShipping(false);
-
-        if ($billingAddress) {
-            $quote->setBillingAddress($billingAddress);
-        }
-
         try {
+            $billingAddress = $addressInformation->getBillingAddress();
+            if ($billingAddress) {
+                if (!$billingAddress->getCustomerAddressId()) {
+                    $billingAddress->setCustomerAddressId(null);
+                }
+                $this->addressValidator->validateForCart($quote, $billingAddress);
+                $quote->setBillingAddress($billingAddress);
+            }
+
+            $this->addressValidator->validateForCart($quote, $address);
+            $carrierCode = $addressInformation->getShippingCarrierCode();
+            $address->setLimitCarrier($carrierCode);
+            $methodCode = $addressInformation->getShippingMethodCode();
+            $quote = $this->prepareShippingAssignment($quote, $address, $carrierCode . '_' . $methodCode);
+
+            $quote->setIsMultiShipping(false);
+
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
@@ -177,7 +191,9 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         $shippingAddress = $quote->getShippingAddress();
 
-        if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())) {
+        if (!$quote->getIsVirtual()
+            && !$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())
+        ) {
             throw new NoSuchEntityException(
                 __('Carrier with such method not found: %1, %2', $carrierCode, $methodCode)
             );
@@ -208,6 +224,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     }
 
     /**
+     * Prepare shipping assignment.
+     *
      * @param CartInterface $quote
      * @param AddressInterface $address
      * @param string $method

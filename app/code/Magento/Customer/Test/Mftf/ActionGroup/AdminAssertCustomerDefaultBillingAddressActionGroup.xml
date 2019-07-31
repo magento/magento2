@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Assert Customer Default Billing Address -->
+    <actionGroup name="AdminAssertCustomerDefaultBillingAddress" >
+        <arguments>
+            <argument name="firstName" type="string" defaultValue=""/>
+            <argument name="lastName" type="string" defaultValue=""/>
+            <argument name="street1" type="string" defaultValue=""/>
+            <argument name="state" type="string" defaultValue=""/>
+            <argument name="postcode" type="string" defaultValue=""/>
+            <argument name="country" type="string" defaultValue=""/>
+            <argument name="telephone" type="string" defaultValue=""/>
+        </arguments>
+        <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
+        <see userInput="{{firstName}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="firstName"/>
+        <see userInput="{{lastName}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="lastName"/>
+        <see userInput="{{street1}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="street1"/>
+        <see userInput="{{state}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="state"/>
+        <see userInput="{{postcode}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="postcode"/>
+        <see userInput="{{country}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="country"/>
+        <see userInput="{{telephone}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="telephone"/>
+    </actionGroup>
+</actionGroups>

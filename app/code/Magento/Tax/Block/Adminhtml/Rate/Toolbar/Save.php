@@ -11,6 +11,9 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
+/**
+ * Rate toolbar block
+ */
 class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**
@@ -46,6 +49,8 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     }
 
     /**
+     * Init model
+     *
      * @return void
      */
     protected function _construct()
@@ -97,6 +102,8 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     }
 
     /**
+     * Prepare layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -115,7 +122,7 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
             ['label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset']
         );
 
-        $rate = intval($this->getRequest()->getParam('rate'));
+        $rate = (int)$this->getRequest()->getParam('rate');
         if ($rate) {
             $this->buttonList->add(
                 'delete',

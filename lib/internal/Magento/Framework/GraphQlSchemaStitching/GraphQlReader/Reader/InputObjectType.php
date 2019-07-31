@@ -10,6 +10,7 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\TypeMetaWrapperReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheAnnotationReader;
 
 /**
  * Composite configuration reader to handle the input object type meta
@@ -27,17 +28,28 @@ class InputObjectType implements TypeMetaReaderInterface
     private $docReader;
 
     /**
+     * @var CacheAnnotationReader
+     */
+    private $cacheAnnotationReader;
+
+    /**
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
      */
-    public function __construct(TypeMetaWrapperReader $typeMetaReader, DocReader $docReader)
-    {
+    public function __construct(
+        TypeMetaWrapperReader $typeMetaReader,
+        DocReader $docReader,
+        CacheAnnotationReader $cacheAnnotationReader = null
+    ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
+        $this->cacheAnnotationReader = $cacheAnnotationReader ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CacheAnnotationReader::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -56,6 +68,10 @@ class InputObjectType implements TypeMetaReaderInterface
             if ($this->docReader->read($typeMeta->astNode->directives)) {
                 $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
             }
+
+            if ($this->docReader->read($typeMeta->astNode->directives)) {
+                $result['cache'] = $this->cacheAnnotationReader->read($typeMeta->astNode->directives);
+            }
             return $result;
         } else {
             return [];
@@ -63,6 +79,8 @@ class InputObjectType implements TypeMetaReaderInterface
     }
 
     /**
+     * Read the input's meta data
+     *
      * @param \GraphQL\Type\Definition\InputObjectField $fieldMeta
      * @return array
      */

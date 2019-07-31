@@ -12,4 +12,7 @@
     <type name="Magento\Customer\CustomerData\Customer">
         <plugin name="section_data" type="Magento\Persistent\Model\Plugin\CustomerData" />
     </type>
+    <type name="Magento\Framework\App\Http\Context">
+        <plugin name="persistent_page_cache_variation" type="Magento\Persistent\Model\Plugin\PersistentCustomerContext" />
+    </type>
 </config>

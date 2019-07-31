@@ -41,7 +41,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     private function getRandomColor() : string
     {
-        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+        return '#' . str_pad(dechex(random_int(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -55,15 +55,17 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $optionsData = [];
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
-            $order = $i + 1;
-            $expectedOptionLabelOnStoreView = "value_{$i}_store_1";
+            $expectedOptionLabelOnStoreView = 'value_' . $i .'_store_1';
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
-            $optionsData []= "optionvisual[order][option_{$i}]={$order}";
-            $optionsData []= "defaultvisual[]=option_{$i}";
-            $optionsData []= "swatchvisual[value][option_{$i}]={$this->getRandomColor()}";
-            $optionsData []= "optionvisual[value][option_{$i}][0]=value_{$i}_admin";
-            $optionsData []= "optionvisual[value][option_{$i}][1]={$expectedOptionLabelOnStoreView}";
-            $optionsData []= "optionvisual[delete][option_{$i}]=";
+            $optionId = 'option_' .$i;
+            $optionRowData = [];
+            $optionRowData['optionvisual']['order'][$optionId] = $i + 1;
+            $optionRowData['defaultvisual'][] = $optionId;
+            $optionRowData['swatchvisual']['value'][$optionId] = $this->getRandomColor();
+            $optionRowData['optionvisual']['value'][$optionId][0] = 'value_' . $i .'_admin';
+            $optionRowData['optionvisual']['value'][$optionId][1] = $expectedOptionLabelOnStoreView;
+            $optionRowData['optionvisual']['delete'][$optionId] = '';
+            $optionsData[] = http_build_query($optionRowData);
         }
         return [
             'attribute_data' => array_merge_recursive(
@@ -95,15 +97,17 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $optionsData = [];
         $expectedOptionsLabels = [];
         for ($i = 0; $i < $optionsCount; $i++) {
-            $order = $i + 1;
-            $expectedOptionLabelOnStoreView = "value_{$i}_store_1";
+            $expectedOptionLabelOnStoreView = 'value_' . $i . '_store_1';
             $expectedOptionsLabels[$i+1] = $expectedOptionLabelOnStoreView;
-            $optionsData []= "optiontext[order][option_{$i}]={$order}";
-            $optionsData []= "defaulttext[]=option_{$i}";
-            $optionsData []= "swatchtext[value][option_{$i}]=x{$i}";
-            $optionsData []= "optiontext[value][option_{$i}][0]=value_{$i}_admin";
-            $optionsData []= "optiontext[value][option_{$i}][1]={$expectedOptionLabelOnStoreView}";
-            $optionsData []= "optiontext[delete][option_{$i}]=";
+            $optionId = 'option_' . $i;
+            $optionRowData = [];
+            $optionRowData['optiontext']['order'][$optionId] = $i + 1;
+            $optionRowData['defaulttext'][] = $optionId;
+            $optionRowData['swatchtext']['value'][$optionId] = 'x' . $i ;
+            $optionRowData['optiontext']['value'][$optionId][0] = 'value_' . $i . '_admin';
+            $optionRowData['optiontext']['value'][$optionId][1]= $expectedOptionLabelOnStoreView;
+            $optionRowData['optiontext']['delete'][$optionId]='';
+            $optionsData[] = http_build_query($optionRowData);
         }
         return [
             'attribute_data' => array_merge_recursive(

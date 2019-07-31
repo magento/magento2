@@ -111,7 +111,9 @@ class Dictionary
             /** @var Config $languageConfig */
             $languageConfig = $packInfo['language'];
             $dictionary = $this->readPackCsv($languageConfig->getVendor(), $languageConfig->getPackage());
-            $result = array_merge($result, $dictionary);
+            foreach ($dictionary as $key => $value) {
+                $result[$key] = $value;
+            }
         }
         return $result;
     }

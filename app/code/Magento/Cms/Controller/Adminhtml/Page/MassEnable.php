@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
@@ -13,7 +14,7 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 /**
  * Class MassEnable
  */
-class MassEnable extends \Magento\Backend\App\Action
+class MassEnable extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

@@ -79,7 +79,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
                 'itemTwo' => 45,
             ]
         ];
-        $rawResponse = ['documents' => $documents, 'aggregations' => $aggregations];
+        $rawResponse = ['documents' => $documents, 'aggregations' => $aggregations, 'total' => 2];
 
         $exceptedResponse = [
             'documents' => [
@@ -102,6 +102,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
                     'itemTwo' => 45
                 ],
             ],
+            'total' => 2,
         ];
 
         $this->documentFactory->expects($this->at(0))->method('create')
@@ -118,7 +119,11 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->expects($this->once())->method('create')
             ->with(
                 $this->equalTo(\Magento\Framework\Search\Response\QueryResponse::class),
-                $this->equalTo(['documents' => ['document1', 'document2'], 'aggregations' => 'aggregationsData'])
+                $this->equalTo([
+                    'documents' => ['document1', 'document2'],
+                    'aggregations' => 'aggregationsData',
+                    'total' => 2
+                ])
             )
             ->will($this->returnValue('QueryResponseObject'));
 

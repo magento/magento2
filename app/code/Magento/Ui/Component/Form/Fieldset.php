@@ -5,13 +5,11 @@
  */
 namespace Magento\Ui\Component\Form;
 
-use Magento\Ui\Component\Container;
 use Magento\Ui\Component\AbstractComponent;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
+ * Fieldset UI Component.
+ *
  * @api
  * @since 100.0.2
  */

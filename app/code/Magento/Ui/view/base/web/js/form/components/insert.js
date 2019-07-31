@@ -237,10 +237,21 @@ define([
          * @param {*} data
          */
         onRender: function (data) {
+            var resp;
+
             this.loading(false);
-            this.set('content', data);
-            this.isRendered = true;
-            this.startRender = false;
+
+            try {
+                resp = JSON.parse(data);
+
+                if (resp.ajaxExpired) {
+                    window.location.href = resp.ajaxRedirect;
+                }
+            } catch (e) {
+                this.set('content', data);
+                this.isRendered = true;
+                this.startRender = false;
+            }
         },
 
         /**

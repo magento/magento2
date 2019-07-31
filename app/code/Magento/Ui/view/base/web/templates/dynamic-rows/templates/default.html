@@ -41,7 +41,7 @@
                     <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
                     <td if="elem.template"
                         css="$parent.setClasses(elem)"
-                        visible="elem.visible"
+                        visible="elem.visible() && elem.formElement !== 'hidden'"
                         disable="elem.disabled"
                         template="elem.template"/>
                     <!-- /ko -->

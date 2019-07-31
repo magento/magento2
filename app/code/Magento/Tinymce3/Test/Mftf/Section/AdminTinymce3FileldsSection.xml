@@ -13,6 +13,7 @@
     </section>
     <section name="TinyMCESection">
         <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
+        <element name="InsertImageBtnTinyMCE3" type="button" selector="#cms_page_form_content_image"/>
     </section>
     <section name="NewsletterWYSIWYGSection">
         <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>

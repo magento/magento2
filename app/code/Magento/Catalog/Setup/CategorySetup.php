@@ -10,7 +10,6 @@ namespace Magento\Catalog\Setup;
 use Magento\Catalog\Block\Adminhtml\Category\Helper\Pricestep;
 use Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\Available;
 use Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\DefaultSortby;
-use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\BaseImage;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category as CategoryFormHelper;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight as WeightFormHelper;
 use Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate;
@@ -54,6 +53,8 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Theme\Model\Theme\Source\Theme;
 
 /**
+ * Setup category with default entities.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategorySetup extends EavSetup
@@ -593,7 +594,6 @@ class CategorySetup extends EavSetup
                         'label' => 'Base Image',
                         'input' => 'media_image',
                         'frontend' => ImageFrontendModel::class,
-                        'input_renderer' => BaseImage::class,
                         'required' => false,
                         'sort_order' => 0,
                         'global' => ScopedAttributeInterface::SCOPE_STORE,
@@ -626,7 +626,6 @@ class CategorySetup extends EavSetup
                         'type' => 'varchar',
                         'label' => 'Media Gallery',
                         'input' => 'gallery',
-                        'backend' => Media::class,
                         'required' => false,
                         'sort_order' => 4,
                         'group' => 'Images',

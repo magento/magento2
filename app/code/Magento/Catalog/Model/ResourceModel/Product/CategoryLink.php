@@ -93,6 +93,8 @@ class CategoryLink
     }
 
     /**
+     * Get category link metadata
+     *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
      */
     private function getCategoryLinkMetadata()
@@ -114,16 +116,22 @@ class CategoryLink
     private function processCategoryLinks($newCategoryPositions, &$oldCategoryPositions)
     {
         $result = ['changed' => [], 'updated' => []];
+
+        $oldCategoryPositions = array_values($oldCategoryPositions);
         foreach ($newCategoryPositions as $newCategoryPosition) {
-            $key = array_search(
-                $newCategoryPosition['category_id'],
-                array_column($oldCategoryPositions, 'category_id')
-            );
+            $key = false;
+
+            foreach ($oldCategoryPositions as $oldKey => $oldCategoryPosition) {
+                if ((int)$oldCategoryPosition['category_id'] === (int)$newCategoryPosition['category_id']) {
+                    $key = $oldKey;
+                    break;
+                }
+            }
 
             if ($key === false) {
                 $result['changed'][] = $newCategoryPosition;
             } elseif ($oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']) {
-                $result['updated'][] = $newCategoryPositions[$key];
+                $result['updated'][] = $newCategoryPosition;
                 unset($oldCategoryPositions[$key]);
             }
         }
@@ -132,6 +140,8 @@ class CategoryLink
     }
 
     /**
+     * Update category links
+     *
      * @param ProductInterface $product
      * @param array $insertLinks
      * @param bool $insert
@@ -175,6 +185,8 @@ class CategoryLink
     }
 
     /**
+     * Delete category links
+     *
      * @param ProductInterface $product
      * @param array $deleteLinks
      * @return array
