@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Test\Unit\Model\Config\Source\Email;
 
 class TemplateTest extends \PHPUnit\Framework\TestCase
@@ -34,7 +32,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $this->_coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
         $this->_emailConfig = $this->createMock(\Magento\Email\Model\Template\Config::class);
-        $this->_templatesFactory = $this->createMock(\Magento\Email\Model\ResourceModel\Template\CollectionFactory::class);
+        $this->_templatesFactory = $this->createMock(
+            \Magento\Email\Model\ResourceModel\Template\CollectionFactory::class
+        );
         $this->_model = new \Magento\Config\Model\Config\Source\Email\Template(
             $this->_coreRegistry,
             $this->_templatesFactory,

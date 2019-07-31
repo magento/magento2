@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Webapi;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -261,21 +259,21 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                     'properties' => [
                         'entity_id' => [
                             'type' => 'integer',
-                                'description' => 'Item ID',
-                            ],
-                            'name' => [
-                                'type' => 'string',
-                                'description' => 'Item name',
-                            ],
-                            'enabled' => [
-                                'type' => 'boolean',
-                                'description' => 'If entity is enabled',
-                            ],
-                            'orders' => [
-                                'type' => 'boolean',
-                                'description' => 'If current entity has a property defined',
-                            ],
-                            'custom_attributes' =>        [
+                            'description' => 'Item ID',
+                        ],
+                        'name' => [
+                            'type' => 'string',
+                            'description' => 'Item name',
+                        ],
+                        'enabled' => [
+                            'type' => 'boolean',
+                            'description' => 'If entity is enabled',
+                        ],
+                        'orders' => [
+                            'type' => 'boolean',
+                            'description' => 'If current entity has a property defined',
+                        ],
+                        'custom_attributes' => [
                             'type' => 'array',
                             'description' => 'Custom attributes values.',
                             'items' => [
