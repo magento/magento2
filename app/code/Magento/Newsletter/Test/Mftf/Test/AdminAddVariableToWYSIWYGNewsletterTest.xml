@@ -83,8 +83,7 @@
         <waitForPageLoad stepKey="waitForPageLoad9" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview1" />
         <switchToWindow userInput="action_window" stepKey="switchToWindow1"/>
-        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe1" />
-        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframe"/>
         <!--see Default Variable on Storefront-->
         <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
         <!--see Custom Variable on Storefront-->
@@ -95,8 +94,7 @@
         <amOnPage url="{{NewsletterTemplateGrid.url}}" stepKey="amOnTemplateGrid" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview2" />
         <switchToWindow userInput="action_window" stepKey="switchToWindow2"/>
-        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe2" />
-        <wait time="10" stepKey="waitForPageLoad8"/>
+        <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframeAfterVariableDelete"/>
         <!--see custom variable blank-->
         <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
         <closeTab stepKey="closeTab"/>
