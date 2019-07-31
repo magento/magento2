@@ -10,6 +10,7 @@
     <test name="CheckDefaultNumbersProductsToDisplayTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Default product numbers to display in grid"/>
             <title value="Check default numbers: products to display"/>
             <description value="Check default numbers: products to display"/>
             <severity value="MAJOR"/>
