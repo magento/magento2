@@ -140,10 +140,10 @@ class CreateCreditMemoStep implements TestStepInterface
 
         foreach ($compareData as $fieldName => $fieldValue) {
             if (isset($data['form_data'][$fieldName]) && $fieldValue != $data['form_data'][$fieldName]) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }
