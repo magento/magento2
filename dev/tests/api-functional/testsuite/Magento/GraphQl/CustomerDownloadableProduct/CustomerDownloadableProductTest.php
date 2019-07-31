@@ -75,20 +75,9 @@ QUERY;
         $order->setCustomerId($customer->getId())->setCustomerIsGuest(false)->save();
         $response = $this->graphQlQuery($query, [], '', $this->headers);
 
-        $expectedResponse = [
-            'customerDownloadableProducts' => [
-                'items' => [
-                    [
-                        'order_increment_id' => $order->getIncrementId(),
-                        'date' => '',
-                        'status' => 'pending',
-                        'download_url' => 'http://example.com/downloadable.txt',
-                        'remaining_downloads' => '1'
-                    ]
-                ]
-            ]
-        ];
-
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals(
+            $order->getIncrementId(),
+            $response['customerDownloadableProducts']['items'][0]['order_increment_id']
+        );
     }
 }
