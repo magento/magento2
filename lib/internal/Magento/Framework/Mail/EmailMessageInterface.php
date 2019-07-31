@@ -28,44 +28,44 @@ interface EmailMessageInterface
     /**
      * Retrieve list of From senders
      *
-     * @return array
+     * @return MailAddressList|null
      */
-    public function getFrom(): array;
+    public function getFrom(): ?MailAddressList;
 
     /**
      * Access the address list of the To header
      *
-     * @return array
+     * @return MailAddressList
      */
-    public function getTo(): array;
+    public function getTo(): MailAddressList;
 
     /**
      * Retrieve list of CC recipients
      *
-     * @return array
+     * @return MailAddressList|null
      */
-    public function getCc(): array;
+    public function getCc(): ?MailAddressList;
 
     /**
      * Retrieve list of BCC recipients
      *
-     * @return array
+     * @return MailAddressList|null
      */
-    public function getBcc(): array;
+    public function getBcc(): ?MailAddressList;
 
     /**
      * Access the address list of the Reply-To header
      *
-     * @return array
+     * @return MailAddressList|null
      */
-    public function getReplyTo(): array;
+    public function getReplyTo(): ?MailAddressList;
 
     /**
      * Retrieve the sender address, if any
      *
-     * @return null|array
+     * @return MailAddress|null
      */
-    public function getSender(): ?string;
+    public function getSender(): ?MailAddress;
 
     /**
      * Get the message subject header value
@@ -77,9 +77,9 @@ interface EmailMessageInterface
     /**
      * Return the currently set message body
      *
-     * @return MimeMessageInterface|null
+     * @return MimeMessageInterface
      */
-    public function getBody(): ?MimeMessageInterface;
+    public function getBody(): MimeMessageInterface;
 
     /**
      * Get the string-serialized message body text

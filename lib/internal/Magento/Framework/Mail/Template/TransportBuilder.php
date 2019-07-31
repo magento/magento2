@@ -4,6 +4,7 @@
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ * @noinspection PhpUnusedParameterInspection
  */
 declare(strict_types=1);
 
@@ -14,6 +15,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
+use Magento\Framework\Mail\MailAddressList;
+use Magento\Framework\Mail\MailAddressListFactory;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\MimeInterface;
@@ -124,6 +127,11 @@ class TransportBuilder
     private $mimePartInterfaceFactory;
 
     /**
+     * @var MailAddressListFactory|null
+     */
+    private $mailAddressListFactory;
+
+    /**
      * TransportBuilder constructor
      *
      * @param FactoryInterface $templateFactory
@@ -135,7 +143,7 @@ class TransportBuilder
      * @param EmailMessageInterfaceFactory|null $emailMessageInterfaceFactory
      * @param MimeMessageInterfaceFactory|null $mimeMessageInterfaceFactory
      * @param MimePartInterfaceFactory|null $mimePartInterfaceFactory
-     *
+     * @param MailAddressListFactory|null $mailAddressListFactory
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -147,7 +155,8 @@ class TransportBuilder
         MessageInterfaceFactory $messageFactory = null,
         EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
         MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
-        MimePartInterfaceFactory $mimePartInterfaceFactory = null
+        MimePartInterfaceFactory $mimePartInterfaceFactory = null,
+        MailAddressListFactory $mailAddressListFactory = null
     ) {
         $this->templateFactory = $templateFactory;
         $this->objectManager = $objectManager;
@@ -159,6 +168,7 @@ class TransportBuilder
             ->get(MimeMessageInterfaceFactory::class);
         $this->mimePartInterfaceFactory = $mimePartInterfaceFactory ?: $this->objectManager
             ->get(MimePartInterfaceFactory::class);
+        $this->mailAddressListFactory = $mailAddressListFactory;
     }
 
     /**
@@ -166,11 +176,16 @@ class TransportBuilder
      *
      * @param array|string $address
      * @param string $name
+     *
      * @return $this
+     * @throws MailException
      */
     public function addCc($address, $name = '')
     {
-        $this->messageData['cc'][$address] = $name;
+        if (!isset($this->messageData['cc'])) {
+            $this->messageData['cc'] = $this->mailAddressListFactory->create();
+        }
+        $this->getMailAddresses($this->messageData['cc'], $address, $name);
 
         return $this;
     }
@@ -180,15 +195,16 @@ class TransportBuilder
      *
      * @param array|string $address
      * @param string $name
+     *
      * @return $this
+     * @throws MailException
      */
     public function addTo($address, $name = '')
     {
-        if (!$name) {
-            $this->messageData['to'][] = $address;
-        } else {
-            $this->messageData['to'][$address] = $name;
+        if (!isset($this->messageData['to'])) {
+            $this->messageData['to'] = $this->mailAddressListFactory->create();
         }
+        $this->getMailAddresses($this->messageData['to'], $address, $name);
 
         return $this;
     }
@@ -197,11 +213,17 @@ class TransportBuilder
      * Add bcc address
      *
      * @param array|string $address
+     *
      * @return $this
+     * @throws MailException
      */
     public function addBcc($address)
     {
         $this->messageData['bcc'] = $address;
+        if (!isset($this->messageData['bcc'])) {
+            $this->messageData['bcc'] = $this->mailAddressListFactory->create();
+        }
+        $this->getMailAddresses($this->messageData['bcc'], $address);
 
         return $this;
     }
@@ -211,11 +233,16 @@ class TransportBuilder
      *
      * @param string $email
      * @param string|null $name
+     *
      * @return $this
+     * @throws MailException
      */
     public function setReplyTo($email, $name = null)
     {
-        $this->messageData['replyTo'][$email] = $name;
+        if (!isset($this->messageData['replyTo'])) {
+            $this->messageData['replyTo'] = $this->mailAddressListFactory->create();
+        }
+        $this->getMailAddresses($this->messageData['replyTo'], $email, $name);
 
         return $this;
     }
@@ -224,6 +251,7 @@ class TransportBuilder
      * Set mail from address
      *
      * @param string|array $from
+     *
      * @return $this
      * @throws MailException
      * @see setFromByScope()
@@ -233,7 +261,7 @@ class TransportBuilder
      */
     public function setFrom($from)
     {
-        return $this->setFromByScope($from, null);
+        return $this->setFromByScope($from);
     }
 
     /**
@@ -241,13 +269,18 @@ class TransportBuilder
      *
      * @param string|array $from
      * @param string|int $scopeId
+     *
      * @return $this
      * @throws MailException
      */
     public function setFromByScope($from, $scopeId = null)
     {
         $result = $this->_senderResolver->resolve($from, $scopeId);
-        $this->messageData['from'][$result['email']] = $result['name'];
+        if (!isset($this->messageData['from'])) {
+            $this->messageData['from'] = $this->mailAddressListFactory->create();
+        }
+        $this->getMailAddresses($this->messageData['from'], $result['email'], $result['name']);
+
         return $this;
     }
 
@@ -255,11 +288,13 @@ class TransportBuilder
      * Set template identifier
      *
      * @param string $templateIdentifier
+     *
      * @return $this
      */
     public function setTemplateIdentifier($templateIdentifier)
     {
         $this->templateIdentifier = $templateIdentifier;
+
         return $this;
     }
 
@@ -267,6 +302,7 @@ class TransportBuilder
      * Set template model
      *
      * @param string $templateModel
+     *
      * @return $this
      */
     public function setTemplateModel($templateModel)
@@ -279,11 +315,13 @@ class TransportBuilder
      * Set template vars
      *
      * @param array $templateVars
+     *
      * @return $this
      */
     public function setTemplateVars($templateVars)
     {
         $this->templateVars = $templateVars;
+
         return $this;
     }
 
@@ -296,6 +334,7 @@ class TransportBuilder
     public function setTemplateOptions($templateOptions)
     {
         $this->templateOptions = $templateOptions;
+
         return $this;
     }
 
@@ -377,5 +416,32 @@ class TransportBuilder
         $this->message = $this->emailMessageInterfaceFactory->create($this->messageData);
 
         return $this;
+    }
+
+    /**
+     * Handles possible incoming types of email (string or array)
+     *
+     * @param MailAddressList $mailAddressList
+     * @param string|array $emailOrList
+     * @param string|null $name
+     *
+     * @return void
+     * @throws MailException
+     */
+    private function getMailAddresses(MailAddressList $mailAddressList, $emailOrList, ?string $name = null): void
+    {
+        if (is_array($emailOrList)) {
+            $mailAddressList->addMany($emailOrList);
+
+            return;
+        }
+
+        if (is_string($emailOrList) && $name === null) {
+            $mailAddressList->addFromString($emailOrList);
+
+            return;
+        }
+
+        $mailAddressList->add($emailOrList, $name);
     }
 }

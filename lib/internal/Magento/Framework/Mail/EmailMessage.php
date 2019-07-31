@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
+use Magento\Framework\Exception\MailException;
+use Zend\Mail\Address as ZendAddress;
 use Zend\Mail\AddressList;
 use Zend\Mail\Message as ZendMessage;
 use Zend\Mime\Message as ZendMimeMessage;
@@ -27,32 +29,45 @@ class EmailMessage implements EmailMessageInterface
     private $mimeMessageFactory;
 
     /**
+     * @var MailAddressListFactory
+     */
+    private $mailAddressListFactory;
+
+    /**
+     * @var MailAddressFactory
+     */
+    private $mailAddressFactory;
+
+    /**
      * EmailMessage constructor
      *
      * @param MimeMessageInterface $body
+     * @param MailAddressList $to
      * @param MimeMessageInterfaceFactory $mimeMessageFactory
-     * @param array|null $to
-     * @param array|null $from
-     * @param array|null $cc
-     * @param array|null $bcc
-     * @param array|null $replyTo
-     * @param string|null $sender
-     * @param string|null $senderName
+     * @param MailAddressListFactory $mailAddressListFactory
+     * @param MailAddressFactory $mailAddressFactory
+     * @param MailAddressList|null $from
+     * @param MailAddressList|null $cc
+     * @param MailAddressList|null $bcc
+     * @param MailAddressList|null $replyTo
+     * @param MailAddress|null $sender
      * @param string|null $subject
      * @param string|null $encoding
      *
+     * @throws MailException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         MimeMessageInterface $body,
+        MailAddressList $to,
         MimeMessageInterfaceFactory $mimeMessageFactory,
-        ?array $to = [],
-        ?array $from = [],
-        ?array $cc = [],
-        ?array $bcc = [],
-        ?array $replyTo = [],
-        ?string $sender = '',
-        ?string $senderName = '',
+        MailAddressListFactory $mailAddressListFactory,
+        MailAddressFactory $mailAddressFactory,
+        ?MailAddressList $from = null,
+        ?MailAddressList $cc = null,
+        ?MailAddressList $bcc = null,
+        ?MailAddressList $replyTo = null,
+        ?MailAddress $sender = null,
         ?string $subject = '',
         ?string $encoding = ''
     ) {
@@ -67,14 +82,20 @@ class EmailMessage implements EmailMessageInterface
             $this->message->setSubject($subject);
         }
         if ($sender) {
-            $this->message->setSender($sender, $senderName);
+            $this->message->setSender($sender);
         }
         $this->message->setReplyTo($replyTo);
+        if ($to->count() < 1) {
+            throw new MailException(__('Email message must have at list one addressee'));
+        }
+
         $this->message->setTo($to);
         $this->message->setFrom($from);
         $this->message->setCc($cc);
         $this->message->setBcc($bcc);
         $this->mimeMessageFactory = $mimeMessageFactory;
+        $this->mailAddressListFactory = $mailAddressListFactory;
+        $this->mailAddressFactory = $mailAddressFactory;
     }
 
     /**
@@ -96,51 +117,60 @@ class EmailMessage implements EmailMessageInterface
     /**
      * @inheritDoc
      */
-    public function getFrom(): array
+    public function getFrom(): ?MailAddressList
     {
-        return $this->convertAddressListToArray($this->message->getFrom());
+        return $this->convertAddressListToMailAddressList($this->message->getFrom());
     }
 
     /**
      * @inheritDoc
      */
-    public function getTo(): array
+    public function getTo(): MailAddressList
     {
-        return $this->convertAddressListToArray($this->message->getTo());
+        return $this->convertAddressListToMailAddressList($this->message->getTo());
     }
 
     /**
      * @inheritDoc
      */
-    public function getCc(): array
+    public function getCc(): ?MailAddressList
     {
-        return $this->convertAddressListToArray($this->message->getCc());
-    }
-
-    /**
-     * Retrieve list of BCC recipients
-     *
-     * @return array
-     */
-    public function getBcc(): array
-    {
-        return $this->convertAddressListToArray($this->message->getBcc());
+        return $this->convertAddressListToMailAddressList($this->message->getCc());
     }
 
     /**
      * @inheritDoc
      */
-    public function getReplyTo(): array
+    public function getBcc(): ?MailAddressList
     {
-        return $this->convertAddressListToArray($this->message->getReplyTo());
+        return $this->convertAddressListToMailAddressList($this->message->getBcc());
     }
 
     /**
      * @inheritDoc
      */
-    public function getSender(): ?string
+    public function getReplyTo(): ?MailAddressList
     {
-        return $this->message->getSender();
+        return $this->convertAddressListToMailAddressList($this->message->getReplyTo());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSender(): ?MailAddress
+    {
+        /** @var ZendAddress $zendSender */
+        if (!$zendSender = $this->message->getSender()) {
+            return null;
+        }
+
+        return $this->mailAddressFactory->create(
+            [
+                'email' => $zendSender->getEmail(),
+                'name' => $zendSender->getName(),
+                'comment' => $zendSender->getComment()
+            ]
+        );
     }
 
     /**
@@ -154,7 +184,7 @@ class EmailMessage implements EmailMessageInterface
     /**
      * @inheritDoc
      */
-    public function getBody(): ?MimeMessageInterface
+    public function getBody(): MimeMessageInterface
     {
         return $this->mimeMessageFactory->create(
             ['parts' => $this->message->getBody()->getParts()]
@@ -178,9 +208,7 @@ class EmailMessage implements EmailMessageInterface
     }
 
     /**
-     * Serialize to string
-     *
-     * @return string
+     * @inheritDoc
      */
     public function toString(): string
     {
@@ -191,17 +219,23 @@ class EmailMessage implements EmailMessageInterface
      * Converts AddressList to array
      *
      * @param AddressList $addressList
-     * @return array
+     * @return MailAddressList
+     * @throws MailException
      */
-    private function convertAddressListToArray(AddressList $addressList): array
+    private function convertAddressListToMailAddressList(AddressList $addressList): MailAddressList
     {
-        $arrayList = [];
-        foreach ($addressList as $email => $address) {
-            if ($address->getName()) {
-                $arrayList[$email] = $address->getName();
-            } else {
-                $arrayList[] = $address->getEmail();
-            }
+        /** @var MailAddressList $arrayList */
+        $arrayList = $this->mailAddressListFactory->create();
+        foreach ($addressList as $address) {
+            $arrayList->add(
+                $this->mailAddressFactory->create(
+                    [
+                        'email' => $address->getEmail(),
+                        'name' => $address->getName(),
+                        'comment' => $address->getComment()
+                    ]
+                )
+            );
         }
 
         return $arrayList;
