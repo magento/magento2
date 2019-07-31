@@ -11,6 +11,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Steps:
@@ -68,21 +69,31 @@ class CreateDownloadableProductEntityTest extends Injectable
     }
 
     /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    private $envWhitelist;
+
+    /**
      * Filling objects of the class
      *
      * @param Category $category
      * @param CatalogProductIndex $catalogProductIndexNewPage
      * @param CatalogProductNew $catalogProductNewPage
+     * @param EnvWhitelist $envWhitelist
      * @return void
      */
     public function __inject(
         Category $category,
         CatalogProductIndex $catalogProductIndexNewPage,
-        CatalogProductNew $catalogProductNewPage
+        CatalogProductNew $catalogProductNewPage,
+        EnvWhitelist $envWhitelist
     ) {
         $this->category = $category;
         $this->catalogProductIndex = $catalogProductIndexNewPage;
         $this->catalogProductNew = $catalogProductNewPage;
+        $this->envWhitelist = $envWhitelist;
     }
 
     /**
@@ -95,10 +106,16 @@ class CreateDownloadableProductEntityTest extends Injectable
     public function test(DownloadableProduct $product, Category $category)
     {
         // Steps
+        $this->envWhitelist->addHost('example.com');
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct('downloadable');
         $productBlockForm = $this->catalogProductNew->getProductForm();
         $productBlockForm->fill($product, null, $category);
         $this->catalogProductNew->getFormPageActions()->save();
+    }
+
+    protected function tearDown()
+    {
+        $this->envWhitelist->removeHost('example.com');
     }
 }
