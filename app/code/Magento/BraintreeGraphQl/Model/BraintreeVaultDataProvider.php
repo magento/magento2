@@ -25,18 +25,18 @@ class BraintreeVaultDataProvider implements AdditionalDataProviderInterface
      */
     public function getData(array $args): array
     {
-        if (!isset($args[static::PATH_ADDITIONAL_DATA])) {
+        if (!isset($args[self::PATH_ADDITIONAL_DATA])) {
             throw new GraphQlInputException(
                 __('Required parameter "braintree_cc_vault" for "payment_method" is missing.')
             );
         }
 
-        if (!isset($args[static::PATH_ADDITIONAL_DATA]['public_hash'])) {
+        if (!isset($args[self::PATH_ADDITIONAL_DATA]['public_hash'])) {
             throw new GraphQlInputException(
                 __('Required parameter "public_hash" for "braintree_cc_vault" is missing.')
             );
         }
 
-        return $args[static::PATH_ADDITIONAL_DATA];
+        return $args[self::PATH_ADDITIONAL_DATA];
     }
 }
