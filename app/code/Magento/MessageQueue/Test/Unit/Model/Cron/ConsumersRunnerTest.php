@@ -15,6 +15,9 @@ use Magento\MessageQueue\Model\Cron\ConsumersRunner;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Magento\Framework\Lock\LockManagerInterface;
 
+/**
+ * Unit tests for ConsumersRunner.
+ */
 class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -90,11 +93,13 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfigMock->expects($this->once())
             ->method('get')
-            ->willReturnMap([
-                ['cron_consumers_runner/cron_run', true, false],
-                ['cron_consumers_runner/max_messages', 10000, 10000],
-                ['cron_consumers_runner/consumers', [], []],
-            ]);
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, false],
+                    ['cron_consumers_runner/max_messages', 10000, 10000],
+                    ['cron_consumers_runner/consumers', [], []],
+                ]
+            );
 
         $this->consumerConfigMock->expects($this->never())
             ->method('getConsumers');
@@ -131,11 +136,13 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
         $this->deploymentConfigMock->expects($this->exactly(3))
             ->method('get')
-            ->willReturnMap([
-                ['cron_consumers_runner/cron_run', true, true],
-                ['cron_consumers_runner/max_messages', 10000, $maxMessages],
-                ['cron_consumers_runner/consumers', [], $allowedConsumers],
-            ]);
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, true],
+                    ['cron_consumers_runner/max_messages', 10000, $maxMessages],
+                    ['cron_consumers_runner/consumers', [], $allowedConsumers],
+                ]
+            );
 
         /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
         $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
@@ -154,7 +161,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
         $this->lockManagerMock->expects($this->exactly($isRunExpects))
             ->method('isLocked')
-            ->with(md5($consumerName))
+            ->with(md5($consumerName)) //phpcs:ignore
             ->willReturn($isLocked);
 
         $this->shellBackgroundMock->expects($this->exactly($shellBackgroundExpects))

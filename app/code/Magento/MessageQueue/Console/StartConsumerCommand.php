@@ -64,7 +64,7 @@ class StartConsumerCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -79,13 +79,13 @@ class StartConsumerCommand extends Command
 
         $singleThread = $input->getOption(self::OPTION_SINGLE_THREAD);
 
-        if ($singleThread && $this->lockManager->isLocked(md5($consumerName))) {
+        if ($singleThread && $this->lockManager->isLocked(md5($consumerName))) { //phpcs:ignore
             $output->writeln('<error>Consumer with the same name is running</error>');
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         if ($singleThread) {
-            $this->lockManager->lock(md5($consumerName));
+            $this->lockManager->lock(md5($consumerName)); //phpcs:ignore
         }
 
         $this->appState->setAreaCode($areaCode ?? 'global');
@@ -94,14 +94,14 @@ class StartConsumerCommand extends Command
         $consumer->process($numberOfMessages);
 
         if ($singleThread) {
-            $this->lockManager->unlock(md5($consumerName));
+            $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -136,13 +136,13 @@ class StartConsumerCommand extends Command
             self::OPTION_SINGLE_THREAD,
             null,
             InputOption::VALUE_NONE,
-            'Does not allow to run a consumer if it was run before.'
+            'This option prevents running multiple copies of one consumer simultaneously.'
         );
         $this->addOption(
             self::PID_FILE_PATH,
             null,
             InputOption::VALUE_REQUIRED,
-            'The file path for saving PID'
+            'The file path for saving PID (This option is deprecated, use --single-thread instead)'
         );
         $this->setHelp(
             <<<HELP
@@ -164,7 +164,7 @@ To specify the preferred area:
 
     <comment>%command.full_name% someConsumer --area-code='adminhtml'</comment>
     
-To do not allow to run a consumer if it was run before:
+To do not run multiple copies of one consumer simultaneously:
 
     <comment>%command.full_name% someConsumer --single-thread'</comment>
 

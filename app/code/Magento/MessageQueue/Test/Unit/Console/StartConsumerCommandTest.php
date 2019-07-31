@@ -131,16 +131,15 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->lockManagerMock->expects($this->exactly($isLockedExpects))
             ->method('isLocked')
-            ->with(md5($consumerName))
+            ->with(md5($consumerName)) //phpcs:ignore
             ->willReturn($isLocked);
 
         $this->lockManagerMock->expects($this->exactly($lockExpects))
             ->method('lock')
-            ->with(md5($consumerName));
+            ->with(md5($consumerName)); //phpcs:ignore
         $this->lockManagerMock->expects($this->exactly($unlockExpects))
             ->method('unlock')
-            ->with(md5($consumerName));
-
+            ->with(md5($consumerName)); //phpcs:ignore
 
         $this->assertEquals(
             $expectedReturn,

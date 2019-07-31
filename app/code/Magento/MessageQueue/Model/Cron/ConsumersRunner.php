@@ -71,6 +71,7 @@ class ConsumersRunner
      * @param ConsumerConfigInterface $consumerConfig The consumer config provider
      * @param DeploymentConfig $deploymentConfig The application deployment configuration
      * @param ShellInterface $shellBackground The shell command line wrapper for executing command in background
+     * @param LockManagerInterface $lockManager The lock manager
      * @param ConnectionTypeResolver $mqConnectionTypeResolver Consumer connection resolver
      * @param LoggerInterface $logger Logger
      */
@@ -146,7 +147,7 @@ class ConsumersRunner
             return false;
         }
 
-        if ($this->lockManager->isLocked(md5($consumerName))) {
+        if ($this->lockManager->isLocked(md5($consumerName))) { //phpcs:ignore
             return false;
         }
 
@@ -154,12 +155,14 @@ class ConsumersRunner
         try {
             $this->mqConnectionTypeResolver->getConnectionType($connectionName);
         } catch (\LogicException $e) {
-            $this->logger->info(sprintf(
-                'Consumer "%s" skipped as required connection "%s" is not configured. %s',
-                $consumerName,
-                $connectionName,
-                $e->getMessage()
-            ));
+            $this->logger->info(
+                sprintf(
+                    'Consumer "%s" skipped as required connection "%s" is not configured. %s',
+                    $consumerName,
+                    $connectionName,
+                    $e->getMessage()
+                )
+            );
             return false;
         }
 

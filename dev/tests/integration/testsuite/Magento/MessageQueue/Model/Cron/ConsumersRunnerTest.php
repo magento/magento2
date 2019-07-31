@@ -97,16 +97,18 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
         $this->shellMock->expects($this->any())
             ->method('execute')
-            ->willReturnCallback(function ($command, $arguments) {
-                $command = vsprintf($command, $arguments);
-                $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
-                $params['MAGE_DIRS']['base']['path'] = BP;
-                $params = 'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
-                $command = str_replace('bin/magento', 'dev/tests/integration/bin/magento', $command);
-                $command = $params . ' ' . $command;
+            ->willReturnCallback(
+                function ($command, $arguments) {
+                    $command = vsprintf($command, $arguments);
+                    $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
+                    $params['MAGE_DIRS']['base']['path'] = BP;
+                    $params = 'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
+                    $command = str_replace('bin/magento', 'dev/tests/integration/bin/magento', $command);
+                    $command = $params . ' ' . $command;
 
-                return exec("{$command} >/dev/null &");
-            });
+                    return exec("{$command} >/dev/null &"); //phpcs:ignore
+                }
+            );
     }
 
     /**
@@ -120,16 +122,16 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $config = $this->config;
         $config['cron_consumers_runner'] = ['consumers' => [$specificConsumer], 'max_messages' => 0];
         $this->writeConfig($config);
-        $this->reRunConsumersAndCheckPidFiles($specificConsumer);
-        $this->reRunConsumersAndCheckPidFiles($specificConsumer);
-        $this->assertTrue($this->lockManager->isLocked(md5($specificConsumer)));
+        $this->reRunConsumersAndCheckLocks($specificConsumer);
+        $this->reRunConsumersAndCheckLocks($specificConsumer);
+        $this->assertTrue($this->lockManager->isLocked(md5($specificConsumer))); //phpcs:ignore
     }
 
     /**
      * @param string $specificConsumer
      * @return void
      */
-    private function reRunConsumersAndCheckPidFiles($specificConsumer)
+    private function reRunConsumersAndCheckLocks($specificConsumer)
     {
         $this->consumersRunner->run();
 
@@ -139,9 +141,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
             $consumerName = $consumer->getName();
 
             if ($consumerName === $specificConsumer) {
-                $this->assertTrue($this->lockManager->isLocked(md5($consumerName)));
+                $this->assertTrue($this->lockManager->isLocked(md5($consumerName))); //phpcs:ignore
             } else {
-                $this->assertFalse($this->lockManager->isLocked(md5($consumerName)));
+                $this->assertFalse($this->lockManager->isLocked(md5($consumerName))); //phpcs:ignore
             }
         }
     }
@@ -163,7 +165,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         sleep(20);
 
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
-            $this->assertFalse($this->lockManager->isLocked(md5($consumer->getName())));
+            $this->assertFalse($this->lockManager->isLocked(md5($consumer->getName()))); //phpcs:ignore
         }
     }
 
@@ -193,7 +195,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     {
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer->getName()) as $consumerProcessId) {
-                exec("kill {$consumerProcessId}");
+                exec("kill {$consumerProcessId}"); //phpcs:ignore
             }
         }
 
@@ -213,6 +215,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
      */
     private function getConsumerProcessIds($consumer)
     {
+        //phpcs:ignore
         exec("ps ax | grep -v grep | grep 'queue:consumers:start {$consumer}' | awk '{print $1}'", $output);
         return $output;
     }
