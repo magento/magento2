@@ -38,6 +38,8 @@ class MimePart implements MimePartInterface
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws MailException
      */
     public function __construct(
         $content,

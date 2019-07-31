@@ -12,7 +12,7 @@ use Magento\Framework\App\TemplateTypesInterface;
 /**
  * Class TransportBuilderTest
  *
- *  @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilderTest extends \PHPUnit\Framework\TestCase
 {

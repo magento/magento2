@@ -1,4 +1,7 @@
 <?php
+/** @noinspection SenselessMethodDuplicationInspection */
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection PhpUndefinedClassInspection */
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,13 +11,17 @@ declare(strict_types=1);
 namespace Magento\Newsletter\Model\Queue;
 
 use Magento\Email\Model\AbstractTemplate;
+use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
+use Magento\Framework\Mail\MailAddressConverter;
+use Magento\Framework\Mail\MailAddressList;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\MimeMessageInterfaceFactory;
 use Magento\Framework\Mail\MimePartInterfaceFactory;
 use Magento\Framework\Mail\Template\FactoryInterface;
 use Magento\Framework\Mail\Template\SenderResolverInterface;
+use Magento\Framework\Mail\TemplateInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -53,6 +60,11 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
     private $mimePartInterfaceFactory;
 
     /**
+     * @var MailAddressConverter|null
+     */
+    private $mailAddressConverter;
+
+    /**
      * TransportBuilder constructor
      *
      * @param FactoryInterface $templateFactory
@@ -64,6 +76,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      * @param EmailMessageInterfaceFactory|null $emailMessageInterfaceFactory
      * @param MimeMessageInterfaceFactory|null $mimeMessageInterfaceFactory
      * @param MimePartInterfaceFactory|null $mimePartInterfaceFactory
+     * @param MailAddressConverter|null $mailAddressConverter
      */
     public function __construct(
         FactoryInterface $templateFactory,
@@ -74,7 +87,8 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
         MessageInterfaceFactory $messageFactory = null,
         EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
         MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
-        MimePartInterfaceFactory $mimePartInterfaceFactory = null
+        MimePartInterfaceFactory $mimePartInterfaceFactory = null,
+        MailAddressConverter $mailAddressConverter = null
     ) {
         parent::__construct(
             $templateFactory,
@@ -85,7 +99,8 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
             $messageFactory,
             $emailMessageInterfaceFactory,
             $mimeMessageInterfaceFactory,
-            $mimePartInterfaceFactory
+            $mimePartInterfaceFactory,
+            $mailAddressConverter
         );
         $this->emailMessageInterfaceFactory = $emailMessageInterfaceFactory ?: $this->objectManager
             ->get(EmailMessageInterfaceFactory::class);
@@ -93,14 +108,22 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
             ->get(MimeMessageInterfaceFactory::class);
         $this->mimePartInterfaceFactory = $mimePartInterfaceFactory ?: $this->objectManager
             ->get(MimePartInterfaceFactory::class);
+        $this->mailAddressConverter = $mailAddressConverter ?: $this->objectManager
+            ->get(MailAddressConverter::class);
     }
 
     /**
-     * @inheritDoc
+     * Add cc address
+     *
+     * @param array|string $address
+     * @param string $name
+     *
+     * @return \Magento\Framework\Mail\Template\TransportBuilder
+     * @throws MailException
      */
     public function addCc($address, $name = '')
     {
-        $this->messageData['cc'][$address] = $name;
+        $this->getMailAddresses('cc', $address, $name);
 
         return $this;
     }
@@ -110,54 +133,79 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      *
      * @param array|string $address
      * @param string $name
+     *
      * @return $this
+     * @throws MailException
      */
     public function addTo($address, $name = '')
     {
-        if (!$name) {
-            $this->messageData['to'][] = $address;
-        } else {
-            $this->messageData['to'][$address] = $name;
-        }
+        $this->getMailAddresses('to', $address, $name);
 
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * Add bcc address
+     *
+     * @param array|string $address
+     *
+     * @return $this
+     * @throws MailException
      */
     public function addBcc($address)
     {
-        $this->messageData['bcc'] = $address;
+        $this->getMailAddresses('bcc', $address);
 
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * Set Reply-To Header
+     *
+     * @param string $email
+     * @param string|null $name
+     *
+     * @return $this
+     * @throws MailException
      */
     public function setReplyTo($email, $name = null)
     {
-        $this->messageData['replyTo'][$email] = $name;
+
+        $this->getMailAddresses('replyTo', $email, $name);
 
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * Set mail from address
+     *
+     * @param string|array $from
+     *
+     * @return $this
+     * @throws MailException
+     * @see setFromByScope()
+     *
+     * @deprecated This function sets the from address but does not provide
+     * a way of setting the correct from addresses based on the scope.
      */
     public function setFrom($from)
     {
-        return $this->setFromByScope($from, null);
+        return $this->setFromByScope($from);
     }
 
     /**
-     * @inheritDoc
+     * Set mail from address by scopeId
+     *
+     * @param string|array $from
+     * @param string|int $scopeId
+     *
+     * @return $this
+     * @throws MailException
      */
     public function setFromByScope($from, $scopeId = null)
     {
         $result = $this->_senderResolver->resolve($from, $scopeId);
-        $this->messageData['from'][$result['email']] = $result['name'];
+        $this->getMailAddresses('from', $result['email'], $result['name']);
 
         return $this;
     }
@@ -207,21 +255,44 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected function prepareMessage()
     {
-        /** @var AbstractTemplate $template */
+        /** @var AbstractTemplate|TemplateInterface $template */
         $template = $this->getTemplate()->setData($this->templateData);
         $this->setTemplateFilter($template);
-        $part['content'] = $template->getProcessedTemplate($this->templateVars);
+        $content = $template->getProcessedTemplate($this->templateVars);
         $this->messageData['subject'] = $template->getSubject();
 
-        $this->messageData['body'] = $this->mimeMessageInterfaceFactory
-            ->create(['parts' => [$this->mimePartInterfaceFactory->create([$part])]]);
-
-        $this->messageData['subject'] = html_entity_decode(
-            (string)$template->getSubject(),
-            ENT_QUOTES
+        $mimePart = $this->mimePartInterfaceFactory->create(
+            ['content' => $content]
         );
+        $this->messageData['body'] = $this->mimeMessageInterfaceFactory->create(
+            ['parts' => [$mimePart]]
+        );
+
         $this->message = $this->emailMessageInterfaceFactory->create($this->messageData);
 
         return $this;
+    }
+
+    /**
+     * Handles possible incoming types of email (string or array)
+     *
+     * @param string $addressType
+     * @param string|array $emailOrList
+     * @param string|null $name
+     *
+     * @return void
+     * @throws MailException
+     */
+    private function getMailAddresses(string $addressType, $emailOrList, ?string $name = null): void
+    {
+        if (is_array($emailOrList)) {
+            $this->messageData[$addressType] = array_merge(
+                $this->messageData[$addressType],
+                $this->mailAddressConverter->convertMany($emailOrList)
+            );
+
+            return;
+        }
+        $this->messageData[$addressType][] = $this->mailAddressConverter->convert($emailOrList, $name);
     }
 }

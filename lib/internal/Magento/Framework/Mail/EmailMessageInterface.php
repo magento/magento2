@@ -28,37 +28,37 @@ interface EmailMessageInterface
     /**
      * Retrieve list of From senders
      *
-     * @return MailAddressList|null
+     * @return MailAddress[]|null
      */
-    public function getFrom(): ?MailAddressList;
+    public function getFrom(): ?array;
 
     /**
      * Access the address list of the To header
      *
-     * @return MailAddressList
+     * @return MailAddress[]
      */
-    public function getTo(): MailAddressList;
+    public function getTo(): array;
 
     /**
      * Retrieve list of CC recipients
      *
-     * @return MailAddressList|null
+     * @return MailAddress[]|null
      */
-    public function getCc(): ?MailAddressList;
+    public function getCc(): ?array;
 
     /**
-     * Retrieve list of BCC recipients
+     * Retrieve list of Bcc recipients
      *
-     * @return MailAddressList|null
+     * @return MailAddress[]|null
      */
-    public function getBcc(): ?MailAddressList;
+    public function getBcc(): ?array;
 
     /**
      * Access the address list of the Reply-To header
      *
-     * @return MailAddressList|null
+     * @return MailAddress[]|null
      */
-    public function getReplyTo(): ?MailAddressList;
+    public function getReplyTo(): ?array;
 
     /**
      * Retrieve the sender address, if any

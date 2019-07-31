@@ -15,6 +15,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
+use Magento\Framework\Mail\MailAddress;
+use Magento\Framework\Mail\MailAddressConverter;
 use Magento\Framework\Mail\MailAddressList;
 use Magento\Framework\Mail\MailAddressListFactory;
 use Magento\Framework\Mail\MessageInterface;
@@ -125,11 +127,10 @@ class TransportBuilder
      * @var MimePartInterfaceFactory
      */
     private $mimePartInterfaceFactory;
-
     /**
-     * @var MailAddressListFactory|null
+     * @var MailAddressConverter|null
      */
-    private $mailAddressListFactory;
+    private $mailAddressConverter;
 
     /**
      * TransportBuilder constructor
@@ -143,7 +144,7 @@ class TransportBuilder
      * @param EmailMessageInterfaceFactory|null $emailMessageInterfaceFactory
      * @param MimeMessageInterfaceFactory|null $mimeMessageInterfaceFactory
      * @param MimePartInterfaceFactory|null $mimePartInterfaceFactory
-     * @param MailAddressListFactory|null $mailAddressListFactory
+     * @param MailAddressConverter|null $mailAddressConverter
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -156,7 +157,7 @@ class TransportBuilder
         EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
         MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
         MimePartInterfaceFactory $mimePartInterfaceFactory = null,
-        MailAddressListFactory $mailAddressListFactory = null
+        MailAddressConverter $mailAddressConverter=null
     ) {
         $this->templateFactory = $templateFactory;
         $this->objectManager = $objectManager;
@@ -168,7 +169,8 @@ class TransportBuilder
             ->get(MimeMessageInterfaceFactory::class);
         $this->mimePartInterfaceFactory = $mimePartInterfaceFactory ?: $this->objectManager
             ->get(MimePartInterfaceFactory::class);
-        $this->mailAddressListFactory = $mailAddressListFactory;
+        $this->mailAddressConverter = $mailAddressConverter ?: $this->objectManager
+            ->get(MailAddressConverter::class);
     }
 
     /**
@@ -182,10 +184,7 @@ class TransportBuilder
      */
     public function addCc($address, $name = '')
     {
-        if (!isset($this->messageData['cc'])) {
-            $this->messageData['cc'] = $this->mailAddressListFactory->create();
-        }
-        $this->getMailAddresses($this->messageData['cc'], $address, $name);
+        $this->getMailAddresses('cc', $address, $name);
 
         return $this;
     }
@@ -201,10 +200,7 @@ class TransportBuilder
      */
     public function addTo($address, $name = '')
     {
-        if (!isset($this->messageData['to'])) {
-            $this->messageData['to'] = $this->mailAddressListFactory->create();
-        }
-        $this->getMailAddresses($this->messageData['to'], $address, $name);
+        $this->getMailAddresses('to', $address, $name);
 
         return $this;
     }
@@ -219,11 +215,7 @@ class TransportBuilder
      */
     public function addBcc($address)
     {
-        $this->messageData['bcc'] = $address;
-        if (!isset($this->messageData['bcc'])) {
-            $this->messageData['bcc'] = $this->mailAddressListFactory->create();
-        }
-        $this->getMailAddresses($this->messageData['bcc'], $address);
+        $this->getMailAddresses('bcc', $address);
 
         return $this;
     }
@@ -239,10 +231,8 @@ class TransportBuilder
      */
     public function setReplyTo($email, $name = null)
     {
-        if (!isset($this->messageData['replyTo'])) {
-            $this->messageData['replyTo'] = $this->mailAddressListFactory->create();
-        }
-        $this->getMailAddresses($this->messageData['replyTo'], $email, $name);
+
+        $this->getMailAddresses('replyTo', $email, $name);
 
         return $this;
     }
@@ -276,10 +266,7 @@ class TransportBuilder
     public function setFromByScope($from, $scopeId = null)
     {
         $result = $this->_senderResolver->resolve($from, $scopeId);
-        if (!isset($this->messageData['from'])) {
-            $this->messageData['from'] = $this->mailAddressListFactory->create();
-        }
-        $this->getMailAddresses($this->messageData['from'], $result['email'], $result['name']);
+        $this->getMailAddresses('from', $result['email'], $result['name']);
 
         return $this;
     }
@@ -391,7 +378,7 @@ class TransportBuilder
     protected function prepareMessage()
     {
         $template = $this->getTemplate();
-        $part['content'] = $template->processTemplate();
+        $content = $template->processTemplate();
         switch ($template->getType()) {
             case TemplateTypesInterface::TYPE_TEXT:
                 $part['type'] = MimeInterface::TYPE_TEXT;
@@ -407,7 +394,7 @@ class TransportBuilder
                 );
         }
         $this->messageData['body'] = $this->mimeMessageInterfaceFactory
-            ->create(['parts' => [$this->mimePartInterfaceFactory->create([$part])]]);
+            ->create(['parts' => [$this->mimePartInterfaceFactory->create(['content'=>$content])]]);
 
         $this->messageData['subject'] = html_entity_decode(
             (string)$template->getSubject(),
@@ -421,27 +408,23 @@ class TransportBuilder
     /**
      * Handles possible incoming types of email (string or array)
      *
-     * @param MailAddressList $mailAddressList
+     * @param string $addressType
      * @param string|array $emailOrList
      * @param string|null $name
      *
      * @return void
      * @throws MailException
      */
-    private function getMailAddresses(MailAddressList $mailAddressList, $emailOrList, ?string $name = null): void
+    private function getMailAddresses(string $addressType, $emailOrList, ?string $name = null): void
     {
         if (is_array($emailOrList)) {
-            $mailAddressList->addMany($emailOrList);
+            $this->messageData[$addressType] = array_merge(
+                $this->messageData[$addressType],
+                $this->mailAddressConverter->convertMany($emailOrList)
+            );
 
             return;
         }
-
-        if (is_string($emailOrList) && $name === null) {
-            $mailAddressList->addFromString($emailOrList);
-
-            return;
-        }
-
-        $mailAddressList->add($emailOrList, $name);
+        $this->messageData[$addressType][] = $this->mailAddressConverter->convert($emailOrList, $name);
     }
 }
