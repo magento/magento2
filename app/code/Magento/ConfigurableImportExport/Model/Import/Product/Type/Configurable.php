@@ -1,12 +1,8 @@
 <?php
 /**
- * Import entity configurable product type model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
@@ -16,7 +12,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Importing configurable products
+ * Import entity configurable product type model
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -461,7 +457,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 ];
                 $subEntityId = $this->connection->fetchOne(
                     $this->connection->select()->from(
-                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')], ['entity_id']
+                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
+                        ['entity_id']
                     )->where($metadata->getLinkField() . ' = ?', $assocId)
                 );
                 $this->_superAttributesData['relation'][] = [
@@ -488,7 +485,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $additionalRows = [];
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
-        } elseif(!empty($rowData['store_view_code'])) {
+        } elseif (!empty($rowData['store_view_code'])) {
             throw new LocalizedException(
                 __(
                     'Product with assigned super attributes should not have specified "%1" value',
@@ -871,7 +868,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if (isset($option['_super_products_sku'])) {
                 if (in_array($option['_super_products_sku'], $skus)) {
                     $error = true;
-                    $this->_entityModel->addRowError(sprintf($this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS], $option['_super_products_sku']), $rowNum);
+                    $this->_entityModel->addRowError(
+                        sprintf(
+                            $this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS],
+                            $option['_super_products_sku']
+                        ),
+                        $rowNum
+                    );
                 }
                 $skus[] = $option['_super_products_sku'];
             }
