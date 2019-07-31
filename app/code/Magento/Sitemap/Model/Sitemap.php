@@ -746,7 +746,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $documentRoot = trim(str_replace('\\', '/', $this->_getDocumentRoot()), '/');
         $baseDir = trim(str_replace('\\', '/', $this->_getBaseDir()), '/');
 
-        if (strpos($baseDir, $documentRoot) === 0) {
+        if (strpos($baseDir, (string) $documentRoot) === 0) {
             //case when basedir is in document root
             $installationFolder = trim(str_replace($documentRoot, '', $baseDir), '/');
             $storeDomain = rtrim($url . '/' . $installationFolder, '/');
@@ -802,7 +802,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             $content = $this->_directory->readFile($filename);
         }
 
-        if (strpos($content, $robotsSitemapLine) === false) {
+        if (strpos($content, (string) $robotsSitemapLine) === false) {
             if (!empty($content)) {
                 $content .= $this->_findNewLinesDelimiter($content);
             }
@@ -821,7 +821,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     private function _findNewLinesDelimiter($text)
     {
         foreach ($this->_crlf as $delimiter) {
-            if (strpos($text, $delimiter) !== false) {
+            if (strpos($text, (string) $delimiter) !== false) {
                 return $delimiter;
             }
         }
