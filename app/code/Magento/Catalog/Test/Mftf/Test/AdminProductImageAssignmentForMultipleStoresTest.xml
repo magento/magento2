@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductImageAssignmentForMultipleStoresTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product image assignment for multiple stores"/>
+            <title value="Product image assignment for multiple stores"/>
+            <description value="Product image assignment for multiple stores"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-9368"/>
+            <group value="product"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <!-- Create Category and Simple Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+            <!-- Login Admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Create Store View English -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createEnglishStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+             <!--Create Store View France -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFrenchStoreView">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete Category and Simple Product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Clear Filter Product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductsGridPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductFilters"/>
+            <!-- Delete Store View English -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteEnglishStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Delete Store View France -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFrenchStoreView">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <!-- Clear Filter Store -->
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetFiltersOnStorePage"/>
+            <!-- Logout Admin -->
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!-- Search Product and Open Edit -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Switch to the English store view -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchProductStoreViewToEnglish">
+            <argument name="scopeName" value="customStoreEN.name"/>
+        </actionGroup>
+        <!-- Upload Image English -->
+        <actionGroup ref="addProductImage" stepKey="uploadImageForEnglishStoreView"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProductImageForEnglishStoreView"/>
+        <!-- Switch to the French store view -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchProductStoreViewToFrench">
+            <argument name="scopeName" value="customStoreFR.name"/>
+        </actionGroup>
+        <!-- Upload Image French -->
+        <actionGroup ref="addProductImage" stepKey="uploadImageForFrenchStoreView">
+            <argument name="image" value="Magento3"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignImageRoleForFrenchStoreView">
+            <argument name="image" value="Magento3"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductImageForFrenchStoreView"/>
+        <!-- Switch to the All store view -->
+        <actionGroup ref="AdminSwitchToAllStoreViewActionGroup" stepKey="switchProductToAllStoreView">
+            <argument name="scopeName" value="AllStoreViews.name"/>
+        </actionGroup>
+        <!-- Upload Image All Store View -->
+        <actionGroup ref="addProductImage" stepKey="uploadImageOnAllStoreView">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignImageRoleForAllStoreView">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <!-- Change any product data product description -->
+        <actionGroup ref="AdminChangeProductDescriptionActionGroup" stepKey="changeProductDescription">
+            <argument name="description" value="This is the long description"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeProductShortDescriptionActionGroup" stepKey="changeProductShortDescription">
+            <argument name="description" value="This is the short description"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductAfterUploadImageOnAllStoreView"/>
+        <!-- Go to Product Page and see Default Store View-->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontProductPageOnDefaultStoreView"/>
+        <actionGroup ref="AssertStorefrontActiveImageProductActionGroup" stepKey="seeActiveImageOnDefaultStoreView">
+            <argument name="image" value="{{TestImageNew.filename}}"/>
+        </actionGroup>
+        <!-- English Switch Store View and see English Store View -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewToEnglish">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontActiveImageCategoryActionGroup" stepKey="seeImageOnEnglishStoreView">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="image" value="{{ProductImage.filename}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontCategoryProductSection.productTitleByName($$createSimpleProduct.name$$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPage"/>
+        <actionGroup ref="AssertStorefrontActiveImageProductActionGroup" stepKey="seeActiveImagesInEnglishStoreView">
+            <argument name="image" value="{{ProductImage.filename}}"/>
+        </actionGroup>
+        <!-- Switch France Store View and see France Store View -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewToFrench">
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontActiveImageCategoryActionGroup" stepKey="seeImageInFrenchStoreView">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="image" value="{{Magento3.filename}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontCategoryProductSection.productTitleByName($$createSimpleProduct.name$$)}}" stepKey="openProductPageAfterSwitchToFrenchStoreView"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPage1"/>
+        <actionGroup ref="AssertStorefrontActiveImageProductActionGroup" stepKey="seeActiveImageToFrenchStoreView">
+            <argument name="image" value="{{Magento3.filename}}"/>
+        </actionGroup>
+    </test>
+</tests>
