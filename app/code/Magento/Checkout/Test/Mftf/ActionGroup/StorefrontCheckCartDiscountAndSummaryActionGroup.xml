@@ -18,6 +18,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForPrices"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
         <wait time="10" stepKey="waitForTotalPrice"/>
-        <see selector="{{CheckoutCartSummarySection.total}}" userInput="${{total}}" stepKey="assertTotal"/>
+        <reloadPage stepKey="reloadPage" after="waitForTotalPrice" />
+        <waitForPageLoad after="reloadPage" stepKey="WaitForPageLoaded" />
+        <see selector="{{CheckoutCartSummarySection.total}}" userInput="${{total}}" stepKey="assertTotal" after="WaitForPageLoaded"/>
     </actionGroup>
 </actionGroups>
