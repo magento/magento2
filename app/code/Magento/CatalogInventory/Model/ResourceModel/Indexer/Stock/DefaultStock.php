@@ -11,7 +11,6 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
@@ -226,8 +225,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
-        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $linkField = $metadata->getLinkField();
 
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -240,12 +237,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         )->joinInner(
             ['cisi' => $this->getTable('cataloginventory_stock_item')],
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
-            []
-        )->joinInner(
-            ['mcpei' => $this->getTable('catalog_product_entity_int')],
-            'e.' . $linkField . ' = mcpei.' . $linkField
-            . ' AND mcpei.attribute_id = ' . $this->_getAttribute('status')->getId()
-            . ' AND mcpei.value = ' . ProductStatus::STATUS_ENABLED,
             []
         )->columns(
             ['qty' => $qtyExpr]
@@ -317,7 +308,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     }
 
     /**
-     * Delete records by their ids from index table
+     * Delete records by their ids from index table.
+     *
      * Used to clean table before re-indexation
      *
      * @param array $ids
@@ -362,6 +354,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     }
 
     /**
+     * Get status expression
+     *
      * @param AdapterInterface $connection
      * @param bool $isAggregate
      * @return mixed
@@ -387,6 +381,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     }
 
     /**
+     * Get stock configuration
+     *
      * @return StockConfigurationInterface
      *
      * @deprecated 100.1.0
@@ -402,6 +398,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     }
 
     /**
+     * Get query processor composite
+     *
      * @return QueryProcessorComposite
      */
     private function getQueryProcessorComposite()

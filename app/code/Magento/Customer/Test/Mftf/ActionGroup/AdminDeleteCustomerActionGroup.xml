@@ -5,15 +5,19 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Action group deletes customer by customer email field -->
     <actionGroup name="AdminDeleteCustomerActionGroup">
         <arguments>
             <argument name="customerEmail"/>
         </arguments>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomersPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
         <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFilters"/>
+        <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{customerEmail}}" stepKey="filterCustomersByEmail"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilters"/>
         <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" stepKey="chooseCustomer"/>
         <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="openActions"/>
         <waitForPageLoad stepKey="waitActions"/>

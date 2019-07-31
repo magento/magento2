@@ -12,7 +12,9 @@
                 <resource id="Magento_Backend::content">
                     <resource id="Magento_Backend::content_elements">
                         <resource id="Magento_Cms::page" title="Pages" translate="title" sortOrder="10">
-                            <resource id="Magento_Cms::save" title="Save Page" translate="title" sortOrder="10" />
+                            <resource id="Magento_Cms::save" title="Save Page" translate="title" sortOrder="10">
+                                <resource id="Magento_Cms::save_design" title="Edit Page Design" translate="title" />
+                            </resource>
                             <resource id="Magento_Cms::page_delete" title="Delete Page" translate="title" sortOrder="20" />
                         </resource>
                         <resource id="Magento_Cms::block" title="Blocks" translate="title" sortOrder="30" />

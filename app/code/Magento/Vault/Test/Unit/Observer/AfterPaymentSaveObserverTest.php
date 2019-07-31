@@ -18,6 +18,9 @@ use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Test for payment observer.
+ */
 class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -61,7 +64,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     protected $salesOrderPaymentMock;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -69,6 +72,10 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
         $encryptorRandomGenerator = $this->createMock(Random::class);
         /** @var DeploymentConfig|MockObject $deploymentConfigMock */
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $deploymentConfigMock->expects($this->any())
+            ->method('get')
+            ->with(Encryptor::PARAM_CRYPT_KEY)
+            ->willReturn('g9mY9KLrcuAVJfsmVUSRkKFLDdUPVkaZ');
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
@@ -117,6 +124,8 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Case when payment successfully made.
+     *
      * @param int $customerId
      * @param string $createdAt
      * @param string $token
@@ -161,6 +170,8 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data for positiveCase test.
+     *
      * @return array
      */
     public function positiveCaseDataProvider()
