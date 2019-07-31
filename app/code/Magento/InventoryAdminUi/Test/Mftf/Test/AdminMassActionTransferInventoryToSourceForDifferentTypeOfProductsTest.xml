@@ -20,7 +20,6 @@
         </annotations>
 
         <before>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="BasicMsiStock1" stepKey="createStock"/>
             <createData entity="_minimalSource" stepKey="createSource"/>
@@ -107,7 +106,6 @@
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
         <after>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <comment userInput="Delete all products after test" stepKey="deleteAllProductsViaGridAfterTestComment"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductsGridForDeleteAllProductsComment"/>
             <waitForPageLoad stepKey="waitForGridLoadForDeleteAllProducts"/>
