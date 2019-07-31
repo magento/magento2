@@ -118,7 +118,6 @@
 
         <!-- Go to export page -->
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
-        <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Fill entity attributes data -->
         <actionGroup ref="exportProductsFilterByAttribute" stepKey="exportProductBySku">

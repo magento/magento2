@@ -2,7 +2,7 @@
     "name": "magento/module-inventory-catalog-search",
     "description": "N/A",
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
         "magento/module-inventory-sales-api": "*",
         "magento/module-inventory-indexer": "*",
