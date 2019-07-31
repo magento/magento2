@@ -34,4 +34,11 @@
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(image)}}" stepKey="seeImage"/>
         <see userInput="{{price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice"/>
     </actionGroup>
+    <!-- Assert image Store View in storefront product page -->
+    <actionGroup name="AssertStorefrontActiveImageProductActionGroup">
+        <arguments>
+            <argument name="image" type="string"/>
+        </arguments>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageActive(image)}}" stepKey="seeActiveImage"/>
+    </actionGroup>
 </actionGroups>
