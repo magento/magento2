@@ -1,11 +1,8 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
@@ -123,7 +120,10 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
 
     public function testGetShippingAddressTotals()
     {
-        $totalMock = $this->createPartialMock(\Magento\Sales\Model\Order\Total::class, ['getCode', 'setTitle', '__wakeup']);
+        $totalMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Total::class,
+            ['getCode', 'setTitle', '__wakeup']
+        );
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
         $this->addressMock->expects($this->once())->method('getAddressType')->willReturn(Address::TYPE_BILLING);
         $this->addressMock->expects($this->once())->method('getTotals')->willReturn([$totalMock]);
@@ -134,7 +134,10 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
 
     public function testGetShippingAddressTotalsWithNotBillingAddress()
     {
-        $totalMock = $this->createPartialMock(\Magento\Sales\Model\Order\Total::class, ['getCode', 'setTitle', '__wakeup']);
+        $totalMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Total::class,
+            ['getCode', 'setTitle', '__wakeup']
+        );
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
         $this->addressMock->expects($this->once())->method('getAddressType')->willReturn('not billing');
         $this->addressMock->expects($this->once())->method('getTotals')->willReturn([$totalMock]);

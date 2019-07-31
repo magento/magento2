@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Admin product tax class add form
  *
@@ -142,7 +140,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         $sessionFormValues = (array)$this->_coreRegistry->registry(RegistryConstants::CURRENT_TAX_RATE_FORM_DATA);
-        $formData = isset($taxRateDataObject) ? $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject) : [];
+        $formData = isset($taxRateDataObject)
+            ? $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject)
+            : [];
         $formData = array_merge($formData, $sessionFormValues);
 
         if (isset($formData['zip_is_range']) && $formData['zip_is_range'] && !isset($formData['tax_postcode'])) {
@@ -299,8 +299,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock(
-                 \Magento\Framework\View\Element\Template::class)->setTemplate('Magento_Tax::rate/js.phtml')
+            $this->getLayout()
+                ->createBlock(\Magento\Framework\View\Element\Template::class)
+                ->setTemplate('Magento_Tax::rate/js.phtml')
         );
 
         return parent::_prepareForm();

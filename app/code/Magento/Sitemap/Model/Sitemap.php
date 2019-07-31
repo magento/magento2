@@ -1,11 +1,8 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sitemap\Model;
 
@@ -374,7 +371,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         if (!preg_match('#^[a-zA-Z0-9_\.]+$#', $this->getSitemapFilename())) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.'
+                    'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.'
+                    . ' No spaces or other characters are allowed.'
                 )
             );
         }

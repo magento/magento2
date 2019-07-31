@@ -1,20 +1,21 @@
 <?php
 /**
- * Google Optmizer Product Block
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\GoogleOptimizer\Block\Code;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\GoogleOptimizer\Block\AbstractCode;
+
 /**
+ * Google Optmizer Product Block.
+ *
  * @api
  * @since 100.0.2
  */
-class Product extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Magento\Framework\DataObject\IdentityInterface
+class Product extends AbstractCode implements IdentityInterface
 {
     /**
      * @var Product name in registry

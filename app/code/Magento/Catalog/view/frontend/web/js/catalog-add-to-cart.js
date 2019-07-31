@@ -29,9 +29,13 @@ define([
 
         /** @inheritdoc */
         _create: function () {
+            var addToCartButton = $(this.element).find(this.options.addToCartButtonSelector);
+
             if (this.options.bindSubmit) {
                 this._bindSubmit();
             }
+
+            addToCartButton.attr('disabled', false);
         },
 
         /**
