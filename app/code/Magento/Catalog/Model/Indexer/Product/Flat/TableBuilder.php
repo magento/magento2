@@ -86,6 +86,7 @@ class TableBuilder
         //Create list of temporary tables based on available attributes attributes
         $valueTables = [];
         foreach ($temporaryEavAttributes as $tableName => $columns) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $valueTables = array_merge(
                 $valueTables,
                 $this->_createTemporaryTable($this->_getTemporaryTableName($tableName), $columns, $valueFieldSuffix)
@@ -294,6 +295,7 @@ class TableBuilder
                 $select = $this->_connection->select();
                 $selectValue = $this->_connection->select();
                 $keyColumn = array_unique([$linkField, 'entity_id']);
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $columns = array_merge($keyColumn, array_keys($columnsList));
                 $valueColumns = $keyColumn;
                 $iterationNum = 1;
