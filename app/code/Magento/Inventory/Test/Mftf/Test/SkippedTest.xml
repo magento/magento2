@@ -90,13 +90,4 @@
             </skip>
         </annotations>
     </test>
-
-    <!-- MC-18595 -->
-    <test name="AdminCreateDownloadableProductWithInvalidDomainLinkUrlTest">
-        <annotations>
-            <skip>
-                <issueId value="MSI-2423" />
-            </skip>
-        </annotations>
-    </test>
 </tests>

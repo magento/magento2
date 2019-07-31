@@ -20,7 +20,6 @@
         </annotations>
         
         <before>
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableStockManagement1"/>
 
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
@@ -46,7 +45,6 @@
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
         </before>
         <after>
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
 
             <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
