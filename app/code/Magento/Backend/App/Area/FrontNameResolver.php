@@ -10,10 +10,15 @@ namespace Magento\Backend\App\Area;
 use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Zend\Uri\Uri;
 
 /**
+ * Class to get area front name.
+ *
  * @api
  * @since 100.0.2
  */
@@ -60,18 +65,34 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     private $scopeConfig;
 
     /**
+     * @var Uri
+     */
+    private $uri;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param \Magento\Backend\App\Config $config
      * @param DeploymentConfig $deploymentConfig
      * @param ScopeConfigInterface $scopeConfig
+     * @param Uri $uri
+     * @param RequestInterface $request
      */
     public function __construct(
         \Magento\Backend\App\Config $config,
         DeploymentConfig $deploymentConfig,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        Uri $uri = null,
+        RequestInterface $request = null
     ) {
         $this->config = $config;
         $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);
         $this->scopeConfig = $scopeConfig;
+        $this->uri = $uri ?: ObjectManager::getInstance()->get(Uri::class);
+        $this->request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
     }
 
     /**
@@ -104,8 +125,8 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
         } else {
             $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
         }
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-        return stripos($this->getHostWithPort($backendUrl), $host) !== false;
+        $host = $this->request->getServer('HTTP_HOST', '');
+        return stripos($this->getHostWithPort($backendUrl), (string) $host) !== false;
     }
 
     /**
@@ -116,9 +137,11 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      */
     private function getHostWithPort($url)
     {
-        $scheme = parse_url(trim($url), PHP_URL_SCHEME);
-        $host = parse_url(trim($url), PHP_URL_HOST);
-        $port = parse_url(trim($url), PHP_URL_PORT);
+        $this->uri->parse($url);
+        $scheme = $this->uri->getScheme();
+        $host = $this->uri->getHost();
+        $port = $this->uri->getPort();
+
         if (!$port) {
             $port = isset($this->standardPorts[$scheme]) ? $this->standardPorts[$scheme] : null;
         }

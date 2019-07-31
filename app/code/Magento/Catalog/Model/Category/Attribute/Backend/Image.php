@@ -136,7 +136,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Get image uploader.
+     * Get Instance of Category Image Uploader.
      *
      * @return \Magento\Catalog\Model\ImageUploader
      *
@@ -178,9 +178,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $fileUrl = ltrim($value[0]['url'], '/');
         $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA);
 
-        $usingPathRelativeToBase = strpos($fileUrl, $baseMediaDir) === 0;
+        if (!$baseMediaDir) {
+            return false;
+        }
 
-        return $usingPathRelativeToBase;
+        return strpos($fileUrl, $baseMediaDir) === 0;
     }
 
     /**
