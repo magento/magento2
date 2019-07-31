@@ -43,7 +43,7 @@ input HostedProUrlInput {
 input PaymentMethodInput {
     paypal_express: PaypalExpressInput @doc(description:"Required input for Express Checkout and Payments Standard payments")
     payflow_express: PayflowExpressInput @doc(description:"Required input for Payflow Express Checkout payments")
-    payflow_link: PayflowLinkAdditionalDataInput @doc(description:"Required input for PayPal Payflow Link and Payments Advanced payments")
+    payflow_link: PayflowLinkInput @doc(description:"Required input for PayPal Payflow Link and Payments Advanced payments")
     payflowpro: PayflowProInput @doc(description: "Required input type for PayPal Payflow Pro and Payment Pro payments")
     hosted_pro: HostedProInput @doc(description:"Required input for PayPal Hosted pro payments")
 }
