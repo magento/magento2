@@ -41,6 +41,8 @@ class IndexScopeResolver implements IndexScopeResolverInterface
     }
 
     /**
+     * Resolve
+     *
      * @param string $index
      * @param Dimension[] $dimensions
      * @return string

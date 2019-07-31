@@ -363,7 +363,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->any())
             ->method('from')
             ->with(
-                ['catalog_category_product_index_store'],
+                ['catalog_category_product_index'],
                 ['category_id', 'product_id', 'position', 'store_id']
             )->willReturnSelf();
 
@@ -456,9 +456,9 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->eavConfig->expects($this->once())
             ->method('getEntityAttributeCodes')
             ->with('catalog_product')
-            ->willReturn([
-                'name',
-            ]);
+            ->willReturn(
+                ['name']
+            );
 
         $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
