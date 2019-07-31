@@ -64,6 +64,13 @@
         <see selector="{{StorefrontQuickSearchResultsSection.productByIndex(index)}}" userInput="{{productName}}" stepKey="seeProductName"/>
     </actionGroup>
 
+    <actionGroup name="StorefrontQuickSearchSeeProductByName">
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <see selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" userInput="{{productName}}" stepKey="seeProductName"/>
+    </actionGroup>
+
     <actionGroup name="StorefrontQuickSearchCheckProductNameNotInGrid">
         <arguments>
             <argument name="productName" type="string"/>

@@ -107,4 +107,35 @@
         <requiredEntity type="custom_attribute">CustomAttributeDynamicPrice</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributePriceViewRange</requiredEntity>
     </entity>
+    <entity name="DynamicBundleProductCustomDescription" type="product2">
+        <data key="name" unique="suffix">Test 123 Dynamic </data>
+        <data key="sku" unique="suffix">test-dynamic-bundle-product</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">test-dynamic-bundle-product</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomDynamicProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomDynamicProductShortDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeDynamicPrice</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributePriceViewRange</requiredEntity>
+    </entity>
+    <entity name="FixedBundleProductCustomDescription" type="product2">
+        <data key="name" unique="suffix">Test 123 Fixed </data>
+        <data key="sku" unique="suffix">test-fixed-bundle-product</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="price">10</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">api-fixed-bundle-product</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomFixedProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomFixedProductShortDescription</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributePriceView</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixPrice</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixWeight</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeFixSku</requiredEntity>
+    </entity>
 </entities>

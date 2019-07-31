@@ -107,6 +107,16 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Io\File|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $ioFileMock;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $fileMock;
+
     private $allowedImageExtensions = [
         'jpg' => 'image/jpg',
         'jpeg' => 'image/jpeg',
@@ -146,6 +156,23 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             DirectoryList::MEDIA
         )->will(
             $this->returnValue($this->directoryMock)
+        );
+
+        $this->fileMock   = $this->createPartialMock(
+            \Magento\Framework\Filesystem\Driver\File::class,
+            ['getParentDirectory']
+        );
+        $this->ioFileMock = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
+        $this->ioFileMock->expects(
+            $this->any()
+        )->method(
+            'getPathInfo'
+        )->will(
+            $this->returnCallback(
+                function ($path) {
+                    return pathinfo($path);
+                }
+            )
         );
 
         $this->adapterFactoryMock = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
@@ -223,11 +250,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                 'directoryDatabaseFactory' => $this->directoryDatabaseFactoryMock,
                 'uploaderFactory' => $this->uploaderFactoryMock,
                 'resizeParameters' => $this->resizeParameters,
+                'extensions' => $allowedExtensions,
                 'dirs' => [
                     'exclude' => [],
                     'include' => [],
                 ],
-                'extensions' => $allowedExtensions,
+                'data' => [],
+                'file' => $this->fileMock,
+                'ioFile' => $this->ioFileMock
             ]
         );
     }
@@ -493,6 +523,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     [$thumbnailTargetPath, true],
                 ]
             );
+
+        $this->fileMock->expects($this->any())->method('getParentDirectory')->willReturn($path);
 
         $image = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image::class)
             ->disableOriginalConstructor()
