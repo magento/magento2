@@ -189,6 +189,15 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
         ];
     }
 
+
+
+    /**
+     * Get GraphQl query for creating Paypal token
+     *
+     * @param string $cartId
+     * @param string $paymentMethod
+     * @return string
+     */
     protected function getCreateTokenMutationWithInvalidUrl(string $cartId, string $paymentMethod): string
     {
         return <<<QUERY
