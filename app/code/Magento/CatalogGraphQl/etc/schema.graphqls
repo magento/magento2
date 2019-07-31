@@ -8,12 +8,12 @@ type Query {
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
-     ): Products
-     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes.") @cache(cacheTag: "cat_p", cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
+    ): Products
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
     category (
         id: Int @doc(description: "Id of the category.")
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @cache(cacheTag: "cat_c", cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
 }
 
 type Price @doc(description: "The Price object defines the price of a product as well as any tax-related adjustments.") {
@@ -97,7 +97,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
-    categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @cache(cacheTag: "cat_c", cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories")
+    categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
     canonical_url: String @doc(description: "Canonical URL.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
 }
 
@@ -218,7 +218,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
-    ): CategoryProducts @doc(description: "The list of products assigned to the category.") @cache(cacheTag: "cat_p", cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
+    ): CategoryProducts @doc(description: "The list of products assigned to the category.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
     breadcrumbs: [Breadcrumb] @doc(description: "Breadcrumbs, parent categories info.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Breadcrumbs")
 }
 
@@ -233,7 +233,7 @@ type CustomizableRadioOption implements CustomizableOptionInterface @doc(descrip
     value: [CustomizableRadioValue] @doc(description: "An array that defines a set of radio buttons.")
 }
 
-type CustomizableRadioValue  @doc(description: "CustomizableRadioValue defines the price and sku of a product whose page contains a customized set of radio buttons.") {
+type CustomizableRadioValue @doc(description: "CustomizableRadioValue defines the price and sku of a product whose page contains a customized set of radio buttons.") {
     option_type_id: Int @doc(description: "The ID assigned to the value.")
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
@@ -246,7 +246,7 @@ type CustomizableCheckboxOption implements CustomizableOptionInterface @doc(desc
     value: [CustomizableCheckboxValue] @doc(description: "An array that defines a set of checkbox values.")
 }
 
-type CustomizableCheckboxValue  @doc(description: "CustomizableCheckboxValue defines the price and sku of a product whose page contains a customized set of checkbox values.") {
+type CustomizableCheckboxValue @doc(description: "CustomizableCheckboxValue defines the price and sku of a product whose page contains a customized set of checkbox values.") {
     option_type_id: Int @doc(description: "The ID assigned to the value.")
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
@@ -329,7 +329,7 @@ type ProductMediaGalleryEntriesVideoContent @doc(description: "ProductMediaGalle
     video_metadata: String @doc(description: "Optional data about the video.")
 }
 
-input ProductSortInput  @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
+input ProductSortInput @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
     name: SortEnum @doc(description: "The product name. Customers use this name to identify the product.")
     sku: SortEnum @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
     description: SortEnum @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
@@ -363,7 +363,7 @@ input ProductSortInput  @doc(description: "ProductSortInput specifies the attrib
     gift_message_available: SortEnum @doc(description: "Indicates whether a gift message is available.")
 }
 
-type MediaGalleryEntry  @doc(description: "MediaGalleryEntry defines characteristics about images and videos associated with a specific product.") {
+type MediaGalleryEntry @doc(description: "MediaGalleryEntry defines characteristics about images and videos associated with a specific product.") {
     id: Int @doc(description: "The identifier assigned to the object.")
     media_type: String @doc(description: "image or video.")
     label: String @doc(description: "The alt text displayed on the UI when the user points to the image.")

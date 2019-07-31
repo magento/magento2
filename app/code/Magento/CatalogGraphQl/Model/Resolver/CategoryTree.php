@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Catalog\Model\Category;
+use Magento\CatalogGraphQl\Model\Resolver\Category\CheckCategoryIsActive;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -35,15 +37,23 @@ class CategoryTree implements ResolverInterface
     private $extractDataFromCategoryTree;
 
     /**
+     * @var CheckCategoryIsActive
+     */
+    private $checkCategoryIsActive;
+
+    /**
      * @param \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
+     * @param CheckCategoryIsActive $checkCategoryIsActive
      */
     public function __construct(
         \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree,
-        ExtractDataFromCategoryTree $extractDataFromCategoryTree
+        ExtractDataFromCategoryTree $extractDataFromCategoryTree,
+        CheckCategoryIsActive $checkCategoryIsActive
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
+        $this->checkCategoryIsActive = $checkCategoryIsActive;
     }
 
     /**
@@ -72,6 +82,9 @@ class CategoryTree implements ResolverInterface
         }
 
         $rootCategoryId = $this->getCategoryId($args);
+        if ($rootCategoryId !== Category::TREE_ROOT_ID) {
+            $this->checkCategoryIsActive->execute($rootCategoryId);
+        }
         $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
 
         if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {

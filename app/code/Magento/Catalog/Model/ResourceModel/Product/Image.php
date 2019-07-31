@@ -158,7 +158,8 @@ class Image
                 'value as filepath'
             )->joinInner(
                 ['image_value' => $this->resourceConnection->getTableName(Gallery::GALLERY_VALUE_TABLE)],
-                'images.value_id = image_value.value_id'
+                'images.value_id = image_value.value_id',
+                []
             )->where(
                 'images.disabled = 0 AND image_value.disabled = 0'
             );

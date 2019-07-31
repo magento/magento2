@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +10,9 @@ use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
+/**
+ * Controller class Save. Performs save action of customers group
+ */
 class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
@@ -79,6 +81,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
                 $customerGroupCode = (string)$this->getRequest()->getParam('code');
+
                 if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
                     $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
