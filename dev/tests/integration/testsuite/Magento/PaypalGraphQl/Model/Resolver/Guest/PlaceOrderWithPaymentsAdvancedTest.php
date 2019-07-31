@@ -153,9 +153,8 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $this->assertEquals('test_quote', $responseData['data']['placeOrder']['order']['order_id']);
     }
 
-
     /**
-     * Test successful place Order with Payments Advanced
+     * Test place Order with Payments Advanced with Invalid Url.
      *
      * @magentoConfigFixture default_store payment/payflow_advanced/active 1
      * @magentoConfigFixture default_store payment/payflow_advanced/sandbox_flag 1
@@ -220,7 +219,6 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
         $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
     }
-
 
     /**
      * Test place Order with PaymentAdvanced with a declined status
@@ -319,7 +317,6 @@ QUERY;
 
         return $responseContent;
     }
-
 
     /**
      * Send setPaymentMethodOnCart and placeOrder mutations and return response content

@@ -112,8 +112,6 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     {
         $paymentMethod = 'payflow_link';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-
         $query
             = <<<QUERY
  mutation {
