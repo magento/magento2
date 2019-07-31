@@ -43,12 +43,12 @@ input HostedProUrlInput {
 input PaymentMethodInput {
     paypal_express: PaypalExpressInput @doc(description:"Required input for PayPal Express Checkout payments")
     payflow_express: PayflowExpressInput @doc(description:"Required input for PayPal Payflow Express Checkout payments")
-    payflow_link: PayflowLinkAdditionalDataInput @doc(description:"Required input for PayPal Payflow Link payments")
+    payflow_link: PayflowLinkInput @doc(description:"Required input for PayPal Payflow Link payments")
     payflowpro: PayflowProInput @doc(description: "Required input type for Paypal payflow pro payments")
-    hosted_pro: HostedProAdditionalDataInput @doc(description:"Required input for PayPal Hosted pro payments")
+    hosted_pro: HostedProInput @doc(description:"Required input for PayPal Hosted pro payments")
 }
 
-input HostedProAdditionalDataInput {
+input HostedProInput {
     return_url: String! @doc(description:"The URL PayPal will redirect back to upon payment success")
     cancel_url: String! @doc(description:"The URL PayPal will redirect back to upon payment cancellation")
 }
@@ -75,7 +75,7 @@ type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer t
     edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
 }
 
-input PayflowLinkAdditionalDataInput {
+input PayflowLinkInput {
     return_url: String! @doc(description:"The URL PayPal will redirect back to upon payment success")
     cancel_url: String! @doc(description:"The URL PayPal will redirect back to upon payment cancellation")
     error_url: String! @doc(description:"The URL PayPal will redirect back to upon payment error")
