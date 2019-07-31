@@ -175,7 +175,6 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
 
         $responseData = $this->setPaymentMethodWithInValidUrl($cartId, $paymentMethod);
         $expectedExceptionMessage = "Invalid Url.";
-
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
