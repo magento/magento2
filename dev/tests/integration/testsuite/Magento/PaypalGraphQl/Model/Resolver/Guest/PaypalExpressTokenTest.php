@@ -15,7 +15,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 
 /**
- * Test createPaypalExpressToken graphql endpoint for guest
+ * Test create PaypalExpressToken graphql endpoint for guest
  *
  * @magentoAppArea graphql
  */
@@ -188,8 +188,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
             ['payflow_express'],
         ];
     }
-
-
 
     /**
      * Get GraphQl query for creating Paypal token
