@@ -104,7 +104,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'first_action',
                     'label' => 'First Action',
-                    'url' => '/module/controller/firstAction'
+                    'url' => '/module/controller/firstAction',
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -123,7 +124,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'label' => 'Second Sub Action 2',
                             'url' => '/module/controller/secondSubAction2'
                         ],
-                    ]
+                    ],
+                    '__disableTmpl' => true
                 ],
             ],
         ];

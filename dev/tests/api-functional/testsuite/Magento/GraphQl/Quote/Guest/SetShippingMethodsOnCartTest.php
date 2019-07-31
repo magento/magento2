@@ -331,7 +331,7 @@ QUERY;
         );
         $this->graphQlMutation($query);
     }
-    
+
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php

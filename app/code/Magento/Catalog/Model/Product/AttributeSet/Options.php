@@ -5,10 +5,13 @@
  */
 namespace Magento\Catalog\Model\Product\AttributeSet;
 
+/**
+ * Attribute Set Options
+ */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
-     * @var null|array
+     * @var array
      */
     protected $options;
 
@@ -25,7 +28,7 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     }
 
     /**
-     * @return array|null
+     * @inheritDoc
      */
     public function toOptionArray()
     {
@@ -33,7 +36,15 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
             $this->options = $this->collectionFactory->create()
                 ->setEntityTypeFilter($this->product->getTypeId())
                 ->toOptionArray();
+
+            array_walk(
+                $this->options,
+                function (&$option) {
+                    $option['__disableTmpl'] = true;
+                }
+            );
         }
+
         return $this->options;
     }
 }

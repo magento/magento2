@@ -23,7 +23,7 @@
             <input>select</input>
         </show_order_statuses>
         <order_statuses>
-            <selector>[name="order_statuses[]"]</selector>
+            <selector>[name="order_statuses[0]"]</selector>
             <input>multiselect</input>
         </order_statuses>
         <show_empty_rows>

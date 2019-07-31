@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SimpleProductPrice10Qty1" type="product">
+        <data key="sku" unique="suffix">simple-product_</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleProduct_</data>
+        <data key="price">10.00</data>
+        <data key="urlKey" unique="suffix">simple-product_</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="VirtualProductPrice10Qty1" type="product">
+        <data key="sku" unique="suffix">virtual-product_</data>
+        <data key="type_id">virtual</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">VirtualProduct_</data>
+        <data key="price">10.00</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProduct2Price10Qty1" type="product">
+        <data key="sku" unique="suffix">simple-product-2_</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct2_</data>
+        <data key="price">10.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+    </entity>
+    <entity name="SimpleProduct3Price10Qty1" type="product2">
+        <data key="sku" unique="suffix">simple-product-3_</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleProduct3_</data>
+        <data key="price">10.00</data>
+        <data key="urlKey" unique="suffix">simple-product-3_</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ConfigurableProductPrice10Qty1" type="product">
+        <data key="sku" unique="suffix">configurable-product_</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">ConfigurableProduct_</data>
+        <data key="urlKey" unique="suffix">configurable-product_</data>
+        <data key="price">10.00</data>
+        <data key="weight">2</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+</entities>

@@ -89,6 +89,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      */
     public function getIdentity()
     {
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return md5('TAX_NOTIFICATION');
     }
 

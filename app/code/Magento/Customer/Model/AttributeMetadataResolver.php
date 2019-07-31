@@ -129,7 +129,14 @@ class AttributeMetadataResolver
                 $meta['arguments']['data']['config']['options'] = $this->countryWithWebsiteSource
                     ->getAllOptions();
             } else {
-                $meta['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                $options = $attribute->getSource()->getAllOptions();
+                array_walk(
+                    $options,
+                    function (&$item) {
+                        $item['__disableTmpl'] = ['label' => true];
+                    }
+                );
+                $meta['arguments']['data']['config']['options'] = $options;
             }
         }
 

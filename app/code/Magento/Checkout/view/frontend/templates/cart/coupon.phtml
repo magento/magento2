@@ -54,8 +54,8 @@
                     <?php endif; ?>
                 </div>
             </div>
-            <?php if (!strlen($block->getCouponCode())): ?>
-            <?= /* @noEscape */ $block->getChildHtml('captcha') ?>
+            <?php if (!strlen($block->getCouponCode())) : ?>
+                <?= /* @noEscape */ $block->getChildHtml('captcha') ?>
             <?php endif; ?>
         </form>
     </div>

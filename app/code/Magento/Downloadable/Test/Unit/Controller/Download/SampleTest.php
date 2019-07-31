@@ -90,32 +90,39 @@ class SampleTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->helperData = $this->createPartialMock(\Magento\Downloadable\Helper\Data::class, [
-                'getIsShareable'
-            ]);
-        $this->downloadHelper = $this->createPartialMock(\Magento\Downloadable\Helper\Download::class, [
+        $this->helperData = $this->createPartialMock(
+            \Magento\Downloadable\Helper\Data::class,
+            ['getIsShareable']
+        );
+        $this->downloadHelper = $this->createPartialMock(
+            \Magento\Downloadable\Helper\Download::class,
+            [
                 'setResource',
                 'getFilename',
                 'getContentType',
                 'getFileSize',
                 'getContentDisposition',
                 'output'
-            ]);
-        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+            ]
+        );
+        $this->product = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            [
                 '_wakeup',
                 'load',
                 'getId',
                 'getProductUrl',
                 'getName'
-            ]);
+            ]
+        );
         $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->salabilityCheckerMock = $this->createMock(\Magento\Catalog\Model\Product\SalabilityChecker::class);
-        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
-                'create',
-                'get'
-            ]);
+        $this->objectManager = $this->createPartialMock(
+            \Magento\Framework\ObjectManager\ObjectManager::class,
+            ['create', 'get']
+        );
         $this->sample = $this->objectManagerHelper->getObject(
             \Magento\Downloadable\Controller\Download\Sample::class,
             [

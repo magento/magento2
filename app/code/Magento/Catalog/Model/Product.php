@@ -177,7 +177,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -381,7 +381,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
      * @param Product\Type $catalogProductType
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param ResourceModel\Product $resource
      * @param ResourceModel\Product\Collection $resourceCollection
@@ -403,8 +403,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $data
      * @param \Magento\Eav\Model\Config|null $config
      * @param FilterProductCustomAttribute|null $filterCustomAttribute
-     * @param UserContextInterface|null $userContext
-     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -424,7 +422,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         Product\Type $catalogProductType,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Model\ResourceModel\Product $resource,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $resourceCollection,
@@ -445,9 +443,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = [],
         \Magento\Eav\Model\Config $config = null,
-        FilterProductCustomAttribute $filterCustomAttribute = null,
-        ?UserContextInterface $userContext = null,
-        ?AuthorizationInterface $authorization = null
+        FilterProductCustomAttribute $filterCustomAttribute = null
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -489,8 +485,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
         $this->filterCustomAttribute = $filterCustomAttribute
             ?? ObjectManager::getInstance()->get(FilterProductCustomAttribute::class);
-        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
-        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
     }
 
     /**
@@ -506,6 +500,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     /**
      * Get resource instance
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Product
@@ -878,6 +873,34 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Get user context.
+     *
+     * @return UserContextInterface
+     */
+    private function getUserContext(): UserContextInterface
+    {
+        if (!$this->userContext) {
+            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
+        }
+
+        return $this->userContext;
+    }
+
+    /**
+     * Get authorization service.
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization(): AuthorizationInterface
+    {
+        if (!$this->authorization) {
+            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        }
+
+        return $this->authorization;
+    }
+
+    /**
      * Check product options and type options and save them, too
      *
      * @return void
@@ -895,12 +918,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->getTypeInstance()->beforeSave($this);
 
         //Validate changing of design.
-        $userType = $this->userContext->getUserType();
+        $userType = $this->getUserContext()->getUserType();
         if ((
                 $userType === UserContextInterface::USER_TYPE_ADMIN
                 || $userType === UserContextInterface::USER_TYPE_INTEGRATION
             )
-            && !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')
+            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_product_design')
         ) {
             $this->setData('custom_design', $this->getOrigData('custom_design'));
             $this->setData('page_layout', $this->getOrigData('page_layout'));
@@ -1851,7 +1874,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Save current attribute with code $code and assign new value
+     * Save current attribute with code $code and assign new value.
      *
      * @param string $code Attribute code
      * @param mixed $value New attribute value

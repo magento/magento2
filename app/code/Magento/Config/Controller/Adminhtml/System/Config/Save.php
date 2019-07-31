@@ -57,6 +57,68 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function _isAllowed()
+    {
+        return parent::_isAllowed() && $this->isSectionAllowed();
+    }
+
+    /**
+     * Checks if user has access to section.
+     *
+     * @return bool
+     */
+    private function isSectionAllowed(): bool
+    {
+        $sectionId = $this->_request->getParam('section');
+        $isAllowed = $this->_configStructure->getElement($sectionId)->isAllowed();
+        if (!$isAllowed) {
+            $groups = $this->getRequest()->getPost('groups');
+            $fieldPath = $this->getFirstFieldPath($groups, $sectionId);
+
+            $fieldPaths = $this->_configStructure->getFieldPaths();
+            $fieldPath = $fieldPaths[$fieldPath][0] ?? $sectionId;
+            $explodedConfigPath = explode('/', $fieldPath);
+            $configSectionId = $explodedConfigPath[0] ?? $sectionId;
+
+            $isAllowed = $this->_configStructure->getElement($configSectionId)->isAllowed();
+        }
+
+        return $isAllowed;
+    }
+
+    /**
+     * Return field path as string.
+     *
+     * @param array $elements
+     * @param string $fieldPath
+     * @return string
+     */
+    private function getFirstFieldPath(array $elements, string $fieldPath): string
+    {
+        $groupData = [];
+        foreach ($elements as $elementName => $element) {
+            if (!empty($element)) {
+                $fieldPath .= '/' . $elementName;
+
+                if (!empty($element['fields'])) {
+                    $groupData = $element['fields'];
+                } elseif (!empty($element['groups'])) {
+                    $groupData = $element['groups'];
+                }
+
+                if (!empty($groupData)) {
+                    $fieldPath = $this->getFirstFieldPath($groupData, $fieldPath);
+                }
+                break;
+            }
+        }
+
+        return $fieldPath;
+    }
+
+    /**
      * Get groups for save
      *
      * @return array|null
@@ -162,10 +224,10 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             /** @var \Magento\Config\Model\Config $configModel */
             $configModel = $this->_configFactory->create(['data' => $configData]);
             $configModel->save();
-            $this->_eventManager->dispatch('admin_system_config_save', [
-                'configData' => $configData,
-                'request' => $this->getRequest()
-            ]);
+            $this->_eventManager->dispatch(
+                'admin_system_config_save',
+                ['configData' => $configData, 'request' => $this->getRequest()]
+            );
             $this->messageManager->addSuccess(__('You saved the configuration.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
