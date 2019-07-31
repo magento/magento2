@@ -11,6 +11,7 @@
     <test name="AdminOnePayPalSolutionsEnabledAtTheSameTimeTest">
         <annotations>
             <features value="Paypal"/>
+            <stories value="Payment methods configuration"/>
             <title value="Only one PayPal solution enabled at the same time"/>
             <description value="Verify that only one PayPal solution can be enabled"/>
             <severity value="MAJOR"/>
