@@ -159,7 +159,6 @@ QUERY;
      */
     public function testProductMediaGalleryEntries()
     {
-        $this->markTestSkipped('https://github.com/magento/graphql-ce/issues/738');
         $productSku = 'simple';
         $query = <<<QUERY
 {
@@ -179,7 +178,10 @@ QUERY;
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('file', $response['products']['items'][0]['media_gallery_entries'][0]);
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['media_gallery_entries'][0]['url']);
+        self::assertContains(
+            'magento_image.jpg',
+            $response['products']['items'][0]['media_gallery_entries'][0]['file']
+        );
     }
 
     /**
