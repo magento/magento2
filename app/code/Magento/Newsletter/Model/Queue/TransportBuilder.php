@@ -1,7 +1,4 @@
 <?php
-/** @noinspection SenselessMethodDuplicationInspection */
-/** @noinspection ReturnTypeCanBeDeclaredInspection */
-/** @noinspection PhpUndefinedClassInspection */
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.

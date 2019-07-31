@@ -4,7 +4,6 @@
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- * @noinspection PhpUnusedParameterInspection
  */
 declare(strict_types=1);
 
@@ -15,10 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
-use Magento\Framework\Mail\MailAddress;
 use Magento\Framework\Mail\MailAddressConverter;
-use Magento\Framework\Mail\MailAddressList;
-use Magento\Framework\Mail\MailAddressListFactory;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\MimeInterface;
@@ -127,6 +123,7 @@ class TransportBuilder
      * @var MimePartInterfaceFactory
      */
     private $mimePartInterfaceFactory;
+
     /**
      * @var MailAddressConverter|null
      */
@@ -231,7 +228,6 @@ class TransportBuilder
      */
     public function setReplyTo($email, $name = null)
     {
-
         $this->getMailAddresses('replyTo', $email, $name);
 
         return $this;
