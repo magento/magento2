@@ -4,30 +4,29 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\ProductAlert\Block\Email\Stock */
 ?>
-<?php if ($_products = $block->getProducts()): ?>
-<p><?= /* @escapeNotVerified */  __('In stock alert! We wanted you to know that these products are now available:') ?></p>
-<table>
-<?php foreach ($_products as $_product): ?>
-    <tr>
-        <td class="col photo">
-            <a href="<?= /* @escapeNotVerified */  $_product->getProductUrl() ?>" title="<?= $block->escapeHtml($_product->getName()) ?>" class="product photo">
-                <?= $block->getImage($_product, 'product_thumbnail_image', ['class' => 'photo image'])->toHtml() ?>
-            </a>
-        </td>
-        <td class="col item">
-            <p>
-                <strong class="product name">
-                    <a href="<?= /* @escapeNotVerified */  $_product->getProductUrl() ?>"><?= $block->escapeHtml($_product->getName()) ?></a>
-                </strong>
-            </p>
-            <?php if ($shortDescription = $block->getFilteredContent($_product->getShortDescription())): ?>
-                <p><small><?= /* @escapeNotVerified */  $shortDescription ?></small></p>
-            <?php endif; ?>
-            <?= $block->getProductPriceHtml(
+<?php if ($_products = $block->getProducts()) : ?>
+    <p><?= $block->escapeHtml(__('In stock alert! We wanted you to know that these products are now available:')) ?></p>
+    <table>
+    <?php foreach ($_products as $_product) : ?>
+        <tr>
+            <td class="col photo">
+                <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" title="<?= $block->escapeHtml($_product->getName()) ?>" class="product photo">
+                    <?= $block->getImage($_product, 'product_thumbnail_image', ['class' => 'photo image'])->toHtml() ?>
+                </a>
+            </td>
+            <td class="col item">
+                <p>
+                    <strong class="product name">
+                        <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"><?= $block->escapeHtml($_product->getName()) ?></a>
+                    </strong>
+                </p>
+                <?php if ($shortDescription = $block->getFilteredContent($_product->getShortDescription())) : ?>
+                    <p><small><?= /* @noEscape */  $shortDescription ?></small></p>
+                <?php endif; ?>
+                <?=
+                $block->getProductPriceHtml(
                     $_product,
                     \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                     \Magento\Framework\Pricing\Render::ZONE_EMAIL,
@@ -36,10 +35,10 @@
                     ]
                 );
                 ?>
-            <p><small><a href="<?= /* @escapeNotVerified */  $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?= /* @escapeNotVerified */  __('Click here to stop alerts for this product.') ?></a></small></p>
-        </td>
-    </tr>
-<?php endforeach; ?>
-</table>
-<p><a href="<?= /* @escapeNotVerified */  $block->getUnsubscribeUrl() ?>"><?= /* @escapeNotVerified */  __('Unsubscribe from all stock alerts') ?></a></p>
+                <p><small><a href="<?= $block->escapeUrl($block->getProductUnsubscribeUrl($_product->getId())) ?>"><?= $block->escapeHtml(__('Click here to stop alerts for this product.')) ?></a></small></p>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </table>
+    <p><a href="<?= $block->escapeUrl($block->getUnsubscribeUrl()) ?>"><?= $block->escapeHtml(__('Unsubscribe from all stock alerts')) ?></a></p>
 <?php endif; ?>
