@@ -19,7 +19,7 @@ class Url
 {
     /** @var UrlValidator */
     private $urlValidator;
-    
+
     /** @var UrlInterface */
     private $urlInterface;
 
