@@ -29,14 +29,9 @@ class EmailMessage implements EmailMessageInterface
     private $mimeMessageFactory;
 
     /**
-     * @var MailAddressListFactory
+     * @var AddressFactory
      */
-    private $mailAddressListFactory;
-
-    /**
-     * @var MailAddressFactory
-     */
-    private $mailAddressFactory;
+    private $addressFactory;
 
     /**
      * EmailMessage constructor
@@ -44,12 +39,12 @@ class EmailMessage implements EmailMessageInterface
      * @param MimeMessageInterface $body
      * @param array $to
      * @param MimeMessageInterfaceFactory $mimeMessageFactory
-     * @param MailAddressFactory $mailAddressFactory
-     * @param MailAddress[]|null $from
-     * @param MailAddress[]|null $cc
-     * @param MailAddress[]|null $bcc
-     * @param MailAddress[]|null $replyTo
-     * @param MailAddress|null $sender
+     * @param AddressFactory $addressFactory
+     * @param Address[]|null $from
+     * @param Address[]|null $cc
+     * @param Address[]|null $bcc
+     * @param Address[]|null $replyTo
+     * @param Address|null $sender
      * @param string|null $subject
      * @param string|null $encoding
      *
@@ -60,12 +55,12 @@ class EmailMessage implements EmailMessageInterface
         MimeMessageInterface $body,
         array $to,
         MimeMessageInterfaceFactory $mimeMessageFactory,
-        MailAddressFactory $mailAddressFactory,
+        AddressFactory $addressFactory,
         ?array $from = null,
         ?array $cc = null,
         ?array $bcc = null,
         ?array $replyTo = null,
-        ?MailAddress $sender = null,
+        ?Address $sender = null,
         ?string $subject = '',
         ?string $encoding = ''
     ) {
@@ -101,7 +96,7 @@ class EmailMessage implements EmailMessageInterface
             $this->convertMailAddressArrayToZendAddressList($bcc)
         );
         $this->mimeMessageFactory = $mimeMessageFactory;
-        $this->mailAddressFactory = $mailAddressFactory;
+        $this->addressFactory = $addressFactory;
     }
 
     /**
@@ -163,14 +158,14 @@ class EmailMessage implements EmailMessageInterface
     /**
      * @inheritDoc
      */
-    public function getSender(): ?MailAddress
+    public function getSender(): ?Address
     {
         /** @var ZendAddress $zendSender */
         if (!$zendSender = $this->message->getSender()) {
             return null;
         }
 
-        return $this->mailAddressFactory->create(
+        return $this->addressFactory->create(
             [
                 'email' => $zendSender->getEmail(),
                 'name' => $zendSender->getName()
@@ -224,14 +219,14 @@ class EmailMessage implements EmailMessageInterface
      * Converts AddressList to array
      *
      * @param AddressList $addressList
-     * @return MailAddress[]
+     * @return Address[]
      */
     private function convertAddressListToMailAddressList(AddressList $addressList): array
     {
         $arrayList = [];
         foreach ($addressList as $address) {
             $arrayList[] =
-                $this->mailAddressFactory->create(
+                $this->addressFactory->create(
                     [
                         'email' => $address->getEmail(),
                         'name' => $address->getName()
@@ -245,7 +240,7 @@ class EmailMessage implements EmailMessageInterface
     /**
      * Converts MailAddress array to AddressList
      *
-     * @param MailAddress[] $arrayList
+     * @param Address[] $arrayList
      * @return AddressList
      */
     private function convertMailAddressArrayToZendAddressList(array $arrayList): AddressList

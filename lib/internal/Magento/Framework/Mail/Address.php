@@ -10,7 +10,7 @@ namespace Magento\Framework\Mail;
 /**
  * Class MailAddress
  */
-class MailAddress
+class Address
 {
     /**
      * @var string|null

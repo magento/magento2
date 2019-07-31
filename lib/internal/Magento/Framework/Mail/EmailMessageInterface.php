@@ -28,44 +28,44 @@ interface EmailMessageInterface
     /**
      * Retrieve list of From senders
      *
-     * @return MailAddress[]|null
+     * @return Address[]|null
      */
     public function getFrom(): ?array;
 
     /**
      * Access the address list of the To header
      *
-     * @return MailAddress[]
+     * @return Address[]
      */
     public function getTo(): array;
 
     /**
      * Retrieve list of CC recipients
      *
-     * @return MailAddress[]|null
+     * @return Address[]|null
      */
     public function getCc(): ?array;
 
     /**
      * Retrieve list of Bcc recipients
      *
-     * @return MailAddress[]|null
+     * @return Address[]|null
      */
     public function getBcc(): ?array;
 
     /**
      * Access the address list of the Reply-To header
      *
-     * @return MailAddress[]|null
+     * @return Address[]|null
      */
     public function getReplyTo(): ?array;
 
     /**
      * Retrieve the sender address, if any
      *
-     * @return MailAddress|null
+     * @return Address|null
      */
-    public function getSender(): ?MailAddress;
+    public function getSender(): ?Address;
 
     /**
      * Get the message subject header value

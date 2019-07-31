@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
-use Magento\Framework\Mail\MailAddressConverter;
+use Magento\Framework\Mail\AddressConverter;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\MimeInterface;
@@ -125,9 +125,9 @@ class TransportBuilder
     private $mimePartInterfaceFactory;
 
     /**
-     * @var MailAddressConverter|null
+     * @var AddressConverter|null
      */
-    private $mailAddressConverter;
+    private $addressConverter;
 
     /**
      * TransportBuilder constructor
@@ -141,7 +141,7 @@ class TransportBuilder
      * @param EmailMessageInterfaceFactory|null $emailMessageInterfaceFactory
      * @param MimeMessageInterfaceFactory|null $mimeMessageInterfaceFactory
      * @param MimePartInterfaceFactory|null $mimePartInterfaceFactory
-     * @param MailAddressConverter|null $mailAddressConverter
+     * @param addressConverter|null $addressConverter
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -154,7 +154,7 @@ class TransportBuilder
         EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
         MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
         MimePartInterfaceFactory $mimePartInterfaceFactory = null,
-        MailAddressConverter $mailAddressConverter=null
+        AddressConverter $addressConverter=null
     ) {
         $this->templateFactory = $templateFactory;
         $this->objectManager = $objectManager;
@@ -166,8 +166,8 @@ class TransportBuilder
             ->get(MimeMessageInterfaceFactory::class);
         $this->mimePartInterfaceFactory = $mimePartInterfaceFactory ?: $this->objectManager
             ->get(MimePartInterfaceFactory::class);
-        $this->mailAddressConverter = $mailAddressConverter ?: $this->objectManager
-            ->get(MailAddressConverter::class);
+        $this->addressConverter = $addressConverter ?: $this->objectManager
+            ->get(AddressConverter::class);
     }
 
     /**
@@ -416,11 +416,11 @@ class TransportBuilder
         if (is_array($emailOrList)) {
             $this->messageData[$addressType] = array_merge(
                 $this->messageData[$addressType],
-                $this->mailAddressConverter->convertMany($emailOrList)
+                $this->addressConverter->convertMany($emailOrList)
             );
 
             return;
         }
-        $this->messageData[$addressType][] = $this->mailAddressConverter->convert($emailOrList, $name);
+        $this->messageData[$addressType][] = $this->addressConverter->convert($emailOrList, $name);
     }
 }

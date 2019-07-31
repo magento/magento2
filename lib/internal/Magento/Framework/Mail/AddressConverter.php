@@ -16,24 +16,24 @@ namespace Magento\Framework\Mail;
 use Magento\Framework\Exception\MailException;
 
 /**
- * Class MailAddressConverter
+ * Class AddressConverter
  */
-class MailAddressConverter
+class AddressConverter
 {
     /**
-     * @var MailAddressFactory
+     * @var AddressFactory
      */
-    private $mailAddressFactory;
+    private $addressFactory;
 
     /**
-     * MailAddressConverter constructor
+     * AddressConverter constructor
      *
-     * @param MailAddressFactory $mailAddressFactory
+     * @param AddressFactory $addressFactory
      */
     public function __construct(
-        MailAddressFactory $mailAddressFactory
+        AddressFactory $addressFactory
     ) {
-        $this->mailAddressFactory = $mailAddressFactory;
+        $this->addressFactory = $addressFactory;
     }
 
     /**
@@ -42,11 +42,11 @@ class MailAddressConverter
      * @param string $email
      * @param string|null $name
      *
-     * @return MailAddress
+     * @return Address
      */
-    public function convert(string $email, ?string $name = null): MailAddress
+    public function convert(string $email, ?string $name = null): Address
     {
-        return $this->mailAddressFactory->create(
+        return $this->addressFactory->create(
             [
                 'name' => $name,
                 'email' => $email
@@ -59,7 +59,7 @@ class MailAddressConverter
      *
      * @param array $addresses
      *
-     * @return MailAddress[]
+     * @return Address[]
      * @throws MailException
      */
     public function convertMany(array $addresses): array

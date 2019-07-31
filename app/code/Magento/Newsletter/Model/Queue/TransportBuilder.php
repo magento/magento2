@@ -10,8 +10,7 @@ namespace Magento\Newsletter\Model\Queue;
 use Magento\Email\Model\AbstractTemplate;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
-use Magento\Framework\Mail\MailAddressConverter;
-use Magento\Framework\Mail\MailAddressList;
+use Magento\Framework\Mail\AddressConverter;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\MimeMessageInterfaceFactory;
@@ -57,9 +56,9 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
     private $mimePartInterfaceFactory;
 
     /**
-     * @var MailAddressConverter|null
+     * @var AddressConverter|null
      */
-    private $mailAddressConverter;
+    private $addressConverter;
 
     /**
      * TransportBuilder constructor
@@ -73,7 +72,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      * @param EmailMessageInterfaceFactory|null $emailMessageInterfaceFactory
      * @param MimeMessageInterfaceFactory|null $mimeMessageInterfaceFactory
      * @param MimePartInterfaceFactory|null $mimePartInterfaceFactory
-     * @param MailAddressConverter|null $mailAddressConverter
+     * @param AddressConverter|null $addressConverter
      */
     public function __construct(
         FactoryInterface $templateFactory,
@@ -85,7 +84,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
         EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
         MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
         MimePartInterfaceFactory $mimePartInterfaceFactory = null,
-        MailAddressConverter $mailAddressConverter = null
+        AddressConverter $addressConverter = null
     ) {
         parent::__construct(
             $templateFactory,
@@ -97,7 +96,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
             $emailMessageInterfaceFactory,
             $mimeMessageInterfaceFactory,
             $mimePartInterfaceFactory,
-            $mailAddressConverter
+            $addressConverter
         );
         $this->emailMessageInterfaceFactory = $emailMessageInterfaceFactory ?: $this->objectManager
             ->get(EmailMessageInterfaceFactory::class);
@@ -105,8 +104,8 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
             ->get(MimeMessageInterfaceFactory::class);
         $this->mimePartInterfaceFactory = $mimePartInterfaceFactory ?: $this->objectManager
             ->get(MimePartInterfaceFactory::class);
-        $this->mailAddressConverter = $mailAddressConverter ?: $this->objectManager
-            ->get(MailAddressConverter::class);
+        $this->addressConverter = $addressConverter ?: $this->objectManager
+            ->get(AddressConverter::class);
     }
 
     /**
@@ -285,11 +284,11 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
         if (is_array($emailOrList)) {
             $this->messageData[$addressType] = array_merge(
                 $this->messageData[$addressType],
-                $this->mailAddressConverter->convertMany($emailOrList)
+                $this->addressConverter->convertMany($emailOrList)
             );
 
             return;
         }
-        $this->messageData[$addressType][] = $this->mailAddressConverter->convert($emailOrList, $name);
+        $this->messageData[$addressType][] = $this->addressConverter->convert($emailOrList, $name);
     }
 }
