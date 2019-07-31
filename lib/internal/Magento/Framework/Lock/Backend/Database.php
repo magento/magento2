@@ -19,7 +19,6 @@ use Magento\Framework\Phrase;
  */
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
-
     /**
      * Max time for lock is 1 week
      *
