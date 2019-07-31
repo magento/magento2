@@ -114,6 +114,9 @@ class CreateDownloadableProductEntityTest extends Injectable
         $this->catalogProductNew->getFormPageActions()->save();
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown()
     {
         $this->envWhitelist->removeHost('example.com');
