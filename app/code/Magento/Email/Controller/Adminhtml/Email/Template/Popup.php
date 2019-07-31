@@ -42,12 +42,12 @@ class Popup extends \Magento\Backend\App\Action
      * Load the page defined in view/adminhtml/layout/adminhtml_email_template_popup.xml
      *
      * @return \Magento\Framework\View\Result\Page
-     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function execute()
     {
         if (!$this->getRequest()->isPost()) {
-            throw new \Magento\Framework\Exception\NotFoundException(__('Page not found.'));
+            $this->_forward('noroute');
+            return;
         }
 
         return $this->resultPageFactory->create();
