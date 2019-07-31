@@ -109,7 +109,7 @@ class PayflowProToken implements ResolverInterface
             try {
                 $urls[$key] = $this->urlService->getUrlFromPath($path, $store);
             } catch (ValidationException $e) {
-                throw new GraphQlInputException(__($e));
+                throw new GraphQlInputException(__($e->getMessage()), $e);
             }
         }
         return $urls;
