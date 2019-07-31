@@ -3,12 +3,14 @@
  * See COPYING.txt for license details.
  */
 
-define(
-    [
+define([
+    'underscore',
     'jquery',
-    'Magento_Ui/js/modal/modal-component'
-    ],
-    function ($, Modal) {
+    'Magento_Ui/js/modal/modal-component',
+    'uiRegistry',
+    'analyticsPopupConfig'
+],
+    function (_, $, Modal, registry, analyticsPopupConfig) {
         'use strict';
 
         return Modal.extend(
@@ -20,10 +22,10 @@ define(
                     },
                     options: {
                         keyEventHandlers: {
-                            escapeKey: function () {
-                                return; }
+                            escapeKey: function () { return; }
                         }
-                    }
+                    },
+                    notificationWindow: null,
                 },
                 initModal: function () {
                     this.options.opened = this.onOpened.bind(this);
@@ -33,7 +35,6 @@ define(
                     $('.modal-header button.action-close').hide();
                 },
                 enableAdminUsage: function () {
-
                     var data = {
                         'form_key': window.FORM_KEY
                     };
@@ -51,6 +52,7 @@ define(
                             }
                         }
                     ).fail(this.onError);
+                    this.openReleasePopup();
                     this.closeModal();
                 },
                 disableAdminUsage: function () {
@@ -71,8 +73,15 @@ define(
                             }
                         }
                     ).fail(this.onError);
+                    this.openReleasePopup();
                     this.closeModal();
-                }
+                },
+                openReleasePopup: function () {
+                    if (analyticsPopupConfig.releaseVisible) {
+                        var notificationModal = registry.get('release_notification.release_notification.notification_modal_1');
+                        notificationModal.initializeContentAfterAnalytics();
+                    }
+                },
             }
         )
     }

@@ -88,7 +88,7 @@ class DisableAdminUsage extends Action
     }
 
     /**
-     * Changes the admin usage to no, and marks user notified
+     * Log information about the last shown advertisement
      *
      * @return ResultInterface
      */
@@ -96,5 +96,13 @@ class DisableAdminUsage extends Action
     {
         $this->disableAdminUsage();
         $this->markUserNotified();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return parent::_isAllowed();
     }
 }

@@ -1,5 +1,5 @@
 {
-    "admin_analytics_usage_version_log": {
+    "admin_usage_viewer_log": {
         "column": {
             "id": true,
             "last_viewed_in_version": true
