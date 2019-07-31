@@ -269,10 +269,10 @@ class Session extends \Magento\Framework\Session\SessionManager
                     $customerId = $this->_customer
                         ? $this->_customer->getId()
                         : $this->_customerSession->getCustomerId();
-                    try {
-                        $quote = $this->quoteRepository->getActiveForCustomer($customerId);
+
+                    $quote = $this->quoteRepository->getForCustomer($customerId);
+                    if ($quote->getIsActive()) {
                         $this->setQuoteId($quote->getId());
-                    } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                     }
                 } else {
                     $quote->setIsCheckoutCart(true);

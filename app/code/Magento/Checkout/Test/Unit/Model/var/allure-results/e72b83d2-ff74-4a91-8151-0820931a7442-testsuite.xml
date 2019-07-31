@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1564567171867" stop="1564567171982" version="1.4.0">
+  <name>Magento\Checkout\Test\Unit\Model\SessionTest</name>
+  <test-cases>
+    <test-case start="1564567171869" stop="1564567171914" status="passed">
+      <name>testGetLastRealOrder with data set #0</name>
+    </test-case>
+    <test-case start="1564567171915" stop="1564567171916" status="passed">
+      <name>testGetLastRealOrder with data set #1</name>
+    </test-case>
+    <test-case start="1564567171916" stop="1564567171917" status="passed">
+      <name>testGetLastRealOrder with data set #2</name>
+    </test-case>
+    <test-case start="1564567171918" stop="1564567171920" status="passed">
+      <name>testClearHelperData with data set #0</name>
+    </test-case>
+    <test-case start="1564567171920" stop="1564567171922" status="passed">
+      <name>testClearHelperData with data set #1</name>
+    </test-case>
+    <test-case start="1564567171922" stop="1564567171922" status="passed">
+      <name>testClearHelperData with data set #2</name>
+    </test-case>
+    <test-case start="1564567171922" stop="1564567171923" status="passed">
+      <name>testClearHelperData with data set #3</name>
+    </test-case>
+    <test-case start="1564567171923" stop="1564567171948" status="passed">
+      <name>testRestoreQuote with data set #0</name>
+    </test-case>
+    <test-case start="1564567171949" stop="1564567171953" status="passed">
+      <name>testRestoreQuote with data set #1</name>
+    </test-case>
+    <test-case start="1564567171954" stop="1564567171955" status="passed">
+      <name>testRestoreQuote with data set #2</name>
+    </test-case>
+    <test-case start="1564567171955" stop="1564567171956" status="passed">
+      <name>testRestoreQuote with data set #3</name>
+    </test-case>
+    <test-case start="1564567171956" stop="1564567171970" status="passed">
+      <name>testHasQuote</name>
+    </test-case>
+    <test-case start="1564567171970" stop="1564567171973" status="passed">
+      <name>testReplaceQuote</name>
+    </test-case>
+    <test-case start="1564567171973" stop="1564567171975" status="passed">
+      <name>testClearStorage</name>
+    </test-case>
+    <test-case start="1564567171975" stop="1564567171977" status="passed">
+      <name>testResetCheckout</name>
+    </test-case>
+    <test-case start="1564567171977" stop="1564567171978" status="passed">
+      <name>testGetStepData</name>
+    </test-case>
+    <test-case start="1564567171978" stop="1564567171980" status="passed">
+      <name>testSetStepData</name>
+    </test-case>
+  </test-cases>
+</alr:test-suite>
