@@ -196,12 +196,7 @@ class CurrencyConverterApi extends AbstractImport
         if (!isset($response['error'])) {
             return true;
         }
-
-        $errorCodes = [
-            400 => __('No API Key was specified or an invalid API Key was specified.')
-        ];
-        $this->_messages[] = $errorCodes[$response['status']] ?? __('Currency rates can\'t be retrieved.');
-
+        $this->_messages[] = $response['error'] ?: __('Currency rates can\'t be retrieved.');
         return false;
     }
 
