@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLockAdminUserEntityTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Lock admin user during login"/>
+            <title value="Lock admin  user after entering incorrect password specified number of times"/>
+            <description value="Lock admin  user after entering incorrect password specified number of times"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+
+        <!--Create New User-->
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
+
+        <actionGroup ref="AdminOpenConfigurationPageActionGroup" stepKey="goToConfigurationPage"/>
+
+    </test>
+</tests>
