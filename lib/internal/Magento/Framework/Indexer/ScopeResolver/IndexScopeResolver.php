@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,6 +11,9 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
+/**
+ * Class IndexScopeResolver
+ */
 class IndexScopeResolver implements IndexScopeResolverInterface
 {
     /**
@@ -24,6 +27,8 @@ class IndexScopeResolver implements IndexScopeResolverInterface
     private $scopeResolver;
 
     /**
+     * IndexScopeResolver constructor.
+     *
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      */
