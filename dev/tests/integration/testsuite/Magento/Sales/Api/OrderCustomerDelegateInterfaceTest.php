@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Api;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -17,6 +16,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for Magento\Sales\Api\OrderCustomerDelegateInterface class
+ *
  * @magentoAppIsolation enabled
  */
 class OrderCustomerDelegateInterfaceTest extends TestCase
@@ -47,7 +48,7 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
     private $orderFactory;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -123,6 +124,7 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_address.php
      * @magentoDataFixture Magento/Sales/_files/order.php
      */
     public function testDelegateNew()
@@ -131,7 +133,7 @@ class OrderCustomerDelegateInterfaceTest extends TestCase
         /** @var Order $orderModel */
         $orderModel = $this->orderFactory->create();
         $orderModel->loadByIncrementId($orderAutoincrementId);
-        $orderId = $orderModel->getId();
+        $orderId = (int)$orderModel->getId();
         unset($orderModel);
 
         $this->delegate->delegateNew($orderId);

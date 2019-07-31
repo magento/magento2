@@ -9,7 +9,6 @@ namespace Magento\Store\App\Action\Plugin;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\Phrase;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreResolverInterface;
@@ -128,15 +127,17 @@ class Context
      * Update context accordingly to the store found.
      *
      * @param StoreInterface $store
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function updateContext(StoreInterface $store)
     {
         /** @var StoreInterface $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
+
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
             $store->getCode(),
-            $defaultStore->getCode()
+            $store->isUseStoreInUrl() ? $store->getCode() : $defaultStore->getCode()
         );
 
         $this->httpContext->setValue(

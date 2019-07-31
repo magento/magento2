@@ -141,6 +141,34 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test get transport with exception
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Test error msg
+     */
+    public function testGetTransportWithException()
+    {
+        $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
+        $options = ['area' => 'frontend', 'store' => 1];
+
+        $template = $this->createMock(\Magento\Framework\Mail\TemplateInterface::class);
+        $template->method('setVars')->willReturnSelf();
+        $template->method('setOptions')->willReturnSelf();
+        $template->method('getSubject')->willReturn('Email Subject');
+        $template->method('getType')->willReturn(TemplateTypesInterface::TYPE_TEXT);
+        $template->method('processTemplate')->willReturn('Plain text');
+        $this->templateFactoryMock->method('get')->willReturn($template);
+        $this->messageMock->method('setSubject')->willReturnSelf();
+        $this->messageMock->method('setMessageType')->willReturnSelf();
+        $this->messageMock->method('setBody')->willReturnSelf();
+        $this->messageFactoryMock->expects($this->once())->method('create');
+        $this->mailTransportFactoryMock->method('create')->willThrowException(new \LogicException('Test error msg'));
+
+        $this->builder->setTemplateIdentifier('identifier')->setTemplateVars($vars)->setTemplateOptions($options);
+        $this->assertInstanceOf(\Magento\Framework\Mail\TransportInterface::class, $this->builder->getTransport());
+    }
+
+    /**
      * @return array
      */
     public function getTransportDataProvider()
