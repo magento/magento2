@@ -10,7 +10,6 @@ namespace Magento\PaypalGraphQl\Model\Resolver\Store;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Url\Validator as UrlValidator;
-use Magento\Framework\Url\RouteValidator as PathValidator;
 use Magento\Framework\Validation\ValidationException;
 
 /**
@@ -20,37 +19,57 @@ class Url
 {
     /** @var UrlValidator */
     private $urlValidator;
-
-    /** @var PathValidator */
-    private $pathValidator;
-
     /** @var UrlInterface */
     private $urlInterface;
 
     /**
      * @param UrlValidator $urlValidator
-     * @param PathValidator $pathValidator
      * @param UrlInterface $urlInterface
      */
     public function __construct(
         UrlValidator $urlValidator,
-        PathValidator $pathValidator,
         UrlInterface $urlInterface
     ) {
         $this->urlValidator = $urlValidator;
-        $this->pathValidator = $pathValidator;
         $this->urlInterface = $urlInterface;
     }
 
     /**
-     * Validate path/route
+     * Validate path
      *
      * @param string $path
      * @return bool
      */
     public function isPath(string $path): bool
     {
-        return $this->pathValidator->isValid($path);
+        $result = true;
+
+        if (empty($path)) {
+            $result = false;
+        } elseif ($path[0] == '/'
+            || $this->containsProtocolDelimiter($path)
+            || $this->containsDirectoryTraversal($path)
+            || $this->containsParametersDelimiter($path)
+            || $this->startsWithPortDelimiter($path)
+            || $this->isUrl($path)) {
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
+     * Validate url format
+     *
+     * @param array $url
+     * @return boolean
+     */
+    private function isUrl(string $url): bool
+    {
+        $result = false;
+        if ($this->urlValidator->isValid($url)) {
+            $result = true;
+        }
+        return $result;
     }
 
     /**
@@ -78,7 +97,7 @@ class Url
         if (substr($resultUrl, 0, strlen($baseUrl)) != $baseUrl
             || $path == $resultUrl
             || $resultUrl == $baseUrl
-            || !$this->validateUrl($resultUrl)
+            || !$this->isUrl($resultUrl)
         ) {
             throw new ValidationException(__('Invalid Url.'));
         }
@@ -87,16 +106,58 @@ class Url
     }
 
     /**
-     * Validate redirect Urls
+     * Validate if url contains protocol delimiter
      *
      * @param array $url
      * @return boolean
      */
-    private function validateUrl(string $url): bool
+    private function containsProtocolDelimiter(string $url): bool
     {
-        if (!$this->urlValidator->isValid($url)) {
-            return false;
+        if (strpos($url, '://') !== false) {
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    /**
+     * Validate if url contains directory traversal
+     *
+     * @param array $url
+     * @return boolean
+     */
+    private function containsDirectoryTraversal(string $url): bool
+    {
+        if (strpos($url, '..') !== false) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validate if url contains parameters delimiter
+     *
+     * @param array $url
+     * @return boolean
+     */
+    private function containsParametersDelimiter(string $url): bool
+    {
+        if (strpos($url, '?') !== false) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validate if path starts with port delimiter
+     *
+     * @param array $url
+     * @return boolean
+     */
+    private function startsWithPortDelimiter(string $path): bool
+    {
+        if (preg_match('/^\:[0-9]+/', $path)) {
+            return true;
+        }
+        return false;
     }
 }
