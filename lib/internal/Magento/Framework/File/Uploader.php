@@ -173,11 +173,13 @@ class Uploader
      *
      * @param string|array $fileId
      * @param \Magento\Framework\File\Mime|null $fileMime
+     * @param DirectoryList|null $directoryList
      * @throws \DomainException
      */
     public function __construct(
         $fileId,
-        Mime $fileMime = null
+        Mime $fileMime = null,
+        DirectoryList $directoryList = null
     ) {
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
@@ -187,6 +189,8 @@ class Uploader
             $this->_fileExists = true;
         }
         $this->fileMime = $fileMime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Mime::class);
+        $this->directoryList= $directoryList ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(DirectoryList::class);
     }
 
     /**
@@ -610,14 +614,14 @@ class Uploader
             if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
-                    $this->getDirectoryList()->getPath(DirectoryList::MEDIA),
-                    $this->getDirectoryList()->getPath(DirectoryList::VAR_DIR),
-                    $this->getDirectoryList()->getPath(DirectoryList::TMP),
-                    $this->getDirectoryList()->getPath(DirectoryList::UPLOAD),
+                    $this->directoryList->getPath(DirectoryList::MEDIA),
+                    $this->directoryList->getPath(DirectoryList::VAR_DIR),
+                    $this->directoryList->getPath(DirectoryList::TMP),
+                    $this->directoryList->getPath(DirectoryList::UPLOAD),
                 ];
 
                 $disallowedFolders = [
-                    $this->getDirectoryList()->getPath(DirectoryList::LOG),
+                    $this->directoryList->getPath(DirectoryList::LOG),
                 ];
 
                 foreach ($allowedFolders as $allowedFolder) {
@@ -641,19 +645,6 @@ class Uploader
                 __('Invalid parameter given. A valid $fileId[tmp_name] is expected.')
             );
         }
-    }
-
-    /**
-     * @return DirectoryList
-     */
-    private function getDirectoryList(): DirectoryList
-    {
-        if ($this->directoryList === null) {
-            $this->directoryList = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(DirectoryList::class);
-        }
-
-        return $this->directoryList;
     }
 
     /**
