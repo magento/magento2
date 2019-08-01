@@ -168,18 +168,16 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @return void
      */
-    public function testResolvePlaceOrderWithPaymentsAdvancedWithInvalidUrl(): void
+    public function testResolvePaymentsAdvancedWithInvalidUrl(): void
     {
         $paymentMethod = 'payflow_advanced';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        $responseData = $this->setPaymentMethodAndPlaceOrderWithInValidUrl($cartId, $paymentMethod);
 
+        $responseData = $this->setPaymentMethodWithInValidUrl($cartId, $paymentMethod);
         $expectedExceptionMessage = "Invalid Url.";
-
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
-
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
         $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
     }
@@ -254,9 +252,9 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
       payment_method: {
           code: "$paymentMethod"
           payflow_link: {
-             cancel_url:"paypal/payflowadvanced/cancel"
-             return_url:"paypal/payflowadvanced/return"
-             error_url:"paypal/payflowadvanced/error"
+             cancel_url:"paypal/payflowadvanced/customcancel"
+             return_url:"paypal/payflowadvanced/customreturn"
+             error_url:"paypal/payflowadvanced/customerror"
           }
       }
   }) {    
@@ -287,7 +285,7 @@ QUERY;
      * @param string $paymentMethod
      * @return array
      */
-    private function setPaymentMethodAndPlaceOrderWithInValidUrl(string $cartId, string $paymentMethod): array
+    private function setPaymentMethodWithInValidUrl(string $cartId, string $paymentMethod): array
     {
         $serializer = $this->objectManager->get(SerializerInterface::class);
         $query
@@ -308,11 +306,6 @@ QUERY;
           selected_payment_method {
           code
       }
-    }
-  }
-  placeOrder(input: {cart_id: "$cartId"}) {
-    order {
-      order_id
     }
   }
 }
