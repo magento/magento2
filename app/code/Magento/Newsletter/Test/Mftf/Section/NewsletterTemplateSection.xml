@@ -18,7 +18,7 @@
     </section>
     <section name="NewsletterWYSIWYGSection">
         <element name="TextArea" type="text" selector="#text" />
-        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by" />
+        <element name="TinyMCE4" type="text" selector=".mce-branding" />
         <element name="ShowHideBtn" type="button" selector="#toggletext" timeout="60"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
         <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
