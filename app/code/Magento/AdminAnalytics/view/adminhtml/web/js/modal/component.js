@@ -22,7 +22,9 @@ define([
                     },
                     options: {
                         keyEventHandlers: {
-                            escapeKey: function () { return; }
+                            escapeKey: function () {
+                                return;
+                            }
                         }
                     },
                     notificationWindow: null,
@@ -79,10 +81,10 @@ define([
                     this.closeModal();
                 },
                 openReleasePopup: function () {
-                    var notificationModal = registry.get('release_notification.release_notification.notification_modal_1');
+                    var notifiModal = registry.get('release_notification.release_notification.notification_modal_1');
 
                     if (analyticsPopupConfig.releaseVisible) {
-                        notificationModal.initializeContentAfterAnalytics();
+                        notifiModal.initializeContentAfterAnalytics();
                     }
                 },
             }

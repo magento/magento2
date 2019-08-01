@@ -6,8 +6,6 @@
 namespace Magento\AdminAnalytics\Model\Condition;
 
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\App\CacheInterface;
 use function Magento\PAT\Reports\Utils\readResponseTimeReport;
@@ -31,17 +29,12 @@ class CanViewNotification implements VisibilityConditionInterface
      *
      * @var string
      */
-    private static $cachePrefix = 'admin-usage-notification-popup-';
+    private static $cachePrefix = 'admin-usage-notification-popup';
 
     /**
      * @var Logger
      */
     private $viewerLogger;
-
-    /**
-     * @var ProductMetadataInterface
-     */
-    private $productMetadata;
 
     /**
      * @var CacheInterface
@@ -51,37 +44,33 @@ class CanViewNotification implements VisibilityConditionInterface
     /**
      * CanViewNotification constructor.
      *
-     * @param Logger                   $viewerLogger
-     * @param ProductMetadataInterface $productMetadata
-     * @param CacheInterface           $cacheStorage
+     * @param Logger         $viewerLogger
+     * @param CacheInterface $cacheStorage
      */
     public function __construct(
         Logger $viewerLogger,
-        ProductMetadataInterface $productMetadata,
         CacheInterface $cacheStorage
     ) {
         $this->viewerLogger = $viewerLogger;
-        $this->productMetadata = $productMetadata;
         $this->cacheStorage = $cacheStorage;
     }
 
     /**
      * Validate if notification popup can be shown and set the notification flag
      *
+     * @param      array $arguments Attributes from element node.
      * @inheritdoc
      */
     public function isVisible(array $arguments)
     {
-        $currentProductVersion = $this->productMetadata->getVersion();
-        $cacheKey = self::$cachePrefix.$currentProductVersion;
+        $cacheKey = self::$cachePrefix;
         $value = $this->cacheStorage->load($cacheKey);
-        if ($value != $currentProductVersion) {
-            $versionViewed = $this->viewerLogger->get($currentProductVersion)->getLastViewVersion();
-            $versionExists = isset($versionViewed);
-            if ($versionExists) {
-                $this->cacheStorage->save($versionViewed, $cacheKey);
+        if ($value !== 'log-exists') {
+            $logExists = $this->viewerLogger->checkLogExists();
+            if ($logExists) {
+                $this->cacheStorage->save('log-exists', $cacheKey);
             }
-            return !$versionExists;
+            return !$logExists;
         }
         return false;
     }

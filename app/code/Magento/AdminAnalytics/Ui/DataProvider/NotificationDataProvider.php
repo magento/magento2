@@ -180,6 +180,7 @@ class NotificationDataProvider implements DataProviderInterface
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
+        return null;
     }
 
     /**
@@ -187,6 +188,7 @@ class NotificationDataProvider implements DataProviderInterface
      */
     public function addOrder($field, $direction)
     {
+        return null;
     }
 
     /**
@@ -194,6 +196,7 @@ class NotificationDataProvider implements DataProviderInterface
      */
     public function setLimit($offset, $size)
     {
+        return null;
     }
 
     /**

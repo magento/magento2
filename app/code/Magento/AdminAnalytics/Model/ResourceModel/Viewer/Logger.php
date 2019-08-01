@@ -80,17 +80,28 @@ class Logger
     }
 
     /**
+     * Get log by the last view version.
+     *
+     * @return boolean
+     */
+    public function checkLogExists() : bool
+    {
+        $data = $this->logFactory->create(['data' => $this->loadLogData()]);
+        $lastViewedVersion = $data->getLastViewVersion();
+        return isset($lastViewedVersion);
+    }
+
+    /**
      * Load release notification viewer log data by last view version
      *
-     * @param string $lastViewVersion
      * @return array
      */
-    private function loadLogData(string $lastViewVersion) : array
+    private function loadLogData() : array
     {
         $connection = $this->resource->getConnection();
         $select = $connection->select()
             ->from($this->resource->getTableName(self::LOG_TABLE_NAME))
-            ->where('last_viewed_in_version = ?', $lastViewVersion);
+            ->limit(['count' => 1]);
 
         $data = $connection->fetchRow($select);
         if (!$data) {
