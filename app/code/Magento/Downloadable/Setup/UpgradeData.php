@@ -6,6 +6,7 @@
 
 namespace Magento\Downloadable\Setup;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Zend\Uri\Uri as UriHandler;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
@@ -109,7 +110,6 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function addDownloadableHostsToConfig(ModuleDataSetupInterface $setup)
     {
@@ -118,28 +118,7 @@ class UpgradeData implements UpgradeDataInterface
         $allStoreScopes = array_merge($storeScopes, [$customStoreScope]);
 
         foreach ($allStoreScopes as $scope) {
-            /** @var $scope Store */
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, false));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, true));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, false));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, true));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_DIRECT_LINK, false));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_DIRECT_LINK, true));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, false));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, true));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
-            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true));
-
-            if ($website = $scope->getWebsite()) {
-                $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_URL));
-                $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_URL));
-                $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_LINK_URL));
-                $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_LINK_URL));
-                $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_MEDIA_URL));
-                $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_MEDIA_URL));
-                $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_STATIC_URL));
-                $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_STATIC_URL));
-            }
+            $this->addStoreAndWebsiteUrlsFromScope($scope);
         }
 
         $customAdminUrl = $this->scopeConfig->getValue(
@@ -196,6 +175,42 @@ class UpgradeData implements UpgradeDataInterface
         }
 
         $this->domainManager->addDomains($this->whitelist);
+    }
+
+    /**
+     * Add stores and website urls from store scope
+     *
+     * @param Store $scope
+     */
+    private function addStoreAndWebsiteUrlsFromScope(Store $scope)
+    {
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, false));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, true));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, false));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, true));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_DIRECT_LINK, false));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_DIRECT_LINK, true));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, false));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, true));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
+        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true));
+
+        try {
+            $website = $scope->getWebsite();
+        } catch (NoSuchEntityException $e) {
+            return;
+        }
+
+        if ($website) {
+            $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_URL));
+            $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_URL));
+            $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_LINK_URL));
+            $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_LINK_URL));
+            $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_MEDIA_URL));
+            $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_MEDIA_URL));
+            $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_STATIC_URL));
+            $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_STATIC_URL));
+        }
     }
 
     /**
