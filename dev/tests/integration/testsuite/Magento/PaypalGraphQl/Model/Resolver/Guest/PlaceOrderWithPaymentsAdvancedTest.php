@@ -173,45 +173,9 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $paymentMethod = 'payflow_advanced';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-        $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
-        $button = 'Magento_Cart_' . $productMetadata->getEdition();
-
-        $payflowLinkResponse = new DataObject(
-            [
-                'result' => '0',
-                'respmsg' => 'Approved',
-                'pnref' => 'V19A3D27B61E',
-                'result_code' => '0'
-            ]
-        );
-        $this->gateway->expects($this->once())
-            ->method('postRequest')
-            ->willReturn($payflowLinkResponse);
-
-        $this->paymentRequest
-            ->method('setData')
-            ->willReturnMap(
-                [
-                    [
-                        'user' => null,
-                        'vendor' => null,
-                        'partner' => null,
-                        'pwd' => null,
-                        'verbosity' => null,
-                        'BUTTONSOURCE' => $button,
-                        'tender' => 'C',
-                    ],
-                    $this->returnSelf()
-                ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
-            );
-
         $responseData = $this->setPaymentMethodAndPlaceOrderWithInValidUrl($cartId, $paymentMethod);
 
         $expectedExceptionMessage = "Invalid Url.";
-        $this->assertArrayHasKey('createPaypalExpressToken', $responseData['data']);
-        $this->assertEmpty($responseData['data']['createPaypalExpressToken']);
 
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
@@ -289,12 +253,10 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data: {
-              payflow_link: {
-                 cancel_url:"paypal/payflowadvanced/cancel"
-                 return_url:"paypal/payflowadvanced/return"
-                 error_url:"paypal/payflowadvanced/error"
-              }
+          payflow_link: {
+             cancel_url:"paypal/payflowadvanced/cancel"
+             return_url:"paypal/payflowadvanced/return"
+             error_url:"paypal/payflowadvanced/error"
           }
       }
   }) {    
@@ -335,12 +297,10 @@ QUERY;
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data: {
-              payflow_link: {
-                 cancel_url:"paypal/payflowadvanced/cancel"
-                 return_url:"http://localhost/paypal/payflowadvanced/return"
-                 error_url:"paypal/payflowadvanced/error"
-              }
+          payflow_link: {
+             cancel_url:"paypal/payflowadvanced/cancel"
+             return_url:"http://localhost/paypal/payflowadvanced/return"
+             error_url:"paypal/payflowadvanced/error"
           }
       }
   }) {    
