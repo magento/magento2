@@ -23,18 +23,15 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * End to end place order test using payflow_link via graphql endpoint for guest
+ * End to end place order test using PayPal payments advanced via GraphQl
  *
  * @magentoAppArea graphql
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PlaceOrderWithPayflowLinkTest extends TestCase
+class PlaceOrderWithPaymentsAdvancedTest extends TestCase
 {
     /** @var GraphQlRequest */
     private $graphQlRequest;
-
-    /** @var SerializerInterface */
-    private $json;
 
     /** @var GetMaskedQuoteIdByReservedOrderId */
     private $getMaskedQuoteIdByReservedOrderId;
@@ -46,13 +43,13 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     private $gateway;
 
     /** @var Request|MockObject */
-    private $payflowRequest;
+    private $paymentRequest;
 
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
-        $this->json = $this->objectManager->get(SerializerInterface::class);
+
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->gateway = $this->getMockBuilder(Gateway::class)
             ->disableOriginalConstructor()
@@ -64,21 +61,21 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->payflowRequest = $this->getMockBuilder(Request::class)
+        $this->paymentRequest = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->setMethods(['__call','setData'])
             ->getMock();
-        $this->payflowRequest->method('__call')
+        $this->paymentRequest->method('__call')
             ->willReturnCallback(
                 function ($method) {
                     if (strpos($method, 'set') === 0) {
-                        return $this->payflowRequest;
+                        return $this->paymentRequest;
                     }
                     return null;
                 }
             );
 
-        $requestFactory->expects($this->any())->method('create')->willReturn($this->payflowRequest);
+        $requestFactory->method('create')->willReturn($this->paymentRequest);
         $this->objectManager->addSharedInstance($this->gateway, Gateway::class);
     }
 
@@ -91,10 +88,10 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     }
 
     /**
-     * Test successful place Order with Payflow link
+     * Test successful place Order with Payments Advanced
      *
-     * @magentoConfigFixture default_store payment/payflow_link/active 1
-     * @magentoConfigFixture default_store payment/payflow_link/sandbox_flag 1
+     * @magentoConfigFixture default_store payment/payflow_advanced/active 1
+     * @magentoConfigFixture default_store payment/payflow_advanced/sandbox_flag 1
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -105,56 +102,27 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @return void
      */
-    public function testResolvePlaceOrderWithPayflowLink(): void
+    public function testResolvePlaceOrderWithPaymentsAdvanced(): void
     {
-        $paymentMethod = 'payflow_link';
+        $paymentMethod = 'payflow_advanced';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $query
-            = <<<QUERY
- mutation {
-  setPaymentMethodOnCart(input: {
-      cart_id: "$cartId"
-      payment_method: {
-          code: "$paymentMethod"
-            payflow_link: 
-            {
-           cancel_url:"paypal/payflow/cancel"
-           return_url:"paypal/payflow/return"
-           error_url:"paypal/payflow/error"
-          }
-      }
-  }) {    
-       cart {
-          selected_payment_method {
-          code
-      }
-    }
-  }
-    placeOrder(input: {cart_id: "$cartId"}) {
-      order {
-        order_id
-      }
-    }
-}
-QUERY;
 
         $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
         $button = 'Magento_Cart_' . $productMetadata->getEdition();
 
         $payflowLinkResponse = new DataObject(
             [
-            'result' => '0',
-            'respmsg' => 'Approved',
-            'pnref' => 'V19A3D27B61E',
-            'result_code' => '0'
+                'result' => '0',
+                'respmsg' => 'Approved',
+                'pnref' => 'V19A3D27B61E',
+                'result_code' => '0'
             ]
         );
         $this->gateway->expects($this->once())
             ->method('postRequest')
             ->willReturn($payflowLinkResponse);
 
-        $this->payflowRequest
+        $this->paymentRequest
             ->method('setData')
             ->willReturnMap(
                 [
@@ -173,8 +141,7 @@ QUERY;
                 ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
             );
 
-        $response = $this->graphQlRequest->send($query);
-        $responseData = $this->json->unserialize($response->getContent());
+        $responseData = $this->setPaymentMethodAndPlaceOrder($cartId, $paymentMethod);
 
         $this->assertArrayNotHasKey('errors', $responseData);
         $this->assertArrayHasKey('data', $responseData);
@@ -182,20 +149,44 @@ QUERY;
             $paymentMethod,
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
-        $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_id'])
-        );
-        $this->assertEquals(
-            'test_quote',
-            $responseData['data']['placeOrder']['order']['order_id']
-        );
+        $this->assertNotEmpty(isset($responseData['data']['placeOrder']['order']['order_id']));
+        $this->assertEquals('test_quote', $responseData['data']['placeOrder']['order']['order_id']);
     }
 
     /**
-     * Test place Order with Payflow link with a declined status
+     * Test place Order with Payments Advanced with Invalid Url.
      *
-     * @magentoConfigFixture default_store payment/payflow_link/active 1
-     * @magentoConfigFixture default_store payment/payflow_link/sandbox_flag 1
+     * @magentoConfigFixture default_store payment/payflow_advanced/active 1
+     * @magentoConfigFixture default_store payment/payflow_advanced/sandbox_flag 1
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
+     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @return void
+     */
+    public function testResolvePaymentsAdvancedWithInvalidUrl(): void
+    {
+        $paymentMethod = 'payflow_advanced';
+        $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+
+        $responseData = $this->setPaymentMethodWithInValidUrl($cartId, $paymentMethod);
+        $expectedExceptionMessage = "Invalid Url.";
+        $this->assertArrayHasKey('errors', $responseData);
+        $actualError = $responseData['errors'][0];
+        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+    }
+
+    /**
+     * Test place Order with PaymentAdvanced with a declined status
+     *
+     * @magentoConfigFixture default_store payment/payflow_advanced/active 1
+     * @magentoConfigFixture default_store payment/payflow_advanced/sandbox_flag 1
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -207,39 +198,10 @@ QUERY;
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testResolveWithPayflowLinkDeclined(): void
+    public function testResolveWithPaymentAdvancedDeclined(): void
     {
-        $paymentMethod = 'payflow_link';
+        $paymentMethod = 'payflow_advanced';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $query
-            = <<<QUERY
- mutation {
-  setPaymentMethodOnCart(input: {
-      cart_id: "$cartId"
-      payment_method: {
-          code: "$paymentMethod"
-            payflow_link: 
-            {
-           cancel_url:"paypal/payflow/cancelPayment"
-           return_url:"paypal/payflow/returnUrl"
-           error_url:"paypal/payflow/returnUrl"
-          }
-      }
-  }) {    
-       cart {
-          selected_payment_method {
-          code
-      }
-    }
-  }
-    placeOrder(input: {cart_id: "$cartId"}) {
-      order {
-        order_id
-      }
-    }
-}
-QUERY;
 
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
         $exception = new \Zend_Http_Client_Exception(__('Declined response message from PayPal gateway'));
@@ -247,12 +209,12 @@ QUERY;
         $expectedExceptionMessage =
             "Unable to place order: Payment Gateway is unreachable at the moment. Please use another payment option.";
 
-        $this->payflowRequest->method('setData')
+        $this->paymentRequest->method('setData')
             ->with(
                 [
                     [
                         'invnum' => 'test_quote',
-                        'amt' => '30.00',
+                        'amt' => '40.00',
                         'pnref' => 'TEST123PNREF',
                         'USER2' => '1EncryptedSilentPostHash',
                         'result' => $resultCode,
@@ -265,14 +227,93 @@ QUERY;
 
         $this->gateway->method('postRequest')->willThrowException($exception);
 
-        $response = $this->graphQlRequest->send($query);
-        $responseData = $this->json->unserialize($response->getContent());
+        $responseData = $this->setPaymentMethodAndPlaceOrder($cartId, $paymentMethod);
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
-        $this->assertEquals(
-            $expectedExceptionMessage,
-            $actualError['message']
-        );
+        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
         $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+    }
+
+    /**
+     * Send setPaymentMethodOnCart and placeOrder mutations and return response content
+     *
+     * @param string $cartId
+     * @param string $paymentMethod
+     * @return array
+     */
+    private function setPaymentMethodAndPlaceOrder(string $cartId, string $paymentMethod): array
+    {
+        $serializer = $this->objectManager->get(SerializerInterface::class);
+        $query
+            = <<<QUERY
+ mutation {
+  setPaymentMethodOnCart(input: {
+      cart_id: "$cartId"
+      payment_method: {
+          code: "$paymentMethod"
+          payflow_link: {
+             cancel_url:"paypal/payflowadvanced/customcancel"
+             return_url:"paypal/payflowadvanced/customreturn"
+             error_url:"paypal/payflowadvanced/customerror"
+          }
+      }
+  }) {    
+       cart {
+          selected_payment_method {
+          code
+      }
+    }
+  }
+  placeOrder(input: {cart_id: "$cartId"}) {
+    order {
+      order_id
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlRequest->send($query);
+        $responseContent = $serializer->unserialize($response->getContent());
+
+        return $responseContent;
+    }
+
+    /**
+     * Send setPaymentMethodOnCart and placeOrder mutations and return response content
+     *
+     * @param string $cartId
+     * @param string $paymentMethod
+     * @return array
+     */
+    private function setPaymentMethodWithInValidUrl(string $cartId, string $paymentMethod): array
+    {
+        $serializer = $this->objectManager->get(SerializerInterface::class);
+        $query
+            = <<<QUERY
+ mutation {
+  setPaymentMethodOnCart(input: {
+      cart_id: "$cartId"
+      payment_method: {
+          code: "$paymentMethod"
+          payflow_link: {
+             cancel_url:"paypal/payflowadvanced/cancel"
+             return_url:"http://localhost/paypal/payflowadvanced/return"
+             error_url:"paypal/payflowadvanced/error"
+          }
+      }
+  }) {    
+       cart {
+          selected_payment_method {
+          code
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlRequest->send($query);
+        $responseContent = $serializer->unserialize($response->getContent());
+
+        return $responseContent;
     }
 }
