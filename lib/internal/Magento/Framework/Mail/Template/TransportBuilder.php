@@ -143,6 +143,7 @@ class TransportBuilder
      * @param MimePartInterfaceFactory|null $mimePartInterfaceFactory
      * @param addressConverter|null $addressConverter
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FactoryInterface $templateFactory,
@@ -154,7 +155,7 @@ class TransportBuilder
         EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
         MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
         MimePartInterfaceFactory $mimePartInterfaceFactory = null,
-        AddressConverter $addressConverter=null
+        AddressConverter $addressConverter = null
     ) {
         $this->templateFactory = $templateFactory;
         $this->objectManager = $objectManager;

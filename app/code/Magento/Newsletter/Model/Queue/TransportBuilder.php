@@ -23,6 +23,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class TransportBuilder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
 {
@@ -73,6 +75,8 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      * @param MimeMessageInterfaceFactory|null $mimeMessageInterfaceFactory
      * @param MimePartInterfaceFactory|null $mimePartInterfaceFactory
      * @param AddressConverter|null $addressConverter
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FactoryInterface $templateFactory,

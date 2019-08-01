@@ -59,18 +59,20 @@ class AddressConverter
     public function convertMany(array $addresses): array
     {
         $addressList = [];
-        foreach ($addresses as $key=>$value) {
+        foreach ($addresses as $key => $value) {
 
             if (is_int($key) || is_numeric($key)) {
                 $addressList[] = $this->convert($value);
                 continue;
             }
 
-            if (! is_string($key)) {
-                throw new MailException(__(
-                    'Invalid key type in provided addresses array ("%s")',
-                    (is_object($key) ? get_class($key) : var_export($key, 1))
-                ));
+            if (!is_string($key)) {
+                throw new MailException(
+                    __(
+                        'Invalid key type in provided addresses array ("%1")',
+                        (is_object($key) ? get_class($key) : var_export($key, 1))
+                    )
+                );
             }
             $addressList[] = $this->convert($key, $value);
         }
