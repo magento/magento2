@@ -91,6 +91,8 @@ class DomainManager implements DomainManagerInterface
             }
         }
 
+        $whitelist = array_values($whitelist);  // reindex whitelist to prevent non-sequential keying
+
         $this->configWriter->saveConfig(
             [
                 ConfigFilePool::APP_ENV => [
