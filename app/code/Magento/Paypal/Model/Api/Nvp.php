@@ -11,9 +11,10 @@ use Magento\Payment\Model\Method\Logger;
 
 /**
  * NVP API wrappers model
+ *
  * @TODO: move some parts to abstract, don't hesitate to throw exceptions on api calls
  *
- * @method string getToken()
+ * @method                                           string getToken()
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -476,6 +477,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Map for shipping address import/export (extends billing address mapper)
+     *
      * @var array
      */
     protected $_shippingAddressMap = [
@@ -491,6 +493,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Map for callback request
+     *
      * @var array
      */
     protected $_callbackRequestMap = [
@@ -504,6 +507,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Payment information response specifically to be collected after some requests
+     *
      * @var string[]
      */
     protected $_paymentInformationResponse = [
@@ -523,6 +527,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Line items export mapping settings
+     *
      * @var array
      */
     protected $_lineItemTotalExportMap = [
@@ -533,6 +538,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Line items export mapping settings
+     *
      * @var array
      */
     protected $_lineItemExportItemsFormat = [
@@ -544,6 +550,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Shipping options export to request mapping settings
+     *
      * @var array
      */
     protected $_shippingOptionsExportItemsFormat = [
@@ -737,16 +744,16 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     protected $_headers = [];
 
     /**
-     * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param Logger $customLogger
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param ProcessableExceptionFactory $processableExceptionFactory
-     * @param \Magento\Framework\Exception\LocalizedExceptionFactory $frameworkExceptionFactory
-     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
-     * @param array $data
+     * @param                                          \Magento\Customer\Helper\Address                       $customerAddress
+     * @param                                          \Psr\Log\LoggerInterface                               $logger
+     * @param                                          Logger                                                 $customLogger
+     * @param                                          \Magento\Framework\Locale\ResolverInterface            $localeResolver
+     * @param                                          \Magento\Directory\Model\RegionFactory                 $regionFactory
+     * @param                                          \Magento\Directory\Model\CountryFactory                $countryFactory
+     * @param                                          ProcessableExceptionFactory                            $processableExceptionFactory
+     * @param                                          \Magento\Framework\Exception\LocalizedExceptionFactory $frameworkExceptionFactory
+     * @param                                          \Magento\Framework\HTTP\Adapter\CurlFactory            $curlFactory
+     * @param                                          array                                                  $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -805,7 +812,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * TODO: put together style and giropay settings
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
      */
     public function callSetExpressCheckout()
     {
@@ -836,7 +843,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetExpressCheckoutDetails call
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetExpressCheckoutDetails
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetExpressCheckoutDetails
      */
     public function callGetExpressCheckoutDetails()
     {
@@ -851,7 +858,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoExpressCheckout call
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoExpressCheckoutPayment
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoExpressCheckoutPayment
      */
     public function callDoExpressCheckoutPayment()
     {
@@ -890,7 +897,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Do Reference Transaction call
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoReferenceTransaction
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoReferenceTransaction
      */
     public function callDoReferenceTransaction()
     {
@@ -903,7 +910,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Check whether the last call was returned with fraud warning
      *
-     * @return bool
+     * @return                                       bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsFraudDetected()
@@ -927,7 +934,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoCapture call
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoCapture
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoCapture
      */
     public function callDoCapture()
     {
@@ -942,7 +949,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoAuthorization call
      *
      * @return $this
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoAuthorization
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoAuthorization
      */
     public function callDoAuthorization()
     {
@@ -958,7 +965,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoVoid call
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoVoid
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoVoid
      */
     public function callDoVoid()
     {
@@ -970,7 +977,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetTransactionDetails
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
      */
     public function callGetTransactionDetails()
     {
@@ -983,7 +990,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * RefundTransaction call
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_RefundTransaction
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_RefundTransaction
      */
     public function callRefundTransaction()
     {
@@ -999,7 +1006,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * ManagePendingTransactionStatus
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_ManagePendingTransactionStatus
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_ManagePendingTransactionStatus
      */
     public function callManagePendingTransactionStatus()
     {
@@ -1015,8 +1022,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetPalDetails call
      *
      * @return void
-     * @link https://www.x.com/docs/DOC-1300
-     * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration
+     * @link   https://www.x.com/docs/DOC-1300
+     * @link   https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration
      */
     public function callGetPalDetails()
     {
@@ -1028,7 +1035,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Set Customer BillingAgreement call
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetCustomerBillingAgreement
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetCustomerBillingAgreement
      */
     public function callSetCustomerBillingAgreement()
     {
@@ -1041,7 +1048,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Get Billing Agreement Customer Details call
      *
      * @return void
-     * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetBillingAgreementCustomerDetails
+     * @link   https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetBillingAgreementCustomerDetails
      */
     public function callGetBillingAgreementCustomerDetails()
     {
@@ -1084,7 +1091,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Import callback request array into $this public data
      *
-     * @param array $request
+     * @param  array $request
      * @return \Magento\Framework\DataObject
      */
     public function prepareShippingOptionsCallbackAddress(array $request)
@@ -1114,8 +1121,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Add method to request array
      *
-     * @param string $methodName
-     * @param array $request
+     * @param  string $methodName
+     * @param  array  $request
      * @return array
      */
     protected function _addMethodToRequest($methodName, $request)
@@ -1128,7 +1135,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Additional response processing.
      * Hack to cut off length from API type response params.
      *
-     * @param array $response
+     * @param  array $response
      * @return array
      */
     protected function _postProcessResponse($response)
@@ -1154,10 +1161,10 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Do the API call
      *
-     * @param string $methodName
-     * @param array $request
-     * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @param                                        string $methodName
+     * @param                                        array  $request
+     * @return                                       array
+     * @throws                                       \Magento\Framework\Exception\LocalizedException|\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function call($methodName, array $request)
@@ -1244,7 +1251,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Setter for 'raw response needed' flag
      *
-     * @param bool $flag
+     * @param  bool $flag
      * @return $this
      */
     public function setRawResponseNeeded($flag)
@@ -1256,9 +1263,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Handle logical errors
      *
-     * @param array $response
-     * @return void
-     * @throws \Magento\Paypal\Model\Api\ProcessableException|\Magento\Framework\Exception\LocalizedException
+     * @param                                   array $response
+     * @return                                  void
+     * @throws                                  \Magento\Paypal\Model\Api\ProcessableException|\Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _handleCallErrors($response)
@@ -1294,7 +1301,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
         $exceptionPhrase = __('PayPal gateway has rejected request. %1', $errorMessages);
 
-        /** @var \Magento\Framework\Exception\LocalizedException $exception */
+        /**
+ * @var \Magento\Framework\Exception\LocalizedException $exception 
+*/
         $firstError = $errors[0]['code'];
         $exception = $this->_isProcessableError($firstError)
             ? $this->_processableExceptionFactory->create(
@@ -1310,9 +1319,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Format error message from error code, short error message and long error message
      *
-     * @param string $errorCode
-     * @param string $shortErrorMessage
-     * @param string $longErrorMessage
+     * @param  string $errorCode
+     * @param  string $shortErrorMessage
+     * @param  string $longErrorMessage
      * @return string
      */
     protected function _formatErrorMessage($errorCode, $shortErrorMessage, $longErrorMessage)
@@ -1327,7 +1336,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Check whether PayPal error can be processed
      *
-     * @param int $errorCode
+     * @param  int $errorCode
      * @return bool
      */
     protected function _isProcessableError($errorCode)
@@ -1344,7 +1353,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Extract errors from PayPal's response and return them in array
      *
-     * @param array $response
+     * @param  array $response
      * @return array
      */
     protected function _extractErrorsFromResponse($response)
@@ -1370,7 +1379,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Catch success calls and collect warnings
      *
-     * @param array $response
+     * @param  array $response
      * @return bool success flag
      */
     protected function _isCallSuccessful($response)
@@ -1396,8 +1405,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Validate response array.
      *
-     * @param string $method
-     * @param array $response
+     * @param  string $method
+     * @param  array  $response
      * @return bool
      */
     protected function _validateResponse($method, $response)
@@ -1414,7 +1423,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Parse an NVP response string into an associative array
-     * @param string $nvpstr
+     *
+     * @param  string $nvpstr
      * @return array
      */
     protected function _deformatNVP($nvpstr)
@@ -1443,8 +1453,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * NVP doesn't support passing discount total as a separate amount - add it as a line item
      *
-     * @param array $request
-     * @param int $i
+     * @param  array $request
+     * @param  int   $i
      * @return true|null
      */
     protected function _exportLineItems(array &$request, $i = 0)
@@ -1459,10 +1469,10 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Create billing and shipping addresses basing on response data
      *
-     * @param array $data
-     * @return void
+     * @param      array $data
+     * @return     void
      * @deprecated 100.2.2 typo in method name
-     * @see _exportAddresses
+     * @see        _exportAddresses
      */
     protected function _exportAddressses($data)
     {
@@ -1472,7 +1482,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Create billing and shipping addresses basing on response data
      *
-     * @param array $data
+     * @param  array $data
      * @return void
      */
     protected function _exportAddresses($data)
@@ -1496,15 +1506,19 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
                 $nameParts = [$firstname, $lastname];
             }
             if (!empty($nameParts[0]) && !empty($nameParts[1])) {
-                $shippingAddress->addData([
+                $shippingAddress->addData(
+                    [
                     'firstname'  => $nameParts[0],
                     'lastname'  => $nameParts[1]
-                ]);
+                    ]
+                );
             } else {
-                $shippingAddress->addData([
+                $shippingAddress->addData(
+                    [
                     'firstname'  => $data['FIRSTNAME'],
                     'lastname'  => $data['LASTNAME']
-                ]);
+                    ]
+                );
             }
             $this->setExportedShippingAddress($shippingAddress);
         }
@@ -1513,7 +1527,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Adopt specified address object to be compatible with Magento
      *
-     * @param \Magento\Framework\DataObject $address
+     * @param  \Magento\Framework\DataObject $address
      * @return void
      */
     protected function _applyStreetAndRegionWorkarounds(\Magento\Framework\DataObject $address)
@@ -1543,7 +1557,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Prepare request data basing on provided addresses
      *
-     * @param array $to
+     * @param  array $to
      * @return array
      */
     protected function _importAddresses(array $to)
@@ -1580,7 +1594,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Filter for credit card type
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      */
     protected function _filterCcType($value)
@@ -1594,7 +1608,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Filter for true/false values (converts to boolean)
      *
-     * @param mixed $value
+     * @param  mixed $value
      * @return bool|mixed
      */
     protected function _filterToBool($value)
@@ -1610,7 +1624,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Filter for 'AUTOBILLAMT'
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      */
     protected function _filterBillFailedLater($value)
@@ -1621,31 +1635,31 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Filter for 'BILLINGPERIOD' and 'TRIALBILLINGPERIOD'
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      */
     protected function _filterPeriodUnit($value)
     {
         switch ($value) {
-            case 'day':
-                return 'Day';
-            case 'week':
-                return 'Week';
-            case 'semi_month':
-                return 'SemiMonth';
-            case 'month':
-                return 'Month';
-            case 'year':
-                return 'Year';
-            default:
-                break;
+        case 'day':
+            return 'Day';
+        case 'week':
+            return 'Week';
+        case 'semi_month':
+            return 'SemiMonth';
+        case 'month':
+            return 'Month';
+        case 'year':
+            return 'Year';
+        default:
+            break;
         }
     }
 
     /**
      * Filter for 'FAILEDINITAMTACTION'
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      */
     protected function _filterInitialAmountMayFail($value)
@@ -1656,77 +1670,77 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Filter for billing agreement status
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      */
     protected function _filterBillingAgreementStatus($value)
     {
         switch ($value) {
-            case 'canceled':
-                return 'Canceled';
-            case 'active':
-                return 'Active';
-            default:
-                break;
+        case 'canceled':
+            return 'Canceled';
+        case 'active':
+            return 'Active';
+        default:
+            break;
         }
     }
 
     /**
      * Convert payment status from NVP format to paypal/info model format
      *
-     * @param string $value
-     * @return string|null
+     * @param                                        string $value
+     * @return                                       string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _filterPaymentStatusFromNvpToInfo($value)
     {
         switch ($value) {
-            case 'None':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_NONE;
-            case 'Completed':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_COMPLETED;
-            case 'Denied':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_DENIED;
-            case 'Expired':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_EXPIRED;
-            case 'Failed':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_FAILED;
-            case 'In-Progress':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_INPROGRESS;
-            case 'Pending':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_PENDING;
-            case 'Refunded':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_REFUNDED;
-            case 'Partially-Refunded':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_REFUNDEDPART;
-            case 'Reversed':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVERSED;
-            case 'Canceled-Reversal':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_UNREVERSED;
-            case 'Processed':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_PROCESSED;
-            case 'Voided':
-                return \Magento\Paypal\Model\Info::PAYMENTSTATUS_VOIDED;
-            default:
-                break;
+        case 'None':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_NONE;
+        case 'Completed':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_COMPLETED;
+        case 'Denied':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_DENIED;
+        case 'Expired':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_EXPIRED;
+        case 'Failed':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_FAILED;
+        case 'In-Progress':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_INPROGRESS;
+        case 'Pending':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_PENDING;
+        case 'Refunded':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_REFUNDED;
+        case 'Partially-Refunded':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_REFUNDEDPART;
+        case 'Reversed':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVERSED;
+        case 'Canceled-Reversal':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_UNREVERSED;
+        case 'Processed':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_PROCESSED;
+        case 'Voided':
+            return \Magento\Paypal\Model\Info::PAYMENTSTATUS_VOIDED;
+        default:
+            break;
         }
     }
 
     /**
      * Convert payment review action to NVP-compatible value
      *
-     * @param string $value
+     * @param  string $value
      * @return string|null
      */
     protected function _filterPaymentReviewAction($value)
     {
         switch ($value) {
-            case \Magento\Paypal\Model\Pro::PAYMENT_REVIEW_ACCEPT:
-                return 'Accept';
-            case \Magento\Paypal\Model\Pro::PAYMENT_REVIEW_DENY:
-                return 'Deny';
-            default:
-                break;
+        case \Magento\Paypal\Model\Pro::PAYMENT_REVIEW_ACCEPT:
+            return 'Accept';
+        case \Magento\Paypal\Model\Pro::PAYMENT_REVIEW_DENY:
+            return 'Deny';
+        default:
+            break;
         }
     }
 
@@ -1743,7 +1757,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Return each call request without unused fields in case of Express Checkout Unilateral payments
      *
-     * @param string $methodName Current method name
+     * @param  string $methodName Current method name
      * @return array
      */
     protected function _prepareEachCallRequest($methodName)
@@ -1762,7 +1776,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Check the EC request against unilateral payments mode and remove the SUBJECT if needed
      *
-     * @param &array $requestFields
+     * @param  &array $requestFields
      * @return void
      */
     protected function _prepareExpressCheckoutCallRequest(&$requestFields)

@@ -46,6 +46,7 @@ class Checkout
     /**
      * Flag which says that was used PayPal Express Checkout button for checkout
      * Uses additional_information as storage
+     *
      * @var string
      */
     const PAYMENT_INFO_BUTTON = 'button';
@@ -273,32 +274,32 @@ class Checkout
     protected $totalsCollector;
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Checkout\Helper\Data $checkoutData
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Paypal\Model\Info $paypalInfo
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\UrlInterface $coreUrl
-     * @param \Magento\Paypal\Model\CartFactory $cartFactory
-     * @param \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory
-     * @param \Magento\Quote\Api\CartManagementInterface $quoteManagement
-     * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
-     * @param \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory
-     * @param DataObject\Copy $objectCopyService
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param AccountManagement $accountManagement
-     * @param OrderSender $orderSender
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
-     * @param array $params
-     * @throws \Exception
+     * @param                                          \Psr\Log\LoggerInterface                          $logger
+     * @param                                          \Magento\Customer\Model\Url                       $customerUrl
+     * @param                                          \Magento\Tax\Helper\Data                          $taxData
+     * @param                                          \Magento\Checkout\Helper\Data                     $checkoutData
+     * @param                                          \Magento\Customer\Model\Session                   $customerSession
+     * @param                                          \Magento\Framework\App\Cache\Type\Config          $configCacheType
+     * @param                                          \Magento\Framework\Locale\ResolverInterface       $localeResolver
+     * @param                                          \Magento\Paypal\Model\Info                        $paypalInfo
+     * @param                                          \Magento\Store\Model\StoreManagerInterface        $storeManager
+     * @param                                          \Magento\Framework\UrlInterface                   $coreUrl
+     * @param                                          \Magento\Paypal\Model\CartFactory                 $cartFactory
+     * @param                                          \Magento\Checkout\Model\Type\OnepageFactory       $onepageFactory
+     * @param                                          \Magento\Quote\Api\CartManagementInterface        $quoteManagement
+     * @param                                          \Magento\Paypal\Model\Billing\AgreementFactory    $agreementFactory
+     * @param                                          \Magento\Paypal\Model\Api\Type\Factory            $apiTypeFactory
+     * @param                                          DataObject\Copy                                   $objectCopyService
+     * @param                                          \Magento\Checkout\Model\Session                   $checkoutSession
+     * @param                                          \Magento\Framework\Encryption\EncryptorInterface  $encryptor
+     * @param                                          \Magento\Framework\Message\ManagerInterface       $messageManager
+     * @param                                          \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param                                          AccountManagement                                 $accountManagement
+     * @param                                          OrderSender                                       $orderSender
+     * @param                                          \Magento\Quote\Api\CartRepositoryInterface        $quoteRepository
+     * @param                                          \Magento\Quote\Model\Quote\TotalsCollector        $totalsCollector
+     * @param                                          array                                             $params
+     * @throws                                         \Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -406,9 +407,9 @@ class Checkout
     /**
      * Setter that enables giropay redirects flow
      *
-     * @param string $successUrl - payment success result
-     * @param string $cancelUrl  - payment cancellation result
-     * @param string $pendingUrl - pending payment result
+     * @param  string $successUrl - payment success result
+     * @param  string $cancelUrl  - payment cancellation result
+     * @param  string $pendingUrl - pending payment result
      * @return $this
      */
     public function prepareGiropayUrls($successUrl, $cancelUrl, $pendingUrl)
@@ -420,7 +421,7 @@ class Checkout
     /**
      * Set create billing agreement flag
      *
-     * @param bool $flag
+     * @param  bool $flag
      * @return $this
      */
     public function setIsBillingAgreementRequested($flag)
@@ -432,7 +433,7 @@ class Checkout
     /**
      * Set flag that forces to use BillMeLater
      *
-     * @param bool $isBml
+     * @param  bool $isBml
      * @return $this
      */
     public function setIsBml($isBml)
@@ -444,7 +445,7 @@ class Checkout
     /**
      * Setter for customer
      *
-     * @param CustomerDataObject $customerData
+     * @param  CustomerDataObject $customerData
      * @return $this
      */
     public function setCustomerData(CustomerDataObject $customerData)
@@ -457,9 +458,9 @@ class Checkout
     /**
      * Setter for customer with billing and shipping address changing ability
      *
-     * @param CustomerDataObject $customerData
-     * @param Address|null $billingAddress
-     * @param Address|null $shippingAddress
+     * @param  CustomerDataObject $customerData
+     * @param  Address|null       $billingAddress
+     * @param  Address|null       $shippingAddress
      * @return $this
      */
     public function setCustomerWithAddressChange(
@@ -475,11 +476,11 @@ class Checkout
     /**
      * Reserve order ID for specified quote and start checkout on PayPal
      *
-     * @param string $returnUrl
-     * @param string $cancelUrl
-     * @param bool|null $button
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         string    $returnUrl
+     * @param                                         string    $cancelUrl
+     * @param                                         bool|null $button
+     * @return                                        string
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -535,8 +536,7 @@ class Checkout
         // suppress or export shipping address
         $address = null;
         if ($this->_quote->getIsVirtual()) {
-            if ($this->_config->getValue('requireBillingAddress')
-                == PaypalConfig::REQUIRE_BILLING_ADDRESS_VIRTUAL
+            if ($this->_config->getValue('requireBillingAddress')== PaypalConfig::REQUIRE_BILLING_ADDRESS_VIRTUAL
             ) {
                 $this->_getApi()->setRequireBillingAddress(1);
             }
@@ -557,7 +557,9 @@ class Checkout
             $this->_quote->getPayment()->save();
         }
 
-        /** @var $cart \Magento\Payment\Model\Cart */
+        /**
+ * @var $cart \Magento\Payment\Model\Cart 
+*/
         $cart = $this->_cartFactory->create(['salesModel' => $this->_quote]);
 
         $this->_getApi()->setPaypalCart($cart);
@@ -606,9 +608,9 @@ class Checkout
      * Rewrite billing address by paypal, save old billing address for new customer, and
      * export shipping address in case address absence
      *
-     * @param string $token
-     * @param string|null $payerIdentifier
-     * @return void
+     * @param                                        string      $token
+     * @param                                        string|null $payerIdentifier
+     * @return                                       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -692,9 +694,9 @@ class Checkout
     /**
      * Check whether order review has enough data to initialize
      *
-     * @param string|null $token
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         string|null $token
+     * @return                                        void
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareOrderReview($token = null)
@@ -717,7 +719,7 @@ class Checkout
     /**
      * Return callback response with shipping options
      *
-     * @param array $request
+     * @param  array $request
      * @return string
      * @throws \Exception
      */
@@ -755,7 +757,7 @@ class Checkout
     /**
      * Set shipping method to quote, if needed
      *
-     * @param string $methodCode
+     * @param  string $methodCode
      * @return void
      */
     public function updateShippingMethod($methodCode)
@@ -780,9 +782,9 @@ class Checkout
     /**
      * Place the order when customer returned from PayPal until this moment all quote data must be valid.
      *
-     * @param string $token
-     * @param string|null $shippingMethodCode
-     * @return void
+     * @param                                        string      $token
+     * @param                                        string|null $shippingMethodCode
+     * @return                                       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -811,24 +813,24 @@ class Checkout
 
         switch ($order->getState()) {
             // even after placement paypal can disallow to authorize/capture, but will wait until bank transfers money
-            case \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT:
-                // TODO
-                break;
+        case \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT:
+            // TODO
+            break;
                 // regular placement, when everything is ok
-            case \Magento\Sales\Model\Order::STATE_PROCESSING:
-            case \Magento\Sales\Model\Order::STATE_COMPLETE:
-            case \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW:
-                try {
-                    if (!$order->getEmailSent()) {
-                        $this->orderSender->send($order);
-                    }
-                } catch (\Exception $e) {
-                    $this->_logger->critical($e);
+        case \Magento\Sales\Model\Order::STATE_PROCESSING:
+        case \Magento\Sales\Model\Order::STATE_COMPLETE:
+        case \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW:
+            try {
+                if (!$order->getEmailSent()) {
+                    $this->orderSender->send($order);
                 }
-                $this->_checkoutSession->start();
-                break;
-            default:
-                break;
+            } catch (\Exception $e) {
+                $this->_logger->critical($e);
+            }
+            $this->_checkoutSession->start();
+            break;
+        default:
+            break;
         }
         $this->_order = $order;
     }
@@ -904,8 +906,8 @@ class Checkout
     /**
      * Sets address data from exported address
      *
-     * @param Address $address
-     * @param array $exportedAddress
+     * @param  Address $address
+     * @param  array   $exportedAddress
      * @return void
      */
     protected function _setExportedAddressData($address, $exportedAddress)
@@ -964,10 +966,10 @@ class Checkout
      * Returns empty array if it was impossible to obtain any shipping rate and
      * if there are shipping rates obtained, the method must return one of them as default.
      *
-     * @param Address $address
-     * @param bool $mayReturnEmpty
-     * @param bool $calculateTax
-     * @return array|false
+     * @param                                        Address $address
+     * @param                                        bool    $mayReturnEmpty
+     * @param                                        bool    $calculateTax
+     * @return                                       array|false
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -1047,9 +1049,9 @@ class Checkout
      *
      * This function is used as a callback comparison function in shipping options sorting process
      *
-     * @see self::_prepareShippingOptions()
-     * @param \Magento\Framework\DataObject $option1
-     * @param \Magento\Framework\DataObject $option2
+     * @see    self::_prepareShippingOptions()
+     * @param  \Magento\Framework\DataObject $option1
+     * @param  \Magento\Framework\DataObject $option2
      * @return int
      */
     protected static function cmpShippingOptions(DataObject $option1, DataObject $option2)
@@ -1064,8 +1066,8 @@ class Checkout
      * If in future the issue is fixed, we don't need to attempt to match it. It would be enough to set the method code
      * before collecting shipping rates
      *
-     * @param Address $address
-     * @param string $selectedCode
+     * @param  Address $address
+     * @param  string  $selectedCode
      * @return string
      */
     protected function _matchShippingMethodCode(Address $address, $selectedCode)
@@ -1087,8 +1089,8 @@ class Checkout
     /**
      * Create payment redirect url
      *
-     * @param bool|null $button
-     * @param string $token
+     * @param  bool|null $button
+     * @param  string    $token
      * @return void
      */
     protected function _setRedirectUrl($button, $token)
@@ -1111,8 +1113,8 @@ class Checkout
     /**
      * Set shipping options to api
      *
-     * @param \Magento\Paypal\Model\Cart $cart
-     * @param \Magento\Quote\Model\Quote\Address|null $address
+     * @param  \Magento\Paypal\Model\Cart              $cart
+     * @param  \Magento\Quote\Model\Quote\Address|null $address
      * @return void
      */
     private function setShippingOptions(PaypalCart $cart, Address $address = null)

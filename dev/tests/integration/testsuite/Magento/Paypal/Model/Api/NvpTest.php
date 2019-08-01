@@ -145,8 +145,8 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         );
 
         $httpQuery = 'TRANSACTIONID=fooTransactionId&REFUNDTYPE=Partial'
-            .'&CURRENCYCODE=USD&AMT=145.98&METHOD=RefundTransaction'
-            .'&VERSION=72.0&BUTTONSOURCE=Magento_Cart_';
+            . '&CURRENCYCODE=USD&AMT=145.98&METHOD=RefundTransaction'
+            . '&VERSION=72.0&BUTTONSOURCE=Magento_Cart_';
 
         $this->httpClient->expects($this->once())->method('write')
             ->with(
