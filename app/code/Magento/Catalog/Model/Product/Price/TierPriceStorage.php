@@ -218,10 +218,10 @@ class TierPriceStorage implements TierPriceStorageInterface
         $affectedIds = [];
 
         foreach ($this->productIdLocator->retrieveProductIdsBySkus($skus) as $productId) {
-            $affectedIds = array_merge($affectedIds, array_keys($productId));
+            $affectedIds[] = array_keys($productId);
         }
 
-        return array_unique($affectedIds);
+        return array_unique(array_merge(...$affectedIds));
     }
 
     /**
