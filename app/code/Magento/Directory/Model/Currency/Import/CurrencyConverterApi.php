@@ -176,7 +176,7 @@ class CurrencyConverterApi extends AbstractImport
                 'GET'
             )->getBody();
 
-            $response = json_decode($jsonResponse, true);
+            $response = json_decode($jsonResponse, true) ?: [];
         } catch (Exception $e) {
             if ($retry == 0) {
                 $response = $this->getServiceResponse($url, 1);
