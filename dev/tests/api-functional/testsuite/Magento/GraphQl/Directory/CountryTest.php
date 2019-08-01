@@ -71,4 +71,25 @@ QUERY;
 
         $this->graphQlQuery($query);
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage GraphQL response contains errors: "Country id" should be specified.
+     */
+    public function testMissedInputParameterException()
+    {
+        $query = <<<QUERY
+{
+  country {
+    available_regions {
+      code
+      id
+      name
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlQuery($query);
+    }
 }
