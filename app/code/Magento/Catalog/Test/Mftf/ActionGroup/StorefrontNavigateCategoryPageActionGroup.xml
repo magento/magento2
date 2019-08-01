@@ -6,11 +6,12 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Navigates storefront category page -->
     <actionGroup name="StorefrontNavigateCategoryPageActionGroup">
         <arguments>
             <argument name="category"/>
         </arguments>
         <!-- Open category page on storefront -->
         <amOnPage url="{{StorefrontCategoryPage.url(category.custom_attributes[url_key])}}" stepKey="navigateStorefrontCategoryPage"/>
-     </actionGroup>
+    </actionGroup>
 </actionGroups>
