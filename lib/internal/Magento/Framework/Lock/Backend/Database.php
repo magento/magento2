@@ -25,7 +25,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * MariaDB does not support negative timeout value to get infinite timeout,
      * so we set 1 week for lock timeout
      */
-    private const MAX_LOCK_TIME = 604800;
+    const MAX_LOCK_TIME = 604800;
 
     /**
      * @var ResourceConnection
