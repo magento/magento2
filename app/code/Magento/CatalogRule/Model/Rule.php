@@ -46,6 +46,7 @@ use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplie
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, IdentityInterface
 {
@@ -652,6 +653,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * Get array with data differences
+     *
      * @param array $array1
      * @param array $array2
      *
@@ -831,6 +833,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
+     * Get from date
+     *
      * @return string
      */
     public function getFromDate()
@@ -839,6 +843,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
+     * Get to date
+     *
      * @return string
      */
     public function getToDate()
