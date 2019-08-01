@@ -173,7 +173,6 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $paymentMethod = 'payflow_advanced';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
-
         $responseData = $this->setPaymentMethodWithInValidUrl($cartId, $paymentMethod);
         $expectedExceptionMessage = "Invalid Url.";
         $this->assertArrayHasKey('errors', $responseData);
