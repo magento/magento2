@@ -134,11 +134,6 @@ define([
 
             field = utils.extend({}, fields.base, field);
 
-            field.__disableTmpl = {
-                label: true,
-                options: true
-            };
-
             return utils.template(field, {
                 record: this,
                 column: column
