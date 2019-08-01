@@ -14,7 +14,7 @@ type Mutation {
 input PaypalExpressTokenInput @doc(description: "Defines the attributes required to receive a payment token for Express Checkout and Payments Standard payment methods.") {
     cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
     code: String! @doc(description:"Payment method code")
-    urls: PaypalExpressUrlsInput! @doc(description:"A set of URLs that PayPal uses to respond to a token request")
+    urls: PaypalExpressUrlsInput! @doc(description:"A set of relative URLs that PayPal uses in response to various actions during the authorization process")
     use_paypal_credit: Boolean @doc(description: "Indicates whether the buyer clicked the PayPal credit button. The default value is false")
     express_button: Boolean @doc(description: "Indicates whether the buyer selected the quick checkout button. The default value is false")
 }
@@ -48,11 +48,11 @@ input PayflowExpressInput @doc(description:"Required input for Payflow Express C
     token: String! @doc(description:"The token returned by the createPaypalExpressToken mutation")
 }
 
-input PaypalExpressUrlsInput @doc(description:"A set of URLs that PayPal uses to respond to a token request. Use this input for Express Checkout and Payments Standard payment methods.") {
-    return_url: String! @doc(description:"The URL of the final review page on your website where the buyer confirms the order and payment")
-    cancel_url: String! @doc(description:"The URL of the original page on your website where the buyer initially chose PayPal as a payment type")
-    success_url: String @doc(description:"The URL to redirect upon success. Not applicable to most PayPal solutions")
-    pending_url: String @doc(description:"The URL to redirect for a pending transactions. Not applicable to most PayPal solutions")
+input PaypalExpressUrlsInput @doc(description:"A set of relative URLs that PayPal will use in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Express Checkout and Payments Standard payment methods.") {
+    return_url: String! @doc(description:"The relative URL of the final confirmation page that PayPal will redirect to upon payment success. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
+    cancel_url: String! @doc(description:"The relative URL of the page that PayPal will redirect to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
+    success_url: String @doc(description:"The relative URL of the order confirmation page that PayPal will redirect to when the payment is successful and additional confirmation is not needed. Not applicable to most PayPal solutions. If the full URL to this page is https://www.example.com/paypal/action/success.html, the relative URL is paypal/action/success.html.")
+    pending_url: String @doc(description:"The relative URL of the page that PayPal will redirect to when the payment has been put on hold for additional review. This condition mostly applies to ACH transactions, and is not applicable to most PayPal solutions. If the full URL to this page is https://www.example.com/paypal/action/success_pending.html, the relative URL is paypal/action/success_pending.html. ")
 }
 
 type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details for Express Checkout and Payments Standard transactions.") {
@@ -60,10 +60,10 @@ type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer t
     edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
 }
 
-input PayflowLinkAdditionalDataInput @doc(description:"Additional data for Payflow Link and Payments Advanced payment methods.") {
-    return_url: String! @doc(description:"The URL that PayPal redirects to upon payment success.")
-    cancel_url: String! @doc(description:"The URL that PayPal redirects to upon payment cancellation.")
-    error_url: String! @doc(description:"The URL that PayPal redirects to upon payment error.")
+input PayflowLinkAdditionalDataInput @doc(description:"A set of relative URLs that PayPal will use in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Payflow Link and Payments Advanced payment methods.") {
+    return_url: String! @doc(description:"The relative URL of the order confirmation page that PayPal will redirect to when the payment is successful and additional confirmation is not needed. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
+    cancel_url: String! @doc(description:"The relative URL of the page that PayPal will redirect to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
+    error_url: String! @doc(description:"The relative URL of the transaction error page that PayPal will redirect to upon payment error. If the full URL to this page is https://www.example.com/paypal/action/error.html, the relative URL is paypal/action/error.html.")
 }
 
 input PayflowLinkTokenInput @doc(description:"Input required to fetch payment token information for Payflow Link and Payments Advanced payment methods.") {
@@ -77,7 +77,7 @@ enum PayflowLinkMode @doc(description:"Mode for payment: TEST or LIVE. Applies t
 
 input PayflowProTokenInput @doc(description:"Input required to fetch payment token information for Payflow Pro and Payments Pro payment methods."){
      cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
-     urls: PayflowProUrlInput! @doc(description:"URL that PayPal uses for callback.")
+     urls: PayflowProUrlInput! @doc(description:"A set of relative URLs that PayPal uses for callback.")
 }
 
 input PayflowProInput @doc(description:"Required input for Payflow Pro and Payments Pro payment methods.") {
@@ -91,10 +91,10 @@ input CreditCardDetailsInput @doc(description:"Required fields for Payflow Pro a
     cc_last_4: Int! @doc(description: "Last 4 digits of the credit card")
 }
 
-input PayflowProUrlInput @doc(description:"A set of URLs that PayPal uses to respond to a token request. Use this input for Payflow Pro and Payment Pro payment methods.") {
-    return_url: String! @doc(description:"The URL that PayPal redirects to upon payment success.")
-    cancel_url: String! @doc(description:"The URL that PayPal redirects to upon payment cancellation.")
-    error_url: String! @doc(description:"The URL that PayPal redirects to upon payment error.")
+input PayflowProUrlInput @doc(description:"A set of relative URLs that PayPal will use in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Payflow Pro and Payment Pro payment methods.") {
+    return_url: String! @doc(description:"The relative URL of the final confirmation page that PayPal will redirect to upon payment success. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
+    cancel_url: String! @doc(description:"The relative URL of the page that PayPal will redirect to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
+    error_url: String! @doc(description:"The relative URL of the transaction error page that PayPal will redirect to upon payment error. If the full URL to this page is https://www.example.com/paypal/action/error.html, the relative URL is paypal/action/error.html.")
 }
 
 type PayflowProToken @doc(description: "Contains the secure information used to authorize transaction. Applies to Payflow Pro and Payments Pro payment methods.") {
