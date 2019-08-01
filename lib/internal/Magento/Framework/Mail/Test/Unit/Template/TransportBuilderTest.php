@@ -60,6 +60,10 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Mail\EmailMessageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $emailMessageMock;
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject
+     */
+    private $mimePartFactoryMock;
 
     /**
      * @return void

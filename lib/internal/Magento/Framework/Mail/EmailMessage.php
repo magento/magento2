@@ -81,19 +81,19 @@ class EmailMessage implements EmailMessageInterface
             throw new MailException(__('Email message must have at list one addressee'));
         }
         $this->message->setTo(
-            $this->convertMailAddressArrayToZendAddressList($to)
+            $this->convertAddressArrayToAddressList($to)
         );
         $this->message->setReplyTo(
-            $this->convertMailAddressArrayToZendAddressList($replyTo)
+            $this->convertAddressArrayToAddressList($replyTo)
         );
         $this->message->setFrom(
-            $this->convertMailAddressArrayToZendAddressList($from)
+            $this->convertAddressArrayToAddressList($from)
         );
         $this->message->setCc(
-            $this->convertMailAddressArrayToZendAddressList($cc)
+            $this->convertAddressArrayToAddressList($cc)
         );
         $this->message->setBcc(
-            $this->convertMailAddressArrayToZendAddressList($bcc)
+            $this->convertAddressArrayToAddressList($bcc)
         );
         $this->mimeMessageFactory = $mimeMessageFactory;
         $this->addressFactory = $addressFactory;
@@ -120,7 +120,7 @@ class EmailMessage implements EmailMessageInterface
      */
     public function getFrom(): ?array
     {
-        return $this->convertAddressListToMailAddressList($this->message->getFrom());
+        return $this->convertAddressListToAddressArray($this->message->getFrom());
     }
 
     /**
@@ -128,7 +128,7 @@ class EmailMessage implements EmailMessageInterface
      */
     public function getTo(): array
     {
-        return $this->convertAddressListToMailAddressList($this->message->getTo());
+        return $this->convertAddressListToAddressArray($this->message->getTo());
     }
 
     /**
@@ -136,7 +136,7 @@ class EmailMessage implements EmailMessageInterface
      */
     public function getCc(): ?array
     {
-        return $this->convertAddressListToMailAddressList($this->message->getCc());
+        return $this->convertAddressListToAddressArray($this->message->getCc());
     }
 
     /**
@@ -144,7 +144,7 @@ class EmailMessage implements EmailMessageInterface
      */
     public function getBcc(): ?array
     {
-        return $this->convertAddressListToMailAddressList($this->message->getBcc());
+        return $this->convertAddressListToAddressArray($this->message->getBcc());
     }
 
     /**
@@ -152,7 +152,7 @@ class EmailMessage implements EmailMessageInterface
      */
     public function getReplyTo(): ?array
     {
-        return $this->convertAddressListToMailAddressList($this->message->getReplyTo());
+        return $this->convertAddressListToAddressArray($this->message->getReplyTo());
     }
 
     /**
@@ -221,7 +221,7 @@ class EmailMessage implements EmailMessageInterface
      * @param AddressList $addressList
      * @return Address[]
      */
-    private function convertAddressListToMailAddressList(AddressList $addressList): array
+    private function convertAddressListToAddressArray(AddressList $addressList): array
     {
         $arrayList = [];
         foreach ($addressList as $address) {
@@ -243,7 +243,7 @@ class EmailMessage implements EmailMessageInterface
      * @param Address[] $arrayList
      * @return AddressList
      */
-    private function convertMailAddressArrayToZendAddressList(array $arrayList): AddressList
+    private function convertAddressArrayToAddressList(array $arrayList): AddressList
     {
         $zendAddressList = new AddressList();
         foreach ($arrayList as $address) {

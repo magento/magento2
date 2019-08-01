@@ -119,7 +119,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      */
     public function addCc($address, $name = '')
     {
-        $this->getMailAddresses('cc', $address, $name);
+        $this->addAddressByType('cc', $address, $name);
 
         return $this;
     }
@@ -135,7 +135,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      */
     public function addTo($address, $name = '')
     {
-        $this->getMailAddresses('to', $address, $name);
+        $this->addAddressByType('to', $address, $name);
 
         return $this;
     }
@@ -150,7 +150,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      */
     public function addBcc($address)
     {
-        $this->getMailAddresses('bcc', $address);
+        $this->addAddressByType('bcc', $address);
 
         return $this;
     }
@@ -167,7 +167,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
     public function setReplyTo($email, $name = null)
     {
 
-        $this->getMailAddresses('replyTo', $email, $name);
+        $this->addAddressByType('replyTo', $email, $name);
 
         return $this;
     }
@@ -201,7 +201,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
     public function setFromByScope($from, $scopeId = null)
     {
         $result = $this->_senderResolver->resolve($from, $scopeId);
-        $this->getMailAddresses('from', $result['email'], $result['name']);
+        $this->addAddressByType('from', $result['email'], $result['name']);
 
         return $this;
     }
@@ -273,22 +273,22 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
      * Handles possible incoming types of email (string or array)
      *
      * @param string $addressType
-     * @param string|array $emailOrList
+     * @param string|array $email
      * @param string|null $name
      *
      * @return void
      * @throws MailException
      */
-    private function getMailAddresses(string $addressType, $emailOrList, ?string $name = null): void
+    private function addAddressByType(string $addressType, $email, ?string $name = null): void
     {
-        if (is_array($emailOrList)) {
+        if (is_array($email)) {
             $this->messageData[$addressType] = array_merge(
                 $this->messageData[$addressType],
-                $this->addressConverter->convertMany($emailOrList)
+                $this->addressConverter->convertMany($email)
             );
 
             return;
         }
-        $this->messageData[$addressType][] = $this->addressConverter->convert($emailOrList, $name);
+        $this->messageData[$addressType][] = $this->addressConverter->convert($email, $name);
     }
 }

@@ -1,13 +1,7 @@
 <?php
 /**
- * Copyright (c) 2019 TechDivision GmbH
- * All rights reserved
- *
- * This product includes proprietary software developed at TechDivision GmbH, Germany
- * For more information see https://www.techdivision.com/
- *
- * To obtain a valid license for using this software please contact us at
- * license@techdivision.com
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 

@@ -57,7 +57,7 @@ class MimePart implements MimePartInterface
     ) {
         try {
             $this->mimePart = new ZendMimePart($content);
-        } catch (\Zend\Mime\Exception\InvalidArgumentException $e) {
+        } catch (\Exception $e) {
             throw new MailException(__($e->getMessage()));
         }
         $this->mimePart->setType($type);
