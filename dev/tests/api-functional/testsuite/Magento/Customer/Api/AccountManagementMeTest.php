@@ -252,7 +252,6 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         } catch (\Exception $e) {
             $this->fail('Customer is not activated.');
         }
-
     }
 
     /**
