@@ -82,19 +82,19 @@ class EmailMessage implements EmailMessageInterface
         if (count($to) < 1) {
             throw new MailException(__('Email message must have at list one addressee'));
         }
-        if ($sender) {
+        if ($to) {
             $this->message->setTo($this->convertAddressArrayToAddressList($to));
         }
-        if ($sender) {
+        if ($replyTo) {
             $this->message->setReplyTo($this->convertAddressArrayToAddressList($replyTo));
         }
-        if ($sender) {
-            $this->message->setFrom($this->convertAddressArrayToAddressList($from));
+        if ($replyTo) {
+            $this->message->setFrom($this->convertAddressArrayToAddressList($replyTo));
         }
-        if ($sender) {
+        if ($cc) {
             $this->message->setCc($this->convertAddressArrayToAddressList($cc));
         }
-        if ($sender) {
+        if ($bcc) {
             $this->message->setBcc($this->convertAddressArrayToAddressList($bcc));
         }
         $this->mimeMessageFactory = $mimeMessageFactory;
