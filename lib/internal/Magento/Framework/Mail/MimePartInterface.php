@@ -120,7 +120,7 @@ interface MimePartInterface
      *
      * @return array
      */
-    public function getHeadersAsArray($endOfLine = MimeInterface::LINE_END): array;
+    public function getHeadersArray($endOfLine = MimeInterface::LINE_END): array;
 
     /**
      * Create and return the array of headers for this MIME part

@@ -204,7 +204,7 @@ class MimePart implements MimePartInterface
     /**
      * @inheritDoc
      */
-    public function getHeadersAsArray($endOfLine = MimeInterface::LINE_END): array
+    public function getHeadersArray($endOfLine = MimeInterface::LINE_END): array
     {
         return $this->mimePart->getHeadersArray($endOfLine);
     }

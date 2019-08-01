@@ -80,21 +80,21 @@ class EmailMessage implements EmailMessageInterface
         if (count($to) < 1) {
             throw new MailException(__('Email message must have at list one addressee'));
         }
-        $this->message->setTo(
-            $this->convertAddressArrayToAddressList($to)
-        );
-        $this->message->setReplyTo(
-            $this->convertAddressArrayToAddressList($replyTo)
-        );
-        $this->message->setFrom(
-            $this->convertAddressArrayToAddressList($from)
-        );
-        $this->message->setCc(
-            $this->convertAddressArrayToAddressList($cc)
-        );
-        $this->message->setBcc(
-            $this->convertAddressArrayToAddressList($bcc)
-        );
+        if ($sender) {
+            $this->message->setTo($this->convertAddressArrayToAddressList($to));
+        }
+        if ($sender) {
+            $this->message->setReplyTo($this->convertAddressArrayToAddressList($replyTo));
+        }
+        if ($sender) {
+            $this->message->setFrom($this->convertAddressArrayToAddressList($from));
+        }
+        if ($sender) {
+            $this->message->setCc($this->convertAddressArrayToAddressList($cc));
+        }
+        if ($sender) {
+            $this->message->setBcc($this->convertAddressArrayToAddressList($bcc));
+        }
         $this->mimeMessageFactory = $mimeMessageFactory;
         $this->addressFactory = $addressFactory;
     }
