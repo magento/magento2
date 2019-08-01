@@ -416,14 +416,16 @@ class TransportBuilder
      */
     private function addAddressByType(string $addressType, $email, ?string $name = null): void
     {
-        if (is_array($email)) {
-            $this->messageData[$addressType] = array_merge(
-                $this->messageData[$addressType],
-                $this->addressConverter->convertMany($email)
-            );
-
+        if (is_string($email)) {
+            $this->messageData[$addressType][] = $this->addressConverter->convert($email, $name);
             return;
         }
-        $this->messageData[$addressType][] = $this->addressConverter->convert($email, $name);
+        $convertedAddressArray = $this->addressConverter->convertMany($email);
+        if (isset($this->messageData[$addressType])) {
+            $this->messageData[$addressType] = array_merge(
+                $this->messageData[$addressType],
+                $convertedAddressArray
+            );
+        }
     }
 }
