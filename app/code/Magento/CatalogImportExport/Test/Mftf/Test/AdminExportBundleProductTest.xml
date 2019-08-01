@@ -18,9 +18,6 @@
             <testCaseId value="MC-14008"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-15934"/>
-            </skip>
         </annotations>
         <before>
             <!--Create bundle product with dynamic price with two simple products -->
