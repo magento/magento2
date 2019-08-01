@@ -14,6 +14,9 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Url\ScopeResolverInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @codeCoverageIgnore
@@ -29,6 +32,11 @@ class UpgradeData implements UpgradeDataInterface
      * @var ScopeResolverInterface
      */
     private $scopeResolver;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @var DomainManager
@@ -55,11 +63,13 @@ class UpgradeData implements UpgradeDataInterface
     public function __construct(
         EavSetupFactory $eavSetupFactory,
         UriHandler $uriHandler,
+        ScopeConfigInterface $scopeConfig,
         ScopeResolverInterface $scopeResolver,
         DomainManager $domainManager
     ) {
         $this->eavSetupFactory = $eavSetupFactory;
         $this->uriHandler = $uriHandler;
+        $this->scopeConfig = $scopeConfig;
         $this->scopeResolver = $scopeResolver;
         $this->domainManager = $domainManager;
     }
@@ -92,6 +102,19 @@ class UpgradeData implements UpgradeDataInterface
 
     private function addDownloadableHostsToConfig(ModuleDataSetupInterface $setup)
     {
+        foreach ($this->scopeResolver->getScopes() as $scope) {
+            $this->addHost($scope->getBaseUrl());
+        }
+
+        $customAdminUrl = $this->scopeConfig->getValue(
+            FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        if ($customAdminUrl) {
+            $this->addHost($customAdminUrl);
+        }
+
         if ($setup->tableExists('downloadable_link')) {
             $select = $setup->getConnection()
                 ->select()
