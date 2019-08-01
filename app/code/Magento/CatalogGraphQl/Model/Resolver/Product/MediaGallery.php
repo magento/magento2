@@ -49,14 +49,12 @@ class MediaGallery implements ResolverInterface
         $product = $value['model'];
 
         $mediaGalleryEntries = [];
-        if (!empty($product->getMediaGalleryEntries())) {
-            foreach ($product->getMediaGalleryEntries() as $key => $entry) {
-                $mediaGalleryEntries[$key] = $entry->getData();
-                $mediaGalleryEntries[$key]['model'] = $product;
-                if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
-                    $mediaGalleryEntries[$key]['video_content']
-                        = $entry->getExtensionAttributes()->getVideoContent()->getData();
-                }
+        foreach ($product->getMediaGalleryEntries() ?? [] as $key => $entry) {
+            $mediaGalleryEntries[$key] = $entry->getData();
+            $mediaGalleryEntries[$key]['model'] = $product;
+            if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
+                $mediaGalleryEntries[$key]['video_content']
+                    = $entry->getExtensionAttributes()->getVideoContent()->getData();
             }
         }
         return $mediaGalleryEntries;

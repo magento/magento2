@@ -13,9 +13,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Store\Model\Store;
 
 /**
- * Returns media label
+ * Return media label
  */
 class Label implements ResolverInterface
 {
@@ -55,13 +56,15 @@ class Label implements ResolverInterface
         /** @var Product $product */
         $product = $value['model'];
         $productId = (int)$product->getEntityId();
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        /** @var Store $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        $storeId = (int)$store->getId();
         if (!isset($value['image_type'])) {
             return $this->getAttributeValue($productId, 'name', $storeId);
         }
         $imageType = $value['image_type'];
         $imageLabel = $this->getAttributeValue($productId, $imageType . '_label', $storeId);
-        if (null === $imageLabel) {
+        if ($imageLabel == null) {
             $imageLabel = $this->getAttributeValue($productId, 'name', $storeId);
         }
 

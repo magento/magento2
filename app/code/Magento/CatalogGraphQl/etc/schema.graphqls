@@ -185,9 +185,9 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
     image_size_y: Int @doc(description: "The maximum height of an image.")
 }
 
-interface MediaGalleryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\MediaGalleryTypeResolver") {
-    url: String @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Url")
-    label: String @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Label")
+interface MediaGalleryInterface @doc(description: "Contains basic information about a product image or video.") @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\MediaGalleryTypeResolver") {
+    url: String @doc(description: "The URL of the product image or video.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Url")
+    label: String @doc(description: "The label of the product image or video.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Label")
 }
 
 type ProductImage implements MediaGalleryInterface @doc(description: "Product image information. Contains the image URL and label.") {
@@ -419,5 +419,5 @@ type StoreConfig @doc(description: "The type contains information about a store 
 }
 
 type ProductVideo @doc(description: "Contains information about a product video.") implements MediaGalleryInterface {
-    video_content: ProductMediaGalleryEntriesVideoContent @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductVideo")
+    video_content: ProductMediaGalleryEntriesVideoContent @doc(description: "Contains a ProductMediaGalleryEntriesVideoContent object.")
 }
