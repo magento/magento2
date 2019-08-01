@@ -141,19 +141,23 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->errorAggregatorMock = $this->getErrorAggregatorObject([
-            'initValidationStrategy',
-            'getErrorsCount',
-        ]);
+        $this->errorAggregatorMock = $this->getErrorAggregatorObject(
+            [
+                'initValidationStrategy',
+                'getErrorsCount',
+            ]
+        );
         $this->_entityAdapter = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'importData',
-                '_saveValidatedBunches',
-                'getErrorAggregator',
-                'setSource',
-                'validateData',
-            ])
+            ->setMethods(
+                [
+                    'importData',
+                    '_saveValidatedBunches',
+                    'getErrorAggregator',
+                    'setSource',
+                    'validateData',
+                ]
+            )
             ->getMockForAbstractClass();
         $this->_entityAdapter->method('getErrorAggregator')
             ->willReturn($this->errorAggregatorMock);
@@ -201,33 +205,37 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->method('getDriver')
             ->willReturn($this->_driver);
         $this->import = $this->getMockBuilder(\Magento\ImportExport\Model\Import::class)
-            ->setConstructorArgs([
-                $logger,
-                $this->_filesystem,
-                $this->_importExportData,
-                $this->_coreConfig,
-                $this->_importConfig,
-                $this->_entityFactory,
-                $this->_importData,
-                $this->_csvFactory,
-                $this->_httpFactory,
-                $this->_uploaderFactory,
-                $this->_behaviorFactory,
-                $this->indexerRegistry,
-                $this->historyModel,
-                $this->dateTime
-            ])
-            ->setMethods([
-                'getDataSourceModel',
-                'setData',
-                'getData',
-                'getProcessedEntitiesCount',
-                'getProcessedRowsCount',
-                'getEntity',
-                'getBehavior',
-                'isReportEntityType',
-                '_getEntityAdapter'
-            ])
+            ->setConstructorArgs(
+                [
+                    $logger,
+                    $this->_filesystem,
+                    $this->_importExportData,
+                    $this->_coreConfig,
+                    $this->_importConfig,
+                    $this->_entityFactory,
+                    $this->_importData,
+                    $this->_csvFactory,
+                    $this->_httpFactory,
+                    $this->_uploaderFactory,
+                    $this->_behaviorFactory,
+                    $this->indexerRegistry,
+                    $this->historyModel,
+                    $this->dateTime
+                ]
+            )
+            ->setMethods(
+                [
+                    'getDataSourceModel',
+                    'setData',
+                    'getData',
+                    'getProcessedEntitiesCount',
+                    'getProcessedRowsCount',
+                    'getEntity',
+                    'getBehavior',
+                    'isReportEntityType',
+                    '_getEntityAdapter'
+                ]
+            )
             ->getMock();
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
     }
@@ -459,10 +467,12 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
         $this->import->expects($this->any())
             ->method('getData')
-            ->willReturnMap([
-                [Import::FIELD_NAME_VALIDATION_STRATEGY, null, $validationStrategy],
-                [Import::FIELD_NAME_ALLOWED_ERROR_COUNT, null, $allowedErrorCount],
-            ]);
+            ->willReturnMap(
+                [
+                    [Import::FIELD_NAME_VALIDATION_STRATEGY, null, $validationStrategy],
+                    [Import::FIELD_NAME_ALLOWED_ERROR_COUNT, null, $allowedErrorCount],
+                ]
+            );
 
         $this->assertTrue($this->import->validateSource($csvMock));
 
@@ -499,12 +509,16 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->_importConfig->expects($this->atLeastOnce())
             ->method('getRelatedIndexers')
             ->willReturn($indexers);
+        $this->_importConfig->method('getEntities')
+            ->willReturn(['test' => []]);
         $this->indexerRegistry->expects($this->any())
             ->method('get')
-            ->willReturnMap([
-                ['indexer_1', $indexer1],
-                ['indexer_2', $indexer2],
-            ]);
+            ->willReturnMap(
+                [
+                    ['indexer_1', $indexer1],
+                    ['indexer_2', $indexer2],
+                ]
+            );
 
         $import = new Import(
             $logger,
@@ -532,6 +546,8 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->_importConfig->expects($this->once())
             ->method('getRelatedIndexers')
             ->willReturn([]);
+        $this->_importConfig->method('getEntities')
+            ->willReturn(['test' => []]);
 
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
@@ -558,12 +574,78 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->assertSame($import, $import->invalidateIndex());
     }
 
-    /**
-     * @todo to implement it.
-     */
-    public function testGetEntityBehaviors()
+    public function testGetKnownEntity()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->_importConfig->method('getEntities')
+            ->willReturn(['test' => []]);
+
+        $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $import = new Import(
+            $logger,
+            $this->_filesystem,
+            $this->_importExportData,
+            $this->_coreConfig,
+            $this->_importConfig,
+            $this->_entityFactory,
+            $this->_importData,
+            $this->_csvFactory,
+            $this->_httpFactory,
+            $this->_uploaderFactory,
+            $this->_behaviorFactory,
+            $this->indexerRegistry,
+            $this->historyModel,
+            $this->dateTime
+        );
+
+        $import->setEntity('test');
+        $entity = $import->getEntity();
+        self::assertSame('test', $entity);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Entity is unknown
+     * @dataProvider unknownEntitiesProvider
+     */
+    public function testGetUnknownEntity($entity)
+    {
+        $this->_importConfig->method('getEntities')
+            ->willReturn(['test' => []]);
+
+        $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $import = new Import(
+            $logger,
+            $this->_filesystem,
+            $this->_importExportData,
+            $this->_coreConfig,
+            $this->_importConfig,
+            $this->_entityFactory,
+            $this->_importData,
+            $this->_csvFactory,
+            $this->_httpFactory,
+            $this->_uploaderFactory,
+            $this->_behaviorFactory,
+            $this->indexerRegistry,
+            $this->historyModel,
+            $this->dateTime
+        );
+
+        $import->setEntity($entity);
+        $import->getEntity();
+    }
+
+    public function unknownEntitiesProvider()
+    {
+        return [
+            [''],
+            ['foo'],
+        ];
     }
 
     /**
@@ -583,9 +665,9 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         $importMock = $this->getMockBuilder(\Magento\ImportExport\Model\Import::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory'
-            ])
+            ->setMethods(
+                ['getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory']
+            )
             ->getMock();
         $importMock->expects($this->any())->method('_getEntityAdapter')->willReturnSelf();
         $importMock->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
@@ -621,9 +703,9 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         $importMock = $this->getMockBuilder(\Magento\ImportExport\Model\Import::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory'
-            ])
+            ->setMethods(
+                ['getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory']
+            )
             ->getMock();
         $importMock->expects($this->any())->method('_getEntityAdapter')->willReturnSelf();
         $importMock->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
@@ -834,9 +916,11 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->_driver
             ->expects($this->any())
             ->method('fileGetContents')
-            ->willReturnCallback(function () use ($phrase) {
-                throw new \Magento\Framework\Exception\FileSystemException($phrase);
-            });
+            ->willReturnCallback(
+                function () use ($phrase) {
+                    throw new \Magento\Framework\Exception\FileSystemException($phrase);
+                }
+            );
         $this->dateTime
             ->expects($this->once())
             ->method('gmtTimestamp')
