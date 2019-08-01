@@ -6,6 +6,7 @@
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\DiCompileCommand;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -121,18 +122,19 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES)
             ->willReturn(['Magento_Catalog' => 1]);
-        $progressBar = $this->getMockBuilder(
-            \Symfony\Component\Console\Helper\ProgressBar::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $objectManager = new ObjectManager($this);
 
         $this->objectManagerMock->expects($this->once())->method('configure');
         $this->objectManagerMock
             ->expects($this->once())
             ->method('create')
             ->with(\Symfony\Component\Console\Helper\ProgressBar::class)
-            ->willReturn($progressBar);
+            ->willReturnCallback(
+                function ($class, $arguments) use ($objectManager) {
+                    return $objectManager->getObject($class, $arguments);
+                }
+            );
 
         $this->managerMock->expects($this->exactly(7))->method('addOperation')
             ->withConsecutive(
