@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\File\Uploader;
+
 /**
  * Catalog image uploader
  */
@@ -201,7 +203,14 @@ class ImageUploader
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
 
-        $baseImagePath = $this->getFilePath($basePath, $imageName);
+        $baseImagePath = $this->getFilePath(
+            $basePath,
+            Uploader::getNewFileName(
+                $this->mediaDirectory->getAbsolutePath(
+                    $this->getFilePath($basePath, $imageName)
+                )
+            )
+        );
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
 
         try {

@@ -1,17 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Test\Unit\Controller\Product\Compare;
 
 use Magento\Catalog\Controller\Product\Compare\Index;
 
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory;
+use Magento\Catalog\Model\Session;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -28,7 +27,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\Product\Compare\ItemFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $itemFactoryMock;
 
-    /** @var Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $collectionFactoryMock;
 
     /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
@@ -40,7 +39,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\Product\Compare\ListCompare|\PHPUnit_Framework_MockObject_MockObject */
     protected $listCompareMock;
 
-    /** @var \Magento\Catalog\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $catalogSession;
 
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -69,22 +68,31 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->createPartialMock(\Magento\Framework\App\Action\Context::class, ['getRequest', 'getResponse', 'getResultRedirectFactory']);
+        $this->contextMock = $this->createPartialMock(
+            \Magento\Framework\App\Action\Context::class,
+            ['getRequest', 'getResponse', 'getResultRedirectFactory']
+        );
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
-        $this->redirectFactoryMock = $this->createPartialMock(\Magento\Framework\Controller\Result\RedirectFactory::class, ['create']);
+        $this->redirectFactoryMock = $this->createPartialMock(
+            \Magento\Framework\Controller\Result\RedirectFactory::class,
+            ['create']
+        );
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->response);
         $this->contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
             ->willReturn($this->redirectFactoryMock);
 
-        $this->itemFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Compare\ItemFactory::class, ['create']);
-        $this->collectionFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory::class, ['create']);
+        $this->itemFactoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Compare\ItemFactory::class,
+            ['create']
+        );
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->sessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->visitorMock = $this->createMock(\Magento\Customer\Model\Visitor::class);
         $this->listCompareMock = $this->createMock(\Magento\Catalog\Model\Product\Compare\ListCompare::class);
-        $this->catalogSession = $this->createPartialMock(\Magento\Catalog\Model\Session::class, ['setBeforeCompareUrl']);
+        $this->catalogSession = $this->createPartialMock(Session::class, ['setBeforeCompareUrl']);
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->formKeyValidatorMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -300,11 +298,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             'getStores'
         )->with(
             true
-        )->will(
-            $this->returnValue([
+        )->willReturn(
+            [
                 new \Magento\Framework\DataObject(['id' => 0]),
-                new \Magento\Framework\DataObject(['id' => 1]), ]
-            )
+                new \Magento\Framework\DataObject(['id' => 1]),
+            ]
         );
 
         /** @var $resource \Magento\Framework\App\ResourceConnection */
@@ -313,7 +311,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $resource->expects($this->any())->method('getConnection')->with()->will($this->returnValue($connectionMock));
         $eavEntityType = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Type::class);
 
-        $relationProcessorMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class);
+        $relationProcessorMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
+        );
 
         $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($resource);

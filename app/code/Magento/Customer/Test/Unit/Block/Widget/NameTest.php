@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
@@ -213,9 +211,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
          * Added some padding so that the trim() call on Customer::getPrefix() will remove it. Also added
          * special characters so that the escapeHtml() method returns a htmlspecialchars translated value.
          */
-        $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->getMockForAbstractClass();
         $customer->expects($this->once())->method('getPrefix')->willReturn('  <' . self::PREFIX . '>  ');
 
         $this->_block->setObject($customer);
@@ -240,18 +237,13 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPrefixOptionsEmpty()
     {
-        $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
-        $this->_options->expects(
-            $this->once()
-        )->method(
-            'getNamePrefixOptions'
-        )->will(
-            $this->returnValue([])
-        );
+        $this->_options->expects($this->once())
+            ->method('getNamePrefixOptions')
+            ->willReturn([]);
 
         $this->assertEmpty($this->_block->getPrefixOptions());
     }
@@ -262,9 +254,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
          * Added padding and special characters to show that trim() works on Customer::getSuffix() and that
          * a properly htmlspecialchars translated value is returned.
          */
-        $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->getMockForAbstractClass();
         $customer->expects($this->once())->method('getSuffix')->willReturn('  <' . self::SUFFIX . '>  ');
         $this->_block->setObject($customer);
 
@@ -274,13 +265,9 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $expectedOptions = $suffixOptions;
         $expectedOptions[$suffix] = $suffix;
 
-        $this->_options->expects(
-            $this->once()
-        )->method(
-            'getNameSuffixOptions'
-        )->will(
-            $this->returnValue($suffixOptions)
-        );
+        $this->_options->expects($this->once())
+            ->method('getNameSuffixOptions')
+            ->willReturn($suffixOptions);
         $this->_escaper->expects($this->once())->method('escapeHtml')->will($this->returnValue($suffix));
 
         $this->assertSame($expectedOptions, $this->_block->getSuffixOptions());
@@ -288,18 +275,13 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSuffixOptionsEmpty()
     {
-        $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
-        $this->_options->expects(
-            $this->once()
-        )->method(
-            'getNameSuffixOptions'
-        )->will(
-            $this->returnValue([])
-        );
+        $this->_options->expects($this->once())
+            ->method('getNameSuffixOptions')
+            ->willReturn([]);
 
         $this->assertEmpty($this->_block->getSuffixOptions());
     }

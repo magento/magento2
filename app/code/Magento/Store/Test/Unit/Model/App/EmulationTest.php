@@ -1,16 +1,14 @@
 <?php
 /**
- * Tests Magento\Store\Model\App\Emulation
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Test\Unit\Model\App;
 
 /**
+ * Tests Magento\Store\Model\App\Emulation
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmulationTest extends \PHPUnit\Framework\TestCase
@@ -161,7 +159,10 @@ class EmulationTest extends \PHPUnit\Framework\TestCase
             ->method('setCurrentStore')->with(self::NEW_STORE_ID);
 
         // Test
-        $result = $this->model->startEnvironmentEmulation(self::NEW_STORE_ID, \Magento\Framework\App\Area::AREA_FRONTEND);
+        $result = $this->model->startEnvironmentEmulation(
+            self::NEW_STORE_ID,
+            \Magento\Framework\App\Area::AREA_FRONTEND
+        );
         $this->assertNull($result);
     }
 

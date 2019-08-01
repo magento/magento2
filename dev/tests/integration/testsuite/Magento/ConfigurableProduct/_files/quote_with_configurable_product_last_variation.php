@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 require __DIR__ . '/configurable_products.php';
 
 /** @var \Magento\Quote\Model\Quote $quote */
@@ -39,17 +37,12 @@ $request->setData(
     ]
 );
 
-$quote->setStoreId(
-        1
-    )->setIsActive(
-        true
-    )->setIsMultiShipping(
-        false
-    )->setReservedOrderId(
-        'test_order_with_configurable_product'
-    )->setEmail(
-        'store@example.com'
-    )->addProduct(
+$quote->setStoreId(1)
+    ->setIsActive(true)
+    ->setIsMultiShipping(false)
+    ->setReservedOrderId('test_order_with_configurable_product')
+    ->setEmail('store@example.com')
+    ->addProduct(
         $productRepository->get('configurable'),
         $request
     );

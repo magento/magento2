@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
@@ -364,7 +362,8 @@ abstract class AbstractData
                     __("Invalid type given. String expected")
                     __("'%value%' appears to be a DNS hostname but contains a dash in an invalid position")
                     __("'%value%' does not match the expected structure for a DNS hostname")
-                    __("'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'")
+                    __("'%value%' appears to be a DNS hostname but cannot match against hostname schema
+                     * for TLD '%tld%'")
                     __("'%value%' does not appear to be a valid local network name")
                     __("'%value%' does not appear to be a valid URI hostname")
                     __("'%value%' appears to be an IP address but IP addresses are not allowed")
@@ -419,7 +418,8 @@ abstract class AbstractData
                     );
                     $validator->setMessage(
                         __(
-                            "'%value%' looks like a DNS hostname but we cannot match it against the hostname schema for TLD '%tld%'."
+                            "'%value%' looks like a DNS hostname but we cannot match it against the "
+                            . "hostname schema for TLD '%tld%'."
                         ),
                         \Zend_Validate_Hostname::INVALID_HOSTNAME_SCHEMA
                     );

@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 use Magento\Framework\Phrase;
 
 /**
  * @SuppressWarnings(PHPMD)
+ * @codingStandardsIgnoreStart
  */
 class TestPhrases
+//@codingStandardsIgnoreEnd
 {
     public function awesomeFunction()
     {
@@ -38,7 +38,11 @@ class TestPhrases
             new Phrase('first part of concat' . ' second part with one variable placeholder %1', $str1),
             new Phrase('first part of concat' . ' second part with two placeholders %1, %2', $str1, $str2),
             new Phrase('first part of concat' . ' second part' . ' third part with one placeholder %1', 'arg'),
-            new Phrase('first part of concat' . ' second part' . ' third part with two placeholders %1, %2', $str1, $str2),
+            new Phrase(
+                'first part of concat' . ' second part' . ' third part with two placeholders %1, %2',
+                $str1,
+                $str2
+            ),
 
             // Escaped quotes
             new Phrase('string with escaped \'single quotes\''),

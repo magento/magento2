@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 
 use Magento\Framework\Data\AbstractCriteria;
@@ -20,7 +18,8 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
      */
     public function __construct($mapper = '')
     {
-        $this->mapperInterfaceName = $mapper ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper::class;
+        $this->mapperInterfaceName = $mapper
+            ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper::class;
         $this->data['initial_condition'] = true;
     }
 
