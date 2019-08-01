@@ -6,7 +6,12 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Psr\Log\LoggerInterface;
@@ -266,13 +271,10 @@ class Session extends \Magento\Framework\Session\SessionManager
 
             if (!$this->getQuoteId()) {
                 if ($this->_customerSession->isLoggedIn() || $this->_customer) {
-                    $customerId = $this->_customer
-                        ? $this->_customer->getId()
-                        : $this->_customerSession->getCustomerId();
-
-                    $quote = $this->quoteRepository->getForCustomer($customerId);
-                    if ($quote->getIsActive()) {
+                    $quoteByCustomer = $this->getQuoteByCustomer();
+                    if ($quoteByCustomer !== false) {
                         $this->setQuoteId($quote->getId());
+                        $quote = $quoteByCustomer;
                     }
                 } else {
                     $quote->setIsCheckoutCart(true);
@@ -566,5 +568,23 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected function isQuoteMasked()
     {
         return $this->isQuoteMasked;
+    }
+
+    /**
+     * @return CartInterface|false
+     */
+    private function getQuoteByCustomer()
+    {
+        $customerId = $this->_customer
+            ? $this->_customer->getId()
+            : $this->_customerSession->getCustomerId();
+
+        try {
+            $quote = $this->quoteRepository->getActiveForCustomer($customerId);
+        } catch (NoSuchEntityException $e) {
+            $quote = false;
+        }
+
+        return $quote;
     }
 }
