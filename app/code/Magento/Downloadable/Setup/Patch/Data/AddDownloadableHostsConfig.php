@@ -9,7 +9,9 @@ namespace Magento\Downloadable\Setup\Patch\Data;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Zend\Uri\Uri as UriHandler;
 use Magento\Framework\Url\ScopeResolverInterface;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
@@ -80,7 +82,17 @@ class AddDownloadableHostsConfig implements DataPatchInterface
     public function apply()
     {
         foreach ($this->scopeResolver->getScopes() as $scope) {
-            $this->addHost($scope->getBaseUrl());
+            /** @var $scope Store */
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, false));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, true));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, false));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, true));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_DIRECT_LINK, false));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_DIRECT_LINK, true));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, false));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, true));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true));
         }
 
         $customAdminUrl = $this->scopeConfig->getValue(
