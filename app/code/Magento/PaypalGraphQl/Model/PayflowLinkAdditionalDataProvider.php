@@ -31,7 +31,7 @@ class PayflowLinkAdditionalDataProvider implements AdditionalDataProviderInterfa
     }
 
     /**
-     * Returns additional data from payflow_link paymentMethodInput
+     * Return additional data from payflow_link paymentMethodInput
      *
      * @param array $data
      * @return array

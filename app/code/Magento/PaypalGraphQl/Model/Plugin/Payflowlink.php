@@ -39,6 +39,8 @@ class Payflowlink
     /**
      * Update redirect URLs in request with values stored in payment additionalInformation
      *
+     * Relative URL paths are converted to absolute URLs
+     *
      * @param \Magento\Paypal\Model\Payflowlink $subject
      * @param DataObject $request
      * @return mixed
