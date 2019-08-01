@@ -8,6 +8,11 @@ declare(strict_types=1);
 namespace Magento\Framework\Mail\Test\Unit\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\EmailMessageInterface;
+use Magento\Framework\Mail\EmailMessageInterfaceFactory;
+use Magento\Framework\Mail\MimePartInterface;
+use Magento\Framework\Mail\MimePartInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class TransportBuilderTest
@@ -62,6 +67,16 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
     private $emailMessageMock;
 
     /**
+     * @var MimePartInterfaceFactory|MockObject
+     */
+    private $mimePartFactoryMock;
+
+    /**
+     * @var EmailMessageInterfaceFactory|MockObject
+     */
+    private $emailMessageInterfaceFactoryMock;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -81,6 +96,10 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMockForAbstractClass();
+
+        $this->emailMessageInterfaceFactoryMock = $this->createMock(EmailMessageInterfaceFactory::class);
+        $this->mimePartFactoryMock = $this->createMock(MimePartInterfaceFactory::class);
+
         $this->builder = $objectManagerHelper->getObject(
             $this->builderClassName,
             [
@@ -89,7 +108,9 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
                 'objectManager' => $this->objectManagerMock,
                 'senderResolver' => $this->senderResolverMock,
                 'mailTransportFactory' => $this->mailTransportFactoryMock,
-                'messageFactory' => $this->messageFactoryMock
+                'messageFactory' => $this->messageFactoryMock,
+                'emailMessageInterfaceFactory' => $this->emailMessageInterfaceFactoryMock,
+                'mimePartInterfaceFactory' => $this->mimePartFactoryMock,
             ]
         );
     }
@@ -107,6 +128,20 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
 
         $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
         $options = ['area' => 'frontend', 'store' => 1];
+
+        /** @var MimePartInterface|MockObject $mimePartMock */
+        $mimePartMock = $this->createMock(MimePartInterface::class);
+
+        $this->mimePartFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($mimePartMock);
+
+        /** @var EmailMessageInterface|MockObject $emailMessage */
+        $emailMessage = $this->createMock(EmailMessageInterface::class);
+
+        $this->emailMessageInterfaceFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($emailMessage);
 
         $template = $this->createMock(\Magento\Framework\Mail\TemplateInterface::class);
         $template->expects($this->once())->method('setVars')->with($this->equalTo($vars))->willReturnSelf();
@@ -127,7 +162,9 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($transport);
 
         $this->builder->setTemplateIdentifier('identifier')->setTemplateVars($vars)->setTemplateOptions($options);
-        $this->assertInstanceOf(\Magento\Framework\Mail\TransportInterface::class, $this->builder->getTransport());
+
+        $result = $this->builder->getTransport();
+        $this->assertInstanceOf(\Magento\Framework\Mail\TransportInterface::class, $result);
     }
 
     /**
