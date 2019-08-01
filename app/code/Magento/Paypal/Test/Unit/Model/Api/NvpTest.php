@@ -199,7 +199,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
             ));
         $this->model->callGetExpressCheckoutDetails();
         $address = $this->model->getExportedShippingAddress();
-        $this->assertEquals('Ship To Name', $address->getData('firstname'));
+        $this->assertEquals('Ship To Name', ($address->getData('firstname') . " " . $address->getData('lastname')));
         $this->assertEquals(implode("\n", ['testStreet','testApartment']), $address->getStreet());
         $this->assertEquals('testCompany', $address->getCompany());
         $this->assertEquals('testCity', $address->getCity());
