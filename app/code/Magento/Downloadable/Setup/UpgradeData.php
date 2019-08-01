@@ -19,6 +19,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Config\Model\Config\Backend\Admin\Custom;
 
 /**
  * @codeCoverageIgnore
@@ -104,7 +105,11 @@ class UpgradeData implements UpgradeDataInterface
 
     private function addDownloadableHostsToConfig(ModuleDataSetupInterface $setup)
     {
-        foreach ($this->scopeResolver->getScopes() as $scope) {
+        $customStoreScope = $this->scopeResolver->getScope(Custom::CONFIG_SCOPE_ID);
+        $storeScopes = $this->scopeResolver->getScopes();
+        $allStoreScopes = array_merge($storeScopes, [$customStoreScope]);
+
+        foreach ($allStoreScopes as $scope) {
             /** @var $scope Store */
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, false));
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, true));
