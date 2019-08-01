@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Store\Model\Store;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Return media label
@@ -56,7 +56,7 @@ class Label implements ResolverInterface
         /** @var Product $product */
         $product = $value['model'];
         $productId = (int)$product->getEntityId();
-        /** @var Store $store */
+        /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
         $storeId = (int)$store->getId();
         if (!isset($value['image_type'])) {
