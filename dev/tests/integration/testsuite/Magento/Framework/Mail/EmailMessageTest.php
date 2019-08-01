@@ -118,15 +118,19 @@ class EmailMessageTest extends TestCase
      */
     public function testEmailMessage($content, $type): void
     {
-        $mimePart = $this->mimePartFactory->create([
-            'content' => $content,
-            'description' => $this->description,
-            'type' => $type
-        ]);
+        $mimePart = $this->mimePartFactory->create(
+            [
+                'content' => $content,
+                'description' => $this->description,
+                'type' => $type
+            ]
+        );
 
-        $mimeMessage = $this->mimeMessageFactory->create([
-            'parts' => [$mimePart]
-        ]);
+        $mimeMessage = $this->mimeMessageFactory->create(
+            [
+                'parts' => [$mimePart]
+            ]
+        );
 
         $this->addressFactory = $this->di->get(AddressFactory::class);
         /** @var Address $addressTo */
@@ -194,21 +198,27 @@ class EmailMessageTest extends TestCase
      */
     public function testEmailMessageWithAttachment(): void
     {
-        $mimePartMain = $this->mimePartFactory->create([
-            'content' => 'Test',
-            'description' => $this->description,
-            'type' => MimeInterface::TYPE_TEXT
-        ]);
-        $mimePartAttachment = $this->mimePartFactory->create([
-            'content' => $this->getXmlContent(),
-            'disposition' => MimeInterface::DISPOSITION_ATTACHMENT,
-            'fileName' => self::ATTACHMENT_FILE_NAME,
-            'type' => self::XML_TYPE
-        ]);
+        $mimePartMain = $this->mimePartFactory->create(
+            [
+                'content' => 'Test',
+                'description' => $this->description,
+                'type' => MimeInterface::TYPE_TEXT
+            ]
+        );
+        $mimePartAttachment = $this->mimePartFactory->create(
+            [
+                'content' => $this->getXmlContent(),
+                'disposition' => MimeInterface::DISPOSITION_ATTACHMENT,
+                'fileName' => self::ATTACHMENT_FILE_NAME,
+                'type' => self::XML_TYPE
+            ]
+        );
 
-        $mimeMessage = $this->mimeMessageFactory->create([
-            'parts' => [$mimePartMain, $mimePartAttachment]
-        ]);
+        $mimeMessage = $this->mimeMessageFactory->create(
+            [
+                'parts' => [$mimePartMain, $mimePartAttachment]
+            ]
+        );
 
         $this->addressFactory = $this->di->get(AddressFactory::class);
         /** @var Address $addressTo */
@@ -242,7 +252,8 @@ class EmailMessageTest extends TestCase
     private function getXmlContent(): string
     {
         return '<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
