@@ -16,6 +16,11 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
     const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
 
     /**
+     *  Xml path to get downloadable Shareable setting
+     */
+    const XML_PATH_DOWNLOADABLE_SHAREABLE = 'catalog/downloadable/shareable';
+
+    /**
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -44,6 +49,10 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
 
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_DISABLE_GUEST_CHECKOUT,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        ) && $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_DOWNLOADABLE_SHAREABLE,
             ScopeInterface::SCOPE_STORE,
             $store
         )) {
