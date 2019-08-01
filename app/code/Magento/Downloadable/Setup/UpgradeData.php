@@ -23,6 +23,7 @@ use Magento\Config\Model\Config\Backend\Admin\Custom;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -103,6 +104,13 @@ class UpgradeData implements UpgradeDataInterface
         $setup->endSetup();
     }
 
+    /**
+     * Add existing Downloadable Hosts to env.php
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function addDownloadableHostsToConfig(ModuleDataSetupInterface $setup)
     {
         $customStoreScope = $this->scopeResolver->getScope(Custom::CONFIG_SCOPE_ID);
@@ -121,6 +129,17 @@ class UpgradeData implements UpgradeDataInterface
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, true));
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true));
+
+            if ($website = $scope->getWebsite()) {
+                $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_URL));
+                $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_URL));
+                $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_LINK_URL));
+                $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_LINK_URL));
+                $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_MEDIA_URL));
+                $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_MEDIA_URL));
+                $this->addHost($website->getConfig(Store::XML_PATH_SECURE_BASE_STATIC_URL));
+                $this->addHost($website->getConfig(Store::XML_PATH_UNSECURE_BASE_STATIC_URL));
+            }
         }
 
         $customAdminUrl = $this->scopeConfig->getValue(
@@ -186,6 +205,10 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function addHost($url)
     {
+        if (!is_string($url)) {
+            return;
+        }
+
         $host = $this->uriHandler->parse($url)->getHost();
         if ($host && !in_array($host, $this->whitelist)) {
             $this->whitelist[] = $host;
