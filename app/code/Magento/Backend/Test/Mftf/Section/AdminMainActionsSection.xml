@@ -13,5 +13,7 @@
         <element name="saveAndContinue" type="button" selector="button[id*=save_and_continue]" timeout="30"/>
         <element name="delete" type="button" selector="#delete" timeout="30"/>
         <element name="add" type="button" selector="#add" timeout="30"/>
+        <element name="cancelDelete" type="button" selector=".modal-popup.confirm button.action-dismiss" timeout="10"/>
+        <element name="confirmDelete" type="button" selector=".modal-popup.confirm button.action-accept" timeout="10"/>
     </section>
 </sections>

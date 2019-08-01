@@ -13,10 +13,13 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class SessionTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
@@ -84,6 +87,26 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         /** Execute SUT */
         $quote = $this->checkoutSession->getQuote();
         $this->_validateCustomerDataInQuote($quote);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGetQuoteWithMismatchingSession()
+    {
+        /** @var Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create(Quote::class);
+        /** @var \Magento\Quote\Model\ResourceModel\Quote $quoteResource */
+        $quoteResource = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\ResourceModel\Quote::class);
+        $quoteResource->load($quote, 'test01', 'reserved_order_id');
+
+        // Customer on quote is not logged in
+        $this->checkoutSession->setQuoteId($quote->getId());
+
+        $sessionQuote = $this->checkoutSession->getQuote();
+        $this->assertEmpty($sessionQuote->getCustomerId());
+        $this->assertNotEquals($quote->getId(), $sessionQuote->getId());
     }
 
     /**

@@ -137,8 +137,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
 
         /** @var bool $isCheckoutPage */
         $isCheckoutPage = (
-            false !== strpos($requestUri, $this->checkoutPagePath) ||
-            false !== strpos($refererUri, $this->checkoutPagePath)
+            false !== strpos($requestUri, (string) $this->checkoutPagePath) ||
+            false !== strpos($refererUri, (string) $this->checkoutPagePath)
         );
 
         return $isCheckoutPage;
