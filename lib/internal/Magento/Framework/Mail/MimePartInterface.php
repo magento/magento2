@@ -7,7 +7,7 @@
 namespace Magento\Framework\Mail;
 
 /**
- * Interface MimePartInterface
+ * Interface representing a MIME part.
  */
 interface MimePartInterface
 {

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
-use Magento\Framework\Exception\MailException;
+use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Zend\Mail\Address as ZendAddress;
 use Zend\Mail\AddressList;
 use Zend\Mail\Message as ZendMessage;
@@ -47,8 +47,8 @@ class EmailMessage implements EmailMessageInterface
      * @param Address|null $sender
      * @param string|null $subject
      * @param string|null $encoding
+     * @throws InvalidArgumentException
      *
-     * @throws MailException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -80,7 +80,7 @@ class EmailMessage implements EmailMessageInterface
             $this->message->setSender($sender->getEmail(), $sender->getName());
         }
         if (count($to) < 1) {
-            throw new MailException(__('Email message must have at list one addressee'));
+            throw new InvalidArgumentException(__('Email message must have at list one addressee'));
         }
         if ($to) {
             $this->message->setTo($this->convertAddressArrayToAddressList($to));

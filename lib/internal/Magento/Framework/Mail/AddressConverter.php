@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
-use Magento\Framework\Exception\MailException;
+use Magento\Framework\Mail\Exception\InvalidArgumentException;
 
 /**
  * Class AddressConverter
@@ -54,7 +54,7 @@ class AddressConverter
      * @param array $addresses
      *
      * @return Address[]
-     * @throws MailException
+     * @throws InvalidArgumentException
      */
     public function convertMany(array $addresses): array
     {
@@ -67,7 +67,7 @@ class AddressConverter
             }
 
             if (!is_string($key)) {
-                throw new MailException(
+                throw new InvalidArgumentException(
                     __(
                         'Invalid key type in provided addresses array ("%1")',
                         (is_object($key) ? get_class($key) : var_export($key, 1))

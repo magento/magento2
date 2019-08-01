@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
-use Magento\Framework\Exception\MailException;
+use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Zend\Mime\Part as ZendMimePart;
 
 /**
- * Class MimePart
+ * @inheritDoc
  */
 class MimePart implements MimePartInterface
 {
@@ -39,7 +39,7 @@ class MimePart implements MimePartInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws MailException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $content,
@@ -58,7 +58,7 @@ class MimePart implements MimePartInterface
         try {
             $this->mimePart = new ZendMimePart($content);
         } catch (\Exception $e) {
-            throw new MailException(__($e->getMessage()));
+            throw new InvalidArgumentException(__($e->getMessage()));
         }
         $this->mimePart->setType($type);
         $this->mimePart->setEncoding($encoding);

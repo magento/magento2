@@ -15,6 +15,7 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\AddressConverter;
+use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\MimeInterface;
@@ -178,7 +179,6 @@ class TransportBuilder
      * @param string $name
      *
      * @return $this
-     * @throws MailException
      */
     public function addCc($address, $name = '')
     {
@@ -194,7 +194,7 @@ class TransportBuilder
      * @param string $name
      *
      * @return $this
-     * @throws MailException
+     * @throws InvalidArgumentException
      */
     public function addTo($address, $name = '')
     {
@@ -209,7 +209,7 @@ class TransportBuilder
      * @param array|string $address
      *
      * @return $this
-     * @throws MailException
+     * @throws InvalidArgumentException
      */
     public function addBcc($address)
     {
@@ -225,7 +225,7 @@ class TransportBuilder
      * @param string|null $name
      *
      * @return $this
-     * @throws MailException
+     * @throws InvalidArgumentException
      */
     public function setReplyTo($email, $name = null)
     {
@@ -240,7 +240,7 @@ class TransportBuilder
      * @param string|array $from
      *
      * @return $this
-     * @throws MailException
+     * @throws InvalidArgumentException
      * @see setFromByScope()
      *
      * @deprecated This function sets the from address but does not provide
@@ -258,6 +258,7 @@ class TransportBuilder
      * @param string|int $scopeId
      *
      * @return $this
+     * @throws InvalidArgumentException
      * @throws MailException
      */
     public function setFromByScope($from, $scopeId = null)
@@ -412,7 +413,7 @@ class TransportBuilder
      * @param string|null $name
      *
      * @return void
-     * @throws MailException
+     * @throws InvalidArgumentException
      */
     private function addAddressByType(string $addressType, $email, ?string $name = null): void
     {
