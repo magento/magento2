@@ -47,7 +47,6 @@ class WebsiteListCommandTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-
         $this->command = $this->objectManager->getObject(
             WebsiteListCommand::class,
             [

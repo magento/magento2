@@ -7,7 +7,6 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Console\Command\IndexerStatusCommand;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
@@ -94,7 +93,7 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManager->method('create')->willReturnCallback(
             function ($class, $arguments) use ($objectManager) {
-                return $objectManager->getObject(Table::class, $arguments);
+                return $objectManager->getObject($class, $arguments);
             }
         );
         
