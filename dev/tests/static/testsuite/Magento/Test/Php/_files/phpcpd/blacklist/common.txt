@@ -217,3 +217,4 @@ Magento/Config/App/Config/Type
 Magento/InventoryReservationCli/Test/Integration
 Magento/InventoryAdminUi/Controller/Adminhtml
 Magento/Newsletter/Model/Queue/TransportBuilder
+Magento/Framework/Mail/Template/TransportBuilder

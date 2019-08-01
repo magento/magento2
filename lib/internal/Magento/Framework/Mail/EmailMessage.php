@@ -50,6 +50,8 @@ class EmailMessage implements EmailMessageInterface
      *
      * @throws MailException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         MimeMessageInterface $body,
