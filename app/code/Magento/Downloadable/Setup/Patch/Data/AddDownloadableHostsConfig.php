@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Setup\Patch\Data;
 
+use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\UrlInterface;
@@ -81,7 +82,11 @@ class AddDownloadableHostsConfig implements DataPatchInterface
      */
     public function apply()
     {
-        foreach ($this->scopeResolver->getScopes() as $scope) {
+        $customStoreScope = $this->scopeResolver->getScope(Custom::CONFIG_SCOPE_ID);
+        $storeScopes = $this->scopeResolver->getScopes();
+        $allStoreScopes = array_merge($storeScopes, [$customStoreScope]);
+
+        foreach ($allStoreScopes as $scope) {
             /** @var $scope Store */
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, false));
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_WEB, true));
