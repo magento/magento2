@@ -152,9 +152,6 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtml($requestParamMap)
     {
-        $this->request->expects($this->atLeastOnce())
-            ->method('isSafeMethod')
-            ->willReturn(true);
         $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnMap($requestParamMap);
@@ -169,24 +166,6 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ->willReturn(self::MALICIOUS_TEXT);
 
         $this->assertEquals(self::MALICIOUS_TEXT, $this->preview->toHtml());
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
-    public function testToHtmlWithException()
-    {
-        $this->request->expects($this->atLeastOnce())
-            ->method('isSafeMethod')
-            ->willReturn(false);
-        $this->template
-            ->expects($this->never())
-            ->method('getDesignConfig');
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage(
-            (string)__('Wrong request.')
-        );
-        $this->preview->toHtml();
     }
 
     /**

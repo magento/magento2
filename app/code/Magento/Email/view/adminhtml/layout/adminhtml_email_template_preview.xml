@@ -12,7 +12,11 @@
         <referenceContainer name="backend.page" remove="true"/>
         <referenceContainer name="menu.wrapper" remove="true"/>
         <referenceContainer name="root">
-            <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_Email::preview/iframeswitcher.phtml"/>
+            <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_Email::preview/iframeswitcher.phtml">
+                <arguments>
+                    <argument name="preview_form_view_model" xsi:type="object">Magento\Email\ViewModel\Template\Preview\Form</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>
