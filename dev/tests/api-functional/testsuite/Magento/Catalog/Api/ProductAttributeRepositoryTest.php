@@ -4,12 +4,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * API tests for \Magento\Catalog\Model\Product\Attribute\Repository.
+ */
 class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductAttributeRepositoryV1';
@@ -130,6 +131,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         try {
             $this->createAttribute($attributeCode);
             $this->fail("Expected exception");
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\SoapFault $e) {
             //Expects soap exception
         } catch (\Exception $e) {
@@ -318,6 +320,20 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     {
         $attributeCode = 'test_attribute_code_333';
         $this->assertTrue($this->deleteAttribute($attributeCode));
+    }
+
+    /**
+     * Trying to delete system attribute.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_system_attribute.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The system attribute can't be deleted.
+     * @return void
+     */
+    public function testDeleteSystemAttributeById(): void
+    {
+        $attributeCode = 'test_attribute_code_333';
+        $this->deleteAttribute($attributeCode);
     }
 
     /**
