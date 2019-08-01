@@ -173,6 +173,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $paymentMethod = 'payflow_advanced';
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
+
         $responseData = $this->setPaymentMethodWithInValidUrl($cartId, $paymentMethod);
         $expectedExceptionMessage = "Invalid Url.";
         $this->assertArrayHasKey('errors', $responseData);
@@ -250,12 +251,12 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-              payflow_link: {
-                 cancel_url:"paypal/payflowadvanced/customcancel"
-                 return_url:"paypal/payflowadvanced/customreturn"
-                 error_url:"paypal/payflowadvanced/customerror"
-              }
+          payflow_link: {
+             cancel_url:"paypal/payflowadvanced/customcancel"
+             return_url:"paypal/payflowadvanced/customreturn"
+             error_url:"paypal/payflowadvanced/customerror"
           }
+      }
   }) {    
        cart {
           selected_payment_method {
@@ -294,12 +295,12 @@ QUERY;
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-              payflow_link: {
-                return_url:"http://magento.com/paypal/payflowadvanced/return"
-                cancel_url:"http://magento.com/paypal/payflowadvanced/cancel"
-                error_url:"http://magento.com/paypal/payflowadvanced/lerror"
-              }
+          payflow_link: {
+             cancel_url:"paypal/payflowadvanced/cancel"
+             return_url:"http://localhost/paypal/payflowadvanced/return"
+             error_url:"paypal/payflowadvanced/error"
           }
+      }
   }) {    
        cart {
           selected_payment_method {
