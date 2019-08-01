@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddImageToWYSIWYGNewsletterTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
+            <group value="Newsletter"/>
+            <title value="Admin should be able to add image to WYSIWYG content of Newsletter"/>
+            <description value="Admin should be able to add image to WYSIWYG content Newsletter"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-84377"/>
+            <skip>
+                <issueId value="MC-17233"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        </before>
+        <!--Create a newsletter template that contains an image-->
+        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
+        <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
+        <conditionalClick selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" dependentSelector="{{NewsletterWYSIWYGSection.TinyMCE4}}" visible="false" stepKey="toggleEditorIfHidden"/>
+        <waitForElementVisible selector="{{NewsletterWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <actionGroup ref="clickBrowseBtnOnUploadPopup" stepKey="clickBrowserBtn"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActions" stepKey="VerifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="CreateImageFolder" stepKey="CreateImageFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+        <actionGroup ref="attachImage" stepKey="attachImage1">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="saveImage" stepKey="insertImage"/>
+        <actionGroup ref="fillOutUploadImagePopup" stepKey="fillOutUploadImagePopup" />
+        <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>
+        <waitForPageLoad stepKey="waitForPageLoad10" />
+        <!--Preview the newsletter template-->
+        <fillField selector="{{BasicFieldNewsletterSection.searchInput}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillSearch"/>
+        <click selector="{{BasicFieldNewsletterSection.searchButton}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview"/>
+        <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
+        <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframe"/>
+        <!--Verify that the text and image are present-->
+        <seeElement selector="{{StorefrontNewsletterSection.mediaDescription}}" stepKey="assertMediaDescription"/>
+        <seeElementInDOM selector="{{StorefrontNewsletterSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
+        <closeTab stepKey="closeTab"/>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>
+

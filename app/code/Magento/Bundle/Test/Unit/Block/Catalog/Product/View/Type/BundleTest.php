@@ -198,7 +198,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                 [
                     ['price' => new \Magento\Framework\DataObject(
                         ['base_amount' => $baseAmount, 'value' => $basePriceValue]
-                    )]
+                    )],
                 ],
                 true,
                 true
@@ -244,12 +244,14 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                 ),
             ]
         );
+        $bundleOptionPriceMock = $this->getAmountPriceMock(
+            $baseAmount,
+            $regularPriceMock,
+            [['item' => $selections[0], 'value' => $basePriceValue, 'base_amount' => 321321]]
+        );
         $prices = [
-            'bundle_option' => $this->getAmountPriceMock(
-                $baseAmount,
-                $regularPriceMock,
-                [['item' => $selections[0], 'value' => $basePriceValue, 'base_amount' => 321321]]
-            ),
+            'bundle_option' => $bundleOptionPriceMock,
+            'bundle_option_regular_price' => $bundleOptionPriceMock,
             \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE => $finalPriceMock,
             \Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE => $regularPriceMock,
         ];
@@ -261,8 +263,8 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $preconfiguredValues = new \Magento\Framework\DataObject(
             [
                 'bundle_option' => [
-                    1 => 123123111
-                ]
+                    1 => 123123111,
+                ],
             ]
         );
         $this->product->expects($this->once())
@@ -278,6 +280,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(110, $jsonConfig['prices']['oldPrice']['amount']);
         $this->assertEquals(100, $jsonConfig['prices']['basePrice']['amount']);
         $this->assertEquals(100, $jsonConfig['prices']['finalPrice']['amount']);
+        $this->assertEquals([1], $jsonConfig['positions']);
     }
 
     /**
@@ -328,6 +331,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnArgument(0));
     }
 
+    /**
+     * @param $price
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getPriceInfoMock($price)
     {
         $priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
@@ -352,6 +359,10 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         return $priceInfoMock;
     }
 
+    /**
+     * @param $prices
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getPriceMock($prices)
     {
         $methods = [];

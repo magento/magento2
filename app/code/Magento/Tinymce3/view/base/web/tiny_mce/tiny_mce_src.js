@@ -918,7 +918,7 @@ tinymce.create('tinymce.util.Dispatcher', {
 
 		parse: function(s) {
 			try {
-				return eval('(' + s + ')');
+				return JSON.parse(s);
 			} catch (ex) {
 				// Ignore
 			}
@@ -1456,7 +1456,7 @@ tinymce.html.Styles = function(settings, schema) {
 			function compress(prefix, suffix) {
 				var top, right, bottom, left;
 
-				// Get values and check it it needs compressing
+				// Get values and check it needs compressing
 				top = styles[prefix + '-top' + suffix];
 				if (!top)
 					return;
@@ -15275,7 +15275,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 					childCount = getChildCount(node);
 
 					// Remove empty nodes but only if there is multiple wrappers and they are not block
-					// elements so never remove single <h1></h1> since that would remove the currrent empty block element where the caret is at
+					// elements so never remove single <h1></h1> since that would remove the current empty block element where the caret is at
 					if ((newWrappers.length > 1 || !isBlock(node)) && childCount === 0) {
 						dom.remove(node, 1);
 						return;
@@ -16506,7 +16506,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 				}
 			};
 
-			// Applies formatting to the caret postion
+			// Applies formatting to the caret position
 			function applyCaretFormat() {
 				var rng, caretContainer, textNode, offset, bookmark, container, text;
 
@@ -16620,7 +16620,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 					node.appendChild(dom.doc.createTextNode(invisibleChar));
 					node = node.firstChild;
 
-					// Insert caret container after the formated node
+					// Insert caret container after the formatted node
 					dom.insertAfter(caretContainer, formatNode);
 
 					// Move selection to text node

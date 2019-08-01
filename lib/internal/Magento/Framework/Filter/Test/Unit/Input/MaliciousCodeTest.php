@@ -33,6 +33,9 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         return [

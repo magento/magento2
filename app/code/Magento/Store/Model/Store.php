@@ -18,6 +18,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Zend\Uri\UriFactory;
 
 /**
  * Store model
@@ -32,6 +33,7 @@ use Magento\Store\Api\Data\StoreInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Store extends AbstractExtensibleModel implements
@@ -320,6 +322,16 @@ class Store extends AbstractExtensibleModel implements
     private $urlModifier;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
+     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -344,6 +356,8 @@ class Store extends AbstractExtensibleModel implements
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data optional generic object data
+     * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
+     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -371,7 +385,9 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Event\ManagerInterface $eventManager = null,
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -390,6 +406,10 @@ class Store extends AbstractExtensibleModel implements
         $this->_currencyInstalled = $currencyInstalled;
         $this->groupRepository = $groupRepository;
         $this->websiteRepository = $websiteRepository;
+        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -402,7 +422,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @return string[]
+     * @inheritdoc
      */
     public function __sleep()
     {
@@ -454,6 +474,7 @@ class Store extends AbstractExtensibleModel implements
      * Validation rules for store
      *
      * @return \Zend_Validate_Interface|null
+     * @throws \Zend_Validate_Exception
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -479,9 +500,11 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Loading store data
      *
-     * @param   mixed $key
-     * @param   string $field
-     * @return  $this
+     * @param mixed $key
+     * @param string $field
+     *
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function load($key, $field = null)
     {
@@ -535,8 +558,8 @@ class Store extends AbstractExtensibleModel implements
     public function getConfig($path)
     {
         $data = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $this->getCode());
-        if (!$data) {
-            $data = $this->_config->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        if ($data === null) {
+            $data = $this->_config->getValue($path);
         }
         return $data === false ? null : $data;
     }
@@ -556,6 +579,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store website
      *
      * @return Website|bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getWebsite()
     {
@@ -568,9 +592,11 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Retrieve url using store configuration specific
      *
-     * @param   string $route
-     * @param   array $params
-     * @return  string
+     * @param string $route
+     * @param array $params
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getUrl($route = '', $params = [])
     {
@@ -690,7 +716,9 @@ class Store extends AbstractExtensibleModel implements
             if ($this->_isCustomEntryPoint()) {
                 $indexFileName = 'index.php';
             } else {
-                $indexFileName = basename($_SERVER['SCRIPT_FILENAME']);
+                $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $indexFileName = basename($scriptFilename);
             }
             $url .= $indexFileName . '/';
         }
@@ -776,7 +804,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function isUrlSecure()
     {
@@ -801,7 +829,7 @@ class Store extends AbstractExtensibleModel implements
             return false;
         }
 
-        $uri = \Zend_Uri::factory($secureBaseUrl);
+        $uri = UriFactory::factory($secureBaseUrl);
         $port = $uri->getPort();
         $serverPort = $this->_request->getServer('SERVER_PORT');
         $isSecure = $uri->getScheme() == 'https' && isset($serverPort) && $port == $serverPort;
@@ -870,8 +898,10 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Set current store currency code
      *
-     * @param   string $code
-     * @return  string
+     * @param string $code
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setCurrentCurrencyCode($code)
     {
@@ -879,7 +909,10 @@ class Store extends AbstractExtensibleModel implements
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
 
-            $defaultCode = $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode();
+            $defaultCode = ($this->_storeManager->getStore() !== null)
+                ? $this->_storeManager->getStore()->getDefaultCurrency()->getCode()
+                : $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode();
+            
             $this->_httpContext->setValue(Context::CONTEXT_CURRENCY, $code, $defaultCode);
         }
         return $this;
@@ -892,23 +925,17 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getCurrentCurrencyCode()
     {
+        $availableCurrencyCodes = \array_values($this->getAvailableCurrencyCodes(true));
         // try to get currently set code among allowed
-        $code = $this->_httpContext->getValue(Context::CONTEXT_CURRENCY);
-        $code = $code === null ? $this->_getSession()->getCurrencyCode() : $code;
-        if (empty($code)) {
+        $code = $this->_httpContext->getValue(Context::CONTEXT_CURRENCY) ?? $this->_getSession()->getCurrencyCode();
+        if (empty($code) || !\in_array($code, $availableCurrencyCodes)) {
             $code = $this->getDefaultCurrencyCode();
-        }
-        if (in_array($code, $this->getAvailableCurrencyCodes(true))) {
-            return $code;
+            if (!\in_array($code, $availableCurrencyCodes) && !empty($availableCurrencyCodes)) {
+                $code = $availableCurrencyCodes[0];
+            }
         }
 
-        // take first one of allowed codes
-        $codes = array_values($this->getAvailableCurrencyCodes(true));
-        if (empty($codes)) {
-            // return default code, if no codes specified at all
-            return $this->getDefaultCurrencyCode();
-        }
-        return array_shift($codes);
+        return $code;
     }
 
     /**
@@ -962,6 +989,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store current currency
      *
      * @return Currency
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCurrentCurrency()
     {
@@ -984,6 +1012,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve current currency rate
      *
      * @return float
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCurrentCurrencyRate()
     {
@@ -994,6 +1023,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve root category identifier
      *
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getRootCategoryId()
     {
@@ -1019,6 +1049,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve group model
      *
      * @return Group|bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getGroup()
     {
@@ -1041,13 +1072,26 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Reinit Stores on after save
      *
-     * @deprecated 100.1.3
      * @return $this
+     * @throws \Exception
      * @since 100.1.3
+     * @deprecated 100.1.3
      */
     public function afterSave()
     {
         $this->_storeManager->reinitStores();
+        if ($this->isObjectNew()) {
+            $event = $this->_eventPrefix . '_add';
+        } else {
+            $event = $this->_eventPrefix . '_edit';
+        }
+        $store  = $this;
+        $this->getResource()->addCommitCallback(
+            function () use ($event, $store) {
+                $this->eventManager->dispatch($event, ['store' => $store]);
+            }
+        );
+        $this->pillPut->put();
         return parent::afterSave();
     }
 
@@ -1117,6 +1161,7 @@ class Store extends AbstractExtensibleModel implements
      * Check if store can be deleted
      *
      * @return boolean
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function isCanDelete()
     {
@@ -1132,6 +1177,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @return boolean
      * @since 100.1.0
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function isDefault()
     {
@@ -1144,10 +1190,12 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Retrieve current url for store
      *
-     * @param bool|string $fromStore
+     * @param bool $fromStore
+     *
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCurrentUrl($fromStore = true)
     {
@@ -1160,10 +1208,12 @@ class Store extends AbstractExtensibleModel implements
             return $storeUrl;
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $storeParsedUrl = parse_url($storeUrl);
 
         $storeParsedQuery = [];
         if (isset($storeParsedUrl['query'])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             parse_str($storeParsedUrl['query'], $storeParsedQuery);
         }
 
@@ -1191,6 +1241,7 @@ class Store extends AbstractExtensibleModel implements
         $requestStringParts = explode('?', $requestString, 2);
         $requestStringPath = $requestStringParts[0];
         if (isset($requestStringParts[1])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             parse_str($requestStringParts[1], $requestString);
         } else {
             $requestString = [];
@@ -1204,7 +1255,7 @@ class Store extends AbstractExtensibleModel implements
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
             . $storeParsedUrl['path']
             . $requestStringPath
-            . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams, '', '&amp;') : '');
+            . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams) : '');
 
         return $currentUrl;
     }
@@ -1223,6 +1274,7 @@ class Store extends AbstractExtensibleModel implements
      * Protect delete from non admin area
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {
@@ -1234,9 +1286,17 @@ class Store extends AbstractExtensibleModel implements
      * Rewrite in order to clear configuration cache
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function afterDelete()
     {
+        $store = $this;
+        $this->getResource()->addCommitCallback(
+            function () use ($store) {
+                $this->_storeManager->reinitStores();
+                $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['store' => $store]);
+            }
+        );
         parent::afterDelete();
         $this->_configCacheType->clean();
 
@@ -1251,6 +1311,7 @@ class Store extends AbstractExtensibleModel implements
             $this->getGroup()->setDefaultStoreId($defaultId);
             $this->getGroup()->save();
         }
+
         return $this;
     }
 
@@ -1287,6 +1348,7 @@ class Store extends AbstractExtensibleModel implements
      * Retrieve store group name
      *
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getFrontendName()
     {
@@ -1319,17 +1381,19 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Return Store Path
+     *
      * @return string
      */
     public function getStorePath()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $parsedUrl = parse_url($this->getBaseUrl());
-        return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+        return $parsedUrl['path'] ?? '/';
     }
 
     /**
-     * {@inheritdoc}
-     * @since 100.1.0
+     * @inheritdoc
      */
     public function getScopeType()
     {
@@ -1337,8 +1401,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
-     * @since 100.1.0
+     * @inheritdoc
      */
     public function getScopeTypeName()
     {
@@ -1346,7 +1409,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -1354,7 +1417,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes

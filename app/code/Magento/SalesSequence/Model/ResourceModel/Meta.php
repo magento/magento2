@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesSequence\Model\ResourceModel;
 
 use Magento\Framework\Exception\LocalizedException as Exception;
@@ -95,7 +96,9 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Using for load sequence profile and setting it into metadata
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     *
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -117,7 +120,12 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->getData('active_profile') instanceof ModelProfile) {
-            throw new NoSuchEntityException(__('Entity Sequence profile not added to meta active profile'));
+            throw new NoSuchEntityException(
+                __(
+                    "The entity sequence profile wasn't added to the meta active profile. "
+                    . "Verify the profile and try again."
+                )
+            );
         }
 
         if (!$object->getData('entity_type')
@@ -131,7 +139,12 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @inheritdoc
+     * Perform actions after object save
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     *
+     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {

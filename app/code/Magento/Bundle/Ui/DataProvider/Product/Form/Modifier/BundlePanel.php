@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
 
 /**
@@ -69,13 +70,26 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
     {
         $meta = $this->removeFixedTierPrice($meta);
-        $path = $this->arrayManager->findPath(static::CODE_BUNDLE_DATA, $meta, null, 'children');
+
+        $groupCode = static::CODE_BUNDLE_DATA;
+        $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
+        if (empty($path)) {
+            $meta[$groupCode]['children'] = [];
+            $meta[$groupCode]['arguments']['data']['config'] = [
+                'componentType' => Fieldset::NAME,
+                'label' => __('Bundle Items'),
+                'collapsible' => true
+            ];
+
+            $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
+        }
 
         $meta = $this->arrayManager->merge(
             $path,
@@ -220,7 +234,7 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -314,7 +328,8 @@ class BundlePanel extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/collapsible',
                         'additionalClasses' => 'admin__field-wide',
                         'dataScope' => 'data.bundle_options',
-                        'bundleSelectionsName' => 'product_bundle_container.bundle_selections'
+                        'isDefaultFieldScope' => 'is_default',
+                        'bundleSelectionsName' => 'product_bundle_container.bundle_selections',
                     ],
                 ],
             ],
@@ -378,7 +393,10 @@ class BundlePanel extends AbstractModifier
                                                     'selection_qty' => '',
                                                 ],
                                                 'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
-                                                'source' => 'product'
+                                                'imports' => [
+                                                    'inputType' => '${$.provider}:${$.dataScope}.type',
+                                                ],
+                                                'source' => 'product',
                                             ],
                                         ],
                                     ],
@@ -594,11 +612,14 @@ class BundlePanel extends AbstractModifier
                     'config' => [
                         'componentType' => Container::NAME,
                         'isTemplate' => true,
-                        'component' => 'Magento_Bundle/js/components/bundle-record',
+                        'component' => 'Magento_Ui/js/dynamic-rows/record',
                         'is_collection' => true,
                         'imports' => [
-                            'onTypeChanged' => '${ $.provider }:${ $.bundleOptionsDataScope }.type'
-                        ]
+                            'inputType' => '${$.parentName}:inputType',
+                        ],
+                        'exports' => [
+                            'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}',
+                        ],
                     ],
                 ],
             ],
@@ -691,11 +712,15 @@ class BundlePanel extends AbstractModifier
                                 'componentType' => Form\Field::NAME,
                                 'formElement' => Form\Element\Checkbox::NAME,
                                 'dataType' => Form\Element\DataType\Price::NAME,
+                                'component' => 'Magento_Bundle/js/components/bundle-user-defined-checkbox',
                                 'label' => __('User Defined'),
                                 'dataScope' => 'selection_can_change_qty',
                                 'value' => '1',
                                 'valueMap' => ['true' => '1', 'false' => '0'],
                                 'sortOrder' => 110,
+                                'imports' => [
+                                    'inputType' => '${$.parentName}:inputType',
+                                ],
                             ],
                         ],
                     ],

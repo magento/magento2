@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Mtf\EntryPoint;
 
@@ -10,8 +11,8 @@ use Magento\Mtf\ObjectManager;
 
 /**
  * Class EntryPoint
- * Application entry point, used to bootstrap and run application
  *
+ * Application entry point, used to bootstrap and run application
  */
 class EntryPoint
 {
@@ -36,7 +37,6 @@ class EntryPoint
      * @param string $rootDir
      * @param array $parameters
      * @param ObjectManager $objectManager
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct(
         $rootDir,
@@ -51,7 +51,7 @@ class EntryPoint
     /**
      * Run a Mtf application
      *
-     * @param $applicationName
+     * @param string $applicationName
      * @param array $arguments
      * @return mixed
      * @throws \DomainException

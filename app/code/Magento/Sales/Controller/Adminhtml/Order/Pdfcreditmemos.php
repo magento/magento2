@@ -76,18 +76,22 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocume
      *
      * @param AbstractCollection $collection
      * @return ResponseInterface|ResultInterface
+     * @throws \Exception
      */
     protected function massAction(AbstractCollection $collection)
     {
 
         $creditmemoCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$creditmemoCollection->getSize()) {
-            $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+            $this->messageManager->addErrorMessage(__('There are no printable documents related to selected orders.'));
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
+        $pdf = $this->pdfCreditmemo->getPdf($creditmemoCollection->getItems());
+        $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
+
         return $this->fileFactory->create(
             sprintf('creditmemo%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
-            $this->pdfCreditmemo->getPdf($creditmemoCollection->getItems())->render(),
+            $fileContent,
             DirectoryList::VAR_DIR,
             'application/pdf'
         );

@@ -50,7 +50,7 @@ class AssertGiftMessageInFrontendOrder extends AbstractConstraint
         $orderHistory->open();
         $orderHistory->getOrderHistoryBlock()->openOrderById($orderId);
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedData,
             $customerOrderView->getGiftMessageForOrderBlock()->getGiftMessage(),
             'Wrong gift message is displayed on order.'

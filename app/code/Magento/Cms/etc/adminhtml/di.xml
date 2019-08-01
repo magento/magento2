@@ -12,6 +12,11 @@
             <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
+    <type name="Magento\Cms\ViewModel\Page\Grid\UrlBuilder">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
     <type name="Magento\Cms\Model\Wysiwyg\CompositeConfigProvider">
         <arguments>
             <argument name="variablePluginConfigProvider" xsi:type="array">
@@ -40,10 +45,16 @@
     </type>
     <type name="Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider">
         <arguments>
+            <argument name="currentTreePath" xsi:type="const">\Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY</argument>
             <argument name="windowSize" xsi:type="array">
                 <item name="height" xsi:type="number">600</item>
                 <item name="width" xsi:type="number">1000</item>
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Cms\Ui\Component\Form\Field\PageLayout" type="Magento\Ui\Component\Form\Field\DefaultValue">
+        <arguments>
+            <argument name="path" xsi:type="string">web/default_layouts/default_cms_layout</argument>
+        </arguments>
+    </virtualType>
 </config>

@@ -56,9 +56,11 @@
     </event>
     <event name="catalog_product_save_before">
         <observer name="set_special_price_start_date" instance="Magento\Catalog\Observer\SetSpecialPriceStartDate" />
-        <observer name="unset_special_price" instance="Magento\Catalog\Observer\UnsetSpecialPrice" />
     </event>
     <event name="store_save_after">
         <observer name="synchronize_website_attributes" instance="Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange" />
+    </event>
+    <event name="catalog_product_save_commit_after">
+        <observer name="magento_image_resize" instance="Magento\Catalog\Observer\ImageResizeAfterProductSave" />
     </event>
 </config>

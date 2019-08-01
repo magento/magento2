@@ -56,7 +56,6 @@ define(['Magento_Bundle/js/components/bundle-checkbox', 'uiRegistry'], function 
                 unit.changeType('select');
 
                 expect(unit.prefer).toBe('radio');
-                expect(unit.clearValues).toHaveBeenCalled();
             });
         });
     });

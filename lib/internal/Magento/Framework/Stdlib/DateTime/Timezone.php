@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Stdlib\DateTime;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -11,7 +12,6 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Timezone library
@@ -41,7 +41,7 @@ class Timezone implements TimezoneInterface
     protected $_scopeResolver;
 
     /**
-     * @var DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
@@ -63,7 +63,7 @@ class Timezone implements TimezoneInterface
     /**
      * @param ScopeResolverInterface $scopeResolver
      * @param ResolverInterface $localeResolver
-     * @param DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param string $defaultTimezonePath
@@ -71,7 +71,7 @@ class Timezone implements TimezoneInterface
     public function __construct(
         ScopeResolverInterface $scopeResolver,
         ResolverInterface $localeResolver,
-        DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         ScopeConfigInterface $scopeConfig,
         $scopeType,
         $defaultTimezonePath
@@ -85,7 +85,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultTimezonePath()
     {
@@ -93,7 +93,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultTimezone()
     {
@@ -101,7 +101,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfigTimezone($scopeType = null, $scopeCode = null)
     {
@@ -113,7 +113,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
@@ -125,7 +125,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDateFormatWithLongYear()
     {
@@ -137,7 +137,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTimeFormat($type = \IntlDateFormatter::SHORT)
     {
@@ -149,7 +149,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDateTimeFormat($type)
     {
@@ -157,7 +157,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {
@@ -191,12 +191,13 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        $date = new \DateTime(is_numeric($date) ? '@' . $date : $date, new \DateTimeZone($timezone));
+        $date = new \DateTime(is_numeric($date) ? '@' . $date : $date);
+        $date->setTimezone(new \DateTimeZone($timezone));
         if (!$includeTime) {
             $date->setTime(0, 0, 0);
         }
@@ -204,7 +205,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function formatDate($date = null, $format = \IntlDateFormatter::SHORT, $showTime = false)
     {
@@ -218,7 +219,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function scopeTimeStamp($scope = null)
     {
@@ -231,7 +232,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
     {
@@ -247,23 +248,12 @@ class Timezone implements TimezoneInterface
             $toTimeStamp += 86400;
         }
 
-        $result = false;
-        if (!$this->_dateTime->isEmptyDate($dateFrom) && $scopeTimeStamp < $fromTimeStamp) {
-        } elseif (!$this->_dateTime->isEmptyDate($dateTo) && $scopeTimeStamp > $toTimeStamp) {
-        } else {
-            $result = true;
-        }
-        return $result;
+        return !(!$this->_dateTime->isEmptyDate($dateFrom) && $scopeTimeStamp < $fromTimeStamp ||
+               !$this->_dateTime->isEmptyDate($dateTo) && $scopeTimeStamp > $toTimeStamp);
     }
 
     /**
-     * @param string|\DateTimeInterface $date
-     * @param int $dateType
-     * @param int $timeType
-     * @param null $locale
-     * @param null $timezone
-     * @param string|null $pattern
-     * @return string
+     * @inheritdoc
      */
     public function formatDateTime(
         $date,
@@ -299,13 +289,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Convert date from config timezone to Utc.
-     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
-     *
-     * @param string|\DateTimeInterface $date
-     * @param string $format
-     * @throws LocalizedException
-     * @return string
+     * @inheritdoc
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
@@ -318,7 +302,10 @@ class Timezone implements TimezoneInterface
         } else {
             if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {
                 throw new LocalizedException(
-                    new Phrase('DateTime object timezone must be the same as config - %1', $this->getConfigTimezone())
+                    new Phrase(
+                        'The DateTime object timezone needs to be the same as the "%1" timezone in config.',
+                        $this->getConfigTimezone()
+                    )
                 );
             }
         }

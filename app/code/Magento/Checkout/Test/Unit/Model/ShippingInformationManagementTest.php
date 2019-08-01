@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Test\Unit\Model;
 
 /**
@@ -81,6 +82,11 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $shippingMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $addressValidatorMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -140,6 +146,9 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
             $this->createPartialMock(\Magento\Quote\Api\Data\CartExtensionFactory::class, ['create']);
         $this->shippingFactoryMock =
             $this->createPartialMock(\Magento\Quote\Model\ShippingFactory::class, ['create']);
+        $this->addressValidatorMock = $this->createMock(
+            \Magento\Quote\Model\QuoteAddressValidator::class
+        );
 
         $this->model = $this->objectManager->getObject(
             \Magento\Checkout\Model\ShippingInformationManagement::class,
@@ -150,33 +159,20 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'shippingAssignmentFactory' => $this->shippingAssignmentFactoryMock,
                 'cartExtensionFactory' => $this->cartExtensionFactoryMock,
-                'shippingFactory' => $this->shippingFactoryMock
+                'shippingFactory' => $this->shippingFactoryMock,
+                'addressValidator' => $this->addressValidatorMock,
             ]
         );
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Shipping method is not applicable for empty cart
+     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
      */
     public function testSaveAddressInformationIfCartIsEmpty()
     {
         $cartId = 100;
-        $carrierCode = 'carrier_code';
-        $shippingMethod = 'shipping_method';
         $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
-
-        $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $addressInformationMock->expects($this->once())
-            ->method('getShippingAddress')
-            ->willReturn($this->shippingAddressMock);
-        $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
-        $addressInformationMock->expects($this->once())->method('getShippingCarrierCode')->willReturn($carrierCode);
-        $addressInformationMock->expects($this->once())->method('getShippingMethodCode')->willReturn($shippingMethod);
-
-        $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
-
-        $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
 
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(0);
         $this->quoteRepositoryMock->expects($this->once())
@@ -238,32 +234,30 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Shipping address is not set
+     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSaveAddressInformationIfShippingAddressNotSet()
     {
         $cartId = 100;
-        $carrierCode = 'carrier_code';
-        $shippingMethod = 'shipping_method';
         $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
-
         $addressInformationMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
-        $addressInformationMock->expects($this->once())->method('getShippingCarrierCode')->willReturn($carrierCode);
-        $addressInformationMock->expects($this->once())->method('getShippingMethodCode')->willReturn($shippingMethod);
-
-        $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
 
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(null);
+
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(100);
 
         $this->model->saveAddressInformation($cartId, $addressInformationMock);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save shipping information. Please check input data.
+     * @expectedExceptionMessage The shipping information was unable to be saved. Verify the input data and try again.
      */
     public function testSaveAddressInformationIfCanNotSaveQuote()
     {
@@ -271,6 +265,9 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
         $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
+
+        $this->addressValidatorMock->expects($this->exactly(2))
+            ->method('validateForCart');
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -313,6 +310,9 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $shippingMethod = 'shipping_method';
         $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
 
+        $this->addressValidatorMock->expects($this->exactly(2))
+            ->method('validateForCart');
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
@@ -353,6 +353,9 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
         $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
+
+        $this->addressValidatorMock->expects($this->exactly(2))
+            ->method('validateForCart');
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')

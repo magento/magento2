@@ -6,8 +6,8 @@
 namespace Magento\Framework\Search\Request;
 
 /**
- * Interface \Magento\Framework\Search\Request\IndexScopeResolverInterface
- *
+ * Resolve table name by provided dimensions. Scope Resolver must accept all dimensions that potentially can be used to
+ * resolve table name, but certain implementation can filter them if needed
  */
 interface IndexScopeResolverInterface
 {

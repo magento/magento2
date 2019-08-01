@@ -132,7 +132,9 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     public function testCall($response, $processableErrors, $exception, $exceptionMessage = '', $exceptionCode = null)
     {
         if (isset($exception)) {
-            $this->expectException($exception, $exceptionMessage, $exceptionCode);
+            $this->expectException($exception);
+            $this->expectExceptionMessage($exceptionMessage);
+            $this->expectExceptionCode($exceptionCode);
         }
         $this->curl->expects($this->once())
             ->method('read')
@@ -143,6 +145,9 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         $this->model->call('some method', ['data' => 'some data']);
     }
 
+    /**
+     * @return array
+     */
     public function callDataProvider()
     {
         return [

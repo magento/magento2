@@ -44,4 +44,21 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Ui\Model\ColorPicker\ColorModesProvider">
+        <arguments>
+            <argument name="colorModesPool" xsi:type="array">
+                <item name="full" xsi:type="string">Magento\Ui\Model\ColorPicker\FullMode</item>
+                <item name="simple" xsi:type="string">Magento\Ui\Model\ColorPicker\SimpleMode</item>
+                <item name="noalpha" xsi:type="string">Magento\Ui\Model\ColorPicker\NoAlphaMode</item>
+                <item name="palette" xsi:type="string">Magento\Ui\Model\ColorPicker\PaletteOnlyMode</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Model\UrlInput\LinksConfigProvider">
+        <arguments>
+            <argument name="linksConfiguration" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Ui\Model\UrlInput\Url</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

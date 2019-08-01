@@ -27,7 +27,7 @@ class AssertProductViewsReportTotalResult extends AbstractConstraint
     {
         $total = explode(', ', $total);
         $totalForm = $productReportView->getGridBlock()->getViewsResults($productsList);
-        \PHPUnit_Framework_Assert::assertEquals($totalForm, $total);
+        \PHPUnit\Framework\Assert::assertEquals($totalForm, $total);
     }
 
     /**

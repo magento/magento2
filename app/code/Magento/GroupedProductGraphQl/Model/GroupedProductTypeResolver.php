@@ -3,23 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GroupedProductGraphQl\Model;
 
-use Magento\Framework\GraphQl\Config\Data\TypeResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as Type;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class GroupedProductTypeResolver implements TypeResolverInterface
 {
+    const GROUPED_PRODUCT = 'GroupedProduct';
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function resolveType(array $data)
+    public function resolveType(array $data) : string
     {
-        if (isset($data['type_id']) && $data['type_id'] == 'grouped') {
-            return 'GroupedProduct';
+        if (isset($data['type_id']) && $data['type_id'] == Type::TYPE_CODE) {
+            return self::GROUPED_PRODUCT;
         }
+        return '';
     }
 }

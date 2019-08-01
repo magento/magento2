@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products;
 
@@ -33,7 +34,7 @@ class SearchResultFactory
      * @param array $productsSearchResult
      * @return SearchResult
      */
-    public function create(int $totalCount, array $productsSearchResult)
+    public function create(int $totalCount, array $productsSearchResult) : SearchResult
     {
         return $this->objectManager->create(
             SearchResult::class,

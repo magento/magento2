@@ -32,7 +32,7 @@ class AssertCustomerIsLockedOnBackend extends AbstractConstraint
         Customer $customer
     ) {
         $customerIndexEdit->open(['id' => $customer->getId()]);
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::CUSTOMER_LOCKED_ACCOUNT,
             $customerIndexEdit->getCustomerForm()->getPersonalInformation('Account Lock'),
             'Incorrect customer account status.'

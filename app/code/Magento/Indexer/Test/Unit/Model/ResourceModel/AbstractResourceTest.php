@@ -165,6 +165,9 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function insertFromTableData()
     {
         return [[false], [true]];

@@ -89,12 +89,17 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetExecutionTime()
     {
-        $time = '01:02:03';
-        $this->timezone->expects($this->any())->method('date')->willReturnSelf();
-        $this->timezone->expects($this->any())->method('getConfigTimezone')->willReturn('America/Los_Angeles');
-        $this->timezone->expects($this->any())->method('diff')->willReturnSelf();
-        $this->timezone->expects($this->any())->method('format')->willReturn($time);
-        $this->assertEquals($time, $this->report->getExecutionTime($time));
+        $startDate = '2000-01-01 01:01:01';
+        $endDate = '2000-01-01 02:03:04';
+        $executionTime = '01:02:03';
+
+        $startDateMock = $this->createTestProxy(\DateTime::class, ['time' => $startDate]);
+        $endDateMock = $this->createTestProxy(\DateTime::class, ['time' => $endDate]);
+        $this->timezone->method('date')
+            ->withConsecutive([$startDate], [])
+            ->willReturnOnConsecutiveCalls($startDateMock, $endDateMock);
+
+        $this->assertEquals($executionTime, $this->report->getExecutionTime($startDate));
     }
 
     /**
@@ -147,9 +152,41 @@ class ReportTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Framework\Phrase::class, $message);
     }
 
+    /**
+     * @dataProvider importFileExistsDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Filename has not permitted symbols in it
+     * @param string $fileName
+     * @return void
+     */
+    public function testImportFileExistsException($fileName)
+    {
+        $this->report->importFileExists($fileName);
+    }
+
+    /**
+     * Test importFileExists()
+     */
     public function testImportFileExists()
     {
-        $this->assertEquals($this->report->importFileExists('file'), true);
+        $this->assertEquals($this->report->importFileExists('..file..name'), true);
+    }
+
+    /**
+     * Dataprovider for testImportFileExistsException()
+     *
+     * @return array
+     */
+    public function importFileExistsDataProvider()
+    {
+        return [
+            [
+                'fileName' => 'some_folder/../another_folder',
+            ],
+            [
+                'fileName' => 'some_folder\..\another_folder',
+            ],
+        ];
     }
 
     /**

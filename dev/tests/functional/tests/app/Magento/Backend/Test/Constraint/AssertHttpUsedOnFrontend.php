@@ -22,7 +22,7 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
      *
      * @var string
      */
-    private $unsecuredProtocol = \Magento\Framework\HTTP\PhpEnvironment\Request::SCHEME_HTTP;
+    const SCHEME_HTTP  = 'http';
 
     /**
      * Browser interface.
@@ -53,11 +53,11 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
 
         // Log in to Customer Account on Storefront to assert that http is used indeed.
         $this->objectManager->create(LogInCustomerOnStorefront::class, ['customer' => $this->customer])->run();
-        $this->assertUsedProtocol($this->unsecuredProtocol);
+        $this->assertUsedProtocol(self::SCHEME_HTTP);
 
         // Log out from Customer Account on Storefront to assert that JS is deployed validly as a part of statics.
         $this->objectManager->create(LogOutCustomerOnStorefront::class)->run();
-        $this->assertUsedProtocol($this->unsecuredProtocol);
+        $this->assertUsedProtocol(self::SCHEME_HTTP);
     }
 
     /**
@@ -72,7 +72,7 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
             $expectedProtocol .= '://';
         }
 
-        \PHPUnit_Framework_Assert::assertStringStartsWith(
+        \PHPUnit\Framework\Assert::assertStringStartsWith(
             $expectedProtocol,
             $this->browser->getUrl(),
             "$expectedProtocol is not used."

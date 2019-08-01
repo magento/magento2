@@ -5,8 +5,13 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Reader;
 
-use \Magento\Framework\Config\Reader\Filesystem;
+use Magento\Framework\Config\Reader\Filesystem;
 
+/**
+ * Test for
+ *
+ * @see Filesystem
+ */
 class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -64,7 +69,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         );
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
 
-        $dom = new \DomDocument();
+        $dom = new \DOMDocument();
         $dom->loadXML($this->_file);
         $this->_converterMock->expects($this->once())->method('convert')->with($dom);
         $model->read('scope');
@@ -119,7 +124,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid XML in file
+     * @expectedExceptionMessage The XML in file "0" is invalid:
      */
     public function testReadWithInvalidXml()
     {

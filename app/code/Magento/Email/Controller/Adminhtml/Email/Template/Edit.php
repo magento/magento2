@@ -6,7 +6,9 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
-class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template implements HttpGetActionInterface
 {
     /**
      * Edit transactional email action

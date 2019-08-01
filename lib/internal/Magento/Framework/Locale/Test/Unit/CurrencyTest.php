@@ -7,7 +7,6 @@
 namespace Magento\Framework\Locale\Test\Unit;
 
 use Magento\Framework\Locale\Currency;
-use Magento\Framework\Locale\CurrencyInterface;
 
 class CurrencyTest extends \PHPUnit\Framework\TestCase
 {

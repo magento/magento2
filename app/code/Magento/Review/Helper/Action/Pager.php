@@ -141,7 +141,7 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
     protected function _getStorageKey()
     {
         if (!$this->_storageId) {
-            throw new LocalizedException(__('Storage key was not set'));
+            throw new LocalizedException(__("The storage key wasn't set. Add the storage key and try again."));
         }
 
         return self::STORAGE_PREFIX . $this->_storageId;

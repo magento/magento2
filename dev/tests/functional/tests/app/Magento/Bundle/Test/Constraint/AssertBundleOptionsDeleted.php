@@ -41,12 +41,12 @@ class AssertBundleOptionsDeleted extends AbstractConstraint
 
         $productDataLength = count($productData);
         $formDataLength = count($productData);
-        \PHPUnit_Framework_Assert::assertEquals($productDataLength, $formDataLength);
+        \PHPUnit\Framework\Assert::assertEquals($productDataLength, $formDataLength);
 
         foreach ($productData as $index => $option) {
             $productAssociatedDataLength = count($option['assigned_products']);
             $formAssociatedDataLength = count($formData[$index]['assigned_products']);
-            \PHPUnit_Framework_Assert::assertEquals($productAssociatedDataLength, $formAssociatedDataLength);
+            \PHPUnit\Framework\Assert::assertEquals($productAssociatedDataLength, $formAssociatedDataLength);
 
             foreach ($option['assigned_products'] as $productIndex => $associatedProduct) {
                 $associatedProduct['data']['getProductName'] =
@@ -56,13 +56,13 @@ class AssertBundleOptionsDeleted extends AbstractConstraint
                     $associatedProduct,
                     $formData[$index]['assigned_products'][$productIndex]
                 );
-                \PHPUnit_Framework_Assert::assertCount(0, $errorAssociatedProducts);
+                \PHPUnit\Framework\Assert::assertCount(0, $errorAssociatedProducts);
             }
 
             unset($option['assigned_products']);
             unset($formData[$index]['assigned_products']);
             $errorFields = array_diff($option, $formData[$index]);
-            \PHPUnit_Framework_Assert::assertCount(0, $errorFields);
+            \PHPUnit\Framework\Assert::assertCount(0, $errorFields);
         }
     }
 

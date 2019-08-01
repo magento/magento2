@@ -53,7 +53,8 @@ class JsonTest extends \PHPUnit\Framework\TestCase
 
     public function testDeserializerInvalidArgumentException()
     {
-        $this->expectException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('"boolean" data type is invalid. String is expected.');
         $this->_jsonDeserializer->deserialize(false);
     }
 

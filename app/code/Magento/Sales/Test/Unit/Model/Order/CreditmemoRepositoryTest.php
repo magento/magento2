@@ -81,7 +81,7 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Id required
+     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
      */
     public function testGetNoId()
     {
@@ -90,7 +90,7 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested entity doesn't exist
+     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEntityNoId()
     {
@@ -167,7 +167,7 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Could not delete credit memo
+     * @expectedExceptionMessage The credit memo couldn't be deleted.
      */
     public function testDeleteWithException()
     {
@@ -216,7 +216,7 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save credit memo
+     * @expectedExceptionMessage The credit memo couldn't be saved.
      */
     public function testSaveWithException()
     {

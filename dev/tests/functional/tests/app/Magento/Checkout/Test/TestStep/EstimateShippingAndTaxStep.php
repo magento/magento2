@@ -107,6 +107,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     {
         $this->checkoutCart->open();
         $this->checkoutCart->getCartBlock()->waitCartContainerLoading();
+        sleep(20);
         /** @var \Magento\Checkout\Test\Fixture\Cart $cart */
         if ($this->cart !== null) {
             $cart = $this->fixtureFactory->createByCode(

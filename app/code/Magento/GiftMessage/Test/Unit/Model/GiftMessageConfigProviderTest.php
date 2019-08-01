@@ -111,7 +111,7 @@ class GiftMessageConfigProviderTest extends \PHPUnit\Framework\TestCase
         );
         $messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
 
-        $this->scopeConfigMock->expects($this->atLeastOnce())->method('getValue')->willReturnMap(
+        $this->scopeConfigMock->expects($this->atLeastOnce())->method('isSetFlag')->willReturnMap(
             [
                 [GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER, Scope::SCOPE_STORE, null, $orderLevel],
                 [GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, Scope::SCOPE_STORE, null, $itemLevel]

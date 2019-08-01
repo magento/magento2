@@ -4,12 +4,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\CurrencySymbol\Controller\Adminhtml\System\Currency as CurrencyAction;
 
-class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
+class FetchRates extends CurrencyAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Fetch rates action
@@ -24,14 +28,16 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
             $service = $this->getRequest()->getParam('rate_services');
             $this->_getSession()->setCurrencyRateService($service);
             if (!$service) {
-                throw new LocalizedException(__('Please specify a correct Import Service.'));
+                throw new LocalizedException(__('The Import Service is incorrect. Verify the service and try again.'));
             }
             try {
                 /** @var \Magento\Directory\Model\Currency\Import\ImportInterface $importModel */
                 $importModel = $this->_objectManager->get(\Magento\Directory\Model\Currency\Import\Factory::class)
                     ->create($service);
             } catch (\Exception $e) {
-                throw new LocalizedException(__('We can\'t initialize the import model.'));
+                throw new LocalizedException(
+                    __("The import model can't be initialized. Verify the model and try again.")
+                );
             }
             $rates = $importModel->fetchRates();
             $errors = $importModel->getMessages();

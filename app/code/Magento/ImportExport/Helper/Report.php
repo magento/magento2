@@ -52,9 +52,9 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getExecutionTime($time)
     {
-        $reportTime = $this->timeZone->date($time, $this->timeZone->getConfigTimezone());
+        $reportTime = $this->timeZone->date($time);
         $timeDiff = $reportTime->diff($this->timeZone->date());
-        return $timeDiff->format('%H:%M:%S');
+        return $timeDiff->format('%H:%I:%S');
     }
 
     /**
@@ -97,6 +97,8 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get report absolute path.
+     *
      * @param string $fileName
      * @return string
      */
@@ -121,9 +123,14 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $filename
      * @return string
+     * @throws \InvalidArgumentException
      */
     protected function getFilePath($filename)
     {
+        if (preg_match('/\.\.(\\\|\/)/', $filename)) {
+            throw new \InvalidArgumentException('Filename has not permitted symbols in it');
+        }
+
         return $this->varDirectory->getRelativePath(Import::IMPORT_HISTORY_DIR . $filename);
     }
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\TestFramework\Deploy;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Magento\Setup\Console\Command\InstallCommand;
@@ -30,9 +31,15 @@ class CliCommand
     private $parametersHolder;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * ShellCommand constructor.
      *
      * @param    TestModuleManager $testEnv
+     * @param DeploymentConfig $deploymentConfig
      * @internal param Shell $shell
      */
     public function __construct(
@@ -65,21 +72,25 @@ class CliCommand
     {
         $initParams = $this->parametersHolder->getInitParams();
         $enableModuleCommand = 'php -f ' . BP . '/bin/magento module:enable ' . $moduleName
-            . ' -n -vvv --magento-init-params=' . $initParams['magento-init-params'];
+            . ' -n -vvv --magento-init-params="' . $initParams['magento-init-params'] . '"';
         return $this->shell->execute($enableModuleCommand);
     }
 
     /**
      * Execute upgrade magento command.
      *
+     * @param array $installParams
      * @return string
      */
-    public function upgrade()
+    public function upgrade($installParams = [])
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $enableModuleCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params='
-            . $initParams['magento-init-params'];
-        return $this->shell->execute($enableModuleCommand);
+        $upgradeCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params="'
+            . $initParams['magento-init-params'] . '"';
+        $installParams = $this->toCliArguments($installParams);
+        $upgradeCommand .= ' ' . implode(" ", array_keys($installParams));
+
+        return $this->shell->execute($upgradeCommand, array_values($installParams));
     }
 
     /**
@@ -92,7 +103,7 @@ class CliCommand
     {
         $initParams = $this->parametersHolder->getInitParams();
         $disableModuleCommand = 'php -f ' . BP . '/bin/magento module:disable '. $moduleName
-            . ' -vvv --magento-init-params=' . $initParams['magento-init-params'];
+            . ' -vvv --magento-init-params="' . $initParams['magento-init-params'] . '"';
         return $this->shell->execute($disableModuleCommand);
     }
 
@@ -109,8 +120,8 @@ class CliCommand
         );
         $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-quote ' .
             implode(" ", array_keys($installParams)) .
-            ' -vvv --magento-init-params=' .
-            $initParams['magento-init-params'];
+            ' -vvv --magento-init-params="' .
+            $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command, array_values($installParams));
     }
@@ -128,8 +139,8 @@ class CliCommand
         );
         $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-sales ' .
             implode(" ", array_keys($installParams)) .
-            ' -vvv --magento-init-params=' .
-            $initParams['magento-init-params'];
+            ' -vvv --magento-init-params="' .
+            $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command, array_values($installParams));
     }
@@ -143,6 +154,21 @@ class CliCommand
         $command = 'php -f ' . BP . '/bin/magento cache:clean ' .
             ' -vvv --magento-init-params=' .
             $initParams['magento-init-params'];
+
+        $this->shell->execute($command);
+    }
+
+    /**
+     * Uninstall module
+     *
+     * @param string $moduleName
+     */
+    public function uninstallModule($moduleName)
+    {
+        $initParams = $this->parametersHolder->getInitParams();
+        $command = 'php -f ' . BP . '/bin/magento module:uninstall ' . $moduleName . ' --remove-data ' .
+            ' -vvv --non-composer --magento-init-params="' .
+            $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command);
     }
@@ -193,9 +219,25 @@ class CliCommand
             )
         );
         // run install script
-        return $this->shell->execute(
+        $exitCode = $this->shell->execute(
             PHP_BINARY . ' -f %s setup:install -vvv ' . implode(' ', array_keys($installParams)),
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
+        $this->afterInstall();
+        return $exitCode;
+    }
+
+    /**
+     * You can decorate this function in order to add your own events here
+     *
+     * @return void
+     */
+    public function afterInstall()
+    {
+        //Take current deployment config in order to flush it cache after installation
+        //Before installation usually we do not have any connections - so we need to add them
+        $this->deploymentConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(DeploymentConfig::class);
+        $this->deploymentConfig->resetData();
     }
 }

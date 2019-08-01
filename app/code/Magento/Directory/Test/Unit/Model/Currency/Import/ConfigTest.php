@@ -29,10 +29,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructorException(array $configData, $expectedException)
     {
-        $this->expectException('InvalidArgumentException', $expectedException);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage($expectedException);
         new \Magento\Directory\Model\Currency\Import\Config($configData);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionDataProvider()
     {
         return [
@@ -78,6 +82,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_model->getServiceClass($serviceName));
     }
 
+    /**
+     * @return array
+     */
     public function getServiceClassDataProvider()
     {
         return ['known' => ['service_one', 'Service_One'], 'unknown' => ['unknown', null]];
@@ -93,6 +100,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_model->getServiceLabel($serviceName));
     }
 
+    /**
+     * @return array
+     */
     public function getServiceLabelDataProvider()
     {
         return ['known' => ['service_one', 'Service One'], 'unknown' => ['unknown', null]];

@@ -35,7 +35,7 @@ class AssertCustomerNameFrontend extends AbstractConstraint
         $infoBlock = $customerAccountIndex->getInfoBlock()->getContactInfoContent();
         $infoBlock = explode(PHP_EOL, $infoBlock);
         $nameInDashboard = $infoBlock[0];
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $nameInDashboard == $customerName,
             'Customer name in Contact info block is not matching the fixture.'
         );
@@ -43,7 +43,7 @@ class AssertCustomerNameFrontend extends AbstractConstraint
         $customerAccountIndex->getInfoBlock()->openEditContactInfo();
         $nameInEdit = $customerAccountEdit->getAccountInfoForm()->getFirstName()
             . " " . $customerAccountEdit->getAccountInfoForm()->getLastName();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $nameInEdit == $customerName,
             'Customer name on Account info tab is not matching the fixture.'
         );

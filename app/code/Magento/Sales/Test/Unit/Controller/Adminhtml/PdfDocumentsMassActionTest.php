@@ -40,13 +40,16 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
      */
     private $filterMock;
 
+    /**
+     * Test setup
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError']
+            ['addSuccessMessage', 'addErrorMessage']
         );
 
         $this->orderCollectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
@@ -80,6 +83,9 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
             );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecute()
     {
         $exception = new \Exception();
@@ -88,7 +94,7 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
             ->method('getCollection')
             ->with($this->orderCollectionMock)
             ->willThrowException($exception);
-        $this->messageManager->expects($this->once())->method('addError');
+        $this->messageManager->expects($this->once())->method('addErrorMessage');
 
         $this->resultRedirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->controller->execute($exception);

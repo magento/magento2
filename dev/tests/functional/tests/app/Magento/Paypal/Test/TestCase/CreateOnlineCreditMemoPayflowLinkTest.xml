@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Paypal\Test\TestCase\CreateOnlineCreditMemoPayflowLinkTest" summary="Create online credit memo for order placed with with PayPal Payflow Link">
+    <testCase name="Magento\Paypal\Test\TestCase\CreateOnlineCreditMemoPayflowLinkTest" summary="Create online credit memo for order placed with PayPal Payflow Link">
         <variation name="CreateOnlineCreditMemoPayflowLinkVariation1" summary="Create Refund for Order Paid with PayPal Payflow Link" ticketId="MAGETWO-13061">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>

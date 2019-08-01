@@ -142,6 +142,10 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         $attributeName = 'tier_price';
         $tierPrices = [
             [
+                'price' => 0,
+                'all_groups' => 1,
+            ],
+            [
                 'price' => 10,
                 'all_groups' => 1,
             ],
@@ -153,6 +157,12 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         $productPrice = 20;
         $allCustomersGroupId = 32000;
         $finalTierPrices = [
+            [
+                'price' => 0,
+                'all_groups' => 1,
+                'website_price' => 0,
+                'cust_group' => 32000,
+            ],
             [
                 'price' => 10,
                 'all_groups' => 1,
@@ -170,8 +180,11 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $allCustomersGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->disableOriginalConstructor()->getMock();
-        $this->groupManagement->expects($this->once())->method('getAllCustomersGroup')->willReturn($allCustomersGroup);
-        $allCustomersGroup->expects($this->once())->method('getId')->willReturn($allCustomersGroupId);
+        $this->groupManagement
+            ->expects($this->exactly(2))
+            ->method('getAllCustomersGroup')
+            ->willReturn($allCustomersGroup);
+        $allCustomersGroup->expects($this->exactly(2))->method('getId')->willReturn($allCustomersGroupId);
         $object->expects($this->once())->method('getPrice')->willReturn($productPrice);
         $this->attribute->expects($this->atLeastOnce())->method('isScopeGlobal')->willReturn(true);
         $object->expects($this->once())->method('getStoreId')->willReturn(null);

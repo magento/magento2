@@ -6,7 +6,9 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
-class Index extends \Magento\Customer\Controller\Adminhtml\Group
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Customer\Controller\Adminhtml\Group implements HttpGetActionInterface
 {
     /**
      * Customer groups list.

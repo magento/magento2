@@ -1142,4 +1142,24 @@ define([
             )).toEqual(true);
         });
     });
+
+    describe('Testing validate-forbidden-extensions', function () {
+        it('validate-forbidden-extensions', function () {
+            var el1 = $('<input type="text" value="" ' +
+                'class="validate-extensions" data-validation-params="php,phtml">').get(0);
+
+            expect($.validator.methods['validate-forbidden-extensions']
+                .call($.validator.prototype, 'php', el1, null)).toEqual(false);
+            expect($.validator.methods['validate-forbidden-extensions']
+                .call($.validator.prototype, 'php,phtml', el1, null)).toEqual(false);
+            expect($.validator.methods['validate-forbidden-extensions']
+                .call($.validator.prototype, 'html', el1, null)).toEqual(true);
+            expect($.validator.methods['validate-forbidden-extensions']
+                .call($.validator.prototype, 'html,png', el1, null)).toEqual(true);
+            expect($.validator.methods['validate-forbidden-extensions']
+                .call($.validator.prototype, 'php,html', el1, null)).toEqual(false);
+            expect($.validator.methods['validate-forbidden-extensions']
+                .call($.validator.prototype, 'html,php', el1, null)).toEqual(false);
+        });
+    });
 });

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Backup\Filesystem\Rollback;
 
 use Magento\Framework\App\ObjectManager;
@@ -66,7 +67,7 @@ class Fs extends AbstractRollback
             }
 
             throw new NotEnoughPermissions(
-                new Phrase('Unable to make rollback because not all files are writable')
+                new Phrase("The rollback can't be executed because not all files are writable.")
             );
         }
 
@@ -74,7 +75,7 @@ class Fs extends AbstractRollback
 
         /**
          * we need these fake initializations because all magento's files in filesystem will be deleted and autoloader
-         * wont be able to load classes that we need for unpacking
+         * won't be able to load classes that we need for unpacking
          */
         new Tar();
         new Gz();
@@ -93,6 +94,8 @@ class Fs extends AbstractRollback
     }
 
     /**
+     * Get file system helper instance
+     *
      * @return Helper
      * @deprecated 100.2.0
      */

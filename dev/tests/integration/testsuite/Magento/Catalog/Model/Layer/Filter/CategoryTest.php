@@ -95,6 +95,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Category', $this->_model->getName());
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     */
     public function testGetItems()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

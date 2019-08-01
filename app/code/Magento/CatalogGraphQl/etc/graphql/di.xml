@@ -6,38 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\GraphQl\Config\FieldConfig">
-        <arguments>
-            <argument name="config" xsi:type="array">
-                <item name="products" xsi:type="array">
-                    <item name="filter" xsi:type="array">
-                        <item name="valueParser" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\ValueParser</item>
-                    </item>
-                    <item name="pageSize" xsi:type="array">
-                        <item name="defaultValue" xsi:type="string">20</item>
-                    </item>
-                    <item name="currentPage" xsi:type="array">
-                        <item name="defaultValue" xsi:type="string">1</item>
-                    </item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
-        <arguments>
-            <argument name="formatterInstances" xsi:type="array">
-                <item name="baseModelData" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\BaseModelData</item>
-                <item name="customAttributes" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\CustomAttributes</item>
-                <item name="entityIdToId" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\EntityIdToId</item>
-                <item name="mediaGalleryEntries" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\MediaGalleryEntries</item>
-                <item name="options" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Options</item>
-                <item name="price" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\Price</item>
-                <item name="tierPrices" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\TierPrices</item>
-                <item name="newFromTo" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\NewFromTo</item>
-                <item name="productLinks" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Formatter\ProductLinks</item>
-            </argument>
-        </arguments>
-    </type>
+    <preference for="Magento\Catalog\Model\Product\Option\Type\Date" type="Magento\CatalogGraphQl\Model\Product\Option\DateType" />
     <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
@@ -52,7 +21,14 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\GraphQl\Type\Entity\DefaultMapper">
+    <type name="Magento\CatalogGraphQl\Model\LayerFilterItemTypeResolverComposite">
+        <arguments>
+            <argument name="typeResolvers" xsi:type="array">
+                <item name="layer_filter_item" xsi:type="object">Magento\CatalogGraphQl\Model\LayerFilterItemTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Entity\DefaultMapper">
         <arguments>
             <argument name="map" xsi:type="array">
                 <item name="catalog_product" xsi:type="array">
@@ -62,12 +38,60 @@
                 </item>
                 <item name="customizable_options" xsi:type="array">
                     <item name="field" xsi:type="string">CustomizableFieldOption</item>
+                    <item name="date" xsi:type="string">CustomizableDateOption</item>
                     <item name="date_time" xsi:type="string">CustomizableDateOption</item>
+                    <item name="time" xsi:type="string">CustomizableDateOption</item>
                     <item name="file" xsi:type="string">CustomizableFileOption</item>
                     <item name="area" xsi:type="string">CustomizableAreaOption</item>
                     <item name="drop_down" xsi:type="string">CustomizableDropDownOption</item>
+                    <item name="multiple" xsi:type="string">CustomizableMultipleOption</item>
                     <item name="radio" xsi:type="string">CustomizableRadioOption</item>
+                    <item name="checkbox" xsi:type="string">CustomizableCheckboxOption</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Layer\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Magento\CatalogGraphQl\Model\Layer\CollectionProvider</argument>
+            <argument name="stateKey" xsi:type="object">Magento\Catalog\Model\Layer\Category\StateKey</argument>
+            <argument name="collectionFilter" xsi:type="object">Magento\Catalog\Model\Layer\Category\CollectionFilter</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Layer\Search">
+        <arguments>
+            <argument name="context" xsi:type="object">Magento\CatalogGraphQl\Model\Layer\Context</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Layer\CollectionProvider">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="price" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductPriceFilter</item>
+                <item name="min_price" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductPriceFilter</item>
+                <item name="max_price" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductPriceFilter</item>
+                <item name="category_id" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\CollectionProcessor\FilterProcessor\CategoryFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
+                type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="product_url_suffix" xsi:type="string">catalog/seo/product_url_suffix</item>
+                <item name="category_url_suffix" xsi:type="string">catalog/seo/category_url_suffix</item>
+                <item name="title_separator" xsi:type="string">catalog/seo/title_separator</item>
+                <item name="list_mode" xsi:type="string">catalog/frontend/list_mode</item>
+                <item name="grid_per_page_values" xsi:type="string">catalog/frontend/grid_per_page_values</item>
+                <item name="list_per_page_values" xsi:type="string">catalog/frontend/list_per_page_values</item>
+                <item name="grid_per_page" xsi:type="string">catalog/frontend/grid_per_page</item>
+                <item name="list_per_page" xsi:type="string">catalog/frontend/list_per_page</item>
+                <item name="catalog_default_sort_by" xsi:type="string">catalog/frontend/default_sort_by</item>
             </argument>
         </arguments>
     </type>

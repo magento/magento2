@@ -21,7 +21,7 @@ class AssertEmailTemplateSuccessSaveMessage extends AbstractConstraint
     public function processAssert(EmailTemplateIndex $emailTemplateIndex)
     {
         $actualMessage = $emailTemplateIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

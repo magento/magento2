@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CheckoutCartSummarySection">
+        <element name="expandShoppingCartSummary" type="button" selector="//*[contains(@class, 'items-in-cart')][not(contains(@class, 'active'))]"/>
+        <element name="elementPosition" type="text" selector=".data.table.totals > tbody tr:nth-of-type({{value}}) > th" parameterized="true"/>
+        <element name="subtotal" type="text" selector="//*[@id='cart-totals']//tr[@class='totals sub']//td//span[@class='price']"/>
+        <element name="shippingMethodForm" type="text" selector="#co-shipping-method-form"/>
+        <element name="shippingMethod" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//th//span[@class='value']"/>
+        <element name="shipping" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//td//span[@class='price']"/>
+        <element name="shippingAmount" type="text" selector="//*[@id='cart-totals']//tr[@class='totals shipping excl']//td//span[@class='price' and contains(text(), '{{amount}}')]" parameterized="true"/>
+        <element name="total" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price']"/>
+        <element name="totalAmount" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price' and contains(text(), '{{amount}}')]" parameterized="true"/>
+        <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
+        <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
+        <element name="shippingHeading" type="button" selector="#block-shipping-heading" timeout="60"/>
+        <element name="postcode" type="input" selector="input[name='postcode']" timeout="10"/>
+        <element name="stateProvince" type="select" selector="select[name='region_id']" timeout="10"/>
+        <element name="stateProvinceInput" type="input" selector="input[name='region']"/>
+        <element name="country" type="select" selector="select[name='country_id']" timeout="10"/>
+        <element name="countryParameterized" type="select" selector="select[name='country_id'] > option:nth-child({{var}})" timeout="10" parameterized="true"/>
+        <element name="estimateShippingAndTax" type="text" selector="#block-shipping-heading" timeout="5"/>
+        <element name="flatRateShippingMethod" type="input" selector="#s_method_flatrate_flatrate" timeout="30"/>
+        <element name="estimateShippingAndTaxSummary" type="text" selector="#block-summary"/>
+        <element name="shippingMethodLabel" type="text" selector="#co-shipping-method-form dl dt span"/>
+        <element name="methodName" type="text" selector="#co-shipping-method-form label"/>
+        <element name="shippingPrice" type="text" selector="#co-shipping-method-form span .price"/>
+        <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true"/>
+    </section>
+</sections>

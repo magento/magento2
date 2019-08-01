@@ -68,6 +68,9 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
      */
     private $templateEnginePool;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -125,7 +128,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_has_tier_price_show_as_low_as.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      */
     public function testRenderAmountMinimalProductWithTierPricesShouldShowMinTierPrice()
@@ -136,7 +139,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_different_store_prices.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      */

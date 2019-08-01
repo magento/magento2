@@ -9,6 +9,7 @@ use Magento\Swatches\Block\Product\Renderer\Configurable;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
@@ -54,8 +55,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
     private $imageHelper;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject  */
-    private $urlBuilder;
+    /** @var \Magento\Catalog\Model\Product\Image\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject  */
+    private $imageUrlBuilder;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $variationPricesMock;
 
     public function setUp()
     {
@@ -74,7 +78,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->typeInstance = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->imageHelper = $this->createMock(\Magento\Catalog\Helper\Image::class);
-        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->imageUrlBuilder = $this->createMock(\Magento\Catalog\Model\Product\Image\UrlBuilder::class);
+        $this->variationPricesMock = $this->createMock(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
+        );
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configurable = $objectManagerHelper->getObject(
@@ -82,7 +89,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             [
                 'scopeConfig' => $this->scopeConfig,
                 'imageHelper' => $this->imageHelper,
-                'urlBuilder' => $this->urlBuilder,
+                'imageUrlBuilder' => $this->imageUrlBuilder,
                 'arrayUtils' => $this->arrayUtils,
                 'jsonEncoder' => $this->jsonEncoder,
                 'helper' => $this->helper,
@@ -93,6 +100,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 'priceCurrency' => $this->priceCurrency,
                 'configurableAttributeData' => $this->configurableAttributeData,
                 'data' => [],
+                'variationPrices' => $this->variationPricesMock
             ]
         );
     }
@@ -200,5 +208,31 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->any())->method('getAllowAttributes')->with($this->product)
             ->willReturn([$attribute1]);
+    }
+
+    public function testGetPricesJson()
+    {
+        $expectedPrices = [
+            'oldPrice' => [
+                'amount' => 10,
+            ],
+            'basePrice' => [
+                'amount' => 15,
+            ],
+            'finalPrice' => [
+                'amount' => 20,
+            ],
+        ];
+
+        $priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $this->configurable->setProduct($this->product);
+        $this->product->expects($this->once())->method('getPriceInfo')->willReturn($priceInfoMock);
+        $this->variationPricesMock->expects($this->once())
+            ->method('getFormattedPrices')
+            ->with($priceInfoMock)
+            ->willReturn($expectedPrices);
+
+        $this->jsonEncoder->expects($this->once())->method('encode')->with($expectedPrices);
+        $this->configurable->getPricesJson();
     }
 }

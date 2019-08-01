@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+
 namespace Magento\Framework\Crontab;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -39,31 +41,35 @@ class CrontabManager implements CrontabManagerInterface
     }
 
     /**
+     * Build tasks block start text.
+     *
      * @return string
      */
     private function getTasksBlockStart()
     {
         $tasksBlockStart = self::TASKS_BLOCK_START;
         if (defined('BP')) {
-            $tasksBlockStart .= ' ' . md5(BP);
+            $tasksBlockStart .= ' ' . hash("sha256", BP);
         }
         return $tasksBlockStart;
     }
 
     /**
+     * Build tasks block end text.
+     *
      * @return string
      */
     private function getTasksBlockEnd()
     {
         $tasksBlockEnd = self::TASKS_BLOCK_END;
         if (defined('BP')) {
-            $tasksBlockEnd .= ' ' . md5(BP);
+            $tasksBlockEnd .= ' ' . hash("sha256", BP);
         }
         return $tasksBlockEnd;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTasks()
     {
@@ -81,12 +87,12 @@ class CrontabManager implements CrontabManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function saveTasks(array $tasks)
     {
         if (!$tasks) {
-            throw new LocalizedException(new Phrase('List of tasks is empty'));
+            throw new LocalizedException(new Phrase('The list of tasks is empty. Add tasks and try again.'));
         }
 
         $this->checkSupportedOs();
@@ -99,7 +105,7 @@ class CrontabManager implements CrontabManagerInterface
             }
 
             if (empty($task['command'])) {
-                throw new LocalizedException(new Phrase('Command should not be empty'));
+                throw new LocalizedException(new Phrase("The command shouldn't be empty. Enter and try again."));
             }
 
             $tasks[$key]['command'] = str_replace(
@@ -117,8 +123,7 @@ class CrontabManager implements CrontabManagerInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @throws LocalizedException
+     * @inheritdoc
      */
     public function removeTasks()
     {
@@ -181,7 +186,7 @@ class CrontabManager implements CrontabManagerInterface
     private function getCrontabContent()
     {
         try {
-            $content = (string)$this->shell->execute('crontab -l');
+            $content = (string)$this->shell->execute('crontab -l 2>/dev/null');
         } catch (LocalizedException $e) {
             return '';
         }
@@ -202,6 +207,7 @@ class CrontabManager implements CrontabManagerInterface
 
         try {
             $this->shell->execute('echo "' . $content . '" | crontab -');
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (LocalizedException $e) {
             throw new LocalizedException(
                 new Phrase('Error during saving of crontab: %1', [$e->getPrevious()->getMessage()]),

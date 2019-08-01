@@ -11,12 +11,13 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
+    'mage/url',
     'mage/storage',
     'jquery/jquery-storageapi'
-], function ($, _, ko, sectionConfig) {
+], function ($, _, ko, sectionConfig, url) {
     'use strict';
 
-    var options,
+    var options = {},
         storage,
         storageInvalidation,
         invalidateCacheBySessionTimeOut,
@@ -25,9 +26,13 @@ define([
         buffer,
         customerData;
 
+    url.setBaseUrl(window.BASE_URL);
+    options.sectionLoadUrl = url.build('customer/section/load');
+
     //TODO: remove global change, in this case made for initNamespaceStorage
     $.cookieStorage.setConf({
-        path: '/'
+        path: '/',
+        expires: 1
     });
 
     storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
@@ -74,17 +79,17 @@ define([
 
         /**
          * @param {Object} sectionNames
-         * @param {Number} updateSectionId
+         * @param {Boolean} forceNewSectionTimestamp
          * @return {*}
          */
-        getFromServer: function (sectionNames, updateSectionId) {
+        getFromServer: function (sectionNames, forceNewSectionTimestamp) {
             var parameters;
 
             sectionNames = sectionConfig.filterClientSideSections(sectionNames);
             parameters = _.isArray(sectionNames) ? {
                 sections: sectionNames.join(',')
             } : [];
-            parameters['update_section_id'] = updateSectionId;
+            parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
 
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
                 throw new Error(jqXHR);
@@ -198,7 +203,8 @@ define([
                 privateContent = $.cookieStorage.get(privateContentVersion),
                 localPrivateContent = $.localStorage.get(privateContentVersion),
                 needVersion = 'need_version',
-                expiredSectionNames = this.getExpiredSectionNames();
+                expiredSectionNames = this.getExpiredSectionNames(),
+                isLoading = false;
 
             if (privateContent &&
                 !$.cookieStorage.isSet(privateContentVersion) &&
@@ -207,13 +213,18 @@ define([
                 $.cookieStorage.set(privateContentVersion, needVersion);
                 $.localStorage.set(privateContentVersion, needVersion);
                 this.reload([], false);
+                isLoading = true;
             } else if (localPrivateContent !== privateContent) {
                 if (!$.cookieStorage.isSet(privateContentVersion)) {
                     privateContent = needVersion;
                     $.cookieStorage.set(privateContentVersion, privateContent);
                 }
                 $.localStorage.set(privateContentVersion, privateContent);
+                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
+                    buffer.notify(sectionName, sectionData);
+                });
                 this.reload([], false);
+                isLoading = true;
             } else if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -232,7 +243,7 @@ define([
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
 
-                if (_.isEmpty(countryData())) {
+                if (_.isEmpty(countryData()) && !isLoading) {
                     customerData.reload(['directory-data'], false);
                 }
             }
@@ -322,11 +333,11 @@ define([
 
         /**
          * @param {Array} sectionNames
-         * @param {Number} updateSectionId
+         * @param {Boolean} forceNewSectionTimestamp
          * @return {*}
          */
-        reload: function (sectionNames, updateSectionId) {
-            return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
+        reload: function (sectionNames, forceNewSectionTimestamp) {
+            return dataProvider.getFromServer(sectionNames, forceNewSectionTimestamp).done(function (sections) {
                 $(document).trigger('customer-data-reload', [sectionNames]);
                 buffer.update(sections);
             });

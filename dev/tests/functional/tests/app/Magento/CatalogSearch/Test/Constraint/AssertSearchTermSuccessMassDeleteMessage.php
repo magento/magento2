@@ -30,7 +30,7 @@ class AssertSearchTermSuccessMassDeleteMessage extends AbstractConstraint
     {
         $actualMessage = $indexPage->getMessagesBlock()->getSuccessMessage();
         $expectedMessage = sprintf(self::SUCCESS_MESSAGE, count($searchTerms));
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $expectedMessage,
             $actualMessage,
             'Wrong success message is displayed.'

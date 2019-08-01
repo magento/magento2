@@ -12,6 +12,9 @@ use Magento\Framework\DB\Select;
 
 /**
  * This strategy handles static attributes
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class StaticAttributeStrategy implements FilterStrategyInterface
 {

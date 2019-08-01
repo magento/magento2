@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View;
 
 use Magento\Framework\App\State;
@@ -81,13 +82,16 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \OutOfBoundsException
-     * @expectedExceptionMessage No element found with ID 'nonexisting_element'
      * @magentoAppIsolation enabled
      */
     public function testRenderNonExistentElementShouldThrowException()
     {
         $layout = $this->_getLayoutModel('render.xml');
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
+
+        $this->expectExceptionMessage(
+            'The element with the "nonexisting_element" ID wasn\'t found. Verify the ID and try again.'
+        );
     }
 
     /**

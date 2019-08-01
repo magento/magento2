@@ -116,6 +116,7 @@
                 <item name="zip_is_range" xsi:type="string">main_table.zip_is_range</item>
                 <item name="zip_from" xsi:type="string">main_table.zip_from</item>
                 <item name="zip_to" xsi:type="string">main_table.zip_to</item>
+                <item name="region_name" xsi:type="string">region_table.code</item>
             </argument>
         </arguments>
     </virtualType>
@@ -142,6 +143,7 @@
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
                 <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="code" xsi:type="string">main_table.code</item>
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
@@ -153,6 +155,7 @@
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
                 <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="code" xsi:type="string">main_table.code</item>
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>

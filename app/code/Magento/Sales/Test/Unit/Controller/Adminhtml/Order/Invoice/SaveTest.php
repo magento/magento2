@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action;
@@ -121,8 +122,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('isPost')
             ->willReturn(false);
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
-            ->with('We can\'t save the invoice right now.');
+            ->method('addErrorMessage')
+            ->with("The invoice can't be saved at this time. Please try again later.");
         $redirectMock->expects($this->once())
             ->method('setPath')
             ->with('sales/order/index')

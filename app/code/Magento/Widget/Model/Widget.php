@@ -84,6 +84,8 @@ class Widget
     }
 
     /**
+     * Get math random
+     *
      * @return \Magento\Framework\Math\Random
      *
      * @deprecated 100.1.0
@@ -149,8 +151,8 @@ class Widget
         $widget = $this->getAsCanonicalArray($widget);
 
         // Save all nodes to object data
-        $object->setType($type);
         $object->setData($widget);
+        $object->setType($type);
 
         // Correct widget parameters and convert its data to objects
         $newParams = $this->prepareWidgetParameters($object);
@@ -246,17 +248,13 @@ class Widget
         $result = $widgets;
 
         // filter widgets by params
-        if (is_array($filters) && count($filters) > 0) {
+        if (is_array($filters) && !empty($filters)) {
             foreach ($widgets as $code => $widget) {
-                try {
-                    foreach ($filters as $field => $value) {
-                        if (!isset($widget[$field]) || (string)$widget[$field] != $value) {
-                            throw new \Exception();
-                        }
+                foreach ($filters as $field => $value) {
+                    if (!isset($widget[$field]) || (string)$widget[$field] != $value) {
+                        unset($result[$code]);
+                        break;
                     }
-                } catch (\Exception $e) {
-                    unset($result[$code]);
-                    continue;
                 }
             }
         }
@@ -315,13 +313,11 @@ class Widget
                 }
             }
             if (isset($value)) {
-                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeQuote($value));
+                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false));
             }
         }
 
         $directive .= $this->getWidgetPageVarName($params);
-
-        $directive .= sprintf(' type_name="%s"', $widget['name']);
 
         $directive .= '}}';
 
@@ -339,6 +335,8 @@ class Widget
     }
 
     /**
+     * Get widget page varname
+     *
      * @param array $params
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException

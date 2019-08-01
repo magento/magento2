@@ -5,11 +5,24 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
 
-class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
+/**
+ * Reset password controller
+ *
+ * @package Magento\Customer\Controller\Adminhtml\Index
+ */
+class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::reset_password';
+
     /**
      * Reset password handler
      *

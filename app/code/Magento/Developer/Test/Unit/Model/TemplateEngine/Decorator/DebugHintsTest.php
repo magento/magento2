@@ -33,6 +33,9 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($actualResult);
     }
 
+    /**
+     * @return array
+     */
     public function renderDataProvider()
     {
         return ['block hints disabled' => [false], 'block hints enabled' => [true]];

@@ -43,4 +43,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Quote\Item\Processor">
+        <plugin name="mergeQuoteItems" type="Magento\GiftMessage\Model\Plugin\MergeQuoteItems"/>
+    </type>
 </config>

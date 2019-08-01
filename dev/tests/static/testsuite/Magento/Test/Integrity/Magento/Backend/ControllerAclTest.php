@@ -97,7 +97,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
                 $inheritanceMessage = "Backend controller $className have to inherit " . AbstractAction::class;
                 $errorMessages[] = $inheritanceMessage;
                 continue;
-            };
+            }
 
             $isAclRedefinedInTheChildClass = $this->isConstantOverwritten($controllerClass)
                 || $this->isMethodOverwritten($controllerClass);
@@ -148,10 +148,10 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
         if ($this->aclResources !== null) {
             return $this->aclResources;
         }
-        $aclFiles = array_keys(Files::init()->getConfigFiles('acl.xml', []));
+        $aclFiles = Files::init()->getConfigFiles('acl.xml', []);
         $xmlResources = [];
         array_map(function ($file) use (&$xmlResources) {
-            $config = simplexml_load_file($file);
+            $config = simplexml_load_file($file[0]);
             $nodes = $config->xpath('.//resource/@id') ?: [];
             foreach ($nodes as $node) {
                 $xmlResources[(string)$node] = $node;
@@ -232,8 +232,8 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
      */
     private function getControllerPath($relativeFilePath)
     {
-        if (preg_match('~(Magento\/.*Controller\/Adminhtml\/.*)\.php~', $relativeFilePath, $matches)) {
-            if (count($matches) === 2 && count($partPath = $matches[1]) >= 1) {
+        if (preg_match('~(Magento\/[^\/]+\/Controller\/Adminhtml\/.*)\.php~', $relativeFilePath, $matches)) {
+            if (count($matches) === 2) {
                 $partPath = $matches[1];
                 return $partPath;
             }

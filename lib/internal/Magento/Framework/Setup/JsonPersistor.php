@@ -19,6 +19,6 @@ class JsonPersistor
      */
     public function persist(array $data, $path)
     {
-        return file_put_contents($path, json_encode($data));
+        return file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT));
     }
 }

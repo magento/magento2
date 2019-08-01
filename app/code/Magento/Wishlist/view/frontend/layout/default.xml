@@ -18,7 +18,7 @@
             </block>
         </referenceBlock>
         <referenceContainer name="sidebar.additional">
-            <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml"/>
+            <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml" ifconfig="wishlist/general/show_in_sidebar"/>
         </referenceContainer>
     </body>
 </page>

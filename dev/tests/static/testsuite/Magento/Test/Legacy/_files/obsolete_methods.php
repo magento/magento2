@@ -6,7 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreStart
+// @codingStandardsIgnoreFile
 
 return [
     ['__get', 'Magento\Framework\DataObject'],
@@ -1982,8 +1982,8 @@ return [
     ['_escapeDefaultValue', 'Magento\Framework\Code\Generator\EntityAbstract'],
     ['urlEncode', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Url\EncoderInterface::encode'],
     ['urlDecode', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Url\DecoderInterface::decode'],
-    ['isModuleEnabled', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Module\Manager::isEnabled()'],
-    ['isModuleOutputEnabled', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Module\Manager::isOutputEnabled()'],
+    ['isModuleEnabled', 'Magento\Framework\App\Helper\AbstractHelper', '\Magento\Framework\Module\ModuleManagerInterface::isEnabled()'],
+    ['isModuleOutputEnabled', 'Magento\Framework\App\Helper\AbstractHelper', '\Magento\Framework\Module\ModuleManagerInterface::isOutputEnabled()'],
     ['_packToTar', 'Magento\Framework\Archive\Tar'],
     ['_parseHeader', 'Magento\Framework\Archive\Tar'],
     ['getIdentities', 'Magento\Wishlist\Block\Link'],
@@ -2528,4 +2528,45 @@ return [
     ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
     ['var_dump', ''],
     ['each', ''],
+    ['strval', ''],
+    ['create_function', ''],
+    ['configure', 'Magento\Framework\MessageQueue\BatchConsumer'],
+    [
+            'getExchangeByTopic',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getExchangeByTopic'
+        ],
+    [
+            'getQueuesByTopic',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getQueuesByTopic'
+        ],
+    [
+            'getConnectionByTopic',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getConnectionByTopic'
+        ],
+    [
+            'getConnectionByConsumer',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getConnectionByConsumer'
+        ],
+    [
+            'getMessageSchemaType',
+            'Magento\Framework\MessageQueue\Config\Data',
+            '\Magento\Framework\MessageQueue\ConfigInterface::getMessageSchemaType'
+        ],
+    [
+            'getCallback',
+            'Magento\Framework\MessageQueue\ConsumerConfiguration'
+        ],
+    [
+            'getCallback',
+            'Magento\Framework\MessageQueue\ConsumerConfigurationInterface'
+        ],
+    [
+            'configure',
+            'Magento\Framework\MessageQueue\ConsumerInterface'
+        ],
+    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote', 'Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed'],
 ];

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Exception;
 
@@ -36,17 +37,17 @@ class GraphQlInputException extends InputException implements \GraphQL\Error\Cli
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function isClientSafe()
+    public function isClientSafe() : bool
     {
         return $this->isSafe;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function getCategory()
+    public function getCategory() : string
     {
         return self::EXCEPTION_CATEGORY;
     }

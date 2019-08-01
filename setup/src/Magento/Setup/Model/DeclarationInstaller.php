@@ -5,10 +5,9 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
-use Magento\Setup\Model\Declaration\Schema\OperationsExecutor;
-use Magento\Setup\Model\Declaration\Schema\RequestFactory;
-use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
+use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
+use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
+use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
 
 /**
  * Declaration Installer is facade for installation and upgrade db in declaration mode.
@@ -26,11 +25,6 @@ class DeclarationInstaller
     private $schemaDiff;
 
     /**
-     * @var RequestFactory
-     */
-    private $requestFactory;
-
-    /**
      * @var SchemaConfigInterface
      */
     private $schemaConfig;
@@ -41,16 +35,13 @@ class DeclarationInstaller
      * @param SchemaConfigInterface $schemaConfig
      * @param SchemaDiff $schemaDiff
      * @param OperationsExecutor $operationsExecutor
-     * @param RequestFactory $requestFactory
      */
     public function __construct(
         SchemaConfigInterface $schemaConfig,
         SchemaDiff $schemaDiff,
-        OperationsExecutor $operationsExecutor,
-        RequestFactory $requestFactory
+        OperationsExecutor $operationsExecutor
     ) {
         $this->operationsExecutor = $operationsExecutor;
-        $this->requestFactory = $requestFactory;
         $this->schemaConfig = $schemaConfig;
         $this->schemaDiff = $schemaDiff;
     }
@@ -66,10 +57,6 @@ class DeclarationInstaller
         $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
         $dbSchema = $this->schemaConfig->getDbConfig();
         $diff = $this->schemaDiff->diff($declarativeSchema, $dbSchema);
-        $diff->registerSchema($declarativeSchema);
-        $diff->registerInstallationRequest(
-            $this->requestFactory->create($requestData)
-        );
-        $this->operationsExecutor->execute($diff);
+        $this->operationsExecutor->execute($diff, $requestData);
     }
 }

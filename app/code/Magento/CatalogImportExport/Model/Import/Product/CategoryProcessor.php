@@ -66,6 +66,8 @@ class CategoryProcessor
     }
 
     /**
+     * Initialize categories
+     *
      * @return $this
      */
     protected function initCategories()
@@ -75,6 +77,7 @@ class CategoryProcessor
             $collection->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
+            $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
             /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
             foreach ($collection as $category) {
                 $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
@@ -103,7 +106,6 @@ class CategoryProcessor
      *
      * @param string $name
      * @param int $parentId
-     *
      * @return int
      */
     protected function createCategory($name, $parentId)
@@ -121,7 +123,6 @@ class CategoryProcessor
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
         $category->save();
         $this->categoriesCache[$category->getId()] = $category;
-
         return $category->getId();
     }
 
@@ -129,7 +130,6 @@ class CategoryProcessor
      * Returns ID of category by string path creating nonexistent ones.
      *
      * @param string $categoryPath
-     *
      * @return int
      */
     protected function upsertCategory($categoryPath)
@@ -160,7 +160,6 @@ class CategoryProcessor
      *
      * @param string $categoriesString
      * @param string $categoriesSeparator
-     *
      * @return array
      */
     public function upsertCategories($categoriesString, $categoriesSeparator)
@@ -229,7 +228,7 @@ class CategoryProcessor
      */
     public function getCategoryById($categoryId)
     {
-        return isset($this->categoriesCache[$categoryId]) ? $this->categoriesCache[$categoryId] : null;
+        return $this->categoriesCache[$categoryId] ?? null;
     }
 
     /**

@@ -3,20 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 ?>
 <fieldset class="admin__fieldset" id="export_filter_container" style="display:none;">
     <legend class="admin__legend">
-        <span><?= /* @escapeNotVerified */ __('Entity Attributes') ?></span>
+        <span><?= $block->escapeHtml(__('Entity Attributes')) ?></span>
     </legend>
     <br />
-    <form id="export_filter_form" action="<?= /* @escapeNotVerified */ $block->getUrl('*/*/export') ?>" method="post">
-        <input name="form_key" type="hidden" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
+    <form id="export_filter_form" action="<?= $block->escapeUrl($block->getUrl('*/*/export')) ?>" method="post">
+        <input name="form_key" type="hidden" value="<?= /* @noEscape */ $block->getFormKey() ?>" />
         <div id="export_filter_grid_container"><!-- --></div>
     </form>
-    <button class="action- scalable" type="button" onclick="getFile();"><span><?php
-        /* @escapeNotVerified */ echo __('Continue')
+    <button class="action- scalable" type="button" onclick="getFile();"><span><?=
+        $block->escapeHtml(__('Continue'))
     ?></span></button>
 </fieldset>
 <script>

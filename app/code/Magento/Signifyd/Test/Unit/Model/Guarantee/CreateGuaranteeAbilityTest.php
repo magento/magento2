@@ -198,6 +198,9 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->createGuaranteeAbility->isAvailable($orderId));
     }
 
+    /**
+     * @return array
+     */
     public function isAvailableWithCanceledOrderDataProvider()
     {
         return [

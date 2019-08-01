@@ -72,7 +72,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('process')
             ->with(['db-host' => 'host']);
-        $this->checkInteraction(true);
+        $this->checkInteraction('Y');
     }
 
     public function testExecuteInteractiveWithNo()
@@ -85,21 +85,21 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('process')
             ->with([]);
-        $this->checkInteraction(false);
+        $this->checkInteraction('n');
     }
 
     /**
      * Checks interaction with users on CLI
      *
-     * @param bool $interactionType
+     * @param string $interactionType
      * @return void
      */
     private function checkInteraction($interactionType)
     {
-        $dialog = $this->createMock(\Symfony\Component\Console\Helper\DialogHelper::class);
+        $dialog = $this->createMock(\Symfony\Component\Console\Helper\QuestionHelper::class);
         $dialog
             ->expects($this->once())
-            ->method('askConfirmation')
+            ->method('ask')
             ->will($this->returnValue($interactionType));
 
         /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
@@ -107,13 +107,13 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $helperSet
             ->expects($this->once())
             ->method('get')
-            ->with('dialog')
+            ->with('question')
             ->will($this->returnValue($dialog));
         $this->command->setHelperSet($helperSet);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--db-host' => 'host']);
-        if ($interactionType) {
+        if (strtolower($interactionType) === 'y') {
             $message = 'You saved the new configuration.' . PHP_EOL;
         } else {
             $message = 'You made no changes to the configuration.'.PHP_EOL;

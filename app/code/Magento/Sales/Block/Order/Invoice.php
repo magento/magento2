@@ -18,7 +18,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
     /**
      * @var string
      */
-    protected $_template = 'order/invoice.phtml';
+    protected $_template = 'Magento_Sales::order/invoice.phtml';
 
     /**
      * @var \Magento\Framework\App\Http\Context

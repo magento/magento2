@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Catalog category image attribute backend model
  *
@@ -68,6 +70,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Gets image name from $value array.
+     *
      * Will return empty string in a case when $value is not an array
      *
      * @param array $value Attribute value
@@ -84,6 +87,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Avoiding saving potential upload data to DB
+     *
      * Will set empty image attribute value if image was not uploaded
      *
      * @param \Magento\Framework\DataObject $object
@@ -95,17 +99,24 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attributeName = $this->getAttribute()->getName();
         $value = $object->getData($attributeName);
 
+        if ($this->fileResidesOutsideCategoryDir($value)) {
+            // use relative path for image attribute so we know it's outside of category dir when we fetch it
+            $value[0]['name'] = $value[0]['url'];
+        }
+
         if ($imageName = $this->getUploadedImageName($value)) {
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
-            $object->setData($attributeName, '');
+            $object->setData($attributeName, null);
         }
 
         return parent::beforeSave($object);
     }
 
     /**
+     * Get Instance of Category Image Uploader.
+     *
      * @return \Magento\Catalog\Model\ImageUploader
      *
      * @deprecated 101.0.0
@@ -132,6 +143,27 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Check for file path resides outside of category media dir. The URL will be a path including pub/media if true
+     *
+     * @param array|null $value
+     * @return bool
+     */
+    private function fileResidesOutsideCategoryDir($value)
+    {
+        if (!is_array($value) || !isset($value[0]['url'])) {
+            return false;
+        }
+
+        $fileUrl = ltrim($value[0]['url'], '/');
+        $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA);
+
+        if (!$baseMediaDir) {
+            return false;
+        }
+        return strpos($fileUrl, $baseMediaDir) === 0;
+    }
+
+    /**
      * Save uploaded file and set its name to category
      *
      * @param \Magento\Framework\DataObject $object
@@ -148,6 +180,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $this->_logger->critical($e);
             }
         }
+
         return $this;
     }
 }

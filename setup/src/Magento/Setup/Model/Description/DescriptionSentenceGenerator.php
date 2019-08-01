@@ -39,7 +39,7 @@ class DescriptionSentenceGenerator
      */
     public function generate()
     {
-        $sentenceWordsCount = mt_rand(
+        $sentenceWordsCount = random_int(
             $this->sentenceConfig['words']['count-min'],
             $this->sentenceConfig['words']['count-max']
         );

@@ -41,6 +41,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $this->model->isShipmentSeparately());
     }
 
+    /**
+     * @return array
+     */
     public function isShipmentSeparatelyWithoutItemDataProvider()
     {
         return [
@@ -70,6 +73,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $this->model->isShipmentSeparately($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function isShipmentSeparatelyWithItemDataProvider()
     {
         return [
@@ -91,6 +97,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $this->model->isChildCalculated());
     }
 
+    /**
+     * @return array
+     */
     public function isChildCalculatedWithoutItemDataProvider()
     {
         return [
@@ -120,6 +129,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $this->model->isChildCalculated($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function isChildCalculatedWithItemDataProvider()
     {
         return [
@@ -151,6 +163,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($unserializedResult, $this->model->getSelectionAttributes($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function getSelectionAttributesDataProvider()
     {
         return [
@@ -184,6 +199,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $this->model->canShowPriceInfo($this->orderItem));
     }
 
+    /**
+     * @return array
+     */
     public function canShowPriceInfoDataProvider()
     {
         return [

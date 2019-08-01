@@ -115,7 +115,8 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         if (isset($row['display_name']) && $row['display_name'] == '') {
             $row['display_name'] = 'WebSetupWizard';
         }
-        $row['id'] = $row['time'] . '_' . $row['type'] . (isset($row['display_name']) ? $row['display_name'] : '');
+        $row['id'] = $row['time'] . '_' . $row['type']
+            . (isset($row['display_name']) ? '_' . $row['display_name'] : '');
         return $row;
     }
 }

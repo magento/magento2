@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DownloadableProduct" type="product">
+        <data key="sku" unique="suffix">downloadableproduct</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">DownloadableProduct</data>
+        <data key="price">50.99</data>
+        <data key="quantity">100</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">downloadableproduct</data>
+    </entity>
+    <entity name="DownloadableProductOutOfStock" type="product">
+        <data key="sku" unique="suffix">downloadableoutofstockproduct</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">DownloadableProduct</data>
+        <data key="price">50.99</data>
+        <data key="quantity">100</data>
+        <data key="weight">0</data>
+        <data key="status">0</data>
+        <data key="urlKey" unique="suffix">downloadableproduct</data>
+    </entity>
+    <entity name="DownloadableProductWithOneLink" type="product">
+        <data key="sku" unique="suffix">downloadableproduct</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">DownloadableProduct</data>
+        <data key="price">50.99</data>
+        <data key="quantity">100</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">downloadableproduct</data>
+        <data key="visibility">4</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="downloadable_link">downloadableLink1</requiredEntity>
+    </entity>
+    <entity name="DownloadableProductWithTwoLink" type="product">
+        <data key="sku" unique="suffix">downloadableproduct</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">DownloadableProduct</data>
+        <data key="price">50.99</data>
+        <data key="quantity">100</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">downloadableproduct</data>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="downloadable_link">downloadableLink1</requiredEntity>
+        <requiredEntity type="downloadable_link">downloadableLink2</requiredEntity>
+    </entity>
+    <entity name="ApiDownloadableProduct" type="product">
+        <data key="sku" unique="suffix">api-downloadable-product</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Downloadable Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-downloadable-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+        <requiredEntity type="downloadable_link">apiDownloadableLink</requiredEntity>
+    </entity>
+    <entity name="DownloadableProductWithTwoLink100" type="product">
+        <data key="sku" unique="suffix">downloadableproduct</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">DownloadableProduct</data>
+        <data key="price">50.99</data>
+        <data key="quantity">100</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <data key="is_shareable">0</data>
+        <data key="urlKey" unique="suffix">downloadableproduct</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+        <requiredEntity type="downloadable_link">downloadableLink1</requiredEntity>
+        <requiredEntity type="downloadable_link">downloadableLink2</requiredEntity>
+    </entity>
+</entities>

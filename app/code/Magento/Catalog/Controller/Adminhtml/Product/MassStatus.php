@@ -6,6 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\ResultFactory;
@@ -13,9 +14,10 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
+ * Updates status for a batch of products.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
+class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
@@ -86,7 +88,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $filterRequest = $this->getRequest()->getParam('filters', null);
         $status = (int) $this->getRequest()->getParam('status');
 
-        if (null !== $storeId && null !== $filterRequest) {
+        if (null === $storeId && null !== $filterRequest) {
             $storeId = (isset($filterRequest['store_id'])) ? (int) $filterRequest['store_id'] : 0;
         }
 

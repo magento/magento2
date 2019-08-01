@@ -32,7 +32,7 @@ class AssertCustomVariableNotInGrid extends AbstractConstraint
         ];
 
         $systemVariableIndexNew->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $systemVariableIndexNew->getSystemVariableGrid()->isRowVisible($filter),
             'Custom System Variable with code \'' . $filter['code'] . '\' is present in System Variable grid.'
         );

@@ -22,6 +22,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->getObject(\Magento\Customer\Block\Account\Customer::class, ['httpContext' => $this->httpContext]);
     }
 
+    /**
+     * @return array
+     */
     public function customerLoggedInDataProvider()
     {
         return [

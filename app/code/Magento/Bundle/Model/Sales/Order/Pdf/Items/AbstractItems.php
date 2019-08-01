@@ -92,9 +92,8 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
 
         if (isset($itemsArray[$item->getOrderItem()->getId()])) {
             return $itemsArray[$item->getOrderItem()->getId()];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -244,9 +243,8 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     {
         if ($this->getItem() instanceof \Magento\Sales\Model\Order\Item) {
             return $this->getItem();
-        } else {
-            return $this->getItem()->getOrderItem();
         }
+        return $this->getItem()->getOrderItem();
     }
 
     /**

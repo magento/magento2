@@ -14,12 +14,23 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->model = new \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype();
+        $this->model = new \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype(
+            $this->getOptionsArray()
+        );
     }
 
     public function testToOptionArray()
     {
-        $expectedResult = [
+        $expectedResult = $this->getOptionsArray();
+        $this->assertEquals($expectedResult, $this->model->toOptionArray());
+    }
+
+    /**
+     * @return array
+     */
+    private function getOptionsArray()
+    {
+        return [
             ['value' => 'text', 'label' => 'Text Field'],
             ['value' => 'textarea', 'label' => 'Text Area'],
             ['value' => 'texteditor', 'label' => 'Text Editor'],
@@ -28,6 +39,5 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
             ['value' => 'multiselect', 'label' => 'Multiple Select'],
             ['value' => 'select', 'label' => 'Dropdown']
         ];
-        $this->assertEquals($expectedResult, $this->model->toOptionArray());
     }
 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
@@ -212,6 +213,34 @@ class AccountManagementTest extends WebapiAbstract
         }
     }
 
+    public function testCreateCustomerWithoutOptionalFields()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST, ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'CreateAccount',
+            ],
+        ];
+
+        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        unset($customerDataArray['store_id']);
+        unset($customerDataArray['website_id']);
+        $requestData = ['customer' => $customerDataArray, 'password' => CustomerHelper::PASSWORD];
+        try {
+            $customerData = $this->_webApiCall($serviceInfo, $requestData, null, 'all');
+            $this->assertNotNull($customerData['id']);
+        } catch (\Exception $e) {
+            $this->fail('Customer should be created without optional fields.');
+        }
+    }
+
     /**
      * Test customer activation when it is required
      *
@@ -322,7 +351,7 @@ class AccountManagementTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = 'Reset password token mismatch.';
+        $expectedMessage = 'The password token is mismatched. Reset and try again.';
 
         try {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
@@ -366,13 +395,13 @@ class AccountManagementTest extends WebapiAbstract
                 'message' => 'One or more input exceptions have occurred.',
                 'errors' => [
                     [
-                        'message' => '%fieldName is a required field.',
+                        'message' => '"%fieldName" is required. Enter and try again.',
                         'parameters' => [
                             'fieldName' => 'email',
                         ],
                     ],
                     [
-                        'message' => '%fieldName is a required field.',
+                        'message' => '"%fieldName" is required. Enter and try again.',
                         'parameters' => [
                             'fieldName' => 'template',
                         ]
@@ -575,8 +604,14 @@ class AccountManagementTest extends WebapiAbstract
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
 
-        $this->assertEquals('The value of attribute "First Name" must be set', $validationResponse['messages'][0]);
-        $this->assertEquals('The value of attribute "Last Name" must be set', $validationResponse['messages'][1]);
+        $this->assertEquals(
+            'The "First Name" attribute value is empty. Set the attribute and try again.',
+            $validationResponse['messages'][0]
+        );
+        $this->assertEquals(
+            'The "Last Name" attribute value is empty. Set the attribute and try again.',
+            $validationResponse['messages'][1]
+        );
     }
 
     public function testIsReadonly()

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDashboardWithChartsTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Google Charts on Magento dashboard"/>
+            <title value="Admin should see Google chart on Magento dashboard"/>
+            <description value="Google chart on Magento dashboard page is displaying properly"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-98934"/>
+            <useCaseId value="MAGETWO-98584"/>
+            <group value="backend"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set admin/dashboard/enable_charts 1" stepKey="setEnableCharts"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">150</field>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="firstname">John1</field>
+                <field key="lastname">Doe1</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Reset admin order filter -->
+            <comment userInput="Reset admin order filter" stepKey="resetAdminOrderFilter"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingOrderGrid"/>
+            <magentoCLI command="config:set admin/dashboard/enable_charts 0" stepKey="setDisableChartsAsDefault"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Login as admin -->
+        <comment userInput="Login as admin" stepKey="adminLogin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <!-- Grab quantity value -->
+        <comment userInput="Grab quantity value from dashboard" stepKey="grabQuantityFromDashboard"/>
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabStartQuantity"/>
+        <!-- Login as customer -->
+        <comment userInput="Login as customer" stepKey="loginAsCustomer"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add Product to Shopping Cart-->
+        <comment userInput="Add product to the shopping cart" stepKey="addProductToCart"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!--Go to Checkout-->
+        <comment userInput="Go to checkout" stepKey="goToCheckout"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingCheckoutPageWithShippingMethod"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask1"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <comment userInput="Select Check/Money payment" stepKey="checkoutSelectCheckMoneyPayment"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!-- Place Order -->
+        <comment userInput="Place order" stepKey="placeOrder"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: " stepKey="seeOrderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!-- Search for Order in the order grid -->
+        <comment userInput="Search for Order in the order grid" stepKey="searchOrderInGrid"/>
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitForSearchingOrder"/>
+        <!-- Create invoice -->
+        <comment userInput="Create invoice" stepKey="createInvoice"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
+        <waitForPageLoad stepKey="waitForInvoicePageToLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
+        <see selector="{{AdminInvoiceTotalSection.total('Subtotal')}}" userInput="$150.00" stepKey="seeCorrectGrandTotal"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessInvoiceMessage"/>
+        <!--Create Shipment for the order-->
+        <comment userInput="Create Shipment for the order" stepKey="createShipmentForOrder"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForOrderListPageLoading"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="openOrderPageForShip"/>
+        <waitForPageLoad stepKey="waitForOrderDetailsPage"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <waitForPageLoad stepKey="waitForShipmentPagePage"/>
+        <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>
+        <!--Submit Shipment-->
+        <comment userInput="Submit Shipment" stepKey="submitShipment"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <waitForPageLoad stepKey="waitForShipmentSubmit"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
+        <!-- Go to dashboard page -->
+        <comment userInput="Go to dashboard page" stepKey="goToDashboardPage"/>
+        <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
+        <waitForPageLoad stepKey="waitForDashboardPageLoad4"/>
+        <!-- Grab quantity value -->
+        <comment userInput="Grab quantity value from dashboard at the end" stepKey="grabQuantityFromDashboardAtTheEnd"/>
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabEndQuantity"/>
+        <!-- Assert that page is not broken -->
+        <comment userInput="Assert that dashboard page is not broken" stepKey="assertDashboardPageIsNotBroken"/>
+        <seeElement selector="{{AdminDashboardSection.dashboardDiagramOrderContentTab}}" stepKey="seeOrderContentTab"/>
+        <seeElement selector="{{AdminDashboardSection.dashboardDiagramContent}}" stepKey="seeDiagramContent"/>
+        <click selector="{{AdminDashboardSection.dashboardDiagramAmounts}}" stepKey="clickDashboardAmount"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForDashboardAmountLoading"/>
+        <seeElement selector="{{AdminDashboardSection.dashboardDiagramAmountsContentTab}}" stepKey="seeDiagramAmountContent"/>
+        <seeElement selector="{{AdminDashboardSection.dashboardDiagramTotals}}" stepKey="seeAmountTotals"/>
+        <dontSeeJsError stepKey="dontSeeJsError"/>
+        <assertGreaterThan expected="$grabStartQuantity" actual="$grabEndQuantity" stepKey="checkQuantityWasChanged"/>
+    </test>
+</tests>

@@ -1,0 +1,43 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type StoreConfig @doc(description: "The type contains information about a store config") {
+    front : String @doc(description: "Default Web URL")
+    cms_home_page : String @doc(description: "CMS Home Page")
+    no_route : String @doc(description: "Default No-route URL")
+    cms_no_route : String @doc(description: "CMS No Route Page")
+    cms_no_cookies : String @doc(description: "CMS No Cookies Page")
+    show_cms_breadcrumbs : Int @doc(description: "Show Breadcrumbs for CMS Pages")
+}
+
+
+type Query {
+    cmsPage (
+        id: Int @doc(description: "Id of the CMS page") @deprecated(reason: "The `id` is deprecated. Use `identifier` instead.") @doc(description: "The CMS page query returns information about a CMS page")
+        identifier: String @doc(description: "Identifier of the CMS page")
+    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Page") @doc(description: "The CMS page query returns information about a CMS page") @cache(cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Page\\Identity")
+    cmsBlocks (
+        identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
+    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "The CMS block query returns information about CMS blocks") @cache(cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Block\\Identity")
+}
+
+type CmsPage @doc(description: "CMS page defines all CMS page information") {
+    identifier: String @doc(description: "Identifier of the CMS page")
+    url_key: String @doc(description: "URL key of CMS page")
+    title: String @doc(description: "CMS page title")
+    content: String @doc(description: "CMS page content")
+    content_heading: String @doc(description: "CMS page content heading")
+    page_layout: String @doc(description: "CMS page content heading")
+    meta_title: String @doc(description: "CMS page meta title")
+    meta_description: String @doc(description: "CMS page meta description")
+    meta_keywords: String @doc(description: "CMS page meta keywords")
+}
+
+type CmsBlocks @doc(description: "CMS blocks information") {
+    items: [CmsBlock] @doc(description: "An array of CMS blocks")
+}
+
+type CmsBlock @doc(description: "CMS block defines all CMS block information") {
+    identifier: String @doc(description: "CMS block identifier")
+    title: String @doc(description: "CMS block title")
+    content: String @doc(description: "CMS block content")
+}

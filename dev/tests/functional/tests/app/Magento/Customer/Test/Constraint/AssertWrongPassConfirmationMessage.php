@@ -35,7 +35,7 @@ class AssertWrongPassConfirmationMessage extends AbstractConstraint
     {
         $validationMessages = $customerAccountEdit->getAccountInfoForm()->getValidationMessages($customer);
         if (isset($validationMessages['password_confirmation'])) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 self::CONFIRMATION_MESSAGE,
                 $validationMessages['password_confirmation'],
                 'Wrong password confirmation validation text message.'

@@ -3,23 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Bundle;
 
 use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Bundle product view test
+ */
 class BundleProductViewTest extends GraphQlAbstract
 {
     const KEY_PRICE_TYPE_FIXED = 'FIXED';
+    const KEY_PRICE_TYPE_DYNAMIC = 'DYNAMIC';
+
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
      */
-    public function testAllFielsBundleProducts()
+    public function testAllFieldsBundleProducts()
     {
         $productSku = 'bundle-product';
         $query
@@ -36,7 +43,6 @@ class BundleProductViewTest extends GraphQlAbstract
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids 
            ... on BundleProduct {
            dynamic_sku
             dynamic_price
@@ -52,7 +58,7 @@ class BundleProductViewTest extends GraphQlAbstract
               sku              
               options {
                 id
-                qty
+                quantity
                 position
                 is_default
                 price
@@ -77,7 +83,111 @@ QUERY;
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $bundleProduct = $productRepository->get($productSku, false, null, true);
+        $bundleProduct->setId(
+            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
+        if ((bool)$bundleProduct->getShipmentType()) {
+            $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
+        } else {
+            $this->assertEquals('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
+        }
+        if ((bool)$bundleProduct->getPriceView()) {
+            $this->assertEquals('AS_LOW_AS', $response['products']['items'][0]['price_view']);
+        } else {
+            $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
+        }
+        $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
+
+        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
+        $this->assertNotEmpty(
+            $response['products']['items'][0]['items'],
+            "Precondition failed: 'items' must not be empty"
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_not_visible_children.php
+     */
+    public function testBundleProductWithNotVisibleChildren()
+    {
+        $productSku = 'bundle-product-1';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+           sku
+           type_id
+           id
+           name
+           attribute_set_id
+           ... on PhysicalProductInterface {
+             weight
+           }
+           ... on BundleProduct {
+           dynamic_sku
+            dynamic_price
+            dynamic_weight
+            price_view
+            ship_bundle_items
+            items {
+              option_id
+              title
+              required
+              type
+              position
+              sku              
+              options {
+                id
+                quantity
+                position
+                is_default
+                price
+                price_type
+                can_change_quantity
+                label
+                product {
+                  id
+                  name
+                  sku
+                  type_id
+                   }
+                }
+            }
+           }
+       }
+   }   
+}
+QUERY;
+
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
+        $config->saveConfig(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            0,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        ObjectManager::getInstance()->get(\Magento\Framework\App\Cache::class)
+            ->clean(\Magento\Framework\App\Config::CACHE_TAG);
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty(
+            $response['products']['items'],
+            "Precondition failed: 'items' must not be empty"
+        );
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        $bundleProduct = $productRepository->get($productSku, false, null, true);
+        $bundleProduct->setId(
+            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
         if ((bool)$bundleProduct->getShipmentType()) {
             $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
         } else {
@@ -126,17 +236,23 @@ QUERY;
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
-            "Precondition failed: 'bundle_product_items' must not be empty"
+            "Precondition failed: 'bundle product items' must not be empty"
         );
+        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         /** @var OptionList $optionList */
         $optionList = ObjectManager::getInstance()->get(\Magento\Bundle\Model\Product\OptionList::class);
         $options = $optionList->getItems($product);
         $option = $options[0];
+        /** @var \Magento\Bundle\Api\Data\LinkInterface $bundleProductLinks */
         $bundleProductLinks = $option->getProductLinks();
         $bundleProductLink = $bundleProductLinks[0];
         $childProductSku = $bundleProductLink->getSku();
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $childProduct = $productRepository->get($childProductSku);
+        /** @var MetadataPool $metadataPool */
+        $childProduct->setId(
+            $childProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+        );
         $this->assertEquals(1, count($options));
         $this->assertResponseFields(
             $actualResponse['items'][0],
@@ -153,10 +269,9 @@ QUERY;
             $actualResponse['items'][0]['options'][0],
             [
                 'id' => $bundleProductLink->getId(),
-                'qty' => (int)$bundleProductLink->getQty(),
+                'quantity' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
-                'price' =>  $bundleProductLink->getPrice(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
                 'label' => $childProduct->getName()
@@ -174,31 +289,6 @@ QUERY;
     }
 
     /**
-     * @param array $actualResponse
-     * @param array $assertionMap ['response_field_name' => 'response_field_value', ...]
-     *                         OR [['response_field' => $field, 'expected_value' => $value], ...]
-     */
-    private function assertResponseFields($actualResponse, $assertionMap)
-    {
-        foreach ($assertionMap as $key => $assertionData) {
-            $expectedValue = isset($assertionData['expected_value'])
-                ? $assertionData['expected_value']
-                : $assertionData;
-            $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $key;
-            $this->assertNotNull(
-                $expectedValue,
-                "Value of '{$responseField}' field must not be NULL"
-            );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
-        }
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_1.php
      */
     public function testAndMaxMinPriceBundleProduct()
@@ -210,12 +300,11 @@ QUERY;
    products(filter: {sku: {eq: "{$productSku}"}})
    {
        items{
-           id           
+           id
            type_id
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids 
            price {
              minimalPrice {
                amount {
@@ -278,7 +367,7 @@ QUERY;
             }
            }
        }
-   }   
+   }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -314,20 +403,19 @@ QUERY;
    products(filter: {sku: {eq: "{$productSku}"}})
    {
        items{
-           id           
+           id
            type_id
            qty
            ... on PhysicalProductInterface {
              weight
            }
-           category_ids 
-           
+
            ... on BundleProduct {
            dynamic_sku
             dynamic_price
             dynamic_weight
             price_view
-            ship_bundle_items             
+            ship_bundle_items
              bundle_product_links {
                id
                name
@@ -335,13 +423,14 @@ QUERY;
              }
            }
        }
-   }   
+   }
 }
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: Cannot'. ' ' .
-            'query field "qty" on type "ProductInterface".');
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: Cannot query field "qty" on type "ProductInterface".'
+        );
         $this->graphQlQuery($query);
     }
 }

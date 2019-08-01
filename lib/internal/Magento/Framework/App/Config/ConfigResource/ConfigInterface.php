@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App\Config\ConfigResource;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Resource for storing store configuration values
  */
@@ -19,7 +21,7 @@ interface ConfigInterface
      * @param int $scopeId
      * @return $this
      */
-    public function saveConfig($path, $value, $scope, $scopeId);
+    public function saveConfig($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0);
 
     /**
      * Delete config value from the storage resource
@@ -29,5 +31,5 @@ interface ConfigInterface
      * @param int $scopeId
      * @return $this
      */
-    public function deleteConfig($path, $scope, $scopeId);
+    public function deleteConfig($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0);
 }

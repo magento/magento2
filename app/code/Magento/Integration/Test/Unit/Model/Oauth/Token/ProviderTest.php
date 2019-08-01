@@ -340,7 +340,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionMessage Token is not the correct length
+     * @expectedExceptionMessage The token length is invalid. Check the length and try again.
      */
     public function testValidateRequestTokenIncorrectLengthToken()
     {

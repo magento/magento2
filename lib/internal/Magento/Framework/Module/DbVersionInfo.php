@@ -31,6 +31,11 @@ class DbVersionInfo
     private $moduleResource;
 
     /**
+     * @var array
+     */
+    private $dbVersionErrorsCache = null;
+
+    /**
      * @param ModuleListInterface $moduleList
      * @param ResourceInterface $moduleResource
      */
@@ -92,16 +97,19 @@ class DbVersionInfo
      */
     public function getDbVersionErrors()
     {
-        $errors = [];
-        foreach ($this->moduleList->getNames() as $moduleName) {
-            if (!$this->isSchemaUpToDate($moduleName)) {
-                $errors[] = $this->getSchemaInfo($moduleName);
-            }
-            if (!$this->isDataUpToDate($moduleName)) {
-                $errors[] = $this->getDataInfo($moduleName);
+        if ($this->dbVersionErrorsCache === null) {
+            $this->dbVersionErrorsCache = [];
+            foreach ($this->moduleList->getNames() as $moduleName) {
+                if (!$this->isSchemaUpToDate($moduleName)) {
+                    $this->dbVersionErrorsCache[] = $this->getSchemaInfo($moduleName);
+                }
+                if (!$this->isDataUpToDate($moduleName)) {
+                    $this->dbVersionErrorsCache[] = $this->getDataInfo($moduleName);
+                }
             }
         }
-        return $errors;
+
+        return $this->dbVersionErrorsCache;
     }
 
     /**
@@ -130,17 +138,20 @@ class DbVersionInfo
      * @param string $moduleName
      * @param string|bool $version
      * @return bool
-     * @throws \UnexpectedValueException
      */
     private function isModuleVersionEqual($moduleName, $version)
     {
         $module = $this->moduleList->getOne($moduleName);
-        if (empty($module['setup_version'])) {
-            throw new \UnexpectedValueException("Setup version for module '$moduleName' is not specified");
-        }
-        $configVer = $module['setup_version'];
+        $configVer = isset($module['setup_version']) ? $module['setup_version'] : null;
 
-        return ($version !== false
-            && version_compare($configVer, $version) === ModuleDataSetupInterface::VERSION_COMPARE_EQUAL);
+        if (empty($configVer)) {
+            /**
+             * If setup_version was removed, this means that we want to ignore old scripts and do installation only
+             * with declarative schema and data/schema patches
+             */
+            return true;
+        }
+
+        return version_compare($configVer, $version) === ModuleDataSetupInterface::VERSION_COMPARE_EQUAL;
     }
 }

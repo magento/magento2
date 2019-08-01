@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Model\Oauth\Token;
 
 use Magento\Integration\Model\Oauth\Token\RequestLog\ReaderInterface as RequestLogReader;
@@ -65,7 +66,10 @@ class RequestThrottler
         $count = $this->requestLogReader->getFailuresCount($userName, $userType);
         if ($count >= $this->requestLogConfig->getMaxFailuresCount()) {
             throw new AuthenticationException(
-                __('You did not sign in correctly or your account is temporarily disabled.')
+                __(
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                )
             );
         }
     }

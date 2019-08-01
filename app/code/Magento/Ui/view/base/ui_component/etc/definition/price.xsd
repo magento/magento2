@@ -12,7 +12,32 @@
     <xs:complexType name="componentPrice">
         <xs:sequence>
             <xs:group ref="configurable" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:group ref="componentPriceSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
         <xs:attributeGroup ref="ui_element_attributes"/>
     </xs:complexType>
+
+    <xs:complexType name="formElementPrice">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:group ref="componentPriceSettings"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:group name="componentPriceSettings">
+        <xs:choice>
+        </xs:choice>
+    </xs:group>
 </xs:schema>

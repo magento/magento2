@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 require __DIR__ . '/multiselect_attribute_rollback.php';
+
+use Magento\Framework\Indexer\IndexerRegistry;
+
 /**
  * Remove all products as strategy of isolation process
  */
@@ -22,3 +26,7 @@ foreach ($productCollection as $product) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(IndexerRegistry::class)
+    ->get(Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID)
+    ->reindexAll();

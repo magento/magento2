@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
+use Magento\Payment\Model\Method\Logger;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\View\Layout;
 use Magento\Checkout\Model\Session;
@@ -64,6 +66,11 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
      */
     private $review;
 
+    /**
+     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
@@ -87,6 +94,9 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
+        $this->loggerMock = $this->getMockBuilder(Logger::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $contextMock->expects(self::once())
             ->method('getRequest')
@@ -102,7 +112,8 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             $contextMock,
             $this->configMock,
             $this->checkoutSessionMock,
-            $this->quoteUpdaterMock
+            $this->quoteUpdaterMock,
+            $this->loggerMock
         );
     }
 
@@ -188,7 +199,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->method('addExceptionMessage')
             ->with(
                 self::isInstanceOf('\InvalidArgumentException'),
-                'We can\'t initialize checkout.'
+                'Checkout failed to initialize. Verify and try again.'
             );
 
         $this->resultFactoryMock->expects(self::once())
@@ -235,7 +246,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->method('addExceptionMessage')
             ->with(
                 self::isInstanceOf(\Magento\Framework\Exception\LocalizedException::class),
-                'We can\'t initialize checkout.'
+                'Checkout failed to initialize. Verify and try again.'
             );
 
         $this->resultFactoryMock->expects(self::once())

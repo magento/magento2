@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Pricing\Price;
 
@@ -77,6 +78,11 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
     protected $priceCurrencyMock;
 
     /**
+     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $ruleDateFormatter;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -94,6 +100,10 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
+        $this->ruleDateFormatter = $this->getMockBuilder(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class)
+            ->setMethods([])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->coreStoreMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
@@ -140,7 +150,8 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
             $this->dataTimeMock,
             $this->storeManagerMock,
             $this->customerSessionMock,
-            $this->catalogRuleResourceFactoryMock
+            $this->catalogRuleResourceFactoryMock,
+            $this->ruleDateFormatter
         );
 
         (new ObjectManager($this))->setBackwardCompatibleProperty(
@@ -159,7 +170,7 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
         $coreWebsiteId = 1;
         $productId = 1;
         $customerGroupId = 1;
-        $dateTime = time();
+        $dateTime = new \DateTime();
 
         $catalogRulePrice = 55.12;
         $convertedPrice = 45.34;
@@ -170,8 +181,8 @@ class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
         $this->coreStoreMock->expects($this->once())
             ->method('getWebsiteId')
             ->will($this->returnValue($coreWebsiteId));
-        $this->dataTimeMock->expects($this->once())
-            ->method('scopeDate')
+        $this->ruleDateFormatter->expects($this->once())
+            ->method('getDate')
             ->with($this->equalTo($coreStoreId))
             ->will($this->returnValue($dateTime));
         $this->customerSessionMock->expects($this->once())

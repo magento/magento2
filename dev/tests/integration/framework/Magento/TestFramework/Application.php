@@ -498,6 +498,7 @@ class Application
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
 
         $this->copyAppConfigFiles();
+        $this->copyGlobalConfigFile();
 
         $installParams = $this->getInstallCliParams();
 
@@ -546,7 +547,7 @@ class Application
     private function copyAppConfigFiles()
     {
         $globalConfigFiles = Glob::glob(
-            $this->_globalConfigDir . '/{di.xml,*/di.xml,vendor_path.php}',
+            $this->_globalConfigDir . '/{di.xml,*/di.xml,db_schema.xml,vendor_path.php}',
             Glob::GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
@@ -556,6 +557,17 @@ class Application
                 copy($file, $targetFile);
             }
         }
+    }
+    
+    /**
+     * Copies global configuration file from the tests folder (see TESTS_GLOBAL_CONFIG_FILE)
+     *
+     * @return void
+     */
+    private function copyGlobalConfigFile()
+    {
+        $targetFile = $this->_configDir . '/config.local.php';
+        copy($this->globalConfigFile, $targetFile);
     }
 
     /**
@@ -626,7 +638,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
-            mkdir($dir);
+            mkdir($dir, 0777, true);
             umask($old);
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
@@ -670,6 +682,7 @@ class Application
             \Magento\Framework\App\Area::AREA_WEBAPI_REST,
             \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
             \Magento\Framework\App\Area::AREA_CRONTAB,
+            \Magento\Framework\App\Area::AREA_GRAPHQL
         ];
         if (in_array($areaCode, $areasForPartialLoading, true)) {
             $app->getArea($areaCode)->load(\Magento\Framework\App\Area::PART_CONFIG);

@@ -169,6 +169,26 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'multiselect',
+                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']],
+                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2|Option 1'],
+                false
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'multiselect',
+                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']],
+                ['product_type' => 'any', 'attribute_code' => 'Option 3|Option 3|Option 3|Option 1'],
+                false
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0]],
+                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 1|Option 1|Option 1'],
+                false
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
                 ['is_required' => true, 'type' => 'datetime'],
                 ['product_type' => 'any', 'attribute_code' => '1/1/15 12am'],
                 true

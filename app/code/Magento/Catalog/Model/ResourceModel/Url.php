@@ -14,6 +14,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Class Url
@@ -102,6 +103,11 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
+     * @var TableMaintainer
+     */
+    private $tableMaintainer;
+
+    /**
      * Url constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -110,6 +116,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
      * @param null $connectionName
+     * @param TableMaintainer|null $tableMaintainer
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -118,7 +125,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,
         \Psr\Log\LoggerInterface $logger,
-        $connectionName = null
+        $connectionName = null,
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
@@ -126,6 +134,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_catalogCategory = $catalogCategory;
         $this->_logger = $logger;
         parent::__construct($context, $connectionName);
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
     }
 
     /**
@@ -655,43 +664,52 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         $connection = $this->getConnection();
 
-        $select = $connection->select()->from(
-            ['i' => $this->getTable('catalog_category_product_index')],
-            ['product_id', 'store_id', 'visibility']
-        )->joinLeft(
-            ['u' => $this->getMainTable()],
-            'i.product_id = u.entity_id AND i.store_id = u.store_id'
-            . ' AND u.entity_type = "' . ProductUrlRewriteGenerator::ENTITY_TYPE . '"',
-            ['request_path']
-        )->joinLeft(
-            ['r' => $this->getTable('catalog_url_rewrite_product_category')],
-            'u.url_rewrite_id = r.url_rewrite_id AND r.category_id is NULL',
-            []
-        );
-
-        $bind = [];
+        $storesProducts = [];
         foreach ($products as $productId => $storeId) {
-            $catId = $this->_storeManager->getStore($storeId)->getRootCategoryId();
-            $productBind = 'product_id' . $productId;
-            $storeBind = 'store_id' . $storeId;
-            $catBind = 'category_id' . $catId;
-            $cond = '(' . implode(
-                ' AND ',
-                ['i.product_id = :' . $productBind, 'i.store_id = :' . $storeBind, 'i.category_id = :' . $catBind]
-            ) . ')';
-            $bind[$productBind] = $productId;
-            $bind[$storeBind] = $storeId;
-            $bind[$catBind] = $catId;
-            $select->orWhere($cond);
+            $storesProducts[$storeId][] = $productId;
         }
 
-        $rowSet = $connection->fetchAll($select, $bind);
-        foreach ($rowSet as $row) {
-            $result[$row['product_id']] = [
-                'store_id' => $row['store_id'],
-                'visibility' => $row['visibility'],
-                'url_rewrite' => $row['request_path'],
-            ];
+        foreach ($storesProducts as $storeId => $productIds) {
+            $select = $connection->select()->from(
+                ['i' => $this->tableMaintainer->getMainTable($storeId)],
+                ['product_id', 'store_id', 'visibility']
+            )->joinLeft(
+                ['u' => $this->getMainTable()],
+                'i.product_id = u.entity_id AND i.store_id = u.store_id'
+                . ' AND u.entity_type = "' . ProductUrlRewriteGenerator::ENTITY_TYPE . '"',
+                ['request_path']
+            )->joinLeft(
+                ['r' => $this->getTable('catalog_url_rewrite_product_category')],
+                'u.url_rewrite_id = r.url_rewrite_id AND r.category_id is NULL',
+                []
+            );
+
+            $bind = [];
+            foreach ($productIds as $productId) {
+                $catId = $this->_storeManager->getStore($storeId)->getRootCategoryId();
+                $productBind = 'product_id' . $productId;
+                $storeBind = 'store_id' . $storeId;
+                $catBind = 'category_id' . $catId;
+                $bindArray = [
+                    'i.product_id = :' . $productBind,
+                    'i.store_id = :' . $storeBind,
+                    'i.category_id = :' . $catBind
+                ];
+                $cond = '(' . implode(' AND ', $bindArray) . ')';
+                $bind[$productBind] = $productId;
+                $bind[$storeBind] = $storeId;
+                $bind[$catBind] = $catId;
+                $select->orWhere($cond);
+            }
+
+            $rowSet = $connection->fetchAll($select, $bind);
+            foreach ($rowSet as $row) {
+                $result[$row['product_id']] = [
+                    'store_id' => $row['store_id'],
+                    'visibility' => $row['visibility'],
+                    'url_rewrite' => $row['request_path'],
+                ];
+            }
         }
 
         return $result;

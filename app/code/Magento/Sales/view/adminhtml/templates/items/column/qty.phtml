@@ -3,44 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php if ($_item = $block->getItem()): ?>
-<table class="qty-table">
-    <tr>
-        <th><?= /* @escapeNotVerified */ __('Ordered') ?></th>
-        <td><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></td>
-    </tr>
-
-    <?php if ((float) $_item->getQtyInvoiced()): ?>
+<?php if ($item = $block->getItem()) : ?>
+    <table class="qty-table">
         <tr>
-            <th><?= /* @escapeNotVerified */ __('Invoiced') ?></th>
-            <td><?= /* @escapeNotVerified */ $_item->getQtyInvoiced()*1 ?></td>
+            <th><?= $block->escapeHtml(__('Ordered')); ?></th>
+            <td><?= (int) $item->getQtyOrdered() ?></td>
         </tr>
-    <?php endif; ?>
 
-    <?php if ((float) $_item->getQtyShipped()): ?>
-        <tr>
-            <th><?= /* @escapeNotVerified */ __('Shipped') ?></th>
-            <td><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></td>
-        </tr>
-    <?php endif; ?>
+        <?php if ((float)$item->getQtyInvoiced()) : ?>
+            <tr>
+                <th><?= $block->escapeHtml(__('Invoiced')); ?></th>
+                <td><?= (int) $item->getQtyInvoiced() ?></td>
+            </tr>
+        <?php endif; ?>
 
-    <?php if ((float) $_item->getQtyRefunded()): ?>
-        <tr>
-            <th><?= /* @escapeNotVerified */ __('Refunded') ?></th>
-            <td><?= /* @escapeNotVerified */ $_item->getQtyRefunded()*1 ?></td>
-        </tr>
-    <?php endif; ?>
+        <?php if ((float)$item->getQtyShipped()) : ?>
+            <tr>
+                <th><?= $block->escapeHtml(__('Shipped')); ?></th>
+                <td><?= (int) $item->getQtyShipped() ?></td>
+            </tr>
+        <?php endif; ?>
 
-    <?php if ((float) $_item->getQtyCanceled()): ?>
-        <tr>
-            <th><?= /* @escapeNotVerified */ __('Canceled') ?></th>
-            <td><?= /* @escapeNotVerified */ $_item->getQtyCanceled()*1 ?></td>
-        </tr>
-    <?php endif; ?>
+        <?php if ((float)$item->getQtyRefunded()) : ?>
+            <tr>
+                <th><?= $block->escapeHtml(__('Refunded')); ?></th>
+                <td><?= (int) $item->getQtyRefunded() ?></td>
+            </tr>
+        <?php endif; ?>
 
-</table>
+        <?php if ((float)$item->getQtyCanceled()) : ?>
+            <tr>
+                <th><?= $block->escapeHtml(__('Canceled')); ?></th>
+                <td><?= (int) $item->getQtyCanceled() ?></td>
+            </tr>
+        <?php endif; ?>
+
+    </table>
 <?php endif; ?>

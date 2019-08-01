@@ -12,16 +12,17 @@ namespace Magento\Framework\App\DeploymentConfig\Writer;
 class PhpFormatter implements FormatterInterface
 {
     /**
-     * 2 space indentation for array formatting.
+     * 4 space indentation for array formatting.
      */
-    const INDENT = '  ';
+    const INDENT = '    ';
 
     /**
      * Format deployment configuration.
+     *
      * If $comments is present, each item will be added
      * as comment to the corresponding section
      *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function format($data, array $comments = [])
     {
@@ -39,7 +40,7 @@ class PhpFormatter implements FormatterInterface
      * @param string $prefix
      * @return string
      */
-    private function formatData($data, $comments = [], $prefix = '  ')
+    private function formatData($data, $comments = [], $prefix = '    ')
     {
         $elements = [];
 
@@ -56,13 +57,12 @@ class PhpFormatter implements FormatterInterface
                     $elements[] = $prefix . " */";
                 }
 
-                $elements[] = $prefix . $this->varExportShort($key) . ' => ' .
-                    (!is_array($value) ? $this->varExportShort($value) . ',' : '');
-
                 if (is_array($value)) {
-                    $elements[] = $prefix . '[';
-                    $elements[] = $this->formatData($value, [], '  ' . $prefix);
+                    $elements[] = $prefix . $this->varExportShort($key) . ' => [';
+                    $elements[] = $this->formatData($value, [], '    ' . $prefix);
                     $elements[] = $prefix . '],';
+                } else {
+                    $elements[] = $prefix . $this->varExportShort($key) . ' => ' . $this->varExportShort($value) . ',';
                 }
             }
             return implode("\n", $elements);
@@ -72,6 +72,8 @@ class PhpFormatter implements FormatterInterface
     }
 
     /**
+     * Format generated config files using the short array syntax.
+     *
      * If variable to export is an array, format with the php >= 5.4 short array syntax. Otherwise use
      * default var_export functionality.
      *
@@ -81,7 +83,9 @@ class PhpFormatter implements FormatterInterface
      */
     private function varExportShort($var, int $depth = 0)
     {
-        if (!is_array($var)) {
+        if (null === $var) {
+            return 'null';
+        } elseif (!is_array($var)) {
             return var_export($var, true);
         }
 

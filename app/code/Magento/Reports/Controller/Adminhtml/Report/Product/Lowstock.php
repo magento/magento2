@@ -6,7 +6,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
-class Lowstock extends \Magento\Reports\Controller\Adminhtml\Report\Product
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Lowstock extends \Magento\Reports\Controller\Adminhtml\Report\Product implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

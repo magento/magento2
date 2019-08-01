@@ -27,7 +27,9 @@ define([
             directionDefault: 'asc',
             orderDefault: 'position',
             limitDefault: '9',
-            url: ''
+            url: '',
+            formKey: '',
+            post: false
         },
 
         /** @inheritdoc */
@@ -89,7 +91,7 @@ define([
                 baseUrl = urlPaths[0],
                 urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
                 paramData = {},
-                parameters, i;
+                parameters, i, form, params, key, input, formKey;
 
             for (i = 0; i < urlParams.length; i++) {
                 parameters = urlParams[i].split('=');
@@ -99,12 +101,38 @@ define([
             }
             paramData[paramName] = paramValue;
 
-            if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
-                delete paramData[paramName];
-            }
-            paramData = $.param(paramData);
+            if (this.options.post) {
+                form = document.createElement('form');
+                params = [this.options.mode, this.options.direction, this.options.order, this.options.limit];
 
-            location.href = baseUrl + (paramData.length ? '?' + paramData : '');
+                for (key in paramData) {
+                    if (params.indexOf(key) !== -1) { //eslint-disable-line max-depth
+                        input = document.createElement('input');
+                        input.name = key;
+                        input.value = paramData[key];
+                        form.appendChild(input);
+                        delete paramData[key];
+                    }
+                }
+                formKey = document.createElement('input');
+                formKey.name = 'form_key';
+                formKey.value = this.options.formKey;
+                form.appendChild(formKey);
+
+                paramData = $.param(paramData);
+                baseUrl += paramData.length ? '?' + paramData : '';
+
+                form.action = baseUrl;
+                form.method = 'POST';
+                document.body.appendChild(form);
+                form.submit();
+            } else {
+                if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
+                    delete paramData[paramName];
+                }
+                paramData = $.param(paramData);
+                location.href = baseUrl + (paramData.length ? '?' + paramData : '');
+            }
         }
     });
 

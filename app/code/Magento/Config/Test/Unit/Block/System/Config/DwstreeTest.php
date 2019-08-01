@@ -121,6 +121,9 @@ class DwstreeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function initTabsDataProvider()
     {
         return [

@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @deprecated use lib/web/mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter.js instead
+ */
 /* global varienGlobalEvents, tinyMceEditors, MediabrowserUtility, closeEditorPopup, Base64 */
 /* eslint-disable strict */
 define([
@@ -34,7 +37,15 @@ define([
             this.config = config;
             this.schema = config.schema || html5Schema;
 
-            _.bindAll(this, 'beforeSetContent', 'saveContent', 'onChangeContent', 'openFileBrowser', 'updateTextArea');
+            _.bindAll(
+                this,
+                'beforeSetContent',
+                'saveContent',
+                'onChangeContent',
+                'openFileBrowser',
+                'updateTextArea',
+                'removeEvents'
+            );
 
             varienGlobalEvents.attachEventHandler('tinymceChange', this.onChangeContent);
             varienGlobalEvents.attachEventHandler('tinymceBeforeSetContent', this.beforeSetContent);
@@ -67,6 +78,17 @@ define([
             }
 
             tinyMCE3.init(this.getSettings(mode));
+        },
+
+        /**
+         * Remove events from instance.
+         *
+         * @param {String} wysiwygId
+         */
+        removeEvents: function (wysiwygId) {
+            var editor = tinyMceEditors.get(wysiwygId);
+
+            varienGlobalEvents.removeEventHandler('tinymceChange', editor.onChangeContent);
         },
 
         /**
@@ -480,7 +502,9 @@ define([
          * @param {String} directive
          */
         makeDirectiveUrl: function (directive) {
-            return this.config['directives_url'].replace(/directive.*/, 'directive/___directive/' + directive);
+            return this.config['directives_url']
+                .replace(/directive/, 'directive/___directive/' + directive)
+                .replace(/\/$/, '');
         },
 
         /**
@@ -490,7 +514,7 @@ define([
          */
         encodeDirectives: function (content) {
             // collect all HTML tags with attributes that contain directives
-            return content.gsub(/<([a-z0-9\-\_]+[^>]+?)([a-z0-9\-\_]+=".*?\{\{.+?\}\}.*?".*?)>/i, function (match) {
+            return content.gsub(/<([a-z0-9\-\_]+[^>]+?)([a-z0-9\-\_]+="[^"]*?\{\{.+?\}\}.*?".*?)>/i, function (match) {
                 var attributesString = match[2],
                     decodedDirectiveString;
 
@@ -537,12 +561,18 @@ define([
          * @return {*}
          */
         decodeDirectives: function (content) {
-            // escape special chars in directives url to use it in regular expression
-            var url = this.makeDirectiveUrl('%directive%').replace(/([$^.?*!+:=()\[\]{}|\\])/g, '\\$1'),
-                reg = new RegExp(url.replace('%directive%', '([a-zA-Z0-9%,_-]+)\/?'));
+            var directiveUrl = this.makeDirectiveUrl('%directive%').split('?')[0], // remove query string from directive
+                // escape special chars in directives url to use in regular expression
+                regexEscapedDirectiveUrl = directiveUrl.replace(/([$^.?*!+:=()\[\]{}|\\])/g, '\\$1'),
+                regexDirectiveUrl = regexEscapedDirectiveUrl
+                    .replace(
+                        '%directive%',
+                        '([a-zA-Z0-9,_-]+(?:%2[A-Z]|)+\/?)(?:(?!").)*'
+                    ) + '/?(\\\\?[^"]*)?', // allow optional query string
+                reg = new RegExp(regexDirectiveUrl);
 
-            return content.gsub(reg, function (match) { //eslint-disable-line no-extra-bind
-                return Base64.mageDecode(decodeURIComponent(match[1])).replace(/"/g, '&quot;');
+            return content.gsub(reg, function (match) {
+                return Base64.mageDecode(decodeURIComponent(match[1]).replace(/\/$/, '')).replace(/"/g, '&quot;');
             });
         },
 

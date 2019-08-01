@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\Helper;
 
@@ -44,7 +45,7 @@ class Filter
      * @param string|array $value
      * @return Item
      */
-    public function generate(string $field, string $condition, $value)
+    public function generate(string $field, string $condition, $value) : Item
     {
         $this->filterBuilder->setField($field);
         $this->filterBuilder->setConditionType($condition);
@@ -60,7 +61,7 @@ class Filter
      * @param Item $filter
      * @return SearchCriteriaInterface
      */
-    public function add(SearchCriteriaInterface $searchCriteria, Item $filter)
+    public function add(SearchCriteriaInterface $searchCriteria, Item $filter) : SearchCriteriaInterface
     {
         $filterGroups = $searchCriteria->getFilterGroups();
         $filterGroups[] = $this->filterGroupBuilder->addFilter($filter)->create();
@@ -76,7 +77,7 @@ class Filter
      * @param string $filterName
      * @return SearchCriteriaInterface
      */
-    public function remove(SearchCriteriaInterface $searchCriteria, string $filterName)
+    public function remove(SearchCriteriaInterface $searchCriteria, string $filterName) : SearchCriteriaInterface
     {
         $filterGroups = [];
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {

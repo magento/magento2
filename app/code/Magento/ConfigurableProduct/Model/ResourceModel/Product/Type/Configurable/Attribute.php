@@ -1,16 +1,17 @@
 <?php
 /**
- * Catalog super product attribute resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Catalog super product attribute resource model.
+ */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -52,7 +53,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Inititalize connection and define tables
+     * Initialize connection and define tables
      *
      * @return void
      */
@@ -85,22 +86,30 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
         ];
         $valueId = $connection->fetchOne($select, $bind);
+
         if ($valueId) {
-            $storeId = (int)$attribute->getStoreId() ?: $this->_storeManager->getStore()->getId();
+            $connection->insertOnDuplicate(
+                $this->_labelTable,
+                [
+                    'product_super_attribute_id' => (int)$attribute->getId(),
+                    'store_id' => (int)$attribute->getStoreId() ?: $this->_storeManager->getStore()->getId(),
+                    'use_default' => (int)$attribute->getUseDefault(),
+                    'value' => $attribute->getLabel(),
+                ],
+                ['value', 'use_default']
+            );
         } else {
             // if attribute label not exists, always store on default store (0)
-            $storeId = Store::DEFAULT_STORE_ID;
+            $connection->insert(
+                $this->_labelTable,
+                [
+                    'product_super_attribute_id' => (int)$attribute->getId(),
+                    'store_id' => Store::DEFAULT_STORE_ID,
+                    'use_default' => (int)$attribute->getUseDefault(),
+                    'value' => $attribute->getLabel(),
+                ]
+            );
         }
-        $connection->insertOnDuplicate(
-            $this->_labelTable,
-            [
-                'product_super_attribute_id' => (int)$attribute->getId(),
-                'use_default' => (int)$attribute->getUseDefault(),
-                'store_id' => $storeId,
-                'value' => $attribute->getLabel(),
-            ],
-            ['value', 'use_default']
-        );
 
         return $this;
     }
@@ -181,8 +190,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     * @inheritDoc
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {

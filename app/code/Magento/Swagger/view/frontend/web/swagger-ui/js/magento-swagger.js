@@ -3,80 +3,67 @@
  * See COPYING.txt for license details.
  */
 
-/*global SwaggerClient SwaggerUi initOAuth hljs*/
+/*global SwaggerTranslator SwaggerUIBundle SwaggerUIStandalonePreset */
 
 /**
  * @api
  */
-$(function () {
+(function () {
     'use strict';
 
-    var url = $('#input_baseUrl').val();
+    var elementBaseUrl = document.querySelector('#input_baseUrl'),
+        url = elementBaseUrl.value,
+        ui;
 
     // Pre load translate...
-    if (window.SwaggerTranslator) {
-        window.SwaggerTranslator.translate();
+    if (SwaggerTranslator) {
+        SwaggerTranslator.translate();
     }
 
-    /** @function addApiKeyAuthorization */
-    function addApiKeyAuthorization() {
-        var key = encodeURIComponent($('#input_apiKey')[0].value);
+    /**
+     * Takes token from input and adds it to request header.
+     */
+    function addApiKeyAuthorization(e) {
+        var key = encodeURIComponent(e.target.value).trim();
 
-        if (key && key.trim() !== '') {
-            window.swaggerUi.api.clientAuthorizations.add(
-                'apiKeyAuth',
-                new SwaggerClient.ApiKeyAuthorization('Authorization',  'Bearer ' + key, 'header')
-            );
+        if (key) {
+            /**
+             * Adds Auth token to request header.
+             *
+             * @param {Object} req
+             *
+             * @returns {Object} req
+             */
+            ui.getConfigs().requestInterceptor = function (req) {
+                req.headers.Authorization = 'Bearer ' + key;
+
+                return req;
+            };
         }
     }
 
-    /** @function log */
-    function log() {
-        if ('console' in window) {
-            console.log.apply(console, arguments);
-        }
-    }
-
-    window.swaggerUi = new SwaggerUi({
+    ui = new SwaggerUIBundle({
         url: url,
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        dom_id: 'swagger-ui-container',
+        dom_id: '#swagger-ui-container',
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+        ],
+        plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        deepLinking: true,
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-
-        /** @function onComplete */
-        onComplete: function () {
-            if (typeof initOAuth == 'function') {
-                initOAuth({
-                    clientId: 'your-client-id',
-                    clientSecret: 'your-client-secret',
-                    realm: 'your-realms',
-                    appName: 'your-app-name',
-                    scopeSeparator: ','
-                });
-            }
-
-            if (window.SwaggerTranslator) {
-                window.SwaggerTranslator.translate();
-            }
-
-            $('pre code').each(function (i, e) {
-                hljs.highlightBlock(e);
-            });
-
-            addApiKeyAuthorization();
-        },
-
-        /** @function onFailure */
-        onFailure: function () {
-            log('Unable to Load SwaggerUI');
-        },
         docExpansion: 'none',
         apisSorter: 'alpha',
-        showRequestHeaders: false
+        showRequestHeaders: false,
+        layout: 'StandaloneLayout'
     });
 
-    $('#input_apiKey').change(addApiKeyAuthorization);
-
-    window.swaggerUi.load();
-});
+    document.querySelector('#input_apiKey').addEventListener('change', addApiKeyAuthorization);
+    document.querySelector('#explore').addEventListener('click', function () {
+        ui.specActions.download();
+    });
+})();

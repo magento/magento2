@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Config\Processor;
 
-use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Theme\Model\Config\Processor\DesignTheme;
@@ -78,6 +77,7 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getDumpConfigDataProvider()
     {
@@ -159,6 +159,22 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
                     'websites' => [
                         'base' => [
                             'design' => ['theme' => ['theme_id' => 3]],
+                        ],
+                    ],
+                ],
+                [
+                    [
+                        'websites' => [
+                            'base' => [
+                                'design' => ['theme' => ['theme_id' => '']],
+                            ],
+                        ],
+                    ],
+                    [
+                        'websites' => [
+                            'base' => [
+                                'design' => ['theme' => ['theme_id' => '']],
+                            ],
                         ],
                     ],
                 ],

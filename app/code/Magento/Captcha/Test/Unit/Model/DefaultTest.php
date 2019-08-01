@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Model;
+
+use Magento\Framework\Math\Random;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -24,7 +28,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
         'enable' => '1',
         'font' => 'linlibertine',
         'mode' => 'after_fail',
-        'forms' => 'user_forgotpassword,user_create,guest_checkout,register_during_checkout',
+        'forms' => 'user_forgotpassword,user_create',
         'failed_attempts_login' => '3',
         'failed_attempts_ip' => '1000',
         'timeout' => '7',
@@ -35,8 +39,6 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
         'always_for' => [
             'user_create',
             'user_forgotpassword',
-            'guest_checkout',
-            'register_during_checkout',
             'contact_us',
         ],
     ];
@@ -185,7 +187,13 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
     {
         self::$_defaultConfig['case_sensitive'] = '1';
         $this->assertFalse($this->_object->isCorrect('abcdef5'));
-        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + self::EXPIRE_FRAME]];
+        $sessionData = [
+            'user_create_word' => [
+                'data' => 'AbCdEf5',
+                'words' => 'AbCdEf5',
+                'expires' => time() + self::EXPIRE_FRAME
+            ]
+        ];
         $this->_object->getSession()->setData($sessionData);
         self::$_defaultConfig['case_sensitive'] = '0';
         $this->assertTrue($this->_object->isCorrect('abcdef5'));
@@ -226,7 +234,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals($this->_object->getWord(), 'AbCdEf5');
         $this->_object->getSession()->setData(
-            ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() - 360]]
+            ['user_create_word' => ['data' => 'AbCdEf5', 'words' => 'AbCdEf5','expires' => time() - 360]]
         );
         $this->assertNull($this->_object->getWord());
     }
@@ -249,7 +257,15 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
 
-        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + self::EXPIRE_FRAME]]);
+        $session->setData(
+            [
+                'user_create_word' => [
+                    'data' => 'AbCdEf5',
+                    'words' => 'AbCdEf5',
+                    'expires' => time() + self::EXPIRE_FRAME
+                ]
+            ]
+        );
         return $session;
     }
 
@@ -354,13 +370,49 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $captcha->isShownToLoggedInUser());
     }
 
+    /**
+     * @return array
+     */
     public function isShownToLoggedInUserDataProvider()
     {
         return [
             [true, 'contact_us'],
             [false, 'user_create'],
-            [false, 'user_forgotpassword'],
-            [false, 'guest_checkout']
+            [false, 'user_forgotpassword']
+        ];
+    }
+
+    /**
+     * @param string $string
+     * @dataProvider generateWordProvider
+     * @throws \ReflectionException
+     */
+    public function testGenerateWord($string)
+    {
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->expects($this->once())
+            ->method('getRandomString')
+            ->will($this->returnValue($string));
+        $captcha = new \Magento\Captcha\Model\DefaultModel(
+            $this->session,
+            $this->_getHelperStub(),
+            $this->_resLogFactory,
+            'user_create',
+            $randomMock
+        );
+        $method = new \ReflectionMethod($captcha, 'generateWord');
+        $method->setAccessible(true);
+        $this->assertEquals($string, $method->invoke($captcha));
+    }
+    /**
+     * @return array
+     */
+    public function generateWordProvider()
+    {
+        return [
+            ['ABC123'],
+            ['1234567890'],
+            ['The quick brown fox jumps over the lazy dog.']
         ];
     }
 }

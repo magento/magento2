@@ -8,11 +8,13 @@ angular.module('module-grid', ['ngStorage'])
     .controller('moduleGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state', 'titleService', 'paginationService',
         function ($rootScope, $scope, $http, $localStorage, $state, titleService, paginationService) {
             $rootScope.modulesProcessed = false;
-            $http.get('index.php/moduleGrid/modules').success(function(data) {
+            $http.get('index.php/moduleGrid/modules').then(function successCallback(resp) {
+                var data = resp.data;
+
                 $scope.modules = data.modules;
                 $scope.total = data.total;
                 $scope.currentPage = 1;
-                $scope.rowLimit = 20;
+                $scope.rowLimit = '20';
                 $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
                 $rootScope.modulesProcessed = true;
             });

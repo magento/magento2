@@ -3,22 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\Product\TierPrice;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\SearchResultInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
-use Magento\GraphQl\Model\EntityAttributeList;
+use Magento\Framework\Api\SearchResultsInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 
 /**
  * Product field data provider, used for GraphQL resolver processing.
@@ -31,9 +25,9 @@ class Product
     private $collectionFactory;
 
     /**
-     * @var JoinProcessorInterface
+     * @var ProductSearchResultsInterfaceFactory
      */
-    private $joinProcessor;
+    private $searchResultsFactory;
 
     /**
      * @var CollectionProcessorInterface
@@ -41,62 +35,68 @@ class Product
     private $collectionProcessor;
 
     /**
-     * @var ProductSearchResultsInterfaceFactory
+     * @var Visibility
      */
-    private $searchResultsFactory;
+    private $visibility;
 
     /**
      * @param CollectionFactory $collectionFactory
-     * @param JoinProcessorInterface $joinProcessor
-     * @param CollectionProcessorInterface $collectionProcessor
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
+     * @param Visibility $visibility
+     * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         CollectionFactory $collectionFactory,
-        JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor,
-        ProductSearchResultsInterfaceFactory $searchResultsFactory
+        ProductSearchResultsInterfaceFactory $searchResultsFactory,
+        Visibility $visibility,
+        CollectionProcessorInterface $collectionProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->joinProcessor = $joinProcessor;
-        $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->visibility = $visibility;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
-     * Gets list of product data with full data set
+     * Gets list of product data with full data set. Adds eav attributes to result set from passed in array
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultInterface
+     * @param string[] $attributes
+     * @param bool $isSearch
+     * @param bool $isChildSearch
+     * @return SearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
-    {
+    public function getList(
+        SearchCriteriaInterface $searchCriteria,
+        array $attributes = [],
+        bool $isSearch = false,
+        bool $isChildSearch = false
+    ): SearchResultsInterface {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $this->joinProcessor->process($collection);
 
-        $collection->addAttributeToSelect('*');
-        $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
-        $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $this->collectionProcessor->process($collection, $searchCriteria, $attributes);
 
-        $this->collectionProcessor->process($searchCriteria, $collection);
-
+        if (!$isChildSearch) {
+            $visibilityIds = $isSearch
+                ? $this->visibility->getVisibleInSearchIds()
+                : $this->visibility->getVisibleInCatalogIds();
+            $collection->setVisibility($visibilityIds);
+        }
         $collection->load();
 
-        $collection->addCategoryIds();
-        $collection->addFinalPrice();
-        $collection->addMediaGalleryData();
-        $collection->addMinimalPrice();
-        $collection->addPriceData();
-        $collection->addWebsiteNamesToResult();
-        $collection->addOptionsToResult();
-        $collection->addTaxPercents();
-        $collection->addWebsiteNamesToResult();
+        // Methods that perform extra fetches post-load
+        if (in_array('media_gallery_entries', $attributes)) {
+            $collection->addMediaGalleryData();
+        }
+        if (in_array('options', $attributes)) {
+            $collection->addOptionsToResult();
+        }
+
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
-
         return $searchResult;
     }
 }

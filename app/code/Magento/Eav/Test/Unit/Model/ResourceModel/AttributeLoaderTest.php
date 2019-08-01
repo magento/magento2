@@ -90,6 +90,9 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$attributeMock], $this->attributeLoader->getAttributes($entityType, $attributeSetId));
     }
 
+    /**
+     * @return array
+     */
     public function getAttributesDataProvider()
     {
         return [

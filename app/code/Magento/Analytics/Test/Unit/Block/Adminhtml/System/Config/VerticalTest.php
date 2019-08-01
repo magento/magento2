@@ -39,6 +39,14 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getComment', 'getLabel', 'getHint'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $objectManager = new ObjectManager($this);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $reflection = new \ReflectionClass($this->abstractElementMock);
+        $reflection_property = $reflection->getProperty('_escaper');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($this->abstractElementMock, $escaper);
+
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -65,7 +73,7 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
             ->method('getHint')
             ->willReturn('New hint');
         $html = $this->vertical->render($this->abstractElementMock);
-        $this->assertRegexp(
+        $this->assertRegExp(
             "/New comment/",
             $html
         );

@@ -40,6 +40,9 @@ class ArrayBackendTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, $product->getEmpty());
     }
 
+    /**
+     * @return array
+     */
     public static function attributeValueDataProvider()
     {
         return [[[1, 2, 3]], ['1,2,3']];
