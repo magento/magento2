@@ -68,8 +68,8 @@ class AddressConverter
 
             if (!is_string($key)) {
                 throw new InvalidArgumentException(
-                    __(
-                        'Invalid key type in provided addresses array ("%1")',
+                    sprintf(
+                        'Invalid key type in provided addresses array ("%s")',
                         (is_object($key) ? get_class($key) : var_export($key, 1))
                     )
                 );

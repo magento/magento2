@@ -80,7 +80,7 @@ class EmailMessage implements EmailMessageInterface
             $this->message->setSender($sender->getEmail(), $sender->getName());
         }
         if (count($to) < 1) {
-            throw new InvalidArgumentException(__('Email message must have at list one addressee'));
+            throw new InvalidArgumentException('Email message must have at list one addressee');
         }
         if ($to) {
             $this->message->setTo($this->convertAddressArrayToAddressList($to));

@@ -58,7 +58,7 @@ class MimePart implements MimePartInterface
         try {
             $this->mimePart = new ZendMimePart($content);
         } catch (\Exception $e) {
-            throw new InvalidArgumentException(__($e->getMessage()));
+            throw new InvalidArgumentException($e->getMessage());
         }
         $this->mimePart->setType($type);
         $this->mimePart->setEncoding($encoding);
