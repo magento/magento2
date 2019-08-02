@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 /**
- * @deprecated
+ * @deprecated use next @magentoConfigFixture instead:
+ * @magentoConfigFixture default_store checkout/options/guest_checkout 0
  */
 // TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
 declare(strict_types=1);
