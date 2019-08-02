@@ -21,6 +21,7 @@ use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
+use Psr\Log\LoggerInterface;
 
 /**
  * @codeCoverageIgnore
@@ -54,6 +55,11 @@ class UpgradeData implements UpgradeDataInterface
     private $whitelist = [];
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * EAV setup factory
      *
      * @var EavSetupFactory
@@ -70,13 +76,15 @@ class UpgradeData implements UpgradeDataInterface
         UriHandler $uriHandler,
         ScopeConfigInterface $scopeConfig,
         ScopeResolverInterface $scopeResolver,
-        DomainManager $domainManager
+        DomainManager $domainManager,
+        LoggerInterface $logger
     ) {
         $this->eavSetupFactory = $eavSetupFactory;
         $this->uriHandler = $uriHandler;
         $this->scopeConfig = $scopeConfig;
         $this->scopeResolver = $scopeResolver;
         $this->domainManager = $domainManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -196,7 +204,10 @@ class UpgradeData implements UpgradeDataInterface
         try {
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true));
-        } catch (\UnexpectedValueException $e) {} //@codingStandardsIgnoreLine
+        } catch (\UnexpectedValueException $e) {
+            // Static content version may not be available at this point
+            $this->logger->notice($e);
+        }
 
         try {
             $website = $scope->getWebsite();
