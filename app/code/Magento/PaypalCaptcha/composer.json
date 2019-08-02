@@ -2,7 +2,7 @@
     "name": "magento/module-paypal-captcha",
     "description": "N/A",
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "magento/framework": "101.0.*",
         "magento/module-captcha": "100.2.*",
         "magento/module-checkout": "100.2.*",
