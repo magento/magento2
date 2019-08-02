@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b7fd0d0f5a1726ef1e511f9c9885140",
+    "content-hash": "0cf49b3b5a47076608e87c7ddb566073",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2402,7 +2402,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -6814,23 +6814,22 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.4.1",
+            "version": "2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "9b5de03fe069d4a36c911112c30b824ff4e80c3a"
+                "reference": "9e9a20fd4c77833ef41ac07eb076a7f2434ce61c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9b5de03fe069d4a36c911112c30b824ff4e80c3a",
-                "reference": "9b5de03fe069d4a36c911112c30b824ff4e80c3a",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9e9a20fd4c77833ef41ac07eb076a7f2434ce61c",
+                "reference": "9e9a20fd4c77833ef41ac07eb076a7f2434ce61c",
                 "shasum": ""
             },
             "require": {
                 "allure-framework/allure-codeception": "~1.3.0",
                 "codeception/codeception": "~2.3.4 || ~2.4.0 ",
                 "consolidation/robo": "^1.0.0",
-                "epfremme/swagger-php": "^2.0",
                 "ext-curl": "*",
                 "flow/jsonpath": ">0.2",
                 "fzaninotto/faker": "^1.6",
@@ -6853,6 +6852,9 @@
                 "sebastian/phpcpd": "~3.0 || ~4.0",
                 "squizlabs/php_codesniffer": "~3.2",
                 "symfony/stopwatch": "~3.4.6"
+            },
+            "suggest": {
+                "epfremme/swagger-php": "^2.0"
             },
             "bin": [
                 "bin/mftf"
@@ -6883,7 +6885,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-06-10T17:57:40+00:00"
+            "time": "2019-08-02T14:26:18+00:00"
         },
         {
             "name": "mikey179/vfsstream",
