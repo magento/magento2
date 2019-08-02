@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage;
+namespace Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\ImageFactory;
@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Returns product's image url
+ * Returns media url
  */
 class Url implements ResolverInterface
 {
@@ -51,7 +51,7 @@ class Url implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['image_type'])) {
+        if (!isset($value['image_type']) && !isset($value['file'])) {
             throw new LocalizedException(__('"image_type" value should be specified'));
         }
 
@@ -61,9 +61,17 @@ class Url implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $imagePath = $product->getData($value['image_type']);
-
-        return $this->getImageUrl($value['image_type'], $imagePath);
+        if (isset($value['image_type'])) {
+            $imagePath = $product->getData($value['image_type']);
+            return $this->getImageUrl($value['image_type'], $imagePath);
+        }
+        if (isset($value['file'])) {
+            $image = $this->productImageFactory->create();
+            $image->setDestinationSubdir('image')->setBaseFile($value['file']);
+            $imageUrl = $image->getUrl();
+            return $imageUrl;
+        }
+        return [];
     }
 
     /**
