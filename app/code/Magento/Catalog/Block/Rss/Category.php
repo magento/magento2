@@ -54,11 +54,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     protected $categoryRepository;
 	
     /**
-     * @var \Magento\Framework\Config\View
-     */
-    protected $configView;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Rss\Category $rssModel
@@ -129,7 +124,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
 
         $attributes = $this->_viewConfig->getViewConfig()
-                ->getMediaAttributes('Magento_Catalog', $this->imageHelper::MEDIA_TYPE_CONFIG_NODE, 'rss_thumbnail');
+        ->getMediaAttributes('Magento_Catalog', $this->imageHelper::MEDIA_TYPE_CONFIG_NODE, 'rss_thumbnail');
 		
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($this->rssModel->getProductCollection($category, $this->getStoreId()) as $product) {
