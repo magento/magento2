@@ -14,37 +14,59 @@ use Magento\Paypal\Model\Info;
  */
 class NvpTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Paypal\Model\Api\Nvp */
+    /**
+     * @var \Magento\Paypal\Model\Api\Nvp 
+     */
     protected $model;
 
-    /** @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $customerAddressHelper;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $logger;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $resolver;
 
-    /** @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $regionFactory;
 
-    /** @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $countryFactory;
 
-    /** @var \Magento\Paypal\Model\Api\ProcessableException|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Paypal\Model\Api\ProcessableException|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $processableException;
 
-    /** @var \Magento\Framework\Exception\LocalizedException|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Exception\LocalizedException|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $exception;
 
-    /** @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $curl;
 
-    /** @var \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $config;
 
-    /** @var \Magento\Payment\Model\Method\Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Payment\Model\Method\Logger|\PHPUnit_Framework_MockObject_MockObject 
+     */
     protected $customLoggerMock;
 
     protected function setUp()
@@ -64,26 +86,34 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         );
         $processableExceptionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnCallback(function ($arguments) {
-                $this->processableException = $this->getMockBuilder(
-                    \Magento\Paypal\Model\Api\ProcessableException::class
+            ->will(
+                $this->returnCallback(
+                    function ($arguments) {
+                        $this->processableException = $this->getMockBuilder(
+                            \Magento\Paypal\Model\Api\ProcessableException::class
+                        )
+                            ->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])
+                            ->getMock();
+                        return $this->processableException;
+                    }
                 )
-                    ->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])
-                    ->getMock();
-                return $this->processableException;
-            }));
+            );
         $exceptionFactory = $this->createPartialMock(
             \Magento\Framework\Exception\LocalizedExceptionFactory::class,
             ['create']
         );
         $exceptionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnCallback(function ($arguments) {
-                $this->exception = $this->getMockBuilder(\Magento\Framework\Exception\LocalizedException::class)
-                    ->setConstructorArgs([$arguments['phrase']])
-                    ->getMock();
-                return $this->exception;
-            }));
+            ->will(
+                $this->returnCallback(
+                    function ($arguments) {
+                        $this->exception = $this->getMockBuilder(\Magento\Framework\Exception\LocalizedException::class)
+                            ->setConstructorArgs([$arguments['phrase']])
+                            ->getMock();
+                        return $this->exception;
+                    }
+                )
+            );
         $this->curl = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
         $curlFactory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
         $curlFactory->expects($this->any())->method('create')->will($this->returnValue($this->curl));
@@ -108,8 +138,8 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Paypal\Model\Api\Nvp $nvpObject
-     * @param string $property
+     * @param  \Magento\Paypal\Model\Api\Nvp $nvpObject
+     * @param  string                        $property
      * @return mixed
      */
     protected function _invokeNvpProperty(\Magento\Paypal\Model\Api\Nvp $nvpObject, $property)
@@ -122,11 +152,11 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $response
-     * @param array $processableErrors
-     * @param null|string $exception
-     * @param string $exceptionMessage
-     * @param null|int $exceptionCode
+     * @param        string      $response
+     * @param        array       $processableErrors
+     * @param        null|string $exception
+     * @param        string      $exceptionMessage
+     * @param        null|int    $exceptionCode
      * @dataProvider callDataProvider
      */
     public function testCall($response, $processableErrors, $exception, $exceptionMessage = '', $exceptionCode = null)
@@ -188,15 +218,17 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     {
         $this->curl->expects($this->once())
             ->method('read')
-            ->will($this->returnValue(
-                "\r\n" . 'ACK=Success&SHIPTONAME=Ship%20To%20Name'
-                . '&SHIPTOSTREET=testStreet'
-                . '&SHIPTOSTREET2=testApartment'
-                . '&BUSINESS=testCompany'
-                . '&SHIPTOCITY=testCity'
-                . '&PHONENUM=223322'
-                . '&STATE=testSTATE'
-            ));
+            ->will(
+                $this->returnValue(
+                    "\r\n" . 'ACK=Success&SHIPTONAME=Ship%20To%20Name'
+                    . '&SHIPTOSTREET=testStreet'
+                    . '&SHIPTOSTREET2=testApartment'
+                    . '&BUSINESS=testCompany'
+                    . '&SHIPTOCITY=testCity'
+                    . '&PHONENUM=223322'
+                    . '&STATE=testSTATE'
+                )
+            );
         $this->model->callGetExpressCheckoutDetails();
         $address = $this->model->getExportedShippingAddress();
         $this->assertEquals('Ship To Name', ($address->getData('firstname') . " " . $address->getData('lastname')));

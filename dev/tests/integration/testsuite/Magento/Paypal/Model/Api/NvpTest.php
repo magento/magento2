@@ -44,7 +44,9 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
-        /** @var CurlFactory|MockObject $httpFactory */
+        /**
+ * @var CurlFactory|MockObject $httpFactory 
+*/
         $httpFactory = $this->getMockBuilder(CurlFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -55,17 +57,23 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         $httpFactory->method('create')
             ->willReturn($this->httpClient);
 
-        $this->nvpApi = $this->objectManager->create(Nvp::class, [
+        $this->nvpApi = $this->objectManager->create(
+            Nvp::class, [
             'curlFactory' => $httpFactory
-        ]);
+            ]
+        );
 
-        /** @var ProductMetadataInterface|MockObject $productMetadata */
+        /**
+ * @var ProductMetadataInterface|MockObject $productMetadata 
+*/
         $productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
             ->getMock();
         $productMetadata->method('getEdition')
             ->willReturn('');
 
-        /** @var Config $config */
+        /**
+ * @var Config $config 
+*/
         $config = $this->objectManager->get(Config::class);
         $config->setMethodCode(Config::METHOD_EXPRESS);
 
@@ -82,12 +90,14 @@ class NvpTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store tax/weee/enable 1
      * @magentoConfigFixture current_store tax/weee/include_in_subtotal 0
-     * @magentoDataFixture Magento/Paypal/_files/quote_with_fpt.php
+     * @magentoDataFixture   Magento/Paypal/_files/quote_with_fpt.php
      */
     public function testRequestTotalsAndLineItemsWithFPT()
     {
         $quote = $this->getQuote('100000016');
-        /** @var CartFactory $cartFactory */
+        /**
+ * @var CartFactory $cartFactory 
+*/
         $cartFactory = $this->objectManager->get(CartFactory::class);
         $cart = $cartFactory->create(['salesModel' => $quote]);
 
@@ -125,11 +135,15 @@ class NvpTest extends \PHPUnit\Framework\TestCase
      */
     public function testCallRefundTransaction()
     {
-        /** @var \Magento\Sales\Model\Order $order */
+        /**
+ * @var \Magento\Sales\Model\Order $order 
+*/
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
 
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
+        /**
+ * @var \Magento\Sales\Model\Order\Payment $payment 
+*/
         $payment = $order->getPayment();
 
         $this->nvpApi->setPayment(
@@ -163,16 +177,20 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets quote by reserved order id.
      *
-     * @param string $reservedOrderId
+     * @param  string $reservedOrderId
      * @return Quote
      */
     private function getQuote($reservedOrderId)
     {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        /**
+ * @var SearchCriteriaBuilder $searchCriteriaBuilder 
+*/
         $searchCriteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
         $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
             ->create();
-        /** @var QuoteRepository $quoteRepository */
+        /**
+ * @var QuoteRepository $quoteRepository 
+*/
         $quoteRepository = $this->objectManager->get(QuoteRepository::class);
         $items = $quoteRepository->getList($searchCriteria)
             ->getItems();
