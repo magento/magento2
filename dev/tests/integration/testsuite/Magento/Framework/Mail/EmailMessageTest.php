@@ -210,6 +210,7 @@ class EmailMessageTest extends TestCase
                 'content' => $this->getXmlContent(),
                 'disposition' => MimeInterface::DISPOSITION_ATTACHMENT,
                 'fileName' => self::ATTACHMENT_FILE_NAME,
+                'encoding' => MimeInterface::ENCODING_8BIT,
                 'type' => self::XML_TYPE
             ]
         );
