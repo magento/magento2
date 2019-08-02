@@ -576,4 +576,13 @@
         <conditionalClick selector="{{AdminProductContentSection.sectionHeader}}" dependentSelector="{{AdminProductContentSection.sectionHeaderShow}}" visible="false" stepKey="expandContentSection"/>
         <seeInField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{productDescription}}" stepKey="seeProductDescription"/>
     </actionGroup>
+
+    <!-- You are on StorefrontProductPage -->
+    <!-- Check active product image -->
+    <actionGroup name="StorefrontAssertActiveProductImage">
+        <arguments>
+            <argument name="fileName" defaultValue="magento-logo" type="string"/>
+        </arguments>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageActive(fileName)}}" stepKey="seeActiveImageDefault"/>
+    </actionGroup>
 </actionGroups>
