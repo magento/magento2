@@ -52,12 +52,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      * @var CategoryRepositoryInterface
      */
     protected $categoryRepository;
-
-    /**
-     * @var \Magento\Framework\View\ConfigInterface
-     */
-    protected $viewConfig;
-
+	
     /**
      * @var \Magento\Framework\Config\View
      */
@@ -71,7 +66,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -83,7 +77,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\Model\Session $customerSession,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\View\ConfigInterface $viewConfig,
         array $data = []
     ) {
         $this->imageHelper = $imageHelper;
@@ -93,7 +86,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $this->rssUrlBuilder = $rssUrlBuilder;
         $this->storeManager = $context->getStoreManager();
         $this->categoryRepository = $categoryRepository;
-        $this->viewConfig = $viewConfig;
         parent::__construct($context, $data);
     }
 
@@ -136,9 +128,9 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $title = $category->getName();
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
 
-        $attributes = $this->getConfigView()
+        $attributes = $this->_viewConfig->getViewConfig()
                 ->getMediaAttributes('Magento_Catalog', $this->imageHelper::MEDIA_TYPE_CONFIG_NODE, 'rss_thumbnail');
-
+		
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($this->rssModel->getProductCollection($category, $this->getStoreId()) as $product) {
             $product->setAllowedInRss(true);
@@ -296,18 +288,5 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     public function isAuthRequired()
     {
         return false;
-    }
-
-    /**
-     * Retrieve config view
-     *
-     * @return \Magento\Framework\Config\View
-     */
-    protected function getConfigView()
-    {
-        if (!$this->configView) {
-            $this->configView = $this->viewConfig->getViewConfig();
-        }
-        return $this->configView;
     }
 }
