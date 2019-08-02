@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage;
+namespace Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
@@ -13,9 +13,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
- * Returns product's image label
+ * Return media label
  */
 class Label implements ResolverInterface
 {
@@ -43,8 +44,9 @@ class Label implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['image_type'])) {
-            throw new LocalizedException(__('"image_type" value should be specified'));
+
+        if (isset($value['label'])) {
+            return $value['label'];
         }
 
         if (!isset($value['model'])) {
@@ -53,18 +55,16 @@ class Label implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $imageType = $value['image_type'];
-        $imagePath = $product->getData($imageType);
         $productId = (int)$product->getEntityId();
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
-
-        // null if image is not set
-        if (null === $imagePath) {
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        $storeId = (int)$store->getId();
+        if (!isset($value['image_type'])) {
             return $this->getAttributeValue($productId, 'name', $storeId);
         }
-
+        $imageType = $value['image_type'];
         $imageLabel = $this->getAttributeValue($productId, $imageType . '_label', $storeId);
-        if (null === $imageLabel) {
+        if ($imageLabel == null) {
             $imageLabel = $this->getAttributeValue($productId, 'name', $storeId);
         }
 
