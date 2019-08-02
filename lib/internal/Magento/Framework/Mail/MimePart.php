@@ -15,6 +15,8 @@ use Zend\Mime\Part as ZendMimePart;
  */
 class MimePart implements MimePartInterface
 {
+    public const CHARSET_UTF8 = 'utf-8';
+
     /**
      * @var ZendMimePart
      */
@@ -43,13 +45,13 @@ class MimePart implements MimePartInterface
      */
     public function __construct(
         $content,
-        ?string $type = MimeInterface::TYPE_OCTET_STREAM,
+        ?string $type = MimeInterface::TYPE_HTML,
         ?string $fileName = null,
-        ?string $disposition = null,
-        ?string $encoding = MimeInterface::ENCODING_8BIT,
+        ?string $disposition = MimeInterface::DISPOSITION_INLINE,
+        ?string $encoding = MimeInterface::ENCODING_UTF8,
         ?string $description = null,
         ?array $filters = [],
-        ?string $charset = null,
+        ?string $charset = self::CHARSET_UTF8,
         ?string $boundary = null,
         ?string $location = null,
         ?string $language = null,

@@ -88,7 +88,7 @@ class EmailMessage implements EmailMessageInterface
         if ($replyTo) {
             $this->message->setReplyTo($this->convertAddressArrayToAddressList($replyTo));
         }
-        if ($replyTo) {
+        if ($from) {
             $this->message->setFrom($this->convertAddressArrayToAddressList($from));
         }
         if ($cc) {
