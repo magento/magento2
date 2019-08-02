@@ -11,7 +11,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 
@@ -87,7 +86,11 @@ class AddSimpleProductToCart
      */
     private function extractSku(array $cartItemData): string
     {
-        if (!isset($cartItemData['data']['sku']) || empty($cartItemData['data']['sku'])) {
+        // Need to keep this for configurable product and backward compatibility.
+        if (!empty($cartItemData['parent_sku'])) {
+            return (string)$cartItemData['parent_sku'];
+        }
+        if (empty($cartItemData['data']['sku'])) {
             throw new GraphQlInputException(__('Missed "sku" in cart item data'));
         }
         return (string)$cartItemData['data']['sku'];
