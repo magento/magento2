@@ -181,6 +181,8 @@ class Uploader
         Mime $fileMime = null,
         DirectoryList $directoryList = null
     ) {
+        $this->directoryList = $directoryList ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(DirectoryList::class);
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -189,8 +191,6 @@ class Uploader
             $this->_fileExists = true;
         }
         $this->fileMime = $fileMime ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Mime::class);
-        $this->directoryList= $directoryList ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(DirectoryList::class);
     }
 
     /**
