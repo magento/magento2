@@ -194,6 +194,12 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
     </actionGroup>
 
+    <!--Generate and save configurable product after setting options-->
+    <actionGroup name="GenerateAndSaveConfiguredProductAfterSettingOptions" extends="saveConfiguredProduct">
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" before="clickOnSaveButton2" stepKey="clickOnNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" after="clickOnNextButton" stepKey="clickOnGenerateProductsButton"/>
+    </actionGroup>
+
     <actionGroup name="addNewProductConfigurationAttribute">
         <arguments>
             <argument name="attribute" type="entity"/>
@@ -357,5 +363,12 @@
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtnByProductName(productName)}}" stepKey="clickToExpandActionsSelect"/>
         <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisableChildProduct"/>
         <see selector="{{AdminProductFormConfigurationsSection.confProductOptionStatusCell(productName)}}" userInput="Disabled" stepKey="seeConfigDisabled"/>
+    </actionGroup>
+
+    <!--You are on AdminProductEditPage-->
+    <!--Start create configurations for attribute and fill quantity-->
+    <actionGroup name="StartCreateConfigurationsForAttribute" extends="generateConfigurationsByAttributeCode">
+        <remove keyForRemoval="clickOnNextButton3"/>
+        <remove keyForRemoval="clickOnNextButton4"/>
     </actionGroup>
 </actionGroups>
