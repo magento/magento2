@@ -134,7 +134,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $blocks = ['block1', 'block2'];
-        $handles = ['handle1', 'handle2'];
+        $handles = ['handle1', 'handle2', "'handle'", '@hanle', '"hanle', '*hanle', '.hanle'];
         $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
@@ -177,7 +177,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
             ->will($this->returnValue(base64_encode(json_encode($handles))));
-        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
+        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo(['handle1', 'handle2']));
         $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
         $this->layoutMock->expects($this->never())
             ->method('getUpdate');
