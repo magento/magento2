@@ -25,15 +25,10 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         $this->_blockGroup = 'Magento_Review';
         $this->_controller = 'adminhtml';
         $this->_mode = 'add';
-
         $this->buttonList->update('save', 'label', __('Save Review'));
         $this->buttonList->update('save', 'id', 'save_button');
-
         $this->buttonList->remove('reset');
-        $this->buttonList->add(
-            'reset_button',
-            ['label' => 'Reset', 'onclick'=>"jQuery('#edit_form').trigger('reset')"]
-        );
+        $this->buttonList->add('reset_button', ['label' => 'Reset', 'onclick'=>"jQuery('#edit_form').trigger('reset')"]);
 
         $this->_formScripts[] = '
             require(["prototype"], function(){
