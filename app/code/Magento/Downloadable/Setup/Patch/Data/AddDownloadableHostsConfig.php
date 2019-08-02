@@ -158,8 +158,11 @@ class AddDownloadableHostsConfig implements DataPatchInterface
         $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_DIRECT_LINK, true));
         $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, false));
         $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_MEDIA, true));
-        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
-        $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true));
+
+        try {
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
+            $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true));
+        } catch (\UnexpectedValueException $e) {} //@codingStandardsIgnoreLine
 
         try {
             $website = $scope->getWebsite();
