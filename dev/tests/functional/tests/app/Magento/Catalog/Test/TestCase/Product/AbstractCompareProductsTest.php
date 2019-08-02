@@ -15,6 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Abstract class for compare products class.
@@ -73,6 +74,13 @@ abstract class AbstractCompareProductsTest extends Injectable
     protected $customer;
 
     /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    protected $envWhitelist;
+
+    /**
      * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
@@ -92,16 +100,19 @@ abstract class AbstractCompareProductsTest extends Injectable
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $catalogProductView
      * @param BrowserInterface $browser
+     * @param EnvWhitelist $envWhitelist
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
         CatalogProductView $catalogProductView,
-        BrowserInterface $browser
+        BrowserInterface $browser,
+        EnvWhitelist $envWhitelist
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->catalogProductView = $catalogProductView;
         $this->browser = $browser;
+        $this->envWhitelist = $envWhitelist;
     }
 
     /**
