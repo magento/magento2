@@ -79,10 +79,8 @@ class TierPriceStorage implements TierPriceStorageInterface
     public function get(array $skus)
     {
         $skus = $this->tierPriceValidator->validateSkus($skus);
-        $skuByIdLookup = $this->buildSkuByIdLookup($skus);
-        $prices = $this->getExistingPrices($skuByIdLookup);
 
-        return $prices;
+        return $this->getExistingPrices($skus);
     }
 
     /**
@@ -90,6 +88,7 @@ class TierPriceStorage implements TierPriceStorageInterface
      */
     public function update(array $prices)
     {
+        $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
         $skus = array_unique(
             array_map(
                 function (TierPriceInterface $price) {
@@ -98,13 +97,11 @@ class TierPriceStorage implements TierPriceStorageInterface
                 $prices
             )
         );
-        $skuByIdLookup = $this->buildSkuByIdLookup($skus);
-        $existingPrices = $this->getExistingPrices($skuByIdLookup, true);
-        $result = $this->tierPriceValidator->retrieveValidationResult($prices, $existingPrices);
+        $result = $this->tierPriceValidator->retrieveValidationResult($prices, $this->getExistingPrices($skus, true));
         $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
         $formattedPrices = $this->retrieveFormattedPrices($prices);
         $this->tierPricePersistence->update($formattedPrices);
-        $this->reindexPrices(array_keys($skuByIdLookup));
+        $this->reindexPrices($affectedIds);
 
         return $result->getFailedItems();
     }
@@ -142,16 +139,18 @@ class TierPriceStorage implements TierPriceStorageInterface
     /**
      * Get existing prices by SKUs.
      *
-     * @param array $skuByIdLookup
+     * @param array $skus
      * @param bool $groupBySku [optional]
      * @return array
      */
-    private function getExistingPrices(array $skuByIdLookup, bool $groupBySku = false): array
+    private function getExistingPrices(array $skus, bool $groupBySku = false): array
     {
-        $rawPrices = $this->tierPricePersistence->get(array_keys($skuByIdLookup));
+        $ids = $this->retrieveAffectedIds($skus);
+        $rawPrices = $this->tierPricePersistence->get($ids);
         $prices = [];
         if ($rawPrices) {
             $linkField = $this->tierPricePersistence->getEntityLinkField();
+            $skuByIdLookup = $this->buildSkuByIdLookup($skus);
             foreach ($rawPrices as $rawPrice) {
                 $sku = $skuByIdLookup[$rawPrice[$linkField]];
                 $price = $this->tierPriceFactory->create($rawPrice, $sku);
