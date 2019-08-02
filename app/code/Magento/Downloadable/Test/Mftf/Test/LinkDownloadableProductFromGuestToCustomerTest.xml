@@ -21,6 +21,7 @@
             <group value="downloadable"/>
         </annotations>
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
             <magentoCLI command="config:set {{EnableGuestCheckoutWithDownloadableItems.path}} {{EnableGuestCheckoutWithDownloadableItems.value}}" stepKey="enableGuestCheckoutWithDownloadableItems" />
             <createData entity="ApiDownloadableProduct" stepKey="createProduct"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink">
@@ -29,6 +30,7 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
             <magentoCLI command="config:set {{DisableGuestCheckoutWithDownloadableItems.path}} {{DisableGuestCheckoutWithDownloadableItems.value}}" stepKey="disableGuestCheckoutWithDownloadableItems" />
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <actionGroup ref="RemoveCustomerFromAdminActionGroup" stepKey="deleteCustomer">
