@@ -221,7 +221,7 @@ class TierPriceStorage implements TierPriceStorageInterface
             $affectedIds[] = array_keys($productId);
         }
 
-        return array_unique(array_merge(...$affectedIds));
+        return $affectedIds ? array_unique(array_merge(...$affectedIds)) : [];
     }
 
     /**
