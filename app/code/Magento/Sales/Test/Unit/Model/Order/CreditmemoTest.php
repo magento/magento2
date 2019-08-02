@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\ResourceModel\OrderFactory;
@@ -123,8 +121,10 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $this->creditmemo->setGrandTotal($grandTotal);
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->with('sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with(
+                'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
             ->willReturn($allowZero);
 
         $this->assertEquals($expectedResult, $this->creditmemo->isValidGrandTotal());

@@ -1,11 +1,8 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
@@ -50,8 +47,9 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
         $this->model = $objectManager->getObject(
             \Magento\Multishipping\Block\Checkout\Success::class,
             [
-                'context' => $this->contextMock
-            ]);
+                'context' => $this->contextMock,
+            ]
+        );
     }
 
     public function testGetOrderIdsWithoutId()

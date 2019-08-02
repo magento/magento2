@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Multishipping\Model\Checkout\Type;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -22,7 +23,6 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  * @since 100.0.2
  */
 class Multishipping extends \Magento\Framework\DataObject
@@ -751,12 +751,7 @@ class Multishipping extends \Magento\Framework\DataObject
             }
 
             // Checks if a country id present in the allowed countries list.
-            if (
-                !in_array(
-                    $address->getCountryId(),
-                    $this->allowedCountryReader->getAllowedCountries()
-                )
-            ) {
+            if (!in_array($address->getCountryId(), $this->allowedCountryReader->getAllowedCountries())) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Some addresses cannot be used due to country-specific configurations.')
                 );
@@ -901,8 +896,8 @@ class Multishipping extends \Magento\Framework\DataObject
 
         if ($this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-        ) {
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )) {
             $result = !($minimumOrderActive && !$this->getQuote()->validateMinimumAmount());
         } else {
             $result = !($minimumOrderActive && !$this->validateMinimumAmountForAddressItems());
@@ -996,7 +991,7 @@ class Multishipping extends \Magento\Framework\DataObject
     private function getDefaultAddressByDataKey($key, $defaultAddressIdFromCustomer)
     {
         $addressId = $this->getData($key);
-        if (is_null($addressId)) {
+        if ($addressId === null) {
             $addressId = $defaultAddressIdFromCustomer;
             if (!$addressId) {
                 /** Default address is not available, try to find any customer address */
@@ -1026,7 +1021,7 @@ class Multishipping extends \Magento\Framework\DataObject
     public function getCheckoutSession()
     {
         $checkout = $this->getData('checkout_session');
-        if (is_null($checkout)) {
+        if ($checkout === null) {
             $checkout = $this->_checkoutSession;
             $this->setData('checkout_session', $checkout);
         }
@@ -1081,7 +1076,7 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     protected function isAddressIdApplicable($addressId)
     {
-        $applicableAddressIds = array_map(function($address) {
+        $applicableAddressIds = array_map(function ($address) {
             /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             return $address->getId();
         }, $this->getCustomer()->getAddresses());

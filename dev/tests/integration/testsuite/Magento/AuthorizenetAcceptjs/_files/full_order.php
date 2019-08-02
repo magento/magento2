@@ -6,7 +6,6 @@
 
 declare(strict_types=1);
 
-use Magento\AuthorizenetAcceptjs\Gateway\Config;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -15,6 +14,7 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
+require __DIR__ . '/../../../Magento/Sales/_files/default_rollback.php';
 $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 
@@ -90,4 +90,4 @@ $order->setIncrementId('100000001')
     ->setPayment($payment);
 
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
-$orderRepository->save($order);
+return $orderRepository->save($order);
