@@ -8,30 +8,30 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\PaypalGraphQl\Model\Resolver\Store\Url as UrlService;
 use Magento\Paypal\Model\Config;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
-use Magento\PaypalGraphQl\Model\Resolver\Store\Url;
 
 /**
- * Get payment additional data for Paypal Payflow Link payment method
+ * Get payment additional data for Paypal HostedPro payment
  */
-class PayflowLinkAdditionalDataProvider implements AdditionalDataProviderInterface
+class HostedProAdditionalDataProvider implements AdditionalDataProviderInterface
 {
     /**
-     * @var Url
+     * @var UrlService
      */
     private $urlService;
 
     /**
-     * @param Url $urlService
+     * @param UrlService $urlService
      */
-    public function __construct(Url $urlService)
+    public function __construct(UrlService $urlService)
     {
         $this->urlService = $urlService;
     }
 
     /**
-     * Return additional data from payflow_link paymentMethodInput
+     * Returns additional data
      *
      * @param array $data
      * @return array
@@ -39,21 +39,21 @@ class PayflowLinkAdditionalDataProvider implements AdditionalDataProviderInterfa
      */
     public function getData(array $data): array
     {
-        $additionalData = $data[Config::METHOD_PAYFLOWLINK] ?? [];
-        $this->validatePathsInArray($additionalData);
+        $additionalData = $data[Config::METHOD_HOSTEDPRO] ?? [];
+        $this->validateUrlPaths($additionalData);
 
         return $additionalData;
     }
 
     /**
-     * Validate paths in known keys of the additional data array
+     * Validate redirect url paths
      *
      * @param array $data
      * @throws GraphQlInputException
      */
-    private function validatePathsInArray(array $data): void
+    private function validateUrlPaths(array $data): void
     {
-        $urlKeys = ['cancel_url', 'return_url', 'error_url'];
+        $urlKeys = ['cancel_url', 'return_url'];
 
         foreach ($urlKeys as $urlKey) {
             if (isset($data[$urlKey])) {

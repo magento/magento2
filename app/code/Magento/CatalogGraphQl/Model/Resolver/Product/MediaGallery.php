@@ -10,7 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
@@ -18,9 +18,8 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  * @inheritdoc
  *
  * Format a product's media gallery information to conform to GraphQL schema representation
- * @deprecated
  */
-class MediaGalleryEntries implements ResolverInterface
+class MediaGallery implements ResolverInterface
 {
     /**
      * @inheritdoc
@@ -46,17 +45,16 @@ class MediaGalleryEntries implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /** @var Product $product */
+        /** @var ProductInterface $product */
         $product = $value['model'];
 
         $mediaGalleryEntries = [];
-        if (!empty($product->getMediaGalleryEntries())) {
-            foreach ($product->getMediaGalleryEntries() as $key => $entry) {
-                $mediaGalleryEntries[$key] = $entry->getData();
-                if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
-                    $mediaGalleryEntries[$key]['video_content']
-                        = $entry->getExtensionAttributes()->getVideoContent()->getData();
-                }
+        foreach ($product->getMediaGalleryEntries() ?? [] as $key => $entry) {
+            $mediaGalleryEntries[$key] = $entry->getData();
+            $mediaGalleryEntries[$key]['model'] = $product;
+            if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
+                $mediaGalleryEntries[$key]['video_content']
+                    = $entry->getExtensionAttributes()->getVideoContent()->getData();
             }
         }
         return $mediaGalleryEntries;
