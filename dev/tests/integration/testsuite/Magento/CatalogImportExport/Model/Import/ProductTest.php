@@ -2612,4 +2612,25 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
     }
+
+    /**
+     * Checking product images after Add/Update import failure
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/import_with_filesystem_images.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @return void
+     */
+    public function testProductBaseImageAfterImport()
+    {
+        $this->importDataForMediaTest('import_media.csv');
+
+        $this->testImportWithNonExistingImage();
+
+        /** @var $productAfterImport \Magento\Catalog\Model\Product */
+        $productAfterImport = $this->getProductBySku('simple_new');
+        $this->assertNotEquals('/no/exists/image/magento_image.jpg', $productAfterImport->getData('image'));
+    }
 }
