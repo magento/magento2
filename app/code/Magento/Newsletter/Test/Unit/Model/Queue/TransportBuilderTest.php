@@ -30,6 +30,8 @@ use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Class TransportBuilderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilderTest extends TestCase
 {
@@ -157,12 +159,18 @@ class TransportBuilderTest extends TestCase
             ->willReturn($emailMessage);
 
         $template = $this->createMock(Template::class);
-        $template->expects($this->once())->method('setVars')->with($this->equalTo($vars))->will($this->returnSelf());
-        $template->expects($this->once())->method('setOptions')->with($this->equalTo($options))->will($this->returnSelf());
-        $template->expects($this->once())->method('getSubject')->willReturn('Email Subject');
-        $template->expects($this->once())->method('setData')->with($this->equalTo($data))->will($this->returnSelf());
-        $template->expects($this->once())->method('getProcessedTemplate')->with($vars)->willReturn($bodyText);
-        $template->expects($this->once())->method('setTemplateFilter')->with($filter);
+        $template->expects($this->once())->method('setVars')
+            ->with($this->equalTo($vars))->will($this->returnSelf());
+        $template->expects($this->once())->method('setOptions')
+            ->with($this->equalTo($options))->will($this->returnSelf());
+        $template->expects($this->once())->method('getSubject')
+            ->willReturn('Email Subject');
+        $template->expects($this->once())->method('setData')
+            ->with($this->equalTo($data))->will($this->returnSelf());
+        $template->expects($this->once())->method('getProcessedTemplate')
+            ->with($vars)->willReturn($bodyText);
+        $template->expects($this->once())->method('setTemplateFilter')
+            ->with($filter);
 
         $this->templateFactoryMock->expects($this->once())
             ->method('get')
