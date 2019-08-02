@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontQTYChangeCustomStockProductVariationOfConfigurableProductTest" extends="StoreFrontQTYChangeProductVariationOfConfigurableProductTest">
+        <annotations>
+            <description value="Check QTY change only for variation product of configurable product on additional stock."/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional stock ans source.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" before="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="stockSourceLink"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" before="loginAsAdmin">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="logout">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="logout"/>
+        </after>
+
+        <!--Assign configurable variations to additional stock.-->
+        <remove keyForRemoval="createConfigurations"/>
+        <actionGroup ref="createConfigurationsForTwoAttributeCustomSource" stepKey="createConfigurationsWithCustomStock" after="waitForEditPage">
+            <argument name="attributeCode" value="$$productAttribute1.attribute_code$$"/>
+            <argument name="secondAttributeCode" value="$$productAttribute2.attribute_code$$"/>
+            <argument name="sourceName" value="$$additionalSource.source[name]$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddSimpleOutOfStockFromCustomStockBySkuFromCustomerAccountTest" extends="AddSimpleOutOfStockProductBySkuFromCustomerAccountTest">
+        <annotations>
+            <stories value="Add Product By SKU from custom stock"/>
+            <title value="Add simple out of stock product by sku from customer account test, additional stock."/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <!--Create additional stock ans source.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" before="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="stockSourceLink"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" before="createSimpleProduct">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Assign create product to additional stock and set qty.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel" after="createSimpleProduct"/>
+            <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="openProductEditPageToSetQty" after="loginToAdminPanel"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToCreatedProduct" after="openProductEditPageToSetQty">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="0" stepKey="setProductQuantity" after="assignSourceToCreatedProduct"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct" after="setProductQuantity"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="logout">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout" before="deleteStock"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" before="deleteSimpleProduct"/>
+        </after>
+    </test>
+</tests>

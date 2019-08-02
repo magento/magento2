@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddCustomStockProductWithFileToTheCartFromRequisitionListTest" extends="StorefrontAddProductWithFileToTheCartFromRequisitionListTest">
+        <annotations>
+            <description value="Verify that a product with a custom file option can be added to a requisition list on additional stock."/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <!--Create additional stock ans source.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" before="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="stockSourceLink"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" before="createCategory">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <remove keyForRemoval="fillProductForm"/>
+            <!--Fill main product data.-->
+            <scrollToTopOfPage stepKey="scrollToTopOfPage" after="goToCreateProductPage"/>
+            <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillProductName" after="scrollToTopOfPage"/>
+            <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{SimpleProduct.sku}}" stepKey="fillProductSku" after="fillProductName"/>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="fillProductPrice" after="fillProductSku"/>
+            <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeight" after="fillProductPrice"/>
+            <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{SimpleProduct.weight}}" stepKey="fillProductWeight" after="selectWeight"/>
+            <!--Assign created product to additional stock and set qty.-->
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToCreatedProduct" after="selectWeight">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setProductQuantity" after="assignSourceToCreatedProduct"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="logout">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="logout"/>
+        </after>
+    </test>
+</tests>
