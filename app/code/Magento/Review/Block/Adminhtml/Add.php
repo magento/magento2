@@ -21,7 +21,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
     protected function _construct()
     {
         parent::_construct();
-
         $this->_blockGroup = 'Magento_Review';
         $this->_controller = 'adminhtml';
         $this->_mode = 'add';
