@@ -64,6 +64,11 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
+    <!-- Save product but do not expect a success message -->
+    <actionGroup name="SaveProductFormNoSuccessCheck" extends="saveProductForm">
+        <remove keyForRemoval="seeSaveConfirmation"/>
+    </actionGroup>
+
     <!--Upload image for product-->
     <actionGroup name="addProductImage">
         <arguments>
@@ -282,5 +287,17 @@
             <argument name="productId" type="string"/>
         </arguments>
         <amOnPage url="{{AdminProductEditPage.url(productId)}}" stepKey="goToProduct"/>
+    </actionGroup>
+
+    <!-- This action group goes to the product index page, opens the drop down and clicks the specified product type for adding a product -->
+    <actionGroup name="GoToSpecifiedCreateProductPage">
+        <arguments>
+            <argument type="string" name="productType" defaultValue="simple"/>
+        </arguments>
+        <comment userInput="actionGroup:GoToSpecifiedCreateProductPage" stepKey="actionGroupComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct(productType)}}" stepKey="clickAddProduct"/>
+        <waitForPageLoad stepKey="waitForFormToLoad"/>
     </actionGroup>
 </actionGroups>

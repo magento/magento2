@@ -1004,4 +1004,56 @@ class LinkRepositoryTest extends WebapiAbstract
             ],
         ];
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Link URL's domain is not in list of downloadable_domains in env.php.
+     */
+    public function testCreateThrowsExceptionIfLinkUrlUsesDomainNotInWhitelist()
+    {
+        $requestData = [
+            'isGlobalScopeContent' => false,
+            'sku' => 'downloadable-product',
+            'link' => [
+                'title' => 'Link Title',
+                'sort_order' => 1,
+                'price' => 10,
+                'is_shareable' => 1,
+                'number_of_downloads' => 100,
+                'link_type' => 'url',
+                'link_url' => 'http://notAnywhereInEnv.com/',
+                'sample_type' => 'url',
+                'sample_url' => 'http://www.example.com/',
+            ],
+        ];
+
+        $this->_webApiCall($this->createServiceInfo, $requestData);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Sample URL's domain is not in list of downloadable_domains in env.php.
+     */
+    public function testCreateThrowsExceptionIfSampleUrlUsesDomainNotInWhitelist()
+    {
+        $requestData = [
+            'isGlobalScopeContent' => false,
+            'sku' => 'downloadable-product',
+            'link' => [
+                'title' => 'Link Title',
+                'sort_order' => 1,
+                'price' => 10,
+                'is_shareable' => 1,
+                'number_of_downloads' => 100,
+                'link_type' => 'url',
+                'link_url' => 'http://example.com/',
+                'sample_type' => 'url',
+                'sample_url' => 'http://www.notAnywhereInEnv.com/',
+            ],
+        ];
+
+        $this->_webApiCall($this->createServiceInfo, $requestData);
+    }
 }
