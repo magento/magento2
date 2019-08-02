@@ -217,9 +217,9 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
     {
         // Update the customer's confirmation key to a known value
         $this->customerData = $this->customerHelper->updateSampleCustomer(
-            $this->customerData[Customer::ID],
+            $this->customerData[CustomerInterface::ID],
             [
-                'id' => $this->customerData[Customer::ID],
+                'id' => $this->customerData[CustomerInterface::ID],
                 'confirmation' => CustomerHelper::CONFIRMATION
             ]
         );
