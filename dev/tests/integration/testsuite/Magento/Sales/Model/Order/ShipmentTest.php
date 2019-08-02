@@ -117,9 +117,12 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $saved = $this->shipmentRepository->save($shipment);
 
         $comments = $saved->getComments();
-        $actual = array_map(function (CommentInterface $comment) {
-            return $comment->getComment();
-        }, $comments);
+        $actual = array_map(
+            function (CommentInterface $comment) {
+                return $comment->getComment();
+            },
+            $comments
+        );
         self::assertEquals(2, count($actual));
         self::assertEquals([$message1, $message2], $actual);
     }
@@ -143,5 +146,34 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->getItems();
 
         return array_pop($items);
+    }
+
+    /**
+     * Check that getTracksCollection() returns only order related tracks.
+     */
+    public function testGetTracksCollection()
+    {
+        $order = $this->getOrder('100000001');
+        $items = [];
+        foreach ($order->getItems() as $item) {
+            $items[$item->getId()] = $item->getQtyOrdered();
+        }
+        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+        $shipment = $this->objectManager->get(ShipmentFactory::class)
+            ->create($order, $items);
+
+        $tracks = $shipment->getTracksCollection();
+        self::assertTrue(empty($tracks->getItems()));
+
+        /** @var ShipmentTrackInterface $track */
+        $track = $this->objectManager->create(ShipmentTrackInterface::class);
+        $track->setNumber('Test Number')
+            ->setTitle('Test Title')
+            ->setCarrierCode('Test CODE');
+
+        $shipment->addTrack($track);
+        $this->shipmentRepository->save($shipment);
+        $saved = $shipment->getTracksCollection();
+        self::assertTrue(in_array($track->getId(), $saved->getColumnValues('id')));
     }
 }
