@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Model\Directpost;
 
 use Magento\Authorizenet\Model\Response as AuthorizenetResponse;
@@ -10,6 +11,7 @@ use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * Authorize.net response model for DirectPost model
+ * @deprecated 2.2.9 Authorize.net is removing all support for this payment method
  */
 class Response extends AuthorizenetResponse
 {
