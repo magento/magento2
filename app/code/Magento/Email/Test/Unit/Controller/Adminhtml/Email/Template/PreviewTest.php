@@ -15,9 +15,7 @@ use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 
 /**
- * Preview Test
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Preview Test.
  */
 class PreviewTest extends \PHPUnit\Framework\TestCase
 {
@@ -122,7 +120,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('setHeader')
-            ->with('Content-Security-Policy', "script-src 'none'");
+            ->with('Content-Security-Policy', "script-src 'self'");
 
         $this->assertNull($this->object->execute());
     }
