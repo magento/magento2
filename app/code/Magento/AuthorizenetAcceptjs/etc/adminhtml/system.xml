@@ -101,10 +101,12 @@
                     <field id="min_order_total" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Minimum Order Total</label>
                         <config_path>payment/authorizenet_acceptjs/min_order_total</config_path>
+                        <validate>validate-number validate-zero-or-greater</validate>
                     </field>
                     <field id="max_order_total" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Maximum Order Total</label>
                         <config_path>payment/authorizenet_acceptjs/max_order_total</config_path>
+                        <validate>validate-number validate-zero-or-greater</validate>
                     </field>
                     <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>

@@ -38,6 +38,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
@@ -1525,6 +1526,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @throws LocalizedException
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _saveProducts()
     {
@@ -2504,6 +2507,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToValidateUrlKey($rowData)
     {
+        if (!empty($rowData[self::COL_SKU]) && empty($rowData[self::URL_KEY])
+            && $this->getBehavior() === Import::BEHAVIOR_APPEND
+            && $this->isSkuExist($rowData[self::COL_SKU])) {
+            return false;
+        }
+
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
                 || $rowData[self::COL_VISIBILITY]
@@ -2827,7 +2836,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return trim(strtolower($urlKey));
         }
 
-        if (!empty($rowData[self::COL_NAME])) {
+        if (!empty($rowData[self::COL_NAME])
+            && (array_key_exists(self::URL_KEY, $rowData) || !$this->isSkuExist($rowData[self::COL_SKU]))) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
@@ -3042,10 +3052,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Processes link bunches
      *
      * @param array $bunch
-     * @param Link $resource
-     * @param int $nextLinkId
+     * @param Link  $resource
+     * @param int   $nextLinkId
      * @param array $positionAttrId
      * @return void
+     * @throws LocalizedException
      */
     private function processLinkBunches(
         array $bunch,

@@ -9,11 +9,15 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Tax\Helper\Data;
 
+/**
+ * Customer logged in observer
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class CustomerLoggedInObserver implements ObserverInterface
 {
     /**
@@ -29,7 +33,7 @@ class CustomerLoggedInObserver implements ObserverInterface
     /**
      * Module manager
      *
-     * @var Manager
+     * @var ModuleManagerInterface
      */
     private $moduleManager;
 
@@ -56,7 +60,7 @@ class CustomerLoggedInObserver implements ObserverInterface
      * @param GroupRepositoryInterface $groupRepository
      * @param Session $customerSession
      * @param Data $taxHelper
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      * @param Config $cacheConfig
      * @param TaxAddressManagerInterface $addressManager
      */
@@ -64,7 +68,7 @@ class CustomerLoggedInObserver implements ObserverInterface
         GroupRepositoryInterface $groupRepository,
         Session $customerSession,
         Data $taxHelper,
-        Manager $moduleManager,
+        ModuleManagerInterface $moduleManager,
         Config $cacheConfig,
         TaxAddressManagerInterface $addressManager
     ) {
@@ -77,6 +81,8 @@ class CustomerLoggedInObserver implements ObserverInterface
     }
 
     /**
+     * Execute.
+     *
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

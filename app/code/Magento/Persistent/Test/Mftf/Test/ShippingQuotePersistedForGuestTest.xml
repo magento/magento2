@@ -54,8 +54,6 @@
         <resetCookie userInput="persistent_shopping_cart" stepKey="resetPersistentCookie"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePageAfterResetPersistentCookie"/>
         <waitForPageLoad stepKey="waitHomePageLoadAfterResetCookie"/>
-        <!--Check that the minicart is empty-->
-        <actionGroup ref="assertMiniCartEmpty" after="waitHomePageLoadAfterResetCookie" stepKey="seeMinicartEmpty"/>
         <!--Step 4: Add the product to shopping cart and open cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsGuestUser"/>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCartAsGuestUser">

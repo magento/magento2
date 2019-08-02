@@ -469,8 +469,11 @@ class Product extends AbstractEntity
             if ($pathSize > 1) {
                 $path = [];
                 for ($i = 1; $i < $pathSize; $i++) {
-                    $name = $collection->getItemById($structure[$i])->getName();
-                    $path[] = $this->quoteCategoryDelimiter($name);
+                    $childCategory = $collection->getItemById($structure[$i]);
+                    if ($childCategory) {
+                        $name = $childCategory->getName();
+                        $path[] = $this->quoteCategoryDelimiter($name);
+                    }
                 }
                 $this->_rootCategories[$category->getId()] = array_shift($path);
                 if ($pathSize > 2) {
@@ -542,6 +545,7 @@ class Product extends AbstractEntity
      *
      * @param int[] $productIds
      * @return array
+     * @throws \Zend_Db_Statement_Exception
      */
     protected function getMediaGallery(array $productIds)
     {
@@ -599,6 +603,7 @@ class Product extends AbstractEntity
      *
      * @param int[] $productIds
      * @return array
+     * @throws \Zend_Db_Statement_Exception
      */
     protected function prepareCatalogInventory(array $productIds)
     {
@@ -633,6 +638,7 @@ class Product extends AbstractEntity
      *
      * @param int[] $productIds
      * @return array
+     * @throws \Zend_Db_Statement_Exception
      */
     protected function prepareLinks(array $productIds)
     {
@@ -867,6 +873,7 @@ class Product extends AbstractEntity
     {
         //Execution time may be very long
         //@codingStandardsIgnoreStart
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
         //@codingStandardsIgnoreEnd
 
@@ -994,6 +1001,7 @@ class Product extends AbstractEntity
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function collectRawData()
     {
@@ -1088,6 +1096,7 @@ class Product extends AbstractEntity
 
         return $data;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Wrap values with double quotes if "Fields Enclosure" option is enabled
@@ -1112,6 +1121,7 @@ class Product extends AbstractEntity
      * Collect multi raw data from
      *
      * @return array
+     * @throws \Zend_Db_Statement_Exception
      */
     protected function collectMultirawData()
     {
@@ -1157,6 +1167,7 @@ class Product extends AbstractEntity
      * @param ProductEntity $item
      * @param int           $storeId
      * @return bool
+     * @throws Exception
      * @deprecated
      */
     protected function hasMultiselectData($item, $storeId)
@@ -1172,6 +1183,7 @@ class Product extends AbstractEntity
      * @param string        $attrCode
      * @param int           $storeId
      * @return $this
+     * @throws Exception
      */
     protected function collectMultiselectValues($item, $attrCode, $storeId)
     {
@@ -1618,6 +1630,7 @@ class Product extends AbstractEntity
      * Get product entity link field
      *
      * @return string
+     * @throws Exception
      * @since 100.1.0
      */
     protected function getProductEntityLinkField()
