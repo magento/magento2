@@ -48,7 +48,7 @@ class MimePart implements MimePartInterface
         ?string $type = MimeInterface::TYPE_HTML,
         ?string $fileName = null,
         ?string $disposition = MimeInterface::DISPOSITION_INLINE,
-        ?string $encoding = MimeInterface::ENCODING_UTF8,
+        ?string $encoding = MimeInterface::ENCODING_QUOTED_PRINTABLE,
         ?string $description = null,
         ?array $filters = [],
         ?string $charset = self::CHARSET_UTF8,
