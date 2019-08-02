@@ -135,6 +135,7 @@
                 <label>Orders Cron Settings</label>
                 <field id="delete_pending_after" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Pending Payment Order Lifetime (minutes)</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
                 </field>
             </group>
         </section>
