@@ -215,15 +215,6 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
 
     public function testGetCustomerActivateCustomer()
     {
-        // Update the customer's confirmation key to a known value
-        $this->customerData = $this->customerHelper->updateSampleCustomer(
-            $this->customerData[CustomerInterface::ID],
-            [
-                'id' => $this->customerData[CustomerInterface::ID],
-                'confirmation' => CustomerHelper::CONFIRMATION
-            ]
-        );
-
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/activate',
