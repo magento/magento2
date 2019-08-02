@@ -92,6 +92,7 @@
     <preference for="Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="Magento\Downloadable\Model\File\ContentUploader" />
     <preference for="Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
     <preference for="Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="Magento\Downloadable\Model\DownloadableOption" />
+    <preference for="Magento\Downloadable\Api\DomainManagerInterface" type="Magento\Downloadable\Model\DomainManager"/>
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
@@ -162,6 +163,15 @@
         <arguments>
             <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
             <argument name="connectionName" xsi:type="string">indexer</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="addDomainsCommand" xsi:type="object">Magento\Downloadable\Console\Command\DomainsAddCommand</item>
+                <item name="removeDomainsCommand" xsi:type="object">Magento\Downloadable\Console\Command\DomainsRemoveCommand</item>
+                <item name="showDomainsCommand" xsi:type="object">Magento\Downloadable\Console\Command\DomainsShowCommand</item>
+            </argument>
         </arguments>
     </type>
 </config>
