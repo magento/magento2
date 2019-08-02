@@ -10,6 +10,7 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Preconditions:
@@ -40,13 +41,24 @@ class DeleteProductEntityTest extends Injectable
     protected $catalogProductIndex;
 
     /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    private $envWhitelist;
+
+    /**
      * Prepare data.
      *
      * @param Category $category
+     * @param EnvWhitelist $envWhitelist
      * @return array
      */
-    public function __prepare(Category $category)
-    {
+    public function __prepare(
+        Category $category,
+        EnvWhitelist $envWhitelist
+    ) {
+        $this->envWhitelist = $envWhitelist;
         $category->persist();
         return [
             'category' => $category
@@ -75,6 +87,7 @@ class DeleteProductEntityTest extends Injectable
     public function test($products, FixtureFactory $fixtureFactory, Category $category)
     {
         //Steps
+        $this->envWhitelist->addHost('example.com');
         $products = explode(',', $products);
         $deleteProducts = [];
         foreach ($products as &$product) {
@@ -97,5 +110,13 @@ class DeleteProductEntityTest extends Injectable
         $this->catalogProductIndex->getProductGrid()->massaction($deleteProducts, 'Delete', true);
 
         return ['product' => $products];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        $this->envWhitelist->removeHost('example.com');
     }
 }
