@@ -6,9 +6,9 @@
 namespace Magento\Store\Test\Unit\Console\Command;
 
 use Magento\Store\Console\Command\StoreListCommand;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableFactory;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\TableHelper;
 use Magento\Store\Model\Store;
 use Magento\Framework\Console\Cli;
 
@@ -38,19 +38,21 @@ class StoreListCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
 
+        $tableHelperFactory = $this->getMockBuilder(TableFactory::class)->disableOriginalConstructor()->getMock();
+        $tableHelperFactory->method('create')
+            ->willReturnCallback(
+                function ($arguments) {
+                    return $this->objectManager->getObject(Table::class, $arguments);
+                }
+            );
+
         $this->command = $this->objectManager->getObject(
             StoreListCommand::class,
-            ['storeManager' => $this->storeManagerMock]
+            [
+                'storeManager' => $this->storeManagerMock,
+                'tableHelperFactory' => $tableHelperFactory
+            ]
         );
-
-        /** @var HelperSet $helperSet */
-        $helperSet = $this->objectManager->getObject(
-            HelperSet::class,
-            ['helpers' => [$this->objectManager->getObject(TableHelper::class)]]
-        );
-
-        //Inject table helper for output
-        $this->command->setHelperSet($helperSet);
     }
 
     public function testExecuteExceptionNoVerbosity()
