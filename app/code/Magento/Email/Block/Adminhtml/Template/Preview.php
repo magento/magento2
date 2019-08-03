@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Adminhtml system template preview block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Email\Block\Adminhtml\Template;
 
 /**
@@ -56,6 +51,7 @@ class Preview extends \Magento\Backend\Block\Widget
      *
      * @return string
      * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
+     * @throws \Exception
      */
     protected function _toHtml()
     {
