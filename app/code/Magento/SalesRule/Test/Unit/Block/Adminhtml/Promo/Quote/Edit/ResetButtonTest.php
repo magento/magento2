@@ -44,6 +44,7 @@ class ResetButtonTest extends \PHPUnit\Framework\TestCase
     public function testGetButtonData()
     {
         $data = [
+            'id' => 'reset_button',
             'label' => __('Reset'),
             'class' => 'reset',
             'on_click' => 'location.reload();',
