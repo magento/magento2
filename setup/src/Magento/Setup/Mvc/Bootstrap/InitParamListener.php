@@ -72,7 +72,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             $priority
         );
 
-        $this->listeners = $sharedEvents->getListeners([Application::class], MvcEvent::EVENT_BOOTSTRAP);
+        $this->listeners = $sharedEvents->getListeners(Application::class, MvcEvent::EVENT_BOOTSTRAP);
     }
 
     /**
