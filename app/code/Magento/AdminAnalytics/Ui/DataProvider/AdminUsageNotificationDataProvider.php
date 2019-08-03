@@ -15,7 +15,7 @@ use Magento\Ui\DataProvider\Modifier\PoolInterface;
 /**
  * Data Provider for the Admin usage UI component.
  */
-class NotificationDataProvider implements DataProviderInterface
+class AdminUsageNotificationDataProvider implements DataProviderInterface
 {
     /**
      * @var PoolInterface

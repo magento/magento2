@@ -37,7 +37,7 @@
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
-        <dataProvider class="Magento\AdminAnalytics\Ui\DataProvider\NotificationDataProvider" name="admin_usage_notification_data_source">
+        <dataProvider class="Magento\AdminAnalytics\Ui\DataProvider\AdminUsageNotificationDataProvider" name="admin_usage_notification_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>entity_id</primaryFieldName>

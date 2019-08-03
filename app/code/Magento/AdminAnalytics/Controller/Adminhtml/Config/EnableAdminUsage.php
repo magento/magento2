@@ -99,6 +99,8 @@ class EnableAdminUsage extends Action
     }
 
     /**
+     * Determines if its allowed
+     *
      * @return bool
      */
     protected function _isAllowed()
