@@ -97,4 +97,12 @@ class DisableAdminUsage extends Action
         $this->disableAdminUsage();
         $this->markUserNotified();
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return parent::_isAllowed();
+    }
 }
