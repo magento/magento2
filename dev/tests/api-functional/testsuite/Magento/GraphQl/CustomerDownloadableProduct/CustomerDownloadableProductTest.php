@@ -121,7 +121,6 @@ QUERY;
         $this->assertEmpty($response['customerDownloadableProducts']['items']);
     }
 
-
     public function testGuestCannotAccessDownloadableProducts()
     {
         $query = <<<QUERY
