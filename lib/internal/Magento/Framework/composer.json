@@ -21,7 +21,7 @@
         "ext-xsl": "*",
         "ext-bcmath": "*",
         "symfony/process": "~2.1",
-        "colinmollenhour/php-redis-session-abstract": "1.3.8",
+        "colinmollenhour/php-redis-session-abstract": "~1.3.8",
         "composer/composer": "^1.4",
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
