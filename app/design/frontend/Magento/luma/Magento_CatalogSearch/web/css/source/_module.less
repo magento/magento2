@@ -18,7 +18,7 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-    
+
     .search {
         .fieldset {
             .control {
@@ -31,7 +31,7 @@
             }
         }
     }
-    
+
     .block-search {
         margin-bottom: 0;
 
@@ -136,8 +136,6 @@
     }
 
     .form.search.advanced {
-        &:extend(.abs-forms-general-desktop all);
-
         .fields.range {
             .field {
                 &:first-child {
@@ -274,5 +272,9 @@
 
     .search-autocomplete {
         margin-top: 0;
+    }
+
+    .form.search.advanced {
+        &:extend(.abs-forms-general-desktop all);
     }
 }
