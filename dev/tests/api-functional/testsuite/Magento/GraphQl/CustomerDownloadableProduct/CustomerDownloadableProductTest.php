@@ -9,6 +9,7 @@ namespace Magento\GraphQl\CustomerDownloadableProduct;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -79,5 +80,67 @@ QUERY;
             $order->getIncrementId(),
             $response['customerDownloadableProducts']['items'][0]['order_increment_id']
         );
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testGetCustomerDownloadableProductsIfProductsDoNotExist()
+    {
+        $query = <<<MUTATION
+mutation {
+  generateCustomerToken(
+    email: "customer@example.com"
+    password: "password"
+  ) {
+    token
+  }
+}
+MUTATION;
+        $response = $this->graphQlMutation($query);
+        $token = $response['generateCustomerToken']['token'];
+        $this->headers = ['Authorization' => 'Bearer ' . $token];
+
+        $query = <<<QUERY
+        {
+    customerDownloadableProducts{
+        items{
+            order_increment_id
+            date
+            status
+            download_url
+            remaining_downloads
+        }
+    }
+
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query, [], '', $this->headers);
+        $this->assertEmpty($response['customerDownloadableProducts']['items']);
+    }
+
+
+    public function testGuestCannotAccessDownloadableProducts()
+    {
+        $query = <<<QUERY
+        {
+    customerDownloadableProducts{
+        items{
+            order_increment_id
+            date
+            status
+            download_url
+            remaining_downloads
+        }
+    }
+
+}
+QUERY;
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The current customer isn\'t authorized');
+        $this->graphQlQuery($query);
     }
 }
