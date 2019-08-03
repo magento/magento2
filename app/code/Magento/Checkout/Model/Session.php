@@ -355,6 +355,10 @@ class Session extends \Magento\Framework\Session\SessionManager
                 $this->quoteRepository->save(
                     $customerQuote->merge($this->getQuote())->collectTotals()
                 );
+                $newQuote = $this->quoteRepository->get($customerQuote->getId());
+                $this->quoteRepository->save(
+                    $newQuote->collectTotals()
+                );
             }
 
             $this->setQuoteId($customerQuote->getId());
