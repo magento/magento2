@@ -115,6 +115,7 @@
         "magento/module-backend": "*",
         "magento/module-backup": "*",
         "magento/module-braintree": "*",
+        "magento/module-braintree-graph-ql": "*",
         "magento/module-bundle": "*",
         "magento/module-bundle-graph-ql": "*",
         "magento/module-bundle-import-export": "*",
