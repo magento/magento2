@@ -68,6 +68,7 @@
         "zendframework/zend-json": "^2.6.1",
         "zendframework/zend-log": "^2.9.1",
         "zendframework/zend-mail": "^2.9.0",
+        "zendframework/zend-mime": "^2.5.0",
         "zendframework/zend-modulemanager": "^2.7",
         "zendframework/zend-mvc": "~2.7.0",
         "zendframework/zend-serializer": "^2.7.2",
