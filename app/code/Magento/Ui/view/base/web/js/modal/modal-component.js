@@ -361,7 +361,44 @@ define([
 
             if (this.valid) {
                 this.closeModal();
+            } else {
+                this._focusInvalid(this.elems());
             }
+        },
+
+        /**
+         * Focus to first invalid element
+         *
+         * @param {HTMLElement} elems
+         * @param {boolean} firstRun
+         * @returns {boolean}
+         */
+        _focusInvalid: function (elems, firstRun = true) {
+            var self = this;
+
+            if (firstRun) {
+                window.focusElement = false;
+            }
+
+            if (window.focusElement) {
+                return true;
+            }
+
+            elems.forEach(function (elem) {
+                if (typeof elem === 'undefined') {
+                    return;
+                }
+                if (typeof elem.focused === 'function' && typeof elem.error === 'function') {
+                    if (elem.error() && !window.focusElement) {
+                        elem.focused(true);
+                        window.focusElement = elem;
+                    }
+                } else if (elem.elems) {
+                    self._focusInvalid(elem.elems(), false);
+                }
+            });
+
+            return false;
         }
     });
 });
