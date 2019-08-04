@@ -79,6 +79,7 @@
         <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
         <element name="sectionHeaderOpened" type="button" selector="[data-index='websites']._show" timeout="30"/>
         <element name="website" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox']" parameterized="true"/>
+        <element name="websiteChecked" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox'][@value='1']" parameterized="true"/>
     </section>
     <section name="ProductDesignSection">
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
