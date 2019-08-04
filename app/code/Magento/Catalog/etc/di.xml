@@ -377,11 +377,11 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Catalog\Pricing\Price\Collection" type="Magento\Framework\Pricing\Price\Collection">
+    <type name="Magento\Catalog\Pricing\Price\Collection">
         <arguments>
             <argument name="pool" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\Pricing\PriceInfo\Factory">
         <arguments>
             <argument name="types" xsi:type="array">
