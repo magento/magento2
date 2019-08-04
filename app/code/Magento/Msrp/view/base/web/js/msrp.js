@@ -6,7 +6,7 @@ define([
     'jquery',
     'Magento_Catalog/js/price-utils',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/dropdown',
     'mage/template'
 ], function ($, priceUtils, _) {
