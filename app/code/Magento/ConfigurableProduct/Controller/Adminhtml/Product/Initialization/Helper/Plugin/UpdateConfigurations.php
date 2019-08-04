@@ -110,6 +110,12 @@ class UpdateConfigurations
                     if (isset($item['qty'])) {
                         $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
                     }
+                    
+                    /* Changing product to simple on weight change*/
+                    if (isset($item['weight']) && $item['weight'] >= 0) {
+                        $result[$item['id']]['type_id'] = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE;
+                        $result[$item['id']]['product_has_weight'] = \Magento\Catalog\Model\Product\Edit\WeightResolver::HAS_WEIGHT;
+                    }
                 }
             }
         }
