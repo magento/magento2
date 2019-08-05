@@ -23,7 +23,6 @@ use Magento\Framework\AuthorizationInterface;
  * Data provider for categories field of product page
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 101.0.0
  */
@@ -120,7 +119,7 @@ class Categories extends AbstractModifier
      * @return CacheInterface
      * @deprecated 101.0.3
      */
-    private function getCacheManager()
+    private function getCacheManager(): CacheInterface
     {
         if (!$this->cacheManager) {
             $this->cacheManager = ObjectManager::getInstance()
@@ -148,7 +147,7 @@ class Categories extends AbstractModifier
      *
      * @return bool
      */
-    private function isAllowed()
+    private function isAllowed(): bool
     {
         return $this->authorization->isAllowed('Magento_Catalog::categories');
     }

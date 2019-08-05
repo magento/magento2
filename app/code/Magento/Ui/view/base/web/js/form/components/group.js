@@ -37,6 +37,24 @@ define([
         },
 
         /**
+         * @inheritdoc
+         */
+        initElement: function (elem) {
+            this._super();
+
+            if (this.disabled) {
+                try {
+                    elem.disabled(true);
+                }
+                catch (e) {
+
+                }
+            }
+
+            return this;
+        },
+
+        /**
          * Calls initObservable of parent class.
          * Defines observable properties of instance.
          *
