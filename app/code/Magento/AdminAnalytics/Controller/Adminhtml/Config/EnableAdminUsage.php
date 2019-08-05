@@ -7,6 +7,7 @@
 namespace Magento\AdminAnalytics\Controller\Adminhtml\Config;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Magento\Framework\App\ProductMetadataInterface;
@@ -17,7 +18,7 @@ use Magento\Config\Model\Config\Factory;
 /**
  * Controller to record that the current admin user has responded to Admin Analytics notice
  */
-class EnableAdminUsage extends Action
+class EnableAdminUsage extends Action implements HttpPostActionInterface
 {
 
     private $configFactory;
@@ -96,15 +97,5 @@ class EnableAdminUsage extends Action
     {
         $this->enableAdminUsage();
         $this->markUserNotified();
-    }
-
-    /**
-     * Checks if EnableAdminUsage is allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
     }
 }

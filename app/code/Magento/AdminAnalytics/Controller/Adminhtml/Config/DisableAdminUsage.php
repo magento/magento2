@@ -7,6 +7,7 @@
 namespace Magento\AdminAnalytics\Controller\Adminhtml\Config;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Magento\Framework\App\ProductMetadataInterface;
@@ -17,7 +18,7 @@ use Magento\Config\Model\Config\Factory;
 /**
  * Controller to record Admin analytics usage log
  */
-class DisableAdminUsage extends Action
+class DisableAdminUsage extends Action implements HttpPostActionInterface
 {
     private $configFactory;
 
@@ -96,15 +97,5 @@ class DisableAdminUsage extends Action
     {
         $this->disableAdminUsage();
         $this->markUserNotified();
-    }
-
-    /**
-     * Checks if DisableAdminUsage is allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
     }
 }
