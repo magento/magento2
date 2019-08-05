@@ -16,9 +16,17 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/inventory/issues/2431"/>
+            </skip>
         </annotations>
 
         <before>
+            <!--Enable Manage Stock in case it's been disabled in previous tests.-->
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStock"/>
+            <!--Create Product and Category.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="VirtualProduct" stepKey="product"/>
             <!--Create Additional Source and Stock.-->
             <createData entity="_minimalSource" stepKey="additionalSource"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
@@ -26,9 +34,6 @@
                 <requiredEntity createDataKey="additionalStock"/>
                 <requiredEntity createDataKey="additionalSource"/>
             </createData>
-            <!--Create Product and Category.-->
-            <createData entity="SimpleSubCategory" stepKey="category"/>
-            <createData entity="VirtualProduct" stepKey="product"/>
         </before>
         <after>
             <!--Assign Default Stock to Default Website.-->
@@ -54,6 +59,9 @@
         <!--Assign create product to additional stock and set qty.-->
         <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
         <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+        <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
+            <argument name="sourceCode" value="{{_defaultSource.source_code}}"/>
+        </actionGroup>
         <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUSSource1ToCreatedProduct">
             <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
         </actionGroup>

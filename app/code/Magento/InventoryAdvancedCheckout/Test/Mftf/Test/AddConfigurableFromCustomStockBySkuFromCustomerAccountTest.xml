@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddConfigurableFromCustomStockBySkuFromCustomerAccountTest" extends="AddConfigurableProductBySkuFromCustomerAccountTest">
+        <annotations>
+            <description value="Add configurable product by sku from customer account, Additional Stock."/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional stock ans source.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" before="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="stockSourceLink"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" before="createConfigChildProductOne">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+
+            <!--Assign product variation one to additional stock and set qty.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel" after="createConfigProductAddChildTwo"/>
+            <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProductOne.id$$)}}" stepKey="openProductVariationOneEditPageToSetQty" after="loginToAdminPanel"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProductVariationOne" after="openProductVariationOneEditPageToSetQty">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1000" stepKey="setProductVariationOneQuantity" after="assignSourceToProductVariationOne"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductVariationOne" after="setProductVariationOneQuantity"/>
+            <!--Assign product variation two to additional stock and set qty.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProductTwo.id$$)}}" stepKey="openProductVariationTwoEditPageToSetQty" after="saveProductVariationOne"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProductVariationTwo" after="openProductVariationTwoEditPageToSetQty">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductVariationTwoQuantity" after="assignSourceToProductVariationTwo"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductVariationTwo" after="setProductVariationTwoQuantity"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="logout">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout" before="deleteStock"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" before="deleteCustomer"/>
+        </after>
+    </test>
+</tests>
