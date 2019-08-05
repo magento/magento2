@@ -19,21 +19,35 @@ use Magento\Framework\Phrase;
  */
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
-    /** @var ResourceConnection */
+    /**
+     * Max time for lock is 1 week
+     *
+     * MariaDB does not support negative timeout value to get infinite timeout,
+     * so we set 1 week for lock timeout
+     */
+    const MAX_LOCK_TIME = 604800;
+
+    /**
+     * @var ResourceConnection
+     */
     private $resource;
 
-    /** @var DeploymentConfig */
+    /**
+     * @var DeploymentConfig
+     */
     private $deploymentConfig;
 
-    /** @var string Lock prefix */
+    /**
+     * @var string Lock prefix
+     */
     private $prefix;
 
-    /** @var string|false Holds current lock name if set, otherwise false */
+    /**
+     * @var string|false Holds current lock name if set, otherwise false
+     */
     private $currentLock = false;
 
     /**
-     * Database constructor.
-     *
      * @param ResourceConnection $resource
      * @param DeploymentConfig $deploymentConfig
      * @param string|null $prefix
@@ -81,7 +95,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
 
         $result = (bool)$this->resource->getConnection()->query(
             "SELECT GET_LOCK(?, ?);",
-            [(string)$name, (int)$timeout]
+            [$name, $timeout < 0 ? self::MAX_LOCK_TIME : $timeout]
         )->fetchColumn();
 
         if ($result === true) {
@@ -104,6 +118,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         if (!$this->deploymentConfig->isDbAvailable()) {
             return true;
         };
+
         $name = $this->addPrefix($name);
 
         $result = (bool)$this->resource->getConnection()->query(
@@ -131,11 +146,12 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         if (!$this->deploymentConfig->isDbAvailable()) {
             return false;
         };
+
         $name = $this->addPrefix($name);
 
         return (bool)$this->resource->getConnection()->query(
             "SELECT IS_USED_LOCK(?);",
-            [(string)$name]
+            [$name]
         )->fetchColumn();
     }
 
@@ -145,7 +161,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * Limited to 64 characters in MySQL.
      *
      * @param string $name
-     * @return string $name
+     * @return string
      * @throws InputException
      */
     private function addPrefix(string $name): string
