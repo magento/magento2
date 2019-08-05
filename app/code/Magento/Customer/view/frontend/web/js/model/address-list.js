@@ -12,5 +12,18 @@ define([
 ], function (ko, defaultProvider) {
     'use strict';
 
-    return ko.observableArray(defaultProvider.getAddressItems());
+    let customerAddresses = ko.observableArray([]).extend({ deferred: true });
+    let customerAddressesDataArray = customerAddresses();
+
+    let addressItems = defaultProvider.getAddressItems();
+    let mappedAddresses = addressItems ? addressItems.map(address => address) : [];
+
+    ko.utils.arrayPushAll(
+        customerAddressesDataArray,
+        mappedAddresses
+    );
+
+    customerAddresses.valueHasMutated();
+
+    return customerAddresses;
 });
