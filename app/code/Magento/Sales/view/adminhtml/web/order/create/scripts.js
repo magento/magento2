@@ -571,11 +571,17 @@ define([
         },
 
         applyCoupon : function(code){
-            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
-            this.orderItemChanged = false;
-            jQuery('html, body').animate({
-                scrollTop: 0
-            });
+            if (!code) {
+                alert({
+                    content: jQuery.mage.__('Please enter a coupon code!')
+                });
+            } else {
+                this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
+                this.orderItemChanged = false;
+                jQuery('html, body').animate({
+                    scrollTop: 0
+                });
+            }
         },
 
         addProduct : function(id){
