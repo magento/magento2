@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initializatio
 
 use \Magento\Catalog\Model\Product\Edit\WeightResolver;
 
-/*
+/**
  * Update Configurations for configurable product
  */
 class UpdateConfigurations
