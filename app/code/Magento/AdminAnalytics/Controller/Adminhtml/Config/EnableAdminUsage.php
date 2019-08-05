@@ -97,14 +97,4 @@ class EnableAdminUsage extends Action
         $this->enableAdminUsage();
         $this->markUserNotified();
     }
-
-    /**
-     * Determines if its allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
-    }
 }
