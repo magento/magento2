@@ -10,7 +10,10 @@ namespace Magento\Ui\Component\Form\Field;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-/** Field class has dynamic default value based on  System Configuration path  */
+
+/**
+ * Field class has dynamic default value based on  System Configuration path
+ */
 class DefaultValue extends \Magento\Ui\Component\Form\Field
 {
     /**
