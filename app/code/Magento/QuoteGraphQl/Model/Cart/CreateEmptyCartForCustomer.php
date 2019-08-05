@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -49,13 +48,12 @@ class CreateEmptyCartForCustomer
         CartManagementInterface $cartManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         QuoteIdMaskResourceModel $quoteIdMaskResourceModel,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId = null
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
     ) {
         $this->cartManagement = $cartManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->quoteIdMaskResourceModel = $quoteIdMaskResourceModel;
-        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId ?? ObjectManager::getInstance()
-                ->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
     }
 
     /**
