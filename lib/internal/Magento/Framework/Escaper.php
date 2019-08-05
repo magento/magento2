@@ -29,6 +29,11 @@ class Escaper
     private $logger;
 
     /**
+     * @var \Magento\Framework\Translate\InlineInterface
+     */
+    private $translateInline;
+
+    /**
      * @var string[]
      */
     private $notAllowedTags = ['script', 'img', 'embed', 'iframe', 'video', 'source', 'object', 'audio'];
@@ -335,8 +340,11 @@ class Escaper
      */
     public function escapeXssInUrl($data)
     {
+        $data = (string)$data;
+        $this->getTranslateInline()->processResponseBody($data);
+
         return htmlspecialchars(
-            $this->escapeScriptIdentifiers((string)$data),
+            $this->escapeScriptIdentifiers($data),
             $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false
@@ -429,5 +437,20 @@ class Escaper
         }
 
         return $allowedTags;
+    }
+
+    /**
+     * Resolve inline translator.
+     *
+     * @return \Magento\Framework\Translate\InlineInterface
+     */
+    private function getTranslateInline()
+    {
+        if ($this->translateInline === null) {
+            $this->translateInline = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Translate\InlineInterface::class);
+        }
+
+        return $this->translateInline;
     }
 }
