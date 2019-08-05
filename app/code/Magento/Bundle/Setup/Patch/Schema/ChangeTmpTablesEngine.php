@@ -41,7 +41,10 @@ class ChangeTmpTablesEngine implements SchemaPatchInterface
             'catalog_product_index_price_bundle_opt_tmp',
         ];
         foreach ($tables as $table) {
-            $this->schemaSetup->getConnection()->changeTableEngine($table, 'InnoDB');
+            $tableName = $this->schemaSetup->getTable($table);
+            if ($this->schemaSetup->getConnection()->isTableExists($tableName)) {
+                $this->schemaSetup->getConnection()->changeTableEngine($tableName, 'InnoDB');
+            }
         }
 
         $this->schemaSetup->endSetup();
