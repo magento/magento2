@@ -12,7 +12,7 @@ define([
     'mage/translate',
     'priceUtils',
     'priceBox',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'jquery/jquery.parsequery'
 ], function ($, _, mageTemplate, $t, priceUtils) {
     'use strict';
