@@ -30,7 +30,7 @@ define([
                             }
                         }
                     },
-                    notificationWindow: null,
+                    notificationWindow: null
                 },
 
                 /**

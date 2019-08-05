@@ -6,7 +6,9 @@
 define(['jquery', 'analyticsPopupConfig'], function ($, analyticsPopupConfig) {
     'use strict';
 
-    var deferred = $.Deferred(), mixin = {
+    var deferred = $.Deferred(),
+
+        mixin = {
         /**
          * Initializes content only if its visible
          */
@@ -34,3 +36,4 @@ define(['jquery', 'analyticsPopupConfig'], function ($, analyticsPopupConfig) {
         return target.extend(mixin);
     };
 });
+
