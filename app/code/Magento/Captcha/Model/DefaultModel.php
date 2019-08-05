@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Model;
 
 use Magento\Captcha\Helper\Data;
+use Magento\Framework\Math\Random;
 
 /**
  * Implementation of \Zend\Captcha\Image
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.0.2
@@ -84,23 +89,31 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     private $words;
 
     /**
+     * @var Random
+     */
+    private $randomMath;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param ResourceModel\LogFactory $resLogFactory
      * @param string $formId
+     * @param Random $randomMath
      * @throws \Zend\Captcha\Exception\ExtensionNotLoadedException
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Captcha\Helper\Data $captchaData,
         \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory,
-        $formId
+        $formId,
+        Random $randomMath = null
     ) {
         parent::__construct();
         $this->session = $session;
         $this->captchaData = $captchaData;
         $this->resLogFactory = $resLogFactory;
         $this->formId = $formId;
+        $this->randomMath = $randomMath ?? \Magento\Framework\App\ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
@@ -382,23 +395,9 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     protected function generateWord()
     {
-        $word = '';
-        $symbols = $this->getSymbols();
+        $symbols = (string)$this->captchaData->getConfig('symbols');
         $wordLen = $this->getWordLen();
-        for ($i = 0; $i < $wordLen; $i++) {
-            $word .= $symbols[array_rand($symbols)];
-        }
-        return $word;
-    }
-
-    /**
-     * Get symbols array to use for word generation
-     *
-     * @return array
-     */
-    private function getSymbols()
-    {
-        return str_split((string)$this->captchaData->getConfig('symbols'));
+        return $this->randomMath->getRandomString($wordLen, $symbols);
     }
 
     /**
@@ -508,7 +507,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Set captcha word
      *
-     * @param  string $word
+     * @param string $word
      * @return $this
      * @since 100.2.0
      */
@@ -562,7 +561,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     protected function gc()
     {
-        //do nothing
+        return; // required for static testing to pass
     }
 
     /**

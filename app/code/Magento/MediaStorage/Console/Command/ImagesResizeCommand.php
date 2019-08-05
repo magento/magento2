@@ -76,6 +76,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            $errors = [];
             $this->appState->setAreaCode(Area::AREA_GLOBAL);
             $generator = $this->resize->resizeFromThemes();
 
@@ -95,7 +96,15 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             }
 
             while ($generator->valid()) {
-                $progress->setMessage($generator->key());
+                $resizeInfo = $generator->key();
+                $error = $resizeInfo['error'];
+                $filename = $resizeInfo['filename'];
+
+                if ($error !== '') {
+                    $errors[$filename] = $error;
+                }
+
+                $progress->setMessage($filename);
                 $progress->advance();
                 $generator->next();
             }
@@ -106,7 +115,14 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         }
 
         $output->write(PHP_EOL);
-        $output->writeln("<info>Product images resized successfully</info>");
+        if (count($errors)) {
+            $output->writeln("<info>Product images resized with errors:</info>");
+            foreach ($errors as $error) {
+                $output->writeln("<error>{$error}</error>");
+            }
+        } else {
+            $output->writeln("<info>Product images resized successfully</info>");
+        }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }

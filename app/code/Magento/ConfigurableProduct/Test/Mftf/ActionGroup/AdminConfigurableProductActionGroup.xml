@@ -81,6 +81,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
         <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
@@ -139,6 +140,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateFirstNewValue"/>
         <fillField userInput="{{firstOptionName}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewFirstOption"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>
@@ -213,6 +215,12 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
     </actionGroup>
 
+    <!--Generate and save configurable product after setting options-->
+    <actionGroup name="GenerateAndSaveConfiguredProductAfterSettingOptions" extends="saveConfiguredProduct">
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" before="clickOnSaveButton2" stepKey="clickOnNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" after="clickOnNextButton" stepKey="clickOnGenerateProductsButton"/>
+    </actionGroup>
+
     <actionGroup name="addNewProductConfigurationAttribute">
         <annotations>
             <description>Generates the Product Configurations for the 2 provided Attribute Names on the Configurable Product creation/edit page.</description>
@@ -239,6 +247,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateFirstNewValue"/>
         <fillField userInput="{{firstOption.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewFirstOption"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>
@@ -416,5 +425,12 @@
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtnByProductName(productName)}}" stepKey="clickToExpandActionsSelect"/>
         <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisableChildProduct"/>
         <see selector="{{AdminProductFormConfigurationsSection.confProductOptionStatusCell(productName)}}" userInput="Disabled" stepKey="seeConfigDisabled"/>
+    </actionGroup>
+
+    <!--You are on AdminProductEditPage-->
+    <!--Start create configurations for attribute and fill quantity-->
+    <actionGroup name="StartCreateConfigurationsForAttribute" extends="generateConfigurationsByAttributeCode">
+        <remove keyForRemoval="clickOnNextButton3"/>
+        <remove keyForRemoval="clickOnNextButton4"/>
     </actionGroup>
 </actionGroups>
