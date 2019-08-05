@@ -12,8 +12,7 @@ namespace Magento\Catalog\Model\Plugin;
 
 use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
-
-/** Set the default value for Category Design Layout if provided */
+/** Sets the default value for Category Design Layout if provided */
 class SetPageLayoutDefaultValue
 {
     private $defaultValue;
@@ -28,6 +27,8 @@ class SetPageLayoutDefaultValue
     }
 
     /**
+     * Sets the default value for Category Design Layout in data provider if provided
+     *
      * @param DataProvider $subject
      * @param array $result
      * @return array
