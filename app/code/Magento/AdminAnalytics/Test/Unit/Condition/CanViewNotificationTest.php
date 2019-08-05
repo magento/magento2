@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdminAnalytics\Test\Unit\Model\Condition;
+namespace Magento\AdminAnalytics\Test\Unit\Condition;
 
 use Magento\AdminAnalytics\Model\Condition\CanViewNotification;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger;
