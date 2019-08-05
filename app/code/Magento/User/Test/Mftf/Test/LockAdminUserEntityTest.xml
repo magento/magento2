@@ -32,7 +32,11 @@
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
 
-        <actionGroup ref="AdminOpenConfigurationPageActionGroup" stepKey="goToConfigurationPage"/>
+        <!--Configure 'Maximum Login Failures to Lockout Account'-->
+        <actionGroup ref="AdminOpenAdminSectionPageActionGroup" stepKey="goToConfigurationPage"/>
+        <actionGroup ref="AdminExpandSecurityTabActionGroup" stepKey="openSecurityTab"/>
+        <actionGroup ref="AdminSetMaximumLoginFailuresToLockoutAccountActionGroup" stepKey="setMaximumLoginFailures"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveCahges"/>
 
     </test>
 </tests>
