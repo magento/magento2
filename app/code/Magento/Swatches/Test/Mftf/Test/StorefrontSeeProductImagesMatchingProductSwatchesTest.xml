@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSeeProductImagesMatchingProductSwatchesTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Swatches in product details page"/>
+            <title value="Customer can see product images matching product swatches"/>
+            <description value="Customer can see product images matching product swatches"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3086"/>
+            <group value="swatches"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="VisualSwatchProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductAttributeGridFilter"/>
+            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllChildrenProducts">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductGridFilter"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Begin creating a new product attribute -->
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillProductAttributeProperties">
+            <argument name="attributeName" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            <argument name="attributeType" value="{{VisualSwatchProductAttribute.frontend_input}}"/>
+        </actionGroup>
+
+        <!--Select value for option "Update Product Preview Image"-->
+        <actionGroup ref="AdminUpdateProductPreviewImageActionGroup" stepKey="setUpdateProductPreviewImage"/>
+
+        <actionGroup ref="AdminAddSwatchOptionAndFillFieldsActionGroup" stepKey="addFirstSwatchOptionAndFillFields"/>
+
+        <actionGroup ref="AdminAddSwatchOptionAndFillFieldsActionGroup" stepKey="addSecondSwatchOptionAndFillFields">
+            <argument name="swatchOption" value="visualSwatchOption2"/>
+        </actionGroup>
+
+        <!-- Set scope to global -->
+        <actionGroup ref="AdminSwitchScopeForProductAttributeActionGroup" stepKey="switchScopeForProductAttribute"/>
+
+        <!-- Save the new attribute -->
+        <actionGroup ref="ClickSaveButtonActionGroup" stepKey="clickSaveAttribute">
+            <argument name="message" value="You saved the product attribute."/>
+        </actionGroup>
+
+        <!-- Edit configurable product -->
+        <actionGroup ref="goToProductPageViaID" stepKey="openProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+
+        <!-- Add images to configurable product -->
+        <actionGroup ref="addProductImage" stepKey="addFirstImageForProductConfigurable">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="addProductImage" stepKey="addSecondImageForProductConfigurable">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+
+        <!-- Create configurations based off the visual swatch we created earlier -->
+        <actionGroup ref="StartCreateConfigurationsForAttribute" stepKey="createConfigurations">
+            <argument name="attributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+        </actionGroup>
+
+        <!--Add images to configurable product attribute options-->
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionOne">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="frontend_label" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            <argument name="label" value="{{visualSwatchOption1.default_label}}"/>
+        </actionGroup>
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionTwo">
+            <argument name="image" value="ImageUpload3"/>
+            <argument name="frontend_label" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            <argument name="label" value="{{visualSwatchOption2.default_label}}"/>
+        </actionGroup>
+
+        <actionGroup ref="GenerateAndSaveConfiguredProductAfterSettingOptions" stepKey="saveProductForm"/>
+
+        <!-- Go to the category page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+
+        <actionGroup ref="StorefrontAssertActiveProductImage" stepKey="StorefrontAssertActiveProductImage"/>
+
+         <!--Click a swatch and expect to see the image from the swatch from the configurable product -->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImage" stepKey="clickSwatchOption">
+            <argument name="optionName" value="{{visualSwatchOption1.default_label}}"/>
+            <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailablity" stepKey="seeFirstImageBaseProductInSwatchOption"/>
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailablity" stepKey="seeSecondImageBaseProductInSwatchOption">
+            <argument name="fileName" value="{{TestImageNew.filename}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImage" stepKey="clickOnSwatchOption2">
+            <argument name="optionName" value="{{visualSwatchOption2.default_label}}"/>
+            <argument name="fileName" value="{{ImageUpload3.filename}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailablity" stepKey="seeFirstImageBaseProductInSwatchOption2"/>
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailablity" stepKey="seeSecondImageBaseProductInSwatchOption2">
+            <argument name="fileName" value="{{TestImageNew.filename}}"/>
+        </actionGroup>
+    </test>
+</tests>
