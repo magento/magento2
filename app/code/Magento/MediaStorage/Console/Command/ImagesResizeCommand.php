@@ -102,15 +102,15 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 
                 if ($error !== '') {
                     $errors[$filename] = $error;
+
+                    // print individual errors in verbose mode
+                    $output->writeln('', OutputInterface::VERBOSITY_VERBOSE); // blank line for aligning error messages
+                    $output->writeln("<error>{$error}</error>", OutputInterface::VERBOSITY_VERBOSE);
                 }
 
                 $progress->setMessage($filename);
-                $progress->advance();
 
-                if ($result instanceof \Exception) {
-                    $output->writeln(''); // blank line for aligning error messages
-                    $output->writeln("<error>{$result->getMessage()}</error>");
-                }
+                $progress->advance();
             }
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
