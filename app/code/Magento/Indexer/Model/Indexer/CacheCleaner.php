@@ -90,6 +90,9 @@ class CacheCleaner
      */
     private function cleanCache()
     {
-        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+        $identities = $this->cacheContext->getIdentities();
+        if (!empty($identities)) {
+            $this->appCache->clean($identities);
+        }
     }
 }
