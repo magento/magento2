@@ -33,18 +33,18 @@ class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(array $cartItemData): array
     {
-        $customizableOptionsData = $this->arrayManager->get('customizable_options', $cartItemData, []);
+        $customizableOptions = $this->arrayManager->get('customizable_options', $cartItemData, []);
 
-        $customizableOptions = [];
-        foreach ($customizableOptionsData as $customizableOption) {
+        $customizableOptionsData = [];
+        foreach ($customizableOptions as $customizableOption) {
             if (isset($customizableOption['value_string'])) {
-                $customizableOptions[$customizableOption['id']] = $this->convertCustomOptionValue(
+                $customizableOptionsData[$customizableOption['id']] = $this->convertCustomOptionValue(
                     $customizableOption['value_string']
                 );
             }
         }
 
-        return ['options' => $customizableOptions];
+        return ['options' => $customizableOptionsData];
     }
 
     /**

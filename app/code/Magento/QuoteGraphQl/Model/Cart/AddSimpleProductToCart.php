@@ -86,7 +86,11 @@ class AddSimpleProductToCart
      */
     private function extractSku(array $cartItemData): string
     {
-        if (!isset($cartItemData['data']['sku']) || empty($cartItemData['data']['sku'])) {
+        // Need to keep this for configurable product and backward compatibility.
+        if (!empty($cartItemData['parent_sku'])) {
+            return (string)$cartItemData['parent_sku'];
+        }
+        if (empty($cartItemData['data']['sku'])) {
             throw new GraphQlInputException(__('Missed "sku" in cart item data'));
         }
         return (string)$cartItemData['data']['sku'];

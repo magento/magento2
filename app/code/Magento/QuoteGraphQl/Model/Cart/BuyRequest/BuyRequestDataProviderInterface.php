@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 
 /**
- * Provide buy request data from add to cart item request
+ * Build buy request for adding products to cart
  */
 interface BuyRequestDataProviderInterface
 {
