@@ -109,7 +109,7 @@ define([
                     if (analyticsPopupConfig.releaseVisible) {
                         notifiModal.initializeContentAfterAnalytics();
                     }
-                },
+                }
             }
         );
     }
