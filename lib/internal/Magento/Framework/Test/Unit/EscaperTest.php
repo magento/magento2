@@ -298,6 +298,10 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
                 'data' => "http://exam\r\nple.com/search?term=this+%26+that&view=list",
                 'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
             ],
+            [
+                'data' => "http://&#x65;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;/",
+                'expected' => "http://example.com/",
+            ],
         ];
     }
 
