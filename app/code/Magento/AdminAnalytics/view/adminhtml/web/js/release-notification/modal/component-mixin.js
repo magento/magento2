@@ -6,8 +6,10 @@
 define(['jquery', 'analyticsPopupConfig'], function ($, analyticsPopupConfig) {
     'use strict';
 
-    var deferred = $.Deferred();
-    var mixin = {
+    var deferred = $.Deferred(), mixin = {
+        /**
+         * Initializes content only if its visible
+         */
         initializeContent: function () {
             var initializeContent = this._super.bind(this);
 
@@ -19,6 +21,10 @@ define(['jquery', 'analyticsPopupConfig'], function ($, analyticsPopupConfig) {
                 });
             }
         },
+
+        /**
+         * Initializes release notification content after admin analytics
+         */
         initializeContentAfterAnalytics: function () {
             deferred.resolve();
         }

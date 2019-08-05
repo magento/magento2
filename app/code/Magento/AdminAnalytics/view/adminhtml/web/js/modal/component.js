@@ -22,6 +22,9 @@ define([
                     },
                     options: {
                         keyEventHandlers: {
+                            /**
+                             * Prevents escape key from exiting out of modal
+                             */
                             escapeKey: function () {
                                 return;
                             }
@@ -29,13 +32,25 @@ define([
                     },
                     notificationWindow: null,
                 },
+
+                /**
+                 * Initializes modal on opened function
+                 */
                 initModal: function () {
                     this.options.opened = this.onOpened.bind(this);
                     this._super();
                 },
+
+                /**
+                 * Once the modal is opened it hides the X
+                 */
                 onOpened: function () {
                     $('.modal-header button.action-close').hide();
                 },
+
+                /**
+                 * Changes admin usage setting to yes
+                 */
                 enableAdminUsage: function () {
                     var data = {
                         'form_key': window.FORM_KEY
@@ -58,6 +73,10 @@ define([
                     this.openReleasePopup();
                     this.closeModal();
                 },
+
+                /**
+                 * Changes admin usage setting to no
+                 */
                 disableAdminUsage: function () {
                     var data = {
                         'form_key': window.FORM_KEY
@@ -80,6 +99,10 @@ define([
                     this.openReleasePopup();
                     this.closeModal();
                 },
+
+                /**
+                 * Allows admin usage popup to be shown first and then new release notification
+                 */
                 openReleasePopup: function () {
                     var notifiModal = registry.get('release_notification.release_notification.notification_modal_1');
 

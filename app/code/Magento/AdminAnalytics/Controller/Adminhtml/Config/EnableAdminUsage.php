@@ -98,4 +98,15 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
         $this->enableAdminUsage();
         $this->markUserNotified();
     }
+
+    /**
+     * Checks if EnableAdminUsage is allowed
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        $isAllowed = parent::_isAllowed();
+        return $isAllowed;
+    }
 }

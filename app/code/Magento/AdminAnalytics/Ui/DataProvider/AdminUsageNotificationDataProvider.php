@@ -86,11 +86,6 @@ class AdminUsageNotificationDataProvider implements DataProviderInterface
      */
     public function getData()
     {
-        /** @var ModifierInterface $modifier */
-        foreach ($this->pool->getModifiersInstances() as $modifier) {
-            $this->data = $modifier->modifyData($this->data);
-        }
-
         return $this->data;
     }
 
@@ -99,10 +94,6 @@ class AdminUsageNotificationDataProvider implements DataProviderInterface
      */
     public function getMeta()
     {
-        /** @var ModifierInterface $modifier */
-        foreach ($this->pool->getModifiersInstances() as $modifier) {
-            $this->meta = $modifier->modifyMeta($this->meta);
-        }
         return $this->meta;
     }
 

@@ -99,6 +99,7 @@
     },
     "replace": {
         "magento/module-marketplace": "*",
+        "magento/module-admin-analytics": "*",
         "magento/module-admin-notification": "*",
         "magento/module-advanced-pricing-import-export": "*",
         "magento/module-amqp": "*",
