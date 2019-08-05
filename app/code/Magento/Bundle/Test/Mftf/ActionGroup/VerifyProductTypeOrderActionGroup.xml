@@ -15,12 +15,4 @@
 
         <seeElement stepKey="seeBundleInOrder" selector="{{AdminProductDropdownOrderSection.bundleProduct}}"/>
     </actionGroup>
-
-    <actionGroup name="StorefrontAddBundleProductFromCategoryToCartActionGroup">
-        <annotations>
-            <description>Checks that Bundle is in the correct order in comparison to other product types on the add product dropdown.</description>
-        </annotations>
-
-        <seeElement stepKey="seeBundleInOrder" selector="{{AdminProductDropdownOrderSection.bundleProduct}}"/>
-    </actionGroup>
 </actionGroups>
