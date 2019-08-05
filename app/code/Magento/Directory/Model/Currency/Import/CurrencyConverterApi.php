@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Directory\Model\Currency\Import;
 
+/**
+ * Currency rate import model (From http://free.currencyconverterapi.com/)
+ *
+ * Class \Magento\Directory\Model\Currency\Import\CurrencyConverterApi
+ */
 class CurrencyConverterApi extends AbstractImport
 {
     /**
@@ -46,7 +51,7 @@ class CurrencyConverterApi extends AbstractImport
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function fetchRates()
     {
@@ -75,10 +80,15 @@ class CurrencyConverterApi extends AbstractImport
     private function convertBatch($data, $currencyFrom, $currenciesTo)
     {
         foreach ($currenciesTo as $to) {
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             set_time_limit(0);
             try {
                 $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
                 $url = str_replace('{{CURRENCY_TO}}', $to, $url);
+                $url = $url . '&apiKey=' . $this->scopeConfig->getValue(
+                    'currency/currencyconverterapi/api_key',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                );
                 $response = $this->getServiceResponse($url);
                 if ($currencyFrom == $to) {
                     $data[$currencyFrom][$to] = $this->_numberFormat(1);
@@ -87,9 +97,14 @@ class CurrencyConverterApi extends AbstractImport
                         $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $to);
                         $data[$currencyFrom][$to] = null;
                     } else {
-                        $data[$currencyFrom][$to] = $this->_numberFormat(
-                            (double)$response[$currencyFrom . '_' . $to]
-                        );
+                        if (isset($response['error']) && $response['error']) {
+                            $this->_messages[] = __($response['error']);
+                            $data[$currencyFrom][$to] = null;
+                        } else {
+                            $data[$currencyFrom][$to] = $this->_numberFormat(
+                                (double)$response[$currencyFrom . '_' . $to]
+                            );
+                        }
                     }
                 }
             } finally {
@@ -137,7 +152,7 @@ class CurrencyConverterApi extends AbstractImport
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _convert($currencyFrom, $currencyTo)
     {
