@@ -12,6 +12,7 @@
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute" />
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionValueInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue" />
     <preference for="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" type="Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue" />
+    <preference for="Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider" />
     <preference for="Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface" type="Magento\ConfigurableProduct\Model\AttributeOptionProvider" />
