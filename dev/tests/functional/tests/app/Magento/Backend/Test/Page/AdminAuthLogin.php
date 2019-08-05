@@ -41,6 +41,11 @@ class AdminAuthLogin extends Page
     protected $messagesBlock = '.messages';
 
     /**
+     * Admin Analytics selector
+     */
+    protected $adminUsageSelector ='.modal-inner-wrap';
+
+    /**
      * Constructor.
      */
     protected function initUrl()
@@ -97,5 +102,24 @@ class AdminAuthLogin extends Page
                 return $item->isVisible() ? true : null;
             }
         );
+    }
+
+    public function dismissAdminUsageNotification()
+    {
+        $browser = $this->browser;
+        $selector = $this->adminUsageSelector;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $item = $browser->find($selector);
+                if ($item->isVisible()) {
+                    return true;
+                }
+                usleep(200000);
+                return true;
+            }
+        );
+        if ($this->browser->find($selector)->isVisible()) {
+            $this->browser->find($selector)->click();
+        }
     }
 }
