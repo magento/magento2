@@ -336,7 +336,7 @@ class Escaper
     public function escapeXssInUrl($data)
     {
         return htmlspecialchars(
-            $this->escapeScriptIdentifiers((string)$data),
+            $this->escapeScriptIdentifiers(html_entity_decode((string)$data)),
             $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false

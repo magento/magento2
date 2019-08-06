@@ -585,6 +585,10 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
+            "support": {
+                "source": "https://github.com/magento/composer/tree/1.2.2",
+                "issues": "https://github.com/magento/composer/issues"
+            },
             "time": "2019-07-30T19:45:16+00:00"
         },
         {
@@ -1869,7 +1873,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -6412,23 +6416,22 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.4.1",
+            "version": "2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "9b5de03fe069d4a36c911112c30b824ff4e80c3a"
+                "reference": "9e9a20fd4c77833ef41ac07eb076a7f2434ce61c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9b5de03fe069d4a36c911112c30b824ff4e80c3a",
-                "reference": "9b5de03fe069d4a36c911112c30b824ff4e80c3a",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9e9a20fd4c77833ef41ac07eb076a7f2434ce61c",
+                "reference": "9e9a20fd4c77833ef41ac07eb076a7f2434ce61c",
                 "shasum": ""
             },
             "require": {
                 "allure-framework/allure-codeception": "~1.3.0",
                 "codeception/codeception": "~2.3.4 || ~2.4.0 ",
                 "consolidation/robo": "^1.0.0",
-                "epfremme/swagger-php": "^2.0",
                 "ext-curl": "*",
                 "flow/jsonpath": ">0.2",
                 "fzaninotto/faker": "^1.6",
@@ -6451,6 +6454,9 @@
                 "sebastian/phpcpd": "~3.0 || ~4.0",
                 "squizlabs/php_codesniffer": "~3.2",
                 "symfony/stopwatch": "~3.4.6"
+            },
+            "suggest": {
+                "epfremme/swagger-php": "^2.0"
             },
             "bin": [
                 "bin/mftf"
@@ -6481,7 +6487,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-06-10T17:57:40+00:00"
+            "time": "2019-08-02T14:26:18+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -8128,8 +8134,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "Copy/Paste Detector (CPD) for PHP code.",
@@ -9209,7 +9215,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",

@@ -39,11 +39,9 @@ class AuthorizeCommandTest extends AbstractTest
 
         $paymentDO = $this->paymentFactory->create($payment);
 
-        $expectedRequest = include __DIR__ . '/../../_files/expected_request/authorize.php';
         $response = include __DIR__ . '/../../_files/response/authorize.php';
 
-        $this->clientMock->method('setRawData')
-            ->with(json_encode($expectedRequest), 'application/json');
+        $this->clientMock->method('setRawData');
 
         $this->responseMock->method('getBody')
             ->willReturn(json_encode($response));

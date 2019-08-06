@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
 /**
@@ -44,7 +42,10 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->priceInfoMock = $this->createPartialMock(\Magento\Framework\Pricing\PriceInfo\Base::class, ['getPrice', 'getPrices']);
+        $this->priceInfoMock = $this->createPartialMock(
+            \Magento\Framework\Pricing\PriceInfo\Base::class,
+            ['getPrice', 'getPrices']
+        );
         $this->finalPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
         $this->priceMock = $this->getMockForAbstractClass(
             \Magento\Bundle\Pricing\Price\DiscountProviderInterface::class
@@ -63,7 +64,7 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
         $price = clone $this->priceMock;
         $price->expects($this->exactly(3))
             ->method('getDiscountPercent')
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         return $price;
     }
 
@@ -74,24 +75,23 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->productMock->expects($this->exactly(2))
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE))
-            ->will($this->returnValue($this->finalPriceMock));
+            ->willReturn($this->finalPriceMock);
         $this->finalPriceMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(100));
+            ->willReturn(100);
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     $this->getPriceMock(30),
                     $this->getPriceMock(20),
                     $this->getPriceMock(40),
                 ]
-            )
-        );
+            );
         $this->assertEquals(20, $this->calculator->calculateDiscount($this->productMock));
     }
 
@@ -102,16 +102,15 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')
-            ->will($this->returnValue(
-                    [
-                        $this->getPriceMock(30),
-                        $this->getPriceMock(20),
-                        $this->getPriceMock(40),
-                    ]
-                )
+            ->willReturn(
+                [
+                    $this->getPriceMock(30),
+                    $this->getPriceMock(20),
+                    $this->getPriceMock(40),
+                ]
             );
         $this->assertEquals(10, $this->calculator->calculateDiscount($this->productMock, 50));
     }

@@ -26,5 +26,6 @@
         <element name="itemQuantityUpdate" type="button" selector="//a[text()='{{productName}}']/../..//span[text()='Update']" parameterized="true"/>
         <element name="emptyCart" type="text" selector=".counter.qty.empty"/>
         <element name="minicartContent" type="block" selector="#minicart-content-wrapper"/>
+        <element name="visibleItemsCountText" type="text" selector="//div[@class='items-total']"/>
     </section>
 </sections>

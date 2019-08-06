@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Attribute;
 
 /**
@@ -78,7 +76,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->fetchStrategyMock = $this->createMock(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class);
+        $this->fetchStrategyMock = $this->createMock(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+        );
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
         $this->eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
@@ -91,7 +91,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnSelf());
 
-        $this->connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['select', 'describeTable', 'quoteIdentifier', '_connect', '_quote']);
+        $this->connectionMock = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'describeTable', 'quoteIdentifier', '_connect', '_quote']
+        );
         $this->selectRenderer = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();

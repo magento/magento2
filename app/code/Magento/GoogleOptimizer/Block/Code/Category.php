@@ -1,20 +1,21 @@
 <?php
 /**
- * Google Optimizer Category Block
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\GoogleOptimizer\Block\Code;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\GoogleOptimizer\Block\AbstractCode;
+
 /**
+ * Google Optimizer Category Block.
+ *
  * @api
  * @since 100.0.2
  */
-class Category extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Magento\Framework\DataObject\IdentityInterface
+class Category extends AbstractCode implements IdentityInterface
 {
     /**
      * @var string Entity name in registry

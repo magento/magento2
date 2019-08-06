@@ -1,11 +1,8 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
@@ -115,10 +112,16 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
-        $blockInstance1 = $this->createPartialMock(\Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class, ['toHtml']);
+        $blockInstance1 = $this->createPartialMock(
+            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
+            ['toHtml']
+        );
         $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block1']));
 
-        $blockInstance2 = $this->createPartialMock(\Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class, ['toHtml']);
+        $blockInstance2 = $this->createPartialMock(
+            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
+            ['toHtml']
+        );
         $blockInstance2->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block2']));
 
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));

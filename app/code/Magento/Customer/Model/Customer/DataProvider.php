@@ -487,6 +487,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $url = $this->getFileUploadUrl($entityTypeCode);
 
             $config = [
+                'dataType' => $this->getMetadataValue($config, 'dataType'),
                 'formElement' => 'fileUploader',
                 'componentType' => 'fileUploader',
                 'maxFileSize' => $maxFileSize,

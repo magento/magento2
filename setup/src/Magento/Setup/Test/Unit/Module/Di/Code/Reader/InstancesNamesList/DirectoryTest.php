@@ -7,6 +7,10 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
 
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 
+/**
+ * Test for Directory Decorator
+ * @package Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList
+ */
 class DirectoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -84,16 +88,26 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             ['NameSpace1\ClassName2', ['Parent_Class_Name', 'Interface_1', 'Interface_2']]
         ];
 
-        $this->classReaderMock->expects($this->exactly(count($classes)))
+        $this->classReaderMock->expects(
+            $this->exactly(
+                count($classes)
+            )
+        )
             ->method('getParents')
-            ->will($this->returnValueMap(
-                $parents
-            ));
+            ->will(
+                $this->returnValueMap(
+                    $parents
+                )
+            );
 
         $this->logMock->expects($this->never())
             ->method('add');
 
-        $this->validatorMock->expects($this->exactly(count($classes)))
+        $this->validatorMock->expects(
+            $this->exactly(
+                count($classes)
+            )
+        )
             ->method('validate');
 
         $this->model->getList($path);
@@ -123,11 +137,17 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             ['NameSpace1\ClassName2', ['Parent_Class_Name', 'Interface_1', 'Interface_2']]
         ];
 
-        $this->classReaderMock->expects($this->exactly(count($classes)))
+        $this->classReaderMock->expects(
+            $this->exactly(
+                count($classes)
+            )
+        )
             ->method('getParents')
-            ->will($this->returnValueMap(
-                $parents
-            ));
+            ->will(
+                $this->returnValueMap(
+                    $parents
+                )
+            );
 
         $this->logMock->expects($this->never())
             ->method('add');
@@ -190,5 +210,13 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             [new \Magento\Framework\Exception\ValidatorException(new \Magento\Framework\Phrase('Not Valid!'))],
             [new \ReflectionException('Not Valid!')]
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        restore_error_handler();
     }
 }

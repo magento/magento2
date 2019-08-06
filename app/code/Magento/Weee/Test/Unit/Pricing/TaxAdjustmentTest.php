@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Weee\Test\Unit\Pricing;
 
 use Magento\Weee\Pricing\TaxAdjustment;
@@ -44,19 +42,17 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
-                    function ($arg) {
-                        return round($arg * 0.5, 2);
-                    }
-                )
+            ->willReturnCallback(
+                function ($arg) {
+                    return round($arg * 0.5, 2);
+                }
             );
         $this->priceCurrencyMock->expects($this->any())
             ->method('convert')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($arg) {
                     return $arg * 0.5;
                 }
-            )
             );
 
         $this->adjustment = new TaxAdjustment(

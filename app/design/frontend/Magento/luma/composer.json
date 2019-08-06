@@ -2,7 +2,7 @@
     "name": "magento/theme-frontend-luma",
     "description": "N/A",
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "magento/theme-frontend-blank": "100.2.*",
         "magento/framework": "101.0.*"
     },

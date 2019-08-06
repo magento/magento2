@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Shipping data helper
  */
@@ -13,6 +11,9 @@ namespace Magento\Shipping\Helper;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
@@ -69,7 +70,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve tracking url with params
      *
      * @param  string $key
-     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Shipment|\Magento\Sales\Model\Order\Shipment\Track $model
+     * @param  Order|Shipment|Track $model
      * @param  string $method Optional - method of a model to get id
      * @return string
      */
@@ -94,11 +95,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getTrackingPopupUrlBySalesModel($model)
     {
-        if ($model instanceof \Magento\Sales\Model\Order) {
+        if ($model instanceof Order) {
             return $this->_getTrackingUrl('order_id', $model);
-        } elseif ($model instanceof \Magento\Sales\Model\Order\Shipment) {
+        } elseif ($model instanceof Shipment) {
             return $this->_getTrackingUrl('ship_id', $model);
-        } elseif ($model instanceof \Magento\Sales\Model\Order\Shipment\Track) {
+        } elseif ($model instanceof Track) {
             return $this->_getTrackingUrl('track_id', $model, 'getEntityId');
         }
         return '';
