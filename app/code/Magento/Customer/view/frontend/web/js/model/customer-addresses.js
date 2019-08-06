@@ -27,9 +27,7 @@ define([
              */
             let toAddress = address => new Address(address);
 
-            return isLoggedIn()
-                ? customerAddresses.map(toAddress)
-                : [];
+            return isLoggedIn() ? customerAddresses.map(toAddress) : [];
         }
     };
 

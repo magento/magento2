@@ -12,9 +12,10 @@ define([
 ], function (ko, defaultProvider) {
     'use strict';
 
-    let customerAddresses = ko.observableArray([]).extend({ deferred: true });
+    let customerAddresses = ko.observableArray([]).extend({
+            deferred: true
+        });
     let customerAddressesDataArray = customerAddresses();
-
     let addressItems = defaultProvider.getAddressItems();
 
     ko.utils.arrayPushAll(
