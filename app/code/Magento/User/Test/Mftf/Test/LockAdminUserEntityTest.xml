@@ -28,15 +28,44 @@
         <!--Create New User-->
         <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
         <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm">
-            <argument name="user" value="NewAdminUser"/>
+            <argument name="user" value="adminUserCorrectPassword"/>
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
 
         <!--Configure 'Maximum Login Failures to Lockout Account'-->
-        <actionGroup ref="AdminOpenAdminSectionPageActionGroup" stepKey="goToConfigurationPage"/>
+        <actionGroup ref="AdminOpenConfigAdminPageActionGroup" stepKey="goToAdminSectionPage"/>
         <actionGroup ref="AdminExpandSecurityTabActionGroup" stepKey="openSecurityTab"/>
         <actionGroup ref="AdminSetMaximumLoginFailuresToLockoutAccountActionGroup" stepKey="setMaximumLoginFailures"/>
-        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveCahges"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveChanges"/>
+
+        <!-- Log in to Admin Panel with incorrect password specified number of times-->
+        <actionGroup ref="logout" stepKey="logoutAsDefaultUser"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserFirstAttempt">
+            <argument name="adminUser" value="adminUserIncorrectPassword"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorFirstAttempt"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserSecondAttempt">
+            <argument name="adminUser" value="adminUserIncorrectPassword"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorSecondAttempt"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserThirdAttempt">
+            <argument name="adminUser" value="adminUserIncorrectPassword"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorThirdAttempt"/>
+
+        <!-- Log in to Admin Panel with correct password-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserFourthAttempt">
+            <argument name="adminUser" value="adminUserCorrectPassword"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorFourthAttempt"/>
+
+        <!--Login as default admin user-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
+
+        <!--Delete new User-->
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
+            <argument name="user" value="adminUserCorrectPassword"/>
+        </actionGroup>
 
     </test>
 </tests>

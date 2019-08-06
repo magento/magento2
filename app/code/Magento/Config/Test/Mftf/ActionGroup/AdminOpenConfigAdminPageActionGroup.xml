@@ -7,8 +7,8 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenAdminSectionPageActionGroup">
-        <amOnPage url="{{AdminEditAdminSectionPage.url}}" stepKey="goToConfigurationPage"/>
+    <actionGroup name="AdminOpenConfigAdminPageActionGroup">
+        <amOnPage url="{{AdminConfigAdminPage.url}}" stepKey="goToAdminSectionPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

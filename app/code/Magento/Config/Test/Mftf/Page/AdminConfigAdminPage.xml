@@ -6,7 +6,7 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminEditAdminSectionPage" url="admin/system_config/edit/section/admin" module="Magento_Config" area="admin">
+    <page name="AdminConfigAdminPage" url="admin/system_config/edit/section/admin" module="Magento_Config" area="admin">
         <section name="AdminSection"/>
     </page>
 </pages>

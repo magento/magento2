@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSetMaximumLoginFailuresToLockoutAccountActionGroup">
         <arguments>
-            <argument name="qty" type="string" defaultValue="5"/>
+            <argument name="qty" type="string" defaultValue="3"/>
         </arguments>
         <uncheckOption selector="{{AdminSection.systemValueForMaximumLoginFailures}}" stepKey="uncheckUseSystemValue"/>
         <fillField selector="{{AdminSection.MaximumLoginFailures}}" userInput="{{qty}}" stepKey="setMaximumLoginFailures"/>
