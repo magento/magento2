@@ -43,7 +43,7 @@ class AdminAuthLogin extends Page
     /**
      * Admin Analytics selector
      */
-    protected $adminUsageSelector ='.modal-inner-wrap';
+    protected $adminUsageSelector ='.action-secondary';
 
     /**
      * Constructor.
