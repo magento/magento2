@@ -48,6 +48,12 @@
                     <item name="radio" xsi:type="string">CustomizableRadioOption</item>
                     <item name="checkbox" xsi:type="string">CustomizableCheckboxOption</item>
                 </item>
+                <item name="sort_attributes" xsi:type="array">
+                    <item name="product_sort_attributes" xsi:type="string">ProductSortInput</item>
+                </item>
+                <item name="filter_attributes" xsi:type="array">
+                    <item name="product_filter_attributes" xsi:type="string">ProductFilterInput</item>
+                </item>
             </argument>
         </arguments>
     </type>
