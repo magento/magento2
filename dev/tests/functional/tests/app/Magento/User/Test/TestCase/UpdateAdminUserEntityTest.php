@@ -147,6 +147,8 @@ class UpdateAdminUserEntityTest extends Injectable
             $this->adminAuth->open();
             $this->adminAuth->getLoginBlock()->fill($initialUser);
             $this->adminAuth->getLoginBlock()->submit();
+            $this->adminAuth->waitForHeaderBlock();
+            $this->adminAuth->dismissAdminUsageNotification();
         }
         $this->userIndex->open();
         $this->userIndex->getUserGrid()->searchAndOpen($filter);

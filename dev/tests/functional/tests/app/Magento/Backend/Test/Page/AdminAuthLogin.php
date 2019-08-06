@@ -80,16 +80,22 @@ class AdminAuthLogin extends Page
     /**
      * Get global messages block.
      *
-     * @return \Magento\Backend\Test\Block\Messages
+     * @return \Magento\Ui\Test\Block\Adminhtml\Modal
+
      */
     public function getMessagesBlock()
     {
         return Factory::getBlockFactory()->getMagentoBackendMessages($this->browser->find($this->messagesBlock));
     }
 
+    /**
+     * Get modal block
+     *
+     * @return void
+     */
     public function getModalBlock()
     {
-        return Factory::getBlockFactory()->getMagentoUiAdminhtmlModal($this->browser->find('.modal-inner-wrap'));
+        return Factory::getBlockFactory()->getMagentoUiAdminhtmlModal($this->browser->find($this->adminUsageSelector));
     }
 
     /**
@@ -109,6 +115,11 @@ class AdminAuthLogin extends Page
         );
     }
 
+    /**
+     * Dismiss admin usage notification
+     *
+     * @return void
+     */
     public function dismissAdminUsageNotification()
     {
         $this->getModalBlock()->dismissIfModalAppears();
