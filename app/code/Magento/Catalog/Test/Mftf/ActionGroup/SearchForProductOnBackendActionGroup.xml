@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SearchForProductOnBackendActionGroup">
+        <annotations>
+            <description>Goto the Product grid page. Search for the provided Product.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="product"/>
         </arguments>
+
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad time="60" stepKey="waitForProductsPageToLoad"/>
         <click selector="{{AdminProductFiltersSection.filtersButton}}" stepKey="openFiltersSectionOnProductsPage"/>
@@ -20,14 +25,22 @@
     </actionGroup>
 
     <actionGroup name="SearchForProductOnBackendByNameActionGroup" extends="SearchForProductOnBackendActionGroup">
+        <annotations>
+            <description>Search for the provided Product Name.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+
         <remove keyForRemoval="fillSkuFieldOnFiltersSection"/>
         <fillField userInput="{{productName}}" selector="{{AdminProductFiltersSection.nameInput}}" after="cleanFiltersIfTheySet" stepKey="fillNameFieldOnFiltersSection"/>
     </actionGroup>
 
     <actionGroup name="ClearProductsFilterActionGroup">
+        <annotations>
+            <description>Goto the Product grid page. Clear the Search Filters for the grid.</description>
+        </annotations>
+
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>
         <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
