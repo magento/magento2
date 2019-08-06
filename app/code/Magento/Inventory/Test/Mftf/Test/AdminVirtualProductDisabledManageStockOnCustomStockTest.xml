@@ -38,6 +38,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="revertConfiguration"/>
         </after>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGridPage1"/>
