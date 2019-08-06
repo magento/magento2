@@ -87,19 +87,7 @@ abstract class AbstractResource
     public function commit()
     {
         $this->getConnection()->commit();
-        /**
-         * Process after commit callbacks
-         */
-        if ($this->getConnection()->getTransactionLevel() === 0) {
-            $callbacks = CallbackPool::get(spl_object_hash($this->getConnection()));
-            try {
-                foreach ($callbacks as $callback) {
-                    call_user_func($callback);
-                }
-            } catch (\Exception $e) {
-                $this->getLogger()->critical($e);
-            }
-        }
+
         return $this;
     }
 
