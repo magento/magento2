@@ -11,7 +11,6 @@
  * @magentoConfigFixture default_store payment/purchaseorder/active 1
  * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
  */
-// TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
 declare(strict_types=1);
 
 use Magento\Framework\App\Config\Storage\Writer;

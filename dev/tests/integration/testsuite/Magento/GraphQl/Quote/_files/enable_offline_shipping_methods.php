@@ -9,7 +9,6 @@
  * @magentoConfigFixture default_store carriers/tablerate/active 1
  * @magentoConfigFixture default_store carriers/freeshipping/active 1
  */
-// TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
 declare(strict_types=1);
 
 use Magento\Framework\App\Config\Storage\Writer;

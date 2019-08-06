@@ -6,7 +6,6 @@
 /**
  * @deprecated use next @magentoConfigFixture instead.
  */
-// TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
 declare(strict_types=1);
 
 use Magento\Framework\App\Config\Storage\Writer;

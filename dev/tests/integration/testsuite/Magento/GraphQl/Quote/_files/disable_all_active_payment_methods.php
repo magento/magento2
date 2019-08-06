@@ -12,7 +12,6 @@
  * @magentoConfigFixture default_store payment/free/active 0
  *
  */
-// TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
 declare(strict_types=1);
 
 use Magento\Config\Model\Config;
