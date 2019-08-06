@@ -119,6 +119,8 @@ class LoginUserOnBackendStep implements TestStepInterface
     {
         $this->adminAuth->getLoginBlock()->fill($this->user);
         $this->adminAuth->getLoginBlock()->submit();
+        $this->adminAuthLogin->waitForHeaderBlock();
+        $this->adminAuthLogin->dismissAdminUsageNotification();
         $this->adminAuth->getLoginBlock()->waitFormNotVisible();
     }
 }

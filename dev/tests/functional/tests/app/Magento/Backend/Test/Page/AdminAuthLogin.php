@@ -43,7 +43,7 @@ class AdminAuthLogin extends Page
     /**
      * Admin Analytics selector
      */
-    protected $adminUsageSelector ='.action-secondary';
+    protected $adminUsageSelector ='.modal-inner-wrap';
 
     /**
      * Constructor.
@@ -87,6 +87,11 @@ class AdminAuthLogin extends Page
         return Factory::getBlockFactory()->getMagentoBackendMessages($this->browser->find($this->messagesBlock));
     }
 
+    public function getModalBlock()
+    {
+        return Factory::getBlockFactory()->getMagentoUiAdminhtmlModal($this->browser->find('.modal-inner-wrap'));
+    }
+
     /**
      * Wait for Header block is visible in the page.
      *
@@ -106,20 +111,6 @@ class AdminAuthLogin extends Page
 
     public function dismissAdminUsageNotification()
     {
-        $browser = $this->browser;
-        $selector = $this->adminUsageSelector;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $item = $browser->find($selector);
-                if ($item->isVisible()) {
-                    return true;
-                }
-                usleep(200000);
-                return true;
-            }
-        );
-        if ($this->browser->find($selector)->isVisible()) {
-            $this->browser->find($selector)->click();
-        }
+        $this->getModalBlock()->dismissIfModalAppears();
     }
 }
