@@ -406,8 +406,8 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
                 'http://test.com/?redirect=:\x74\x65\x78\x74x2cCPHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
             ],
             [
-                'http://test.com/?redirect={{{j}}{{j}}{{j}}{{j}}}avascript:alert(1)',
-                'http://test.com/?redirect=:alert(1)',
+                'http://test.com/?{{{test}}{{test_translated}}{{tes_origin}}{{theme}}}',
+                'http://test.com/?test',
             ],
         ];
     }
