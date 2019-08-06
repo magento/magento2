@@ -162,9 +162,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $auth;
 
     /**
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
+     * @param $name
+     * @param $primaryFieldName
+     * @param $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param StoreManagerInterface $storeManager
@@ -176,7 +176,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param array $data
      * @param PoolInterface|null $pool
      * @param AuthorizationInterface|null $auth
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param ArrayUtils|null $arrayUtils
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         $name,
@@ -321,7 +322,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @inheritDoc
      * @since 101.0.0
      */
-    public function getData(): array
+    public function getData()
     {
         if (isset($this->loadedData)) {
             return $this->loadedData;
@@ -382,7 +383,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             // disable fields
             $attributeIsLocked = $this->getCurrentCategory()->isLockedAttribute($code);
             $meta[$code]['disabled'] = $attributeIsLocked;
-            if (array_search('use_config.' . $code, $fields, true) && $meta[$code]['disabled']) {
+            if (array_search('use_config.' . $code, $fields) && $meta[$code]['disabled']) {
                 $meta['use_config.' . $code]['disabled'] = true;
             }
         }

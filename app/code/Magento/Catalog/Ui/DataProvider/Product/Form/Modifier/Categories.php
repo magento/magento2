@@ -149,7 +149,7 @@ class Categories extends AbstractModifier
      */
     private function isAllowed(): bool
     {
-        return $this->authorization->isAllowed('Magento_Catalog::categories');
+        return (bool) $this->authorization->isAllowed('Magento_Catalog::categories');
     }
 
     /**
@@ -291,6 +291,7 @@ class Categories extends AbstractModifier
                             'formElement' => 'container',
                             'additionalClasses' => 'admin__field-small',
                             'componentType' => 'container',
+                            'disabled' => $fieldIsDisabled,
                             'component' => 'Magento_Ui/js/form/components/button',
                             'template' => 'ui/form/components/button/container',
                             'actions' => [
@@ -315,7 +316,6 @@ class Categories extends AbstractModifier
                             'displayArea' => 'insideGroup',
                             'sortOrder' => 20,
                             'dataScope'  => $fieldCode,
-                            'disabled' => $fieldIsDisabled,
                         ],
                     ],
                 ]

@@ -52,7 +52,7 @@ class Wysiwyg extends AbstractElement
         array $config = []
     ) {
         $wysiwygConfigData = isset($config['wysiwygConfigData']) ? $config['wysiwygConfigData'] : [];
-        if ($config['disabled'] === true) {
+        if (isset($config['disabled']) && $config['disabled'] === true) {
             $config['wysiwygConfigData']['settings']['readonly'] = 1;
         }
 
