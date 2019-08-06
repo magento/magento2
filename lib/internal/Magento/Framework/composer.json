@@ -2,13 +2,13 @@
     "name": "magento/framework",
     "description": "N/A",
     "type": "magento2-library",
-    "version": "101.0.8",
+    "version": "101.0.9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-simplexml": "*",

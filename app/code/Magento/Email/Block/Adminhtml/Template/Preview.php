@@ -12,11 +12,10 @@
 namespace Magento\Email\Block\Adminhtml\Template;
 
 /**
- * Template Preview Block
+ * Email template preview block.
  *
  * @api
  * @since 100.0.2
- * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
  */
 class Preview extends \Magento\Backend\Block\Widget
 {
@@ -56,6 +55,7 @@ class Preview extends \Magento\Backend\Block\Widget
      * Prepare html output
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     protected function _toHtml()
     {

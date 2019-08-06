@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\App\ObjectManager;
@@ -538,7 +536,9 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function getCode()
     {
         if (empty($this->_code)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment method code.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot retrieve the payment method code.')
+            );
         }
         return $this->_code;
     }
@@ -578,7 +578,9 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     {
         $instance = $this->getData('info_instance');
         if (!$instance instanceof InfoInterface) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment information object instance.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot retrieve the payment information object instance.')
+            );
         }
         return $instance;
     }

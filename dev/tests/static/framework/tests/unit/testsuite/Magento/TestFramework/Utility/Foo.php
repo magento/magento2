@@ -8,9 +8,6 @@ namespace Magento\TestFramework\Utility;
 use Magento\Framework\UrlFactory;
 use Magento\Catalog\Model\Product;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class Foo
 {
     /**
@@ -29,7 +26,9 @@ class Foo
      */
     public function getBuilderFactory()
     {
-        return \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory::class);
+        return \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory::class
+        );
     }
 
     /**
@@ -80,6 +79,8 @@ class Foo
      */
     public function getCustomerRepositoryFactory()
     {
-        return \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Customer\Api\CustomerRepositoryInterfaceFactory::class);
+        return \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Customer\Api\CustomerRepositoryInterfaceFactory::class
+        );
     }
 }

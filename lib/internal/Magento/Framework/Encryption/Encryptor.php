@@ -10,7 +10,7 @@ use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Math\Random;
 
 /**
- * Class Encryptor provides basic logic for hashing strings and encrypting/decrypting misc data
+ * Class Encryptor provides basic logic for hashing strings and encrypting/decrypting misc data.
  */
 class Encryptor implements EncryptorInterface
 {
@@ -103,6 +103,11 @@ class Encryptor implements EncryptorInterface
     protected $keys = [];
 
     /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
      */
@@ -138,6 +143,18 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Generate simple hash for given string.
+     *
+     * @param string $data
+     * @param int $version
+     * @return string
+     */
+    private function generateSimpleHash(string $data, int $version): string
+    {
+        return hash($this->hashVersionMap[$version], (string)$data);
+    }
+
+    /**
      * @inheritdoc
      */
     public function getHash($password, $salt = false, $version = self::HASH_VERSION_LATEST)
@@ -155,7 +172,7 @@ class Encryptor implements EncryptorInterface
         return implode(
             self::DELIMITER,
             [
-                $this->hash($salt . $password, $version),
+                $this->generateSimpleHash($salt . $password, $version),
                 $salt,
                 $version
             ]
@@ -167,7 +184,11 @@ class Encryptor implements EncryptorInterface
      */
     public function hash($data, $version = self::HASH_VERSION_LATEST)
     {
-        return hash($this->hashVersionMap[$version], $data);
+        if (empty($this->keys[$this->keyVersion])) {
+            throw new \RuntimeException('No key available');
+        }
+
+        return hash_hmac($this->hashVersionMap[$version], (string)$data, $this->keys[$this->keyVersion], false);
     }
 
     /**
@@ -183,15 +204,21 @@ class Encryptor implements EncryptorInterface
      */
     public function isValidHash($password, $hash)
     {
-        $this->explodePasswordHash($hash);
-
-        foreach ($this->getPasswordVersion() as $hashVersion) {
-            $password = $this->hash($this->getPasswordSalt() . $password, $hashVersion);
+        try {
+            $this->explodePasswordHash($hash);
+            $recreated = $password;
+            foreach ($this->getPasswordVersion() as $hashVersion) {
+                $recreated = $this->generateSimpleHash($this->getPasswordSalt() . $password, $hashVersion);
+                $hash = $this->getPasswordHash();
+            }
+        } catch (\RuntimeException $exception) {
+            //Hash is not a password hash.
+            $recreated = $this->hash($password);
         }
 
         return Security::compareStrings(
-            $password,
-            $this->getPasswordHash()
+            $recreated,
+            $hash
         );
     }
 
@@ -200,7 +227,12 @@ class Encryptor implements EncryptorInterface
      */
     public function validateHashVersion($hash, $validateCount = false)
     {
-        $this->explodePasswordHash($hash);
+        try {
+            $this->explodePasswordHash($hash);
+        } catch (\RuntimeException $exception) {
+            //Not a password hash.
+            return true;
+        }
         $hashVersions = $this->getPasswordVersion();
 
         return $validateCount
@@ -209,12 +241,18 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
+     * Separate password hash parts.
+     *
      * @param string $hash
+     * @throws \RuntimeException When given hash cannot be processed.
      * @return array
      */
     private function explodePasswordHash($hash)
     {
         $explodedPassword = explode(self::DELIMITER, $hash, 3);
+        if (count($explodedPassword) !== 3) {
+            throw new \RuntimeException('Hash is not a password hash');
+        }
 
         foreach ($this->passwordHashMap as $key => $defaultValue) {
             $this->passwordHashMap[$key] = (isset($explodedPassword[$key])) ? $explodedPassword[$key] : $defaultValue;

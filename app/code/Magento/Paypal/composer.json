@@ -2,7 +2,7 @@
     "name": "magento/module-paypal",
     "description": "N/A",
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "magento/module-config": "101.0.*",
         "magento/module-store": "100.2.*",
         "magento/module-checkout": "100.2.*",
@@ -26,7 +26,7 @@
         "magento/module-checkout-agreements": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.6",
+    "version": "100.2.7",
     "license": [
         "proprietary"
     ],

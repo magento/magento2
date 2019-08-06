@@ -2,7 +2,7 @@
     "name": "magento/module-catalog",
     "description": "N/A",
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "magento/module-store": "100.2.*",
         "magento/module-eav": "101.0.*",
         "magento/module-cms": "102.0.*",
@@ -26,7 +26,8 @@
         "magento/module-config": "101.0.*",
         "magento/module-media-storage": "100.2.*",
         "magento/framework": "101.0.*",
-        "magento/module-ui": "101.0.*"
+        "magento/module-ui": "101.0.*",
+        "magento/module-authorization": "100.2.*"
     },
     "suggest": {
         "magento/module-cookie": "100.2.*",
@@ -34,7 +35,7 @@
         "magento/module-catalog-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
-    "version": "102.0.8",
+    "version": "102.0.9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

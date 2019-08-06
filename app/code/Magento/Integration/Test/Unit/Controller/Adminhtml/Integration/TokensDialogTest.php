@@ -3,11 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
 {
     public function testTokensDialog()
@@ -15,11 +13,9 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
         $controller = $this->_createIntegrationController('TokensDialog');
         $this->_registryMock->expects($this->any())->method('register');
 
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-                'getParam'
-            )->will(
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->will(
                 $this->returnValueMap(
                     [
                         [
@@ -32,15 +28,10 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
                 )
             );
 
-        $this->_integrationSvcMock->expects(
-            $this->any()
-        )->method(
-                'get'
-            )->with(
-                $this->equalTo(self::INTEGRATION_ID)
-            )->will(
-                $this->returnValue($this->_getIntegrationModelMock())
-            );
+        $this->_integrationSvcMock->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->willReturn($this->_getIntegrationModelMock());
 
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')

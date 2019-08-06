@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Framework\View\Result\Page as ResultPage;

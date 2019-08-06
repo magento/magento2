@@ -2,7 +2,7 @@
     "name": "magento/module-ui",
     "description": "N/A",
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "magento/module-backend": "100.2.*",
         "magento/framework": "101.0.*",
         "magento/module-eav": "101.0.*",
@@ -13,7 +13,7 @@
         "magento/module-config": "101.0.*"
     },
     "type": "magento2-module",
-    "version": "101.0.8",
+    "version": "101.0.9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

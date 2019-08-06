@@ -2,11 +2,11 @@
     "name": "magento/theme-frontend-blank",
     "description": "N/A",
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "magento/framework": "101.0.*"
     },
     "type": "magento2-theme",
-    "version": "100.2.6",
+    "version": "100.2.7",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
