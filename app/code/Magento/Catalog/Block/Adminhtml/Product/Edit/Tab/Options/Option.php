@@ -380,7 +380,7 @@ class Option extends Widget
      * @param int $scope
      * @return array
      */
-    public function getOptionValueOfGroupSelect($value, $option, $showPrice, $scope)
+    private function getOptionValueOfGroupSelect($value, $option, $showPrice, $scope)
     {
         $i = 0;
         $itemCount = 0;
