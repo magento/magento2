@@ -340,7 +340,7 @@ class Escaper
      */
     public function escapeXssInUrl($data)
     {
-        $data = (string)$data;
+        $data = html_entity_decode((string)$data);
         $this->getTranslateInline()->processResponseBody($data);
 
         return htmlspecialchars(
