@@ -21,7 +21,6 @@ class SetPageLayoutDefaultValue
     private $defaultValue;
 
     /**
-     * SetPageLayoutDefaultValue constructor.
      * @param string $defaultValue
      */
     public function __construct(string $defaultValue = "")
