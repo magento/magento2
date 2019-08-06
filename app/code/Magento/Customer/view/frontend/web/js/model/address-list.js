@@ -16,11 +16,10 @@ define([
     let customerAddressesDataArray = customerAddresses();
 
     let addressItems = defaultProvider.getAddressItems();
-    let mappedAddresses = addressItems ? addressItems.map(address => address) : [];
 
     ko.utils.arrayPushAll(
         customerAddressesDataArray,
-        mappedAddresses
+        addressItems
     );
 
     customerAddresses.valueHasMutated();

@@ -21,8 +21,14 @@ define([
         getAddressItems: function () {
             let customerAddresses = window.customerData.addresses;
 
+            /**
+             * @param address
+             * @return {Object}
+             */
+            let toAddress = address => new Address(address);
+
             return isLoggedIn()
-                ? customerAddresses.map(address => new Address(address))
+                ? customerAddresses.map(toAddress)
                 : [];
         }
     };
