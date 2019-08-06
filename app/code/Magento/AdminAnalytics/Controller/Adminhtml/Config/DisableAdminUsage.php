@@ -66,7 +66,7 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
     /**
      * Changes the value of config/admin/usage/enabled
      */
-    private function disableAdminUsage()
+    public function disableAdminUsage()
     {
         $configModel = $this->configFactory->create();
         $configModel->setDataByPath('admin/usage/enabled', 0);
@@ -78,7 +78,7 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
      *
      * @return ResultInterface
      */
-    private function markUserNotified() : ResultInterface
+    public function markUserNotified() : ResultInterface
     {
         $responseContent = [
             'success' => $this->notificationLogger->log(
