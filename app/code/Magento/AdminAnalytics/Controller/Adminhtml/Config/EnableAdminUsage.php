@@ -20,7 +20,9 @@ use Magento\Config\Model\Config\Factory;
  */
 class EnableAdminUsage extends Action implements HttpPostActionInterface
 {
-
+    /**
+     * @var Factory
+     */
     private $configFactory;
     /**
      * @var ProductMetadataInterface
@@ -63,7 +65,7 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     /**
      * Changes the value of config/admin/usage/enabled
      */
-    public function enableAdminUsage()
+    private function enableAdminUsage()
     {
         $configModel = $this->configFactory->create();
         $configModel->setDataByPath('admin/usage/enabled', 1);
@@ -75,7 +77,7 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
      *
      * @return ResultInterface
      */
-    public function markUserNotified()
+    private function markUserNotified() : ResultInterface
     {
         $responseContent = [
             'success' => $this->notificationLogger->log(
@@ -104,7 +106,7 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
      *
      * @return bool
      */
-    protected function _isAllowed()
+    public function _isAllowed()
     {
         $isAllowed = parent::_isAllowed();
         return $isAllowed;

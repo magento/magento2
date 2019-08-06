@@ -11,9 +11,7 @@ use Magento\Framework\App\CacheInterface;
 use function Magento\PAT\Reports\Utils\readResponseTimeReport;
 
 /**
- * Dynamic validator for UI release notification, manage UI component visibility.
- *
- * Return true if the logged in user has not seen the notification.
+ * Dynamic validator for UI admin analytics notification, manage UI component visibility.
  */
 class CanViewNotification implements VisibilityConditionInterface
 {

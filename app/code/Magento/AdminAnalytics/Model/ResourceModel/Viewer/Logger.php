@@ -34,7 +34,6 @@ class Logger
     private $logFactory;
 
     /**
-     * Logger constructor.
      * @param ResourceConnection $resource
      * @param LogFactory $logFactory
      */
@@ -71,16 +70,15 @@ class Logger
     /**
      * Get log by the last view version.
      *
-     * @param string $lastViewVersion
      * @return Log
      */
-    public function get(string $lastViewVersion) : Log
+    public function get() : Log
     {
-        return $this->logFactory->create(['data' => $this->loadLogData($lastViewVersion)]);
+        return $this->logFactory->create(['data' => $this->loadLogData()]);
     }
 
     /**
-     * Get log by the last view version.
+     * Checks is log already exists.
      *
      * @return boolean
      */

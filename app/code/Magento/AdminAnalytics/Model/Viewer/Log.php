@@ -17,7 +17,7 @@ class Log extends DataObject
      *
      * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->getData('id');
     }
@@ -27,7 +27,7 @@ class Log extends DataObject
      *
      * @return string
      */
-    public function getLastViewVersion()
+    public function getLastViewVersion() : ?string
     {
         return $this->getData('last_viewed_in_version');
     }
