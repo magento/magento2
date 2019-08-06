@@ -13,7 +13,10 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
- * @inheritdoc
+ * CatalogGraphQl product option date type.
+ *
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class DateType extends ProductDateOptionType
 {
