@@ -220,10 +220,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $categoryMock->expects($this->exactly(2))
             ->method('getData')
-            ->willReturnMap([
-                ['', null, $categoryData],
-                ['image', null, $categoryData['image']],
-            ]);
+            ->willReturnMap(
+                [
+                    ['', null, $categoryData],
+                    ['image', null, $categoryData['image']],
+                ]
+            );
         $categoryMock->expects($this->any())
             ->method('getExistsStoreValueFlag')
             ->with('url_key')
@@ -294,10 +296,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $categoryMock->expects($this->exactly(2))
             ->method('getData')
-            ->willReturnMap([
-                ['', null, $categoryData],
-                ['image', null, $categoryData['image']],
-            ]);
+            ->willReturnMap(
+                [
+                    ['', null, $categoryData],
+                    ['image', null, $categoryData['image']],
+                ]
+            );
         $categoryMock->expects($this->any())
             ->method('getExistsStoreValueFlag')
             ->with('url_key')
