@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -10,8 +12,12 @@ use Magento\Framework\Message\Manager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Catalog\Model\Product;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
+ * Test class for Product adminhtml actions
+ *
  * @magentoAppArea adminhtml
  */
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendController
@@ -58,11 +64,10 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     public function testSaveActionAndDuplicate()
     {
-        $this->getRequest()->setPostValue(['back' => 'duplicate']);
         $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        /** @var Product $product */
         $product = $repository->get('simple');
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
+        $this->assertSaveAndDuplicateAction($product);
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(
             $this->logicalNot(
@@ -71,14 +76,30 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
                 )
             )
         );
-        $this->assertSessionMessages(
-            $this->contains('You saved the product.'),
-            MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertSessionMessages(
-            $this->contains('You duplicated the product.'),
-            MessageInterface::TYPE_SUCCESS
-        );
+    }
+
+    /**
+     * Test saving and duplicate existing product after the script execution.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testSaveActionAndDuplicateWithUrlPathAttribute()
+    {
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        /** @var Product $product */
+        $product = $repository->get('simple');
+
+        // set url_path attribute and check it
+        $product->setData('url_path', $product->getSku());
+        $repository->save($product);
+        $urlPathAttribute = $product->getCustomAttribute('url_path');
+        $this->assertEquals($urlPathAttribute->getValue(), $product->getSku());
+
+        // clean cache
+        CacheCleaner::cleanAll();
+
+        // dispatch Save&Duplicate action and check it
+        $this->assertSaveAndDuplicateAction($product);
     }
 
     /**
@@ -354,5 +375,25 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $product['tier_price'] = $tierPrice;
         unset($product['entity_id']);
         return $product;
+    }
+
+    /**
+     * Dispatch Save&Duplicate action and check it
+     *
+     * @param Product $product
+     */
+    private function assertSaveAndDuplicateAction(Product $product)
+    {
+        $this->getRequest()->setPostValue(['back' => 'duplicate']);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
+        $this->assertSessionMessages(
+            $this->contains('You saved the product.'),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertSessionMessages(
+            $this->contains('You duplicated the product.'),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 }
