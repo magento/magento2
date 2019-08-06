@@ -437,7 +437,7 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
             ['CH', 'VS', 'Wallis'],
             ['CH', 'ZG', 'Zug'],
             ['CH', 'ZH', 'Zürich'],
-            ['ES', 'A Coruсa', 'A Coruña'],
+            ['ES', 'A Coruca', 'A Coruña'],
             ['ES', 'Alava', 'Alava'],
             ['ES', 'Albacete', 'Albacete'],
             ['ES', 'Alicante', 'Alicante'],

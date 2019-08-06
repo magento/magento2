@@ -16,7 +16,7 @@ use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 /**
  * Generate static files, compile
  *
- * Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
+ * Clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -156,7 +156,7 @@ class Filesystem
     public function regenerateStatic(
         OutputInterface $output
     ) {
-        // Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
+        // Clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
