@@ -54,7 +54,7 @@ class Country implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['id'])) {
+        if (empty($args['id'])) {
             throw new GraphQlInputException(__('"Country id" should be specified.'));
         }
 
