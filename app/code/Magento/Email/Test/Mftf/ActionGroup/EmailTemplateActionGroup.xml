@@ -8,9 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <!--Create New Template -->
     <actionGroup name="CreateNewTemplate">
+        <annotations>
+            <description>Clicks on Add New Template. Fills the Template details. Clicks on Save. PLEASE NOTE: The values are Hardcoded.</description>
+        </annotations>
         <arguments>
             <argument name="template" defaultValue="EmailTemplate"/>
         </arguments>
@@ -55,6 +57,9 @@
     </actionGroup>
 
     <actionGroup name="DeleteEmailTemplate" extends="FindAndOpenEmailTemplate">
+        <annotations>
+            <description>Clicks on Delete Template. Accepts the Popup. Validates that the Email Template is NOT present in the Email Templates Grid.</description>
+        </annotations>
         <click selector="{{AdminEmailTemplateEditSection.deleteTemplateButton}}" after="checkTemplateName" stepKey="deleteTemplate"/>
         <acceptPopup after="deleteTemplate" stepKey="acceptPopup"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" after="acceptPopup" stepKey="waitForSuccessMessage"/>

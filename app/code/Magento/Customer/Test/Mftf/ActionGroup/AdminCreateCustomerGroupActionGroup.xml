@@ -5,13 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCustomerGroupActionGroup">
+        <annotations>
+            <description>Goes to the Customer Groups creation page. Fills Name. Selects Tax Class. Clicks on Save. Validate that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="groupName" type="string"/>
             <argument name="taxClass" type="string"/>
         </arguments>
+        
         <amOnPage url="{{AdminNewCustomerGroupPage.url}}" stepKey="goToNewCustomerGroupPage"/>
         <waitForPageLoad stepKey="waitForNewCustomerGroupPageLoad"/>
 
