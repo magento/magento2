@@ -35,7 +35,9 @@
         <!--Configure 'Maximum Login Failures to Lockout Account'-->
         <actionGroup ref="AdminOpenConfigAdminPageActionGroup" stepKey="goToConfigAdminSectionPage"/>
         <actionGroup ref="AdminExpandSecurityTabActionGroup" stepKey="openSecurityTab"/>
-        <actionGroup ref="AdminSetMaximumLoginFailuresToLockoutAccountActionGroup" stepKey="setMaximumLoginFailures"/>
+        <actionGroup ref="AdminSetMaximumLoginFailuresToLockoutAccountActionGroup" stepKey="setMaximumLoginFailures">
+        <argument name="qty"  value="2"/>
+        </actionGroup>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveChanges"/>
 
         <!-- Log in to Admin Panel with incorrect password specified number of times-->
@@ -48,16 +50,12 @@
             <argument name="adminUser" value="adminUserIncorrectPassword"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorSecondAttempt"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserThirdAttempt">
-            <argument name="adminUser" value="adminUserIncorrectPassword"/>
-        </actionGroup>
-        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorThirdAttempt"/>
 
         <!-- Log in to Admin Panel with correct password-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserFourthAttempt">
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserThirdAttempt">
             <argument name="adminUser" value="adminUserCorrectPassword"/>
         </actionGroup>
-        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorFourthAttempt"/>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorThirdAttempt"/>
 
         <!--Login as default admin user-->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
