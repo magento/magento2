@@ -3,14 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Product;
 
 /**
+ * Test for category backend actions
+ *
  * @magentoAppArea adminhtml
  */
 class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
@@ -36,6 +43,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Test save action
+     *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDbIsolation enabled
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
@@ -95,6 +104,44 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Check default value for category url path
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @throws NoSuchEntityException
+     */
+    public function testDefaultValueForCategoryUrlPath()
+    {
+        $repository = $this->_objectManager->get(CategoryRepositoryInterface::class);
+        $categoryId = 3;
+        $category = $repository->get($categoryId);
+        $newUrlPath = 'test_url_path';
+        $defaultUrlPath = $category->getData('url_path');
+
+        // update url_path and check it
+        $category->setStoreId(1);
+        $category->setUrlKey($newUrlPath);
+        $category->setUrlPath($newUrlPath);
+        $repository->save($category);
+        $this->assertEquals($newUrlPath, $category->getUrlPath());
+
+        // set default url_path and check it
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $postData = $category->getData();
+        $postData['use_default'] = [
+            'available_sort_by' => 1,
+            'default_sort_by' => 1,
+            'url_key' => 1,
+        ];
+        $this->getRequest()->setPostValue($postData);
+        $this->dispatch('backend/catalog/category/save');
+        $category = $repository->get($categoryId);
+        $this->assertEquals($defaultUrlPath, $category->getData('url_path'));
+    }
+
+    /**
+     * Test save action from product form page
+     *
      * @param array $postData
      * @dataProvider categoryCreatedFromProductCreationPageDataProvider
      * @magentoDbIsolation enabled
@@ -130,6 +177,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Get category post data
+     *
      * @static
      * @return array
      */
@@ -174,6 +223,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Save action data provider
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
@@ -382,6 +433,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Test move Action
+     *
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @dataProvider moveActionDataProvider
      *
@@ -420,6 +473,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Move action data provider
+     *
      * @return array
      */
     public function moveActionDataProvider()
@@ -433,6 +488,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Test save action
+     *
      * @magentoDataFixture Magento/Catalog/_files/products_in_different_stores.php
      * @magentoDbIsolation disabled
      * @dataProvider saveActionWithDifferentWebsitesDataProvider
@@ -460,6 +517,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     }
 
     /**
+     * Save action data provider
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
