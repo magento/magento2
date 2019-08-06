@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f5596f72f7ab5bbe3fdd0575740a54c",
+    "content-hash": "5948beca080ef42e4310331c85c3fba1",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -585,10 +585,6 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "support": {
-                "source": "https://github.com/magento/composer/tree/1.2.2",
-                "issues": "https://github.com/magento/composer/issues"
-            },
             "time": "2019-07-30T19:45:16+00:00"
         },
         {
@@ -1873,7 +1869,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -4276,8 +4272,8 @@
             "authors": [
                 {
                     "name": "Ivan Krutov",
-                    "role": "Developer",
-                    "email": "vania-pooh@yandex-team.ru"
+                    "email": "vania-pooh@yandex-team.ru",
+                    "role": "Developer"
                 }
             ],
             "description": "A Codeception adapter for Allure report.",
@@ -4331,8 +4327,8 @@
             "authors": [
                 {
                     "name": "Ivan Krutov",
-                    "role": "Developer",
-                    "email": "vania-pooh@yandex-team.ru"
+                    "email": "vania-pooh@yandex-team.ru",
+                    "role": "Developer"
                 }
             ],
             "description": "PHP API for Allure adapter",
@@ -6329,9 +6325,9 @@
             "authors": [
                 {
                     "name": "Phil Bennett",
-                    "role": "Developer",
                     "email": "philipobenito@gmail.com",
-                    "homepage": "http://www.philipobenito.com"
+                    "homepage": "http://www.philipobenito.com",
+                    "role": "Developer"
                 }
             ],
             "description": "A fast and intuitive dependency injection container.",
@@ -6800,18 +6796,18 @@
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "role": "Developer",
-                    "email": "arne@blankerts.de"
+                    "email": "arne@blankerts.de",
+                    "role": "Developer"
                 },
                 {
                     "name": "Sebastian Heuer",
-                    "role": "Developer",
-                    "email": "sebastian@phpeople.de"
+                    "email": "sebastian@phpeople.de",
+                    "role": "Developer"
                 },
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "Developer",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "Developer"
                 }
             ],
             "description": "Library for handling version information and constraints",
@@ -7248,8 +7244,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information.",
@@ -8134,8 +8130,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Copy/Paste Detector (CPD) for PHP code.",
@@ -9056,8 +9052,8 @@
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "role": "lead",
-                    "email": "arne@blankerts.de"
+                    "email": "arne@blankerts.de",
+                    "role": "lead"
                 }
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
@@ -9215,7 +9211,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.1.0|~7.2.0",
+        "php": "~7.0.13|~7.1.0|~7.2.0",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
