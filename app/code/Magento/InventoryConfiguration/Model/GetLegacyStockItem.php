@@ -81,12 +81,14 @@ class GetLegacyStockItem
         $searchCriteria->setLimit(1, 1);
 
         $stockItemCollection = $this->legacyStockItemRepository->getList($searchCriteria);
-        if ($stockItemCollection->getTotalCount() === 0) {
-            return $this->stockItemFactory->create();
-        }
 
         $stockItems = $stockItemCollection->getItems();
         $stockItem = reset($stockItems);
+
+        if (!$stockItem) {
+            return $this->stockItemFactory->create();
+        }
+
         return $stockItem;
     }
 }
