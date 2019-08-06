@@ -8,9 +8,9 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\Composer\ComposerFactory;
-use \Magento\Framework\Composer\ComposerJsonFinder;
-use \Magento\Framework\App\Filesystem\DirectoryList;
-use \Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\ComposerJsonFinder;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class ProductMetadata
@@ -29,6 +29,11 @@ class ProductMetadata implements ProductMetadataInterface
     const PRODUCT_NAME  = 'Magento';
 
     /**
+     * Magento Product Version Cache Key
+     */
+    const MAGENTO_PRODUCT_VERSION_CACHE_KEY = 'magento-product-version';
+
+    /**
      * Product version
      *
      * @var string
@@ -45,13 +50,19 @@ class ProductMetadata implements ProductMetadataInterface
      * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
 
     /**
      * @param ComposerJsonFinder $composerJsonFinder
+     * @param CacheInterface|null $cache
      */
-    public function __construct(ComposerJsonFinder $composerJsonFinder)
+    public function __construct(ComposerJsonFinder $composerJsonFinder, CacheInterface $cache = null)
     {
         $this->composerJsonFinder = $composerJsonFinder;
+        $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);
     }
 
     /**
@@ -61,6 +72,9 @@ class ProductMetadata implements ProductMetadataInterface
      */
     public function getVersion()
     {
+        if ($cachedVersion = $this->cache->load(self::MAGENTO_PRODUCT_VERSION_CACHE_KEY)) {
+            $this->version = $cachedVersion;
+        }
         if (!$this->version) {
             if (!($this->version = $this->getSystemPackageVersion())) {
                 if ($this->getComposerInformation()->isMagentoRoot()) {
@@ -69,6 +83,7 @@ class ProductMetadata implements ProductMetadataInterface
                     $this->version = 'UNKNOWN';
                 }
             }
+            $this->cache->save($this->version, self::MAGENTO_PRODUCT_VERSION_CACHE_KEY);
         }
         return $this->version;
     }
