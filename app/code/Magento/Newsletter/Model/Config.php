@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Newsletter configuration model
  */
@@ -18,27 +20,19 @@ class Config
     const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Config\Model\ResourceModel\Config
-     */
-    protected $resourceConfig;
-
-    /**
      * Config constructor.
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Config\Model\ResourceModel\Config $resourceConfig
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->resourceConfig = $resourceConfig;
     }
 
     /**
@@ -46,8 +40,8 @@ class Config
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive($scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_NEWSLETTER_ACTIVE);
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_NEWSLETTER_ACTIVE, $scopeType);
     }
 }
