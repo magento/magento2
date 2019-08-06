@@ -74,7 +74,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: "Country id" should be specified.
+     * @expectedExceptionMessage Country "id" value should be specified
      */
     public function testMissedInputParameterException()
     {
