@@ -17,4 +17,3 @@
         <seeInField selector="{{AdminSection.MaximumLoginFailures}}" userInput="{{qty}}"  stepKey="seeNewValueInField"/>
     </actionGroup>
 </actionGroups>
-

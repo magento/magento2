@@ -33,7 +33,7 @@
         <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
 
         <!--Configure 'Maximum Login Failures to Lockout Account'-->
-        <actionGroup ref="AdminOpenConfigAdminPageActionGroup" stepKey="goToAdminSectionPage"/>
+        <actionGroup ref="AdminOpenConfigAdminPageActionGroup" stepKey="goToConfigAdminSectionPage"/>
         <actionGroup ref="AdminExpandSecurityTabActionGroup" stepKey="openSecurityTab"/>
         <actionGroup ref="AdminSetMaximumLoginFailuresToLockoutAccountActionGroup" stepKey="setMaximumLoginFailures"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveChanges"/>

@@ -12,5 +12,3 @@
     <conditionalClick selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true" stepKey="openSecurityTab"/>
     </actionGroup>
 </actionGroups>
-
-
