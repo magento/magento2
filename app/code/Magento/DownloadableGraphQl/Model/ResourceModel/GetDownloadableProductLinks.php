@@ -34,6 +34,8 @@ class GetDownloadableProductLinks
     }
 
     /**
+     * Returns downloadable product links
+     *
      * @param Product $product
      * @param array $selectedLinksIds
      * @return array

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
+use Exception;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Data as DownloadableHelper;
 use Magento\Downloadable\Model\Link;
@@ -21,6 +22,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\UrlInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Psr\Log\LoggerInterface;
 
 /**
  * Resolver fetches downloadable product links and formats it according to the GraphQL schema.
@@ -43,6 +45,11 @@ class DownloadableLinks implements ResolverInterface
     private $downloadableProductLinks;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var UrlInterface
      */
     private $urlBuilder;
@@ -53,17 +60,20 @@ class DownloadableLinks implements ResolverInterface
      * @param DownloadableHelper $downloadableHelper
      * @param EnumLookup $enumLookup
      * @param GetDownloadableProductLinks $getDownloadableProductLinks
+     * @param LoggerInterface $logger
      * @param UrlInterface $urlBuilder
      */
     public function __construct(
         DownloadableHelper $downloadableHelper,
         EnumLookup $enumLookup,
         GetDownloadableProductLinks $getDownloadableProductLinks,
+        LoggerInterface $logger,
         UrlInterface $urlBuilder
     ) {
         $this->enumLookup = $enumLookup;
         $this->downloadableHelper = $downloadableHelper;
         $this->downloadableProductLinks = $getDownloadableProductLinks;
+        $this->logger = $logger;
         $this->urlBuilder = $urlBuilder;
     }
 
@@ -79,7 +89,7 @@ class DownloadableLinks implements ResolverInterface
      * @throws GraphQlInputException
      * @throws LocalizedException
      */
-    public function resolve(
+    public function resolve(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
         Field $field,
         $context,
         ResolveInfo $info,
@@ -125,12 +135,15 @@ class DownloadableLinks implements ResolverInterface
         try {
             foreach ($links as $linkKey => $link) {
                 /** @var Link $link */
-                $resultData[$linkKey]['id'] = $link->getId();
-                $resultData[$linkKey]['title'] = $link->getTitle();
-                $resultData[$linkKey]['sort_order'] = $link->getSortOrder();
-                $resultData[$linkKey]['is_shareable'] = $this->downloadableHelper->getIsShareable($link);
-                $resultData[$linkKey]['price'] = $link->getPrice();
-                $resultData[$linkKey]['number_of_downloads'] = $link->getNumberOfDownloads();
+                $resultData[$linkKey] = [
+                    'id' => $link->getId(),
+                    'sort_order' => $link->getSortOrder(),
+                    'title' => $link->getTitle(),
+                    'is_shareable' => $this->downloadableHelper->getIsShareable($link),
+                    'price' => $link->getPrice(),
+                    'number_of_downloads' => $link->getNumberOfDownloads(),
+                ];
+
                 $sampleType = $link->getSampleType();
                 $linkType = $link->getLinkType();
 
@@ -154,8 +167,8 @@ class DownloadableLinks implements ResolverInterface
                     ['link_id' => $link->getId()]
                 );
             }
-        } catch (\Exception $e) {
-            // Do nothing
+        } catch (Exception $e) {
+            $this->logger->critical($e);
         }
 
         return $resultData;
