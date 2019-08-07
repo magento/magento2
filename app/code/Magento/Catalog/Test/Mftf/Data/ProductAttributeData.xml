@@ -343,4 +343,8 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="VisualSwatchProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">swatch_visual</data>
+        <data key="attribute_code" unique="suffix">visual_swatch</data>
+    </entity>
 </entities>
