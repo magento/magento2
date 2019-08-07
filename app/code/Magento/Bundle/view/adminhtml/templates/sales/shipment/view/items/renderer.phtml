@@ -48,7 +48,7 @@
         <td class="col-qty last">
             <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())) : ?>
                 <?php if (isset($shipItems[$_item->getId()])) : ?>
-                    <?= $block->escapeHtml($shipItems[$_item->getId()]->getQty()*1) ?>
+                    <?= (float)$shipItems[$_item->getId()]->getQty() * 1 ?>
                 <?php elseif ($_item->getIsVirtual()) : ?>
                     <?= $block->escapeHtml(__('N/A')) ?>
                 <?php else : ?>
