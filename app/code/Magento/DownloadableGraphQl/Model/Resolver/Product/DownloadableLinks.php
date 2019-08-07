@@ -88,8 +88,9 @@ class DownloadableLinks implements ResolverInterface
      * @return array|Value|mixed|null
      * @throws GraphQlInputException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function resolve(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function resolve(
         Field $field,
         $context,
         ResolveInfo $info,

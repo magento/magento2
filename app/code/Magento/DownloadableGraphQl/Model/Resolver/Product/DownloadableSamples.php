@@ -82,8 +82,9 @@ class DownloadableSamples implements ResolverInterface
      * @throws GraphQlInputException
      * @throws LocalizedException
      * @throws RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function resolve(// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function resolve(
         Field $field,
         $context,
         ResolveInfo $info,
