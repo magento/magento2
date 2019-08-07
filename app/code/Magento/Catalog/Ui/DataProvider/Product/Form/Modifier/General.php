@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Ui\Component\Form;
 
 /**
  * Data provider for main panel of product page
@@ -60,10 +61,10 @@ class General extends AbstractModifier
     /**
      * Customize number fields for advanced price and weight fields.
      *
-     * @since 101.0.0
      * @param array $data
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -125,7 +126,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (float) $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    (float)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
         }
 
@@ -135,9 +136,9 @@ class General extends AbstractModifier
     /**
      * Customize product form fields.
      *
-     * @since 101.0.0
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -234,9 +235,13 @@ class General extends AbstractModifier
                 null,
                 'children'
             );
-            $meta = $this->arrayManager->merge($containerPath . static::META_CONFIG_PATH, $meta, [
-                'component' => 'Magento_Ui/js/form/components/group',
-            ]);
+            $meta = $this->arrayManager->merge(
+                $containerPath . static::META_CONFIG_PATH,
+                $meta,
+                [
+                    'component' => 'Magento_Ui/js/form/components/group',
+                ]
+            );
 
             $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
                 . ProductAttributeInterface::CODE_HAS_WEIGHT;
@@ -438,8 +443,13 @@ class General extends AbstractModifier
         $precision = strlen(substr(strrchr($value, "."), 1));
         $store = $this->locator->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,
-                                                'precision' => $precision]);
+        $value = $currency->toCurrency(
+            $value,
+            [
+                'display' => \Magento\Framework\Currency::NO_SYMBOL,
+                'precision' => $precision
+            ]
+        );
 
         return $value;
     }
