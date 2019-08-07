@@ -94,9 +94,6 @@
             <item>Magento_Indexer::index</item>
             <item>Magento_Indexer::changeMode</item>
             <item>Magento_User::acl</item>
-            <item>Magento_Logging::magento_logging</item>
-            <item>Magento_Logging::magento_logging_events</item>
-            <item>Magento_Logging::backups</item>
             <item>Magento_Backend::system_other_settings</item>
             <item>Magento_Backend::global_search</item>
             <item>Magento_Backend::system</item>
