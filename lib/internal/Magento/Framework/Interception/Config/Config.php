@@ -202,9 +202,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     private function generateIntercepted($classDefinitions)
     {
         $config = [];
-        $scopes = $this->_scopeList->getAllScopes();
-        array_unshift($scopes, 'primary');
-        foreach (array_unique($scopes) as $scope) {
+        foreach ($this->_scopeList->getAllScopes() as $scope) {
             $config = array_replace_recursive($config, $this->_reader->read($scope));
         }
         unset($config['preferences']);

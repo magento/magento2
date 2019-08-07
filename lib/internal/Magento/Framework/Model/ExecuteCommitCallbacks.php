@@ -20,6 +20,9 @@ class ExecuteCommitCallbacks
      */
     private $logger;
 
+    /**
+     * @param LoggerInterface $logger
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -31,12 +34,11 @@ class ExecuteCommitCallbacks
      * @param AdapterInterface $subject
      * @param AdapterInterface $result
      * @return AdapterInterface
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterCommit(AdapterInterface $subject, AdapterInterface $result): AdapterInterface
     {
         if ($result->getTransactionLevel() === 0) {
-            $callbacks = CallbackPool::get(spl_object_hash($result));
+            $callbacks = CallbackPool::get(spl_object_hash($subject));
             foreach ($callbacks as $callback) {
                 try {
                     call_user_func($callback);
@@ -45,6 +47,20 @@ class ExecuteCommitCallbacks
                 }
             }
         }
+
+        return $result;
+    }
+
+    /**
+     * Drop callbacks after rollBack.
+     *
+     * @param AdapterInterface $subject
+     * @param AdapterInterface $result
+     * @return AdapterInterface
+     */
+    public function afterRollBack(AdapterInterface $subject, AdapterInterface $result): AdapterInterface
+    {
+        CallbackPool::clear(spl_object_hash($subject));
 
         return $result;
     }
