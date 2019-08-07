@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Action group to delete an item given that items name -->
+    <!-- Must already be on the admin page containing the grid -->
+    <actionGroup name="OpenCartOnPayPalActionGroup">
+        <click selector="{{PayPalPaymentSection.cartIcon}}" stepKey="openCart"/>
+        <seeElement selector="{{PayPalPaymentSection.itemName($$createProduct.name$$)}}" stepKey="seeProductname"/>
+        <click selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="clickPayPalSubmitBtn"/>
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>
