@@ -16,6 +16,9 @@ use Magento\InventoryCatalogApi\Model\GetProductIdsBySkusInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Get legacy stock item.
+ */
 class GetLegacyStockItem
 {
     /**
@@ -57,6 +60,8 @@ class GetLegacyStockItem
     }
 
     /**
+     * Execute.
+     *
      * @param string $sku
      * @return StockItemInterface
      * @throws LocalizedException
