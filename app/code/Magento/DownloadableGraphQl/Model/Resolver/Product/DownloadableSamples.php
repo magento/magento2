@@ -48,6 +48,7 @@ class DownloadableSamples implements ResolverInterface
      *
      * @param EnumLookup $enumLookup
      * @param SampleFactory $sampleFactory
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
         EnumLookup $enumLookup,
