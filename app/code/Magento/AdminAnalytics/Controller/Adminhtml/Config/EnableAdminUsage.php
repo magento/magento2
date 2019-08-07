@@ -13,7 +13,6 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Config\Model\Config\Factory;
 
 /**
@@ -22,14 +21,10 @@ use Magento\Config\Model\Config\Factory;
 class EnableAdminUsage extends Action implements HttpPostActionInterface
 {
     /**
-     * Authorization level of a basic admin session
-     */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
-
-    /**
      * @var Factory
      */
     private $configFactory;
+
     /**
      * @var ProductMetadataInterface
      */
@@ -41,31 +36,23 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     private $notificationLogger;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * MarkUserNotified constructor.
      *
      * @param Action\Context           $context
      * @param ProductMetadataInterface $productMetadata
      * @param NotificationLogger       $notificationLogger
      * @param Factory                  $configFactory
-     * @param LoggerInterface          $logger
      */
     public function __construct(
         Action\Context $context,
         ProductMetadataInterface $productMetadata,
         NotificationLogger $notificationLogger,
-        Factory $configFactory,
-        LoggerInterface $logger
+        Factory $configFactory
     ) {
         parent::__construct($context);
         $this->configFactory = $configFactory;
         $this->productMetadata = $productMetadata;
         $this->notificationLogger = $notificationLogger;
-        $this->logger = $logger;
     }
 
     /**
@@ -105,5 +92,13 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     {
         $this->enableAdminUsage();
         $this->markUserNotified();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed(static::ADMIN_RESOURCE);
     }
 }
