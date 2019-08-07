@@ -89,7 +89,8 @@ class Products implements ResolverInterface
             $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
         } else {
             $layerType = Resolver::CATALOG_LAYER_CATEGORY;
-            $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
+            $searchCriteria->setRequestName('catalog_view_container');
+            $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
         }
         //possible division by 0
         if ($searchCriteria->getPageSize()) {
@@ -116,6 +117,7 @@ class Products implements ResolverInterface
                 'current_page' => $currentPage,
                 'total_pages' => $maxPages
             ],
+            //'filters' => $aggregations
             'layer_type' => $layerType
         ];
 

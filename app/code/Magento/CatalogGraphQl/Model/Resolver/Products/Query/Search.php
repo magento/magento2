@@ -13,6 +13,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\Helper\Filter 
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Search\Api\SearchInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
 
 /**
  * Full text search for catalog using given search criteria.
@@ -50,12 +51,19 @@ class Search
     private $pageSizeProvider;
 
     /**
+     * @var SearchCriteriaInterfaceFactory
+     */
+    private $searchCriteriaFactory;
+
+    /**
      * @param SearchInterface $search
      * @param FilterHelper $filterHelper
      * @param Filter $filterQuery
      * @param SearchResultFactory $searchResultFactory
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Search\Model\Search\PageSizeProvider $pageSize
+     * @param SearchCriteriaInterfaceFactory $searchCriteriaFactory
+     * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         SearchInterface $search,
@@ -63,7 +71,9 @@ class Search
         Filter $filterQuery,
         SearchResultFactory $searchResultFactory,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Search\Model\Search\PageSizeProvider $pageSize
+        \Magento\Search\Model\Search\PageSizeProvider $pageSize,
+        SearchCriteriaInterfaceFactory $searchCriteriaFactory,
+        \Magento\Framework\Registry $registry
     ) {
         $this->search = $search;
         $this->filterHelper = $filterHelper;
@@ -71,6 +81,8 @@ class Search
         $this->searchResultFactory = $searchResultFactory;
         $this->metadataPool = $metadataPool;
         $this->pageSizeProvider = $pageSize;
+        $this->searchCriteriaFactory = $searchCriteriaFactory;
+        $this->registry = $registry;
     }
 
     /**
@@ -89,11 +101,11 @@ class Search
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
         // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
-        $pageSize = $this->pageSizeProvider->getMaxPageSize();
-        $searchCriteria->setPageSize($pageSize);
+        //$pageSize = $this->pageSizeProvider->getMaxPageSize();
+        $searchCriteria->setPageSize(10000);
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
-
+        $this->registry->register('aggregations', $itemsResults->getAggregations());
         $ids = [];
         $searchIds = [];
         foreach ($itemsResults->getItems() as $item) {
@@ -101,14 +113,14 @@ class Search
             $searchIds[] = $item->getId();
         }
 
+        $searchCriteriaIds = $this->searchCriteriaFactory->create();
         $filter = $this->filterHelper->generate($idField, 'in', $searchIds);
-        $searchCriteria = $this->filterHelper->remove($searchCriteria, 'search_term');
-        $searchCriteria = $this->filterHelper->add($searchCriteria, $filter);
-        $searchResult = $this->filterQuery->getResult($searchCriteria, $info, true);
+        $searchCriteriaIds = $this->filterHelper->add($searchCriteriaIds, $filter);
+        $searchResult = $this->filterQuery->getResult($searchCriteriaIds, $info, true);
 
-        $searchCriteria->setPageSize($realPageSize);
-        $searchCriteria->setCurrentPage($realCurrentPage);
-        $paginatedProducts = $this->paginateList($searchResult, $searchCriteria);
+        $searchCriteriaIds->setPageSize($realPageSize);
+        $searchCriteriaIds->setCurrentPage($realCurrentPage);
+        $paginatedProducts = $this->paginateList($searchResult, $searchCriteriaIds);
 
         $products = [];
         if (!isset($searchCriteria->getSortOrders()[0])) {
