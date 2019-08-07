@@ -102,7 +102,11 @@ class Cli extends Console\Application
      */
     public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $exitCode = parent::doRun($input, $output);
+        try {
+            $exitCode = parent::doRun($input, $output);
+        } catch (\Exception $e) {
+            $output->writeln($e->getTraceAsString());
+        }
 
         if ($this->initException) {
             throw $this->initException;
