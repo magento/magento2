@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\DownloadableProduct;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
 /**
  * Class AddDownloadableProductToCartTest
@@ -18,22 +19,12 @@ use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 class AddDownloadableProductToCartTest extends GraphQlAbstract
 {
     /**
-     * @var QuoteResource
+     * @var GetMaskedQuoteIdByReservedOrderId
      */
-    private $quoteResource;
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @var Quote
-     */
-    private $quote;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedId;
-
-    /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
@@ -42,30 +33,23 @@ class AddDownloadableProductToCartTest extends GraphQlAbstract
      */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->quoteResource = $this->objectManager->get(QuoteResource::class);
-        $this->quote = $this->objectManager->create(Quote::class);
-        $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
      * Add a downloadable product into shopping cart when "Links can be purchased separately" is enabled
      *
-     * @magentoApiDataFixture Magento/GraphQl/_files/product_downloadable_with_purchased_separately_links.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
     public function testAddDownloadableProductWithCustomLinks()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $sku    = 'downloadable-product-with-purchased-separately-links';
-        $qty    = 1;
-        $links  = $this->getProductsLinks($sku);
+        $sku = 'downloadable-product-with-purchased-separately-links';
+        $qty = 1;
+        $links = $this->getProductsLinks($sku);
         $linkId = key($links);
 
         $query = <<<MUTATION
@@ -120,32 +104,26 @@ MUTATION;
      * Add a downloadable product into shopping cart when "Links can be purchased separately" is enabled
      * There is the same value in couple of `link_id` options
      *
-     * @magentoApiDataFixture Magento/GraphQl/_files/product_downloadable_with_purchased_separately_links.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
     public function testAddDownloadableProductWithCustomLinks2()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $sku    = 'downloadable-product-with-purchased-separately-links';
-        $qty    = 1;
-        $links  = $this->getProductsLinks($sku);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'downloadable-product-with-purchased-separately-links';
+        $qty = 1;
+        $links = $this->getProductsLinks($sku);
         $linkId = key($links);
 
         $query = <<<MUTATION
 mutation {
     addDownloadableProductsToCart(
         input: {
-            cart_id: "{$maskedQuoteId}", 
+            cart_id: "{$maskedQuoteId}",
             cart_items: [
                 {
                     data: {
-                        quantity: {$qty}, 
+                        quantity: {$qty},
                         sku: "{$sku}"
                     },
                     downloadable_product_links: [
@@ -191,31 +169,25 @@ MUTATION;
     /**
      * Add a downloadable product into shopping cart when "Links can be purchased separately" is disabled
      *
-     * @magentoApiDataFixture Magento/GraphQl/_files/product_downloadable_without_purchased_separately_links.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_without_purchased_separately_links.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
     public function testAddDownloadableProductWithoutCustomLinks()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $sku   = 'downloadable-product-without-purchased-separately-links';
-        $qty   = 1;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'downloadable-product-without-purchased-separately-links';
+        $qty = 1;
         $links = $this->getProductsLinks($sku);
 
         $query = <<<MUTATION
 mutation {
     addDownloadableProductsToCart(
         input: {
-            cart_id: "{$maskedQuoteId}", 
+            cart_id: "{$maskedQuoteId}",
             cart_items: [
                 {
                     data: {
-                        quantity: {$qty}, 
+                        quantity: {$qty},
                         sku: "{$sku}"
                     }
                 }
@@ -250,32 +222,26 @@ MUTATION;
      * Add a downloadable product into shopping cart when "Links can be purchased separately" is disabled
      * Unnecessary `link_id` option is provided
      *
-     * @magentoApiDataFixture Magento/GraphQl/_files/product_downloadable_without_purchased_separately_links.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_without_purchased_separately_links.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
     public function testAddDownloadableProductWithoutCustomLinks2()
     {
-        $this->quoteResource->load(
-            $this->quote,
-            'test_order_1',
-            'reserved_order_id'
-        );
-        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
-
-        $sku    = 'downloadable-product-without-purchased-separately-links';
-        $qty    = 1;
-        $links  = $this->getProductsLinks($sku);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'downloadable-product-without-purchased-separately-links';
+        $qty = 1;
+        $links = $this->getProductsLinks($sku);
         $linkId = key($links);
 
         $query = <<<MUTATION
 mutation {
     addDownloadableProductsToCart(
         input: {
-            cart_id: "{$maskedQuoteId}", 
+            cart_id: "{$maskedQuoteId}",
             cart_items: [
                 {
                     data: {
-                        quantity: {$qty}, 
+                        quantity: {$qty},
                         sku: "{$sku}"
                     },
                     downloadable_product_links: [
@@ -317,10 +283,10 @@ MUTATION;
      * @param string $sku
      * @return array
      */
-    private function getProductsLinks($sku = '')
+    private function getProductsLinks(string $sku)
     {
         $result = [];
-        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
         $product = $productRepository->get($sku, false, null, true);
 

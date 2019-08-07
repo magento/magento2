@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -18,7 +20,7 @@ $productRepository = Bootstrap::getObjectManager()
 
 try {
     $product = $productRepository->get(
-        'downloadable-product-with-purchased-separately-links',
+        'downloadable-product-without-purchased-separately-links',
         false,
         null,
         true
