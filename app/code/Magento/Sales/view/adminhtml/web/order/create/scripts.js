@@ -445,8 +445,8 @@ define([
          */
         loadShippingRates: function () {
             var addressContainer = this.shippingAsBilling ?
-                    'billingAddressContainer' :
-                    'shippingAddressContainer',
+                'billingAddressContainer' :
+                'shippingAddressContainer',
                 data = this.serializeData(this[addressContainer]).toObject();
 
             data['collect_shipping_rates'] = 1;
@@ -571,17 +571,11 @@ define([
         },
 
         applyCoupon : function(code){
-            if (!code) {
-                alert({
-                    content: jQuery.mage.__('Please enter a coupon code!')
-                });
-            } else {
-                this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
-                this.orderItemChanged = false;
-                jQuery('html, body').animate({
-                    scrollTop: 0
-                });
-            }
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
+            this.orderItemChanged = false;
+            jQuery('html, body').animate({
+                scrollTop: 0
+            });
         },
 
         addProduct : function(id){
