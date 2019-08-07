@@ -65,7 +65,8 @@ class PayflowProToken implements ResolverInterface
         $urls = $args['input']['urls'] ?? null ;
 
         $customerId = $context->getUserId();
-        $cart = $this->getCartForUser->execute($cartId, $customerId);
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($cartId, $customerId, $storeId);
 
         if (!empty($args['input']['urls'])) {
             $this->validateUrls($args['input']['urls']);
