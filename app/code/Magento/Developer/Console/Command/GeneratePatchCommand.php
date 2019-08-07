@@ -48,41 +48,42 @@ class GeneratePatchCommand extends Command
     }
 
     /**
-     * Configure command
-     *
      * @inheritdoc
+     *
      * @throws InvalidArgumentException
      */
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
             ->setDescription('Generate patch and put it in specific folder.')
-            ->setDefinition([
-                new InputArgument(
-                    self::MODULE_NAME,
-                    InputArgument::REQUIRED,
-                    'Module name'
-                ),
-                new InputArgument(
-                    self::INPUT_KEY_PATCH_NAME,
-                    InputArgument::REQUIRED,
-                    'Patch name'
-                ),
-                new InputOption(
-                    self::INPUT_KEY_IS_REVERTABLE,
-                    null,
-                    InputOption::VALUE_OPTIONAL,
-                    'Check whether patch is revertable or not.',
-                    false
-                ),
-                new InputOption(
-                    self::INPUT_KEY_PATCH_TYPE,
-                    null,
-                    InputOption::VALUE_OPTIONAL,
-                    'Find out what type of patch should be generated.',
-                    'data'
-                ),
-            ]);
+            ->setDefinition(
+                [
+                    new InputArgument(
+                        self::MODULE_NAME,
+                        InputArgument::REQUIRED,
+                        'Module name'
+                    ),
+                    new InputArgument(
+                        self::INPUT_KEY_PATCH_NAME,
+                        InputArgument::REQUIRED,
+                        'Patch name'
+                    ),
+                    new InputOption(
+                        self::INPUT_KEY_IS_REVERTABLE,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Check whether patch is revertable or not.',
+                        false
+                    ),
+                    new InputOption(
+                        self::INPUT_KEY_PATCH_TYPE,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Find out what type of patch should be generated. Available values: `data`, `schema`.',
+                        'data'
+                    ),
+                ]
+            );
 
         parent::configure();
     }
@@ -92,8 +93,9 @@ class GeneratePatchCommand extends Command
      *
      * @return string
      */
-    private function getPatchTemplate() : string
+    private function getPatchTemplate(): string
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return file_get_contents(__DIR__ . '/patch_template.php.dist');
     }
 
@@ -101,7 +103,7 @@ class GeneratePatchCommand extends Command
      * @inheritdoc
      * @throws \InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $moduleName = $input->getArgument(self::MODULE_NAME);
         $patchName = $input->getArgument(self::INPUT_KEY_PATCH_NAME);
@@ -117,10 +119,13 @@ class GeneratePatchCommand extends Command
         $patchTemplateData = str_replace('%class%', $patchName, $patchTemplateData);
         $patchDir = $patchToFile = $modulePath . '/Setup/Patch/' . $preparedType;
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!is_dir($patchDir)) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             mkdir($patchDir, 0777, true);
         }
         $patchToFile = $patchDir . '/' . $patchName . '.php';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         file_put_contents($patchToFile, $patchTemplateData);
         return Cli::RETURN_SUCCESS;
     }

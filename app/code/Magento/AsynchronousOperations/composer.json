@@ -10,7 +10,7 @@
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-ui": "*",
-        "php": "~7.1.3||~7.2.0"
+        "php": "~7.1.3||~7.2.0||~7.3.0"
     },
     "suggest": {
         "magento/module-admin-notification": "*",

@@ -5,9 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontClickOnHeaderLogoActionGroup">
+        <annotations>
+            <description>Goes to the Storefront. Clicks on the Logo.</description>
+        </annotations>
+
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoaded"/>
         <click selector="{{StorefrontHeaderSection.logoLink}}" stepKey="clickOnLogo"/>
