@@ -52,7 +52,6 @@
         <!-- TODO: Below step will be replaced with createData once MQE-1561 is completed -->
         <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="configPayPalExpressCheckout"/>
 
-
         <!-- Set skip order review -->
         <magentoCLI command="config:set payment/paypal_express/skip_order_review_step 1" stepKey="enableSkipOrderReview"/>
 
