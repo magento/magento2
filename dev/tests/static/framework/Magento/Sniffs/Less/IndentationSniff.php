@@ -97,6 +97,7 @@ class IndentationSniff implements Sniff
                 $phpcsFile->addError($error, $i, 'Incorrect', [$expectedIndent, $foundIndent]);
             }
 
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             if ($indentLevel > $this->maxIndentLevel) {
                 // Will be implemented in MAGETWO-49778
                 // $phpcsFile->addWarning('Avoid using more than three levels of nesting', $i, 'IncorrectNestingLevel');

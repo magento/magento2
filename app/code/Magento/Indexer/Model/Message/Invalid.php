@@ -59,6 +59,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
      */
     public function getIdentity()
     {
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return md5('INDEX_INVALID');
     }
 

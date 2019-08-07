@@ -81,6 +81,7 @@ class TypeSelectorsSniff implements Sniff
             return;
         }
 
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         if ((T_STRING === $tokens[$stackPtr - 1]['code'])
             && in_array($tokens[$stackPtr - 1]['content'], $this->tags)
         ) {

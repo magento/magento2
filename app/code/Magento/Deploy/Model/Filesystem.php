@@ -285,22 +285,7 @@ class Filesystem
         $excludePatterns = ['#.htaccess#', '#deployed_version.txt#'];
         foreach ($directoryCodeList as $code) {
             if ($code == DirectoryList::STATIC_VIEW) {
-                $directoryPath = $this->directoryList->getPath(DirectoryList::STATIC_VIEW);
-                if ($this->driverFile->isExists($directoryPath)) {
-                    $files = $this->driverFile->readDirectory($directoryPath);
-                    foreach ($files as $file) {
-                        foreach ($excludePatterns as $pattern) {
-                            if (preg_match($pattern, $file)) {
-                                continue 2;
-                            }
-                        }
-                        if ($this->driverFile->isFile($file)) {
-                            $this->driverFile->deleteFile($file);
-                        } else {
-                            $this->driverFile->deleteDirectory($file);
-                        }
-                    }
-                }
+                $this->cleanupStaticDirectory($excludePatterns);
             } else {
                 $this->filesystem->getDirectoryWrite($code)
                     ->delete();
@@ -373,5 +358,31 @@ class Filesystem
     {
         $command = $this->functionCallPath . 'cache:flush';
         $this->shell->execute($command);
+    }
+
+    /**
+     * Cleanup directory with static view files.
+     *
+     * @param array $excludePatterns
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function cleanupStaticDirectory(array $excludePatterns): void
+    {
+        $directoryPath = $this->directoryList->getPath(DirectoryList::STATIC_VIEW);
+        if ($this->driverFile->isExists($directoryPath)) {
+            $files = $this->driverFile->readDirectory($directoryPath);
+            foreach ($files as $file) {
+                foreach ($excludePatterns as $pattern) {
+                    if (preg_match($pattern, $file)) {
+                        continue 2;
+                    }
+                }
+                if ($this->driverFile->isFile($file)) {
+                    $this->driverFile->deleteFile($file);
+                } else {
+                    $this->driverFile->deleteDirectory($file);
+                }
+            }
+        }
     }
 }

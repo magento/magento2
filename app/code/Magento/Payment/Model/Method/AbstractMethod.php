@@ -18,6 +18,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
 /**
  * Payment method abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
