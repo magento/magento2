@@ -81,7 +81,6 @@ class DownloadableSamples implements ResolverInterface
      * @return array|Value|mixed
      * @throws GraphQlInputException
      * @throws LocalizedException
-     * @throws RuntimeException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
@@ -129,7 +128,6 @@ class DownloadableSamples implements ResolverInterface
      *
      * @param Collection $samples
      * @return array
-     * @throws RuntimeException
      */
     private function formatSamples(Collection $samples) : array
     {
