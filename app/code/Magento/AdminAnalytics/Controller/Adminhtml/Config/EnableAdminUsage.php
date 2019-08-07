@@ -41,6 +41,11 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
+    /**
      * MarkUserNotified constructor.
      *
      * @param Action\Context           $context
@@ -100,16 +105,5 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     {
         $this->enableAdminUsage();
         $this->markUserNotified();
-    }
-
-    /**
-     * Checks if EnableAdminUsage is allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        $isAllowed = parent::_isAllowed();
-        return $isAllowed;
     }
 }

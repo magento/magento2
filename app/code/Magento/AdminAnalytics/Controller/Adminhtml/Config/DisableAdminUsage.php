@@ -42,6 +42,11 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
+    /**
      * DisableAdminUsage constructor.
      *
      * @param Action\Context           $context
@@ -101,16 +106,5 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
     {
         $this->disableAdminUsage();
         $this->markUserNotified();
-    }
-
-    /**
-     * Checks if DisableAdminUsage is allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        $isAllowed = parent::_isAllowed();
-        return $isAllowed;
     }
 }
