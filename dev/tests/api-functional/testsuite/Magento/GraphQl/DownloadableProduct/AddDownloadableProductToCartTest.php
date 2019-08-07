@@ -63,7 +63,7 @@ class AddDownloadableProductToCartTest extends GraphQlAbstract
         );
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
-        $sku    = 'graphql-downloadable-product-with-purchased-separately-links';
+        $sku    = 'downloadable-product-with-purchased-separately-links';
         $qty    = 1;
         $links  = $this->getProductsLinks($sku);
         $linkId = key($links);
@@ -132,7 +132,7 @@ MUTATION;
         );
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
-        $sku    = 'graphql-downloadable-product-with-purchased-separately-links';
+        $sku    = 'downloadable-product-with-purchased-separately-links';
         $qty    = 1;
         $links  = $this->getProductsLinks($sku);
         $linkId = key($links);
@@ -203,7 +203,7 @@ MUTATION;
         );
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
-        $sku   = 'graphql-downloadable-product-without-purchased-separately-links';
+        $sku   = 'downloadable-product-without-purchased-separately-links';
         $qty   = 1;
         $links = $this->getProductsLinks($sku);
 
@@ -262,7 +262,7 @@ MUTATION;
         );
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
-        $sku    = 'graphql-downloadable-product-without-purchased-separately-links';
+        $sku    = 'downloadable-product-without-purchased-separately-links';
         $qty    = 1;
         $links  = $this->getProductsLinks($sku);
         $linkId = key($links);

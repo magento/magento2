@@ -18,13 +18,14 @@ $productRepository = Bootstrap::getObjectManager()
 
 try {
     $product = $productRepository->get(
-        'graphql-downloadable-product-with-purchased-separately-links',
+        'downloadable-product-with-purchased-separately-links',
         false,
         null,
         true
     );
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
+    // Tests which are wrapped with MySQL transaction clear all data by transaction rollback
 }
 
 $registry->unregister('isSecureArea');

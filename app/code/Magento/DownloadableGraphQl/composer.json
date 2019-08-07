@@ -8,6 +8,7 @@
         "magento/module-downloadable": "*",
         "magento/module-graph-ql": "*",
         "magento/module-quote": "*",
+        "magento/module-quote-graph-ql": "*",
         "magento/framework": "*"
     },
     "suggest": {
