@@ -14,6 +14,7 @@ use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class ProductMetadata
+ *
  * @package Magento\Framework\App
  */
 class ProductMetadata implements ProductMetadataInterface
