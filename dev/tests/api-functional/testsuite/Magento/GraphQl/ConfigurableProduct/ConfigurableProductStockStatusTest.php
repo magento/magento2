@@ -35,7 +35,6 @@ class ConfigurableProductStockStatusTest extends GraphQlAbstract
      */
     public function testConfigurableProductShowOutOfStock()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
         $parentSku = 'configurable';
         $childSkuOutOfStock = 'simple_1010';
         $stockItem = $this->stockRegistry->getStockItemBySku($childSkuOutOfStock);
@@ -55,7 +54,6 @@ class ConfigurableProductStockStatusTest extends GraphQlAbstract
      */
     public function testConfigurableProductDoNotShowOutOfStock()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
         $parentSku = 'configurable';
         $childSkuOutOfStock = 'simple_1010';
         $stockItem = $this->stockRegistry->getStockItemBySku($childSkuOutOfStock);

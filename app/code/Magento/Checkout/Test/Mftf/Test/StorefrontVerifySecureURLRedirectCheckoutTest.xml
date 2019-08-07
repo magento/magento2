@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySecureURLRedirectCheckout">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Storefront Secure URLs"/>
+            <title value="Verify Secure URLs For Storefront Checkout Pages"/>
+            <description value="Verify that the Secure URL configuration applies to the Checkout pages on the Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15531"/>
+            <group value="checkout"/>
+            <group value="configuration"/>
+            <group value="secure_storefront_url"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="_defaultProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="goToCategoryPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="moveMouseOverProduct"/>
+            <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="clickAddToCartButton"/>
+            <waitForPageLoad stepKey="waitForAddToCart"/>
+            <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForAddedToCartSuccessMessage"/>
+            <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$product.name$$ to your shopping cart." stepKey="seeAddedToCartSuccessMessage"/>
+            <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+        </after>
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <amOnUrl url="http://{$hostname}/checkout" stepKey="goToUnsecureCheckoutURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/checkout" stepKey="seeSecureCheckoutURL"/>
+        <amOnUrl url="http://{$hostname}/checkout/sidebar" stepKey="goToUnsecureCheckoutSidebarURL"/>
+        <seeCurrentUrlEquals url="http://{$hostname}/checkout/sidebar" stepKey="seeUnsecureCheckoutSidebarURL"/>
+    </test>
+</tests>

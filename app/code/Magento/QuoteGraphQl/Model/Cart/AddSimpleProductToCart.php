@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote;
+use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 
 /**
  * Add simple product to cart
@@ -19,25 +20,25 @@ use Magento\Quote\Model\Quote;
 class AddSimpleProductToCart
 {
     /**
-     * @var CreateBuyRequest
-     */
-    private $createBuyRequest;
-
-    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
 
     /**
+     * @var BuyRequestBuilder
+     */
+    private $buyRequestBuilder;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
-     * @param CreateBuyRequest $createBuyRequest
+     * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        CreateBuyRequest $createBuyRequest
+        BuyRequestBuilder $buyRequestBuilder
     ) {
         $this->productRepository = $productRepository;
-        $this->createBuyRequest = $createBuyRequest;
+        $this->buyRequestBuilder = $buyRequestBuilder;
     }
 
     /**
@@ -53,8 +54,6 @@ class AddSimpleProductToCart
     public function execute(Quote $cart, array $cartItemData): void
     {
         $sku = $this->extractSku($cartItemData);
-        $quantity = $this->extractQuantity($cartItemData);
-        $customizableOptions = $cartItemData['customizable_options'] ?? [];
 
         try {
             $product = $this->productRepository->get($sku);
@@ -63,7 +62,7 @@ class AddSimpleProductToCart
         }
 
         try {
-            $result = $cart->addProduct($product, $this->createBuyRequest->execute($quantity, $customizableOptions));
+            $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
         } catch (\Exception $e) {
             throw new GraphQlInputException(
                 __(
@@ -87,31 +86,13 @@ class AddSimpleProductToCart
      */
     private function extractSku(array $cartItemData): string
     {
-        if (!isset($cartItemData['data']['sku']) || empty($cartItemData['data']['sku'])) {
+        // Need to keep this for configurable product and backward compatibility.
+        if (!empty($cartItemData['parent_sku'])) {
+            return (string)$cartItemData['parent_sku'];
+        }
+        if (empty($cartItemData['data']['sku'])) {
             throw new GraphQlInputException(__('Missed "sku" in cart item data'));
         }
         return (string)$cartItemData['data']['sku'];
-    }
-
-    /**
-     * Extract quantity from cart item data
-     *
-     * @param array $cartItemData
-     * @return float
-     * @throws GraphQlInputException
-     */
-    private function extractQuantity(array $cartItemData): float
-    {
-        if (!isset($cartItemData['data']['quantity'])) {
-            throw new GraphQlInputException(__('Missed "qty" in cart item data'));
-        }
-        $quantity = (float)$cartItemData['data']['quantity'];
-
-        if ($quantity <= 0) {
-            throw new GraphQlInputException(
-                __('Please enter a number greater than 0 in this field.')
-            );
-        }
-        return $quantity;
     }
 }
