@@ -5,13 +5,14 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-eav": "*",
         "magento/module-store": "*",
-        "magento/module-user": "*"
+        "magento/module-user": "*",
+        "magento/module-cms": "*"
     },
     "suggest": {
         "magento/module-config": "*"

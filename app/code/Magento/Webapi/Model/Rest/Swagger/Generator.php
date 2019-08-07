@@ -334,7 +334,7 @@ class Generator extends AbstractSchemaGenerator
             $description = isset($parameterInfo['documentation']) ? $parameterInfo['documentation'] : null;
 
             /** Get location of parameter */
-            if (strpos($httpMethodData['uri'], '{' . $parameterName . '}') !== false) {
+            if (strpos($httpMethodData['uri'], (string) ('{' . $parameterName . '}')) !== false) {
                 $parameters[] = $this->generateMethodPathParameter($parameterName, $parameterInfo, $description);
             } elseif (strtoupper($httpMethodData['httpOperation']) === 'GET') {
                 $parameters = $this->generateMethodQueryParameters(
@@ -751,12 +751,14 @@ class Generator extends AbstractSchemaGenerator
             if ($isArray) {
                 $subPrefix .= self::ARRAY_SIGNIFIER;
             }
-            $queryNames = array_merge(
-                $queryNames,
-                $this->getQueryParamNames($subParameterName, $subParameterType, $subParameterDescription, $subPrefix)
+            $queryNames[] = $this->getQueryParamNames(
+                $subParameterName,
+                $subParameterType,
+                $subParameterDescription,
+                $subPrefix
             );
         }
-        return $queryNames;
+        return array_merge(...$queryNames);
     }
 
     /**
