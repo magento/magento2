@@ -27,10 +27,8 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'label', __('Save Review'));
         $this->buttonList->update('save', 'id', 'save_button');
         $this->buttonList->remove('reset');
-        $this->buttonList->add(
-            'reset_button',
-            ['label' => 'Reset', 'onclick'=>"jQuery('#edit_form').trigger('reset')"]
-        );
+        $this->buttonList->add('reset_button', ['label' => 'Reset']);
+        
         $this->_formScripts[] = '
             require(["prototype"], function(){
                 toggleParentVis("add_review_form");
@@ -53,6 +51,9 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                             review.showForm();
                             review.formHidden = false;
                         }
+                        jQuery("#reset_button").click(function(){
+                            jQuery("#edit_form").trigger("reset")
+                        });
                     },
                     loadProductData : function() {
                         jQuery.ajax({
