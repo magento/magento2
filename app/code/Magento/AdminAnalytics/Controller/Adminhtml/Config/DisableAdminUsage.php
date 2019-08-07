@@ -22,6 +22,11 @@ use Magento\Config\Model\Config\Factory;
 class DisableAdminUsage extends Action implements HttpPostActionInterface
 {
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
+    /**
      * @var Factory
      */
     private $configFactory;
@@ -40,11 +45,6 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * Authorization level of a basic admin session
-     */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
 
     /**
      * DisableAdminUsage constructor.

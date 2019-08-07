@@ -22,6 +22,11 @@ use Magento\Config\Model\Config\Factory;
 class EnableAdminUsage extends Action implements HttpPostActionInterface
 {
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
+    /**
      * @var Factory
      */
     private $configFactory;
@@ -39,11 +44,6 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * Authorization level of a basic admin session
-     */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
 
     /**
      * MarkUserNotified constructor.
