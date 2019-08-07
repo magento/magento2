@@ -49,7 +49,7 @@
     </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>
-        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by"/>
+        <element name="TinyMCE4" type="text" selector=".mce-branding"/>
         <element name="Style" type="button" selector=".mce-txt" />
         <element name="Bold" type="button" selector=".mce-i-bold" />
         <element name="Italic" type="button" selector=".mce-i-italic" />

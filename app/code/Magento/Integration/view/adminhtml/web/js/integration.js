@@ -204,7 +204,7 @@ define([
                         clearInterval(IdentityLogin.checker);
                         $('body').trigger('processStart');
                         //Check for window closed
-                        window.location.reload();
+                        window.location.href = url.grid;
                         IdentityLogin.jqInfoDialog.modal('closeModal');
                     }
                 } catch (e) {

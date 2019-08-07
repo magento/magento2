@@ -115,7 +115,6 @@
 
         <!-- Go to export page -->
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
-        <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Fill entity attributes data -->
         <actionGroup ref="exportProductsFilterByAttribute" stepKey="exportProductBySku">
@@ -125,6 +124,7 @@
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
