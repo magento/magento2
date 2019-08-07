@@ -8,6 +8,7 @@ namespace Magento\Customer\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
@@ -43,13 +44,17 @@ class UpgradeQuoteCustomerEmailObserver implements ObserverInterface
 
         /** @var \Magento\Customer\Model\Data\Customer $customerOrig */
         $customerOrig = $observer->getEvent()->getOrigCustomerDataObject();
-        $emailOrig = $customerOrig->getEmail();
+        if ($customerOrig) {
+            $emailOrig = $customerOrig->getEmail();
 
-        if ($email != $emailOrig) {
-                $quote = $this->quoteRepository->getForCustomer($customer->getId());
-                $quote->setCustomerEmail($email);
-                $this->quoteRepository->save($quote);
-
+            if ($email != $emailOrig) {
+                try {
+                    $quote = $this->quoteRepository->getForCustomer($customer->getId());
+                    $quote->setCustomerEmail($email);
+                    $this->quoteRepository->save($quote);
+                } catch (NoSuchEntityException $e) {
+                }
+            }
         }
     }
 }
