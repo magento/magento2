@@ -10,10 +10,14 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Open the Minicart and check Summary -->
     <actionGroup name="StorefrontCheckCartDiscountAndSummaryActionGroup">
+        <annotations>
+            <description>Validates that the provided Order Total and Discount Totals are present and correct under the 'Summary' section of the Storefront Shopping Cart page.</description>
+        </annotations>
         <arguments>
             <argument name="total" type="string"/>
             <argument name="discount" type="string"/>
         </arguments>
+        
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPrices"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
