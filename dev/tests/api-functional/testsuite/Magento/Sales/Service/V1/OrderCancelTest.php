@@ -6,21 +6,51 @@
 
 namespace Magento\Sales\Service\V1;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Model\Order;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Canceling of the order
+ */
 class OrderCancelTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-
     const SERVICE_NAME = 'salesOrderManagementV1';
 
     /**
-     * @magentoApiDataFixture Magento/Sales/_files/order.php
+     * @var ObjectManagerInterface
      */
-    public function testOrderCancel()
+    private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $order = $objectManager->get(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
+        $this->objectManager = Bootstrap::getObjectManager();
+    }
+
+    /**
+     * Gets order by increment ID.
+     *
+     * @param string $incrementId
+     * @return Order
+     */
+    private function getOrder(string $incrementId): Order
+    {
+        return $this->objectManager->create(Order::class)->loadByIncrementId($incrementId);
+    }
+
+    /**
+     * Send API request for canceling the order
+     *
+     * @param Order $order
+     * @return array|bool|float|int|string
+     */
+    private function sendCancelRequest(Order $order)
+    {
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/orders/' . $order->getId() . '/cancel',
@@ -33,7 +63,36 @@ class OrderCancelTest extends WebapiAbstract
             ],
         ];
         $requestData = ['id' => $order->getId()];
-        $result = $this->_webApiCall($serviceInfo, $requestData);
+        return $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/order.php
+     */
+    public function testOrderCancel()
+    {
+        $order = $this->getOrder('100000001');
+        $result = $this->sendCancelRequest($order);
         $this->assertTrue($result);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_state_hold.php
+     */
+    public function testOrderWithStateHoldedShouldNotBeCanceled()
+    {
+        $order = $this->getOrder('100000001');
+        $result = $this->sendCancelRequest($order);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_shipping_and_invoice.php
+     */
+    public function testOrderWithStateCompleteShouldNotBeCanceled()
+    {
+        $order = $this->getOrder('100000001');
+        $result = $this->sendCancelRequest($order);
+        $this->assertFalse($result);
     }
 }
