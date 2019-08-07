@@ -6,6 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -36,7 +37,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPos
                 $product = null;
             }
 
-            if ($product && $product->isSalable()) {
+            if ($product && (int)$product->getStatus() !== Status::STATUS_DISABLED) {
                 $this->_catalogProductCompareList->addProduct($product);
                 $productName = $this->_objectManager->get(
                     \Magento\Framework\Escaper::class

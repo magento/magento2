@@ -12,8 +12,7 @@ use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 
 /**
- * Class PostDataProcessor
- * @package Magento\Cms\Controller\Adminhtml\Page
+ * Processes form data
  */
 class PostDataProcessor
 {
@@ -80,6 +79,7 @@ class PostDataProcessor
      *
      * @param array $data
      * @return bool     Return FALSE if some item is invalid
+     * @deprecated
      */
     public function validate($data)
     {

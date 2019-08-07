@@ -13,8 +13,11 @@
             <resource>Magento_Config::sendfriend</resource>
             <group id="email" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Email Templates</label>
-                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enabled</label>
+                    <comment>
+                        <![CDATA[We strongly recommend to enable a <a href="https://devdocs.magento.com/guides/v2.3/security/google-recaptcha.html" target="_blank">CAPTCHA solution</a> alongside enabling "Email to a Friend" to ensure abuse of this feature does not occur.]]>
+                    </comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="template" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

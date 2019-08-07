@@ -79,6 +79,7 @@ class GroupActions extends Column
                                 ]
                             ),
                             'label' => __('Edit'),
+                            '__disableTmpl' => true
                         ],
                     ];
 
@@ -102,7 +103,8 @@ class GroupActions extends Column
                                 $this->escaper->escapeJs($title)
                             )
                         ],
-                        'post' => true
+                        'post' => true,
+                        '__disableTmpl' => true
                     ];
                 }
             }

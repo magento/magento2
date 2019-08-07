@@ -25,7 +25,14 @@
                 <item name="website" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Website</item>
                 <item name="weight" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Weight</item>
                 <item name="quantity" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Quantity</item>
+                <item name="layout_update" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdate</item>
+                <item name="layout_update_permissions" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdatePermissions</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdate">
+        <arguments>
+            <argument name="validationState" xsi:type="object">Magento\Framework\Config\ValidationState\Required</argument>
         </arguments>
     </type>
 </config>

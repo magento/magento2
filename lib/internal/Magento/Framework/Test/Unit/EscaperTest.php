@@ -224,7 +224,12 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
             ],
             'text with html comment' => [
                 'data' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
-                'expected' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
+                'expected' => 'Only <span><b>2</b></span> in stock ',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'text with multi-line html comment' => [
+                'data' => "Only <span><b>2</b></span> in stock <!-- --!\n\n><img src=#>-->",
+                'expected' => 'Only <span><b>2</b></span> in stock ',
                 'allowedTags' => ['span', 'b'],
             ],
             'text with non ascii characters' => [

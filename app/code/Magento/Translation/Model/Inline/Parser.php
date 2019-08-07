@@ -16,7 +16,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Translation\Model\Inline\CacheManager;
 
 /**
- * Parse content, applying necessary html element wrapping and client scripts for inline translation.
+ * Parses content and applies necessary html element wrapping and client scripts for inline translation.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -229,7 +229,12 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     $storeId = $validStoreId;
                 }
             }
-            $resource->saveTranslate($param['original'], $param['custom'], null, $storeId);
+            $resource->saveTranslate(
+                $param['original'],
+                $param['custom'],
+                null,
+                $storeId
+            );
         }
 
         return $this->getCacheManger()->updateAndGetTranslations();
@@ -257,7 +262,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * Apply input filter to values of translation parameters
      *
      * @param array $translateParams
-     * @param array $fieldNames
+     * @param array $fieldNames Names of fields values of which are to be filtered
      * @return void
      */
     protected function _filterTranslationParams(array &$translateParams, array $fieldNames)
