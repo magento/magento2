@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Customer\Observer;
 
@@ -41,10 +45,11 @@ class UpgradeQuoteCustomerEmailObserver implements ObserverInterface
         $customerOrig = $observer->getEvent()->getOrigCustomerDataObject();
         $emailOrig = $customerOrig->getEmail();
 
-        if($email != $emailOrig){
-            $quote = $this->quoteRepository->getForCustomer($customer->getId());
-            $quote->setCustomerEmail($email);
-            $this->quoteRepository->save($quote);
+        if ($email != $emailOrig) {
+                $quote = $this->quoteRepository->getForCustomer($customer->getId());
+                $quote->setCustomerEmail($email);
+                $this->quoteRepository->save($quote);
+
         }
     }
 }

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Customer\Test\Unit\Observer;
 
@@ -19,8 +23,14 @@ class UpgradeQuoteCustomerEmailObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $quoteRepositoryMock;
 
+    /**
+     * @var \Magento\Framework\Event\Observer
+     */
     protected $observerMock;
 
+    /**
+     * @var \Magento\Framework\Event
+     */
     protected $eventMock;
 
     /**
@@ -46,7 +56,7 @@ class UpgradeQuoteCustomerEmailObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
+     * Unit test for verifying quote customers email upgrade observer
      */
     public function testUpgradeQuoteCustomerEmail()
     {
@@ -75,6 +85,7 @@ class UpgradeQuoteCustomerEmailObserverTest extends \PHPUnit\Framework\TestCase
         $customer->expects($this->any())
             ->method('getEmail')
             ->willReturn($this->returnValue($email));
+
         $customerOrig->expects($this->any())
             ->method('getEmail')
             ->willReturn($this->returnValue($origEmail));
