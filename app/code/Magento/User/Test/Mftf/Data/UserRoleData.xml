@@ -18,11 +18,6 @@
         <data key="resourceAccess">All</data>
         <data key="resources">[]</data>
     </entity>
-    <entity name="roleAdmin" type="role">
-        <data key="name" unique="suffix">Admin </data>
-        <data key="resourceAccess">All</data>
-        <data key="resources">[]</data>
-    </entity>
     <entity name="roleSales" type="role">
         <data key="name" unique="suffix">Role Sales </data>
         <data key="resourceAccess">Custom</data>
