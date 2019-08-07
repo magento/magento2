@@ -124,8 +124,6 @@ class UnlockAdminUserTest extends Injectable
             $this->adminAuth->open();
             $this->adminAuth->getLoginBlock()->fill($incorrectUser);
             $this->adminAuth->getLoginBlock()->submit();
-            $this->adminAuth->waitForHeaderBlock();
-            $this->adminAuth->dismissAdminUsageNotification();
         }
 
         // Test steps
