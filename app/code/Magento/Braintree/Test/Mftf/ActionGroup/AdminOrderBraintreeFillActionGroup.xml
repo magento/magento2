@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOrderBraintreeFillActionGroup">
+        <annotations>
+            <description>Fills in the Payment Method using Braintree details. PLEASE NOTE: The Braintree details are Hardcoded using 'PaymentAndShippingInfo'.</description>
+        </annotations>
+
         <!--Select Braintree Payment method on Admin Order Create Page-->
         <click stepKey="chooseBraintree" selector="{{NewOrderSection.creditCardBraintree}}"/>
         <waitForPageLoad stepKey="waitForBraintreeConfigs"/>
