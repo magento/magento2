@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="VerifyCheckoutSuccessActionGroup">
+        <annotations>
+            <description>Goes to the checkout one page success page and verifies if theorder is placed successfully.</description>
+        </annotations>
         <waitForElement selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForLoadSuccessPageTitle"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
         <seeElement selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="seeOrderLink"/>

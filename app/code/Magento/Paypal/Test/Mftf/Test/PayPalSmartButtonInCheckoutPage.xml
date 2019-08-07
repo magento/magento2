@@ -39,13 +39,19 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+            <!-- TODO: Delete created paypal configuration -->
+
+            <!-- revert skip order settings -->
+            <magentoCLI command="config:set payment/paypal_express/skip_order_review_step 0" stepKey="enableSkipOrderReview"/>
 
             <!-- Logout -->
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Configure PayPal sandbox -->
+        <!-- TODO: Below step will be replaced with createData once MQE-1561 is completed -->
         <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="configPayPalExpressCheckout"/>
+
 
         <!-- Set skip order review -->
         <magentoCLI command="config:set payment/paypal_express/skip_order_review_step 1" stepKey="enableSkipOrderReview"/>
@@ -61,10 +67,10 @@
             <argument name="payerName" value="Alex"/>
         </actionGroup>
 
-        <!-- Open Cart on PayPal-->
-        <actionGroup ref="OpenCartOnPayPalActionGroup" stepKey="openCartOnPayPal"/>
+        <!-- PayPal checkout -->
+        <actionGroup ref="PayOrderOnPayPalCheckoutActionGroup" stepKey="payOrderOnPayPalCheckout"/>
 
         <!-- I see order successful Page instead of Order Review Page -->
-        <actionGroup ref="VerifyCheckoutSuccessActionGroup" stepKey="verifyCheckoutSuccessActionGroup"/>
+        <actionGroup ref="VerifyCheckoutSuccessActionGroup" stepKey="verifyCheckoutSuccess"/>
     </test>
 </tests>

@@ -210,7 +210,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     <input type="checkbox" data-action="change-type-product-downloadable"  class="admin__control-checkbox"
            name="is_downloadable" id="is-downloaodable" <?= $block->isDownloadable() ? 'checked="checked"' : ''?> />
     <label class="admin__field-label" for="is-downloaodable">
-        <span><?= /* @noEscape */ __('Is this a downloadable Product?'); ?></span>
+        <span><?= $block->escapeHtml(__('Is this a downloadable Product?')); ?></span>
     </label>
 </div>
 <div class="entry-edit" id="product_info_tabs_downloadable_items">
