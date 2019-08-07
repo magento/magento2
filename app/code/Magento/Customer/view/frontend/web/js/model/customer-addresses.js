@@ -22,8 +22,7 @@ define([
             let customerAddresses = window.customerData.addresses;
 
             /**
-             * @param address
-             * @return {Object}
+             * @param {Address} address
              */
             let toAddress = address => new Address(address);
 
