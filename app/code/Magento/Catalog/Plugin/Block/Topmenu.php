@@ -193,4 +193,21 @@ class Topmenu
 
         return $collection;
     }
+
+    /**
+     * Add active
+     *
+     * @param \Magento\Theme\Block\Html\Topmenu $subject
+     * @param string[] $result
+     * @return string[]
+     */
+    public function afterGetCacheKeyInfo(\Magento\Theme\Block\Html\Topmenu $subject, array $result)
+    {
+        $activeCategory = $this->getCurrentCategory();
+        if ($activeCategory) {
+            $result[] = Category::CACHE_TAG . '_' . $activeCategory->getId();
+        }
+
+        return $result;
+    }
 }
