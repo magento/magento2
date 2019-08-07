@@ -19,7 +19,7 @@ class Log extends DataObject
      *
      * @return int
      */
-    public function getId() : int
+    public function getId() : ?int
     {
         return $this->getData('id');
     }

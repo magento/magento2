@@ -3,32 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\AdminAnalytics\ViewModel;
+namespace Magento\AdminAnalytics\Block;
+
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\AdminAnalytics\Model\Condition\CanViewNotification as AdminAnalyticsNotification;
+use Magento\ReleaseNotification\Model\Condition\CanViewNotification as ReleaseNotification;
 
 /**
  * Class Notification
  */
-class Notification implements \Magento\Framework\View\Element\Block\ArgumentInterface
+class Notification implements ArgumentInterface
 {
     /**
-     * @var \Magento\AdminAnalytics\Model\Condition\CanViewNotification
+     * @var AdminAnalyticsNotification
      */
     private $canViewNotificationAnalytics;
 
     /**
-     * @var \Magento\ReleaseNotification\Model\Condition\CanViewNotification
+     * @var ReleaseNotification
      */
     private $canViewNotificationRelease;
 
     /**
      * Notification constructor.
-     * @param \Magento\AdminAnalytics\Model\Condition\CanViewNotification $canViewNotificationAnalytics
-     * @param \Magento\ReleaseNotification\Model\Condition\CanViewNotification $canViewNotificationRelease
+     * @param AdminAnalyticsNotification $canViewNotificationAnalytics
+     * @param ReleaseNotification $canViewNotificationRelease
      */
     public function __construct(
-        \Magento\AdminAnalytics\Model\Condition\CanViewNotification $canViewNotificationAnalytics,
-        \Magento\ReleaseNotification\Model\Condition\CanViewNotification $canViewNotificationRelease
+        AdminAnalyticsNotification $canViewNotificationAnalytics,
+        ReleaseNotification $canViewNotificationRelease
     ) {
         $this->canViewNotificationAnalytics = $canViewNotificationAnalytics;
         $this->canViewNotificationRelease = $canViewNotificationRelease;

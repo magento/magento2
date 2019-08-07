@@ -14,7 +14,7 @@
             </uiComponent>
             <block name="tracking_notification" as="tracking_notification" template="Magento_AdminAnalytics::notification.phtml">
                 <arguments>
-                    <argument name="notification" xsi:type="object">Magento\AdminAnalytics\ViewModel\Notification</argument>
+                    <argument name="notification" xsi:type="object">Magento\AdminAnalytics\Block\Notification</argument>
                 </arguments>
             </block>
         </referenceContainer>

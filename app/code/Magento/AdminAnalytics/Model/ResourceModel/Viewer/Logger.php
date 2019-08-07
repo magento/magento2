@@ -74,7 +74,7 @@ class Logger
      */
     public function get() : Log
     {
-        return $this->logFactory->create(['data' => $this->loadLogData()]);
+        return $this->logFactory->create(['data' => $this->loadLatestLogData()]);
     }
 
     /**
@@ -84,7 +84,7 @@ class Logger
      */
     public function checkLogExists() : bool
     {
-        $data = $this->logFactory->create(['data' => $this->loadLogData()]);
+        $data = $this->logFactory->create(['data' => $this->loadLatestLogData()]);
         $lastViewedVersion = $data->getLastViewVersion();
         return isset($lastViewedVersion);
     }
@@ -94,11 +94,12 @@ class Logger
      *
      * @return array
      */
-    private function loadLogData() : array
+    private function loadLatestLogData() : array
     {
         $connection = $this->resource->getConnection();
         $select = $connection->select()
-            ->from($this->resource->getTableName(self::LOG_TABLE_NAME))
+            ->from(['log_table' => $this->resource->getTableName(self::LOG_TABLE_NAME)])
+            ->order('log_table.id desc')
             ->limit(['count' => 1]);
 
         $data = $connection->fetchRow($select);

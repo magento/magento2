@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdminAnalytics\Controller\Adminhtml\Config;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Magento\Framework\App\ProductMetadataInterface;
@@ -67,7 +67,7 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
     /**
      * Changes the value of config/admin/usage/enabled
      */
-    public function disableAdminUsage()
+    private function disableAdminUsage()
     {
         $configModel = $this->configFactory->create();
         $configModel->setDataByPath('admin/usage/enabled', 0);
@@ -79,7 +79,7 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
      *
      * @return ResultInterface
      */
-    public function markUserNotified() : ResultInterface
+    private function markUserNotified() : ResultInterface
     {
         $responseContent = [
             'success' => $this->notificationLogger->log(
@@ -108,7 +108,7 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
      *
      * @return bool
      */
-    public function _isAllowed()
+    protected function _isAllowed()
     {
         $isAllowed = parent::_isAllowed();
         return $isAllowed;
