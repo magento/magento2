@@ -519,9 +519,6 @@ class Select extends \Zend_Db_Select
      */
     public function __sleep()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff(
             $properties,
@@ -544,9 +541,6 @@ class Select extends \Zend_Db_Select
      */
     public function __wakeup()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_adapter = $objectManager->get(ResourceConnection::class)->getConnection();
         $this->selectRenderer = $objectManager->get(\Magento\Framework\DB\Select\SelectRenderer::class);

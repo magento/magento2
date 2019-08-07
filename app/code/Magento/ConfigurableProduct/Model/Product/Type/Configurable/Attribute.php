@@ -270,9 +270,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function __sleep()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         return array_diff(
             parent::__sleep(),
             ['metadataPool']
@@ -287,9 +284,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function __wakeup()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->metadataPool = $objectManager->get(MetadataPool::class);

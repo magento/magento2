@@ -67,9 +67,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      */
     public function __sleep()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         return ['_subject', '_isShared'];
     }
 
@@ -83,9 +80,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      */
     public function __wakeup()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 

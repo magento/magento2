@@ -495,9 +495,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function __sleep()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $this->unsetData('attribute_set_info');
         return array_diff(
             parent::__sleep(),
@@ -514,9 +511,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function __wakeup()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = ObjectManager::getInstance();
         $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);

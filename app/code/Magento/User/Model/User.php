@@ -218,9 +218,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function __sleep()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = parent::__sleep();
         return array_diff(
             $properties,
@@ -252,9 +249,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function __wakeup()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->serializer = $objectManager->get(Json::class);

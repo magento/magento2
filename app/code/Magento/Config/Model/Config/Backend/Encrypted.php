@@ -54,9 +54,6 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      */
     public function __sleep()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = parent::__sleep();
         return array_diff($properties, ['_encryptor']);
     }
@@ -71,9 +68,6 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      */
     public function __wakeup()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $this->_encryptor = \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\Encryption\EncryptorInterface::class

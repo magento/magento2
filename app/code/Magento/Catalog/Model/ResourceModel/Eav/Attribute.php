@@ -852,9 +852,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function __sleep()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $this->unsetData('entity_type');
         return array_diff(
             parent::__sleep(),
@@ -871,9 +868,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function __wakeup()
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_indexerEavProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);
