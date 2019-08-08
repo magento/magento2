@@ -16,7 +16,6 @@
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{adminUser.username}}" stepKey="fillUsername"/>
         <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{adminUser.password}}" stepKey="fillPassword"/>
         <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
-        <conditionalClick selector="{{AdminUsageNotificationSection.adminUsageDontAllowButton}}" dependentSelector="{{AdminUsageNotificationSection.adminUsageDontAllowButton}}" visible="true" stepKey="clickDontAllowButtonIfVisible"/>
         <closeAdminNotification stepKey="closeAdminNotification"/>
     </actionGroup>
 </actionGroups>
