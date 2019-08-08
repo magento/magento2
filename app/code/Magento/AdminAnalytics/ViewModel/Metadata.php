@@ -3,20 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdminAnalytics\Block;
+namespace Magento\AdminAnalytics\ViewModel;
 
-use Magento\Backend\Block\Template;
-use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\State;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Gets user version and mode
- *
- * @api
  */
-class Metadata extends Template
+class Metadata implements ArgumentInterface
 {
     /**
      * @var State
@@ -34,23 +31,18 @@ class Metadata extends Template
     private $productMetadata;
 
     /**
-     * @param Context $context
      * @param ProductMetadataInterface $productMetadata
      * @param Session $authSession
      * @param State $appState
-     * @param array $data
      */
     public function __construct(
-        Context $context,
         ProductMetadataInterface $productMetadata,
         Session $authSession,
-        State $appState,
-        array $data = []
+        State $appState
     ) {
         $this->productMetadata = $productMetadata;
         $this->authSession = $authSession;
         $this->appState = $appState;
-        parent::__construct($context, $data);
     }
 
     /**

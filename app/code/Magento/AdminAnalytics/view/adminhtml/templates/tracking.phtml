@@ -8,8 +8,8 @@
 <script src="<?= $block->escapeUrl($block->getTrackingUrl()) ?>" async></script>
 <script>
     var adminAnalyticsMetadata = {
-        "version": "<?= $block->escapeJs($block->getMagentoVersion()) ?>",
-        "user": "<?= $block->escapeJs($block->getCurrentUser()) ?>",
-        "mode": "<?= $block->escapeJs($block->getMode()) ?>"
+        "version": "<?= $block->escapeJs($block->getMetadata()->getMagentoVersion()) ?>",
+        "user": "<?= $block->escapeJs($block->getMetadata()->getCurrentUser()) ?>",
+        "mode": "<?= $block->escapeJs($block->getMetadata()->getMode()) ?>"
     };
 </script>

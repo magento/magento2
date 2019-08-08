@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdminAnalytics\Block;
+namespace Magento\AdminAnalytics\ViewModel;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\AdminAnalytics\Model\Condition\CanViewNotification as AdminAnalyticsNotification;
 use Magento\ReleaseNotification\Model\Condition\CanViewNotification as ReleaseNotification;
 
 /**
- * Class Notification
+ * Control display of admin analytics and release notification modals
  */
 class Notification implements ArgumentInterface
 {
