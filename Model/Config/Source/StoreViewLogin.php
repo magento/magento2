@@ -32,7 +32,7 @@ class StoreViewLogin implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray()
     {
         return  [
-            ['value' => self::AUTODETECT, 'label' => __('Autodetect')],
+            ['value' => self::AUTODETECT, 'label' => __('Auto-Detection (default)')],
             ['value' => self::MANUAL, 'label' => __('Manual Choose')],
         ];
     }

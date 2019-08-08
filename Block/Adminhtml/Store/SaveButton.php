@@ -19,7 +19,7 @@ class SaveButton extends \Magefan\Community\Block\Adminhtml\Edit\SaveButton
     public function getButtonData()
     {
         return [
-            'label' => __('Save'),
+            'label' => __('Login As Customer'),
             'class' => 'save primary',
             'data_attribute' => [
                 'mage-init' => ['button' => ['event' => 'save']],

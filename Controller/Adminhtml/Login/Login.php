@@ -66,9 +66,10 @@ class Login extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $customerId = (int) $this->getRequest()->getParam('customer_id');
+        $request = $this->getRequest();
+        $customerId = (int) $request->getParam('customer_id');
         if (!$customerId) {
-            $customerId = (int) $this->getRequest()->getParam('entity_id');
+            $customerId = (int) $request->getParam('entity_id');
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
@@ -84,10 +85,10 @@ class Login extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('customer/index/index');
         }
 
-        $customerStoreId = $this->getRequest()->getParam('store_id');
+        $customerStoreId = $request->getParam('store_id');
 
         if (!isset($customerStoreId) && $this->config->getStoreViewLogin()) {
-            $this->messageManager->addNoticeMessage(__('Select Store View.'));
+            $this->messageManager->addNoticeMessage(__('Please select a Store View to login in.'));
             return $resultRedirect->setPath('loginascustomer/login/manual', ['entity_id' => $customerId ]);
         }
 

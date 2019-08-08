@@ -45,6 +45,10 @@
                 <field id="store_view_login" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Store View To Login In</label>
                     <source_model>Magefan\LoginAsCustomer\Model\Config\Source\StoreViewLogin</source_model>
+                    <comment><![CDATA[
+                            Use "Manual Choose" option on multy-website Magento setup with enabled global Share Customer Accounts.
+                            If set to "Manual Choose" then after click on "Login As Customer" admin will need to choose from a select box a store view to login in.
+                        ]]></comment>
                 </field>
             </group>
         </section>
