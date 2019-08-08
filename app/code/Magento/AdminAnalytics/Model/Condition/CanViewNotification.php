@@ -12,7 +12,7 @@ use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\App\CacheInterface;
 
 /**
- * Dynamic validator for UI admin analytics notification, manage UI component visibility.
+ * Dynamic validator for UI admin analytics notification, control UI component visibility.
  */
 class CanViewNotification implements VisibilityConditionInterface
 {
@@ -41,7 +41,7 @@ class CanViewNotification implements VisibilityConditionInterface
     private $cacheStorage;
 
     /**
-     * @param Logger         $viewerLogger
+     * @param Logger $viewerLogger
      * @param CacheInterface $cacheStorage
      */
     public function __construct(

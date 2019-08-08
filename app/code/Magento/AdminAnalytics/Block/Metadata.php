@@ -5,8 +5,8 @@
  */
 namespace Magento\AdminAnalytics\Block;
 
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\State;

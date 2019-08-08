@@ -36,12 +36,10 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     private $notificationLogger;
 
     /**
-     * MarkUserNotified constructor.
-     *
-     * @param Action\Context           $context
+     * @param Action\Context $context
      * @param ProductMetadataInterface $productMetadata
-     * @param NotificationLogger       $notificationLogger
-     * @param Factory                  $configFactory
+     * @param NotificationLogger $notificationLogger
+     * @param Factory $configFactory
      */
     public function __construct(
         Action\Context $context,
@@ -56,7 +54,7 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     }
 
     /**
-     * Changes the value of config/admin/usage/enabled
+     * Change the value of config/admin/usage/enabled
      */
     private function enableAdminUsage()
     {
@@ -70,7 +68,7 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
      *
      * @return ResultInterface
      */
-    private function markUserNotified() : ResultInterface
+    private function markUserNotified(): ResultInterface
     {
         $responseContent = [
             'success' => $this->notificationLogger->log(

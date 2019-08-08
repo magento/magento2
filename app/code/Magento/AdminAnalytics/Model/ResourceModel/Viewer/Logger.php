@@ -51,7 +51,7 @@ class Logger
      * @param string $lastViewVersion
      * @return bool
      */
-    public function log(string $lastViewVersion) : bool
+    public function log(string $lastViewVersion): bool
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
         $connection = $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
@@ -72,7 +72,7 @@ class Logger
      *
      * @return Log
      */
-    public function get() : Log
+    public function get(): Log
     {
         return $this->logFactory->create(['data' => $this->loadLatestLogData()]);
     }
@@ -82,7 +82,7 @@ class Logger
      *
      * @return boolean
      */
-    public function checkLogExists() : bool
+    public function checkLogExists(): bool
     {
         $data = $this->logFactory->create(['data' => $this->loadLatestLogData()]);
         $lastViewedVersion = $data->getLastViewVersion();
@@ -94,7 +94,7 @@ class Logger
      *
      * @return array
      */
-    private function loadLatestLogData() : array
+    private function loadLatestLogData(): array
     {
         $connection = $this->resource->getConnection();
         $select = $connection->select()

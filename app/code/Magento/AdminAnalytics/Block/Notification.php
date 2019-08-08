@@ -27,7 +27,6 @@ class Notification implements ArgumentInterface
     private $canViewNotificationRelease;
 
     /**
-     * Notification constructor.
      * @param AdminAnalyticsNotification $canViewNotificationAnalytics
      * @param ReleaseNotification $canViewNotificationRelease
      */
