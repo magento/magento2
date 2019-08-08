@@ -588,7 +588,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     /**
      * Retrieve massaction block
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Extended
+     * @return $this
      */
     public function getMassactionBlock()
     {
