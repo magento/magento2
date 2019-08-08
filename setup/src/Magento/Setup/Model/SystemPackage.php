@@ -196,12 +196,15 @@ class SystemPackage
      */
     public function sortVersions($enterpriseVersions)
     {
-        usort($enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS], function ($versionOne, $versionTwo) {
-            if (version_compare($versionOne, $versionTwo, '==')) {
-                return 0;
+        usort(
+            $enterpriseVersions[InfoCommand::AVAILABLE_VERSIONS],
+            function ($versionOne, $versionTwo) {
+                if (version_compare($versionOne, $versionTwo, '==')) {
+                    return 0;
+                }
+                return (version_compare($versionOne, $versionTwo, '<')) ? 1 : -1;
             }
-            return (version_compare($versionOne, $versionTwo, '<')) ? 1 : -1;
-        });
+        );
 
         return $enterpriseVersions;
     }
@@ -231,15 +234,18 @@ class SystemPackage
             }
         }
 
-        usort($versions, function ($versionOne, $versionTwo) {
-            if (version_compare($versionOne['id'], $versionTwo['id'], '==')) {
-                if ($versionOne['package'] === static::EDITION_COMMUNITY) {
-                    return 1;
+        usort(
+            $versions,
+            function ($versionOne, $versionTwo) {
+                if (version_compare($versionOne['id'], $versionTwo['id'], '==')) {
+                    if ($versionOne['package'] === static::EDITION_COMMUNITY) {
+                        return 1;
+                    }
+                    return 0;
                 }
-                return 0;
+                return (version_compare($versionOne['id'], $versionTwo['id'], '<')) ? 1 : -1;
             }
-            return (version_compare($versionOne['id'], $versionTwo['id'], '<')) ? 1 : -1;
-        });
+        );
 
         return $versions;
     }
