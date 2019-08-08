@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CatalogPriceRuleVirtualProductAdditionalStockTest" extends="AdminCreateCatalogPriceRuleForCustomerGroupTest">
+        <annotations>
+            <stories value="Virtual Product Additional Stock."/>
+            <title value="Catalog price rule with virtual product and additional stock."/>
+            <description value="Verify catalog price rule applied correctly for virtual product on additional stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/444060/scenarios/1520238"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Replace simple product with virtual.-->
+            <remove keyForRemoval="createProduct"/>
+            <createData entity="VirtualProduct" stepKey="createProduct" after="createCategory"/>
+            <!--Create additional source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" after="createProduct"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="additionalSource"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Assign created product to additional stock and set product qty.'.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openProductEditPageToSetQty" after="loginAsAdmin"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignAdditionalSourceToProduct" after="openProductEditPageToSetQty">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="123.00" stepKey="fillProductPrice" after="assignAdditionalSourceToProduct"/>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductQuantity" after="fillProductPrice"/>
+            <scrollToTopOfPage stepKey="scrollToTheTopOfProductEditPage" after="setProductQuantity"/>
+            <!--Assign product to category.-->
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToVirtualProduct" after="scrollToTheTopOfProductEditPage">
+                <argument name="categoryName" value="$$createCategory.name$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="deleteCategory">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="assignMainWebsiteToDefaultStock">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <!--Delete stock.-->
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="assignMainWebsiteToDefaultStock"/>
+        </after>
+    </test>
+</tests>
