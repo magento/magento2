@@ -7,23 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableGraphQl\Model\Resolver\Product;
 
-use Exception;
 use Magento\Catalog\Model\Product;
-use Magento\Downloadable\Model\Sample;
 use Magento\Downloadable\Model\SampleFactory;
-use Magento\Framework\Data\Collection;
+use Magento\DownloadableGraphQl\Service\FormatProductSamplesService;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\EnumLookup;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\UrlInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
-use Psr\Log\LoggerInterface;
 
 /**
  * Resolver fetches downloadable product samples and formats it according to the GraphQL schema.
@@ -31,14 +25,9 @@ use Psr\Log\LoggerInterface;
 class DownloadableSamples implements ResolverInterface
 {
     /**
-     * @var EnumLookup
+     * @var FormatProductSamplesService
      */
-    private $enumLookup;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private $formatSamplesService;
 
     /**
      * @var SampleFactory
@@ -46,28 +35,17 @@ class DownloadableSamples implements ResolverInterface
     private $sampleFactory;
 
     /**
-     * @var UrlInterface
-     */
-    private $urlBuilder;
-
-    /**
      * DownloadableSamples constructor.
      *
-     * @param EnumLookup $enumLookup
-     * @param LoggerInterface $logger
+     * @param FormatProductSamplesService $formatProductSamplesService
      * @param SampleFactory $sampleFactory
-     * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        EnumLookup $enumLookup,
-        LoggerInterface $logger,
-        SampleFactory $sampleFactory,
-        UrlInterface $urlBuilder
+        FormatProductSamplesService $formatProductSamplesService,
+        SampleFactory $sampleFactory
     ) {
-        $this->enumLookup = $enumLookup;
-        $this->logger = $logger;
+        $this->formatSamplesService = $formatProductSamplesService;
         $this->sampleFactory = $sampleFactory;
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -116,67 +94,8 @@ class DownloadableSamples implements ResolverInterface
         $samples->addTitleToResult($product->getStoreId())
             ->addProductToFilter($product->getId());
 
-        $data = $this->formatSamples(
-            $samples
-        );
+        $data = $this->formatSamplesService->execute($samples);
 
         return $data;
-    }
-
-    /**
-     * Format links from collection as array
-     *
-     * @param Collection $samples
-     * @return array
-     */
-    private function formatSamples(Collection $samples) : array
-    {
-        $resultData = [];
-
-        try {
-            /** @var Sample $sample */
-            foreach ($samples as $sampleKey => $sample) {
-                $resultData[$sampleKey] = [
-                    'id' => $sample->getId(),
-                    'title' => $sample->getTitle(),
-                    'sort_order' => $sample->getSortOrder(),
-                    'sample_type' => $this->getSampleType($sample),
-                    'sample_file' => $sample->getSampleFile(),
-                    'sample_url' => $this->getSampleUrl($sample),
-                ];
-            }
-        } catch (Exception $e) {
-            $this->logger->critical($e);
-        }
-
-        return $resultData;
-    }
-
-    /**
-     * Returns URL of sample
-     *
-     * @param Sample $sample
-     * @return string
-     * @throws RuntimeException
-     */
-    protected function getSampleUrl(Sample $sample): string
-    {
-        return $this->enumLookup->getEnumValueFromField('DownloadableFileTypeEnum', $sample->getSampleType());
-    }
-
-    /**
-     * Returns sample type
-     *
-     * @param Sample $sample
-     * @return string
-     */
-    private function getSampleType(Sample $sample): string
-    {
-        return $this->urlBuilder->getUrl(
-            'downloadable/download/sample',
-            [
-                'sample_id' => $sample->getId(),
-            ]
-        );
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\DownloadableGraphQl\Model\ResourceModel;
 
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\LinkFactory;
+use Magento\Downloadable\Model\ResourceModel\Link\Collection;
 
 /**
  * Class GetDownloadableProductLinks
@@ -42,7 +43,7 @@ class GetDownloadableProductLinks
      */
     public function execute(Product $product, array $selectedLinksIds = []): array
     {
-        /** @var \Magento\Downloadable\Model\ResourceModel\Link\Collection */
+        /** @var Collection */
         $links = $this->linkFactory->create()->getResourceCollection();
         $links->addTitleToResult($product->getStoreId())
             ->addPriceToResult($product->getStore()->getWebsiteId())
