@@ -282,17 +282,4 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     {
         return false;
     }
-	
-	 /**
-     * Retrieve config view
-     *
-     * @return \Magento\Framework\Config\View
-     */
-    private function getConfigView()
-    {
-        if (!$this->configView) {
-            $this->configView = $this->_viewConfig->getViewConfig();
-        }
-        return $this->configView;
-    }
 }
