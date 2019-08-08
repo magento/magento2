@@ -72,7 +72,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
-        $this->assertNotContains('"autoOpen":true', $actual);
+        $this->assertContains('"autoOpen":false', $actual);
     }
 
     public function testExecuteFalseContent()
@@ -87,6 +87,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
-        $this->assertNotContains('"autoOpen":true', $actual);
+        $this->assertContains('"autoOpen":false', $actual);
     }
 }
