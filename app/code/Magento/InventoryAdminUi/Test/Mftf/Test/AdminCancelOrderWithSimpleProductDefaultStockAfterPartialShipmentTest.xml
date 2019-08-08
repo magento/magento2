@@ -127,6 +127,5 @@
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="997" stepKey="checkProductSourceQtyAfterInvoiceCreated"/>
         <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="997" stepKey="checkSalableQtyAfterInvoiceCreated"/>
-
     </test>
 </tests>
