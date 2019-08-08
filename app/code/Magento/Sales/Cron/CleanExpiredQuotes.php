@@ -61,6 +61,10 @@ class CleanExpiredQuotes
     public function execute()
     {
         $lifetimes = $this->storesConfig->getStoresConfigByPath('checkout/cart/delete_quote_after');
+        $fields = array_merge(
+            $this->getExpireQuotesAdditionalFilterFields(),
+            $this->expireQuotesFilterFieldsProvider->getFields()
+        );
         foreach ($lifetimes as $storeId => $lifetime) {
             $lifetime *= self::LIFETIME;
 
@@ -70,11 +74,6 @@ class CleanExpiredQuotes
             $quotes->addFieldToFilter('store_id', $storeId);
             $quotes->addFieldToFilter('updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
             $quotes->addFieldToFilter('is_active', 0);
-            
-            $fields = array_merge(
-                $this->getExpireQuotesAdditionalFilterFields(),
-                $this->expireQuotesFilterFieldsProvider->getFields()
-            );
 
             foreach ($fields as $field => $condition) {
                 $quotes->addFieldToFilter($field, $condition);
