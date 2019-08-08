@@ -101,4 +101,14 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilder">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="price_bucket" xsi:type="object">Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Price</item>
+                <item name="category_bucket" xsi:type="object">Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Category</item>
+                <item name="attribute_bucket" xsi:type="object">Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Attribute</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

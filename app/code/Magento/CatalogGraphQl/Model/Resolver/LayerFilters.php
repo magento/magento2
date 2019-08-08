@@ -10,7 +10,8 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-//use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilder;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilder;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Layered navigation filters resolver, used for GraphQL request processing.
@@ -22,24 +23,25 @@ class LayerFilters implements ResolverInterface
      */
     private $filtersDataProvider;
 
-//    /**
-//     * @var LayerBuilder
-//     */
-//    private $layerBuilder;
+    /**
+     * @var LayerBuilder
+     */
+    private $layerBuilder;
 
     /**
      * @param \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
      * @param \Magento\Framework\Registry $registry
+     * @param LayerBuilder $layerBuilder
      */
     public function __construct(
         \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider,
-        \Magento\Framework\Registry $registry
-        //LayerBuilder $layerBuilder
+        \Magento\Framework\Registry $registry,
+        LayerBuilder $layerBuilder
 
     ) {
         $this->filtersDataProvider = $filtersDataProvider;
         $this->registry = $registry;
-        //$this->layerBuilder = $layerBuilder;
+        $this->layerBuilder = $layerBuilder;
     }
 
     /**
@@ -56,7 +58,9 @@ class LayerFilters implements ResolverInterface
             return null;
         }
         $aggregations = $this->registry->registry('aggregations');
-        return [];
-        //return $this->layerBuilder->build($aggregations, 1);
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        $storeId = (int)$store->getId();
+        return $this->layerBuilder->build($aggregations, $storeId);
     }
 }
