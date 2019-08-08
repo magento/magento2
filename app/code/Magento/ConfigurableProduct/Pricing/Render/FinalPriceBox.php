@@ -30,10 +30,10 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param SaleableInterface $saleableItem
      * @param PriceInterface $price
      * @param RendererPool $rendererPool
-     * @param ConfigurableOptionsProviderInterface $configurableOptionsProvider
-     * @param array $data
      * @param SalableResolverInterface $salableResolver
      * @param MinimalPriceCalculatorInterface $minimalPriceCalculator
+     * @param ConfigurableOptionsProviderInterface $configurableOptionsProvider
+     * @param array $data
      */
     public function __construct(
         Context $context,

@@ -110,10 +110,12 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
         $priceInfoMock = $this->createMock(PriceInfoInterface::class);
         $priceInfoMock->expects($this->exactly(2))
             ->method('getPrice')
-            ->willReturnMap([
-                [RegularPrice::PRICE_CODE, $priceMockOne],
-                [FinalPrice::PRICE_CODE, $priceMockTwo],
-            ]);
+            ->willReturnMap(
+                [
+                    [RegularPrice::PRICE_CODE, $priceMockOne],
+                    [FinalPrice::PRICE_CODE, $priceMockTwo],
+                ]
+            );
 
         $productMock = $this->createMock(Product::class);
         $productMock->expects($this->exactly(2))
