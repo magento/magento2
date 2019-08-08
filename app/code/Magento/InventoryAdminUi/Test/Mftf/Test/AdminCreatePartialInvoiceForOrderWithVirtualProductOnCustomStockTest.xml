@@ -110,8 +110,8 @@
         <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessageOrder"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessageOrderPlaced"/>
 
-        <!--Admin create and verify full Invoice-->
-        <comment userInput="Admin - Process invoice for full order" stepKey="InvoiceFullOrder"/>
+        <!--Admin create and verify partial Invoice-->
+        <comment userInput="Admin - Process partial invoice" stepKey="InvoicePartOrder"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <scrollTo selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="scrollToQty"/>
         <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="1" stepKey="InvoiceQuantityPartial" />
