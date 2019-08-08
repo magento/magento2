@@ -215,6 +215,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve JSON string of selected checkboxes
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSelectedJson()
     {
@@ -229,6 +230,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve array of selected checkboxes
      *
      * @return string[]
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getSelected()
     {
