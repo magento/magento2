@@ -13,6 +13,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Newsletter\Model\Config;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class PredispatchNewsletterObserver
@@ -39,16 +40,16 @@ class PredispatchNewsletterObserver implements ObserverInterface
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
-     * @param Config $config
+     * @param Config|null $config
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
-        Config $config
+        Config $config = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
-        $this->config = $config;
+        $this->config = $config ?: ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
