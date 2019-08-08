@@ -48,7 +48,6 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="category"/>
             </createData>
-
         </before>
 
         <after>

@@ -48,7 +48,6 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="category"/>
             </createData>
-
         </before>
 
         <after>
@@ -73,8 +72,7 @@
         <waitForAjaxLoad stepKey="waitForImageLoader"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="5" stepKey="fillQuantity"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30"
-                               stepKey="waitForProductAdded"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
 
         <!-- Place Order -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
@@ -115,7 +113,6 @@
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 5" stepKey="seeOrderedQuantity"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 3" stepKey="seeShippedQuantity"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled	2" stepKey="seeCancelledQuantity"/>
-
 
         <!-- Verify Source Quantities and Salable Quantity are Correct-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexToFinalCheck"/>
