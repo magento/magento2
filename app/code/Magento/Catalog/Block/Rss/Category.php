@@ -52,7 +52,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      * @var CategoryRepositoryInterface
      */
     protected $categoryRepository;
-	
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
@@ -122,8 +121,9 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $newUrl = $category->getUrl();
         $title = $category->getName();
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
-
-        $attributes = $this->_viewConfig->getViewConfig()->getMediaAttributes('Magento_Catalog', $this->imageHelper::MEDIA_TYPE_CONFIG_NODE, 'rss_thumbnail');		
+		$attributes = $this->_viewConfig
+							->getViewConfig()
+							->getMediaAttributes('Magento_Catalog', $this->imageHelper::MEDIA_TYPE_CONFIG_NODE, 'rss_thumbnail');		
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($this->rssModel->getProductCollection($category, $this->getStoreId()) as $product) {
             $product->setAllowedInRss(true);
@@ -281,5 +281,18 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     public function isAuthRequired()
     {
         return false;
+    }
+	
+	 /**
+     * Retrieve config view
+     *
+     * @return \Magento\Framework\Config\View
+     */
+    private function getConfigView()
+    {
+        if (!$this->configView) {
+            $this->configView = $this->_viewConfig->getViewConfig();
+        }
+        return $this->configView;
     }
 }
