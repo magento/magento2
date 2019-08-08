@@ -37,7 +37,7 @@ class CreateBuyRequest
      * @param array $downloadableLinks
      * @return DataObject
      */
-    public function execute(float $qty, array $customizableOptionsData, array $downloadableLinks): DataObject
+    public function execute(float $qty, array $customizableOptionsData, array $downloadableLinks = []): DataObject
     {
         $customizableOptions = [];
         foreach ($customizableOptionsData as $customizableOption) {
