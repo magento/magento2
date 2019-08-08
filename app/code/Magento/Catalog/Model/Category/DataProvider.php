@@ -356,6 +356,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
         $fields = $this->getFields();
+        $category = $this->getCurrentCategory();
         /* @var EavAttribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
@@ -382,11 +383,13 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             $meta[$code]['componentType'] = Field::NAME;
 
             // disable fields
-            $attributeIsLocked = $this->getCurrentCategory()->isLockedAttribute($code);
-            $meta[$code]['disabled'] = $attributeIsLocked;
-            $hasUseConfigField = (bool) array_search('use_config.' . $code, $fields, true);
-            if ($hasUseConfigField && $meta[$code]['disabled']) {
-                $meta['use_config.' . $code]['disabled'] = true;
+            if ($category) {
+                $attributeIsLocked = $category->isLockedAttribute($code);
+                $meta[$code]['disabled'] = $attributeIsLocked;
+                $hasUseConfigField = (bool) array_search('use_config.' . $code, $fields, true);
+                if ($hasUseConfigField && $meta[$code]['disabled']) {
+                    $meta['use_config.' . $code]['disabled'] = true;
+                }
             }
         }
 
