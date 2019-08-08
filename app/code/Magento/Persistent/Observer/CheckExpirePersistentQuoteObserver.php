@@ -121,6 +121,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
             $this->_checkoutSession->clearQuote();
+            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
             return;
         }
 
