@@ -44,7 +44,7 @@
         <?= $block->getItemPriceHtml() ?>
     </td>
     <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Invoiced')) ?>">
-        <span class="qty summary"><?= (int) $_item->getQty() ?></span>
+        <span class="qty summary"><?= (float) $_item->getQty() ?></span>
     </td>
     <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>
