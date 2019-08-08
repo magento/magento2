@@ -8,7 +8,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~7.1.0|~7.2.0",
+        "php": "~7.0.13|~7.1.0|~7.2.0",
         "zendframework/zend-stdlib": "^2.7.7",
         "zendframework/zend-code": "~3.1.0",
         "zendframework/zend-server": "^2.6.1",
