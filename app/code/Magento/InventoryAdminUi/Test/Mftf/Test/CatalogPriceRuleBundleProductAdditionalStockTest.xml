@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CatalogPriceRuleBundleProductAdditionalStockTest" extends="AdminCreateCatalogPriceRuleForCustomerGroupTest">
+        <annotations>
+            <stories value="Bundle Product Additional Stock."/>
+            <title value="Catalog price rule with bundle product and additional stock."/>
+            <description value="Verify catalog price rule applied correctly for bundle product on additional stock."/>
+            <testCaseId value=" https://app.hiptest.com/projects/69435/test-plan/folders/444060/scenarios/1522394"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/inventory/issues/522"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!--Replace simple product with bundle.-->
+            <remove keyForRemoval="createProduct"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct" after="createCategory"/>
+            <createData entity="ApiBundleProduct" stepKey="createProduct" after="simpleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption" after="createProduct">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="bundleLink" after="bundleOption">
+                <requiredEntity createDataKey="createProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="simpleProduct"/>
+            </createData>
+            <!--Create additional source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" after="bundleOption"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="additionalSource"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Assign bundle option product to additional stock and set product qty.'.-->
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPageToSetQty" after="loginAsAdmin"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignAdditionalSourceToProduct" after="openProductEditPageToSetQty">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="123.00" stepKey="fillProductPrice" after="assignAdditionalSourceToProduct"/>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductQuantity" after="fillProductPrice"/>
+            <actionGroup ref="saveProductForm" stepKey="saveBundleOptionProduct" after="setProductQuantity"/>
+            <!--Assign bundle product to category.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openProductEditPageToAssignCategory" after="saveBundleOptionProduct"/>
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToBundleProduct" after="openProductEditPageToAssignCategory">
+                <argument name="categoryName" value="$$createCategory.name$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="deleteCategory">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="assignMainWebsiteToDefaultStock">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <!--Delete stock.-->
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="assignMainWebsiteToDefaultStock"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteBundleOption" after="deleteStock"/>
+        </after>
+    </test>
+</tests>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductWithSwatchAttributeMultipleStocks">
+        <annotations>
+            <stories value="Configurable Product Multi Stock."/>
+            <title value="Create configurable product with visual swatch on multiple stocks."/>
+            <description value="Verify configurable product with visual swatch on different stocks and websites."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457025/scenarios/1848482"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <!--Add store code to url.-->
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
+            <!--Create category.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <!--Create main website source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSourceMainWebsite"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStockMainWebsite"/>
+            <!--Link main website source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="additionalStockMainWebsite"/>
+                <requiredEntity createDataKey="additionalSourceMainWebsite"/>
+            </createData>
+            <!--Crate additional source and stock for additional website.-->
+            <createData entity="_minimalSource" stepKey="additionalSourceAdditionalWebsite"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStockAdditionalWebsite"/>
+            <!--Link additional website source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStockAdditionalWebsite"/>
+                <requiredEntity createDataKey="additionalSourceAdditionalWebsite"/>
+            </createData>
+            <createData entity="ConfigurableMsiProduct" stepKey="configurableProduct"/>
+            <!--Create website, store and store view.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!--Assign additional stock to website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignStockToAdditionalWebsite">
+                <argument name="stockName" value="$$additionalStockAdditionalWebsite.stock[name]$$"/>
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete created website.-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable main website source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableMainWebsiteSource">
+                <argument name="sourceCode" value="$$additionalSourceMainWebsite.source[source_code]$$"/>
+            </actionGroup>
+            <!--Disable additional website source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableAdditionalWebsiteSource">
+                <argument name="sourceCode" value="$$additionalSourceAdditionalWebsite.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <!--Delete category, stocks and revert configuration.-->
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="configurableProduct" stepKey="deleteConfigurable"/>
+            <deleteData createDataKey="additionalStockAdditionalWebsite" stepKey="deleteMainWebsiteStock"/>
+            <deleteData createDataKey="additionalStockMainWebsite" stepKey="deleteAdditionalWebsiteStock"/>
+        </after>
+
+        <!--Create configurable variations.-->
+        <amOnPage url="{{AdminProductEditPage.url($$configurableProduct.id$$)}}" stepKey="openConfigurableProductEditPage"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton"/>
+        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForAttributesGridLoad"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="createNewAttribute"/>
+        <waitForPageLoad time="30" stepKey="waitForCreateAttributePageLoad"/>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <!--Fill attribute data.-->
+        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{visualSwatchAttribute.name}}" stepKey="fillSwatchAttributeLabel"/>
+        <selectOption selector="#frontend_input" userInput="{{visualSwatchAttribute.catalogInputType}}" stepKey="fillInputTypeForAttribute"/>
+        <!--Add first option.-->
+        <click selector="#add_new_swatch_visual_option_button" stepKey="addFirstSwatchOption"/>
+        <fillField selector="input[name='optionvisual[value][option_0][0]']" userInput="{{visualSwatchColor1.name}}" stepKey="fillFirstAdminOptionName"/>
+        <!--Add second option.-->
+        <click selector="#add_new_swatch_visual_option_button" stepKey="addSecondSwatchOption"/>
+        <fillField selector="input[name='optionvisual[value][option_1][0]']" userInput="{{visualSwatchColor2.name}}" stepKey="fillSecondAdminOptionAttributeName"/>
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="saveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeSave"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+        <!--Select created attribute for configurable variations.-->
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findAttributeInGrid">
+            <argument name="selector" value="AdminAssignProductAttributeSlideOutSection.attributeLabel"/>
+            <argument name="value" value="{{visualSwatchAttribute.name}}"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.checkboxByValue(visualSwatchAttribute.name)}}" stepKey="clickOnTheColorAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <!--Finish generate variations.-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
+        <!--Assign configurable to additional website.-->
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToProductInWebsiteSectionHeader"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickProductInWebsiteSectionHeader"/>
+        <checkOption selector="{{ProductInWebsitesSection.website(customWebsite.name)}}" stepKey="checkWebsite"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+        <!--Assign product to category.-->
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToConfigurableProduct">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <!--Assign main website source to red variation.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGridAssignSourceToRedVariation"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findRedVariation">
+            <argument name="selector" value="AdminProductGridFilterSection.nameFilter"/>
+            <argument name="value" value="{{visualSwatchColor1.name}}"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="selectRedVariation"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignMainWebsiteSourceToRedVariation">
+            <argument name="sourceCode" value="$$additionalSourceMainWebsite.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillRedVariationQuantity"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveRedVariation"/>
+        <!--Assign additional website source to blue variation.-->
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findBlueVariation">
+            <argument name="selector" value="AdminProductGridFilterSection.nameFilter"/>
+            <argument name="value" value="{{visualSwatchColor2.name}}"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="selectBlueVariation"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignAdditionalWebsiteSourceToBlueVariation">
+            <argument name="sourceCode" value="$$additionalSourceAdditionalWebsite.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillBlueVariationQuantity"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveBlueVariation"/>
+        <!--Set configurable product stock status.-->
+        <amOnPage url="{{AdminProductEditPage.url($$configurableProduct.id$$)}}" stepKey="openProductEditPage"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="setProductStockStatus"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveConfigurableProduct"/>
+        <!--Verify configurable product with red variation on main website.-->
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="verifyConfigurableVisibleOnStoreFrontMainWebsite">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <amOnPage url="$$configurableProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPageMainWebsite"/>
+        <waitForPageLoad stepKey="waitForMainWebsitePDPLoad"/>
+        <seeElement selector="//div[@option-label='{{visualSwatchColor1.name}}']" stepKey="verifyRedVariationIsPresentOnMainWebsite"/>
+        <dontSeeElement selector="//div[@option-label='{{visualSwatchColor2.name}}']" stepKey="verifyBlueVariationIsNotPresentOnMainWebsite"/>
+        <!--Verify configurable product with blue variation on additional website.-->
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$category.name$$.html" stepKey="navigateToAdditionalCategoryPage"/>
+        <waitForPageLoad stepKey="waitForAdditionalWebsiteCategoryPageLoad"/>
+        <see userInput="$$configurableProduct.name$$" stepKey="assertProductPresent"/>
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$configurableProduct.custom_attributes[url_key]$$.html" stepKey="navigateToPDP"/>
+        <waitForPageLoad stepKey="waitForAdditionalWebsitePDPLoad"/>
+        <dontSeeElement selector="//div[@option-label='{{visualSwatchColor1.name}}']" stepKey="verifyRedVariationIsNotPresentOnAdditionalWebsite"/>
+        <seeElement selector="//div[@option-label='{{visualSwatchColor2.name}}']" stepKey="verifyBlueVariationIsPresentOnAdditionalWebsite"/>
+    </test>
+</tests>

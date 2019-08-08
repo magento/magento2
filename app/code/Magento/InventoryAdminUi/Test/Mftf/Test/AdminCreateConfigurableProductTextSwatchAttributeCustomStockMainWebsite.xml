@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductTextSwatchAttributeCustomStockMainWebsite">
+        <annotations>
+            <stories value="Configurable Product Multi Stock."/>
+            <title value="Create configurable product with text swatch on additional stock."/>
+            <description value="Verify configurable product with text swatch on additional stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457025/scenarios/1695806"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <!--Create category.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <!--Crate additional source and stock for additional website.-->
+            <createData entity="_minimalSource" stepKey="additionalSourceMainWebsite"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStockMainWebsite"/>
+            <!--Link main website source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStockMainWebsite"/>
+                <requiredEntity createDataKey="additionalSourceMainWebsite"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete configurable product.-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToAdminProductGridToDeleteProducts"/>
+            <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findConfigurableProduct">
+                <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+                <argument name="value" value="{{ConfigurableMsiProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="productName" value="ConfigurableMsiProduct.name"/>
+            </actionGroup>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable main website source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableAdditionalWebsiteSource">
+                <argument name="sourceCode" value="$$additionalSourceMainWebsite.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <!--Delete category and stock.-->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="additionalStockMainWebsite" stepKey="deleteMainWebsiteStock"/>
+        </after>
+
+        <!--Start creating configurable product.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGridToCreateConfigurableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForProductGridLoad"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnTheAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addTypeProduct('configurable')}}" stepKey="clickOnAddConfigurableProduct"/>
+        <waitForPageLoad time="30" stepKey="waitForConfigurableProductCreatePageLoaded"/>
+        <!--Fill main product fields.-->
+        <fillField userInput="{{ConfigurableMsiProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillConfigurableProductName"/>
+        <fillField userInput="{{ConfigurableMsiProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillConfigurableProductPrice"/>
+        <fillField userInput="{{ConfigurableMsiProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillConfigurableProductSku"/>
+        <fillField userInput="{{ConfigurableMsiProduct.quantity}}" selector="{{AdminConfigurableProductFormSection.productQuantity}}" stepKey="fillConfigurableProductQuantity"/>
+        <fillField userInput="{{ConfigurableMsiProduct.weight}}" selector="{{AdminConfigurableProductFormSection.productWeight}}" stepKey="fillConfigurableProductWeight"/>
+        <!--Start creating configurations.-->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton"/>
+        <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForAttributesGridLoad"/>
+        <!--Create text swatch attribute.-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnCreateNewAttribute"/>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{visualSwatchAttribute.name}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="#frontend_input" userInput="{{textSwatchAttribute.catalogInputType}}" stepKey="fillCatalogInputTypeForStoreOwner"/>
+        <!--Create first option.-->
+        <click selector="#add_new_swatch_text_option_button" stepKey="addFirstSwatchOption"/>
+        <fillField selector="input[name='swatchtext[value][option_0][0]']" userInput="{{textSwatch1.name}}" stepKey="fillFirstOptionAdminName"/>
+        <fillField selector="input[name='optiontext[value][option_0][0]']" userInput="{{textSwatch1.name}}" stepKey="fillFirstOptionDescription"/>
+        <fillField selector="input[name='swatchtext[value][option_0][1]']" userInput="{{textSwatch1.name}}" stepKey="fillFirstOptionDefaultStoreViewName"/>
+        <fillField selector="input[name='optiontext[value][option_0][1]']" userInput="{{textSwatch1.name}}" stepKey="fillFirstOptionDefaultStoreViewDescription"/>
+        <!--Create second option.-->
+        <click selector="#add_new_swatch_text_option_button" stepKey="addSecondSwatchOption"/>
+        <fillField selector="input[name='swatchtext[value][option_1][0]']" userInput="{{textSwatch2.name}}" stepKey="fillSecondOptionAdminName"/>
+        <fillField selector="input[name='optiontext[value][option_1][0]']" userInput="{{textSwatch2.name}}" stepKey="fillSecondOptionDescription"/>
+        <fillField selector="input[name='swatchtext[value][option_1][1]']" userInput="{{textSwatch2.name}}" stepKey="fillSecondOptionDefaultStoreViewName"/>
+        <fillField selector="input[name='optiontext[value][option_1][1]']" userInput="{{textSwatch2.name}}" stepKey="fillSecondOptionDefaultStoreViewDescription"/>
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="saveAttribute"/>
+        <switchToIFrame stepKey="switchOutOfIFrame1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findAttributeForVariations">
+            <argument name="selector" value="AdminAssignProductAttributeSlideOutSection.attributeLabel"/>
+            <argument name="value" value="{{visualSwatchAttribute.name}}"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.checkboxByValue(visualSwatchAttribute.name)}}" stepKey="selectAttributeForVariations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToAttributesValues"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <!--Assign additional source.-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="applySingleQuantityToVariations"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources"/>
+        <conditionalClick selector="(//div[@class='admin__data-grid-header']//*[@data-action='grid-filter-reset'])[1]" dependentSelector="(//div[@class='admin__data-grid-header']//*[@data-action='grid-filter-reset'])[1]" visible="true" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="searchAdditionalSource">
+            <argument name="selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="value" value="$$additionalSourceMainWebsite.source[source_code]$$"/>
+        </actionGroup>
+        <click selector="{{AdminGridRow.checkboxByValue($$additionalSourceMainWebsite.source[source_code]$$)}}" stepKey="selectAdditionalSource"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="done"/>
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillQuantity"/>
+        <!--Finish generate variations.-->
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="saveProduct"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+        <!--Assign product to category.-->
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToConfigurableProduct">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <!--Verify configurable product on storefront.-->
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="verifyConfigurableProductOnCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="verifyConfigurableProductOnPDP">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+    </test>
+</tests>
