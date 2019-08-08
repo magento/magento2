@@ -37,7 +37,7 @@
         <actionGroup ref="AssertAdminRoleInGridActionGroup" stepKey="assertRoleInGrid">
             <argument name="roleName" value="{{roleSales.name}}"/>
         </actionGroup>
-        <!--Delete New Roles-->
+        <!--Delete the new role with custom access-->
         <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteSaleRole">
             <argument name="roleName" value="{{roleSales.name}}"/>
         </actionGroup>
@@ -54,7 +54,7 @@
         <actionGroup ref="AssertAdminRoleInGridActionGroup" stepKey="assertRoleInGridSecondTime">
             <argument name="roleName" value="{{roleAdministrator.name}}"/>
         </actionGroup>
-        <!--Delete New Roles-->
+        <!--Delete the new role with full access-->
         <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteAdministratorRole">
             <argument name="roleName" value="{{roleAdministrator.name}}"/>
         </actionGroup>
