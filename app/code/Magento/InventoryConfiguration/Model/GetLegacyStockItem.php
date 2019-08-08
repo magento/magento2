@@ -60,7 +60,7 @@ class GetLegacyStockItem
     }
 
     /**
-     * Execute.
+     * Get legacy stock item entity by sku.
      *
      * @param string $sku
      * @return StockItemInterface
