@@ -5,33 +5,30 @@
  */
 declare(strict_types=1);
 
-namespace Magento\DownloadableGraphQl\Model\ResourceModel;
+namespace Magento\DownloadableGraphQl\Model;
 
 use Magento\Catalog\Model\Product;
-use Magento\Downloadable\Model\LinkFactory;
+use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Model\ResourceModel\Link\Collection;
+use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory;
 
 /**
- * Class GetDownloadableProductLinks
- *
  * Returns links of a particular downloadable product
  */
 class GetDownloadableProductLinks
 {
     /**
-     * @var LinkFactory
+     * @var CollectionFactory
      */
-    private $linkFactory;
+    private $linkCollectionFactory;
 
     /**
-     * GetDownloadableProductLinks constructor.
-     *
-     * @param LinkFactory $linkFactory
+     * @param CollectionFactory $linkCollectionFactory
      */
     public function __construct(
-        LinkFactory $linkFactory
+        CollectionFactory $linkCollectionFactory
     ) {
-        $this->linkFactory = $linkFactory;
+        $this->linkCollectionFactory = $linkCollectionFactory;
     }
 
     /**
@@ -39,25 +36,20 @@ class GetDownloadableProductLinks
      *
      * @param Product $product
      * @param array $selectedLinksIds
-     * @return array
+     * @return LinkInterface[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(Product $product, array $selectedLinksIds = []): array
     {
         /** @var Collection */
-        $links = $this->linkFactory->create()->getResourceCollection();
+        $links = $this->linkCollectionFactory->create();
         $links->addTitleToResult($product->getStoreId())
             ->addPriceToResult($product->getStore()->getWebsiteId())
             ->addProductToFilter($product->getId());
 
-        if ($product->getLinksPurchasedSeparately() && count($selectedLinksIds) > 0) {
+        if (count($selectedLinksIds) > 0) {
             $links->addFieldToFilter('main_table.link_id', ['in' => $selectedLinksIds]);
         }
-
-        $result = [];
-        foreach ($links as $link) {
-            $result[] = $link;
-        }
-
-        return $result;
+        return $links->getItems();
     }
 }

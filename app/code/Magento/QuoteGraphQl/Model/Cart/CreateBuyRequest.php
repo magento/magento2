@@ -34,10 +34,9 @@ class CreateBuyRequest
      *
      * @param float $qty
      * @param array $customizableOptionsData
-     * @param array $downloadableLinks
      * @return DataObject
      */
-    public function execute(float $qty, array $customizableOptionsData, array $downloadableLinks = []): DataObject
+    public function execute(float $qty, array $customizableOptionsData): DataObject
     {
         $customizableOptions = [];
         foreach ($customizableOptionsData as $customizableOption) {
@@ -54,11 +53,6 @@ class CreateBuyRequest
                 'options' => $customizableOptions,
             ],
         ];
-
-        if (count($downloadableLinks) > 0) {
-            $dataArray['data']['links'] = $downloadableLinks;
-        }
-
         return $this->dataObjectFactory->create($dataArray);
     }
 

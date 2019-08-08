@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 
 /**
- * DataProvider for building downloable product links in buy requests
+ * DataProvider for building downloadable product links in buy requests
  */
 class DownloadableLinksDataProvider implements BuyRequestDataProviderInterface
 {
@@ -23,8 +23,6 @@ class DownloadableLinksDataProvider implements BuyRequestDataProviderInterface
     private $productRepository;
 
     /**
-     * DownloadableLinksDataProvider constructor.
-     *
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
