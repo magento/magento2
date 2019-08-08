@@ -36,7 +36,7 @@ $objectManager->get(\Magento\SalesRule\Model\ResourceModel\Rule::class)->save($s
 
 /* @var CouponRepositoryInterface $couponRepository */
 $couponRepository = $objectManager->get(CouponRepositoryInterface::class);
-for ($index = 1; $index <= 100; $index ++) {
+for ($index = 1; $index <= 30; $index ++) {
     $coupon = $objectManager->create(Coupon::class);
     $coupon->setRuleId($salesRule->getId())
         ->setCode('coupon_code_' . $index)
