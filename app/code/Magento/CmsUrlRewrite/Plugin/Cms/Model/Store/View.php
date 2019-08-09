@@ -113,6 +113,7 @@ class View
         foreach ($cmsPagesCollection as $page) {
             $page->setStoreId($storeId);
             /** @var \Magento\Cms\Model\Page $page */
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $urls = array_merge(
                 $urls,
                 $this->cmsPageUrlRewriteGenerator->generate($page)
