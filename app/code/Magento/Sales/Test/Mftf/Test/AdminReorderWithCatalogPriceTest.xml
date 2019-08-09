@@ -52,9 +52,10 @@
         </after>
         <!-- Login as admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <!--Open order by Id-->
-        <actionGroup ref="OpenOrderById" stepKey="openOrderById">
+
+        <actionGroup ref="OpenOrderByName" stepKey="openOrderById">
             <argument name="orderId" value="$createGuestCart.return$"/>
+            <argument name="orderName" value="{{ShippingAddressTX.fullname}}"/>
         </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
@@ -63,7 +64,7 @@
         <see selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" userInput="${{AdminOrderSimpleProductWithCatalogRule.subtotal}}" stepKey="seeOrderItemPrice"/>
         <!--Verify totals on Order page-->
         <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
-        <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" stepKey="waitOrderSubtotalToBeVisible"/>
+        <waitForElementVisible selector="{{AdminOrderFormTotalSection.total( 'Subtotal')}}" stepKey="waitOrderSubtotalToBeVisible"/>
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProductWithCatalogRule.subtotal}}" stepKey="seeOrderSubTotal"/>
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Shipping')}}" stepKey="waitOrderShippingToBeVisible"/>
         <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProductWithCatalogRule.shipping}}" stepKey="seeOrderShipping"/>

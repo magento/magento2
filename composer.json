@@ -8,7 +8,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~7.0.13|~7.1.0|~7.2.0",
+        "php": "~7.1.0|~7.2.0",
         "zendframework/zend-stdlib": "^2.7.7",
         "zendframework/zend-code": "~3.1.0",
         "zendframework/zend-server": "^2.6.1",
@@ -76,7 +76,7 @@
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
-        "magento/magento2-functional-testing-framework": "2.4.1",
+        "magento/magento2-functional-testing-framework": "~2.4.3",
         "phpunit/phpunit": "~6.2.0",
         "squizlabs/php_codesniffer": "3.2.2",
         "phpmd/phpmd": "@stable",
