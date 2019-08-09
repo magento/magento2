@@ -324,7 +324,7 @@ define([
 
         /**
          * Avoid using this function directly 'cause of possible performance drawbacks.
-         * Each customer section reload brings new non-cached ajax request
+         * Each customer section reload brings new non-cached ajax request.
          *
          * @param {Array} sectionNames
          * @param {Boolean} forceNewSectionTimestamp
