@@ -76,7 +76,7 @@ class MassDisable extends \Magento\Backend\App\Action implements \Magento\Framew
         $requestData = $request->getPost()->toArray();
 
 
-        if (!$request->isPost() || empty($requestData['selected'])) {
+        if (!$request->isPost()) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             return $resultRedirect;
         }
@@ -85,15 +85,21 @@ class MassDisable extends \Magento\Backend\App\Action implements \Magento\Framew
         $sourceCollection = $this->sourceCollectionFactory->create();
         $this->massActionFilter->getCollection($sourceCollection);
 
-        $count = 0;
-
+        $disabled = 0;
+        $alreadyDisabled = 0;
         /** @var \Magento\Inventory\Model\Source $source */
         foreach ($sourceCollection as $source) {
-            if ( ($source->isEnabled()) && ($source->getSourceCode() !== $this->defaultSourceProvider->getCode()) ) {
+            if ($source->getSourceCode() === $this->defaultSourceProvider->getCode()) {
+                $this->messageManager->addNoticeMessage(__('Default Source can not be disabled.'));
+                continue;
+            }
+            $alreadyDisabled++;
+            if ($source->isEnabled()) {
                 try {
                     $source->setEnabled(false);
                     $this->sourceRepository->save($source);
-                    $count++;
+                    $alreadyDisabled--;
+                    $disabled++;
                 } catch (\Magento\Framework\Validation\ValidationException $validationException) {
                     $messages = [$validationException->getMessage()];
                     foreach ($validationException->getErrors() as $validationError) {
@@ -105,10 +111,14 @@ class MassDisable extends \Magento\Backend\App\Action implements \Magento\Framew
                 }
             }
         }
-
-        if ($count) {
+        if ($disabled) {
             $this->messageManager->addSuccessMessage(
-                __('A total of %1 source(s) have been disabled.', $count)
+                __('A total of %1 source(s) have been disabled.', $disabled)
+            );
+        }
+        if ($alreadyDisabled) {
+            $this->messageManager->addNoticeMessage(
+                __('A total of %1 source(s) already disabled.', $alreadyDisabled)
             );
         }
 

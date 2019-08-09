@@ -73,10 +73,8 @@ class MassEnable extends \Magento\Backend\App\Action implements \Magento\Framewo
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('inventory/source/index');
         $request = $this->getRequest();
-        $requestData = $request->getPost()->toArray();
 
-
-        if (!$request->isPost() || empty($requestData['selected'])) {
+        if (!$request->isPost()) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             return $resultRedirect;
         }
@@ -85,15 +83,17 @@ class MassEnable extends \Magento\Backend\App\Action implements \Magento\Framewo
         $sourceCollection = $this->sourceCollectionFactory->create();
         $this->massActionFilter->getCollection($sourceCollection);
 
-        $count = 0;
-
+        $enabled = 0;
+        $alreadyEnabled = 0;
         /** @var \Magento\Inventory\Model\Source $source */
         foreach ($sourceCollection as $source) {
-            if ( (!$source->isEnabled()) && ($source->getSourceCode() !== $this->defaultSourceProvider->getCode()) ) {
+            $alreadyEnabled++;
+            if (!$source->isEnabled() && $source->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 try {
                     $source->setEnabled(true);
                     $this->sourceRepository->save($source);
-                    $count++;
+                    $alreadyEnabled--;
+                    $enabled++;
                 } catch (\Magento\Framework\Validation\ValidationException $validationException) {
                     $messages = [$validationException->getMessage()];
                     foreach ($validationException->getErrors() as $validationError) {
@@ -105,10 +105,14 @@ class MassEnable extends \Magento\Backend\App\Action implements \Magento\Framewo
                 }
             }
         }
-
-        if ($count) {
+        if ($enabled) {
             $this->messageManager->addSuccessMessage(
-                __('A total of %1 source(s) have been enabled.', $count)
+                __('A total of %1 source(s) have been enabled.', $enabled)
+            );
+        }
+        if ($alreadyEnabled) {
+            $this->messageManager->addNoticeMessage(
+                __('A total of %1 source(s) already enabled.', $alreadyEnabled)
             );
         }
 
