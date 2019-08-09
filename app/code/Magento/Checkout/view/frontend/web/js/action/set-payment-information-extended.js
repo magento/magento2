@@ -21,6 +21,8 @@ define([
         var serviceUrl,
             payload;
 
+        delete paymentData.__disableTmpl;
+
         skipBilling = skipBilling || false;
         payload = {
             cartId: quote.getQuoteId(),
