@@ -277,9 +277,8 @@ define([
             var invalidField = _.find(this.delegate('checkInvalid'));
 
             if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
-				var fieldName = invalidField.inputName;
 				$('html, body').animate({
-                    scrollTop: $("[name='"+fieldName+"']").offset().top
+                    scrollTop: $("[name='"+invalidField.inputName+"']").offset().top
                 }, 2000);
                 invalidField.focused(true);
             }
