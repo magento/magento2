@@ -75,7 +75,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             }
         }
 
-        if (!$this->isAdminStoreLabelUnique($attribute, (string) $options['value'][$optionId][0])) {
+        if (!$this->isAttributeOptionLabelExists($attribute, (string) $options['value'][$optionId][0])) {
             throw new InputException(
                 __(
                     'Admin store attribute option label "%1" is already exists.',
@@ -210,17 +210,19 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     }
 
     /**
-     * Checks if the incoming admin store attribute option label is unique.
+     * Checks if the incoming attribute option label for admin store is already exists.
      *
      * @param EavAttributeInterface $attribute
      * @param string $adminStoreLabel
+     * @param int $storeId
      * @return bool
      */
-    private function isAdminStoreLabelUnique(
+    private function isAttributeOptionLabelExists(
         EavAttributeInterface $attribute,
-        string $adminStoreLabel
+        string $adminStoreLabel,
+        int $storeId = 0
     ) :bool {
-        $attribute->setStoreId(0);
+        $attribute->setStoreId($storeId);
 
         foreach ($attribute->getSource()->toOptionArray() as $existingAttributeOption) {
             if ($existingAttributeOption['label'] === $adminStoreLabel) {
