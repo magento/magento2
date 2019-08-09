@@ -45,7 +45,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                 <?php else : ?>
                     <?= $block->getMainButtonsHtml() ? '<div class="admin__filter-actions">' . $block->getMainButtonsHtml() . '</div>' : '' ?>
                 <?php endif; ?>
-                    <?php $countRecords = $block->getCollection()->getSize(); ?>
+                    <?php $countRecords = $block->getCollection()->count(); ?>
                     <div class="admin__control-support-text">
                         <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count" <?= /* @noEscape */ $block->getUiId('total-count') ?>>
                             <?= /* @noEscape */ $countRecords ?>
