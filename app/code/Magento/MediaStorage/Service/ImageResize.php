@@ -183,11 +183,11 @@ class ImageResize
             $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
             $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
 
+            if ($this->fileStorageDatabase->checkDbUsage()) {
+                $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
+            }
             if ($this->mediaDirectory->isFile($originalImagePath)) {
                 foreach ($viewImages as $viewImage) {
-                    if ($this->fileStorageDatabase->checkDbUsage()) {
-                        $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
-                    }
                     $this->resize($viewImage, $originalImagePath, $originalImageName);
                 }
             } else {
