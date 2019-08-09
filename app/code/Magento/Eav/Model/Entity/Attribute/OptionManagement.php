@@ -41,7 +41,16 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     }
 
     /**
-     * @inheritdoc
+     * Add option to attribute.
+     *
+     * @param int $entityType
+     * @param string $attributeCode
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function add($entityType, $attributeCode, $option)
     {
@@ -148,7 +157,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
      * @param EavAttributeInterface $attribute
      * @param int $optionId
      * @return void
-     *@throws NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     protected function validateOption($attribute, $optionId)
     {
