@@ -39,9 +39,10 @@ class BundlePrice extends AbstractModifier
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
     }
-
+    
     /**
-     * {@inheritdoc}
+     * @param array $meta
+     * @return array
      */
     public function modifyMeta(array $meta)
     {
@@ -64,7 +65,7 @@ class BundlePrice extends AbstractModifier
             $this->arrayManager->findPath(
                 ProductAttributeInterface::CODE_PRICE,
                 $meta,
-                'product-details/children',
+                self::DEFAULT_GENERAL_PANEL.'/children',
                 'children'
             ) . static::META_CONFIG_PATH,
             $meta,
@@ -94,7 +95,8 @@ class BundlePrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return array
      */
     public function modifyData(array $data)
     {
