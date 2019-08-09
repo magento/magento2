@@ -13,6 +13,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class InitializeDirectoryData
+ *
  * @package Magento\Directory\Setup\Patch
  */
 class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterface
@@ -41,7 +42,8 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
@@ -437,7 +439,7 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
             ['CH', 'VS', 'Wallis'],
             ['CH', 'ZG', 'Zug'],
             ['CH', 'ZH', 'Zürich'],
-            ['ES', 'A Coruca', 'A Coruña'],
+            ['ES', 'A Coruсa', 'A Coruña'],
             ['ES', 'Alava', 'Alava'],
             ['ES', 'Albacete', 'Albacete'],
             ['ES', 'Alicante', 'Alicante'],
@@ -874,7 +876,7 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -882,7 +884,7 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -890,7 +892,7 @@ class InitializeDirectoryData implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
