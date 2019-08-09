@@ -18,6 +18,8 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Ui\DataProvider\SearchResultFactory;
 
 /**
+ * Data provider for admin source grid.
+ *
  * @api
  */
 class SourceDataProvider extends DataProvider
@@ -92,7 +94,7 @@ class SourceDataProvider extends DataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData()
     {
@@ -122,7 +124,7 @@ class SourceDataProvider extends DataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSearchResult()
     {
