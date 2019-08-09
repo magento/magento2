@@ -239,14 +239,6 @@ define([
                     this.reload(storageInvalidation.keys(), false);
                 }
             }
-
-            if (!_.isEmpty(privateContent)) {
-                countryData = this.get('directory-data');
-
-                if (_.isEmpty(countryData()) && !isLoading) {
-                    customerData.reload(['directory-data'], false);
-                }
-            }
         },
 
         /**
@@ -332,6 +324,9 @@ define([
         },
 
         /**
+         * Avoid using this function directly 'cause of possible performance drawbacks.
+         * Each customer section reload brings new non-cached ajax request
+         *
          * @param {Array} sectionNames
          * @param {Boolean} forceNewSectionTimestamp
          * @return {*}
