@@ -3,29 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CmsUrlRewrite\Plugin\Cms\Model\Store;
 
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Store\Model\ResourceModel\Store;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\ResourceModel\Store as ResourceStore;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Plugin which is listening store resource model and on save replace cms page url rewrites
  *
- * @see Store
+ * @see ResourceStore
  */
 class View
 {
-    /**
-     * @var AbstractModel
-     */
-    private $origStore;
-
     /**
      * @var UrlPersistInterface
      */
@@ -65,38 +60,23 @@ class View
     }
 
     /**
-     * Get the correct store for later regenerate url
-     *
-     * @param Store $object
-     * @param AbstractModel $store
-     * @return void
+     * @param ResourceStore $object
+     * @param \Closure $proceed
+     * @param Store $store
+     * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSave(
-        Store $object,
-        AbstractModel $store
-    ) {
-        $this->origStore = $store;
-    }
-
-    /**
-     * Regenerate urls on store after save
-     *
-     * @param Store $store
-     * @return Store
-     */
-    public function afterSave(
-        Store $store
-    ) {
-        if ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id')) {
-            if (!$this->origStore->isObjectNew()) {
-                $this->urlPersist->deleteByData([UrlRewrite::STORE_ID => $this->origStore->getId()]);
-            }
+    public function aroundSave(ResourceStore $object, \Closure $proceed, Store $store)
+    {
+        $newStore = $store->isObjectNew() || $store->dataHasChangedFor('group_id');
+        $result = $proceed($store);
+        if ($newStore) {
             $this->urlPersist->replace(
-                $this->generateCmsPagesUrls($this->origStore->getId())
+                $this->generateCmsPagesUrls((int)$store->getId())
             );
         }
-        return $store;
+
+        return $result;
     }
 
     /**
@@ -105,20 +85,18 @@ class View
      * @param int $storeId
      * @return array
      */
-    private function generateCmsPagesUrls($storeId): array
+    private function generateCmsPagesUrls(int $storeId): array
     {
+        $rewrites = [];
         $urls = [];
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $cmsPagesCollection = $this->pageRepository->getList($searchCriteria)->getItems();
         foreach ($cmsPagesCollection as $page) {
             $page->setStoreId($storeId);
-            /** @var \Magento\Cms\Model\Page $page */
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $urls = array_merge(
-                $urls,
-                $this->cmsPageUrlRewriteGenerator->generate($page)
-            );
+            $rewrites[] = $this->cmsPageUrlRewriteGenerator->generate($page);
         }
+        $urls = array_merge($urls, ...$rewrites);
+
         return $urls;
     }
 }
