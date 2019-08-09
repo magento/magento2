@@ -13,5 +13,6 @@
         <element name="productItemName" type="text" selector=".product-item-name"/>
         <element name="productItemQty" type="text" selector=".value"/>
         <element name="productItemPrice" type="text" selector=".price"/>
+        <element name="shippingAddress" type="block" selector=".box-address-shipping address"/>
     </section>
 </sections>

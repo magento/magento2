@@ -15,5 +15,8 @@
         <element name="widgets" type="button" selector="#nav li[data-ui-id='menu-magento-widget-cms-widget-instance']"/>
         <element name="stores" type="button" selector="#menu-magento-backend-stores"/>
         <element name="configuration" type="button" selector="#nav li[data-ui-id='menu-magento-config-system-config']"/>
+
+        <!-- Navigate menu selectors -->
+        <element name="menuItem" type="button" selector="li[data-ui-id='menu-{{dataUiId}}']" parameterized="true" timeout="30"/>
     </section>
 </sections>
