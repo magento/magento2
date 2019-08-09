@@ -150,7 +150,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken'])
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
             ->getMockForAbstractClass();
 
         $commandManagerPool = $this->createMock(CommandManagerPoolInterface::class);
