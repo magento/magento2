@@ -7,55 +7,70 @@ declare(strict_types=1);
 
 namespace Magento\InventoryAdminUi\Controller\Adminhtml\Source;
 
+use Exception;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Inventory\Model\ResourceModel\Source\Collection;
+use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
+use Magento\Inventory\Model\Source;
+use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
- * MassEnable Controller
+ * Enable source mass action controller.
  */
-class MassEnable extends \Magento\Backend\App\Action implements \Magento\Framework\App\Action\HttpPostActionInterface
+class MassEnable extends Action implements HttpPostActionInterface
 {
     /**
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_InventoryApi::source';
+
     /**
-     * @var \Magento\Ui\Component\MassAction\Filter
+     * @var Filter
      */
-    protected $massActionFilter;
+    private $massActionFilter;
+
     /**
-     * @var \Magento\Inventory\Model\ResourceModel\Source\CollectionFactory
+     * @var CollectionFactory
      */
-    protected $sourceCollectionFactory;
+    private $sourceCollectionFactory;
+
     /**
-     * @var \Magento\InventoryApi\Api\Data\SourceInterfaceFactory
+     * @var SourceInterfaceFactory
      */
     private $sourceFactory;
+
     /**
-     * @var \Magento\InventoryApi\Api\SourceRepositoryInterface
+     * @var SourceRepositoryInterface
      */
     private $sourceRepository;
+
     /**
-     * @var \Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface
+     * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
 
-
     /**
-     * MassEnable constructor.
-     * @param \Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface $defaultSourceProvider
-     * @param \Magento\Inventory\Model\ResourceModel\Source\CollectionFactory $sourceCollectionFactory
-     * @param \Magento\Backend\App\Action\Context                             $context
-     * @param \Magento\Ui\Component\MassAction\Filter                         $massActionFilter
-     * @param \Magento\InventoryApi\Api\Data\SourceInterfaceFactory           $sourceFactory
-     * @param \Magento\InventoryApi\Api\SourceRepositoryInterface             $sourceRepository
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param CollectionFactory $sourceCollectionFactory
+     * @param Context $context
+     * @param Filter $massActionFilter
+     * @param SourceInterfaceFactory $sourceFactory
+     * @param SourceRepositoryInterface $sourceRepository
      */
     public function __construct(
-        \Magento\InventoryCatalogApi\Api\DefaultSourceProviderInterface $defaultSourceProvider,
-        \Magento\Inventory\Model\ResourceModel\Source\CollectionFactory $sourceCollectionFactory,
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Ui\Component\MassAction\Filter $massActionFilter,
-        \Magento\InventoryApi\Api\Data\SourceInterfaceFactory $sourceFactory,
-        \Magento\InventoryApi\Api\SourceRepositoryInterface $sourceRepository
+        DefaultSourceProviderInterface $defaultSourceProvider,
+        CollectionFactory $sourceCollectionFactory,
+        Context $context,
+        Filter $massActionFilter,
+        SourceInterfaceFactory $sourceFactory,
+        SourceRepositoryInterface $sourceRepository
     ) {
         parent::__construct($context);
         $this->massActionFilter = $massActionFilter;
@@ -73,19 +88,27 @@ class MassEnable extends \Magento\Backend\App\Action implements \Magento\Framewo
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('inventory/source/index');
         $request = $this->getRequest();
-
         if (!$request->isPost()) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             return $resultRedirect;
         }
-
-        /** @var \Magento\Inventory\Model\ResourceModel\Source\Collection $sourceCollection */
         $sourceCollection = $this->sourceCollectionFactory->create();
         $this->massActionFilter->getCollection($sourceCollection);
+        $this->enableSources($sourceCollection);
 
+        return $resultRedirect;
+    }
+
+    /**
+     * Enable sources and add messages to user interface.
+     *
+     * @param Collection $sourceCollection
+     * @return void
+     */
+    public function enableSources(Collection $sourceCollection): void
+    {
         $enabled = 0;
         $alreadyEnabled = 0;
-        /** @var \Magento\Inventory\Model\Source $source */
         foreach ($sourceCollection as $source) {
             $alreadyEnabled++;
             if (!$source->isEnabled() && $source->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
@@ -94,13 +117,13 @@ class MassEnable extends \Magento\Backend\App\Action implements \Magento\Framewo
                     $this->sourceRepository->save($source);
                     $alreadyEnabled--;
                     $enabled++;
-                } catch (\Magento\Framework\Validation\ValidationException $validationException) {
+                } catch (ValidationException $validationException) {
                     $messages = [$validationException->getMessage()];
                     foreach ($validationException->getErrors() as $validationError) {
                         $messages[] = $validationError->getMessage();
                     }
                     $this->messageManager->addErrorMessage(implode(', ', $messages));
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());
                 }
             }
@@ -115,7 +138,5 @@ class MassEnable extends \Magento\Backend\App\Action implements \Magento\Framewo
                 __('A total of %1 source(s) already enabled.', $alreadyEnabled)
             );
         }
-
-        return $resultRedirect;
     }
 }
