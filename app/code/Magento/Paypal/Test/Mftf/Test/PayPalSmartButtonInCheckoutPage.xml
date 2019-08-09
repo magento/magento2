@@ -67,7 +67,9 @@
         </actionGroup>
 
         <!-- PayPal checkout -->
-        <actionGroup ref="PayOrderOnPayPalCheckoutActionGroup" stepKey="payOrderOnPayPalCheckout"/>
+        <actionGroup ref="PayOrderOnPayPalCheckoutActionGroup" stepKey="payOrderOnPayPalCheckout">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
 
         <!-- I see order successful Page instead of Order Review Page -->
         <actionGroup ref="VerifyCheckoutSuccessActionGroup" stepKey="verifyCheckoutSuccess"/>

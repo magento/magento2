@@ -21,14 +21,14 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
         <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab(countryCode)}}" stepKey="waitForAdvancedSettingTab"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.email(countryCode)}}" userInput="{{_CREDS.magento/paypal_express_checkout_us_business_account}}" stepKey="inputEmailAssociatedWithPayPalMerchantAccount"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.email(countryCode)}}" userInput="{{credentials.magento/paypal_express_checkout_us_business_account}}" stepKey="inputEmailAssociatedWithPayPalMerchantAccount"/>
         <selectOption selector ="{{PayPalExpressCheckoutConfigSection.apiMethod(countryCode)}}" userInput="API Signature" stepKey="inputAPIAuthenticationMethods"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.username(countryCode)}}" userInput="{{_CREDS.magento/paypal_express_checkout_us_api_username}}" stepKey="inputAPIUsername"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.password(countryCode)}}" userInput="{{_CREDS.magento/paypal_express_checkout_us_api_password}}" stepKey="inputAPIPassword"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.signature(countryCode)}}" userInput="{{_CREDS.magento/paypal_express_checkout_us_api_signature}}" stepKey="inputAPISignature"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.username(countryCode)}}" userInput="{{credentials.magento/paypal_express_checkout_us_api_username}}" stepKey="inputAPIUsername"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.password(countryCode)}}" userInput="{{credentials.magento/paypal_express_checkout_us_api_password}}" stepKey="inputAPIPassword"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.signature(countryCode)}}" userInput="{{credentials.magento/paypal_express_checkout_us_api_signature}}" stepKey="inputAPISignature"/>
         <selectOption selector ="{{PayPalExpressCheckoutConfigSection.sandboxMode(countryCode)}}" userInput="Yes" stepKey="enableSandboxMode"/>
         <selectOption selector="{{PayPalExpressCheckoutConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
-        <fillField selector ="{{PayPalExpressCheckoutConfigSection.merchantID(countryCode)}}" userInput="{{_CREDS.magento/paypal_express_checkout_us_merchant_id}}" stepKey="inputMerchantID"/>
+        <fillField selector ="{{PayPalExpressCheckoutConfigSection.merchantID(countryCode)}}" userInput="{{credentials.magento/paypal_express_checkout_us_merchant_id}}" stepKey="inputMerchantID"/>
         <!--Save configuration-->
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
     </actionGroup>
@@ -39,7 +39,10 @@
         </annotations>
         <arguments>
             <argument name="payerName" defaultValue="MPI" type="string"/>
+            <argument name="credentials" defaultValue="_CREDS"/>
         </arguments>
+
+        <!-- click on PayPal payment radio button -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="clickPlaceOrder"/>
 
@@ -57,8 +60,8 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeCurrentUrlMatches regex="~\//www.sandbox.paypal.com/~" stepKey="seeCurrentUrlMatchesConfigPath1"/>
         <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm" />
-        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{_CREDS.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
-        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{_CREDS.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
+        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
+        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
         <waitForPageLoad stepKey="wait"/>
         <see userInput="{{payerName}}" selector="{{PayPalPaymentSection.reviewUserInfo}}" stepKey="seePayerName"/>

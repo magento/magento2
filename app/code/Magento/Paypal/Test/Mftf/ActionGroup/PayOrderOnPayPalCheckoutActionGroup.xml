@@ -10,10 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="PayOrderOnPayPalCheckoutActionGroup">
         <annotations>
-            <description>Goes to PayPal payment checkout page, confirms product name and clicks 'Pay Now'.</description>
+            <description>Verifies product name on Paypal cart and clicks 'Pay Now' on PayPal payment checkout page.</description>
         </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
         <click selector="{{PayPalPaymentSection.cartIcon}}" stepKey="openCart"/>
-        <seeElement selector="{{PayPalPaymentSection.itemName($$createProduct.name$$)}}" stepKey="seeProductname"/>
+        <seeElement selector="{{PayPalPaymentSection.itemName(productName)}}" stepKey="seeProductName"/>
         <click selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="clickPayPalSubmitBtn"/>
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

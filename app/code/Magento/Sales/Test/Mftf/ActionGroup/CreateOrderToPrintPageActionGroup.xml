@@ -15,7 +15,7 @@
         <arguments>
             <argument name="Category"/>
         </arguments>
-        
+
         <amOnPage url="{{StorefrontCategoryPage.url(Category.name)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
