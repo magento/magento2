@@ -87,7 +87,9 @@ class Current extends Template
      */
     public function isCurrent()
     {
-        return $this->getCurrent() || $this->getUrl($this->getPath()) == $this->getUrl($this->getMca());
+        $pathUrl = preg_replace('/(\/index|(\/))+($|\/$)/', '', $this->getUrl($this->getPath()));
+        $mcaUrl = preg_replace('/(\/index|(\/))+($|\/$)/', '', $this->getUrl($this->getMca()));
+        return $this->getCurrent() || $pathUrl == $mcaUrl;
     }
 
     /**
