@@ -17,12 +17,7 @@ class CurrencyConverterApi extends AbstractImport
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra'; //@codingStandardsIgnoreLine
-
-    /**
-     * @var string
-     */
-    const API_KEY = 'apiKey';
+    const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra&apiKey={{API_KEY}}'; //@codingStandardsIgnoreLine
 
     /**
      * Http Client Factory
@@ -98,7 +93,7 @@ class CurrencyConverterApi extends AbstractImport
             try {
                 $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
                 $url = str_replace('{{CURRENCY_TO}}', $to, $url);
-                $url = $url . '&' . self::API_KEY . '=' . $apiKey;
+                $url = str_replace('{{API_KEY}}', $apiKey, $url);
                 $response = $this->getServiceResponse($url);
                 if ($currencyFrom == $to) {
                     $data[$currencyFrom][$to] = $this->_numberFormat(1);
