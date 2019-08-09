@@ -103,7 +103,7 @@
 
         <!-- Edit Design settings for the product -->
         <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="editProductDesignSettings">
-            <argument name="designSettings" value="simpleLumaDesign"/>
+            <argument name="designSettings" value="simpleLumaDesignEmpty"/>
         </actionGroup>
 
         <!-- Edit Gift Option product settings -->
