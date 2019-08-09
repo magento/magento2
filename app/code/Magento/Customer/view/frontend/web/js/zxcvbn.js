@@ -341,7 +341,6 @@
         3: [function (require, module, exports) {
             var frequency_lists;
             frequency_lists = {
-                passwords: "".split(",")
             }, module.exports = frequency_lists;
 
         }, {}],
