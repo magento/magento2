@@ -40,6 +40,13 @@ class SourceDataProvider extends DataProvider
     private $session;
 
     /**
+     * Total source count.
+     *
+     * @var int
+     */
+    private $sourceCount;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -90,6 +97,7 @@ class SourceDataProvider extends DataProvider
     public function getData()
     {
         $data = parent::getData();
+        $data['totalRecords'] = $this->getSourcesCount();
         if (self::SOURCE_FORM_NAME === $this->name) {
             // It is need for support of several fieldsets.
             // For details see \Magento\Ui\Component\Form::getDataSourceData
@@ -128,5 +136,22 @@ class SourceDataProvider extends DataProvider
             SourceInterface::SOURCE_CODE
         );
         return $searchResult;
+    }
+
+    /**
+     * Get total sources count, without filter be source name.
+     *
+     * Get total sources count, without filter in order to ui/grid/columns/multiselect::updateState()
+     * works correctly with sources selection.
+     *
+     * @return int
+     */
+    private function getSourcesCount(): int
+    {
+        if (!$this->sourceCount) {
+            $this->sourceCount = $this->sourceRepository->getList()->getTotalCount();
+        }
+
+        return $this->sourceCount;
     }
 }
