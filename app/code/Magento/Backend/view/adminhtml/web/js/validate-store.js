@@ -50,9 +50,17 @@ define([
                 options = $.data(form, 'validator').settings;
 
             if ($(form).validation('isValid')) {
+                const counts = {};
                 $.each($(form).serializeArray(), function () {
-                    formData[this.name] = this.value || '';
+                    let name = this.name;
+                    counts[name] = (counts[name] || 0) + 1;
+                    if (formData[name]) {
+                        const replacement = '[' + (counts[name] - 1) + ']';
+                        name = name.replace(new RegExp(/\[\]$/g), replacement);
+                    }
+                    formData[name] = this.value || '';
                 });
+
                 requestData = {
                     action: $(form).attr('action'),
                     data: formData
