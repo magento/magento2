@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Name and Price for a Configurable Product are present on a Storefront Category page.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
             <argument name="expectedPrice" type="string"/>
         </arguments>
+
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="assertProductName"/>
         <see userInput="{{expectedPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(productName)}}" stepKey="AssertProductPrice"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProduct"/>

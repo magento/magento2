@@ -8,8 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="AddVisualSwatchToProductActionGroup">
+        <annotations>
+            <description>Adds the provided Visual Swatch Attribute and Options (2) to a Product on the Admin Product creation/edit page. Clicks on Save. Validates that the Success Message is present.</description>
+        </annotations>
         <arguments>
             <argument name="attribute" defaultValue="visualSwatchAttribute"/>
             <argument name="option1" defaultValue="visualSwatchOption1"/>
@@ -63,6 +65,9 @@
     </actionGroup>
 
     <actionGroup name="AddVisualSwatchToProductWithStorefrontConfigActionGroup" extends="AddVisualSwatchToProductActionGroup">
+        <annotations>
+            <description>EXTENDS: AddVisualSwatchToProductActionGroup. Add the provided Visual Swatch Attribute and Options (2) to a Product with Storefront Configurations.</description>
+        </annotations>
         <arguments>
             <argument name="attribute" defaultValue="visualSwatchAttribute"/>
             <argument name="option1" defaultValue="visualSwatchOption1"/>
@@ -78,5 +83,13 @@
         <selectOption selector="{{AdminNewAttributePanel.useInLayeredNavigation}}" stepKey="selectUseInLayer" userInput="Filterable (with results)" after="switchOnComparableOnStorefront"/>
         <selectOption selector="{{AdminNewAttributePanel.visibleOnCatalogPagesOnStorefront}}" stepKey="switchOnVisibleOnCatalogPagesOnStorefront" userInput="Yes" after="selectUseInLayer"/>
         <selectOption selector="{{AdminNewAttributePanel.useInProductListing}}" stepKey="switchOnUsedInProductListing" userInput="Yes" after="switchOnVisibleOnCatalogPagesOnStorefront"/>
+    </actionGroup>
+    <actionGroup name="AddVisualSwatchWithProductWithStorefrontPreviewImageConfigActionGroup" extends="AddVisualSwatchToProductActionGroup">
+        <selectOption selector="{{AdminNewAttributePanel.updateProductPreviewImage}}" userInput="Yes" stepKey="selectUpdatePreviewImage" after="selectInputType"/>
+        <click selector="{{AdminNewAttributePanel.storefrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab" after="fillDefaultStoreLabel2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.storefrontPropertiesTitle}}" after="goToStorefrontPropertiesTab" stepKey="waitTabLoad"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInLayeredNavigation}}" userInput="Filterable (with results)" stepKey="selectUseInLayer" after="waitTabLoad"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInProductListing}}" userInput="Yes" stepKey="switchOnUsedInProductListing" after="selectUseInLayer"/>
+        <selectOption selector="{{AdminNewAttributePanel.usedForStoringInProductListing}}" userInput="Yes" stepKey="switchOnUsedForStoringInProductListing"  after="switchOnUsedInProductListing"/>
     </actionGroup>
 </actionGroups>
