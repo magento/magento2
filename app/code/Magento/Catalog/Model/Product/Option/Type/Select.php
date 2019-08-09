@@ -84,6 +84,9 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             );
         }
         if (!$this->_isSingleSelection()) {
+            if (is_string($value)) {
+                $value = explode(',', $value);
+            }
             $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
             $valueCount = is_array($value) ? count($value) : 0;
             if ($valuesCollection->count() != $valueCount) {
