@@ -103,7 +103,7 @@ class CurrencyConverterApi extends AbstractImport
                         $data[$currencyFrom][$to] = null;
                     } else {
                         if (isset($response['error']) && $response['error']) {
-                            $this->_messages[] = __($response['error']);
+                            $this->_messages[] = $response['error'];
                             $data[$currencyFrom][$to] = null;
                         } else {
                             $data[$currencyFrom][$to] = $this->_numberFormat(
