@@ -65,6 +65,8 @@ class View
     }
 
     /**
+     * Get the correct store for later regenerate url
+     *
      * @param Store $object
      * @param AbstractModel $store
      * @return void
