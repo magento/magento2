@@ -12,7 +12,6 @@ use Magento\DownloadableGraphQl\Model\ConvertLinksToArray;
 use Magento\DownloadableGraphQl\Model\GetDownloadableProductLinks;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
@@ -20,7 +19,7 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 /**
  * Resolver fetches downloadable cart item links and formats it according to the GraphQL schema.
  */
-class DownloadableLinks implements ResolverInterface
+class Links implements ResolverInterface
 {
     /**
      * @var GetDownloadableProductLinks
@@ -64,14 +63,6 @@ class DownloadableLinks implements ResolverInterface
         /** @var Product $product */
         $product = $quoteItem->getProduct();
 
-        // TODO:
-        if (!in_array($product->getTypeId(), ['downloadable', 'virtual'])) {
-            throw new GraphQlInputException(
-                __('Wrong product type. Links are available for Downloadable and Virtual product types')
-            );
-        }
-
-        // TODO:
         $selectedLinksIds = $product->getLinksPurchasedSeparately()
             ? explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue()) : [];
         $links = $this->getDownloadableProductLinks->execute($product, $selectedLinksIds);

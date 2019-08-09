@@ -29,7 +29,7 @@ type AddDownloadableProductsToCartOutput {
 }
 
 type DownloadableCartItem implements CartItemInterface @doc(description: "Downloadable Cart Item") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Resolver\\CustomizableOptions")
+    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
     links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Links") @doc(description: "An array containing information about the links for the added to cart downloadable product")
     samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Samples") @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product")
 }

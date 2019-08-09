@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class AddDownloadableProductToCartTest
+ * Test cases for adding downloadable product to cart.
  */
 class AddDownloadableProductToCartTest extends GraphQlAbstract
 {
@@ -76,12 +76,12 @@ mutation {
             items {
                 quantity
                 ... on DownloadableCartItem {
-                    downloadable_product_links {
+                    links {
                         title
                         link_type
                         price
                     }
-                    downloadable_product_samples {
+                    samples {
                         id
                         title
                     }
@@ -96,73 +96,7 @@ MUTATION;
         self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
         self::assertEquals(
             $links[$linkId],
-            $response['addDownloadableProductsToCart']['cart']['items'][0]['downloadable_product_links'][0]
-        );
-    }
-
-    /**
-     * Add a downloadable product into shopping cart when "Links can be purchased separately" is enabled
-     * There is the same value in couple of `link_id` options
-     *
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     */
-    public function testAddDownloadableProductWithCustomLinks2()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
-        $sku = 'downloadable-product-with-purchased-separately-links';
-        $qty = 1;
-        $links = $this->getProductsLinks($sku);
-        $linkId = key($links);
-
-        $query = <<<MUTATION
-mutation {
-    addDownloadableProductsToCart(
-        input: {
-            cart_id: "{$maskedQuoteId}",
-            cart_items: [
-                {
-                    data: {
-                        quantity: {$qty},
-                        sku: "{$sku}"
-                    },
-                    downloadable_product_links: [
-                        {
-          	                link_id: {$linkId}
-                        }
-                        {
-          	                link_id: {$linkId}
-                        }
-                    ]
-                }
-            ]
-        }
-    ) {
-        cart {
-            items {
-                quantity
-                ... on DownloadableCartItem {
-                    downloadable_product_links {
-                        title
-                        link_type
-                        price
-                    }
-                    downloadable_product_samples {
-                        id
-                        title
-                    }
-                }
-            }
-        }
-    }
-}
-MUTATION;
-        $response = $this->graphQlMutation($query);
-        self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
-        self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
-        self::assertEquals(
-            $links[$linkId],
-            $response['addDownloadableProductsToCart']['cart']['items'][0]['downloadable_product_links'][0]
+            $response['addDownloadableProductsToCart']['cart']['items'][0]['links'][0]
         );
     }
 
@@ -198,7 +132,7 @@ mutation {
             items {
                 quantity
                 ... on DownloadableCartItem {
-                    downloadable_product_links {
+                    links {
                         title
                         link_type
                         price
@@ -214,66 +148,7 @@ MUTATION;
         self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
         self::assertEquals(
             $links[key($links)],
-            $response['addDownloadableProductsToCart']['cart']['items'][0]['downloadable_product_links'][0]
-        );
-    }
-
-    /**
-     * Add a downloadable product into shopping cart when "Links can be purchased separately" is disabled
-     * Unnecessary `link_id` option is provided
-     *
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_without_purchased_separately_links.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     */
-    public function testAddDownloadableProductWithoutCustomLinks2()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
-        $sku = 'downloadable-product-without-purchased-separately-links';
-        $qty = 1;
-        $links = $this->getProductsLinks($sku);
-        $linkId = key($links);
-
-        $query = <<<MUTATION
-mutation {
-    addDownloadableProductsToCart(
-        input: {
-            cart_id: "{$maskedQuoteId}",
-            cart_items: [
-                {
-                    data: {
-                        quantity: {$qty},
-                        sku: "{$sku}"
-                    },
-                    downloadable_product_links: [
-                        {
-          	                link_id: {$linkId}
-                        }
-                    ]
-                }
-            ]
-        }
-    ) {
-        cart {
-            items {
-                quantity
-                ... on DownloadableCartItem {
-                    downloadable_product_links {
-                        title
-                        link_type
-                        price
-                    }
-                }
-            }
-        }
-    }
-}
-MUTATION;
-        $response = $this->graphQlMutation($query);
-        self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
-        self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
-        self::assertEquals(
-            $links[key($links)],
-            $response['addDownloadableProductsToCart']['cart']['items'][0]['downloadable_product_links'][0]
+            $response['addDownloadableProductsToCart']['cart']['items'][0]['links'][0]
         );
     }
 
@@ -283,7 +158,7 @@ MUTATION;
      * @param string $sku
      * @return array
      */
-    private function getProductsLinks(string $sku)
+    private function getProductsLinks(string $sku) : array
     {
         $result = [];
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -292,9 +167,9 @@ MUTATION;
 
         foreach ($product->getDownloadableLinks() as $linkObject) {
             $result[$linkObject->getLinkId()] = [
-                'title'     => $linkObject->getTitle(),
-                'link_type' => strtoupper($linkObject->getLinkType()),
-                'price'     => $linkObject->getPrice(),
+                'title' => $linkObject->getTitle(),
+                'link_type' => null, //deprecated field
+                'price' => $linkObject->getPrice(),
             ];
         }
 

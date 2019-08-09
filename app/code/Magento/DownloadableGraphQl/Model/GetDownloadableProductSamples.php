@@ -9,7 +9,7 @@ namespace Magento\DownloadableGraphQl\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Api\Data\SampleInterface;
-use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory;
+use Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory;
 
 /**
  * Returns samples of a particular downloadable product
