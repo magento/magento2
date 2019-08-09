@@ -62,6 +62,5 @@ class UpgradeQuoteCustomerEmailObserver implements ObserverInterface
         } catch (NoSuchEntityException $e) {
             return;
         }
-
     }
 }
