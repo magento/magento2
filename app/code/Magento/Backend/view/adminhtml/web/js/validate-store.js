@@ -50,12 +50,12 @@ define([
                 options = $.data(form, 'validator').settings;
 
             if ($(form).validation('isValid')) {
-                const counts = {};
+                var counts = {};
                 $.each($(form).serializeArray(), function () {
-                    let name = this.name;
+                    var name = this.name;
                     counts[name] = (counts[name] || 0) + 1;
                     if (formData[name]) {
-                        const replacement = '[' + (counts[name] - 1) + ']';
+                        var replacement = '[' + (counts[name] - 1) + ']';
                         name = name.replace(new RegExp(/\[\]$/g), replacement);
                     }
                     formData[name] = this.value || '';
