@@ -68,9 +68,8 @@ class View
      */
     public function aroundSave(ResourceStore $object, \Closure $proceed, Store $store)
     {
-        $newStore = $store->isObjectNew() || $store->dataHasChangedFor('group_id');
         $result = $proceed($store);
-        if ($newStore) {
+        if ($store->isObjectNew() || $store->dataHasChangedFor('group_id')) {
             $this->urlPersist->replace(
                 $this->generateCmsPagesUrls((int)$store->getId())
             );
