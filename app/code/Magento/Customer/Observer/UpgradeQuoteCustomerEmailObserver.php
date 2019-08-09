@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Observer;
 
@@ -36,25 +37,31 @@ class UpgradeQuoteCustomerEmailObserver implements ObserverInterface
      * @param Observer $observer
      * @return void
      */
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
+        /** @var \Magento\Customer\Model\Data\Customer $customerOrig */
+        $customerOrig = $observer->getEvent()->getOrigCustomerDataObject();
+        if (!$customerOrig) {
+            return;
+        }
+
+        $emailOrig = $customerOrig->getEmail();
+
         /** @var \Magento\Customer\Model\Data\Customer $customer */
         $customer = $observer->getEvent()->getCustomerDataObject();
         $email = $customer->getEmail();
 
-        /** @var \Magento\Customer\Model\Data\Customer $customerOrig */
-        $customerOrig = $observer->getEvent()->getOrigCustomerDataObject();
-        if ($customerOrig) {
-            $emailOrig = $customerOrig->getEmail();
-
-            if ($email != $emailOrig) {
-                try {
-                    $quote = $this->quoteRepository->getForCustomer($customer->getId());
-                    $quote->setCustomerEmail($email);
-                    $this->quoteRepository->save($quote);
-                } catch (NoSuchEntityException $e) {
-                }
-            }
+        if ($email == $emailOrig) {
+            return;
         }
+
+        try {
+            $quote = $this->quoteRepository->getForCustomer($customer->getId());
+            $quote->setCustomerEmail($email);
+            $this->quoteRepository->save($quote);
+        } catch (NoSuchEntityException $e) {
+            return;
+        }
+
     }
 }

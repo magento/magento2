@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Observer;
 
@@ -82,13 +83,13 @@ class UpgradeQuoteCustomerEmailObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getOrigCustomerDataObject')
             ->will($this->returnValue($customerOrig));
 
-        $customer->expects($this->any())
-            ->method('getEmail')
-            ->willReturn($this->returnValue($email));
-
         $customerOrig->expects($this->any())
             ->method('getEmail')
             ->willReturn($this->returnValue($origEmail));
+
+        $customer->expects($this->any())
+            ->method('getEmail')
+            ->willReturn($this->returnValue($email));
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')
