@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="DeveloperJSConfig" dataType="developer_js_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/dev/" method="POST">
+        <object key="groups" dataType="dev_js_settings">
+            <object key="js" dataType="dev_js_settings">
+                <object key="fields" dataType="dev_js_settings">
+                    <object key="minify_files" dataType="default_minify_files">
+                        <field key="inherit">string</field>
+                    </object>
+                    <object key="enable_js_bundling" dataType="default_bundling">
+                        <field key="inherit">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>
