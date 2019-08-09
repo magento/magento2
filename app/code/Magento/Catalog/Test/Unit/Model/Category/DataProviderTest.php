@@ -354,7 +354,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry->expects($this->once())
+        $this->registry->expects($this->atLeastOnce())
             ->method('registry')
             ->with('category')
             ->willReturn($categoryMock);
