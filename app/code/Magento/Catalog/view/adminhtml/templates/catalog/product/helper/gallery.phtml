@@ -61,7 +61,7 @@ $formName = $block->getFormName();
                    value="<%- data.label %>"/>
             <input type="hidden"
                    name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][disabled]"
-                   data-form-part="<?= $block->escapeHtmlAttr(formName) ?>"
+                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
                    value="<%- data.disabled %>"/>
             <input type="hidden"
                    name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][media_type]"
