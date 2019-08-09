@@ -104,10 +104,7 @@ class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
         $stockStatusCollectionMock
             ->expects($this->once())
             ->method('getItems')
-            ->willReturn([
-                1 => $stockStatusMock,
-                2 => $stockStatusMock,
-            ]);
+            ->willReturn([1 => $stockStatusMock, 2 => $stockStatusMock]);
         $this->stockStatusRepositoryMock
             ->expects($this->once())
             ->method('getList')
