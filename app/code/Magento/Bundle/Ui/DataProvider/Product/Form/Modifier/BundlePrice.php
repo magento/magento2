@@ -41,6 +41,8 @@ class BundlePrice extends AbstractModifier
     }
     
     /**
+     * modified modify meta for bundle product
+     *
      * @param array $meta
      * @return array
      */
@@ -95,6 +97,8 @@ class BundlePrice extends AbstractModifier
     }
 
     /**
+     * modify data for bundle product
+     *
      * @param array $data
      * @return array
      */
