@@ -20,6 +20,11 @@ class CurrencyConverterApi extends AbstractImport
     const CURRENCY_CONVERTER_URL = 'http://free.currencyconverterapi.com/api/v3/convert?q={{CURRENCY_FROM}}_{{CURRENCY_TO}}&compact=ultra'; //@codingStandardsIgnoreLine
 
     /**
+     * @var string
+     */
+    const API_KEY = 'apiKey';
+
+    /**
      * Http Client Factory
      *
      * @var \Magento\Framework\HTTP\ZendClientFactory
@@ -79,16 +84,21 @@ class CurrencyConverterApi extends AbstractImport
      */
     private function convertBatch($data, $currencyFrom, $currenciesTo)
     {
+        $apiKey = $this->scopeConfig->getValue(
+            'currency/currencyconverterapi/api_key',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if (!$apiKey) {
+            $this->_messages[] = __('No API Key was specified.');
+            return $data;
+        }
         foreach ($currenciesTo as $to) {
             //phpcs:ignore Magento2.Functions.DiscouragedFunction
             set_time_limit(0);
             try {
                 $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
                 $url = str_replace('{{CURRENCY_TO}}', $to, $url);
-                $url = $url . '&apiKey=' . $this->scopeConfig->getValue(
-                    'currency/currencyconverterapi/api_key',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                );
+                $url = $url . '&' . self::API_KEY . '=' . $apiKey;
                 $response = $this->getServiceResponse($url);
                 if ($currencyFrom == $to) {
                     $data[$currencyFrom][$to] = $this->_numberFormat(1);
