@@ -37,24 +37,32 @@ class ReindexRuleProductPrice
     private $pricesPersistor;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param RuleProductsSelectBuilder $ruleProductsSelectBuilder
      * @param ProductPriceCalculator $productPriceCalculator
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder $ruleProductsSelectBuilder,
         \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator $productPriceCalculator,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor
+        \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
     ) {
         $this->storeManager = $storeManager;
         $this->ruleProductsSelectBuilder = $ruleProductsSelectBuilder;
         $this->productPriceCalculator = $productPriceCalculator;
         $this->dateTime = $dateTime;
         $this->pricesPersistor = $pricesPersistor;
+        $this->localeDate = $localeDate;
     }
 
     /**
@@ -71,18 +79,20 @@ class ReindexRuleProductPrice
         \Magento\Catalog\Model\Product $product = null,
         $useAdditionalTable = false
     ) {
-        $fromDate = mktime(0, 0, 0, date('m'), date('d') - 1);
-        $toDate = mktime(0, 0, 0, date('m'), date('d') + 1);
-
         /**
          * Update products rules prices per each website separately
-         * because of max join limit in mysql
+         * because for each website date in website's timezone should be used
          */
         foreach ($this->storeManager->getWebsites() as $website) {
             $productsStmt = $this->ruleProductsSelectBuilder->build($website->getId(), $product, $useAdditionalTable);
             $dayPrices = [];
             $stopFlags = [];
             $prevKey = null;
+
+            $storeGroup = $this->storeManager->getGroup($website->getDefaultGroupId());
+            $currentDate = $this->localeDate->scopeDate($storeGroup->getDefaultStoreId());
+            $previousDate = (clone $currentDate)->modify('-1 day');
+            $nextDate = (clone $currentDate)->modify('+1 day');
 
             while ($ruleData = $productsStmt->fetch()) {
                 $ruleProductId = $ruleData['product_id'];
@@ -105,7 +115,8 @@ class ReindexRuleProductPrice
                 /**
                  * Build prices for each day
                  */
-                for ($time = $fromDate; $time <= $toDate; $time += IndexBuilder::SECONDS_IN_DAY) {
+                foreach ([$previousDate, $currentDate, $nextDate] as $date) {
+                    $time = $date->getTimestamp();
                     if (($ruleData['from_time'] == 0 ||
                             $time >= $ruleData['from_time']) && ($ruleData['to_time'] == 0 ||
                             $time <= $ruleData['to_time'])
@@ -118,7 +129,7 @@ class ReindexRuleProductPrice
 
                         if (!isset($dayPrices[$priceKey])) {
                             $dayPrices[$priceKey] = [
-                                'rule_date' => $time,
+                                'rule_date' => $date,
                                 'website_id' => $ruleData['website_id'],
                                 'customer_group_id' => $ruleData['customer_group_id'],
                                 'product_id' => $ruleProductId,
