@@ -27,9 +27,9 @@ class ReindexRuleProductPrice
     private $productPriceCalculator;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    private $dateTime;
+    private $localeDate;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor
@@ -37,32 +37,24 @@ class ReindexRuleProductPrice
     private $pricesPersistor;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param RuleProductsSelectBuilder $ruleProductsSelectBuilder
      * @param ProductPriceCalculator $productPriceCalculator
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder $ruleProductsSelectBuilder,
         \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator $productPriceCalculator,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor
     ) {
         $this->storeManager = $storeManager;
         $this->ruleProductsSelectBuilder = $ruleProductsSelectBuilder;
         $this->productPriceCalculator = $productPriceCalculator;
-        $this->dateTime = $dateTime;
-        $this->pricesPersistor = $pricesPersistor;
         $this->localeDate = $localeDate;
+        $this->pricesPersistor = $pricesPersistor;
     }
 
     /**
@@ -110,8 +102,6 @@ class ReindexRuleProductPrice
                     }
                 }
 
-                $ruleData['from_time'] = $this->roundTime($ruleData['from_time']);
-                $ruleData['to_time'] = $this->roundTime($ruleData['to_time']);
                 /**
                  * Build prices for each day
                  */
@@ -163,17 +153,5 @@ class ReindexRuleProductPrice
             $this->pricesPersistor->execute($dayPrices, $useAdditionalTable);
         }
         return true;
-    }
-
-    /**
-     * @param int $timeStamp
-     * @return int
-     */
-    private function roundTime($timeStamp)
-    {
-        if (is_numeric($timeStamp) && $timeStamp != 0) {
-            $timeStamp = $this->dateTime->timestamp($this->dateTime->date('Y-m-d 00:00:00', $timeStamp));
-        }
-        return $timeStamp;
     }
 }
