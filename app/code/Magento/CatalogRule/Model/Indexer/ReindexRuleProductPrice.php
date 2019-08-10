@@ -6,49 +6,53 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Reindex product prices according rule settings.
  */
 class ReindexRuleProductPrice
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder
+     * @var RuleProductsSelectBuilder
      */
     private $ruleProductsSelectBuilder;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator
+     * @var ProductPriceCalculator
      */
     private $productPriceCalculator;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     private $localeDate;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor
+     * @var RuleProductPricesPersistor
      */
     private $pricesPersistor;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param RuleProductsSelectBuilder $ruleProductsSelectBuilder
      * @param ProductPriceCalculator $productPriceCalculator
-     * @param @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor
+     * @param TimezoneInterface $localeDate
+     * @param RuleProductPricesPersistor $pricesPersistor
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder $ruleProductsSelectBuilder,
-        \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator $productPriceCalculator,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor
+        StoreManagerInterface $storeManager,
+        RuleProductsSelectBuilder $ruleProductsSelectBuilder,
+        ProductPriceCalculator $productPriceCalculator,
+        TimezoneInterface $localeDate,
+        RuleProductPricesPersistor $pricesPersistor
     ) {
         $this->storeManager = $storeManager;
         $this->ruleProductsSelectBuilder = $ruleProductsSelectBuilder;
@@ -61,16 +65,13 @@ class ReindexRuleProductPrice
      * Reindex product prices.
      *
      * @param int $batchCount
-     * @param \Magento\Catalog\Model\Product|null $product
+     * @param Product|null $product
      * @param bool $useAdditionalTable
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute(
-        $batchCount,
-        \Magento\Catalog\Model\Product $product = null,
-        $useAdditionalTable = false
-    ) {
+    public function execute($batchCount, Product $product = null, $useAdditionalTable = false)
+    {
         /**
          * Update products rules prices per each website separately
          * because for each website date in website's timezone should be used
@@ -82,7 +83,7 @@ class ReindexRuleProductPrice
             $prevKey = null;
 
             $storeGroup = $this->storeManager->getGroup($website->getDefaultGroupId());
-            $currentDate = $this->localeDate->scopeDate($storeGroup->getDefaultStoreId());
+            $currentDate = $this->localeDate->scopeDate($storeGroup->getDefaultStoreId(), null, true);
             $previousDate = (clone $currentDate)->modify('-1 day');
             $nextDate = (clone $currentDate)->modify('+1 day');
 
