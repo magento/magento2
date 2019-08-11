@@ -39,10 +39,9 @@ class NoticeTest extends TestCase
         $contextMock->expects($this->once())->method('getEscaper')->willReturn($escaperMock);
 
         $this->sut = new Notice($contextMock);
-
     }
 
-    public function test_should_render_notice() : void
+    public function testShouldRenderNotice() : void
     {
         $dataObject = new DataObject();
         $dataObject->setData('title', 'A great Title');

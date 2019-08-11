@@ -41,44 +41,44 @@ class SeverityTest extends TestCase
         $this->sut = new Severity($contextMock, $inboxMock);
     }
 
-    public function test_should_render_severity() : void
+    public function testShouldRenderSeverity() : void
     {
         /** @var Column | \PHPUnit_Framework_MockObject_MockObject $columnMock */
         $columnMock = $this->getMockBuilder(Column::class)->disableOriginalConstructor()->getMock();
-        $columnMock->expects($this->exactly(5))->method('getData')->with($this->equalTo('index'))->willReturn('a magic index');
+        $columnMock->expects($this->exactly(5))->method('getData')->with($this->equalTo('index'))->willReturn('index');
         $this->sut->setColumn($columnMock);
         $dataObject = new DataObject();
 
         // Test critical severity
-        $dataObject->setData('a magic index', 1);
+        $dataObject->setData('index', 1);
         $actual = $this->sut->render($dataObject);
         $expected = '<span class="grid-severity-critical"><span></span></span>';
 
         $this->assertEquals($actual, $expected);
 
         // Test major severity
-        $dataObject->setData('a magic index', 2);
+        $dataObject->setData('index', 2);
         $actual = $this->sut->render($dataObject);
         $expected = '<span class="grid-severity-major"><span></span></span>';
 
         $this->assertEquals($actual, $expected);
 
         // Test minor severity
-        $dataObject->setData('a magic index', 3);
+        $dataObject->setData('index', 3);
         $actual = $this->sut->render($dataObject);
         $expected = '<span class="grid-severity-minor"><span></span></span>';
 
         $this->assertEquals($actual, $expected);
 
         // Test notice severity
-        $dataObject->setData('a magic index', 4);
+        $dataObject->setData('index', 4);
         $actual = $this->sut->render($dataObject);
         $expected = '<span class="grid-severity-notice"><span></span></span>';
 
         $this->assertEquals($actual, $expected);
 
         // Test default severity
-        $dataObject->setData('a magic index', 5);
+        $dataObject->setData('index', 5);
         $actual = $this->sut->render($dataObject);
         $expected = '<span class="grid-severity-"><span></span></span>';
 

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -9,6 +9,7 @@ declare(strict_types=1);
 /**
  * Test class for \Magento\AdminNotification\Block\Grid\Renderer\Actions
  */
+
 namespace Magento\AdminNotification\Test\Unit\Block\Grid\Renderer;
 
 use Magento\AdminNotification\Block\Grid\Renderer\Actions;
@@ -23,7 +24,6 @@ class ActionsTest extends TestCase
 {
     /**
      * System under Test
-     *
      * @var Actions
      */
     private $sut;
@@ -50,20 +50,23 @@ class ActionsTest extends TestCase
         $urlHelperMock->expects($this->once())->method('getEncodedUrl')->willReturn('http://magento.com');
 
         $this->sut = new Actions($contextMock, $urlHelperMock);
-
     }
 
-    public function test_should_render_message_when_urlIsGiven() : void
+    public function testShouldRenderMessageWhenUrlIsGiven() : void
     {
         $dataObject = new DataObject();
         $dataObject->setdata('url', 'https://magento.com');
         $dataObject->setdata('is_read', true);
         $dataObject->setdata('id', 1);
 
-        $actual = $this->sut->render($dataObject);
+        $actual   = $this->sut->render($dataObject);
+
+        // Ignoring Code Style at this point due to the long HEREDOC
+        // phpcs:disable
         $expected = <<<HTML
 <a class="action-details" target="_blank" href="https://magento.com">Read Details</a><a class="action-delete" href="http://magento.com" onClick="deleteConfirm('Are you sure?', this.href); return false;">Remove</a>
 HTML;
+        // phpcs:enable
 
         $this->assertEquals($actual, $expected);
     }
