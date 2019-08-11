@@ -16,8 +16,15 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Block\Adminhtml;
 
+/**
+ * Review Grid
+ *
+ * Class \Magento\Review\Block\Adminhtml\Grid
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -239,7 +246,13 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         if (!$this->_storeManager->isSingleStoreMode()) {
             $this->addColumn(
                 'visible_in',
-                ['header' => __('Visibility'), 'index' => 'stores', 'type' => 'store', 'store_view' => true]
+                [
+                    'header' => __('Visibility'),
+                    'index' => 'stores',
+                    'type' => 'store',
+                    'store_view' => true,
+                    'sortable' => false
+                ]
             );
         }
 
