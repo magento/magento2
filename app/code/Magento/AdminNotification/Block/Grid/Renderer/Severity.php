@@ -15,6 +15,11 @@ use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Notification\MessageInterface;
 
+/**
+ * Renderer class for severity in the admin notifications grid
+ *
+ * @package Magento\AdminNotification\Block\Grid\Renderer
+ */
 class Severity extends AbstractRenderer
 {
     /**
