@@ -92,7 +92,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
 
                 $couponSpec = $this->generationSpecFactory->create(['data' => $data]);
 
-                $this->messagePublisher->publish('sales_rule.codegenerator', $couponSpec);
+                $this->messagePublisher->publish('sales_rule.codegenerator.couponCodesGrid', $couponSpec);
                 $this->messageManager->addSuccessMessage(
                     __('Message is added to queue, wait to get your coupons soon')
                 );
