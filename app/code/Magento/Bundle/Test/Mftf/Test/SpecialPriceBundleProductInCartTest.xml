@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="SpecialPriceBundleProductInCartTest">
+            <annotations>
+                <features value="Bundle"/>
+                <stories value="Check that the cart total is correct when the bundle product with special price added to the cart"/>
+                <title value="Customer should not be able to add a Bundle Product to the cart when added a special price for associated products"/>
+                <description value="Customer should not be able to add a Bundle Product to the cart when added a special price for associated products"/>
+                <severity value="MAJOR"/>
+                <testCaseId value="MC-19134"/>
+                <group value="Bundle"/>
+            </annotations>
+            <before>
+                <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+                <createData entity="_defaultCategory" stepKey="category"/>
+                <!-- Create simple product and add special price  -->
+                <createData entity="SimpleProductWithSpecialPrice" stepKey="simpleProduct">
+                    <requiredEntity createDataKey="category"/>
+                </createData>
+                <amOnPage url="{{AdminProductEditPage.url($simpleProduct.id$)}}" stepKey="goToAdminProductPage"/>
+                <waitForPageLoad stepKey="waitForAdminProductPage"/>
+                <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice">
+                    <argument name="price" value="{{SimpleProductWithSpecialPrice.special_price}}"/>
+                </actionGroup>
+                <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+            </before>
+            <after>
+                <!-- Delete the bundled product -->
+                <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+                    <argument name="product" value="BundleProduct"/>
+                </actionGroup>
+                <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
+                <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
+                <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+                <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            </after>
+            <!--Go to bundle product creation page-->
+            <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
+            <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+            <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainFieldsForBundle"/>
+            <!-- Add Option, a "Radio Buttons" type option -->
+            <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOptions">
+                <argument name="x" value="0"/>
+                <argument name="n" value="1"/>
+                <argument name="prodOneSku" value="$$simpleProduct.sku$$"/>
+                <argument name="prodTwoSku" value=""/>
+                <argument name="optionTitle" value="Option"/>
+                <argument name="inputType" value="radio"/>
+            </actionGroup>
+            <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="userDefinedQuantitiyOptionProduct"/>
+            <actionGroup ref="saveProductForm" stepKey="saveBundleProduct"/>
+            <!-- Go to storefront BundleProduct -->
+            <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+            <waitForPageLoad stepKey="waitForStorefront"/>
+            <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addProductToCartFirstTime">
+                <argument name="productName" value="{{BundleProduct.name}}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addProductToCartSecondTime">
+                <argument name="productName" value="{{BundleProduct.name}}"/>
+            </actionGroup>
+            <click stepKey="openMiniCart" selector="{{StorefrontMinicartSection.showCart}}"/>
+            <waitForPageLoad stepKey="waitForMiniCart"/>
+            <see stepKey="seeCartSubtotal" userInput="$180.00"/>
+        </test>
+</tests>
