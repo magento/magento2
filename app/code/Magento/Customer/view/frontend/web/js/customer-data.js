@@ -198,8 +198,7 @@ define([
                 privateContent = $.cookieStorage.get(privateContentVersion),
                 localPrivateContent = $.localStorage.get(privateContentVersion),
                 needVersion = 'need_version',
-                expiredSectionNames = this.getExpiredSectionNames(),
-                isLoading = false;
+                expiredSectionNames = this.getExpiredSectionNames();
 
             if (privateContent &&
                 !$.cookieStorage.isSet(privateContentVersion) &&
@@ -208,7 +207,6 @@ define([
                 $.cookieStorage.set(privateContentVersion, needVersion);
                 $.localStorage.set(privateContentVersion, needVersion);
                 this.reload([], false);
-                isLoading = true;
             } else if (localPrivateContent !== privateContent) {
                 if (!$.cookieStorage.isSet(privateContentVersion)) {
                     privateContent = needVersion;
@@ -219,7 +217,6 @@ define([
                     buffer.notify(sectionName, sectionData);
                 });
                 this.reload([], false);
-                isLoading = true;
             } else if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
