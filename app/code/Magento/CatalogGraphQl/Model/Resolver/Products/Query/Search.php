@@ -115,60 +115,18 @@ class Search
         $searchCriteriaIds = $this->searchCriteriaFactory->create();
         $filter = $this->filterHelper->generate($idField, 'in', $searchIds);
         $searchCriteriaIds = $this->filterHelper->add($searchCriteriaIds, $filter);
-        $searchResult = $this->filterQuery->getResult($searchCriteriaIds, $info, true);
-
+        $searchCriteriaIds->setSortOrders($searchCriteria->getSortOrders());
         $searchCriteriaIds->setPageSize($realPageSize);
         $searchCriteriaIds->setCurrentPage($realCurrentPage);
-        $paginatedProducts = $this->paginateList($searchResult, $searchCriteriaIds);
 
-        $products = [];
-        if (!isset($searchCriteria->getSortOrders()[0])) {
-            foreach ($paginatedProducts as $product) {
-                if (in_array($product[$idField], $searchIds)) {
-                    $ids[$product[$idField]] = $product;
-                }
-            }
-            $products = array_filter($ids);
-        } else {
-            foreach ($paginatedProducts as $product) {
-                $productId = isset($product['entity_id']) ? $product['entity_id'] : $product[$idField];
-                if (in_array($productId, $searchIds)) {
-                    $products[] = $product;
-                }
-            }
-        }
+        $searchResult = $this->filterQuery->getResult($searchCriteriaIds, $info, true);
 
         return $this->searchResultFactory->create(
             [
                 'totalCount' => $searchResult->getTotalCount(),
-                'productsSearchResult' => $products,
+                'productsSearchResult' => $searchResult->getProductsSearchResult(),
                 'searchAggregation' => $aggregation
             ]
         );
-    }
-
-    /**
-     * Paginate an array of Ids that get pulled back in search based off search criteria and total count.
-     *
-     * @param SearchResult $searchResult
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return int[]
-     */
-    private function paginateList(SearchResult $searchResult, SearchCriteriaInterface $searchCriteria) : array
-    {
-        $length = $searchCriteria->getPageSize();
-        // Search starts pages from 0
-        $offset = $length * ($searchCriteria->getCurrentPage() - 1);
-
-        if ($searchCriteria->getPageSize()) {
-            $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize());
-        } else {
-            $maxPages = 0;
-        }
-
-        if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
-            $offset = (int)$maxPages;
-        }
-        return array_slice($searchResult->getProductsSearchResult(), $offset, $length);
     }
 }
