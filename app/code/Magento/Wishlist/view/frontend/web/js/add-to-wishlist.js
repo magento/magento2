@@ -167,7 +167,9 @@ define([
 
                 data[elementName + '[' + elementValue + ']'] = elementValue;
             } else {
-                data[elementName] = elementValue;
+                if (elementValue) {
+                    data[elementName] = elementValue;
+                }
             }
 
             return data;
