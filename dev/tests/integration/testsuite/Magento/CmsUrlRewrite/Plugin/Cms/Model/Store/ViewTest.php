@@ -57,7 +57,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->urlFinder = $this->objectManager->create(UrlFinderInterface::class);
         $this->storeFactory = $this->objectManager->create(StoreFactory::class);
         $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
-        $this->storeCode = 'test_' . mt_rand();
+        $this->storeCode = 'test_' . random_int(0, 999);
     }
 
     /**

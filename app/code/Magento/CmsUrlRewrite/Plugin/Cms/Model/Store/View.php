@@ -62,6 +62,8 @@ class View
     }
 
     /**
+     * Replace cms page url rewrites on store view save
+     *
      * @param ResourceStore $object
      * @param \Closure $proceed
      * @param AbstractModel $store
