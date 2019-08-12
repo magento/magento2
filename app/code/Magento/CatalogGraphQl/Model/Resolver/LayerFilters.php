@@ -30,17 +30,13 @@ class LayerFilters implements ResolverInterface
 
     /**
      * @param \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
-     * @param \Magento\Framework\Registry $registry
      * @param LayerBuilder $layerBuilder
      */
     public function __construct(
         \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider,
-        \Magento\Framework\Registry $registry,
         LayerBuilder $layerBuilder
-
     ) {
         $this->filtersDataProvider = $filtersDataProvider;
-        $this->registry = $registry;
         $this->layerBuilder = $layerBuilder;
     }
 
@@ -54,13 +50,19 @@ class LayerFilters implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['layer_type'])) {
+        if (!isset($value['layer_type']) || !isset($value['search_result'])) {
             return null;
         }
-        $aggregations = $this->registry->registry('aggregations');
-        /** @var StoreInterface $store */
-        $store = $context->getExtensionAttributes()->getStore();
-        $storeId = (int)$store->getId();
-        return $this->layerBuilder->build($aggregations, $storeId);
+
+        $aggregations = $value['search_result']->getSearchAggregation();
+
+        if ($aggregations) {
+            /** @var StoreInterface $store */
+            $store = $context->getExtensionAttributes()->getStore();
+            $storeId = (int)$store->getId();
+            return $this->layerBuilder->build($aggregations, $storeId);
+        } else {
+            return [];
+        }
     }
 }

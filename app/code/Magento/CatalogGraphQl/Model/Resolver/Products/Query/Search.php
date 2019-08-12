@@ -63,7 +63,6 @@ class Search
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Search\Model\Search\PageSizeProvider $pageSize
      * @param SearchCriteriaInterfaceFactory $searchCriteriaFactory
-     * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         SearchInterface $search,
@@ -72,8 +71,7 @@ class Search
         SearchResultFactory $searchResultFactory,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Search\Model\Search\PageSizeProvider $pageSize,
-        SearchCriteriaInterfaceFactory $searchCriteriaFactory,
-        \Magento\Framework\Registry $registry
+        SearchCriteriaInterfaceFactory $searchCriteriaFactory
     ) {
         $this->search = $search;
         $this->filterHelper = $filterHelper;
@@ -82,7 +80,6 @@ class Search
         $this->metadataPool = $metadataPool;
         $this->pageSizeProvider = $pageSize;
         $this->searchCriteriaFactory = $searchCriteriaFactory;
-        $this->registry = $registry;
     }
 
     /**
@@ -98,14 +95,16 @@ class Search
         $idField = $this->metadataPool->getMetadata(
             \Magento\Catalog\Api\Data\ProductInterface::class
         )->getIdentifierField();
+
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
         // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
-        //$pageSize = $this->pageSizeProvider->getMaxPageSize();
-        $searchCriteria->setPageSize(10000);
+        $pageSize = $this->pageSizeProvider->getMaxPageSize();
+        $searchCriteria->setPageSize($pageSize);
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
-        $this->registry->register('aggregations', $itemsResults->getAggregations());
+        $aggregation = $itemsResults->getAggregations();
+
         $ids = [];
         $searchIds = [];
         foreach ($itemsResults->getItems() as $item) {
@@ -139,7 +138,13 @@ class Search
             }
         }
 
-        return $this->searchResultFactory->create($searchResult->getTotalCount(), $products);
+        return $this->searchResultFactory->create(
+            [
+                'totalCount' => $searchResult->getTotalCount(),
+                'productsSearchResult' => $products,
+                'searchAggregation' => $aggregation
+            ]
+        );
     }
 
     /**

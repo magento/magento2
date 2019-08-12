@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
+use GraphQL\Language\AST\SelectionNode;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
@@ -79,7 +80,12 @@ class Filter
             $productArray[$product->getId()]['model'] = $product;
         }
 
-        return $this->searchResultFactory->create($products->getTotalCount(), $productArray);
+        return $this->searchResultFactory->create(
+            [
+                'totalCount' => $products->getTotalCount(),
+                'productsSearchResult' => $productArray
+            ]
+        );
     }
 
     /**
@@ -99,20 +105,35 @@ class Filter
                 if ($selection->name->value !== 'items') {
                     continue;
                 }
+                $fieldNames[] = $this->collectProductFieldNames($selection, $fieldNames);
+            }
+        }
 
-                foreach ($selection->selectionSet->selections as $itemSelection) {
-                    if ($itemSelection->kind === 'InlineFragment') {
-                        foreach ($itemSelection->selectionSet->selections as $inlineSelection) {
-                            if ($inlineSelection->kind === 'InlineFragment') {
-                                continue;
-                            }
-                            $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
-                        }
+        $fieldNames = array_merge(...$fieldNames);
+
+        return $fieldNames;
+    }
+
+    /**
+     * Collect field names for each node in selection
+     *
+     * @param SelectionNode $selection
+     * @param array $fieldNames
+     * @return array
+     */
+    private function collectProductFieldNames(SelectionNode $selection, array $fieldNames = []): array
+    {
+        foreach ($selection->selectionSet->selections as $itemSelection) {
+            if ($itemSelection->kind === 'InlineFragment') {
+                foreach ($itemSelection->selectionSet->selections as $inlineSelection) {
+                    if ($inlineSelection->kind === 'InlineFragment') {
                         continue;
                     }
-                    $fieldNames[] = $this->fieldTranslator->translate($itemSelection->name->value);
+                    $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
                 }
+                continue;
             }
+            $fieldNames[] = $this->fieldTranslator->translate($itemSelection->name->value);
         }
 
         return $fieldNames;

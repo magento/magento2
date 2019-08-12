@@ -7,31 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products;
 
-use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Api\Search\AggregationInterface;
 
 /**
  * Container for a product search holding the item result and the array in the GraphQL-readable product type format.
  */
 class SearchResult
 {
-    /**
-     * @var SearchResultsInterface
-     */
-    private $totalCount;
+    private $data;
 
     /**
-     * @var array
+     * @param array $data
      */
-    private $productsSearchResult;
-
-    /**
-     * @param int $totalCount
-     * @param array $productsSearchResult
-     */
-    public function __construct(int $totalCount, array $productsSearchResult)
+    public function __construct(array $data)
     {
-        $this->totalCount = $totalCount;
-        $this->productsSearchResult = $productsSearchResult;
+        $this->data = $data;
     }
 
     /**
@@ -41,7 +31,7 @@ class SearchResult
      */
     public function getTotalCount() : int
     {
-        return $this->totalCount;
+        return $this->data['totalCount'] ?? 0;
     }
 
     /**
@@ -51,6 +41,16 @@ class SearchResult
      */
     public function getProductsSearchResult() : array
     {
-        return $this->productsSearchResult;
+        return $this->data['productsSearchResult'] ?? [];
+    }
+
+    /**
+     * Retrieve aggregated search results
+     *
+     * @return AggregationInterface|null
+     */
+    public function getSearchAggregation(): ?AggregationInterface
+    {
+        return $this->data['searchAggregation'] ?? null;
     }
 }
