@@ -461,10 +461,6 @@ define([
             var value = this.filterInputValue().trim().toLowerCase(),
                 array = [];
 
-            if (value && value.length < 2) {
-                return false;
-            }
-
             if (this.searchOptions) {
                 return this.loadOptions(value);
             }
