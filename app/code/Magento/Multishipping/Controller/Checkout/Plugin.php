@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Controller\Checkout;
 
 /**
- * Class Plugin
- *
- * @package Magento\Multishipping\Controller\Checkout
+ * Turns Off Multishipping mode for Quote.
  */
 class Plugin
 {
