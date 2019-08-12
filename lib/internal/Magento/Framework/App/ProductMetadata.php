@@ -29,6 +29,11 @@ class ProductMetadata implements ProductMetadataInterface
     const PRODUCT_NAME  = 'Magento';
 
     /**
+     * Magento version cache prefix
+     */
+    const CACHE_PREFIX = 'mage-version';
+
+    /**
      * Product version
      *
      * @var string
@@ -47,11 +52,21 @@ class ProductMetadata implements ProductMetadataInterface
     private $composerInformation;
 
     /**
-     * @param ComposerJsonFinder $composerJsonFinder
+     * @var CacheInterface
      */
-    public function __construct(ComposerJsonFinder $composerJsonFinder)
-    {
+    private $cache;
+
+    /**
+     * ProductMetadata constructor.
+     * @param ComposerJsonFinder $composerJsonFinder
+     * @param \Magento\Framework\App\CacheInterface $cache
+     */
+    public function __construct(
+        ComposerJsonFinder $composerJsonFinder,
+        CacheInterface $cache = null
+    ) {
         $this->composerJsonFinder = $composerJsonFinder;
+        $this->cache = $cache ?? ObjectManager::getInstance()->get(CacheInterface::class);
     }
 
     /**
@@ -61,6 +76,8 @@ class ProductMetadata implements ProductMetadataInterface
      */
     public function getVersion()
     {
+        $versionFromCache = $this->cache->load(self::CACHE_PREFIX);
+        $this->version = $this->version ?: $versionFromCache;
         if (!$this->version) {
             if (!($this->version = $this->getSystemPackageVersion())) {
                 if ($this->getComposerInformation()->isMagentoRoot()) {
@@ -68,6 +85,7 @@ class ProductMetadata implements ProductMetadataInterface
                 } else {
                     $this->version = 'UNKNOWN';
                 }
+                $this->cache->save($this->version, self::CACHE_PREFIX, [Config::CACHE_TAG]);
             }
         }
         return $this->version;
