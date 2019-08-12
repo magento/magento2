@@ -53,6 +53,7 @@ define([
             if ($(form).validation('isValid')) {
                 $.each($(form).serializeArray(), function () {
                     counts[this.name] = (counts[this.name] || 0) + 1;
+
                     if (formData[this.name]) {
                         this.name = this.name.replace(new RegExp(/\[\]$/g), '[' + (counts[this.name] - 1) + ']');
                     }
