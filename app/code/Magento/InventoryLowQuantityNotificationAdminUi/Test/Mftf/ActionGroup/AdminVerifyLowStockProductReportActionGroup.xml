@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Verify low stock report for given product and source. Starts from "Low Stock Report" page.-->
+    <actionGroup name="AdminVerifyLowStockProductReportActionGroup">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+            <argument name="productQty" type="string"/>
+            <argument name="source" defaultValue="_defaultSource"/>
+        </arguments>
+        <see selector="{{LowStockProductGridSection.productName}}" userInput="{{product.name}}" stepKey="verifyProductName"/>
+        <see selector="{{LowStockProductGridSection.productSku}}" userInput="{{product.sku}}" stepKey="verifyProductSku"/>
+        <see selector="{{LowStockProductGridSection.productQty}}" userInput="{{productQty}}" stepKey="verifyProductQty"/>
+        <see selector="{{LowStockProductGridSection.productSourceCode}}" userInput="{{source.source_code}}" stepKey="verifyProductSourceCode"/>
+    </actionGroup>
+</actionGroups>

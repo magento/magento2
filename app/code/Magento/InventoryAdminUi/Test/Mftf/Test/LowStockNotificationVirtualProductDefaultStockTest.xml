@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LowStockNotificationVirtualProductDefaultStockTest" extends="LowStockNotificationSimpleProductDefaultStockTest">
+        <annotations>
+            <stories value="Virtual Product On Default Stock"/>
+            <title value="Low Stock Notification for Virtual Product On Default Stock."/>
+            <description value="Verify low stock notifications working correctly for virtual product in multi stock environment on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/446482/scenarios/2115105"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="product"/>
+            <createData entity="VirtualProduct" stepKey="product" after="category"/>
+        </before>
+    </test>
+</tests>
