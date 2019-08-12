@@ -150,7 +150,7 @@ class ConfigShowCommand extends Command
             $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
             $configValue = $this->configSource->get($configPath);
 
-            if ($configValue == null && empty($configValue)) {
+            if (is_array($configValue) && empty($configValue)) {
                 $output->writeln(
                     sprintf(
                         '<error>%s</error>',
