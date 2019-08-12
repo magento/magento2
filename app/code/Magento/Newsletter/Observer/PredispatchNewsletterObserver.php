@@ -21,6 +21,12 @@ use Magento\Framework\App\ObjectManager;
 class PredispatchNewsletterObserver implements ObserverInterface
 {
     /**
+     * @deprecated
+     * use Magento\Newsletter\Model\Config::XML_PATH_NEWSLETTER_ACTIVE instead
+     */
+    const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
+
+    /**
      * @var Newsletter Config
      */
     private $config;
