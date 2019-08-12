@@ -837,6 +837,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $storeIds = array_merge($storeIds, $websiteStores);
                 }
             }

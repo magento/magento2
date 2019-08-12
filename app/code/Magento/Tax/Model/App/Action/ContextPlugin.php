@@ -52,6 +52,8 @@ class ContextPlugin
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
+     *
+     * phpcs:ignore Magento2.Classes.DiscouragedDependencies
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
