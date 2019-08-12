@@ -10,7 +10,7 @@ namespace Magento\CmsUrlRewrite\Plugin\Cms\Model\Store;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Store\Model\Store;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\ResourceModel\Store as ResourceStore;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
@@ -42,6 +42,8 @@ class View
     private $searchCriteriaBuilder;
 
     /**
+     * Update store view plugin constructor
+     *
      * @param UrlPersistInterface $urlPersist
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param PageRepositoryInterface $pageRepository
@@ -62,11 +64,11 @@ class View
     /**
      * @param ResourceStore $object
      * @param \Closure $proceed
-     * @param Store $store
+     * @param AbstractModel $store
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(ResourceStore $object, \Closure $proceed, Store $store)
+    public function aroundSave(ResourceStore $object, \Closure $proceed, AbstractModel $store)
     {
         $result = $proceed($store);
         if ($store->isObjectNew() || $store->dataHasChangedFor('group_id')) {
