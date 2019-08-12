@@ -152,11 +152,11 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
     /**
      * @inheritdoc
      */
-    public function getSize()
-    {
-        $this->setVisibilityFilter();
-        $this->setInStockFilter();
-
-        return parent::getSize();
-    }
+//    public function getSize()
+//    {
+//        $this->setVisibilityFilter();
+//        $this->setInStockFilter();
+//
+//        return parent::getSize();
+//    }
 }
