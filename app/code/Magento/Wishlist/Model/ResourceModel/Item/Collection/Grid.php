@@ -149,4 +149,12 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         }
         return parent::addFieldToFilter($field, $condition);
     }
+
+    public function getSize()
+    {
+        $this->setVisibilityFilter(true);
+        $this->setInStockFilter(true);
+
+        return parent::getSize();
+    }
 }
