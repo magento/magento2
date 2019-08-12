@@ -34,7 +34,9 @@ class Plugin
      */
     public function beforeExecute(\Magento\Framework\App\Action\Action $subject)
     {
-        $this->cart->getQuote()->setIsMultiShipping(0);
-        $this->cart->saveQuote();
+        if ($this->cart->getQuote()->getIsMultiShipping()) {
+            $this->cart->getQuote()->setIsMultiShipping(0);
+            $this->cart->saveQuote();
+        }
     }
 }
