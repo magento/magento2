@@ -85,7 +85,9 @@ class ReindexRuleProductPrice
             $storeGroup = $this->storeManager->getGroup($website->getDefaultGroupId());
             $currentDate = $this->localeDate->scopeDate($storeGroup->getDefaultStoreId(), null, true);
             $previousDate = (clone $currentDate)->modify('-1 day');
+            $previousDate->setTime(23, 59, 59);
             $nextDate = (clone $currentDate)->modify('+1 day');
+            $nextDate->setTime(0, 0, 0);
 
             while ($ruleData = $productsStmt->fetch()) {
                 $ruleProductId = $ruleData['product_id'];
