@@ -47,18 +47,16 @@ define([
         _saveHandler: function (form) {
             var formData = {},
                 requestData = {},
+                counts = {},
                 options = $.data(form, 'validator').settings;
 
             if ($(form).validation('isValid')) {
-                var counts = {};
                 $.each($(form).serializeArray(), function () {
-                    var name = this.name;
-                    counts[name] = (counts[name] || 0) + 1;
-                    if (formData[name]) {
-                        var replacement = '[' + (counts[name] - 1) + ']';
-                        name = name.replace(new RegExp(/\[\]$/g), replacement);
+                    counts[this.name] = (counts[this.name] || 0) + 1;
+                    if (formData[this.name]) {
+                        this.name = this.name.replace(new RegExp(/\[\]$/g), '[' + (counts[this.name] - 1) + ']');
                     }
-                    formData[name] = this.value || '';
+                    formData[this.name] = this.value || '';
                 });
 
                 requestData = {
