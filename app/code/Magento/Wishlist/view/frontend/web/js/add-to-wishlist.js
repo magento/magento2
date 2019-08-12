@@ -166,10 +166,8 @@ define([
                 elementName = elementName.substring(0, elementName.length - 2);
 
                 data[elementName + '[' + elementValue + ']'] = elementValue;
-            } else {
-                if (elementValue) {
-                    data[elementName] = elementValue;
-                }
+            } else if(elementValue) {
+                data[elementName] = elementValue;
             }
 
             return data;
