@@ -8,10 +8,8 @@ declare(strict_types=1);
 namespace Magento\CmsUrlRewrite\Plugin\Cms\Model\Store;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Registry;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreFactory;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -34,19 +32,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var StoreFactory
+     * @var Store
      */
     private $storeFactory;
-
-    /**
-     * @var string
-     */
-    private $storeCode;
-
-    /**
-     * @var WebsiteRepositoryInterface
-     */
-    private $websiteRepository;
 
     /**
      * @inheritdoc
@@ -56,8 +44,6 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->urlFinder = $this->objectManager->create(UrlFinderInterface::class);
         $this->storeFactory = $this->objectManager->create(StoreFactory::class);
-        $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
-        $this->storeCode = 'test_' . random_int(0, 999);
     }
 
     /**
@@ -67,85 +53,56 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     public function testUrlRewritesChangesAfterStoreSave()
     {
+        $storeId = $this->createStore();
+        $this->assertUrlRewritesCount($storeId, 1);
+        $this->deleteStore($storeId);
+        $this->assertUrlRewritesCount($storeId, 0);
+    }
+
+    /**
+     * Assert url rewrites count by store id
+     *
+     * @param int $storeId
+     * @param int $expectedCount
+     */
+    private function assertUrlRewritesCount(int $storeId, int $expectedCount): void
+    {
         $data = [
             UrlRewrite::REQUEST_PATH => 'page100',
+            UrlRewrite::STORE_ID => $storeId
         ];
         $urlRewrites = $this->urlFinder->findAllByData($data);
-        $this->assertCount(1, $urlRewrites);
-        $this->createStore();
-        $urlRewrites = $this->urlFinder->findAllByData($data);
-        $this->assertCount(2, $urlRewrites);
-        $this->deleteStore();
-        $urlRewrites = $this->urlFinder->findAllByData($data);
-        $this->assertCount(1, $urlRewrites);
+        $this->assertCount($expectedCount, $urlRewrites);
     }
 
     /**
      * Create test store
      *
-     * @return void
+     * @return int
      */
-    private function createStore(): void
+    private function createStore(): int
     {
-        /** @var $store Store */
         $store = $this->storeFactory->create();
-        if (!$store->load($this->storeCode, 'code')->getId()) {
-            $store->setData(
-                [
-                    'code' => $this->storeCode,
-                    'website_id' => $this->websiteRepository->getDefault()->getId(),
-                    'group_id' => $this->websiteRepository->getDefault()->getDefaultGroupId(),
-                    'name' => 'Test Store',
-                    'sort_order' => '0',
-                    'is_active' => '1',
-                ]
-            );
-            $store->save();
-        } else {
-            if ($store->getId()) {
-                /** @var \Magento\TestFramework\Helper\Bootstrap $registry */
-                $registry = $this->objectManager->get(
-                    Registry::class
-                );
-                $registry->unregister('isSecureArea');
-                $registry->register('isSecureArea', true);
-                $store->delete();
-                $registry->unregister('isSecureArea');
-                $registry->register('isSecureArea', false);
-                $store = $this->objectManager->create(Store::class);
-                $store->setData(
-                    [
-                        'code' => $this->storeCode,
-                        'website_id' => $this->websiteRepository->getDefault()->getId(),
-                        'group_id' => $this->websiteRepository->getDefault()->getDefaultGroupId(),
-                        'name' => 'Test Store',
-                        'sort_order' => '0',
-                        'is_active' => '1',
-                    ]
-                );
-                $store->save();
-            }
-        }
+        $store->setCode('test_' . random_int(0, 999))
+            ->setName('Test Store')
+            ->unsId()
+            ->save();
+
+        return (int)$store->getId();
     }
 
     /**
      * Delete test store
      *
+     * @param int $storeId
      * @return void
      */
-    private function deleteStore(): void
+    private function deleteStore(int $storeId): void
     {
-        /** @var Registry $registry */
-        $registry = $this->objectManager->get(Registry::class);
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
-        /** @var Store $store */
-        $store = $this->objectManager->get(Store::class);
-        $store->load($this->storeCode, 'code');
-        if ($store->getId()) {
+        $store = $this->storeFactory->create();
+        $store->load($storeId);
+        if ($store !== null) {
             $store->delete();
         }
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', false);
     }
 }
