@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Wishlist item collection grouped by customer id
- */
 namespace Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
 use Magento\Customer\Controller\RegistryConstants as RegistryConstants;
 
 /**
+ * Wishlist item collection grouped by customer id
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
@@ -150,10 +149,13 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         return parent::addFieldToFilter($field, $condition);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getSize()
     {
-        $this->setVisibilityFilter(true);
-        $this->setInStockFilter(true);
+        $this->setVisibilityFilter();
+        $this->setInStockFilter();
 
         return parent::getSize();
     }
