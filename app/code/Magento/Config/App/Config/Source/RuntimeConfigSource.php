@@ -54,7 +54,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
      * Get initial data.
      *
      * @param string $path Format is scope type and scope code separated by slash: e.g. "type/code"
-     * @return array
+     * @return mixed
      * @since 100.1.2
      */
     public function get($path = '')
