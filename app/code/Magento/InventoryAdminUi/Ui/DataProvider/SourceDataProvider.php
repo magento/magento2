@@ -18,6 +18,8 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Ui\DataProvider\SearchResultFactory;
 
 /**
+ * Data provider for admin source grid.
+ *
  * @api
  */
 class SourceDataProvider extends DataProvider
@@ -38,6 +40,13 @@ class SourceDataProvider extends DataProvider
      * @var Session
      */
     private $session;
+
+    /**
+     * Total source count.
+     *
+     * @var int
+     */
+    private $sourceCount;
 
     /**
      * @param string $name
@@ -85,7 +94,7 @@ class SourceDataProvider extends DataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData()
     {
@@ -110,11 +119,12 @@ class SourceDataProvider extends DataProvider
                 ];
             }
         }
+        $data['totalRecords'] = $this->getSourcesCount();
         return $data;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSearchResult()
     {
@@ -128,5 +138,22 @@ class SourceDataProvider extends DataProvider
             SourceInterface::SOURCE_CODE
         );
         return $searchResult;
+    }
+
+    /**
+     * Get total sources count, without filter be source name.
+     *
+     * Get total sources count, without filter in order to ui/grid/columns/multiselect::updateState()
+     * works correctly with sources selection.
+     *
+     * @return int
+     */
+    private function getSourcesCount(): int
+    {
+        if (!$this->sourceCount) {
+            $this->sourceCount = $this->sourceRepository->getList()->getTotalCount();
+        }
+
+        return $this->sourceCount;
     }
 }
