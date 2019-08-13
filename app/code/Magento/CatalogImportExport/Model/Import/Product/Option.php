@@ -1468,6 +1468,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $specificTypeData = $this->_getSpecificTypeData($rowData, 0, false);
             //For others stores
             if ($specificTypeData) {
+                if (isset($specificTypeData['price'])) {
+                    $typePrices[$nextValueId][$this->_rowStoreId] = $specificTypeData['price'];
+                }
                 $typeTitles[$nextValueId++][$this->_rowStoreId] = $specificTypeData['title'];
             }
         }
@@ -1749,28 +1752,30 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _getSpecificTypeData(array $rowData, $optionTypeId, $defaultStore = true)
     {
+        $data = [];
+        $priceData = [];
+        $customOptionRowPrice = $rowData[self::COLUMN_ROW_PRICE];
+        if (!empty($customOptionRowPrice) || $customOptionRowPrice === '0') {
+            $priceData['price'] = (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%');
+            $priceData['price_type'] = ('%' == substr($rowData[self::COLUMN_ROW_PRICE], -1)) ? 'percent' : 'fixed';
+        }
         if (!empty($rowData[self::COLUMN_ROW_TITLE]) && $defaultStore && empty($rowData[self::COLUMN_STORE])) {
             $valueData = [
                 'option_type_id' => $optionTypeId,
                 'sort_order' => empty($rowData[self::COLUMN_ROW_SORT]) ? 0 : abs($rowData[self::COLUMN_ROW_SORT]),
                 'sku' => !empty($rowData[self::COLUMN_ROW_SKU]) ? $rowData[self::COLUMN_ROW_SKU] : '',
             ];
-
-            $priceData = false;
-            if (!empty($rowData[self::COLUMN_ROW_PRICE])) {
-                $priceData = [
-                    'price' => (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%'),
-                    'price_type' => 'fixed',
-                ];
-                if ('%' == substr($rowData[self::COLUMN_ROW_PRICE], -1)) {
-                    $priceData['price_type'] = 'percent';
-                }
-            }
-            return ['value' => $valueData, 'title' => $rowData[self::COLUMN_ROW_TITLE], 'price' => $priceData];
+            $data['value'] = $valueData;
+            $data['title'] = $rowData[self::COLUMN_ROW_TITLE];
+            $data['price'] = $priceData;
         } elseif (!empty($rowData[self::COLUMN_ROW_TITLE]) && !$defaultStore && !empty($rowData[self::COLUMN_STORE])) {
-            return ['title' => $rowData[self::COLUMN_ROW_TITLE]];
+            if ($priceData) {
+                $data['price'] = $priceData;
+            }
+            $data['title'] = $rowData[self::COLUMN_ROW_TITLE];
         }
-        return false;
+
+        return $data ?: false;
     }
 
     /**
@@ -1828,7 +1833,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $titleRows = [];
         foreach ($titles as $optionId => $storeInfo) {
-            foreach ($storeInfo as $storeId => $title) {
+            //for use default
+            $uniqStoreInfo = array_unique($storeInfo);
+            foreach ($uniqStoreInfo as $storeId => $title) {
                 $titleRows[] = ['option_id' => $optionId, 'store_id' => $storeId, 'title' => $title];
             }
         }
@@ -1923,7 +1930,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $optionTypeTitleRows = [];
         foreach ($typeTitles as $optionTypeId => $storesData) {
-            foreach ($storesData as $storeId => $title) {
+            //for use default
+            $uniqStoresData = array_unique($storesData);
+            foreach ($uniqStoresData as $storeId => $title) {
                 $optionTypeTitleRows[] = [
                     'option_type_id' => $optionTypeId,
                     'store_id' => $storeId,
