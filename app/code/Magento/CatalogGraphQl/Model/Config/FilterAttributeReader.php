@@ -67,6 +67,10 @@ class FilterAttributeReader implements ReaderInterface
         $config = [];
 
         foreach ($this->getAttributeCollection() as $attribute) {
+            if (!$attribute->getIsUserDefined()) {
+                //do not override fields defined in schema.graphqls
+                continue;
+            }
             $attributeCode = $attribute->getAttributeCode();
 
             foreach ($typeNames as $typeName) {
