@@ -10,7 +10,7 @@
         <test name="StorefrontSpecialPriceBundleProductInCartTest">
             <annotations>
                 <features value="Bundle"/>
-                <stories value="Check that the cart total is correct when the bundle product with special price added to the cart"/>
+                <stories value="Add bundle product to cart on storefront"/>
                 <title value="Customer should not be able to add a Bundle Product to the cart when added a special price for associated products"/>
                 <description value="Customer should not be able to add a Bundle Product to the cart when added a special price for associated products"/>
                 <severity value="MAJOR"/>
@@ -19,10 +19,10 @@
                 <group value="bundle"/>
             </annotations>
             <before>
-                <createData entity="_defaultCategory" stepKey="category"/>
-                <!-- Create simple product -->
-                <createData entity="SimpleProductWithSpecialPrice" stepKey="simpleProduct">
-                    <requiredEntity createDataKey="category"/>
+                <!-- Create the Simple product with Special price -->
+                <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+                <createData entity="specialProductPrice2" stepKey="specialPriceToSimpleProduct">
+                    <requiredEntity createDataKey="simpleProduct"/>
                 </createData>
                 <!-- Create the bundle product -->
                 <createData entity="ApiBundleProduct" stepKey="bundleProduct"/>
@@ -35,19 +35,12 @@
                     <requiredEntity createDataKey="bundleOption"/>
                     <requiredEntity createDataKey="simpleProduct"/>
                 </createData>
-                <!-- Add special price to simple product -->
-                <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-                <amOnPage url="{{AdminProductEditPage.url($simpleProduct.id$)}}" stepKey="goToAdminProductPage"/>
-                <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice">
-                    <argument name="price" value="{{SimpleProductWithSpecialPrice.special_price}}"/>
-                </actionGroup>
-                <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+                <!-- Run reindex stock status -->
+                <magentoCLI command="indexer:reindex" arguments="cataloginventory_stock" stepKey="reindex"/>
             </before>
             <after>
                 <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
                 <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-                <deleteData createDataKey="category" stepKey="deleteCategory"/>
-                <actionGroup ref="logout" stepKey="logout"/>
             </after>
             <!-- Go to storefront BundleProduct -->
             <amOnPage url="{{StorefrontProductPage.url($$bundleProduct.custom_attributes[url_key]$$)}}" stepKey="goToStorefront"/>
@@ -59,7 +52,7 @@
             </actionGroup>
             <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
             <actionGroup ref="AssertStorefrontMiniCartSubtotalActionGroup" stepKey="assertSubtotal">
-                <argument name="subtotal" value="$180"/>
+                <argument name="subtotal" value="$111.10"/>
             </actionGroup>
         </test>
 </tests>
