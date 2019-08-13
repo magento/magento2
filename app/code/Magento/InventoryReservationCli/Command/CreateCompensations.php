@@ -125,7 +125,7 @@ class CreateCompensations extends Command
                         '  - Product <comment>%s</comment> was compensated by '
                         . '<comment>%+f</comment> for stock <comment>%s</comment>',
                         $compensation->getSku(),
-                        -$compensation->getQuantity(),
+                        $compensation->getQuantity(),
                         $compensation->getStockId()
                     )
                 );
