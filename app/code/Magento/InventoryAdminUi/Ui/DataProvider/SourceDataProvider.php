@@ -99,7 +99,6 @@ class SourceDataProvider extends DataProvider
     public function getData()
     {
         $data = parent::getData();
-        $data['totalRecords'] = $this->getSourcesCount();
         if (self::SOURCE_FORM_NAME === $this->name) {
             // It is need for support of several fieldsets.
             // For details see \Magento\Ui\Component\Form::getDataSourceData
@@ -120,6 +119,7 @@ class SourceDataProvider extends DataProvider
                 ];
             }
         }
+        $data['totalRecords'] = $this->getSourcesCount();
         return $data;
     }
 
