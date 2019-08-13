@@ -13,7 +13,6 @@ use Magento\SalesSequence\Model\Meta;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMeta;
 use Magento\SalesSequence\Model\Sequence\DeleteByStore;
-use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -57,11 +56,6 @@ class DeleteByStoreTest extends TestCase
      */
     private $select;
 
-    /**
-     * @var StoreInterface | MockObject
-     */
-    private $store;
-
     protected function setUp()
     {
         $this->connectionMock = $this->getMockForAbstractClass(
@@ -85,15 +79,6 @@ class DeleteByStoreTest extends TestCase
         $this->select = $this->createMock(Select::class);
         $this->metaFactory = $this->createPartialMock(MetaFactory::class, ['create']);
         $this->metaFactory->expects($this->any())->method('create')->willReturn($this->meta);
-        $this->store = $this->getMockForAbstractClass(
-            StoreInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId']
-        );
 
         $helper = new ObjectManager($this);
         $this->deleteByStore = $helper->getObject(
@@ -112,9 +97,6 @@ class DeleteByStoreTest extends TestCase
         $storeId = 1;
         $metadataIds = [1, 2];
         $profileIds = [10, 11];
-        $this->store->expects($this->once())
-            ->method('getId')
-            ->willReturn($storeId);
         $this->resourceMock->method('getTableName')
             ->willReturnCallback(static function ($tableName) {
                 return $tableName;
@@ -155,6 +137,6 @@ class DeleteByStoreTest extends TestCase
         $this->resourceSequenceMeta->expects($this->any())
             ->method('delete')
             ->willReturn($this->resourceSequenceMeta);
-        $this->deleteByStore->execute($this->store);
+        $this->deleteByStore->execute($storeId);
     }
 }

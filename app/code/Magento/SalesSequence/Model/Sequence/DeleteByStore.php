@@ -10,7 +10,6 @@ namespace Magento\SalesSequence\Model\Sequence;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
-use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class DeleteByStore
@@ -50,13 +49,13 @@ class DeleteByStore
     /**
      * Deletes all sequence linked entites
      *
-     * @param StoreInterface $store
+     * @param int $storeId
      * @return void
      * @throws \Exception
      */
-    public function execute(StoreInterface $store): void
+    public function execute($storeId): void
     {
-        $metadataIds = $this->getMetadataIdsByStoreId($store->getId());
+        $metadataIds = $this->getMetadataIdsByStoreId($storeId);
         $profileIds = $this->getProfileIdsByMetadataIds($metadataIds);
 
         $this->appResource->getConnection()->delete(

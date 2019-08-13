@@ -39,7 +39,9 @@ class SequenceRemovalObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        $this->deleteByStore->execute($observer->getData('store'));
+        if ($store = $observer->getData('store')) {
+            $this->deleteByStore->execute($store->getId());
+        }
 
         return $this;
     }
