@@ -46,7 +46,7 @@ class DeleteWidgetById
      * @return void
      * @throws \Exception
      */
-    public function execute(int $instanceId)
+    public function execute(int $instanceId) : void
     {
         $model = $this->getWidgetById($instanceId);
 
