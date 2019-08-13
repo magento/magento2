@@ -95,11 +95,14 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->setVisibilityFilter();
-        $this->setInStockFilter();
         $this->addCustomerIdFilter(
             $this->_registryManager->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        )->resetSortOrder()->addDaysInWishlist()->addStoreData();
+        )
+            ->resetSortOrder()
+            ->addDaysInWishlist()
+            ->addStoreData()
+            ->setVisibilityFilter()
+            ->setInStockFilter();
         return $this;
     }
 
