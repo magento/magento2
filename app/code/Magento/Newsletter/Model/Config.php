@@ -17,7 +17,7 @@ class Config
     /**
      * Configuration path to newsletter active setting
      */
-    private const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
+    const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
 
     /**
      * @var ScopeConfigInterface

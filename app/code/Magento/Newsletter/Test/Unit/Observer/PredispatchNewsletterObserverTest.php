@@ -90,7 +90,7 @@ class PredispatchNewsletterObserverTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->configMock->method('getValue')
-            ->with(PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE, ScopeInterface::SCOPE_STORE)
+            ->with(\Magento\Newsletter\Model\Config::XML_PATH_NEWSLETTER_ACTIVE, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
         $observerMock->expects($this->never())
             ->method('getData')
@@ -116,7 +116,7 @@ class PredispatchNewsletterObserverTest extends TestCase
 
         $this->configMock->expects($this->at(0))
             ->method('getValue')
-            ->with(PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE, ScopeInterface::SCOPE_STORE)
+            ->with(\Magento\Newsletter\Model\Config::XML_PATH_NEWSLETTER_ACTIVE, ScopeInterface::SCOPE_STORE)
             ->willReturn(false);
 
         $expectedRedirectUrl = 'https://test.com/index';

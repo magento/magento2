@@ -7,7 +7,6 @@ namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Model\AccountManagement;
-use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register.
@@ -298,7 +297,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getValue'
         )->with(
-            PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE
+            \Magento\Newsletter\Model\Config::XML_PATH_NEWSLETTER_ACTIVE
         )->will(
             $this->returnValue($isNewsletterActive)
         );

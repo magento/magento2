@@ -6,7 +6,6 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
-use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
 
 /**
  * Customer register form block
@@ -170,7 +169,7 @@ class Register extends \Magento\Directory\Block\Data
     public function isNewsletterEnabled()
     {
         return $this->_moduleManager->isOutputEnabled('Magento_Newsletter')
-            && $this->getConfig(PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE);
+            && $this->getConfig(\Magento\Newsletter\Model\Config::XML_PATH_NEWSLETTER_ACTIVE);
     }
 
     /**
