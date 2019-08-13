@@ -608,7 +608,7 @@ class Customer extends AbstractCustomer
                 }
 
                 if (isset($rowData[$attributeCode]) && strlen((string)$rowData[$attributeCode])) {
-                    if ($attributeParams['type'] == 'select' && empty($rowData[$attributeCode])) {
+                    if ($attributeParams['type'] == 'select') {
                         continue;
                     }
 
