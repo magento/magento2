@@ -122,7 +122,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $valueMap = [
                 ['paypal/general/merchant_country', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, 'US'],
                 ['paypal/general/merchant_country', ScopeInterface::SCOPE_STORE, null, 'US'],
-                ['payment/paypal_express/disable_funding_options', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, []],
+                ['paypal/style/disable_funding_options', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, []],
             ];
             $this->scopeConfig
                 ->method('getValue')
