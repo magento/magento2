@@ -165,6 +165,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         ];
 
         foreach ($this->configOptionsCollection as $configOptionsList) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $options = array_merge($options, $configOptionsList->getOptions());
         }
 
@@ -221,6 +222,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         }
 
         foreach ($this->configOptionsCollection as $configOptionsList) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $errors = array_merge($errors, $configOptionsList->validate($options, $deploymentConfig));
         }
 
