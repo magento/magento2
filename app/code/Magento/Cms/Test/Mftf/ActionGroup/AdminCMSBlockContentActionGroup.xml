@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddImageToCMSBlockContent">
+        <arguments>
+            <argument name="image" type="entity" defaultValue="MagentoLogo"/>
+        </arguments>
+        <click selector="{{BlockContentItemsSection.addImageButton}}" stepKey="clickAddImageButton"/>
+        <waitForElementVisible selector="{{BlockInsertOrEditImageSection.browseImage}}" stepKey="waitForBrowseImage"/>
+        <click  selector="{{BlockInsertOrEditImageSection.browseImage}}" stepKey="clickBrowseImage"/>
+        <waitForElementVisible selector="{{BlockSelectImageSection.treeRoot}}" stepKey="waitForAttacheFiles"/>
+        <click  selector="{{BlockSelectImageSection.treeRoot}}" stepKey="clickRoot"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <attachFile selector="{{BlockSelectImageSection.uploadFile}}" userInput="{{image.file}}" stepKey="attachLogo"/>
+        <waitForElementVisible selector="{{BlockSelectImageSection.addSelected}}" stepKey="waitForAddSelected"/>
+        <click  selector="{{BlockSelectImageSection.addSelected}}" stepKey="clickAddSelected"/>
+        <waitForElementVisible selector="{{BlockInsertOrEditImageSection.ok}}" stepKey="waitForOkButton"/>
+        <click  selector="{{BlockInsertOrEditImageSection.ok}}" stepKey="clickOk"/>
+    </actionGroup>
+</actionGroups>
