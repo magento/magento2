@@ -52,13 +52,11 @@ class ContextPlugin
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
-     *
-     * phpcs:ignore Magento2.Classes.DiscouragedDependencies
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Tax\Model\Calculation\Proxy $calculation,
+        \Magento\Tax\Model\Calculation\Proxy $calculation, //phpcs:ignore Magento2.Classes.DiscouragedDependencies
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\PageCache\Model\Config $cacheConfig
