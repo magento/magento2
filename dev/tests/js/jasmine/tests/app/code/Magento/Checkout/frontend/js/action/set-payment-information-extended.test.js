@@ -63,13 +63,12 @@ define([
                         title: true
                     }
                 },
-                formattedData = {
-                    method: 'checkmo',
-                    additionalData: null
-                },
                 payload = {
                     cartId: 1,
-                    paymentMethod: formattedData,
+                    paymentMethod: {
+                        method: 'checkmo',
+                        additionalData: null
+                    },
                     billingAddress: null
                 };
 
