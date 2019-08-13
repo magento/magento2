@@ -59,17 +59,10 @@ class AstConverter
     public function getClausesFromAst(string $fieldName, array $arguments) : array
     {
         $attributes = $this->fieldEntityAttributesPool->getEntityAttributesForEntityFromField($fieldName);
-        $attributes[] = 'cat';
-        $attributes[] = 'mysize';
-        $attributes[] = 'mycolor';
-        $attributes[] = 'ca_1_631447041';
-        $attributes[] = 'attributeset2attribute1';
-        $attributes[] = 'price_dynamic_algorithm';
-        $attributes[] = 'visibility';
-        $attributes[] = 'category_ids';
         $conditions = [];
         foreach ($arguments as $argumentName => $argument) {
-            if (in_array($argumentName, $attributes)) {
+            if (key_exists($argumentName, $attributes)) {
+                $argumentName = $attributes[$argumentName]['fieldName'] ?? $argumentName;
                 foreach ($argument as $clauseType => $clause) {
                     if (is_array($clause)) {
                         $value = [];

@@ -315,9 +315,6 @@ input ProductFilterInput @doc(description: "ProductFilterInput defines the filte
     country_of_manufacture: FilterTypeInput @doc(description: "The product's country of origin.")
     custom_layout: FilterTypeInput @doc(description: "The name of a custom layout.")
     gift_message_available: FilterTypeInput @doc(description: "Indicates whether a gift message is available.")
-    visibility: FilterTypeInput @doc(description: "CATEGORY attribute name")
-    price_dynamic_algorithm: FilterTypeInput @doc(description: "CATEGORY attribute name")
-    category_ids: FilterTypeInput @doc(description: "CATEGORY attribute name")
     or: ProductFilterInput @doc(description: "The keyword required to perform a logical OR comparison.")
 }
 

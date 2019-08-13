@@ -103,7 +103,6 @@ class Search
         $searchCriteria->setPageSize($pageSize);
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
-        $aggregation = $itemsResults->getAggregations();
 
         $ids = [];
         $searchIds = [];
@@ -121,11 +120,21 @@ class Search
 
         $searchResult = $this->filterQuery->getResult($searchCriteriaIds, $info, true);
 
+        //possible division by 0
+        if ($realPageSize) {
+            $maxPages = (int)ceil($searchResult->getTotalCount() / $realPageSize);
+        } else {
+            $maxPages = 0;
+        }
+
         return $this->searchResultFactory->create(
             [
                 'totalCount' => $searchResult->getTotalCount(),
                 'productsSearchResult' => $searchResult->getProductsSearchResult(),
-                'searchAggregation' => $aggregation
+                'searchAggregation' => $itemsResults->getAggregations(),
+                'pageSize' => $realPageSize,
+                'currentPage' => $realCurrentPage,
+                'totalPages' => $maxPages,
             ]
         );
     }

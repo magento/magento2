@@ -23,24 +23,41 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
     private $config;
 
     /**
+     * Additional attributes that are not retrieved by getting fields from ProductInterface
+     *
      * @var array
      */
     private $additionalAttributes = ['min_price', 'max_price', 'category_id'];
 
     /**
+     * Array to translate graphql field to internal entity attribute
+     *
+     * @var array
+     */
+    private $translatedAttributes = ['category_id' => 'category_ids'];
+
+    /**
      * @param ConfigInterface $config
-     * @param array $additionalAttributes
+     * @param string[] $additionalAttributes
+     * @param array $translatedAttributes
      */
     public function __construct(
         ConfigInterface $config,
-        array $additionalAttributes = []
+        array $additionalAttributes = [],
+        array $translatedAttributes = []
     ) {
         $this->config = $config;
         $this->additionalAttributes = array_merge($this->additionalAttributes, $additionalAttributes);
+        $this->translatedAttributes = array_merge($this->translatedAttributes, $translatedAttributes);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * Gather all the product entity attributes that can be filtered by search criteria.
+     * Example format ['attributeNameInGraphQl' => ['type' => 'String'. 'fieldName' => 'attributeNameInSearchCriteria']]
+     *
+     * @return array
      */
     public function getEntityAttributes() : array
     {
@@ -55,14 +72,20 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
             $configElement = $this->config->getConfigElement($interface['interface']);
 
             foreach ($configElement->getFields() as $field) {
-                $fields[$field->getName()] = 'String';
+                $fields[$field->getName()] = [
+                    'type' => 'String',
+                    'fieldName' => $this->translatedAttributes[$field->getName()] ?? $field->getName(),
+                ];
             }
         }
 
-        foreach ($this->additionalAttributes as $attribute) {
-            $fields[$attribute] = 'String';
+        foreach ($this->additionalAttributes as $attributeName) {
+            $fields[$attributeName] = [
+                'type' => 'String',
+                'fieldName' => $this->translatedAttributes[$attributeName] ?? $attributeName,
+            ];
         }
 
-        return array_keys($fields);
+        return $fields;
     }
 }

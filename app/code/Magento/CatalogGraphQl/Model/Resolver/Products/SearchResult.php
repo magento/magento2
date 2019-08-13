@@ -53,4 +53,34 @@ class SearchResult
     {
         return $this->data['searchAggregation'] ?? null;
     }
+
+    /**
+     * Retrieve the page size for the search
+     *
+     * @return int
+     */
+    public function getPageSize(): int
+    {
+        return $this->data['pageSize'] ?? 0;
+    }
+
+    /**
+     * Retrieve the current page for the search
+     *
+     * @return int
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->data['currentPage'] ?? 0;
+    }
+
+    /**
+     * Retrieve total pages for the search
+     *
+     * @return int
+     */
+    public function getTotalPages(): int
+    {
+        return $this->data['totalPages'] ?? 0;
+    }
 }
