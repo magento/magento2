@@ -102,16 +102,16 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
             $model->setData($data);
 
-            $this->_eventManager->dispatch(
-                'cms_page_prepare_save',
-                ['page' => $model, 'request' => $this->getRequest()]
-            );
-
-            if (!$this->dataProcessor->validate($data)) {
-                return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
-            }
-
             try {
+                $this->_eventManager->dispatch(
+                    'cms_page_prepare_save',
+                    ['page' => $model, 'request' => $this->getRequest()]
+                );
+
+                if (!$this->dataProcessor->validate($data)) {
+                    return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
+                }
+
                 $this->pageRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 return $this->processResultRedirect($model, $resultRedirect, $data);

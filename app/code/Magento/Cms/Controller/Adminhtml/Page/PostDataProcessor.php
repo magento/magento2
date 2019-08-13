@@ -64,6 +64,7 @@ class PostDataProcessor
      */
     public function filter($data)
     {
+        unset($data['layout_update_selected']);
         $filterRules = [];
 
         foreach (['custom_theme_from', 'custom_theme_to'] as $dateField) {

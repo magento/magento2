@@ -8,6 +8,7 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Cms\Model\Page\IdentityMap;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\ObjectManager;
@@ -83,6 +84,11 @@ class PageRepository implements PageRepositoryInterface
     private $authorization;
 
     /**
+     * @var IdentityMap
+     */
+    private $identityMap;
+
+    /**
      * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
@@ -92,6 +98,7 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param IdentityMap|null $identityMap
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -103,7 +110,8 @@ class PageRepository implements PageRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        ?IdentityMap $identityMap = null
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -114,6 +122,7 @@ class PageRepository implements PageRepositoryInterface
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->identityMap = $identityMap ?? ObjectManager::getInstance()->get(IdentityMap::class);
     }
 
     /**
@@ -158,33 +167,18 @@ class PageRepository implements PageRepositoryInterface
             $page->setStoreId($storeId);
         }
         try {
-            //Validate changing of design.
-            $userType = $this->getUserContext()->getUserType();
-            if ((
-                    $userType === UserContextInterface::USER_TYPE_ADMIN
-                    || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-                )
-                && !$this->getAuthorization()->isAllowed('Magento_Cms::save_design')
+            //Persisted data
+            $savedPage = $page->getId() ? $this->getById($page->getId()) : null;
+
+            //Custom layout update must be selected from available files
+            if ($page->getCustomLayoutUpdateXml()
+                && (!$savedPage || $page->getCustomLayoutUpdateXml() !== $savedPage->getCustomLayoutUpdateXml())
             ) {
-                if (!$page->getId()) {
-                    $page->setLayoutUpdateXml(null);
-                    $page->setPageLayout(null);
-                    $page->setCustomTheme(null);
-                    $page->setCustomLayoutUpdateXml(null);
-                    $page->setCustomThemeTo(null);
-                    $page->setCustomThemeFrom(null);
-                } else {
-                    $savedPage = $this->getById($page->getId());
-                    $page->setLayoutUpdateXml($savedPage->getLayoutUpdateXml());
-                    $page->setPageLayout($savedPage->getPageLayout());
-                    $page->setCustomTheme($savedPage->getCustomTheme());
-                    $page->setCustomLayoutUpdateXml($savedPage->getCustomLayoutUpdateXml());
-                    $page->setCustomThemeTo($savedPage->getCustomThemeTo());
-                    $page->setCustomThemeFrom($savedPage->getCustomThemeFrom());
-                }
+                throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
             }
 
             $this->resource->save($page);
+            $this->identityMap->add($page);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the page: %1', $exception->getMessage()),
@@ -208,6 +202,8 @@ class PageRepository implements PageRepositoryInterface
         if (!$page->getId()) {
             throw new NoSuchEntityException(__('The CMS page with the "%1" ID doesn\'t exist.', $pageId));
         }
+        $this->identityMap->add($page);
+
         return $page;
     }
 
@@ -245,6 +241,7 @@ class PageRepository implements PageRepositoryInterface
     {
         try {
             $this->resource->delete($page);
+            $this->identityMap->remove($page->getId());
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __('Could not delete the page: %1', $exception->getMessage())

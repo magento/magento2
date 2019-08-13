@@ -118,12 +118,15 @@ class ServiceMetadata
                 $methods = [];
                 foreach ($serviceData[Converter::KEY_METHODS] as $methodName => $methodMetadata) {
                     $services[$serviceName][self::KEY_SERVICE_METHODS][$methodName] = [
+                        //Method to use for the operation. May differ from the operation's name.
                         self::KEY_METHOD => $methodMetadata[Converter::KEY_REAL_SERVICE_METHOD],
                         self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_SECURE],
                         self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_SECURE],
                         self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES],
                         self::KEY_METHOD_ALIAS => $methodName,
-                        self::KEY_ROUTE_PARAMS => $methodMetadata[Converter::KEY_DATA_PARAMETERS]
+                        self::KEY_ROUTE_PARAMS => $methodMetadata[Converter::KEY_DATA_PARAMETERS],
+                        //Class to initialize for the operation. May differ from the operation's name.
+                        'real_class' => $methodMetadata['real_class']
                     ];
                     $services[$serviceName][self::KEY_CLASS] = $serviceClass;
                     $methods[] = $methodMetadata[Converter::KEY_REAL_SERVICE_METHOD];

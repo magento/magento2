@@ -50,16 +50,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $service = $route->getElementsByTagName('service')->item(0);
             $serviceClass = $service->attributes->getNamedItem('class')->nodeValue;
             $serviceMethod = $service->attributes->getNamedItem('method')->nodeValue;
+            //WSDL method name which may differ from an actual method used.
             $soapMethod = $serviceMethod;
             if ($soapOperationNode = $route->attributes->getNamedItem('soapOperation')) {
                 $soapMethod = trim($soapOperationNode->nodeValue);
+            }
+            //WSDL class name which may differ from an actual class used.
+            $soapService = $serviceClass;
+            if ($soapServiceNode = $route->attributes->getNamedItem('soapService')) {
+                $soapService = trim($soapServiceNode->nodeValue);
             }
             $url = trim($route->attributes->getNamedItem('url')->nodeValue);
             $version = $this->convertVersion($url);
 
             $serviceClassData = [];
-            if (isset($result[self::KEY_SERVICES][$serviceClass][$version])) {
-                $serviceClassData = $result[self::KEY_SERVICES][$serviceClass][$version];
+            if (isset($result[self::KEY_SERVICES][$soapService][$version])) {
+                $serviceClassData = $result[self::KEY_SERVICES][$soapService][$version];
             }
 
             $resources = $route->getElementsByTagName('resource');
@@ -110,13 +116,18 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             if (isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE])) {
                 $serviceSecure = $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE];
             }
+            //Real method to use when performing operations.
             if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_REAL_SERVICE_METHOD])) {
                 $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_REAL_SERVICE_METHOD] = $serviceMethod;
+            }
+            //Real class to initialize when performing operations.
+            if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod]['real_class'])) {
+                $serviceClassData[self::KEY_METHODS][$soapMethod]['real_class'] = $serviceClass;
             }
             $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE] = $serviceSecure || $secure;
             $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_DATA_PARAMETERS] = $serviceData;
 
-            $result[self::KEY_SERVICES][$serviceClass][$version] = $serviceClassData;
+            $result[self::KEY_SERVICES][$soapService][$version] = $serviceClassData;
         }
         return $result;
     }

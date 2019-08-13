@@ -5,7 +5,9 @@
  */
 namespace Magento\Cms\Helper;
 
+use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * CMS Page Helper
@@ -77,6 +79,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     protected $resultPageFactory;
 
     /**
+     * @var CustomLayoutManagerInterface
+     */
+    private $customLayoutManager;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -88,6 +95,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param CustomLayoutManagerInterface|null $customLayoutManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,7 +107,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        ?CustomLayoutManagerInterface $customLayoutManager = null
     ) {
         $this->messageManager = $messageManager;
         $this->_page = $page;
@@ -109,6 +118,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_localeDate = $localeDate;
         $this->_escaper = $escaper;
         $this->resultPageFactory = $resultPageFactory;
+        $this->customLayoutManager = $customLayoutManager
+            ?? ObjectManager::getInstance()->get(CustomLayoutManagerInterface::class);
         parent::__construct($context);
     }
 
@@ -152,7 +163,14 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $resultPage = $this->resultPageFactory->create();
         $this->setLayoutType($inRange, $resultPage);
         $resultPage->addHandle('cms_page_view');
-        $resultPage->addPageLayoutHandles(['id' => str_replace('/', '_', $this->_page->getIdentifier())]);
+        $pageHandles = ['id' => str_replace('/', '_', $this->_page->getIdentifier())];
+        //Selected custom updates.
+        $customLayoutHandle = $this->customLayoutManager->fetchHandle($this->_page->getId());
+        if ($customLayoutHandle) {
+            $pageHandles = array_merge($pageHandles, $customLayoutHandle);
+        }
+
+        $resultPage->addPageLayoutHandles($pageHandles);
 
         $this->_eventManager->dispatch(
             'cms_page_render',

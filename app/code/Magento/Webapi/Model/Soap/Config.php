@@ -74,7 +74,7 @@ class Config
             foreach ($this->getRequestedSoapServices($requestedServices) as $serviceName => $serviceData) {
                 foreach ($serviceData[ServiceMetadata::KEY_SERVICE_METHODS] as $methodData) {
                     $method = $methodData[ServiceMetadata::KEY_METHOD];
-                    $class = $serviceData[ServiceMetadata::KEY_CLASS];
+                    $class = $methodData['real_class'];
                     $operation = $methodData[ServiceMetadata::KEY_METHOD_ALIAS];
                     $operationName = $serviceName . ucfirst($operation);
                     $this->soapOperations[$operationName] = [

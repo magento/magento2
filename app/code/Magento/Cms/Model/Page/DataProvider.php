@@ -8,6 +8,7 @@ namespace Magento\Cms\Model\Page;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use Magento\Framework\AuthorizationInterface;
 
@@ -37,6 +38,16 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $auth;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var CustomLayoutManagerInterface
+     */
+    private $customLayoutManager;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -46,6 +57,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param array $data
      * @param PoolInterface|null $pool
      * @param AuthorizationInterface|null $auth
+     * @param RequestInterface|null $request
+     * @param CustomLayoutManagerInterface|null $customLayoutManager
      */
     public function __construct(
         $name,
@@ -56,13 +69,18 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         array $meta = [],
         array $data = [],
         PoolInterface $pool = null,
-        ?AuthorizationInterface $auth = null
+        ?AuthorizationInterface $auth = null,
+        ?RequestInterface $request = null,
+        ?CustomLayoutManagerInterface $customLayoutManager = null
     ) {
         $this->collection = $pageCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->meta = $this->prepareMeta($this->meta);
+        $this->request = $request ?? ObjectManager::getInstance()->get(RequestInterface::class);
+        $this->customLayoutManager = $customLayoutManager
+            ?? ObjectManager::getInstance()->get(CustomLayoutManagerInterface::class);
     }
 
     /**
@@ -133,6 +151,27 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             ];
             $meta = array_merge_recursive($meta, $designMeta);
         }
+
+        //List of custom layout files available for current page.
+        $options = [['label' => 'Use default', 'value' => '']];
+        if ($this->getRequestFieldName() && ($pageId = (int)$this->request->getParam($this->getRequestFieldName()))) {
+            //We must have a specific page selected.
+            foreach ($this->customLayoutManager->fetchAvailableFiles($pageId) as $layoutFile) {
+                $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
+            }
+        }
+        $customLayoutMeta = [
+            'design' => [
+                'children' => [
+                    'custom_layout_update_select' => [
+                        'arguments' => [
+                            'data' => ['options' => $options]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $meta = array_merge_recursive($meta, $customLayoutMeta);
 
         return $meta;
     }

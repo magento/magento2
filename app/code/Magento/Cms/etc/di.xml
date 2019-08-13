@@ -235,4 +235,10 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="cms" type="Magento\Cms\Model\Plugin\Product" sortOrder="100"/>
     </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutManagerInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager" />
+    <type name="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager">
+        <arguments>
+            <argument name="fileCollector" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
+        </arguments>
+    </type>
 </config>

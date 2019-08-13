@@ -145,6 +145,8 @@ interface PageInterface
     /**
      * Get custom layout update xml
      *
+     * @deprecated Existing updates are applied, new are not accepted.
+     * @see \Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelectedInterface
      * @return string|null
      */
     public function getCustomLayoutUpdateXml();
