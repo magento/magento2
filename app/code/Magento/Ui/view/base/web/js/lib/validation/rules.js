@@ -13,7 +13,6 @@ define([
     'moment',
     'tinycolor',
     'jquery/validate',
-    'jquery/ui',
     'mage/translate'
 ], function ($, _, utils, moment, tinycolor) {
     'use strict';
@@ -803,6 +802,14 @@ define([
             },
             $.mage.__('Please enter a valid date.')
         ],
+        'validate-date-range': [
+            function (value, params) {
+                var fromDate = $('input[name*="' + params + '"]').val();
+
+                return moment.utc(value).unix() >= moment.utc(fromDate).unix() || isNaN(moment.utc(value).unix());
+            },
+            $.mage.__('Make sure the To Date is later than or the same as the From Date.')
+        ],
         'validate-identifier': [
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/.test(value);
@@ -920,12 +927,12 @@ define([
         ],
         'validate-per-page-value-list': [
             function (value) {
-                var isValid = utils.isEmpty(value),
+                var isValid = true,
                     values = value.split(','),
                     i;
 
-                if (isValid) {
-                    return true;
+                if (utils.isEmpty(value)) {
+                    return isValid;
                 }
 
                 for (i = 0; i < values.length; i++) {

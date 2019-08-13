@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SearchAttributeByCodeOnProductAttributeGridActionGroup">
+        <annotations>
+            <description>Goto the Product Attribute grid page. Search for the provided Product Attribute Code.</description>
+        </annotations>
+        <arguments>
+            <argument name="productAttributeCode" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAdminProductAttributeGridLoad"/>
+        <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
+        <waitForPageLoad stepKey="waitForAdminProductAttributeGridSectionLoad"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{productAttributeCode}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskOnGridToDisappear"/>
+        <see selector="{{AdminProductAttributeGridSection.attributeCodeColumn}}" userInput="{{productAttributeCode}}" stepKey="seeAttributeCodeInGrid"/>
+    </actionGroup>
+</actionGroups>

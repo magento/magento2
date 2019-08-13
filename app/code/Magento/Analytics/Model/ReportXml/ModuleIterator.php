@@ -5,7 +5,7 @@
  */
 namespace Magento\Analytics\Model\ReportXml;
 
-use Magento\Framework\Module\Manager as ModuleManager;
+use \Magento\Framework\Module\ModuleManagerInterface as ModuleManager;
 
 /**
  * Iterator for ReportXml modules

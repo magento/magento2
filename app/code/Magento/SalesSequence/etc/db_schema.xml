@@ -41,7 +41,7 @@
         <column xsi:type="varchar" name="entity_type" nullable="false" length="32" comment="Prefix"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Store Id"/>
-        <column xsi:type="varchar" name="sequence_table" nullable="false" length="32" comment="table for sequence"/>
+        <column xsi:type="varchar" name="sequence_table" nullable="false" length="64" comment="table for sequence"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="meta_id"/>
         </constraint>

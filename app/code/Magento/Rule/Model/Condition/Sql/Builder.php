@@ -250,8 +250,30 @@ class Builder
         $this->_joinTablesToCollection($collection, $combine);
         $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
-            // Select ::where method adds braces even on empty expression
-            $collection->getSelect()->where($whereExpression);
+            if (!empty($combine->getConditions())) {
+                $conditions = '';
+                $attributeField = '';
+                foreach ($combine->getConditions() as $condition) {
+                    if ($condition->getData('attribute') === \Magento\Catalog\Api\Data\ProductInterface::SKU) {
+                        $conditions = $condition->getData('value');
+                        $attributeField = $condition->getMappedSqlField();
+                    }
+                }
+
+                $collection->getSelect()->where($whereExpression);
+
+                if (!empty($conditions) && !empty($attributeField)) {
+                    $conditions = explode(',', $conditions);
+                    foreach ($conditions as &$condition) {
+                        $condition = "'" . trim($condition) . "'";
+                    }
+                    $conditions = implode(', ', $conditions);
+                    $collection->getSelect()->order("FIELD($attributeField, $conditions)");
+                }
+            } else {
+                // Select ::where method adds braces even on empty expression
+                $collection->getSelect()->where($whereExpression);
+            }
         }
     }
 }

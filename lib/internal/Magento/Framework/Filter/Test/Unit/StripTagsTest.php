@@ -12,8 +12,7 @@ class StripTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStripTags()
     {
-        $escaper = $this->createMock(\Magento\Framework\Escaper::class);
-        $stripTags = new \Magento\Framework\Filter\StripTags($escaper);
+        $stripTags = new \Magento\Framework\Filter\StripTags(new \Magento\Framework\Escaper());
         $this->assertEquals('three', $stripTags->filter('<two>three</two>'));
     }
 }

@@ -10,6 +10,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Tax\Api\OrderTaxManagementInterface;
+use Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -47,6 +48,11 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     private $orderTaxManagementMock;
 
     /**
+     * @var PaymentAdditionalInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paymentAdditionalInfoFactory;
+
+    /**
      * Setup the test
      *
      * @return void
@@ -69,6 +75,8 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->orderTaxManagementMock = $this->getMockBuilder(OrderTaxManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->paymentAdditionalInfoFactory = $this->getMockBuilder(PaymentAdditionalInfoInterfaceFactory::class)
+            ->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
         $this->orderRepository = $this->objectManager->getObject(
             \Magento\Sales\Model\OrderRepository::class,
             [
@@ -76,7 +84,8 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
                 'searchResultFactory' => $this->searchResultFactory,
                 'collectionProcessor' => $this->collectionProcessor,
                 'orderExtensionFactory' => $orderExtensionFactoryMock,
-                'orderTaxManagement' => $this->orderTaxManagementMock
+                'orderTaxManagement' => $this->orderTaxManagementMock,
+                'paymentAdditionalInfoFactory' => $this->paymentAdditionalInfoFactory
             ]
         );
     }
@@ -95,12 +104,16 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
         $orderTaxDetailsMock = $this->getMockBuilder(\Magento\Tax\Api\Data\OrderTaxDetailsInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAppliedTaxes', 'getItems'])->getMockForAbstractClass();
+        $paymentMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderPaymentInterface::class)
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $paymentAdditionalInfo = $this->getMockBuilder(\Magento\Payment\Api\Data\PaymentAdditionalInfoInterface::class)
+            ->disableOriginalConstructor()->setMethods(['setKey', 'setValue'])->getMockForAbstractClass();
 
         $extensionAttributes = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderExtension::class,
             [
                 'getShippingAssignments', 'setShippingAssignments', 'setConvertingFromQuote',
-                'setAppliedTaxes', 'setItemAppliedTaxes'
+                'setAppliedTaxes', 'setItemAppliedTaxes', 'setPaymentAdditionalInfo'
             ]
         );
         $shippingAssignmentBuilder = $this->createMock(
@@ -111,6 +124,13 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('process')
             ->with($searchCriteriaMock, $collectionMock);
         $itemsMock->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn($extensionAttributes);
+        $itemsMock->expects($this->atleastOnce())->method('getPayment')->willReturn($paymentMock);
+        $paymentMock->expects($this->atLeastOnce())->method('getAdditionalInformation')
+            ->willReturn(['method' => 'checkmo']);
+        $this->paymentAdditionalInfoFactory->expects($this->atLeastOnce())->method('create')
+            ->willReturn($paymentAdditionalInfo);
+        $paymentAdditionalInfo->expects($this->atLeastOnce())->method('setKey')->willReturnSelf();
+        $paymentAdditionalInfo->expects($this->atLeastOnce())->method('setValue')->willReturnSelf();
         $this->orderTaxManagementMock->expects($this->atLeastOnce())->method('getOrderTaxDetails')
             ->willReturn($orderTaxDetailsMock);
         $extensionAttributes->expects($this->any())

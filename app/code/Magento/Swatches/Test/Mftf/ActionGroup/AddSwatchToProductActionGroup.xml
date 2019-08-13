@@ -8,8 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="AddVisualSwatchToProductActionGroup">
+        <annotations>
+            <description>Adds the provided Visual Swatch Attribute and Options (2) to a Product on the Admin Product creation/edit page. Clicks on Save. Validates that the Success Message is present.</description>
+        </annotations>
         <arguments>
             <argument name="attribute" defaultValue="visualSwatchAttribute"/>
             <argument name="option1" defaultValue="visualSwatchOption1"/>
@@ -62,4 +64,24 @@
         <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSaveProductMessage"/>
     </actionGroup>
 
+    <actionGroup name="AddVisualSwatchToProductWithStorefrontConfigActionGroup" extends="AddVisualSwatchToProductActionGroup">
+        <annotations>
+            <description>EXTENDS: AddVisualSwatchToProductActionGroup. Add the provided Visual Swatch Attribute and Options (2) to a Product with Storefront Configurations.</description>
+        </annotations>
+        <arguments>
+            <argument name="attribute" defaultValue="visualSwatchAttribute"/>
+            <argument name="option1" defaultValue="visualSwatchOption1"/>
+            <argument name="option2" defaultValue="visualSwatchOption2"/>
+        </arguments>
+
+        <!-- Go to Storefront Properties tab -->
+        <click selector="{{AdminNewAttributePanel.storefrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab" after="fillDefaultStoreLabel2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.storefrontPropertiesTitle}}" stepKey="waitTabLoad" after="goToStorefrontPropertiesTab"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInSearch}}" stepKey="switchOnUsInSearch" userInput="Yes" after="waitTabLoad"/>
+        <selectOption selector="{{AdminNewAttributePanel.visibleInAdvancedSearch}}" stepKey="switchOnVisibleInAdvancedSearch" userInput="Yes" after="switchOnUsInSearch"/>
+        <selectOption selector="{{AdminNewAttributePanel.comparableOnStorefront}}" stepKey="switchOnComparableOnStorefront" userInput="Yes" after="switchOnVisibleInAdvancedSearch"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInLayeredNavigation}}" stepKey="selectUseInLayer" userInput="Filterable (with results)" after="switchOnComparableOnStorefront"/>
+        <selectOption selector="{{AdminNewAttributePanel.visibleOnCatalogPagesOnStorefront}}" stepKey="switchOnVisibleOnCatalogPagesOnStorefront" userInput="Yes" after="selectUseInLayer"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInProductListing}}" stepKey="switchOnUsedInProductListing" userInput="Yes" after="switchOnVisibleOnCatalogPagesOnStorefront"/>
+    </actionGroup>
 </actionGroups>

@@ -216,7 +216,7 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
     public function makeStorableArrayFieldValueDataProvider()
     {
         return [
-            'invalid bool' => [false, ''],
+            'invalid bool' => [false, false],
             'invalid empty string' => ['', ''],
             'valid numeric' => ['22', '22'],
             'valid empty array' => [[], '[]', 1],
@@ -240,7 +240,8 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
                 '[1]',
                 1,
                 [0 => 1.0]
-            ]
+            ],
+            'json value' => ['{"32000":2,"0":1}', '{"32000":2,"0":1}'],
         ];
     }
 }

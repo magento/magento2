@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\MailException;
+use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Phrase;
@@ -59,12 +62,12 @@ class Transport implements TransportInterface
     private $message;
 
     /**
-     * @param MessageInterface $message Email message object
+     * @param EmailMessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
      * @param null|string|array|\Traversable $parameters Config options for sendmail parameters
      */
     public function __construct(
-        MessageInterface $message,
+        EmailMessageInterface $message,
         ScopeConfigInterface $scopeConfig,
         $parameters = null
     ) {
@@ -87,7 +90,7 @@ class Transport implements TransportInterface
     public function sendMessage()
     {
         try {
-            $zendMessage = Message::fromString($this->message->getRawMessage());
+            $zendMessage = Message::fromString($this->message->getRawMessage())->setEncoding('utf-8');
             if (2 === $this->isSetReturnPath && $this->returnPathValue) {
                 $zendMessage->setSender($this->returnPathValue);
             } elseif (1 === $this->isSetReturnPath && $zendMessage->getFrom()->count()) {

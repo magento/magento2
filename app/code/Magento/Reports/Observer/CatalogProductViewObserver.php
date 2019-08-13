@@ -10,6 +10,7 @@ use Magento\Reports\Model\Event;
 
 /**
  * Reports Event observer model
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CatalogProductViewObserver implements ObserverInterface
 {
@@ -49,6 +50,7 @@ class CatalogProductViewObserver implements ObserverInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param EventSaver $eventSaver
+     * @param \Magento\Reports\Model\ReportStatus $reportStatus
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,

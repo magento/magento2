@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogRuleConfigurable\Test\TestCase\ApplyConfigurableProductCatalogPriceRulesTest" summary="Apply Catalog Price Rules">
         <variation name="ApplyCatalogRuleForComfigurableProductWithOptions1" summary="Apply Catalog Rule For Configurable Product With Promo Simple Product" ticketId="MAGETWO-47186">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">configurableProduct::Stellar_Solar_Jacket_SIZE_S</data>
             <data name="products/1" xsi:type="string">configurableProduct::Stellar_Solar_Jacket_SIZE_M</data>
             <data name="products/2" xsi:type="string">configurableProduct::Stellar_Solar_Jacket_SIZE_L</data>
@@ -39,6 +40,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="ApplyCatalogRuleForConfigurableProductWithAssignedSimpleProducts" summary="Apply Catalog Rule For Configurable Product With Custom Options" ticketId="MAGETWO-23042">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">configurableProduct::first_product_with_custom_options_and_option_key_1</data>
             <data name="products/1" xsi:type="string">configurableProduct::first_product_with_custom_options_and_option_key_2</data>
             <data name="products/2" xsi:type="string">configurableProduct::second_product_with_custom_options_and_option_key_1</data>

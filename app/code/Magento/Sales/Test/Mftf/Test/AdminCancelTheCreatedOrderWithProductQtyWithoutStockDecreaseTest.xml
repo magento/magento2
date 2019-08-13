@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelTheCreatedOrderWithProductQtyWithoutStockDecreaseTest">
+        <annotations>
+            <group value="Sales"/>
+            <stories value="Cancel Created Order"/>
+            <title value="Cancel the created order with product quantity without stock decrease"/>
+            <description value="Create an order with product quantity without stock decrease, cancel the order and verify product quantity in backend"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16071"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set {{DisableCatalogInventoryConfigData.path}} {{DisableCatalogInventoryConfigData.value}}" stepKey="disableDecreaseInQuantityAfterOrder"/>
+
+            <!--Set default flat rate shipping method settings-->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+
+            <!--Create simple customer-->
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+
+            <!-- Create the category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Create Simple Product -->
+            <createData entity="ApiSimplePrice10Qty10" stepKey="simpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10.00</field>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{EnableCatalogInventoryConfigData.path}} {{EnableCatalogInventoryConfigData.value}}" stepKey="enableDecreaseInQuantityAfterOrder"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create new customer order-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!--Add Simple product to order-->
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+
+        <!--Verify order information-->
+        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+
+        <!-- Assert Simple Product Quantity in backend after order -->
+        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+            <argument name="productSku" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="10" stepKey="seeProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatus"/>
+
+        <!-- Open Order Index Page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
+
+        <!-- Filter Order using orderId -->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction"/>
+
+        <!-- Cancel the Order -->
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder"/>
+
+        <!-- Assert Simple Product Quantity in backend after Cancelling the order -->
+        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct1">
+            <argument name="productSku" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad1"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName1"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="10" stepKey="seeProductQuantityAfterCancelOrder"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatusAfterCancelOrder"/>
+
+        <!-- Open Order Index Page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders1"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+
+        <!-- Filter Order using orderId -->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById1">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction1"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <!-- Reorder the product -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickOnReorderButton"/>
+        <waitForPageLoad stepKey="waitForReorderFormToLoad"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder1"/>
+
+        <!-- Assert Simple Product Quantity in backend after Reorder -->
+        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct2">
+            <argument name="productSku" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad2"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName2"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="10" stepKey="seeProductQuantityAfterReorder"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatusAfterReorder"/>
+    </test>
+</tests>

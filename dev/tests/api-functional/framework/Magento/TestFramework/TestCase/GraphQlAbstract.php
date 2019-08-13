@@ -6,6 +6,7 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Request\Http;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -27,7 +28,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
     private $appCache;
 
     /**
-     * Perform GraphQL call to the system under test.
+     * Perform GraphQL query call via GET to the system under test.
      *
      * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
      * @param string $query
@@ -43,7 +44,55 @@ abstract class GraphQlAbstract extends WebapiAbstract
         string $operationName = '',
         array $headers = []
     ) {
-        return $this->getGraphQlClient()->postQuery(
+        return $this->getGraphQlClient()->get(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
+     * Perform GraphQL mutations call via POST to the system under test.
+     *
+     * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
+     */
+    public function graphQlMutation(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        return $this->getGraphQlClient()->post(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
+     * Perform GraphQL query via GET and returns only the response headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function graphQlQueryWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        return $this->getGraphQlClient()->getWithResponseHeaders(
             $query,
             $variables,
             $operationName,

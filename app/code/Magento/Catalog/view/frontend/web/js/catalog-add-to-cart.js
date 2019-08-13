@@ -8,7 +8,7 @@ define([
     'mage/translate',
     'underscore',
     'Magento_Catalog/js/product/view/product-ids-resolver',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($, $t, _, idsResolver) {
     'use strict';
 
@@ -163,6 +163,16 @@ define([
                             .html(res.product.statusText);
                     }
                     self.enableAddToCartButton(form);
+                },
+
+                /** @inheritdoc */
+                error: function (res) {
+                    $(document).trigger('ajax:addToCart:error', {
+                        'sku': form.data().productSku,
+                        'productIds': productIds,
+                        'form': form,
+                        'response': res
+                    });
                 },
 
                 /** @inheritdoc */

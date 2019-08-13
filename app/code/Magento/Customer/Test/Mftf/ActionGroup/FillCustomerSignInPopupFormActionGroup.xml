@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillCustomerSignInPopupFormActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer details (Email and Password) in the Customer Sign In modal on the Storefront Checkout page. Clicks on Sign In.</description>
+        </annotations>
+        <arguments>
+            <argument name="customer" type="entity"/>
+        </arguments>
+        
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible"/>
+        <fillField selector="{{StorefrontCustomerSignInPopupFormSection.email}}" userInput="{{customer.email}}" stepKey="fillCustomerEmail"/>
+        <fillField selector="{{StorefrontCustomerSignInPopupFormSection.password}}" userInput="{{customer.password}}" stepKey="fillCustomerPassword"/>
+        <click selector="{{StorefrontCustomerSignInPopupFormSection.signIn}}" stepKey="clickSignIn"/>
+    </actionGroup>
+</actionGroups>

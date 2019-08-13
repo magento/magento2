@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="FullCaptureAuthorizenetAcceptjsTest">
+        <annotations>
+            <stories value="Authorize.net Accept.js"/>
+            <title value="Full Capture using Authorize.net Accept.js"/>
+            <description value="Capture an order placed using Authorize.net Accept.js"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12255"/>
+            <skip>
+                <issueId value="DEVOPS-4604"/>
+            </skip>
+            <group value="AuthorizenetAcceptjs"/>
+            <group value="ThirdPartyPayments"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <createData stepKey="createCustomer" entity="Simple_US_Customer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!--Configure Auth.net-->
+            <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+            <actionGroup ref="ConfigureAuthorizenetAcceptjs" stepKey="configureAuthorizenetAcceptjs">
+                <argument name="paymentAction" value="Authorize Only"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="DisableAuthorizenetAcceptjs" stepKey="DisableAuthorizenetAcceptjs"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Storefront Login-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Add product to cart-->
+        <amOnPage url="$$createProduct.name$$.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForCartToFill"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+
+        <!--Checkout steps-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
+        <waitForPageLoad stepKey="waitForCheckoutLoad"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="submitShippingSelection"/>
+        <waitForPageLoad stepKey="waitForShippingToFinish"/>
+        <actionGroup ref="FillPaymentInformation" stepKey="fillPaymentInfo"/>
+
+        <!--View and validate order-->
+        <actionGroup ref="ViewAndValidateOrderActionGroup" stepKey="viewAndValidateOrder">
+            <argument name="amount" value="{{AuthorizenetAcceptjsOrderValidationData.twoSimpleProductsOrderAmount}}"/>
+            <argument name="status" value="{{AuthorizenetAcceptjsOrderValidationData.processingStatusProcessing}}"/>
+            <argument name="captureStatus" value="{{AuthorizenetAcceptjsOrderValidationData.captureStatusCapture}}"/>
+            <argument name="closedStatus" value="{{AuthorizenetAcceptjsOrderValidationData.closedStatusNo}}"/>
+        </actionGroup>
+    </test>
+</tests>

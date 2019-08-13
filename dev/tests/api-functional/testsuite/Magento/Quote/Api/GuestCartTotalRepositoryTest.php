@@ -63,14 +63,14 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
         $shippingAddress = $quote->getShippingAddress();
 
         $data = [
-            Totals::KEY_BASE_GRAND_TOTAL => $quote->getBaseGrandTotal(),
             Totals::KEY_GRAND_TOTAL => $quote->getGrandTotal(),
-            Totals::KEY_BASE_SUBTOTAL => $quote->getBaseSubtotal(),
+            Totals::KEY_BASE_GRAND_TOTAL => $quote->getBaseGrandTotal(),
             Totals::KEY_SUBTOTAL => $quote->getSubtotal(),
-            Totals::KEY_BASE_SUBTOTAL_WITH_DISCOUNT => $quote->getBaseSubtotalWithDiscount(),
-            Totals::KEY_SUBTOTAL_WITH_DISCOUNT => $quote->getSubtotalWithDiscount(),
+            Totals::KEY_BASE_SUBTOTAL => $quote->getBaseSubtotal(),
             Totals::KEY_DISCOUNT_AMOUNT => $shippingAddress->getDiscountAmount(),
             Totals::KEY_BASE_DISCOUNT_AMOUNT => $shippingAddress->getBaseDiscountAmount(),
+            Totals::KEY_SUBTOTAL_WITH_DISCOUNT => $quote->getSubtotalWithDiscount(),
+            Totals::KEY_BASE_SUBTOTAL_WITH_DISCOUNT => $quote->getBaseSubtotalWithDiscount(),
             Totals::KEY_SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
             Totals::KEY_BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
             Totals::KEY_SHIPPING_DISCOUNT_AMOUNT => $shippingAddress->getShippingDiscountAmount(),
@@ -94,6 +94,7 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
         $data = $this->formatTotalsData($data);
 
         $actual = $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);
+        $actual = $this->formatTotalsData($actual);
 
         unset($actual['items'][0]['options']);
         unset($actual['weee_tax_applied_amount']);

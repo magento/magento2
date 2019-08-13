@@ -16,9 +16,6 @@
             <description value="Sort by price should be correct if the apply Catalog Rule to child product of configurable product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69988"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
             <group value="сonfigurable_product"/>
         </annotations>
         <before>

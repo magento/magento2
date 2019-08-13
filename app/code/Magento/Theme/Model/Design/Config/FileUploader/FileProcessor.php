@@ -18,6 +18,8 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Design file processor.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FileProcessor
@@ -79,8 +81,8 @@ class FileProcessor
      * Save file to temp media directory
      *
      * @param  string $fileId
+     *
      * @return array
-     * @throws LocalizedException
      */
     public function saveToTmp($fileId)
     {

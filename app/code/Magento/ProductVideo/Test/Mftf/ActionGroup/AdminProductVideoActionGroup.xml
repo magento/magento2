@@ -5,13 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add video in Admin Product page -->
     <actionGroup name="addProductVideo">
+        <annotations>
+            <description>Expands the 'Images And Videos' section on the Admin Product creation/edit page. Adds the provided Video to the Product. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="video" defaultValue="mftfTestProductVideo"/>
         </arguments>
+
         <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductVideoSection"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.addVideoButton}}" stepKey="waitForAddVideoButtonVisible" time="30"/>
@@ -28,6 +33,10 @@
 
     <!-- Remove video in Admin Product page -->
     <actionGroup name="removeProductVideo">
+        <annotations>
+            <description>Expands the 'Images And Videos' section on the Admin Product creation/edit page. Clicks on the Remove Video button.</description>
+        </annotations>
+
         <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductVideoSection"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.addVideoButton}}" stepKey="waitForAddVideoButtonVisible" time="30"/>
@@ -36,9 +45,13 @@
 
     <!-- Assert product video in Admin Product page -->
     <actionGroup name="assertProductVideoAdminProductPage">
+        <annotations>
+            <description>Validates that the provided Video is present on the Admin Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="video" defaultValue="mftfTestProductVideo"/>
         </arguments>
+
         <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductVideoSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -48,9 +61,13 @@
 
     <!-- Assert product video not in Admin Product page -->
     <actionGroup name="assertProductVideoNotInAdminProductPage">
+        <annotations>
+            <description>Validates that the provided Video is NOT present on the Admin Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="video" defaultValue="mftfTestProductVideo"/>
         </arguments>
+
         <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductVideoSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

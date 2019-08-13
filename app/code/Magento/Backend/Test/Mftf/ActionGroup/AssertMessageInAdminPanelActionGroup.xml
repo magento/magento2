@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertMessageInAdminPanelActionGroup">
+        <annotations>
+            <description>Validates that the provided Message appears in the provided Message Type on an Admin page.</description>
+        </annotations>
+        <arguments>
+            <argument name="message" type="string"/>
+            <argument name="messageType" type="string" defaultValue="success"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminMessagesSection.messageByType(messageType)}}" stepKey="waitForMessageVisible"/>
+        <see userInput="{{message}}" selector="{{AdminMessagesSection.messageByType(messageType)}}" stepKey="verifyMessage"/>
+    </actionGroup>
+</actionGroups>

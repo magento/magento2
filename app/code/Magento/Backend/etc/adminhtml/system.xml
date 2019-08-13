@@ -112,7 +112,7 @@
             <group id="debug" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Debug</label>
                 <field id="template_hints_storefront" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enabled Template Path Hints for Storefront</label>
+                    <label>Enable Template Path Hints for Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="template_hints_storefront_show_with_parameter" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -132,7 +132,7 @@
                     <comment>Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]</comment>
                 </field>
                 <field id="template_hints_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enabled Template Path Hints for Admin</label>
+                    <label>Enable Template Path Hints for Admin</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="template_hints_blocks" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -169,15 +169,15 @@
             </group>
             <group id="js" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>JavaScript Settings</label>
-                <field id="merge_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="merge_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Merge JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="enable_js_bundling" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_js_bundling" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable JavaScript Bundling</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minify JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
@@ -185,11 +185,11 @@
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>CSS Settings</label>
-                <field id="merge_css_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="merge_css_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Merge CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minify CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
@@ -323,11 +323,11 @@
                     <label>Port (25)</label>
                     <comment>For Windows server only.</comment>
                 </field>
-                <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Set Return-Path</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesnocustom</source_model>
                 </field>
-                <field id="return_path_email" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="return_path_email" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Return-Path Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>

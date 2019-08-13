@@ -34,15 +34,23 @@ class QueryComplexityLimiter
     private $queryComplexity;
 
     /**
+     * @var IntrospectionConfiguration
+     */
+    private $introspectionConfig;
+
+    /**
      * @param int $queryDepth
      * @param int $queryComplexity
+     * @param IntrospectionConfiguration $introspectionConfig
      */
     public function __construct(
         int $queryDepth,
-        int $queryComplexity
+        int $queryComplexity,
+        IntrospectionConfiguration $introspectionConfig
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;
+        $this->introspectionConfig = $introspectionConfig;
     }
 
     /**
@@ -53,7 +61,9 @@ class QueryComplexityLimiter
     public function execute(): void
     {
         DocumentValidator::addRule(new QueryComplexity($this->queryComplexity));
-        DocumentValidator::addRule(new DisableIntrospection());
+        DocumentValidator::addRule(
+            new DisableIntrospection((int) $this->introspectionConfig->isIntrospectionDisabled())
+        );
         DocumentValidator::addRule(new QueryDepth($this->queryDepth));
     }
 }

@@ -265,7 +265,7 @@ class Tax extends CommonTaxCollector
     {
         $extraTaxableDetails = [];
         foreach ($itemsByType as $itemType => $itemTaxDetails) {
-            if ($itemType != self::ITEM_TYPE_PRODUCT and $itemType != self::ITEM_TYPE_SHIPPING) {
+            if ($itemType != self::ITEM_TYPE_PRODUCT && $itemType != self::ITEM_TYPE_SHIPPING) {
                 foreach ($itemTaxDetails as $itemCode => $itemTaxDetail) {
                     /** @var \Magento\Tax\Api\Data\TaxDetailsInterface $taxDetails */
                     $taxDetails = $itemTaxDetail[self::KEY_ITEM];
@@ -403,11 +403,11 @@ class Tax extends CommonTaxCollector
         $total->setShippingTaxAmount($shippingTaxAmount);
         $total->setDiscountTaxCompensationAmount($discountTaxCompensation); // accessed via 'discount_tax_compensation'
         $total->setSubtotalInclTax($subtotalInclTax);
-        return;
     }
 
     /**
      * Process model configuration array.
+     *
      * This method can be used for changing totals collect sort order
      *
      * @param   array $config

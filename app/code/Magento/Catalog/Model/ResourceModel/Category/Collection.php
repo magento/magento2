@@ -82,7 +82,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -322,7 +321,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                         ['e' => $this->getTable('catalog_category_entity')],
                         'main_table.category_id=e.entity_id',
                         []
-                    )->where('e.entity_id = :entity_id OR e.path LIKE :c_path');
+                    )->where(
+                        '(e.entity_id = :entity_id OR e.path LIKE :c_path)'
+                    );
                     if ($websiteId) {
                         $select->join(
                             ['w' => $this->getProductWebsiteTable()],

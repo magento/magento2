@@ -3,19 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+//phpcs:disable Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace
+//phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+//phpcs:disable Magento2.Files.LineLength.MaxExceeded
 ?>
 <?php /** @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking\View */ ?>
 <div class="admin__control-table-wrapper">
     <table class="data-table admin__control-table" id="shipment_tracking_info">
         <thead>
             <tr class="headings">
-                <th class="col-carrier"><?= /* @escapeNotVerified */ __('Carrier') ?></th>
-                <th class="col-title"><?= /* @escapeNotVerified */ __('Title') ?></th>
-                <th class="col-number"><?= /* @escapeNotVerified */ __('Number') ?></th>
-                <th class="col-delete last"><?= /* @escapeNotVerified */ __('Action') ?></th>
+                <th class="col-carrier"><?= $block->escapeHtml(__('Carrier')) ?></th>
+                <th class="col-title"><?= $block->escapeHtml(__('Title')) ?></th>
+                <th class="col-number"><?= $block->escapeHtml(__('Number')) ?></th>
+                <th class="col-delete last"><?= $block->escapeHtml(__('Action')) ?></th>
             </tr>
         </thead>
         <tfoot>
@@ -24,8 +24,8 @@
                     <select name="carrier"
                             class="select admin__control-select"
                             onchange="selectCarrier(this)">
-                        <?php foreach ($block->getCarriers() as $_code => $_name): ?>
-                        <option value="<?= /* @escapeNotVerified */ $_code ?>"><?= $block->escapeHtml($_name) ?></option>
+                        <?php foreach ($block->getCarriers() as $_code => $_name) : ?>
+                        <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </td>
@@ -46,21 +46,23 @@
                 <td class="col-delete last"><?= $block->getSaveButtonHtml() ?></td>
             </tr>
         </tfoot>
-    <?php if ($_tracks = $block->getShipment()->getAllTracks()): ?>
+    <?php if ($_tracks = $block->getShipment()->getAllTracks()) : ?>
         <tbody>
-        <?php $i = 0; foreach ($_tracks as $_track):$i++ ?>
-            <tr class="<?= /* @escapeNotVerified */ ($i%2 == 0) ? 'even' : 'odd' ?>">
-                <td class="col-carrier"><?= $block->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?></td>
+        <?php $i = 0; foreach ($_tracks as $_track) :$i++ ?>
+            <tr class="<?= /* @noEscape */ ($i%2 == 0) ? 'even' : 'odd' ?>">
+                <td class="col-carrier">
+                    <?= $block->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?>
+                </td>
                 <td class="col-title"><?= $block->escapeHtml($_track->getTitle()) ?></td>
                 <td class="col-number">
-                    <?php if ($_track->isCustom()): ?>
-                    <?= $block->escapeHtml($_track->getNumber()) ?>
-                    <?php else: ?>
-                    <a href="#" onclick="popWin('<?= /* @escapeNotVerified */ $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_track) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?= $block->escapeHtml($_track->getNumber()) ?></a>
-                    <div id="shipment_tracking_info_response_<?= /* @escapeNotVerified */ $_track->getId() ?>"></div>
+                    <?php if ($_track->isCustom()) : ?>
+                        <?= $block->escapeHtml($_track->getNumber()) ?>
+                    <?php else : ?>
+                    <a href="#" onclick="popWin('<?= $block->escapeJs($block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($_track))) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?= $block->escapeHtml($_track->getNumber()) ?></a>
+                    <div id="shipment_tracking_info_response_<?= (int) $_track->getId() ?>"></div>
                     <?php endif; ?>
                 </td>
-                <td class="col-delete last"><button class="action-delete" type="button" onclick="deleteTrackingNumber('<?= /* @escapeNotVerified */ $block->getRemoveUrl($_track) ?>'); return false;"><span><?= /* @escapeNotVerified */ __('Delete') ?></span></button></td>
+                <td class="col-delete last"><button class="action-delete" type="button" onclick="deleteTrackingNumber('<?= $block->escapeJs($block->escapeUrl($block->getRemoveUrl($_track))) ?>'); return false;"><span><?= $block->escapeHtml(__('Delete')) ?></span></button></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -78,7 +80,7 @@ function selectCarrier(elem) {
 }
 
 function deleteTrackingNumber(url) {
-    if (confirm('<?= /* @escapeNotVerified */ __('Are you sure?') ?>')) {
+    if (confirm('<?= $block->escapeJs($block->escapeHtml(__('Are you sure?'))) ?>')) {
         submitAndReloadArea($('shipment_tracking_info').parentNode, url)
     }
 }

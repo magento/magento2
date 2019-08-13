@@ -33,6 +33,7 @@ $orders = [
         'grand_total' => 130.00,
         'base_grand_total' => 130.00,
         'subtotal' => 130.00,
+        'total_paid' => 130.00,
         'store_id' => 0,
         'website_id' => 0,
         'payment' => $payment
@@ -55,6 +56,7 @@ $orders = [
         'grand_total' => 150.00,
         'base_grand_total' => 150.00,
         'subtotal' => 150.00,
+        'total_paid' => 150.00,
         'store_id' => 1,
         'website_id' => 1,
         'payment' => $payment
@@ -66,6 +68,7 @@ $orders = [
         'grand_total' => 160.00,
         'base_grand_total' => 160.00,
         'subtotal' => 160.00,
+        'total_paid' => 160.00,
         'store_id' => 1,
         'website_id' => 1,
         'payment' => $payment
@@ -88,6 +91,15 @@ foreach ($orders as $orderData) {
 
     $shippingAddress = clone $billingAddress;
     $shippingAddress->setId(null)->setAddressType('shipping');
+
+    /** @var Order\Item $orderItem */
+    $orderItem = $objectManager->create(Order\Item::class);
+    $orderItem->setProductId($product->getId())
+        ->setQtyOrdered(2)
+        ->setBasePrice($product->getPrice())
+        ->setPrice($product->getPrice())
+        ->setRowTotal($product->getPrice())
+        ->setProductType('simple');
 
     $order
         ->setData($orderData)

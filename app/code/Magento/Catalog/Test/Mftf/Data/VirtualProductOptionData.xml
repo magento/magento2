@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="virtualProductCustomizableOption1">
+        <data key="title" unique="suffix">Test1 option </data>
+        <data key="is_required">1</data>
+        <data key="type">Field</data>
+        <data key="option_0_price">120.03</data>
+        <data key="option_0_price_type">Fixed</data>
+        <data key="option_0_sku" unique="suffix">sku1_</data>
+        <data key="option_0_max_characters">45</data>
+    </entity>
+    <entity name="virtualProductCustomizableOption2">
+        <data key="title" unique="suffix">Test2 option </data>
+        <data key="is_required">1</data>
+        <data key="type">Field</data>
+        <data key="option_0_price">120.03</data>
+        <data key="option_0_price_type">Fixed</data>
+        <data key="option_0_sku" unique="suffix">sku2_</data>
+        <data key="option_0_max_characters">45</data>
+    </entity>
+    <entity name="virtualProductCustomizableOption3">
+        <data key="title" unique="suffix">Test3 option </data>
+        <data key="is_required">1</data>
+        <data key="type">Drop-down</data>
+        <data key="option_0_title" unique="suffix">Test3-1 </data>
+        <data key="option_0_price">110.01</data>
+        <data key="option_0_expected_price">9,900.90</data>
+        <data key="option_0_price_type">Percent</data>
+        <data key="option_0_sku" unique="suffix">sku3-1_</data>
+        <data key="option_0_sort_order">0</data>
+        <data key="option_1_title" unique="suffix">Test3-2 </data>
+        <data key="option_1_price">210.02</data>
+        <data key="option_1_price_type">Fixed</data>
+        <data key="option_1_sku" unique="suffix">sku3-2_</data>
+        <data key="option_1_sort_order">1</data>
+    </entity>
+    <entity name="virtualProductCustomizableOption4">
+        <data key="title" unique="suffix">Test4 option </data>
+        <data key="is_required">1</data>
+        <data key="type">Drop-down</data>
+        <data key="option_0_title" unique="suffix">Test4-1 </data>
+        <data key="option_0_price">10.01</data>
+        <data key="option_0_price_type">Percent</data>
+        <data key="option_0_sku" unique="suffix">sku4-1_</data>
+        <data key="option_0_sort_order">0</data>
+        <data key="option_1_title" unique="suffix">Test4-2 </data>
+        <data key="option_1_price">20.02</data>
+        <data key="option_1_price_type">Fixed</data>
+        <data key="option_1_sku" unique="suffix">sku4-2_</data>
+        <data key="option_1_sort_order">1</data>
+    </entity>
+</entities>
