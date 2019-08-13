@@ -127,6 +127,18 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
     }
 
     /**
+     * Add quantity to filter
+     *
+     * @param $field
+     * @param $condition
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     */
+    private function addQtyFilter($field, $condition)
+    {
+        return parent::addFieldToFilter('main_table.' . $field, $condition);
+    }
+
+    /**
      * Add field filter to collection
      *
      * @param string|array $field
@@ -149,6 +161,11 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
             case 'days_in_wishlist':
                 if (!isset($condition['datetime'])) {
                     return $this->addDaysFilter($condition);
+                }
+                break;
+            case 'qty':
+                if (isset($condition['from']) || isset($condition['to'])) {
+                    return $this->addQtyFilter($field, $condition);
                 }
         }
         return parent::addFieldToFilter($field, $condition);
