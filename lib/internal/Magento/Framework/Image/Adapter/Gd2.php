@@ -296,6 +296,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                     imagecolortransparent($imageResourceTo, $transparentColor);
                     return $transparentColor;
                 }
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Exception $e) {
                 // fallback to default background color
             }
