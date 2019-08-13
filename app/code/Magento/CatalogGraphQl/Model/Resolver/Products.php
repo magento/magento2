@@ -56,7 +56,7 @@ class Products implements ResolverInterface
      * @param Search $searchQuery
      * @param Filter $filterQuery
      * @param SearchFilter $searchFilter
-     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param SearchCriteriaBuilder|null $searchApiCriteriaBuilder
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
@@ -105,7 +105,6 @@ class Products implements ResolverInterface
 
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
-
 
         $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
 

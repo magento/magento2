@@ -74,7 +74,9 @@ class SearchCriteriaBuilder
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
         $searchCriteria = $this->builder->build('products', $args);
-        $searchCriteria->setRequestName('catalog_view_container');
+        $searchCriteria->setRequestName(
+            $includeAggregation ? 'graphql_product_search_with_aggregation' : 'graphql_product_search'
+        );
         if ($includeAggregation) {
             $this->preparePriceAggregation($searchCriteria);
         }
