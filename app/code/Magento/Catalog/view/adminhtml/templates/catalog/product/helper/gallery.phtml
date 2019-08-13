@@ -37,7 +37,7 @@ $formName = $block->getFormName();
                type="hidden"
                value="<?= $block->escapeHtmlAttr($typeData['value']) ?>"/>
         <?php
-} ?>
+    } ?>
 
     <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="image item<% if (data.disabled == 1) { %> hidden-for-front<% } %>"
