@@ -14,6 +14,7 @@ use \Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class ProductMetadata
+ *
  * @package Magento\Framework\App
  */
 class ProductMetadata implements ProductMetadataInterface
@@ -29,9 +30,9 @@ class ProductMetadata implements ProductMetadataInterface
     const PRODUCT_NAME  = 'Magento';
 
     /**
-     * Magento version cache prefix
+     * Magento version cache key
      */
-    const CACHE_PREFIX = 'mage-version';
+    const VERSION_CACHE_KEY = 'mage-version';
 
     /**
      * Product version
@@ -76,7 +77,7 @@ class ProductMetadata implements ProductMetadataInterface
      */
     public function getVersion()
     {
-        $versionFromCache = $this->cache->load(self::CACHE_PREFIX);
+        $versionFromCache = $this->cache->load(self::VERSION_CACHE_KEY);
         $this->version = $this->version ?: $versionFromCache;
         if (!$this->version) {
             if (!($this->version = $this->getSystemPackageVersion())) {
@@ -85,7 +86,7 @@ class ProductMetadata implements ProductMetadataInterface
                 } else {
                     $this->version = 'UNKNOWN';
                 }
-                $this->cache->save($this->version, self::CACHE_PREFIX, [Config::CACHE_TAG]);
+                $this->cache->save($this->version, self::VERSION_CACHE_KEY, [Config::CACHE_TAG]);
             }
         }
         return $this->version;
