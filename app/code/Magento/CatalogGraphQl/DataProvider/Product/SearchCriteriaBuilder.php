@@ -10,9 +10,11 @@ namespace Magento\CatalogGraphQl\DataProvider\Product;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\Api\SortOrderBuilder;
 
 /**
  * Build search criteria
@@ -44,24 +46,32 @@ class SearchCriteriaBuilder
     private $visibility;
 
     /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
+
+    /**
      * @param Builder $builder
      * @param ScopeConfigInterface $scopeConfig
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param Visibility $visibility
+     * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
         Builder $builder,
         ScopeConfigInterface $scopeConfig,
         FilterBuilder $filterBuilder,
         FilterGroupBuilder $filterGroupBuilder,
-        Visibility $visibility
+        Visibility $visibility,
+        SortOrderBuilder $sortOrderBuilder
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->builder = $builder;
         $this->visibility = $visibility;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**
@@ -84,7 +94,7 @@ class SearchCriteriaBuilder
         if (!empty($args['search'])) {
             $this->addFilter($searchCriteria, 'search_term', $args['search']);
             if (!$searchCriteria->getSortOrders()) {
-                $searchCriteria->setSortOrders(['_score' => \Magento\Framework\Api\SortOrder::SORT_DESC]);
+                $this->addDefaultSortOrder($searchCriteria);
             }
         }
 
@@ -150,5 +160,19 @@ class SearchCriteriaBuilder
         $filterGroups = $searchCriteria->getFilterGroups();
         $filterGroups[] = $this->filterGroupBuilder->create();
         $searchCriteria->setFilterGroups($filterGroups);
+    }
+
+    /**
+     * Sort by _score DESC if no sort order is set
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     */
+    private function addDefaultSortOrder(SearchCriteriaInterface $searchCriteria): void
+    {
+        $sortOrder = $this->sortOrderBuilder
+            ->setField('_score')
+            ->setDirection(SortOrder::SORT_DESC)
+            ->create();
+        $searchCriteria->setSortOrders([$sortOrder]);
     }
 }
