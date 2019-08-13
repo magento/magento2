@@ -24,6 +24,11 @@ use Magento\Framework\View\Element\Template\Context;
 class Current extends Template
 {
     /**
+     * Search redundant /index and / in url
+     */
+    private const REGEX_INDEX_URL_PATTERN = '/(\/index|(\/))+($|\/$)/';
+
+    /**
      * Default path
      *
      * @var DefaultPathInterface
@@ -88,8 +93,8 @@ class Current extends Template
     public function isCurrent()
     {
         return $this->getCurrent() ||
-            preg_replace('/(\/index|(\/))+($|\/$)/', '', $this->getUrl($this->getPath()))
-            == preg_replace('/(\/index|(\/))+($|\/$)/', '', $this->getUrl($this->getMca()));
+            preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()))
+            == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()));
     }
 
     /**
