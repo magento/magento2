@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelOrderWithVirtualProductCustomSourceAfterPartialInvoiceTest">
+        <annotations>
+            <stories value="Order with Virtual product on Custom stock canceled from Admin after partial invoice"/>
+            <title value="Order with Virtual product on Custom stock canceled from Admin after partial invoice"/>
+            <description value="You should be able to cancel Order with Virtual product on Custom stock after partial invoice"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/2439406"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+            <createData entity="FullSource1" stepKey="customSource"/>
+            <createData entity="BasicMsiStock1" stepKey="customStock"/>
+
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="amOnTheStockGridPage"/>
+            <waitForPageLoad time="20" stepKey="waitForStockGridPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomStockByKeyword">
+                <argument name="keyword" value="$$customStock.stock[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue($$customStock.stock[name]$$)}}" stepKey="clickOnEditForCustomStock"/>
+            <waitForPageLoad time="20" stepKey="waitForStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectWebsiteAsSalesChannel"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveCustomStock"/>
+
+            <comment userInput="Perform reindex and cache flush after assign default stock to main website." stepKey="reindexCacheFlushAfterAssignDefaultStockToMainWebsite"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+
+            <createData entity="VirtualProduct" stepKey="virtualProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+
+            <amOnPage url="{{AdminProductEditPage.url($$virtualProduct.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUSSource1ToCreatedProduct">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setCustomSourceQuantity"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedVirtualProduct"/>
+        </before>
+
+        <after>
+            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="20" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="20" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
+        </after>
+
+        <!--Create Order with 5 items of Virtual product from Admin-->
+        <comment userInput="Create order with Virtual product from admin area." stepKey="createOrderWithVirtualProductComment"/>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addVirtualProductToOrder">
+            <argument name="product" value="$$virtualProduct$$"/>
+            <argument name="productQty" value="5"/>
+        </actionGroup>
+        <waitForPageLoad time="20" stepKey="waitForPageLoadOrder"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessageOrder"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessageOrderPlaced"/>
+
+        <!--Admin Area Process Partial Invoice-->
+        <comment userInput="Admin - Process partial invoice" stepKey="InvoicePartialOrder"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <scrollTo selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="scrollToQty"/>
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="1" stepKey="InvoiceQuantityPartial" />
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="clickUpdateQty" />
+        <waitForPageLoad time="20" stepKey="WaitForInvoiceQtyUpdate"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoadSubmitInvoice"/>
+        <scrollToTopOfPage stepKey="scrollToTopMessage"/>
+        <waitForPageLoad stepKey="waitForPageLoadSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
+
+        <!-- Order cancellation -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
+        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
+
+        <!-- Verify Order status after cancellation -->
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="seeOrderStatus"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 5" stepKey="seeOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Invoiced 1" stepKey="seeInvoicedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 4" stepKey="seeCancelledQuantity"/>
+
+        <!-- Verify Product's Source Quantity and Salable Quantity are Correct-->
+        <comment userInput="Check product quantity and salable quantity." stepKey="checkProductQuantityComment"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterInvoiceCreated"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findSimpleProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$virtualProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$customSource.source[name]$$)}}" userInput="99" stepKey="checkProductSourceQtyAfterInvoiceCreated"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$customStock.stock[name]$$)}}" userInput="99" stepKey="checkSalableQtyAfterInvoiceCreated"/>
+    </test>
+</tests>

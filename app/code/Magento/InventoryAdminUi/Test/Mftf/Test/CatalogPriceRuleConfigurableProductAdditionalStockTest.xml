@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CatalogPriceRuleConfigurableProductAdditionalStockTest" extends="AdminCreateCatalogPriceRuleForCustomerGroupTest">
+        <annotations>
+            <stories value="Configurable Product Additional Stock."/>
+            <title value="Catalog price rule with configurable product and additional stock."/>
+            <description value="Verify catalog price rule applied correctly for configurable product on additional stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/444060/scenarios/1523632"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" after="createProduct"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="additionalSource"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Replace simple product with configurable.-->
+            <remove keyForRemoval="createProduct"/>
+            <createData entity="ConfigurableMsiProduct" stepKey="createProduct"/>
+            <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openConfigurableProductEditPage" after="loginAsAdmin"/>
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton" after="openConfigurableProductEditPage"/>
+            <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresents" after="clickOnTheCreateConfigurationsButton"/>
+            <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="selectColorAttribute" after="waitForGridPresents"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStep" after="selectColorAttribute"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorWhite" after="navigateToSecondStep"/>
+            <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameWhite" after="addNewColorWhite"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveWhiteColor" after="setNameWhite"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep" after="saveWhiteColor"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku" after="navigateToThirdStep"/>
+            <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="openSelectSourcesModalWindow" after="clickOnApplySingleQuantityToEachSku"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter" after="openSelectSourcesModalWindow"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByNameForAssignment" after="clearSourcesFilter">
+                <argument name="keyword" value="$$additionalSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$additionalSource.source[name]$$)}}" stepKey="selectCustomSource" after="searchCustomSourceByNameForAssignment"/>
+            <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="daneAssignSources" after="selectCustomSource"/>
+            <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillQuantityForCustomSource" after="daneAssignSources"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep" after="fillQuantityForCustomSource"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations" after="navigateToFourthStep"/>
+            <click selector="{{AdminProductFormSection.save}}" stepKey="saveConfigurableProduct" after="doneGeneratingConfigurableVariations"/>
+            <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct" after="saveConfigurableProduct"/>
+            <!--Set configurable product stock status.-->
+            <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="setProductStockStatus" after="confirmDefaultAttributeSetForConfigurableProduct"/>
+            <!--Assign configurable product to category.-->
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToConfigurableProduct" after="setProductStockStatus">
+                <argument name="categoryName" value="$$createCategory.name$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="deleteCategory">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="assignMainWebsiteToDefaultStock">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <!--Delete stock.-->
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="assignMainWebsiteToDefaultStock"/>
+        </after>
+
+        <!--Verify configurable product prices.-->
+        <remove keyForRemoval="seeDiscountedPrice1"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="As low as $90.00" stepKey="seeDiscountedPrice1" after="seeProduct1"/>
+        <remove keyForRemoval="seeDiscountedPrice2"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="As low as $100.00" stepKey="seeDiscountedPrice2" after="seeProduct2"/>
+    </test>
+</tests>

@@ -11,6 +11,8 @@
     <section name="AdminConfigurableProductAssignSourcesSlideOut">
         <element name="done" type="button" selector=".product_form_product_form_assign_sources_configurable_modal .action-primary" timeout="5"/>
         <element name="assignSources" type="button" selector="(//button/span[contains(text(), 'Assign Sources')])[2]" timeout="5"/>
+        <element name="assignSourcesByAttributeOptionName" type="button" selector="(//span[text()='{{optionName}}'])[2]/../..//button/span[text()='Assign Sources']" parameterized="true"/>
+        <element name="quantityPerSourceBySourceName" type="input" selector="(//span[@data-index='source'][text()='{{sourceName}}'])[2]/../../../../..//input" parameterized="true"/>
         <element name="quantityPerSource" type="input" selector="input[name='quantity_resolver[dynamicRows][dynamicRows][{{var1}}][quantity_per_source]']" parameterized="true"/>
         <element name="quantityPerSourceForSingleMode" type="input" selector="#apply-single-inventory-input"/>
         <element name="quantityPerSourceForMultiMode" type="input" selector="input[name='quantity_resolver[dynamicRows][dynamicRows][0][quantity_per_source]']"/>
