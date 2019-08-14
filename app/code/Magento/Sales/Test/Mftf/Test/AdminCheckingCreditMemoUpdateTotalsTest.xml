@@ -18,6 +18,9 @@
             <testCaseId value="MC-18159"/>
             <useCaseId value="MC-17003"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="MC-17003"/>
+            </skip>
         </annotations>
         <before>
             <!--Create product-->
