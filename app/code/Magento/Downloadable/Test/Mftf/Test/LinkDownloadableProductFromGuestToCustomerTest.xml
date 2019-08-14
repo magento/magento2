@@ -19,6 +19,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableGuestCheckoutWithDownloadableItems.path}} {{EnableGuestCheckoutWithDownloadableItems.value}}" stepKey="enableGuestCheckoutWithDownloadableItems" />
+            <magentoCLI command="config:set {{EnableShareableDownloadableItems.path}} {{EnableShareableDownloadableItems.value}}" stepKey="enableShareableDownloadableItems" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="DownloadableProductWithOneLink" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
