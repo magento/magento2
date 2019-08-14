@@ -35,7 +35,7 @@
         <!--Create New Role-->
         <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
         <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
-            <argument name="role" value="restrictedRole"/>
+            <argument name="role" value="roleSales"/>
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
 
@@ -44,7 +44,7 @@
             <argument name="user" value="NewAdminUser"/>
         </actionGroup>
         <actionGroup ref="AdminUpdateUserRoleActionGroup" stepKey="assignNewUserRole">
-            <argument name="role" value="restrictedRole"/>
+            <argument name="roleName" value="{{roleSales.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveUser"/>
         <actionGroup ref="logout" stepKey="logOutAsDefaultAdminUser"/>
@@ -66,7 +66,7 @@
 
         <!--Delete New Role-->
         <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRole">
-            <argument name="roleName" value="{{restrictedRole.name}}"/>
+            <argument name="roleName" value="{{roleSales.name}}"/>
         </actionGroup>
 
         <!--Delete New User-->

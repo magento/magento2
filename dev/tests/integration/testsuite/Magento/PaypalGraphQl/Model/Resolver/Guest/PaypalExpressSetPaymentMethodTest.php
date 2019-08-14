@@ -11,7 +11,7 @@ use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-use Magento\Framework\UrlInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Test ExpressSetPaymentMethodTest graphql endpoint for guest
@@ -69,19 +69,16 @@ class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
 
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
-
         $query = <<<QUERY
 mutation {
     createPaypalExpressToken(input: {
         cart_id: "{$cartId}",
         code: "{$paymentMethod}",
         urls: {
-            return_url: "{$baseUrl}paypal/express/return/",
-            cancel_url: "{$baseUrl}paypal/express/cancel/"
-            success_url: "{$baseUrl}checkout/onepage/success/",
-            pending_url: "{$baseUrl}checkout/onepage/pending/"
+            return_url: "paypal/express/return/",
+            cancel_url: "paypal/express/cancel/"
+            success_url: "checkout/onepage/success/",
+            pending_url: "checkout/onepage/pending/"
         }
         express_button: false
     })

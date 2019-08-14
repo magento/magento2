@@ -5,16 +5,20 @@
   * See COPYING.txt for license details.
   */
 -->
-<!-- Test XML Example -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStoreViewFormActionGroup">
+        <annotations>
+            <description>Validates that the provided Store, Name, Code and Status are present and correct on the Admin Stores creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="storeDropdown" type="string"/>
             <argument name="storeViewName" type="string"/>
             <argument name="storeViewCode" type="string"/>
             <argument name="status" type="string"/>
         </arguments>
+
         <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewFirstRowInGrid"/>
         <waitForPageLoad stepKey="waitForAdminSystemStoreViewPageLoad"/>
         <seeInField selector="{{AdminNewStoreSection.storeGrpDropdown}}" userInput="{{storeDropdown}}" stepKey="seeAssertStore"/>
