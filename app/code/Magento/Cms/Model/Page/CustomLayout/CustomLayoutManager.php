@@ -164,8 +164,7 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
 
         return array_filter(
             array_map(
-                function (File $file) use ($identifier) : ?string
-                {
+                function (File $file) use ($identifier) : ?string {
                     preg_match(
                         '/selectable\_' .preg_quote($identifier) .'\_([a-z0-9]+)/i',
                         $file->getName(),

@@ -20,8 +20,8 @@
             <resource ref="Magento_Cms::page"/>
         </resources>
     </route>
-    <route url="/V1/cmsPage" method="POST" soapService="Magento\Cms\Api\PageRepositoryInterface">
-        <service class="Magento\Cms\Controller\Page\SaveManager" method="save"/>
+    <route url="/V1/cmsPage" method="POST">
+        <service class="Magento\Cms\Api\PageRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Cms::page"/>
         </resources>

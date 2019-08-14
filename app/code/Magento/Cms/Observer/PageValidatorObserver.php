@@ -34,6 +34,7 @@ class PageValidatorObserver implements ObserverInterface
 
     /**
      * @inheritDoc
+     *
      * @throws LocalizedException
      */
     public function execute(Observer $observer)

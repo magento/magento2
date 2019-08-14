@@ -422,7 +422,10 @@ class PageRepositoryTest extends WebapiAbstract
         $rules->setResources(['Magento_Cms::page']);
         $rules->saveRel();
         //Using the admin user with custom role.
-        $token = $this->adminTokens->createAdminAccessToken('customRoleUser', \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+        $token = $this->adminTokens->createAdminAccessToken(
+            'customRoleUser',
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
 
         $id = 'test-cms-page';
         $serviceInfo = [
