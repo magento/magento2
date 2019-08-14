@@ -1,4 +1,29 @@
-# Admin Notification
+# Magento_AdminNotification module
 
-**Admin Notification** provides the ability to alert administrators via
-system messages and provides a message inbox for surveys and notifications.
+The Magento_AdminNotification module provides the ability to alert administrators via system messages and provides a message inbox for surveys and notifications.
+
+## Installation details
+
+Before disable or uninstall this module, please note that Magento_Indexer module depends on this module.
+
+For information about a module installation in Magento 2, see [Enable or disable modules](http://devdocs.magento.com/guides/v2.3/install-gde/install/cli/install-cli-subcommands-enable.html).
+
+### Events
+
+This module observes the following events:
+
+ - `controller_action_predispatch` event in `Magento\AdminNotification\Observer\PredispatchAdminActionControllerObserver`
+
+### Layouts
+
+This module introduces the following layouts handle in the `view/adminhtml/layout` directory:
+
+- `adminhtml_notification_index`
+
+For more information about a layout in Magento 2, see the [Layout documentation](http://devdocs.magento.com/guides/v2.3/frontend-dev-guide/layouts/layout-overview.html).
+
+### UI components
+
+You can extend admin notifications using the configuration file in `view/adminhtml/ui_component/notification_area.xml`
+
+For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.3/ui_comp_guide/bk-ui_comps.html).
