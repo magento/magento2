@@ -94,25 +94,10 @@ class CurrencyConverterApi extends AbstractImport
                 $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
                 $url = str_replace('{{CURRENCY_TO}}', $to, $url);
                 $url = str_replace('{{API_KEY}}', $apiKey, $url);
-                $response = $this->getServiceResponse($url);
                 if ($currencyFrom == $to) {
                     $data[$currencyFrom][$to] = $this->_numberFormat(1);
                 } else {
-                    if (empty($response)) {
-                        $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $to);
-                        $data[$currencyFrom][$to] = null;
-                    } else {
-                        if (isset($response['error']) && $response['error']) {
-                            if (!in_array($response['error'], $this->_messages)) {
-                                $this->_messages[] = $response['error'];
-                            }
-                            $data[$currencyFrom][$to] = null;
-                        } else {
-                            $data[$currencyFrom][$to] = $this->_numberFormat(
-                                (double)$response[$currencyFrom . '_' . $to]
-                            );
-                        }
-                    }
+                    $data[$currencyFrom][$to] = $this->getCurrencyRate($currencyFrom, $to, $url);
                 }
             } finally {
                 ini_restore('max_execution_time');
@@ -120,6 +105,36 @@ class CurrencyConverterApi extends AbstractImport
         }
 
         return $data;
+    }
+
+    /**
+     * Get currency rate from api
+     *
+     * @param string $currencyFrom
+     * @param string $to
+     * @param string $url
+     * @return double
+     */
+    private function getCurrencyRate($currencyFrom, $to, $url)
+    {
+        $rate = null;
+        $response = $this->getServiceResponse($url);
+        if (empty($response)) {
+            $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $to);
+            $rate = null;
+        } else {
+            if (isset($response['error']) && $response['error']) {
+                if (!in_array($response['error'], $this->_messages)) {
+                    $this->_messages[] = $response['error'];
+                }
+                $rate = null;
+            } else {
+                $rate = $this->_numberFormat(
+                    (double)$response[$currencyFrom . '_' . $to]
+                );
+            }
+        }
+        return $rate;
     }
 
     /**
