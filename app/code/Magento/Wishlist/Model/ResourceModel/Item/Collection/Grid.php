@@ -129,11 +129,11 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
     /**
      * Add quantity to filter
      *
-     * @param $field
-     * @param $condition
+     * @param string $field
+     * @param array $condition
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
-    private function addQtyFilter($field, $condition)
+    private function addQtyFilter(string $field, array $condition)
     {
         return parent::addFieldToFilter('main_table.' . $field, $condition);
     }
