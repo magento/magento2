@@ -55,7 +55,8 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
             self::XML_PATH_DOWNLOADABLE_SHAREABLE,
             ScopeInterface::SCOPE_STORE,
             $store
-        )) {
+        )
+        ) {
             return $this;
         }
 

@@ -144,15 +144,6 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
                 $this->storeMock
             )
             ->willReturn(true);
-        
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with(
-                IsAllowedGuestCheckoutObserver::XML_PATH_DOWNLOADABLE_SHAREABLE,
-                ScopeInterface::SCOPE_STORE,
-                $this->storeMock
-            )
-            ->willReturn(false);
 
         $this->observerMock->expects($this->exactly(3))
             ->method('getEvent')
@@ -185,7 +176,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getResult')
             ->will($this->returnValue($this->resultMock));
 
-        $this->scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->at(0))
             ->method('isSetFlag')
             ->with(
                 IsAllowedGuestCheckoutObserver::XML_PATH_DISABLE_GUEST_CHECKOUT,
@@ -194,7 +185,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn(false);
 
-        $this->scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->at(1))
             ->method('isSetFlag')
             ->with(
                 IsAllowedGuestCheckoutObserver::XML_PATH_DOWNLOADABLE_SHAREABLE,
