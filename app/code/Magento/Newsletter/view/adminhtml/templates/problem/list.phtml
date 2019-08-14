@@ -18,9 +18,11 @@ require(["prototype", "mage/adminhtml/events"], function(){
     problemController = {
         checkCheckboxes:function (controlCheckbox) {
             var elements = $('problemGrid').getElementsByClassName('problemCheckbox');
-            elements.each(function (obj) {
-                obj.checked = controlCheckbox.checked;
-            });
+            if (elements && elements.length) {
+                elements.each(function (obj) {
+                    obj.checked = controlCheckbox.checked;
+                });
+            }
         },
         rowClick:function (e) {
             if (!Event.element(e).hasClassName('problemCheckbox')) {
