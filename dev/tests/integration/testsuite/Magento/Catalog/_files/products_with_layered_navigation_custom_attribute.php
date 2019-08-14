@@ -124,12 +124,13 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var  $productRepository \Magento\Catalog\Api\ProductRepositoryInterface */
 $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-$productsWithNewAttributeSet = ['simple', 'simple-4'];
+$productsWithNewAttributeSet = ['simple', '12345', 'simple-4'];
 
 foreach ($productsWithNewAttributeSet as $sku) {
     try {
         $product = $productRepository->get($sku, false, null, true);
         $product->setAttributeSetId($attributeSet->getId());
+        $product->setStockData(['use_config_manage_stock' => 1, 'qty' => 50, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
         $productRepository->save($product);
     } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
 
