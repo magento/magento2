@@ -78,7 +78,7 @@ class DeleteByStoreTest extends TestCase
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->select = $this->createMock(Select::class);
         $this->metaFactory = $this->createPartialMock(MetaFactory::class, ['create']);
-        $this->metaFactory->expects($this->any())->method('create')->willReturn($this->meta);
+        $this->metaFactory->method('create')->willReturn($this->meta);
 
         $helper = new ObjectManager($this);
         $this->deleteByStore = $helper->getObject(
@@ -91,6 +91,10 @@ class DeleteByStoreTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testExecute()
     {
         $profileTableName = 'sales_sequence_profile';
@@ -98,9 +102,11 @@ class DeleteByStoreTest extends TestCase
         $metadataIds = [1, 2];
         $profileIds = [10, 11];
         $this->resourceMock->method('getTableName')
-            ->willReturnCallback(static function ($tableName) {
-                return $tableName;
-            });
+            ->willReturnCallback(
+                static function ($tableName) {
+                    return $tableName;
+                }
+            );
         $this->resourceMock->method('getConnection')
             ->willReturn($this->connectionMock);
         $this->connectionMock
@@ -114,7 +120,6 @@ class DeleteByStoreTest extends TestCase
 
         $this->connectionMock->method('fetchCol')
             ->willReturnCallback(
-                /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
                 static function ($arg, $arg2) use ($metadataIds, $profileIds) {
                     if (array_key_exists('store', $arg2)) {
                         return $metadataIds;
@@ -128,13 +133,13 @@ class DeleteByStoreTest extends TestCase
             ->method('delete')
             ->with($profileTableName, ['profile_id IN (?)' => $profileIds])
             ->willReturn(2);
-        $this->resourceSequenceMeta->expects($this->any())
+        $this->resourceSequenceMeta
             ->method('load')
             ->willReturn($this->meta);
-        $this->connectionMock->expects($this->any())
+        $this->connectionMock
             ->method('dropTable')
             ->willReturn(true);
-        $this->resourceSequenceMeta->expects($this->any())
+        $this->resourceSequenceMeta
             ->method('delete')
             ->willReturn($this->resourceSequenceMeta);
         $this->deleteByStore->execute($storeId);
