@@ -10,37 +10,49 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Check the configurable product on the product page -->
     <actionGroup name="StorefrontCheckConfigurableProduct">
+        <annotations>
+            <description>Goes to the provided Storefront Product page. Validates that the Product details are present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
             <argument name="optionProduct"/>
         </arguments>
+        
         <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
         <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
         <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="assertAddToCart" />
+        <seeElement selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="assertAddToCart"/>
         <see userInput="{{product.custom_attributes[description]}}" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
         <see userInput="{{product.custom_attributes[short_description]}}" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
     </actionGroup>
 
     <!-- Check Storefront Configurable Product Option -->
     <actionGroup name="VerifyOptionInProductStorefront">
+        <annotations>
+            <description>Validates that the provided Option Code and Option Name are present and correct on a Configurable Product page.</description>
+        </annotations>
         <arguments>
             <argument name="attributeCode" type="string"/>
             <argument name="optionName" type="string"/>
         </arguments>
+
         <seeElement selector="{{StorefrontProductInfoMainSection.attributeOptionByAttributeID(attributeCode, optionName)}}" stepKey="verifyOptionExists"/>
     </actionGroup>
 
     <!-- Adds Single Option Configurable Product to cart-->
     <actionGroup name="SelectSingleAttributeAndAddToCart">
+        <annotations>
+            <description>Selects a Product Option. Clicks 'Add to Cart'. Validates that the Product Added Success message appears.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
             <argument name="attributeCode" type="string"/>
             <argument name="optionName" type="string"/>
         </arguments>
+        
         <selectOption selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID(attributeCode)}}" userInput="{{optionName}}" stepKey="selectAttribute"/>
         <click stepKey="addProduct" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
@@ -49,11 +61,15 @@
 
     <!-- Verify configurable product options in storefront product view -->
     <actionGroup name="storefrontCheckConfigurableProductOptions">
+        <annotations>
+            <description>Validates that the Options for a Configurable Product are present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product" type="entity"/>
             <argument name="firstOption" type="entity"/>
             <argument name="secondOption" type="entity"/>
         </arguments>
+
         <selectOption userInput="{{firstOption.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
         <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeConfigurableProductName"/>
         <see userInput="{{firstOption.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPricePresent"/>
@@ -68,11 +84,15 @@
 
     <!-- Assert option image in storefront product page -->
     <actionGroup name="assertOptionImageInStorefrontProductPage">
+        <annotations>
+            <description>Validates that the provided Product Image is present when the provided Product Option is selected.</description>
+        </annotations>
         <arguments>
             <argument name="product" type="entity"/>
             <argument name="label" type="string"/>
             <argument name="image" defaultValue="MagentoLogo"/>
         </arguments>
+
         <seeInCurrentUrl url="/{{product.urlKey}}.html" stepKey="checkUrl"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <selectOption userInput="{{label}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
@@ -81,11 +101,15 @@
 
     <!-- Assert option image and price in storefront product page -->
     <actionGroup name="AssertOptionImageAndPriceInStorefrontProductActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Image and Price are present when the provided Product Option is selected.</description>
+        </annotations>
         <arguments>
             <argument name="label" type="string"/>
             <argument name="image" type="string"/>
             <argument name="price" type="string"/>
         </arguments>
+
         <selectOption userInput="{{label}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(image)}}" stepKey="seeImage"/>
         <see userInput="{{price}}" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeProductPrice"/>
@@ -93,11 +117,15 @@
 
     <!-- Assert configurable product with special price in storefront product page -->
     <actionGroup name="assertConfigurableProductWithSpecialPriceOnStorefrontProductPage">
+        <annotations>
+            <description>Validates that Special Price for a Configurable Product is present and correct when the provided Product Option is selected.</description>
+        </annotations>
         <arguments>
             <argument name="option" type="string"/>
             <argument name="price" type="string"/>
             <argument name="specialPrice" defaultValue="specialProductPrice"/>
         </arguments>
+
         <selectOption userInput="{{option}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOptionWithSpecialPrice"/>
         <see userInput="{{specialProductPrice.price}}" selector="{{StorefrontProductInfoMainSection.productSpecialPrice}}" stepKey="seeSpecialProductPrice"/>
         <see userInput="Regular Price" selector="{{StorefrontProductInfoMainSection.specialProductText}}" stepKey="seeText"/>
