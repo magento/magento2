@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Review\Block\Adminhtml;
 
 /**
  * Adminhtml reviews grid
@@ -13,17 +16,6 @@
  * @method \Magento\Review\Block\Adminhtml\Grid setCustomerId() setCustomerId(int $customerId)
  * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue()
  * setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-declare(strict_types=1);
-
-namespace Magento\Review\Block\Adminhtml;
-
-/**
- * Review Grid
- *
- * Class \Magento\Review\Block\Adminhtml\Grid
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -183,7 +175,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'datetime',
                 'filter_index' => 'rt.created_at',
                 'index' => 'review_created_at',
-                'header_css_class' => 'col-date',
+                'header_css_class' => 'col-date col-date-min-width',
                 'column_css_class' => 'col-date'
             ]
         );
