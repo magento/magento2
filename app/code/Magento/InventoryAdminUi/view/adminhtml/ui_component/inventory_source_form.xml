@@ -152,9 +152,6 @@
         </field>
         <field name="fax" formElement="input" sortOrder="40">
             <settings>
-                <validation>
-                    <rule name="validate-fax" xsi:type="boolean">true</rule>
-                </validation>
                 <dataType>text</dataType>
                 <label translate="true">Fax</label>
             </settings>
