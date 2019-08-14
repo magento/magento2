@@ -273,7 +273,7 @@ class Shipping implements RateCollectorInterface
      */
     private function prepareCarrier(string $carrierCode, RateRequest $request): AbstractCarrier
     {
-        $carrier = $this->isActive($carrierCode)
+        $carrier = $this->isShippingCarrierAvailable($carrierCode)
             ? $this->_carrierFactory->create($carrierCode, $request->getStoreId())
             : null;
         if (!$carrier) {
@@ -363,6 +363,7 @@ class Shipping implements RateCollectorInterface
     {
         $allItems = $request->getAllItems();
         $fullItems = [];
+        $weightItems = [];
 
         $maxWeight = (double)$carrier->getConfigData('max_package_weight');
 
@@ -428,12 +429,13 @@ class Shipping implements RateCollectorInterface
 
             if (!empty($decimalItems)) {
                 foreach ($decimalItems as $decimalItem) {
-                    $fullItems[] = array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight']);
+                    $weightItems[] = array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight']);
                 }
             } else {
-                $fullItems[] = array_fill(0, $qty, $itemWeight);
+                $weightItems[] = array_fill(0, $qty, $itemWeight);
             }
         }
+        $fullItems = array_merge($fullItems, ...$weightItems);
         sort($fullItems);
 
         return $this->_makePieces($fullItems, $maxWeight);
@@ -537,9 +539,9 @@ class Shipping implements RateCollectorInterface
      * Checks availability of carrier.
      *
      * @param string $carrierCode
-     * @return bool|null
+     * @return bool
      */
-    private function isActive(string $carrierCode)
+    private function isShippingCarrierAvailable(string $carrierCode): bool
     {
         return $this->_scopeConfig->isSetFlag(
             'carriers/' . $carrierCode . '/' . $this->_availabilityConfigField,
