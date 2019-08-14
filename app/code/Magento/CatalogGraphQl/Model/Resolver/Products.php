@@ -103,9 +103,6 @@ class Products implements ResolverInterface
             isset($productFields['filters'])
         );
 
-        $searchCriteria->setCurrentPage($args['currentPage']);
-        $searchCriteria->setPageSize($args['pageSize']);
-
         $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
 
         if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {

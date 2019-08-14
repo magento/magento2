@@ -120,6 +120,8 @@ class Search
 
         $searchResult = $this->filterQuery->getResult($searchCriteriaIds, $info, true);
 
+        $searchCriteria->setPageSize($realPageSize);
+        $searchCriteria->setCurrentPage($realCurrentPage);
         //possible division by 0
         if ($realPageSize) {
             $maxPages = (int)ceil($searchResult->getTotalCount() / $realPageSize);
