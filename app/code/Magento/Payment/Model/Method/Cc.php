@@ -167,7 +167,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                         '(6550(2[1-9]|3[0-9]|4[0-9]|5[0-8])))\d*$/',
                     //Aura
                     'AU' => '/^5078\d*$/',
-                    //Troy
+                    //Troy	
 					'TR' => '^97[0-9]{14}|^65[0-9]{14}$',
                 ];
 
