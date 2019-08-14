@@ -168,7 +168,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                     //Aura
                     'AU' => '/^5078\d*$/',
                     //Troy	
-					'TR' => '^97[0-9]{14}|^65[0-9]{14}$',
+					'TR' => '^97[0-9]{14}|^65[0-9]{14}$'
                 ];
 
                 $ccNumAndTypeMatches = isset(
