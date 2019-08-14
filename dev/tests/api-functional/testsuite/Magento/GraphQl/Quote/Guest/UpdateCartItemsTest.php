@@ -70,6 +70,16 @@ class UpdateCartItemsTest extends GraphQlAbstract
 
         $this->assertEquals($itemId, $item['id']);
         $this->assertEquals($quantity, $item['quantity']);
+
+        $cartQuery = $this->getCartQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($cartQuery);
+
+        $this->assertArrayHasKey('cart', $response);
+
+        $responseCart = $response['cart'];
+        $item = current($responseCart['items']);
+
+        $this->assertEquals($quantity, $item['quantity']);
     }
 
     /**
@@ -265,6 +275,26 @@ mutation {
         id
         quantity
       }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getCartQuery(string $maskedQuoteId)
+    {
+        return <<<QUERY
+query {
+  cart(cart_id: "{$maskedQuoteId}"){
+    items{
+      product{
+        name
+      }
+      quantity
     }
   }
 }
