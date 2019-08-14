@@ -9,15 +9,13 @@ declare(strict_types=1);
 namespace Magento\Cms\Observer;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Controller\Page\Authorization;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Performing additional validation each time a user saves a CMS page.
+ * Perform additional authorization before saving a page.
  */
-class PageValidatorObserver implements ObserverInterface
+class PageAclPlugin
 {
     /**
      * @var Authorization
@@ -33,14 +31,17 @@ class PageValidatorObserver implements ObserverInterface
     }
 
     /**
-     * @inheritDoc
+     * Authorize saving before it is executed.
      *
-     * @throws LocalizedException
+     * @param PageRepositoryInterface $subject
+     * @param PageInterface $page
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(Observer $observer)
+    public function beforeSave(PageRepositoryInterface $subject, PageInterface $page): array
     {
-        /** @var PageInterface $page */
-        $page = $observer->getEvent()->getData('page');
         $this->authorization->authorizeFor($page);
+
+        return [$page];
     }
 }

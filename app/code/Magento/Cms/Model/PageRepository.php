@@ -19,8 +19,6 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\AuthorizationInterface;
-use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class PageRepository
@@ -74,16 +72,6 @@ class PageRepository implements PageRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
-
-    /**
      * @var IdentityMap
      */
     private $identityMap;
@@ -123,34 +111,6 @@ class PageRepository implements PageRepositoryInterface
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->identityMap = $identityMap ?? ObjectManager::getInstance()->get(IdentityMap::class);
-    }
-
-    /**
-     * Get user context.
-     *
-     * @return UserContextInterface
-     */
-    private function getUserContext(): UserContextInterface
-    {
-        if (!$this->userContext) {
-            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
-        }
-
-        return $this->userContext;
-    }
-
-    /**
-     * Get authorization service.
-     *
-     * @return AuthorizationInterface
-     */
-    private function getAuthorization(): AuthorizationInterface
-    {
-        if (!$this->authorization) {
-            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
-        }
-
-        return $this->authorization;
     }
 
     /**

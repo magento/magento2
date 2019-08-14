@@ -15,9 +15,9 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Manages CMS pages modification initiated by users.
+ * Authorization for saving a page.
  */
-class SaveManager
+class Authorization
 {
     /**
      * @var PageRepositoryInterface
@@ -42,27 +42,14 @@ class SaveManager
     }
 
     /**
-     * User saves a page (bew or existing).
-     *
-     * @param \Magento\Cms\Api\Data\PageInterface $page
-     * @return \Magento\Cms\Api\Data\PageInterface
-     * @throws LocalizedException
-     */
-    public function save(\Magento\Cms\Api\Data\PageInterface $page): \Magento\Cms\Api\Data\PageInterface
-    {
-        $this->validatePage($page);
-
-        return $this->pageRepository->save($page);
-    }
-
-    /**
-     * Validate page data received from a user.
+     * Authorize user before updating a page.
      *
      * @param PageInterface $page
      * @return void
-     * @throws LocalizedException When validation failed.
+     * @throws AuthorizationException
+     * @throws LocalizedException When it is impossible to perform authorization for given page.
      */
-    public function validatePage(\Magento\Cms\Api\Data\PageInterface $page): void
+    public function authorizeFor(PageInterface $page): void
     {
         //Validate design changes.
         if (!$this->authorization->isAllowed('Magento_Cms::save_design')) {
