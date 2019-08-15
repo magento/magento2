@@ -10,7 +10,8 @@ use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapp
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Reindex rule relations with products.
@@ -33,26 +34,26 @@ class ReindexRuleProduct
     private $tableSwapper;
 
     /**
-     * @var LocalizedDateToUtcConverterInterface
+     * @var TimezoneInterface
      */
-    private $dateToUtcConverter;
+    private $localeDate;
 
     /**
      * @param ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param TableSwapper $tableSwapper
-     * @param LocalizedDateToUtcConverterInterface $dateToUtcConverter
+     * @param TimezoneInterface $localeDate
      */
     public function __construct(
         ResourceConnection $resource,
         ActiveTableSwitcher $activeTableSwitcher,
         TableSwapper $tableSwapper,
-        LocalizedDateToUtcConverterInterface $dateToUtcConverter
+        TimezoneInterface $localeDate
     ) {
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
         $this->tableSwapper = $tableSwapper;
-        $this->dateToUtcConverter = $dateToUtcConverter;
+        $this->localeDate = $localeDate;
     }
 
     /**
@@ -96,16 +97,19 @@ class ReindexRuleProduct
         $actionStop = $rule->getStopRulesProcessing();
 
         $rows = [];
-        foreach ($productIds as $productId => $validationByWebsite) {
-            foreach ($websiteIds as $websiteId) {
+        foreach ($websiteIds as $websiteId) {
+            $scopeTz = new \DateTimeZone(
+                $this->localeDate->getConfigTimezone(ScopeInterface::SCOPE_WEBSITE, $websiteId)
+            );
+            $fromTime = (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp();
+            $toTime = $rule->getToDate()
+                ? (new \DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
+                : 0;
+
+            foreach ($productIds as $productId => $validationByWebsite) {
                 if (empty($validationByWebsite[$websiteId])) {
                     continue;
                 }
-
-                $fromTime = strtotime($this->dateToUtcConverter->convertLocalizedDateToUtc($rule->getFromDate()));
-                $toTime = $rule->getToDate()
-                    ? strtotime($this->dateToUtcConverter->convertLocalizedDateToUtc($rule->getToDate()))
-                    : 0;
 
                 foreach ($customerGroupIds as $customerGroupId) {
                     $rows[] = [
