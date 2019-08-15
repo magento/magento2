@@ -20,6 +20,8 @@
         </annotations>
 
         <before>
+            <!--Enable Manage Stock in case it's been disabled in previous tests.-->
+            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStockBeforeTest"/>
             <!--Create Additional Source and Stock.-->
             <createData entity="_minimalSource" stepKey="additionalSource"/>
             <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
