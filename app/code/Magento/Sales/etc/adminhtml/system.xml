@@ -213,6 +213,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Comment Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Order Comments Email Copy Method</label>
