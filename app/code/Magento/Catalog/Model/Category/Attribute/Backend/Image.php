@@ -125,7 +125,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if ($imageName = $this->getUploadedImageName($value)) {
-            if (!$this->fileResidesOutsideCategoryDir($object->getData($attributeName))) {
+            if (!$this->fileResidesOutsideCategoryDir($value)) {
                 $imageName = $this->checkUniqueImageName($imageName);
             }
             $object->setData($this->additionalData . $attributeName, $value);
@@ -178,13 +178,15 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         $fileUrl = ltrim($value[0]['url'], '/');
-        $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA);
+        $imageUploader = $this->getImageUploader();
+        $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA)
+            . DIRECTORY_SEPARATOR . $imageUploader->getBasePath();
 
         if (!$baseMediaDir) {
             return false;
         }
 
-        return strpos($fileUrl, $baseMediaDir) === 0;
+        return strpos($fileUrl, $baseMediaDir) === false;
     }
 
     /**
