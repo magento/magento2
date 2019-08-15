@@ -275,12 +275,17 @@ class AfterImportDataObserver implements ObserverInterface
      */
     private function isNeedToPopulateForUrlGeneration($rowData, $newSku, $oldSku): bool
     {
-        if ((empty($newSku) || !isset($newSku['entity_id']))
-            || ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
-                && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE]))
-            || (array_key_exists($rowData[ImportProduct::COL_SKU], $oldSku)
-                && !isset($rowData[self::URL_KEY_ATTRIBUTE_CODE])
-                && $this->import->getBehavior() === ImportExport::BEHAVIOR_APPEND)) {
+        if (
+            (
+                (empty($newSku) || !isset($newSku['entity_id']))
+                || ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
+                    && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE]))
+                || (array_key_exists($rowData[ImportProduct::COL_SKU], $oldSku)
+                    && !isset($rowData[self::URL_KEY_ATTRIBUTE_CODE])
+                    && $this->import->getBehavior() === ImportExport::BEHAVIOR_APPEND)
+            )
+            && !isset($rowData["categories"])
+        ) {
             return false;
         }
         return true;
