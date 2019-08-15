@@ -8,10 +8,7 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
-use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Reindex rule relations with products.
@@ -19,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 class ReindexRuleProduct
 {
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\App\ResourceConnection
      */
     private $resource;
 
@@ -34,40 +31,36 @@ class ReindexRuleProduct
     private $tableSwapper;
 
     /**
-     * @var TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
-     * @param ResourceConnection $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
-     * @param TableSwapper $tableSwapper
-     * @param TimezoneInterface $localeDate
+     * @param TableSwapper|null $tableSwapper
      */
     public function __construct(
-        ResourceConnection $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         ActiveTableSwitcher $activeTableSwitcher,
-        TableSwapper $tableSwapper,
-        TimezoneInterface $localeDate
+        TableSwapper $tableSwapper = null
     ) {
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
-        $this->tableSwapper = $tableSwapper;
-        $this->localeDate = $localeDate;
+        $this->tableSwapper = $tableSwapper ??
+            ObjectManager::getInstance()->get(TableSwapper::class);
     }
 
     /**
      * Reindex information about rule relations with products.
      *
-     * @param Rule $rule
+     * @param \Magento\CatalogRule\Model\Rule $rule
      * @param int $batchCount
      * @param bool $useAdditionalTable
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute(Rule $rule, $batchCount, $useAdditionalTable = false)
-    {
+    public function execute(
+        \Magento\CatalogRule\Model\Rule $rule,
+        $batchCount,
+        $useAdditionalTable = false
+    ) {
         if (!$rule->getIsActive() || empty($rule->getWebsiteIds())) {
             return false;
         }
@@ -91,26 +84,21 @@ class ReindexRuleProduct
 
         $ruleId = $rule->getId();
         $customerGroupIds = $rule->getCustomerGroupIds();
+        $fromTime = strtotime($rule->getFromDate());
+        $toTime = strtotime($rule->getToDate());
+        $toTime = $toTime ? $toTime + \Magento\CatalogRule\Model\Indexer\IndexBuilder::SECONDS_IN_DAY - 1 : 0;
         $sortOrder = (int)$rule->getSortOrder();
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
         $actionStop = $rule->getStopRulesProcessing();
 
         $rows = [];
-        foreach ($websiteIds as $websiteId) {
-            $scopeTz = new \DateTimeZone(
-                $this->localeDate->getConfigTimezone(ScopeInterface::SCOPE_WEBSITE, $websiteId)
-            );
-            $fromTime = (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp();
-            $toTime = $rule->getToDate()
-                ? (new \DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
-                : 0;
 
-            foreach ($productIds as $productId => $validationByWebsite) {
+        foreach ($productIds as $productId => $validationByWebsite) {
+            foreach ($websiteIds as $websiteId) {
                 if (empty($validationByWebsite[$websiteId])) {
                     continue;
                 }
-
                 foreach ($customerGroupIds as $customerGroupId) {
                     $rows[] = [
                         'rule_id' => $ruleId,
@@ -135,7 +123,6 @@ class ReindexRuleProduct
         if (!empty($rows)) {
             $connection->insertMultiple($indexTable, $rows);
         }
-
         return true;
     }
 }
