@@ -19,9 +19,7 @@ use Magento\Framework\Event\ObserverInterface;
  */
 class AssignCouponDataAfterOrderCustomerAssignObserver implements ObserverInterface
 {
-    const EVENT_KEY_CUSTOMER = 'customer';
-
-    const EVENT_KEY_ORDER    = 'order';
+    private const EVENT_KEY_ORDER = 'order';
 
     /**
      * @var UpdateCouponUsages
