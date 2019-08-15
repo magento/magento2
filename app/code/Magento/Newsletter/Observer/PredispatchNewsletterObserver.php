@@ -27,7 +27,7 @@ class PredispatchNewsletterObserver implements ObserverInterface
     const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
 
     /**
-     * @var Newsletter Config
+     * @var Config
      */
     private $newsletterConfig;
 
@@ -46,7 +46,7 @@ class PredispatchNewsletterObserver implements ObserverInterface
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
-     * @param Config|null $config
+     * @param Config|null $newsletterConfig
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
