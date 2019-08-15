@@ -21,6 +21,7 @@
         </allow>
         <deny>
             <tag group="stable" value="no" />
+            <tag group="mftf_migrated" value="yes" />
         </deny>
     </rule>
 </config>
