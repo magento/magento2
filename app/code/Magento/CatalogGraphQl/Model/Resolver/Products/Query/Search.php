@@ -87,15 +87,20 @@ class Search
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @param ResolveInfo $info
+     * @param array $args
      * @return SearchResult
      * @throws \Exception
      */
-    public function getResult(SearchCriteriaInterface $searchCriteria, ResolveInfo $info) : SearchResult
-    {
+    public function getResult(
+        SearchCriteriaInterface $searchCriteria,
+        ResolveInfo $info,
+        array $args = []
+    ): SearchResult {
         $idField = $this->metadataPool->getMetadata(
             \Magento\Catalog\Api\Data\ProductInterface::class
         )->getIdentifierField();
 
+        $isSearch = isset($args['search']);
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
         // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
@@ -118,7 +123,7 @@ class Search
         $searchCriteriaIds->setPageSize($realPageSize);
         $searchCriteriaIds->setCurrentPage($realCurrentPage);
 
-        $searchResult = $this->filterQuery->getResult($searchCriteriaIds, $info, true);
+        $searchResult = $this->filterQuery->getResult($searchCriteriaIds, $info, $isSearch);
 
         $searchCriteria->setPageSize($realPageSize);
         $searchCriteria->setCurrentPage($realCurrentPage);

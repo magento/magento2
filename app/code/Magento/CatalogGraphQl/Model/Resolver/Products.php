@@ -103,7 +103,7 @@ class Products implements ResolverInterface
             isset($productFields['filters'])
         );
 
-        $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
+        $searchResult = $this->searchQuery->getResult($searchCriteria, $info, $args);
 
         if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {
             throw new GraphQlInputException(

@@ -6,11 +6,11 @@
 namespace Magento\CatalogGraphQl\Plugin\Search\Request;
 
 use Magento\Catalog\Api\Data\EavAttributeInterface;
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 
 /**
  * Add search request configuration to config for give ability filter and search products during GraphQL request
@@ -33,26 +33,28 @@ class ConfigReader
     private $requestName = 'graphql_product_search';
 
     /**
-     * @var DataProvider
-     */
-    private $dataProvider;
-
-    /**
      * @var GeneratorResolver
      */
     private $generatorResolver;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $productAttributeCollectionFactory;
 
     /** Bucket name suffix */
     private const BUCKET_SUFFIX = '_bucket';
 
     /**
-     * @param DataProvider $dataProvider
      * @param GeneratorResolver $generatorResolver
+     * @param CollectionFactory $productAttributeCollectionFactory
      */
-    public function __construct(DataProvider $dataProvider, GeneratorResolver $generatorResolver)
-    {
-        $this->dataProvider = $dataProvider;
+    public function __construct(
+        GeneratorResolver $generatorResolver,
+        CollectionFactory $productAttributeCollectionFactory
+    ) {
         $this->generatorResolver = $generatorResolver;
+        $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
     }
 
     /**
@@ -89,9 +91,18 @@ class ConfigReader
     private function getSearchableAttributes(): array
     {
         $attributes = [];
-        foreach ($this->dataProvider->getSearchableAttributes() as $attribute) {
-                $attributes[$attribute->getAttributeCode()] = $attribute;
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $productAttributes */
+        $productAttributes = $this->productAttributeCollectionFactory->create();
+        $productAttributes->addFieldToFilter(
+            ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable', 'is_filterable_in_search'],
+            [1, 1, [1, 2], 1]
+        );
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        foreach ($productAttributes->getItems() as $attribute) {
+            $attributes[$attribute->getAttributeCode()] = $attribute;
         }
+
         return $attributes;
     }
 
@@ -106,7 +117,7 @@ class ConfigReader
         $request = [];
         foreach ($this->getSearchableAttributes() as $attribute) {
             if (\in_array($attribute->getAttributeCode(), ['price', 'visibility', 'category_ids'])) {
-                //same fields have special semantics
+                //some fields have special semantics
                 continue;
             }
             $queryName = $attribute->getAttributeCode() . '_query';
