@@ -12,7 +12,6 @@ require __DIR__ . '/../../Catalog/_files/categories.php';
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\TestFramework\Helper\CacheCleaner;
 
 $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
@@ -112,11 +111,11 @@ if (!$attribute1->getId()) {
     $attributeRepository->save($attribute1);
 
     /* Assign attribute to attribute set */
-    $installer->addAttributeToGroup('catalog_product',
+    $installer->addAttributeToGroup(
+        'catalog_product',
         $attributeSet->getId(),
         $attributeSet->getDefaultGroupId(),
-        $attribute1->getId()
-    );
+        $attribute1->getId());
 }
 
 $eavConfig->clear();
@@ -132,7 +131,12 @@ foreach ($productsWithNewAttributeSet as $sku) {
     try {
         $product = $productRepository->get($sku, false, null, true);
         $product->setAttributeSetId($attributeSet->getId());
-        $product->setStockData(['use_config_manage_stock' => 1, 'qty' => 50, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
+        $product->setStockData(
+            ['use_config_manage_stock' => 1,
+                'qty' => 50,
+                'is_qty_decimal' => 0,
+                'is_in_stock' => 1]
+        );
         $productRepository->save($product);
     } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
 

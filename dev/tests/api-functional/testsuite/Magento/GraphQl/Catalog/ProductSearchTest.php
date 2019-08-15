@@ -258,7 +258,7 @@ QUERY;
                     'request_var'=> 'category_id'
                 ],
                 ['name' => 'Second Test Configurable',
-                    'request_var'=> 'second_test_configurable'
+                  'request_var'=> 'second_test_configurable'
                 ],
             ];
         $layers = array_map(null, $expectedFilterLayers, $response['products']['filters']);
@@ -352,6 +352,49 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
+        $actualCategoryFilterItems = $response['products']['filters'][1]['filter_items'];
+        //Validate the number of categories/sub-categories that contain the products with the custom attribute
+        $this->assertCount(6,$actualCategoryFilterItems);
+
+        $expectedCategoryFilterItems =
+            [
+                [ 'label' => 'Category 1',
+                  'items_count'=> 2
+                ],
+                [ 'label' => 'Category 1.1',
+                  'items_count'=> 1
+                ],
+                [ 'label' => 'Movable Position 2',
+                  'items_count'=> 1
+                ],
+                [ 'label' => 'Movable Position 3',
+                  'items_count'=> 1
+                ],
+                [ 'label' => 'Category 12',
+                  'items_count'=> 1
+                ],
+                [ 'label' => 'Category 1.2',
+                  'items_count'=> 2
+                ],
+            ];
+        $categoryFilterItems = array_map(null, $expectedCategoryFilterItems,$actualCategoryFilterItems);
+
+//Validate the categories and sub-categories data in the filter layer
+        foreach ($categoryFilterItems as $index => $categoryFilterData) {
+            $this->assertNotEmpty($categoryFilterData);
+            $this->assertEquals(
+                $categoryFilterItems[$index][0]['label'],
+                $actualCategoryFilterItems[$index]['label'],
+                'Category is incorrect'
+            );
+            $this->assertEquals(
+                $categoryFilterItems[$index][0]['items_count'],
+                $actualCategoryFilterItems[$index]['items_count'],
+                'Products count in the category is incorrect'
+            ) ;
+        }
+
+
     }
 
 
