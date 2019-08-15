@@ -17,12 +17,12 @@ class Config
     /**
      * Configuration path to newsletter active setting
      */
-    const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
+    private const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
 
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * Config constructor.
@@ -41,7 +41,7 @@ class Config
      * @param string $scopeType
      * @return bool
      */
-    public function isActive($scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT): bool
+    public function isActive(string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_NEWSLETTER_ACTIVE, $scopeType);
     }
