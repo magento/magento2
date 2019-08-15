@@ -3,20 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Catalog Price rules observer model
- */
 namespace Magento\CatalogRule\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Rule;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\Session as CustomerModelSession;
-use Magento\Framework\Event\Observer as EventObserver;
 
+/**
+ * Observer for applying catalog rules on product for frontend area
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class ProcessFrontFinalPriceObserver implements ObserverInterface
 {
     /**
@@ -80,7 +80,7 @@ class ProcessFrontFinalPriceObserver implements ObserverInterface
         if ($observer->hasDate()) {
             $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = $this->localeDate->scopeDate($storeId);
+            $date = $this->localeDate->date(null, null, false);
         }
 
         if ($observer->hasWebsiteId()) {

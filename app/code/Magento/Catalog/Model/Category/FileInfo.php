@@ -180,7 +180,7 @@ class FileInfo
         $filePath = ltrim($fileName, '/');
 
         $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath($filePath);
-        $isFileNameBeginsWithMediaDirectoryPath = strpos($filePath, $mediaDirectoryRelativeSubpath) === 0;
+        $isFileNameBeginsWithMediaDirectoryPath = strpos($filePath, (string) $mediaDirectoryRelativeSubpath) === 0;
 
         return $isFileNameBeginsWithMediaDirectoryPath;
     }

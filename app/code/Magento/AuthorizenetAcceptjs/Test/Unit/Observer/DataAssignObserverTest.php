@@ -17,6 +17,9 @@ use Magento\AuthorizenetAcceptjs\Observer\DataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Tests DataAssignObserver
+ */
 class DataAssignObserverTest extends TestCase
 {
     public function testExecuteSetsProperData()
@@ -30,9 +33,7 @@ class DataAssignObserverTest extends TestCase
         $observerContainer = $this->createMock(Observer::class);
         $event = $this->createMock(Event::class);
         $paymentInfoModel = $this->createMock(InfoInterface::class);
-        $dataObject = new DataObject([
-            PaymentInterface::KEY_ADDITIONAL_DATA => $additionalInfo
-        ]);
+        $dataObject = new DataObject([PaymentInterface::KEY_ADDITIONAL_DATA => $additionalInfo]);
         $observerContainer->method('getEvent')
             ->willReturn($event);
         $event->method('getDataByKey')
