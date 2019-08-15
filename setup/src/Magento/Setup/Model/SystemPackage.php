@@ -53,8 +53,8 @@ class SystemPackage
     /**
      * Returns system package and available versions
      *
-     * @throws \RuntimeException
      * @return array
+     * @throws \RuntimeException
      */
     public function getPackageVersions()
     {
@@ -150,7 +150,7 @@ class SystemPackage
                 'current' => true,
             ];
         }
-        return  $versions;
+        return $versions;
     }
 
     /**
@@ -181,7 +181,7 @@ class SystemPackage
             throw new \RuntimeException(
                 'We\'re sorry, no components are available because you cloned the Magento 2 GitHub repository. ' .
                 'You must manually update components as discussed in the ' .
-                '<a href="https://devdocs.magento.com/guides/v2.0/install-gde/install/cli/dev_options.html">' .
+                '<a href="https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/dev_options.html">' .
                 'Installation Guide</a>.'
             );
         }
