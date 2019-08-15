@@ -9,6 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
     <action name="checkout/cart/add">
         <section name="cart"/>
+        <section name="directory-data"/>
     </action>
     <action name="checkout/cart/delete">
         <section name="cart"/>
