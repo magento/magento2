@@ -7,9 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
+use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\Rules;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Downloadable\Model\Link;
+use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
@@ -54,6 +59,33 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 10
         ],
     ];
+
+    /**
+     * @var RoleFactory
+     */
+    private $roleFactory;
+
+    /**
+     * @var RulesFactory
+     */
+    private $rulesFactory;
+
+    /**
+     * @var AdminTokenServiceInterface
+     */
+    private $adminTokens;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
+        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
+        $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
@@ -726,9 +758,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * @param array $product
+     * @param string|null $token
      * @return array|bool|float|int|string
      */
-    protected function updateProduct($product)
+    protected function updateProduct($product, ?string $token = null)
     {
         if (isset($product['custom_attributes'])) {
             for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
@@ -755,6 +788,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
         $requestData = ['product' => $product];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
@@ -1135,7 +1171,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 3.62,
             ProductInterface::STATUS => 1,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             'custom_attributes' => [
                 ['attribute_code' => 'cost', 'value' => ''],
@@ -1147,9 +1182,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @param $product
      * @param string|null $storeCode
+     * @param string|null $token
      * @return mixed
      */
-    protected function saveProduct($product, $storeCode = null)
+    protected function saveProduct($product, $storeCode = null, ?string $token = null)
     {
         if (isset($product['custom_attributes'])) {
             for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
@@ -1171,6 +1207,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
         $requestData = ['product' => $product];
         return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
@@ -1581,5 +1620,101 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             }
         }
         $this->assertEquals($expectedMultiselectValue, $multiselectValue);
+    }
+
+    /**
+     * Test design settings authorization
+     *
+     * @magentoApiDataFixture Magento/User/_files/user_with_custom_role.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveDesign(): void
+    {
+        //Updating our admin user's role to allow saving products but not their design settings.
+        /** @var Role $role */
+        $role = $this->roleFactory->create();
+        $role->load('test_custom_role', 'role_name');
+        /** @var Rules $rules */
+        $rules = $this->rulesFactory->create();
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::products']);
+        $rules->saveRel();
+        //Using the admin user with custom role.
+        $token = $this->adminTokens->createAdminAccessToken(
+            'customRoleUser',
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+
+        $productData = $this->getSimpleProductData();
+        $productData['custom_attributes'][] = ['attribute_code' => 'custom_design', 'value' => '1'];
+
+        //Creating new product with design settings.
+        $exceptionMessage = null;
+        try {
+            $this->saveProduct($productData, null, $token);
+        } catch (\Throwable $exception) {
+            if ($restResponse = json_decode($exception->getMessage(), true)) {
+                //REST
+                $exceptionMessage = $restResponse['message'];
+            } else {
+                //SOAP
+                $exceptionMessage = $exception->getMessage();
+            }
+        }
+        //We don't have the permissions.
+        $this->assertEquals('Not allowed to edit the product\'s design attributes', $exceptionMessage);
+
+        //Updating the user role to allow access to design properties.
+        /** @var Rules $rules */
+        $rules = Bootstrap::getObjectManager()->create(Rules::class);
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
+        $rules->saveRel();
+        //Making the same request with design settings.
+        $result = $this->saveProduct($productData, null, $token);
+        $this->assertArrayHasKey('id', $result);
+        //Product must be saved.
+        $productSaved = $this->getProduct($productData[ProductInterface::SKU]);
+        $savedCustomDesign = null;
+        foreach ($productSaved['custom_attributes'] as $customAttribute) {
+            if ($customAttribute['attribute_code'] === 'custom_design') {
+                $savedCustomDesign = $customAttribute['value'];
+            }
+        }
+        $this->assertEquals('1', $savedCustomDesign);
+        $productData = $productSaved;
+
+        //Updating our role to remove design properties access.
+        /** @var Rules $rules */
+        $rules = Bootstrap::getObjectManager()->create(Rules::class);
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::products']);
+        $rules->saveRel();
+        //Updating the product but with the same design properties values.
+        $result = $this->updateProduct($productData, $token);
+        //We haven't changed the design so operation is successful.
+        $this->assertArrayHasKey('id', $result);
+
+        //Changing a design property.
+        foreach ($productData['custom_attributes'] as &$customAttribute) {
+            if ($customAttribute['attribute_code'] === 'custom_design') {
+                $customAttribute['value'] = '2';
+            }
+        }
+        $exceptionMessage = null;
+        try {
+            $this->updateProduct($productData, $token);
+        } catch (\Throwable $exception) {
+            if ($restResponse = json_decode($exception->getMessage(), true)) {
+                //REST
+                $exceptionMessage = $restResponse['message'];
+            } else {
+                //SOAP
+                $exceptionMessage = $exception->getMessage();
+            }
+        }
+        //We don't have permissions to do that.
+        $this->assertEquals('Not allowed to edit the product\'s design attributes', $exceptionMessage);
     }
 }

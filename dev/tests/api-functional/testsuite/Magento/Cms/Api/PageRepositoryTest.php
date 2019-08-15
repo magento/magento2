@@ -490,7 +490,6 @@ class PageRepositoryTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, $requestData);
         //We haven't changed the design so operation is successful.
         $this->assertArrayHasKey('id', $result);
-
         //Changing a design property.
         $requestData['page'][PageInterface::CUSTOM_THEME] = 2;
         $exceptionMessage = null;

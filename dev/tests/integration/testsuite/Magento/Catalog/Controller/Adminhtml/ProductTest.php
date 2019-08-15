@@ -5,17 +5,41 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ProductRepositoryFactory;
 use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
  */
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
+    /**
+     * @var Builder
+     */
+    private $aclBuilder;
+
+    /**
+     * @var ProductRepositoryFactory
+     */
+    private $repositoryFactory;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->repositoryFactory = Bootstrap::getObjectManager()->get(ProductRepositoryFactory::class);
+    }
+
     /**
      * Test calling save with invalid product's ID.
      */
@@ -39,7 +63,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndNew()
     {
         $this->getRequest()->setPostValue(['back' => 'new']);
-        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        /** @var ProductRepository $repository */
+        $repository = $this->repositoryFactory->create();
         $product = $repository->get('simple');
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
@@ -59,7 +84,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndDuplicate()
     {
         $this->getRequest()->setPostValue(['back' => 'duplicate']);
-        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        /** @var ProductRepository $repository */
+        $repository = $this->repositoryFactory->create();
         $product = $repository->get('simple');
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
@@ -130,7 +156,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     public function testEditAction()
     {
-        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        /** @var ProductRepository $repository */
+        $repository = $this->repositoryFactory->create();
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
@@ -349,10 +376,70 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     private function getProductData(array $tierPrice)
     {
-        $productRepositoryInterface = $this->_objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepositoryInterface->get('tier_prices')->getData();
+        /** @var ProductRepository $repo */
+        $repo = $this->repositoryFactory->create();
+        $product = $repo->get('tier_prices')->getData();
         $product['tier_price'] = $tierPrice;
         unset($product['entity_id']);
         return $product;
+    }
+
+    /**
+     * Check whether additional authorization is required for the design fields.
+     *
+     * @magentoDbIsolation enabled
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveDesign(): void
+    {
+        $requestData = [
+            'product' => [
+                'type' => 'simple',
+                'sku' => 'simple',
+                'store' => '0',
+                'set' => '4',
+                'back' => 'edit',
+                'product' => [],
+                'is_downloadable' => '0',
+                'affect_configurable_product_attributes' => '1',
+                'new_variation_attribute_set_id' => '4',
+                'use_default' => [
+                    'gift_message_available' => '0',
+                    'gift_wrapping_available' => '0'
+                ],
+                'configurable_matrix_serialized' => '[]',
+                'associated_product_ids_serialized' => '[]'
+            ]
+        ];
+        $uri = 'backend/catalog/product/save';
+
+        //Trying to update product's design settings without proper permissions.
+        //Expected list of sessions messages collected throughout the controller calls.
+        $sessionMessages = ['Not allowed to edit the product\'s design attributes'];
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        $requestData['product']['custom_design'] = '1';
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->dispatch($uri);
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
+        );
+
+        //Trying again with the permissions.
+        $this->aclBuilder->getAcl()->allow(null, ['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
+        $this->getRequest()->setDispatched(false);
+        $this->dispatch($uri);
+        /** @var ProductRepository $repo */
+        $repo = $this->repositoryFactory->create();
+        $product = $repo->get('simple');
+        $this->assertNotEmpty($product->getCustomDesign());
+        $this->assertEquals(1, $product->getCustomDesign());
+        //No new error messages
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
+        );
     }
 }

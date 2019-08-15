@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
+use Magento\Catalog\Controller\Adminhtml\Product\Authorization as ProductAuthorization;
 
 /**
  * Product helper
@@ -97,6 +98,11 @@ class Helper
     private $attributeFilter;
 
     /**
+     * @var ProductAuthorization
+     */
+    private $productAuthorization;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\RequestInterface $request
@@ -123,7 +129,8 @@ class Helper
         ProductLinkFactory $productLinkFactory = null,
         ProductRepositoryInterface $productRepository = null,
         LinkTypeProvider $linkTypeProvider = null,
-        AttributeFilter $attributeFilter = null
+        AttributeFilter $attributeFilter = null,
+        ?ProductAuthorization $productAuthorization = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -138,6 +145,7 @@ class Helper
         $this->productRepository = $productRepository ?: $objectManager->get(ProductRepositoryInterface::class);
         $this->linkTypeProvider = $linkTypeProvider ?: $objectManager->get(LinkTypeProvider::class);
         $this->attributeFilter = $attributeFilter ?: $objectManager->get(AttributeFilter::class);
+        $this->productAuthorization = $productAuthorization ?? $objectManager->get(ProductAuthorization::class);
     }
 
     /**
@@ -228,7 +236,10 @@ class Helper
     public function initialize(\Magento\Catalog\Model\Product $product)
     {
         $productData = $this->request->getPost('product', []);
-        return $this->initializeFromData($product, $productData);
+        $product = $this->initializeFromData($product, $productData);
+        $this->productAuthorization->authorizeSavingOf($product);
+
+        return $product;
     }
 
     /**
