@@ -8,7 +8,11 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
-use Magento\Framework\App\ObjectManager;
+use Magento\CatalogRule\Model\Rule;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Reindex rule relations with products.
@@ -16,7 +20,7 @@ use Magento\Framework\App\ObjectManager;
 class ReindexRuleProduct
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     private $resource;
 
@@ -31,25 +35,40 @@ class ReindexRuleProduct
     private $tableSwapper;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
+     * @param ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
-     * @param TableSwapper|null $tableSwapper
+     * @param TableSwapper $tableSwapper
+     * @param ScopeConfigInterface $scopeConfig
+     * @param TimezoneInterface $localeDate
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource,
+        ResourceConnection $resource,
         ActiveTableSwitcher $activeTableSwitcher,
-        TableSwapper $tableSwapper = null
+        TableSwapper $tableSwapper,
+        ScopeConfigInterface $scopeConfig,
+        TimezoneInterface $localeDate
     ) {
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
-        $this->tableSwapper = $tableSwapper ??
-            ObjectManager::getInstance()->get(TableSwapper::class);
+        $this->tableSwapper = $tableSwapper;
+        $this->scopeConfig = $scopeConfig;
+        $this->localeDate = $localeDate;
     }
 
     /**
      * Reindex information about rule relations with products.
      *
-     * @param \Magento\CatalogRule\Model\Rule $rule
+     * @param Rule $rule
      * @param int $batchCount
      * @param bool $useAdditionalTable
      * @return bool
@@ -57,7 +76,7 @@ class ReindexRuleProduct
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute(
-        \Magento\CatalogRule\Model\Rule $rule,
+        Rule $rule,
         $batchCount,
         $useAdditionalTable = false
     ) {
@@ -84,9 +103,6 @@ class ReindexRuleProduct
 
         $ruleId = $rule->getId();
         $customerGroupIds = $rule->getCustomerGroupIds();
-        $fromTime = strtotime($rule->getFromDate());
-        $toTime = strtotime($rule->getToDate());
-        $toTime = $toTime ? $toTime + \Magento\CatalogRule\Model\Indexer\IndexBuilder::SECONDS_IN_DAY - 1 : 0;
         $sortOrder = (int)$rule->getSortOrder();
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
@@ -99,6 +115,16 @@ class ReindexRuleProduct
                 if (empty($validationByWebsite[$websiteId])) {
                     continue;
                 }
+
+                $scopeTzPath = $this->localeDate->getDefaultTimezonePath();
+                $scopeTz = new \DateTimeZone(
+                    $this->scopeConfig->getValue($scopeTzPath, ScopeInterface::SCOPE_WEBSITE, $websiteId)
+                );
+                $fromTime = (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp();
+                $toTime = $rule->getToDate()
+                    ? (new \DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
+                    : 0;
+
                 foreach ($customerGroupIds as $customerGroupId) {
                     $rows[] = [
                         'rule_id' => $ruleId,
@@ -123,6 +149,7 @@ class ReindexRuleProduct
         if (!empty($rows)) {
             $connection->insertMultiple($indexTable, $rows);
         }
+
         return true;
     }
 }
