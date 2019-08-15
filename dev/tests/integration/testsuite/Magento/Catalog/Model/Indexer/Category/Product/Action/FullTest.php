@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
 use Magento\Catalog\Model\Indexer\Category\Product\Action\Full as OriginObject;
 use Magento\TestFramework\Catalog\Model\Indexer\Category\Product\Action\Full as PreferenceObject;
 use Magento\Framework\Interception\PluginListInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 /**
- * Class FullTest
- * @package Magento\Catalog\Model\Indexer\Category\Product\Action
+ * Test for Magento\Catalog\Model\Indexer\Category\Product\Action\Full *
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,14 +31,28 @@ class FullTest extends \PHPUnit\Framework\TestCase
     private $pluginList;
 
     /**
-     * Prepare data for test
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @inheritDoc
      */
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->configure(['preferences' => [OriginObject::class => PreferenceObject::class]]);
-        $this->interceptor = $objectManager->get(OriginObject::class);
-        $this->pluginList = $objectManager->get(PluginListInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $preferenceObject = $this->objectManager->get(PreferenceObject::class);
+        $this->objectManager->addSharedInstance($preferenceObject, OriginObject::class);
+        $this->interceptor = $this->objectManager->get(OriginObject::class);
+        $this->pluginList = $this->objectManager->get(PluginListInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        $this->objectManager->removeSharedInstance(OriginObject::class);
     }
 
     /**
