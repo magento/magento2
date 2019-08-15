@@ -320,7 +320,7 @@ class Escaper
     public function escapeXssInUrl($data)
     {
         return htmlspecialchars(
-            $this->escapeScriptIdentifiers((string)$data),
+            $this->escapeScriptIdentifiers(html_entity_decode((string)$data)),
             $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false
@@ -335,8 +335,16 @@ class Escaper
      */
     private function escapeScriptIdentifiers(string $data): string
     {
-        $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data) ?: '';
-        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData) ?: '';
+        $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data);
+        if ($filteredData === false || $filteredData === '') {
+            return '';
+        }
+
+        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData);
+        if ($filteredData === false) {
+            return '';
+        }
+
         if (preg_match(self::$xssFiltrationPattern, $filteredData)) {
             $filteredData = $this->escapeScriptIdentifiers($filteredData);
         }
