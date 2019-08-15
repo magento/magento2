@@ -26,20 +26,37 @@
             <createData entity="DownloadableMsiProduct" stepKey="downloadableProduct1">
                 <requiredEntity createDataKey="simpleCategory1"/>
             </createData>
-
             <createData entity="_minimalSource" stepKey="createSource1"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
             <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
                 <requiredEntity createDataKey="createStock1"/>
                 <requiredEntity createDataKey="createSource1"/>
             </createData>
-
+            <comment userInput="Perform reindex and cache flush after assign default stock to main website." stepKey="reindexCacheFlushAfterAssignDefaultStockToMainWebsite"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
             <createData entity="Msi_US_Customer" stepKey="customer"/>
-
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
+            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
+            <waitForPageLoad time="20" stepKey="waitForStockListPageLoad"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
+                <argument name="keyword" value="_defaultStock.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
+            <waitForPageLoad time="20" stepKey="waitFroDefaultStockEditPageLoad"/>
+            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
+            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$createSource1.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory"/>
+            <deleteData createDataKey="downloadableProduct1" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createStock1" stepKey="deleteCustomStock"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
@@ -77,10 +94,10 @@
             <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
-
-        <fillField selector="input[name='sources[assigned_sources][0][quantity]']" userInput="100" stepKey="fillSourceQtyField1"/>
-        <fillField selector="input[name='sources[assigned_sources][1][quantity]']" userInput="100" stepKey="fillSourceQtyField2"/>
-
+        <fillField selector="input[name='sources[assigned_sources][1][quantity]']" userInput="110" stepKey="fillSourceQtyField2"/>
+        <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
+            <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+        </actionGroup>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProduct"/>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
@@ -99,7 +116,7 @@
 
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
-        <fillField selector=".cart-item-qty" userInput="100" stepKey="setProductQtyToFiftyInMiniCart"/>
+        <fillField selector=".cart-item-qty" userInput="10" stepKey="setProductQtyToFiftyInMiniCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
 
         <click selector=".update-cart-item" stepKey="updateQtyInMiniCart"/>

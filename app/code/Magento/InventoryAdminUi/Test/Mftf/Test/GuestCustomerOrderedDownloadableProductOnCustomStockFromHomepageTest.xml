@@ -41,8 +41,10 @@
             <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignCustomSource">
                 <argument name="sourceCode" value="$$createSource.source[source_code]$$" />
             </actionGroup>
-            <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillDefaultSourceQtyField"/>
             <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="fillCustomSourceQtyField"/>
+            <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
+                <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProduct"/>
         </before>
         <after>
@@ -63,9 +65,10 @@
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
                 <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createStock" stepKey="deleteStock"/>
             <deleteData createDataKey="downloadableProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
         <amOnPage url="{{StorefrontProductPage.url($$downloadableProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage"/>
