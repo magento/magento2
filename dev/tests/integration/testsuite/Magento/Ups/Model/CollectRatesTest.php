@@ -31,6 +31,7 @@ class CollectRatesTest extends \Magento\OfflineShipping\Model\CollectRatesTest
      * @magentoConfigFixture default_store carriers/ups/specificcountry UK
      * @magentoConfigFixture default_store carriers/ups/showmethod 1
      */
+    // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
     public function testCollectRatesWhenShippingCarrierIsAvailableAndNotApplicable()
     {
         parent::testCollectRatesWhenShippingCarrierIsAvailableAndNotApplicable();
@@ -43,6 +44,7 @@ class CollectRatesTest extends \Magento\OfflineShipping\Model\CollectRatesTest
      * @magentoConfigFixture default_store carriers/ups/specificcountry UK
      * @magentoConfigFixture default_store carriers/ups/showmethod 1
      */
+    // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
     public function testCollectRatesWhenShippingCarrierIsNotAvailableAndNotApplicable()
     {
         parent::testCollectRatesWhenShippingCarrierIsNotAvailableAndNotApplicable();
