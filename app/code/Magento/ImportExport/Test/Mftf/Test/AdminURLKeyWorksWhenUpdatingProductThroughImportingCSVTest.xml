@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminURLKeyWorksWhenUpdatingProductThroughImportingCSVTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import Products"/>
+            <title value="Check that new URL Key works after updating a product through importing CSV file"/>
+            <description value="Check that new URL Key works after updating a product through importing CSV file"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6317"/>
+            <useCaseId value="MAGETWO-91544"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <!--Create Product-->
+            <comment userInput="Create Product" stepKey="commentCreateProduct"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProductBeforeUpdate" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <comment userInput="Delete created data" stepKey="commentDeleteData"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Import product form CSV file-->
+        <comment userInput="Import product from CSV file" stepKey="commentImportProduct"/>
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="importProduct">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="export-91544.csv"/>
+            <argument name="importMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
+        </actionGroup>
+        <!--Assert product's updated url-->
+        <comment userInput="Assert product's updated url" stepKey="commentAssertUrl"/>
+        <amOnPage url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <seeInCurrentUrl url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="seeUpdatedUrl"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="assertProductName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createProduct.sku$$" stepKey="assertProductSku"/>
+    </test>
+</tests>
