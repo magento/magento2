@@ -242,23 +242,6 @@ class NvpTest extends \PHPUnit\Framework\TestCase
                     'telephone' => '223322',
                     'region' => 'testSTATE',
                 ]
-            ],
-            [
-                "\r\n" . 'ACK=Success&SHIPTONAME=John'
-                . '&SHIPTOSTREET=testStreet'
-                . '&BUSINESS=testCompany'
-                . '&SHIPTOCITY=testCity'
-                . '&PHONENUM=223322'
-                . '&STATE=testSTATE',
-                [
-                    'firstName' => 'John',
-                    'lastName' => null,
-                    'street' => 'testStreet',
-                    'company' => 'testCompany',
-                    'city' => 'testCity',
-                    'telephone' => '223322',
-                    'region' => 'testSTATE',
-                ]
             ]
         ];
     }
