@@ -1664,7 +1664,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $collUrlRewrite->getFirstItem()->getRequestPath()
         );
 
-        $this->assertEquals(
+        $this->assertContains(
             sprintf('men/tops/%s.html', $product->getUrlKey()),
             $collUrlRewrite->getLastItem()->getRequestPath()
         );
