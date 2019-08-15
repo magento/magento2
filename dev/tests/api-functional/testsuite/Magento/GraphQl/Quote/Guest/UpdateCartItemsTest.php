@@ -71,6 +71,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->assertEquals($itemId, $item['id']);
         $this->assertEquals($quantity, $item['quantity']);
 
+        //Check that update is correctly reflected in cart
         $cartQuery = $this->getCartQuery($maskedQuoteId);
         $response = $this->graphQlQuery($cartQuery);
 
@@ -100,6 +101,15 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->assertArrayHasKey('cart', $response['updateCartItems']);
 
         $responseCart = $response['updateCartItems']['cart'];
+        $this->assertCount(0, $responseCart['items']);
+
+        //Check that update is correctly reflected in cart
+        $cartQuery = $this->getCartQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($cartQuery);
+
+        $this->assertArrayHasKey('cart', $response);
+
+        $responseCart = $response['cart'];
         $this->assertCount(0, $responseCart['items']);
     }
 
