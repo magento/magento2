@@ -357,12 +357,14 @@ class Checkout
         if (isset($params['config']) && $params['config'] instanceof PaypalConfig) {
             $this->_config = $params['config'];
         } else {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Config instance is required.');
         }
 
         if (isset($params['quote']) && $params['quote'] instanceof \Magento\Quote\Model\Quote) {
             $this->_quote = $params['quote'];
         } else {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Quote instance is required.');
         }
     }

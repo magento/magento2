@@ -1519,11 +1519,10 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             )->setPageSize(
                 1
             );
-            foreach ($regions as $region) {
-                $address->setRegionId($region->getId());
-                $address->setExportedKeys(array_merge($address->getExportedKeys(), ['region_id']));
-                break;
-            }
+            $regionItems = $regions->getItems();
+            $region = array_shift($regionItems);
+            $address->setRegionId($region->getId());
+            $address->setExportedKeys(array_merge($address->getExportedKeys(), ['region_id']));
         }
     }
 
