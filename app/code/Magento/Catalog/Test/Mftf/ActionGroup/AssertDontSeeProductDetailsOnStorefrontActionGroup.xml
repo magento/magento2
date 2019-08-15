@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertDontSeeProductDetailsOnStorefrontActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Info does NOT appear in the Product Number on a Storefront Category page.</description>
+        </annotations>
         <arguments>
             <argument name="productNumber" type="string"/>
             <argument name="productInfo" type="string"/>
         </arguments>
+
         <dontSee selector="{{StorefrontCategoryProductSection.ProductInfoByNumber(productNumber)}}" userInput="{{productInfo}}" stepKey="seeProductInfo"/>
     </actionGroup>
 </actionGroups>
