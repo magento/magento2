@@ -85,7 +85,7 @@ class Price implements DimensionalIndexerInterface
     private $eventManager;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     private $moduleManager;
 
@@ -97,7 +97,7 @@ class Price implements DimensionalIndexerInterface
      * @param BasePriceModifier $basePriceModifier
      * @param JoinAttributeProcessor $joinAttributeProcessor
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param bool $fullReindexAction
      * @param string $connectionName
      *
@@ -111,7 +111,7 @@ class Price implements DimensionalIndexerInterface
         BasePriceModifier $basePriceModifier,
         JoinAttributeProcessor $joinAttributeProcessor,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         $fullReindexAction = false,
         $connectionName = 'indexer'
     ) {
@@ -139,16 +139,16 @@ class Price implements DimensionalIndexerInterface
 
         $temporaryPriceTable = $this->indexTableStructureFactory->create(
             [
-            'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
-            'entityField' => 'entity_id',
-            'customerGroupField' => 'customer_group_id',
-            'websiteField' => 'website_id',
-            'taxClassField' => 'tax_class_id',
-            'originalPriceField' => 'price',
-            'finalPriceField' => 'final_price',
-            'minPriceField' => 'min_price',
-            'maxPriceField' => 'max_price',
-            'tierPriceField' => 'tier_price',
+                'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
+                'entityField' => 'entity_id',
+                'customerGroupField' => 'customer_group_id',
+                'websiteField' => 'website_id',
+                'taxClassField' => 'tax_class_id',
+                'originalPriceField' => 'price',
+                'finalPriceField' => 'final_price',
+                'minPriceField' => 'min_price',
+                'maxPriceField' => 'max_price',
+                'tierPriceField' => 'tier_price',
             ]
         );
 
@@ -335,9 +335,9 @@ class Price implements DimensionalIndexerInterface
             );
             $finalPrice = $connection->getLeastSql(
                 [
-                $price,
-                $connection->getIfNullSql($specialPriceExpr, $price),
-                $connection->getIfNullSql($tierPrice, $price),
+                    $price,
+                    $connection->getIfNullSql($specialPriceExpr, $price),
+                    $connection->getIfNullSql($tierPrice, $price),
                 ]
             );
         } else {
@@ -477,8 +477,8 @@ class Price implements DimensionalIndexerInterface
 
             $priceExpr = $connection->getLeastSql(
                 [
-                $priceExpr,
-                $connection->getIfNullSql($tierExpr, $priceExpr),
+                    $priceExpr,
+                    $connection->getIfNullSql($tierExpr, $priceExpr),
                 ]
             );
         } else {
@@ -495,8 +495,8 @@ class Price implements DimensionalIndexerInterface
             );
             $priceExpr = $connection->getLeastSql(
                 [
-                $specialExpr,
-                $connection->getIfNullSql($tierExpr, $price),
+                    $specialExpr,
+                    $connection->getIfNullSql($tierExpr, $price),
                 ]
             );
         }
