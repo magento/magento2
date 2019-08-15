@@ -9,10 +9,8 @@ namespace Magento\CatalogRule\Model\Indexer;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
 
 /**
  * Reindex rule relations with products.
@@ -35,34 +33,26 @@ class ReindexRuleProduct
     private $tableSwapper;
 
     /**
-     * @var ScopeConfigInterface
+     * @var LocalizedDateToUtcConverterInterface
      */
-    private $scopeConfig;
-
-    /**
-     * @var TimezoneInterface
-     */
-    private $localeDate;
+    private $dateToUtcConverter;
 
     /**
      * @param ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param TableSwapper $tableSwapper
-     * @param ScopeConfigInterface $scopeConfig
-     * @param TimezoneInterface $localeDate
+     * @param LocalizedDateToUtcConverterInterface $dateToUtcConverter
      */
     public function __construct(
         ResourceConnection $resource,
         ActiveTableSwitcher $activeTableSwitcher,
         TableSwapper $tableSwapper,
-        ScopeConfigInterface $scopeConfig,
-        TimezoneInterface $localeDate
+        LocalizedDateToUtcConverterInterface $dateToUtcConverter
     ) {
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
         $this->tableSwapper = $tableSwapper;
-        $this->scopeConfig = $scopeConfig;
-        $this->localeDate = $localeDate;
+        $this->dateToUtcConverter = $dateToUtcConverter;
     }
 
     /**
@@ -75,11 +65,8 @@ class ReindexRuleProduct
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute(
-        Rule $rule,
-        $batchCount,
-        $useAdditionalTable = false
-    ) {
+    public function execute(Rule $rule, $batchCount, $useAdditionalTable = false)
+    {
         if (!$rule->getIsActive() || empty($rule->getWebsiteIds())) {
             return false;
         }
@@ -109,20 +96,15 @@ class ReindexRuleProduct
         $actionStop = $rule->getStopRulesProcessing();
 
         $rows = [];
-
         foreach ($productIds as $productId => $validationByWebsite) {
             foreach ($websiteIds as $websiteId) {
                 if (empty($validationByWebsite[$websiteId])) {
                     continue;
                 }
 
-                $scopeTzPath = $this->localeDate->getDefaultTimezonePath();
-                $scopeTz = new \DateTimeZone(
-                    $this->scopeConfig->getValue($scopeTzPath, ScopeInterface::SCOPE_WEBSITE, $websiteId)
-                );
-                $fromTime = (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp();
+                $fromTime = strtotime($this->dateToUtcConverter->convertLocalizedDateToUtc($rule->getFromDate()));
                 $toTime = $rule->getToDate()
-                    ? (new \DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
+                    ? strtotime($this->dateToUtcConverter->convertLocalizedDateToUtc($rule->getToDate()))
                     : 0;
 
                 foreach ($customerGroupIds as $customerGroupId) {
