@@ -18,6 +18,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\DataObject;
 
 /**
@@ -88,6 +89,272 @@ QUERY;
             'Returned filters data set does not match the expected value'
         );
     }
+
+    /**
+     * Advanced Search which uses product attribute to filter out the results
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testAdvancedSearchByOneCustomAttribute()
+    {
+        $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
+
+        $query = <<<QUERY
+{
+  products(filter:{
+                   second_test_configurable: {eq: "{$optionValue}"}
+                   },
+                   pageSize: 3
+                   currentPage: 1
+       )
+  {
+  total_count
+    items 
+     {
+      name
+      sku
+      }
+    page_info{
+      current_page
+      page_size
+      total_pages
+    }
+    filters{
+      name
+      request_var
+      filter_items_count 
+      filter_items{
+        label
+        items_count
+        value_string
+        __typename
+      }
+       
+    }    
+      
+    } 
+}
+QUERY;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product1 = $productRepository->get('simple');
+        $product2 = $productRepository->get('12345');
+        $product3 = $productRepository->get('simple-4');
+        $filteredProducts = [$product1, $product2, $product3 ];
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(3, $response['products']['total_count']);
+        $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
+            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
+            //validate that correct products are returned
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [ 'name' => $filteredProducts[$itemIndex]->getName(),
+                    'sku' => $filteredProducts[$itemIndex]->getSku()
+                ]
+            );
+        }
+
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        $attribute = $eavConfig->getAttribute('catalog_product', 'second_test_configurable');
+
+        // Validate custom attribute filter layer data
+        $this->assertResponseFields(
+            $response['products']['filters'][2],
+            [
+                'name' => $attribute->getDefaultFrontendLabel(),
+                'request_var'=> $attribute->getAttributeCode(),
+                'filter_items_count'=> 1,
+                'filter_items' => [
+                    [
+                        'label' => 'Option 3',
+                         'items_count' => 3,
+                         'value_string' => $optionValue,
+                         '__typename' =>'LayerFilterItem'
+                     ],
+                 ],
+            ]
+        );
+    }
+
+    /**
+     * Get the option value for the custom attribute to be used in the graphql query
+     *
+     * @param string $attributeCode
+     * @return string
+     */
+    private function getDefaultAttributeOptionValue(string $attributeCode) : string
+    {
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
+        /** @var AttributeOptionInterface[] $options */
+        $options = $attribute->getOptions();
+        $defaultOptionValue = $options[1]->getValue();
+        return $defaultOptionValue;
+    }
+
+    /**
+     * Full text search for Product and then filter the results by custom attribute
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testFullTextSearchForProductAndFilterByCustomAttribute()
+    {
+        $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
+
+        $query = <<<QUERY
+{
+  products(search:"Simple",
+          filter:{
+          second_test_configurable: {eq: "{$optionValue}"}
+          },
+         pageSize: 3
+         currentPage: 1
+       )
+  {
+   total_count
+    items 
+     {
+      name
+      sku
+      }
+    page_info{
+      current_page
+      page_size
+      total_pages
+    }
+    filters{
+      name
+      request_var
+      filter_items_count 
+      filter_items{
+        label
+        items_count
+        value_string
+        __typename
+      }
+       
+    }    
+      
+    }
+ 
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        //Verify total count of the products returned
+        $this->assertEquals(3, $response['products']['total_count']);
+        $expectedFilterLayers =
+            [
+                ['name' => 'Price',
+                    'request_var'=> 'price'
+                ],
+                ['name' => 'Category',
+                    'request_var'=> 'category_id'
+                ],
+                ['name' => 'Second Test Configurable',
+                    'request_var'=> 'second_test_configurable'
+                ],
+            ];
+        $layers = array_map(null, $expectedFilterLayers, $response['products']['filters']);
+
+        //Verify all the three layers : Price, Category and Custom attribute layers are created
+        foreach ($layers as $layerIndex => $layerFilterData) {
+            $this->assertNotEmpty($layerFilterData);
+            $this->assertEquals(
+                $layers[$layerIndex][0]['name'],
+                $response['products']['filters'][$layerIndex]['name'],
+                'Layer name does not match'
+            );
+            $this->assertEquals(
+                $layers[$layerIndex][0]['request_var'],
+                $response['products']['filters'][$layerIndex]['request_var'],
+                'request_var does not match'
+            ) ;
+        }
+
+       // Validate the price filter layer data from the response
+        $this->assertResponseFields(
+            $response['products']['filters'][0],
+            [
+                'name' => 'Price',
+                'request_var'=> 'price',
+                'filter_items_count'=> 2,
+                'filter_items' => [
+                    [
+                        'label' => '10-20',
+                        'items_count' => 2,
+                        'value_string' => '10_20',
+                         '__typename' =>'LayerFilterItem'
+                     ],
+                     [
+                         'label' => '40-*',
+                         'items_count' => 1,
+                         'value_string' => '40_*',
+                          '__typename' =>'LayerFilterItem'
+                      ],
+                 ],
+            ]
+        );
+    }
+
+    /**
+     *  Filter by mu;ltiple attributes like category_id and  custom attribute
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testFilterByCategoryIdAndCustomAttribute()
+    {
+        $categoryId = 13;
+        $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
+        $query = <<<QUERY
+{
+  products(filter:{
+                   category_id : {eq:"{$categoryId}"}
+                   second_test_configurable: {eq: "{$optionValue}"}
+                   },
+                   pageSize: 3
+                   currentPage: 1
+       )
+  {
+  total_count
+    items 
+     {
+      name
+      sku
+      }
+    page_info{
+      current_page
+      page_size
+      total_pages
+    }
+    filters{
+      name
+      request_var
+      filter_items_count 
+      filter_items{
+        label
+        items_count
+        value_string
+        __typename
+      }
+       
+    }    
+      
+    } 
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+    }
+
+
 
     /**
      * Get array with expected data for layered navigation filters

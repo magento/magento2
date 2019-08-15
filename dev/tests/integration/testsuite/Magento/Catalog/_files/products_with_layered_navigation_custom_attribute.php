@@ -68,7 +68,6 @@ if (!$attribute->getId()) {
 
     /* Assign attribute to attribute set */
     $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
-    CacheCleaner::cleanAll();
 }
 // create a second attribute
 if (!$attribute1->getId()) {
@@ -113,8 +112,11 @@ if (!$attribute1->getId()) {
     $attributeRepository->save($attribute1);
 
     /* Assign attribute to attribute set */
-    $installer->addAttributeToGroup('catalog_product', $attributeSet->getId(), $attributeSet->getDefaultGroupId(), $attribute1->getId());
-    CacheCleaner::cleanAll();
+    $installer->addAttributeToGroup('catalog_product',
+        $attributeSet->getId(),
+        $attributeSet->getDefaultGroupId(),
+        $attribute1->getId()
+    );
 }
 
 $eavConfig->clear();
