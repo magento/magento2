@@ -33,7 +33,7 @@ class ContextPlugin
     protected $weeeHelper;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -63,7 +63,7 @@ class ContextPlugin
      * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Weee\Helper\Data $weeeHelper
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -74,7 +74,7 @@ class ContextPlugin
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Weee\Helper\Data $weeeHelper,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\PageCache\Model\Config $cacheConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
