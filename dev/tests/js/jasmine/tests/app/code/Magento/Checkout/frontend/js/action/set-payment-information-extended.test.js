@@ -52,7 +52,7 @@ define([
         }
     });
 
-    describe('Magento/Checkout/frontend/js/action/set-payment-information-extended', function () {
+    describe('Magento/Checkout/js/action/set-payment-information-extended', function () {
         it('Checks that paymentData consist correct data value.', function () {
             var messageContainer = jasmine.createSpy('messageContainer'),
                 deferral = new $.Deferred(),
@@ -63,13 +63,12 @@ define([
                         title: true
                     }
                 },
-                formattedData = {
-                    method: 'checkmo',
-                    additionalData: null
-                },
                 payload = {
                     cartId: 1,
-                    paymentMethod: formattedData,
+                    paymentMethod: {
+                        method: 'checkmo',
+                        additionalData: null
+                    },
                     billingAddress: null
                 };
 
