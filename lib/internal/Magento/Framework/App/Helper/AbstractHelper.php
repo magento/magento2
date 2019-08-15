@@ -27,7 +27,7 @@ abstract class AbstractHelper
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $_moduleManager;
 
@@ -125,7 +125,7 @@ abstract class AbstractHelper
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * use \Magento\Framework\Module\ModuleManagerInterface::isOutputEnabled()
+     * use \Magento\Framework\Module\Manager::isOutputEnabled()
      */
     public function isModuleOutputEnabled($moduleName = null)
     {

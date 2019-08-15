@@ -47,7 +47,7 @@ class CurrentCustomerTest extends \PHPUnit\Framework\TestCase
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManagerMock;
 
@@ -80,7 +80,7 @@ class CurrentCustomerTest extends \PHPUnit\Framework\TestCase
         $this->customerDataMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerRepositoryMock = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\ModuleManagerInterface::class);
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
         $this->viewMock = $this->createMock(\Magento\Framework\App\View::class);
 
         $this->currentCustomer = new \Magento\Customer\Helper\Session\CurrentCustomer(
