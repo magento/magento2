@@ -65,21 +65,18 @@ class View
      * Replace cms page url rewrites on store view save
      *
      * @param ResourceStore $object
-     * @param \Closure $proceed
-     * @param AbstractModel $store
-     * @return mixed
+     * @param ResourceStore $result
+     * @param ResourceStore $store
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(ResourceStore $object, \Closure $proceed, AbstractModel $store)
+    public function afterSave(ResourceStore $object, ResourceStore $result, AbstractModel $store): void
     {
-        $result = $proceed($store);
         if ($store->isObjectNew() || $store->dataHasChangedFor('group_id')) {
             $this->urlPersist->replace(
                 $this->generateCmsPagesUrls((int)$store->getId())
             );
         }
-
-        return $result;
     }
 
     /**
