@@ -143,6 +143,9 @@
         <reloadPage stepKey="reloadDuplicatedProductPage"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductReload"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="createConfigurationsDuplicatedProduct"/>
+        <waitForElementVisible selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="waitForCreateConfigurationsPageLoad"/>
+        <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Deselect All')}}" stepKey="DeselectAllAttributes"/>
         <actionGroup ref="createOptionsForAttribute" stepKey="createOptionsForDuplicatedProduct">
             <argument name="attributeName" value="{{productAttributeColor.default_label}}"/>
             <argument name="firstOptionName" value="{{colorConfigurableProductAttribute1.name}}"/>
