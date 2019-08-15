@@ -178,15 +178,13 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         $fileUrl = ltrim($value[0]['url'], '/');
-        $imageUploader = $this->getImageUploader();
-        $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA)
-            . DIRECTORY_SEPARATOR . $imageUploader->getBasePath();
+        $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA);
 
         if (!$baseMediaDir) {
             return false;
         }
 
-        return strpos($fileUrl, $baseMediaDir) === false;
+        return strpos($fileUrl, $baseMediaDir) !== false;
     }
 
     /**
