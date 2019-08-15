@@ -10,6 +10,8 @@ use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class FileInfo
@@ -49,15 +51,25 @@ class FileInfo
     private $pubDirectory;
 
     /**
+     * Store manager
+     *
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Filesystem $filesystem
      * @param Mime $mime
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Filesystem $filesystem,
-        Mime $mime
+        Mime $mime,
+        StoreManagerInterface $storeManager
     ) {
         $this->filesystem = $filesystem;
         $this->mime = $mime;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -152,7 +164,8 @@ class FileInfo
      */
     private function getFilePath($fileName)
     {
-        $filePath = ltrim($fileName, '/');
+        $filePath = $this->removeStorePath($fileName);
+        $filePath = ltrim($filePath, '/');
 
         $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath($filePath);
         $isFileNameBeginsWithMediaDirectoryPath = $this->isBeginsWithMediaDirectoryPath($fileName);
@@ -177,12 +190,34 @@ class FileInfo
      */
     public function isBeginsWithMediaDirectoryPath($fileName)
     {
-        $filePath = ltrim($fileName, '/');
+        $filePath = $this->removeStorePath($fileName);
+        $filePath = ltrim($filePath, '/');
 
         $mediaDirectoryRelativeSubpath = $this->getMediaDirectoryPathRelativeToBaseDirectoryPath($filePath);
         $isFileNameBeginsWithMediaDirectoryPath = strpos($filePath, (string) $mediaDirectoryRelativeSubpath) === 0;
 
         return $isFileNameBeginsWithMediaDirectoryPath;
+    }
+
+    /**
+     * Clean store path in case if it's exists
+     *
+     * @param string $path
+     * @return string
+     */
+    private function removeStorePath(string $path): string
+    {
+        $result = $path;
+        try {
+            $storeUrl = $this->storeManager->getStore()->getUrl();
+        } catch (NoSuchEntityException $e) {
+            return $result;
+        }
+        $path = parse_url($path, PHP_URL_PATH);
+        $storePath = parse_url($storeUrl, PHP_URL_PATH);
+        $result = ltrim($path, $storePath);
+
+        return $result;
     }
 
     /**
