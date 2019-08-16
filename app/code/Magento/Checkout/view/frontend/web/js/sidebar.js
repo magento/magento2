@@ -261,6 +261,9 @@ define([
                 $(document).trigger('ajax:removeFromCart', {
                     productIds: [productData['product_id']]
                 });
+                if (window.location.href === this.shoppingCartUrl) {
+                    location.reload();
+                }
             }
         },
 
@@ -306,14 +309,10 @@ define([
                 }
             })
                 .done(function (response) {
-                    var msg, currentURL;
+                    var msg;
 
                     if (response.success) {
                         callback.call(this, elem, response);
-                        currentURL = window.location.pathname;
-                        if (currentURL.includes("/checkout/cart/")) {
-                            location.reload();
-                        }
                     } else {
                         msg = response['error_message'];
 
