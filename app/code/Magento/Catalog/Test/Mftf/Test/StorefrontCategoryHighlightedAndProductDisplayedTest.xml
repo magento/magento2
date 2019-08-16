@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckCurrentCategoryIsHighlightedAndProductsDisplayed">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Category"/>
+            <title value="Сheck that current category is highlighted and all products displayed for it"/>
+            <description value="Сheck that current category is highlighted and all products displayed for it"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-99028"/>
+            <useCaseId value="MAGETWO-98748"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="category1"/>
+            <createData entity="SimpleSubCategory" stepKey="category2"/>
+            <createData entity="SimpleSubCategory" stepKey="category3"/>
+            <createData entity="SimpleSubCategory" stepKey="category4"/>
+            <createData entity="SimpleProduct" stepKey="product1">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="product2">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="category2" stepKey="deleteCategory2"/>
+            <deleteData createDataKey="category3" stepKey="deleteCategory3"/>
+            <deleteData createDataKey="category4" stepKey="deleteCategory4"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Open Storefront home page-->
+        <comment userInput="Open Storefront home page" stepKey="openStorefrontHomePage"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontHomePage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPage"/>
+        <!--Click on first category-->
+        <comment userInput="Click on first category" stepKey="openFirstCategoryPage"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$category1.name$$)}}" stepKey="clickCategory1Name"/>
+        <waitForPageLoad stepKey="waitForCategory1Page"/>
+        <!--Check if current category is highlighted and the others are not-->
+        <comment userInput="Check if current category is highlighted and the others are not" stepKey="checkCateg1NameIsHighlighted"/>
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category1.name$$)}}" userInput="class" stepKey="grabCategory1Class"/>
+        <assertContains expectedType="string" expected="active" actual="$grabCategory1Class" stepKey="assertCategory1IsHighlighted"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedAmount"/>
+        <assertEquals expectedType="int" expected="1" actual="$highlightedAmount" stepKey="assertRestCategories1IsNotHighlighted"/>
+        <!--See products in the category page-->
+        <comment userInput="See products in the category page" stepKey="seeProductsInCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($product1.name$)}}" stepKey="seeProduct1InCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($product2.name$)}}" stepKey="seeProduct2InCategoryPage"/>
+        <!--Click on second category-->
+        <comment userInput="Click on second category" stepKey="openSecondCategoryPage"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$category2.name$$)}}" stepKey="clickCategory2Name"/>
+        <waitForPageLoad stepKey="waitForCategory2Page"/>
+        <!--Check if current category is highlighted  and the others are not-->
+        <comment userInput="Check if current category is highlighted and the others are not" stepKey="checkCateg2NameIsHighlighted"/>
+        <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category2.name$$)}}" userInput="class" stepKey="grabCategory2Class"/>
+        <assertContains expectedType="string" expected="active" actual="$grabCategory2Class" stepKey="assertCategory2IsHighlighted"/>
+        <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedAmount2"/>
+        <assertEquals expectedType="int" expected="1" actual="$highlightedAmount2" stepKey="assertRestCategories1IsNotHighlighted2"/>
+    </test>
+</tests>
