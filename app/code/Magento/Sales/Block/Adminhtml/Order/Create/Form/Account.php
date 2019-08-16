@@ -39,6 +39,8 @@ class Account extends AbstractForm
      */
     protected $_extensibleDataObjectConverter;
 
+    private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
@@ -147,7 +149,7 @@ class Account extends AbstractForm
     {
         switch ($element->getId()) {
             case 'email':
-                $element->setRequired(1);
+                $element->setRequired($this->isEmailRequiredCreateOrder());
                 $element->setClass('validate-email admin__control-text');
                 break;
         }
@@ -203,5 +205,18 @@ class Account extends AbstractForm
         }
 
         return $formValues;
+    }
+
+    /**
+     * Retrieve email is required field for admin order creation
+     *
+     * @return bool
+     */
+    private function isEmailRequiredCreateOrder()
+    {
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_EMAIL_REQUIRED_CREATE_ORDER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }
