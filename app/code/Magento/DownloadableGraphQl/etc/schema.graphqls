@@ -1,6 +1,35 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type Mutation {
+    addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+}
+
+input AddDownloadableProductsToCartInput {
+    cart_id: String!
+    cart_items: [DownloadableProductCartItemInput!]!
+}
+
+input DownloadableProductCartItemInput {
+    data: CartItemInput!
+    downloadable_product_links: [DownloadableProductLinksInput!]
+    customizable_options:[CustomizableOptionInput!]
+}
+
+input DownloadableProductLinksInput {
+    link_id: Int!
+}
+
+type AddDownloadableProductsToCartOutput {
+    cart: Cart!
+}
+
+type DownloadableCartItem implements CartItemInterface @doc(description: "Downloadable Cart Item") {
+    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+    links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Links") @doc(description: "An array containing information about the links for the added to cart downloadable product")
+    samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Samples") @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product")
+}
+
 type DownloadableProduct implements ProductInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the customer downloads") {
     downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples") @doc(description: "An array containing information about samples of this downloadable product.")
     downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Links") @doc(description: "An array containing information about the links for this downloadable product")
