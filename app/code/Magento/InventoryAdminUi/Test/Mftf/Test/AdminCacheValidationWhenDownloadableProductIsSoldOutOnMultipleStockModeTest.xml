@@ -94,7 +94,7 @@
             <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
             <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
-        <fillField selector="input[name='sources[assigned_sources][1][quantity]']" userInput="110" stepKey="fillSourceQtyField2"/>
+        <fillField selector="input[name='sources[assigned_sources][1][quantity]']" userInput="100" stepKey="fillSourceQtyField2"/>
         <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
             <argument name="sourceCode" value="{{_defaultSource.name}}"/>
         </actionGroup>
@@ -116,7 +116,7 @@
 
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
-        <fillField selector=".cart-item-qty" userInput="10" stepKey="setProductQtyToFiftyInMiniCart"/>
+        <fillField selector=".cart-item-qty" userInput="100" stepKey="setProductQtyToFiftyInMiniCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
 
         <click selector=".update-cart-item" stepKey="updateQtyInMiniCart"/>

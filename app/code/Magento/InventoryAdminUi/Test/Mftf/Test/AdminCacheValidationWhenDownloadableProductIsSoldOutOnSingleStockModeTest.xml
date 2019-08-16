@@ -47,7 +47,7 @@
         <click selector="{{AdminGridRow.editByValue($$downloadableProduct1.product[sku]$$)}}" stepKey="clickOnEditDownloadableProductForCheckInStock"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="110" stepKey="fillProductQty"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/>
 
         <comment userInput="Assign category to product." stepKey="assignCategoryComment"/>
@@ -90,7 +90,7 @@
 
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
-        <fillField selector=".cart-item-qty" userInput="10" stepKey="setProductQtyToFiftyInMiniCart"/>
+        <fillField selector=".cart-item-qty" userInput="100" stepKey="setProductQtyToFiftyInMiniCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
 
         <click selector=".update-cart-item" stepKey="updateQtyInMiniCart"/>
