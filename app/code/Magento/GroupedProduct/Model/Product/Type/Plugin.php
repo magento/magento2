@@ -6,7 +6,7 @@
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 
 /**
  * Plugin.
@@ -14,14 +14,14 @@ use Magento\Framework\Module\ModuleManagerInterface;
 class Plugin
 {
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
     /**
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      */
-    public function __construct(ModuleManagerInterface $moduleManager)
+    public function __construct(Manager $moduleManager)
     {
         $this->moduleManager = $moduleManager;
     }

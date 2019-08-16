@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Ui\Component\Form;
 use Magento\Framework\UrlInterface;
-use \Magento\Framework\Module\ModuleManagerInterface as ModuleManager;
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\App\ObjectManager;
 
 /**
