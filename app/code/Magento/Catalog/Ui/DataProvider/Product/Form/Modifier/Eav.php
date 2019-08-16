@@ -858,7 +858,9 @@ class Eav extends AbstractModifier
                 'arguments/data/config',
                 $containerMeta,
                 [
-                    'component' => 'Magento_Ui/js/form/components/group'
+                    'component' => 'Magento_Ui/js/form/components/group',
+                    'label' => false,
+                    'required' => false,
                 ]
             );
         }

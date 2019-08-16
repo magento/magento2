@@ -243,13 +243,13 @@ class Categories extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'label' => __('Categories'),
+                        'label' => false,
+                        'required' => false,
                         'dataScope' => '',
                         'breakLine' => false,
                         'formElement' => 'container',
                         'componentType' => 'container',
                         'component' => 'Magento_Ui/js/form/components/group',
-                        'scopeLabel' => __('[GLOBAL]'),
                         'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
                     ],
                 ],
