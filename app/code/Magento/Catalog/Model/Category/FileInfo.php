@@ -213,7 +213,9 @@ class FileInfo
         } catch (NoSuchEntityException $e) {
             return $result;
         }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $path = parse_url($path, PHP_URL_PATH);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $storePath = parse_url($storeUrl, PHP_URL_PATH);
         $result = ltrim($path, $storePath);
 
