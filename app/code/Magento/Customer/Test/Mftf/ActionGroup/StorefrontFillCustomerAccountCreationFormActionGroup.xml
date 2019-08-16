@@ -9,12 +9,15 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontFillCustomerAccountCreationFormActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer details on the Storefront Customer creation page.</description>
+        </annotations>
         <arguments>
-            <argument name="customer" type="entity" />
+            <argument name="customer" type="entity"/>
         </arguments>
 
-        <fillField  stepKey="fillFirstName" userInput="{{customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" />
-        <fillField  stepKey="fillLastName"  userInput="{{customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" />
+        <fillField  stepKey="fillFirstName" userInput="{{customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
+        <fillField  stepKey="fillLastName"  userInput="{{customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
         <fillField  stepKey="fillEmail" userInput="{{customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
         <fillField  stepKey="fillPassword" userInput="{{customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
         <fillField  stepKey="fillConfirmPassword" userInput="{{customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
