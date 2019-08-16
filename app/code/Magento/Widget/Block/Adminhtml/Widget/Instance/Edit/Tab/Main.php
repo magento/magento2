@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+declare(strict_types=1);
 /**
  * Widget Instance Main tab block
  *
@@ -198,7 +198,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => 'sort_order',
                 'label' => __('Sort Order'),
                 'title' => __('Sort Order'),
-                'class' => '',
+                'class' => 'validate-number',
                 'required' => false,
                 'note' => __('Sort Order of widget instances in the same container')
             ]
