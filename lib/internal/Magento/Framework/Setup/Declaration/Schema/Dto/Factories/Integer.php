@@ -50,7 +50,7 @@ class Integer implements FactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(array $data)
     {
