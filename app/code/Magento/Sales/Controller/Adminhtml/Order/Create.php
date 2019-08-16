@@ -55,6 +55,7 @@ abstract class Create extends \Magento\Backend\App\Action
         ForwardFactory $resultForwardFactory
     ) {
         parent::__construct($context);
+        $productHelper->setSkipSaleableCheck(true);
         $this->escaper = $escaper;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
