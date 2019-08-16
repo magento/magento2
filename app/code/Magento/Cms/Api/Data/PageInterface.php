@@ -298,6 +298,8 @@ interface PageInterface
      *
      * @param string $customLayoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @deprecated Existing updates are applied, new are not accepted.
+     * @see \Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelectedInterface
      */
     public function setCustomLayoutUpdateXml($customLayoutUpdateXml);
 
