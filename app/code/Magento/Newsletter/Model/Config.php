@@ -38,9 +38,10 @@ class Config
     /**
      * Returns newsletter's enabled status
      *
+     * @param string $scopeType
      * @return bool
      */
-    public function isActive($scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
+    public function isActive(string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_NEWSLETTER_ACTIVE, $scopeType);
     }
