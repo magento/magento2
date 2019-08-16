@@ -20,6 +20,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\DataObject;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -99,12 +100,11 @@ QUERY;
     public function testAdvancedSearchByOneCustomAttribute()
     {
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
-
         $query = <<<QUERY
 {
-  products(filter:{
+  products(filter:{                   
                    second_test_configurable: {eq: "{$optionValue}"}
-                   },
+                   }
                    pageSize: 3
                    currentPage: 1
        )
@@ -136,6 +136,8 @@ QUERY;
     } 
 }
 QUERY;
+
+
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple');
@@ -194,7 +196,8 @@ QUERY;
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
-        $defaultOptionValue = $options[1]->getValue();
+        array_shift($options);
+        $defaultOptionValue = $options[0]->getValue();
         return $defaultOptionValue;
     }
 
@@ -393,10 +396,115 @@ QUERY;
                 'Products count in the category is incorrect'
             ) ;
         }
+    }
 
+    private function getQueryProductsWithCustomAttribute($optionValue)
+    {
+        return <<<QUERY
+{
+  products(filter:{                   
+                   test_configurable: {eq: "{$optionValue}"}
+                   }
+                   pageSize: 3
+                   currentPage: 1
+       )
+  {
+  total_count
+    items 
+     {
+      name
+      sku
+      }
+    page_info{
+      current_page
+      page_size
+      total_pages
+    }
+    filters{
+      name
+      request_var
+      filter_items_count 
+      filter_items{
+        label
+        items_count
+        value_string
+        __typename
+      }
+       
+    }    
+      
+    } 
+}
+QUERY;
 
     }
 
+    /**
+     *  Layered navigation for Configurable products with out of stock options
+     * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testLayeredNavigationForConfigurableProductWithOutOfStockOption()
+    {
+        $attributeCode = 'test_configurable';
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
+        /** @var AttributeOptionInterface[] $options */
+        $options = $attribute->getOptions();
+        array_shift($options);
+        $firstOption = $options[0]->getValue();
+        $secondOption = $options[1]->getValue();
+        $query = $this->getQueryProductsWithCustomAttribute($firstOption);
+        $response = $this->graphQlQuery($query);
+
+        //Only 1 product will be returned since only one child product with attribute option1 from 1st Configurable product is OOS
+        $this->assertEquals(1, $response['products']['total_count']);
+
+        // Custom attribute filter layer data
+        $this->assertResponseFields(
+            $response['products']['filters'][1],
+            [
+                'name' => $attribute->getDefaultFrontendLabel(),
+                'request_var'=> $attribute->getAttributeCode(),
+                'filter_items_count'=> 2,
+                'filter_items' => [
+                    [
+                        'label' => 'Option 1',
+                        'items_count' => 1,
+                        'value_string' => $firstOption,
+                        '__typename' =>'LayerFilterItem'
+                    ],
+                    [
+                        'label' => 'Option 2',
+                        'items_count' => 1,
+                        'value_string' => $secondOption,
+                        '__typename' =>'LayerFilterItem'
+                    ]
+                ],
+            ]
+        );
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $outOfStockChildProduct = $productRepository->get('simple_30');
+        // Set another child product from 2nd Configurable product with  attribute option1 to OOS
+        $outOfStockChildProduct->setStockData(
+            ['use_config_manage_stock' => 1,
+                'qty' => 0,
+                'is_qty_decimal' => 0,
+                'is_in_stock' => 0]
+        );
+        $productRepository->save($outOfStockChildProduct);
+        $query = $this->getQueryProductsWithCustomAttribute($firstOption);
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(0, $response['products']['total_count']);
+        $this->assertEmpty($response['products']['items']);
+        $this->assertEmpty($response['products']['filters']);
+        $i = 0;
+    }
 
 
     /**
