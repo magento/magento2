@@ -13,19 +13,8 @@
     <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
 
     <each args="data: currentBillingAddress().customAttributes, as: 'element'">
-        <if args="typeof element === 'object'">
-            <if args="element.label">
-                <text args="element.label"/>
-            </if>
-            <ifnot args="element.label">
-                <if args="element.value">
-                    <text args="element.value"/>
-                </if>
-            </ifnot>
-        </if>
-        <if args="typeof element === 'string'">
-            <text args="element"/>
-        </if><br/>
+        <text args="$parent.getCustomAttributeLabel(element)"/>
+        <br/>
     </each>
 
     <button visible="!isAddressSameAsShipping()"

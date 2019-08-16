@@ -18,6 +18,7 @@ define([
     return {
         /**
          * Convert address form data to Address object
+         *
          * @param {Object} formData
          * @returns {Object}
          */
