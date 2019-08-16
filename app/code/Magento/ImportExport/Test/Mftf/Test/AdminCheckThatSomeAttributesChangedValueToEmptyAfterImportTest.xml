@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckThatSomeAttributesChangedValueToEmptyAfterImportTest">
+        <annotations>
+            <stories value="Attribute importing"/>
+            <title value="Check that some attributes changed the value to an empty after import CSV"/>
+            <description value="Check that some attributes changed the value to an empty after import CSV"/>
+            <features value="Import/Export"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11332"/>
+            <useCaseId value="MAGETWO-61593"/>
+            <group value="importExport"/>
+            <skip>
+                <issueId value="MC-17175" />
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="productDropDownAttribute" stepKey="productAttribute"/>
+            <createData entity="productAttributeOption2" stepKey="attributeOptionWithDefaultValue">
+                <requiredEntity createDataKey="productAttribute"/>
+            </createData>
+            <!--Create product-->
+            <comment userInput="Create product" stepKey="createProduct"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <actionGroup ref="FillAdminSimpleProductFormWithoutSave" stepKey="fillProductFieldsInAdmin">
+                <argument name="category" value="$$createCategory$$"/>
+                <argument name="simpleProduct" value="simpleProductWithShortNameAndSku"/>
+            </actionGroup>
+            <!--Select created attribute-->
+            <comment userInput="Select created attribute" stepKey="selectedCreatedAttribute"/>
+            <actionGroup ref="addProductAttributeInProductModal" stepKey="addAttributeToProduct">
+                <argument name="attributeCode" value="$$productAttribute.attribute_code$$"/>
+            </actionGroup>
+            <!--Check that attribute value is selected-->
+            <comment userInput="Check that attribute value is selected" stepKey="checkSelectedValue"/>
+            <scrollTo selector="{{AdminProductFormSection.attributeTab}}" stepKey="scrollToAttributeTitle1"/>
+            <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" visible="false" stepKey="expandAttributeTab1"/>
+            <seeOptionIsSelected selector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" userInput="option2" stepKey="seeAttributeValueIsSelected1"/>
+            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <!--Import product with add/update behavior-->
+            <comment userInput="Import products with add/update behavior" stepKey="importProduct"/>
+            <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsFirstTime">
+                <argument name="behavior" value="Add/Update"/>
+                <argument name="importFile" value="import_simple_product.csv"/>
+                <argument name="importMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete Product and Category-->
+            <comment userInput="Delete Product and Category" stepKey="deleteProduct"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
+                <argument name="productName" value="simpleProductWithShortNameAndSku.name"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Delete attribute-->
+            <comment userInput="Delete attribute" stepKey="deleteAttribute"/>
+            <deleteData createDataKey="productAttribute" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Check that attribute value is empty after import-->
+        <comment userInput="Check that attribute value is empty after import" stepKey="checkAttrValueAfterImport"/>
+        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct2">
+            <argument name="productSku" value="{{simpleProductWithShortNameAndSku.sku}}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" stepKey="scrollToAttributeTitle2"/>
+        <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" visible="false" stepKey="expandAttributeTab2"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" userInput="" stepKey="seeAttributeValueIsSelected2"/>
+    </test>
+</tests>
