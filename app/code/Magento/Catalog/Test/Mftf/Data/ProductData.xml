@@ -1210,4 +1210,31 @@
         <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ABC_dfj_SimpleProduct" type="product">
+        <data key="name" unique="suffix">abc_dfj_</data>
+        <data key="sku" unique="suffix">abc_dfj</data>
+        <data key="price">50.00</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ProductDescriptionAdvancedSearchABC</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ProductShortDescriptionAdvancedSearch</requiredEntity>
+    </entity>
+    <entity name="ABC_123_SimpleProduct" type="product">
+        <data key="name" unique="suffix">adc_123_</data>
+        <data key="sku" unique="suffix">adc_123</data>
+        <data key="price">100.00</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ProductDescriptionAdvancedSearchADC123</requiredEntity>
+    </entity>
 </entities>

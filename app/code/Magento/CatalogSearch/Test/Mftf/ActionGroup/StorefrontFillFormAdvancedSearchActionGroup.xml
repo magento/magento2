@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontFillFormAdvancedSearchActionGroup">
+        <arguments>
+            <argument name="productName" type="string" defaultValue=""/>
+            <argument name="sku" type="string" defaultValue=""/>
+            <argument name="description" type="string" defaultValue=""/>
+            <argument name="short_description" type="string" defaultValue=""/>
+            <argument name="price_from" type="string" defaultValue=""/>
+            <argument name="price_to" type="string" defaultValue=""/>
+        </arguments>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ProductName}}" userInput="{{productName}}" stepKey="fillName"/>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.SKU}}" userInput="{{sku}}" stepKey="fillSku"/>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.Description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ShortDescription}}" userInput="{{short_description}}" stepKey="fillShortDescription"/>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceFrom}}" userInput="{{price_from}}" stepKey="fillPriceFrom"/>
+        <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceTo}}" userInput="{{price_to}}" stepKey="fillPriceTo"/>
+        <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>
