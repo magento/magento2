@@ -11,7 +11,7 @@ namespace Magento\Ups\Model;
  * Integration tests for online shipping carriers.
  * @magentoAppIsolation enabled
  */
-class CollectRatesTest extends \Magento\Shipping\Model\CollectRatesTest
+class CollectRatesTest extends \Magento\Shipping\Model\CollectRatesAbstract
 {
     /**
      * @var string

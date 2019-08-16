@@ -15,11 +15,10 @@ use Magento\Shipping\Model\Rate\Result;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Integration tests for shipping carriers.
+ * Abstract class for testing shipping carriers.
  */
-class CollectRatesTest extends \PHPUnit\Framework\TestCase
+abstract class CollectRatesAbstract extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @var ObjectManagerInterface
      */
@@ -45,14 +44,13 @@ class CollectRatesTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        if (empty($this->carrier) || empty($this->errorMessage)) {
-            $this->markTestSkipped('Required fields are empty');
-        }
         $this->objectManager = Bootstrap::getObjectManager();
         $this->shipping = $this->objectManager->get(Shipping::class);
     }
 
     /**
+     * Tests that an error message is displayed when the shipping method is enabled and not applicable.
+     *
      * @return void
      */
     public function testCollectRatesWhenShippingCarrierIsAvailableAndNotApplicable()
@@ -65,6 +63,8 @@ class CollectRatesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests that shipping rates don't return when the shipping method is disabled and not applicable.
+     *
      * @return void
      */
     public function testCollectRatesWhenShippingCarrierIsNotAvailableAndNotApplicable()
@@ -76,6 +76,8 @@ class CollectRatesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Returns customer address.
+     *
      * @return DataObject
      */
     private function getAddress(): DataObject
@@ -102,6 +104,8 @@ class CollectRatesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Returns shipping rate by the result.
+     *
      * @param Result $result
      * @return Method|Error
      */

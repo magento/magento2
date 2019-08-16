@@ -11,7 +11,7 @@ namespace Magento\OfflineShipping\Model;
  * Integration tests for offline shipping carriers.
  * @magentoAppIsolation enabled
  */
-class CollectRatesTest extends \Magento\Shipping\Model\CollectRatesTest
+class CollectRatesTest extends \Magento\Shipping\Model\CollectRatesAbstract
 {
     /**
      * @var string
