@@ -78,25 +78,30 @@ class ScopeTreeProvider implements ScopeTreeProviderInterface
                 'scopes' => [],
             ];
 
-            /** @var Group $group */
-            foreach ($groups[$website->getId()] as $group) {
-                $groupScope = [
-                    'scope' => ScopeInterface::SCOPE_GROUP,
-                    'scope_id' => $group->getId(),
-                    'scopes' => [],
-                ];
-
-                /** @var Store $store */
-                foreach ($stores[$group->getId()] as $store) {
-                    $storeScope = [
-                        'scope' => ScopeInterface::SCOPE_STORES,
-                        'scope_id' => $store->getId(),
+            if (!empty($groups[$website->getId()])) {
+                /** @var Group $group */
+                foreach ($groups[$website->getId()] as $group) {
+                    $groupScope = [
+                        'scope' => ScopeInterface::SCOPE_GROUP,
+                        'scope_id' => $group->getId(),
                         'scopes' => [],
                     ];
-                    $groupScope['scopes'][] = $storeScope;
+
+                    if (!empty($stores[$group->getId()])) {
+                        /** @var Store $store */
+                        foreach ($stores[$group->getId()] as $store) {
+                            $storeScope = [
+                                'scope' => ScopeInterface::SCOPE_STORES,
+                                'scope_id' => $store->getId(),
+                                'scopes' => [],
+                            ];
+                            $groupScope['scopes'][] = $storeScope;
+                        }
+                    }
+                    $websiteScope['scopes'][] = $groupScope;
                 }
-                $websiteScope['scopes'][] = $groupScope;
             }
+
             $defaultScope['scopes'][] = $websiteScope;
         }
 
