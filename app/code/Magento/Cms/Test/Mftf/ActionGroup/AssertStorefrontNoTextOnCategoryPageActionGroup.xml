@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertTextOnCategoryFronPageActionGroup">
+    <actionGroup name="AssertStorefrontNoTextOnCategoryPageActionGroup">
         <arguments>
             <argument name="category" defaultValue="_defaultCategory"/>
             <argument name="text" type="string"/>
@@ -16,6 +16,6 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{category.name_lwr}}" stepKey="assertCategoryOnStorefront"/>
         <seeInTitle userInput="{{category.name}}" stepKey="seeCategoryNameInTitle"/>
-        <see selector="{{StorefrontCMSPageSection.mainContent}}" userInput="{{text}}" stepKey="seeAssertTextInMainContent"/>
+        <dontSee selector="{{StorefrontCMSPageSection.mainContent}}" userInput="{{text}}" stepKey="seeAssertTextInMainContent"/>
     </actionGroup>
 </actionGroups>

@@ -46,7 +46,7 @@
         </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
 
-        <actionGroup ref="AssertNoTextOnCategoryFrontPageActionGroup" stepKey="assertBlockOnCategoryFrontPage">
+        <actionGroup ref="AssertStorefrontNoTextOnCategoryPageActionGroup" stepKey="assertBlockOnCategoryFrontPage">
             <argument name="category" value="$$newDefaultCategory$$"/>
             <argument name="text" value="{{_defaultBlock.content}}"/>
         </actionGroup>
