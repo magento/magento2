@@ -3,10 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
 use Magento\Backend\Block\Widget\Form;
 
+/**
+ * Form attribute set
+ *
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formset
+ */
 class Formset extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -43,7 +50,11 @@ class Formset extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset('set_name', ['legend' => __('Edit Attribute Set Name')]);
+        if (!$this->getRequest()->getParam('id', false)) {
+            $fieldset = $form->addFieldset('set_name', ['legend' => __('Attribute Set Information')]);
+        } else {
+            $fieldset = $form->addFieldset('set_name', ['legend' => __('Edit Attribute Set Name')]);
+        }
         $fieldset->addField(
             'attribute_set_name',
             'text',
