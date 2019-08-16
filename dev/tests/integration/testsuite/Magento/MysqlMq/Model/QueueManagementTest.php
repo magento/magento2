@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 namespace Magento\MysqlMq\Model;
 
 /**
@@ -66,6 +67,60 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_numeric($secondMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]));
         $this->assertEquals(0, $secondMessage[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
         $this->assertCount(12, date_parse($secondMessage[QueueManagement::MESSAGE_UPDATED_AT]));
+    }
+
+    /**
+     * @magentoDataFixture Magento/MysqlMq/_files/queues.php
+     */
+    public function testMessageReadingMultipleQueues()
+    {
+        $this->queueManagement->addMessageToQueues('topic1', 'messageBody1', ['queue1']);
+        $this->queueManagement->addMessageToQueues('topic2', 'messageBody2', ['queue1', 'queue2']);
+        $this->queueManagement->addMessageToQueues('topic3', 'messageBody3', ['queue2']);
+
+        $maxMessagesNumber = 2;
+        $messages = $this->queueManagement->readMessages('queue1', $maxMessagesNumber);
+        $this->assertCount($maxMessagesNumber, $messages);
+
+        $message = array_shift($messages);
+        $this->assertEquals('topic1', $message[QueueManagement::MESSAGE_TOPIC]);
+        $this->assertEquals('messageBody1', $message[QueueManagement::MESSAGE_BODY]);
+        $this->assertEquals('queue1', $message[QueueManagement::MESSAGE_QUEUE_NAME]);
+        $this->assertEquals(
+            QueueManagement::MESSAGE_STATUS_IN_PROGRESS,
+            $message[QueueManagement::MESSAGE_STATUS]
+        );
+
+        $message= array_shift($messages);
+        $this->assertEquals('topic2', $message[QueueManagement::MESSAGE_TOPIC]);
+        $this->assertEquals('messageBody2', $message[QueueManagement::MESSAGE_BODY]);
+        $this->assertEquals('queue1', $message[QueueManagement::MESSAGE_QUEUE_NAME]);
+        $this->assertEquals(
+            QueueManagement::MESSAGE_STATUS_IN_PROGRESS,
+            $message[QueueManagement::MESSAGE_STATUS]
+        );
+
+        $maxMessagesNumber = 2;
+        $messages = $this->queueManagement->readMessages('queue2', $maxMessagesNumber);
+        $this->assertCount($maxMessagesNumber, $messages);
+
+        $message= array_shift($messages);
+        $this->assertEquals('topic2', $message[QueueManagement::MESSAGE_TOPIC]);
+        $this->assertEquals('messageBody2', $message[QueueManagement::MESSAGE_BODY]);
+        $this->assertEquals('queue2', $message[QueueManagement::MESSAGE_QUEUE_NAME]);
+        $this->assertEquals(
+            QueueManagement::MESSAGE_STATUS_IN_PROGRESS,
+            $message[QueueManagement::MESSAGE_STATUS]
+        );
+
+        $message = array_shift($messages);
+        $this->assertEquals('topic3', $message[QueueManagement::MESSAGE_TOPIC]);
+        $this->assertEquals('messageBody3', $message[QueueManagement::MESSAGE_BODY]);
+        $this->assertEquals('queue2', $message[QueueManagement::MESSAGE_QUEUE_NAME]);
+        $this->assertEquals(
+            QueueManagement::MESSAGE_STATUS_IN_PROGRESS,
+            $message[QueueManagement::MESSAGE_STATUS]
+        );
     }
 
     /**
