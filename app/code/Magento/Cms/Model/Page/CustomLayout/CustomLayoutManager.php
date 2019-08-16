@@ -8,40 +8,22 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Model\Page\CustomLayout;
 
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelectedInterface;
 use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
-use Magento\Cms\Model\ResourceModel\Page;
-use Magento\Cms\Model\Page as PageModel;
-use Magento\Cms\Model\PageFactory as PageModelFactory;
-use Magento\Cms\Model\Page\IdentityMap;
 use Magento\Framework\App\Area;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\File;
 use Magento\Framework\View\File\CollectorInterface;
+use Magento\Framework\View\Result\Page as PageLayout;
 
 /**
  * @inheritDoc
  */
 class CustomLayoutManager implements CustomLayoutManagerInterface
 {
-    /**
-     * @var Page
-     */
-    private $pageRepository;
-
-    /**
-     * @var PageModelFactory;
-     */
-    private $pageFactory;
-
-    /**
-     * @var IdentityMap
-     */
-    private $identityMap;
-
     /**
      * @var CollectorInterface
      */
@@ -58,104 +40,44 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
     private $design;
 
     /**
-     * @param Page $pageRepository
-     * @param PageModelFactory $factory
-     * @param IdentityMap $identityMap
+     * @var PageRepositoryInterface
+     */
+    private $pageRepository;
+
+    /**
      * @param CollectorInterface $fileCollector
      * @param FlyweightFactory $themeFactory
      * @param DesignInterface $design
+     * @param PageRepositoryInterface $pageRepository
      */
     public function __construct(
-        Page $pageRepository,
-        PageModelFactory $factory,
-        IdentityMap $identityMap,
         CollectorInterface $fileCollector,
         FlyweightFactory $themeFactory,
-        DesignInterface $design
+        DesignInterface $design,
+        PageRepositoryInterface $pageRepository
     ) {
-        $this->pageRepository = $pageRepository;
-        $this->pageFactory = $factory;
-        $this->identityMap = $identityMap;
         $this->fileCollector = $fileCollector;
         $this->themeFactory = $themeFactory;
         $this->design = $design;
-    }
-
-    /**
-     * Find page model by ID.
-     *
-     * @param int $id
-     * @return PageModel
-     * @throws NoSuchEntityException
-     */
-    private function findPage(int $id): PageModel
-    {
-        if (!$page = $this->identityMap->get($id)) {
-            /** @var PageModel $page */
-            $this->pageRepository->load($page = $this->pageFactory->create(), $id);
-            if (!$page->getIdentifier()) {
-                throw NoSuchEntityException::singleField('id', $id);
-            }
-        }
-
-        return $page;
+        $this->pageRepository = $pageRepository;
     }
 
     /**
      * Adopt page's identifier to be used as layout handle.
      *
-     * @param PageModel $page
+     * @param PageInterface $page
      * @return string
      */
-    private function sanitizeIdentifier(PageModel $page): string
+    private function sanitizeIdentifier(PageInterface $page): string
     {
         return str_replace('/', '_', $page->getIdentifier());
     }
 
     /**
-     * Save new custom layout file value for a page.
-     *
-     * @param int $pageId
-     * @param string|null $layoutFile
-     * @throws LocalizedException
-     * @throws \InvalidArgumentException When invalid file was selected.
-     * @throws NoSuchEntityException
-     */
-    private function saveLayout(int $pageId, ?string $layoutFile): void
-    {
-        $page = $this->findPage($pageId);
-        if ($layoutFile !== null && !in_array($layoutFile, $this->fetchAvailableFiles($pageId), true)) {
-            throw new \InvalidArgumentException(
-                $layoutFile .' is not available for page #' .$pageId
-            );
-        }
-
-        $page->setData('layout_update_selected', $layoutFile);
-        $this->pageRepository->save($page);
-    }
-
-    /**
      * @inheritDoc
      */
-    public function save(CustomLayoutSelectedInterface $layout): void
+    public function fetchAvailableFiles(PageInterface $page): array
     {
-        $this->saveLayout($layout->getPageId(), $layout->getLayoutFileId());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function deleteFor(int $pageId): void
-    {
-        $this->saveLayout($pageId, null);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetchAvailableFiles(int $pageId): array
-    {
-        $page = $this->findPage($pageId);
         $identifier = $this->sanitizeIdentifier($page);
         $layoutFiles = $this->fileCollector->getFiles(
             $this->themeFactory->create($this->design->getConfigurationDesignTheme(Area::AREA_FRONTEND)),
@@ -184,11 +106,12 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
     /**
      * @inheritDoc
      */
-    public function fetchHandle(int $pageId): ?array
+    public function applyUpdate(PageLayout $layout, CustomLayoutSelectedInterface $layoutSelected): void
     {
-        $page = $this->findPage($pageId);
+        $page = $this->pageRepository->getById($layoutSelected->getPageId());
 
-        return $page['layout_update_selected']
-            ? ['selectable' => $this->sanitizeIdentifier($page) .'_' .$page['layout_update_selected']] : null;
+        $layout->addPageLayoutHandles(
+            ['selectable' => $this->sanitizeIdentifier($page) .'_' .$layoutSelected->getLayoutFileId()]
+        );
     }
 }

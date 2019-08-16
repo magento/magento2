@@ -241,4 +241,5 @@
             <argument name="fileCollector" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
         </arguments>
     </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutRepositoryInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository" />
 </config>

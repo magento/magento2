@@ -8,8 +8,11 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Cms\Model\Page;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Cms\Model\Page\CustomLayoutRepositoryInterface;
+use Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelected;
 
 /**
  * Save CMS page action.
@@ -44,6 +47,11 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     private $pageRepository;
 
     /**
+     * @var CustomLayoutRepositoryInterface
+     */
+    private $customLayoutRepository;
+
+    /**
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
@@ -55,15 +63,16 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         PostDataProcessor $dataProcessor,
         DataPersistorInterface $dataPersistor,
         \Magento\Cms\Model\PageFactory $pageFactory = null,
-        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null,
+        ?CustomLayoutRepositoryInterface $customLayoutRepository = null
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
-        $this->pageFactory = $pageFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
+        $this->pageFactory = $pageFactory ?: ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
         $this->pageRepository = $pageRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+            ?: ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+        $this->customLayoutRepository = $customLayoutRepository
+            ?? ObjectManager::getInstance()->get(CustomLayoutRepositoryInterface::class);
         parent::__construct($context);
     }
 
@@ -112,7 +121,13 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
                 }
 
+                $customLayoutFile = (string)$this->getRequest()->getParam('layout_update_selected');
                 $this->pageRepository->save($model);
+                if ($customLayoutFile) {
+                    $this->customLayoutRepository->save(new CustomLayoutSelected($model->getId(), $customLayoutFile));
+                } else {
+                    $this->customLayoutRepository->deleteFor($model->getId());
+                }
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 return $this->processResultRedirect($model, $resultRedirect, $data);
             } catch (LocalizedException $e) {

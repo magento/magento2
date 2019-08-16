@@ -11,16 +11,16 @@ namespace Magento\Cms\Model\Page;
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\PageFactory;
 use Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelected;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\View\File;
-use Magento\Framework\View\Result\PageFactory as PageResultFactory;
 
 /**
- * Test the manager.
+ * Test the repository.
  */
-class CustomLayoutManagerTest extends TestCase
+class CustomLayoutRepositoryTest extends TestCase
 {
     /**
      * @var CustomLayoutRepositoryInterface
@@ -28,19 +28,9 @@ class CustomLayoutManagerTest extends TestCase
     private $repo;
 
     /**
-     * @var CustomLayoutManagerInterface
-     */
-    private $manager;
-
-    /**
      * @var PageFactory
      */
     private $pageFactory;
-
-    /**
-     * @var PageResultFactory
-     */
-    private $resultFactory;
 
     /**
      * @inheritDoc
@@ -48,7 +38,6 @@ class CustomLayoutManagerTest extends TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->resultFactory = $objectManager->get(PageResultFactory::class);
         //Mocking available list of files for the page.
         $files = [
             new File('cms_page_view_selectable_page100_select1.xml', 'test'),
@@ -58,14 +47,11 @@ class CustomLayoutManagerTest extends TestCase
         $fileCollector->method('getFiles')
             ->willReturn($files);
 
-        $this->manager = $objectManager->create(
+        $manager = $objectManager->create(
             CustomLayoutManagerInterface::class,
             ['fileCollector' => $fileCollector]
         );
-        $this->repo = $objectManager->create(
-            CustomLayoutRepositoryInterface::class,
-            ['manager' => $this->manager]
-        );
+        $this->repo = $objectManager->create(CustomLayoutRepositoryInterface::class, ['manager' => $manager]);
         $this->pageFactory = $objectManager->get(PageFactory::class);
     }
 
@@ -73,21 +59,42 @@ class CustomLayoutManagerTest extends TestCase
      * Test updating a page's custom layout.
      *
      * @magentoDataFixture Magento/Cms/_files/pages.php
-     * @throws \Throwable
      * @return void
      */
-    public function testCustomLayoutUpdate(): void
+    public function testCustomLayout(): void
     {
         /** @var Page $page */
         $page = $this->pageFactory->create();
         $page->load('page100', 'identifier');
         $pageId = (int)$page->getId();
+
+        //Invalid file ID
+        $exceptionRaised = null;
+        try {
+            $this->repo->save(new CustomLayoutSelected($pageId, 'some_file'));
+        } catch (\Throwable $exception) {
+            $exceptionRaised = $exception;
+        }
+        $this->assertNotEmpty($exceptionRaised);
+        $this->assertInstanceOf(\InvalidArgumentException::class, $exceptionRaised);
+
         //Set file ID
         $this->repo->save(new CustomLayoutSelected($pageId, 'select2'));
 
-        //Test handles
-        $result = $this->resultFactory->create();
-        $this->manager->applyUpdate($result, $this->repo->getFor($pageId));
-        $this->assertContains('___selectable_page100_select2', $result->getLayout()->getUpdate()->getHandles());
+        //Test saved
+        $saved = $this->repo->getFor($pageId);
+        $this->assertEquals('select2', $saved->getLayoutFileId());
+
+        //Removing custom file
+        $this->repo->deleteFor($pageId);
+
+        //Test saved
+        $notFound = false;
+        try {
+            $this->repo->getFor($pageId);
+        } catch (NoSuchEntityException $exception) {
+            $notFound = true;
+        }
+        $this->assertTrue($notFound);
     }
 }
