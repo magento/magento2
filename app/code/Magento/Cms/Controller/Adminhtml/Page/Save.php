@@ -95,6 +95,14 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             if (empty($data['page_id'])) {
                 $data['page_id'] = null;
             }
+            //Either use existing custom layout XML or use a file.
+            $customLayoutFile = (string)$this->getRequest()->getParam('layout_update_selected');
+            if ($customLayoutFile !== '_existing_') {
+                $data['custom_layout_update_xml'] = null;
+            } else {
+                $customLayoutFile = null;
+            }
+
 
             /** @var \Magento\Cms\Model\Page $model */
             $model = $this->pageFactory->create();
@@ -121,7 +129,6 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
                 }
 
-                $customLayoutFile = (string)$this->getRequest()->getParam('layout_update_selected');
                 $this->pageRepository->save($model);
                 if ($customLayoutFile) {
                     $this->customLayoutRepository->save(new CustomLayoutSelected($model->getId(), $customLayoutFile));

@@ -108,6 +108,10 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         /** @var $page \Magento\Cms\Model\Page */
         foreach ($items as $page) {
             $this->loadedData[$page->getId()] = $page->getData();
+            if ($page->getCustomLayoutUpdateXml()) {
+                //Deprecated layout update exists.
+                $this->loadedData[$page->getId()]['layout_update_selected'] = '_existing_';
+            }
         }
 
         $data = $this->dataPersistor->get('cms_page');
@@ -115,6 +119,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             $page = $this->collection->getNewEmptyItem();
             $page->setData($data);
             $this->loadedData[$page->getId()] = $page->getData();
+            if ($page->getCustomLayoutUpdateXml()) {
+                $this->loadedData[$page->getId()]['layout_update_selected'] = '_existing_';
+            }
             $this->dataPersistor->clear('cms_page');
         }
 
@@ -153,10 +160,23 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         }
 
         //List of custom layout files available for current page.
-        $options = [['label' => 'Use default', 'value' => '']];
+        $options = [['label' => 'No update', 'value' => '']];
         if ($this->getRequestFieldName() && ($pageId = (int)$this->request->getParam($this->getRequestFieldName()))) {
             //We must have a specific page selected.
-            foreach ($this->customLayoutManager->fetchAvailableFiles($pageId) as $layoutFile) {
+            //Finding our page.
+            $found  = null;
+            /** @var \Magento\Cms\Model\Page  $page */
+            foreach ($this->collection->getItems() as $page) {
+                if ($page->getId() == $pageId) {
+                    $found = $page;
+                    break;
+                }
+            }
+            //If custom layout XML is set then displaying this special option.
+            if ($page->getCustomLayoutUpdateXml()) {
+                $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
+            }
+            foreach ($this->customLayoutManager->fetchAvailableFiles($found) as $layoutFile) {
                 $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
             }
         }

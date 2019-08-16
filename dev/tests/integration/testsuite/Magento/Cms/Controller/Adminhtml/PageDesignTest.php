@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace Magento\Cms\Controller\Adminhtml;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\GetPageByIdentifierInterface;
 use Magento\Cms\Model\Page;
+use Magento\Cms\Model\PageFactory;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
@@ -17,11 +19,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * Test the saving CMS pages via admin area interface.
+ * Test the saving CMS pages design via admin area interface.
  *
  * @magentoAppArea adminhtml
  */
-class PageSaveTest extends AbstractBackendController
+class PageDesignTest extends AbstractBackendController
 {
     /**
      * @var string
@@ -44,6 +46,11 @@ class PageSaveTest extends AbstractBackendController
     private $aclBuilder;
 
     /**
+     * @var GetPageByIdentifierInterface
+     */
+    private $pageRetriever;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -51,6 +58,7 @@ class PageSaveTest extends AbstractBackendController
         parent::setUp();
 
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->pageRetriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
     }
 
     /**
@@ -109,5 +117,47 @@ class PageSaveTest extends AbstractBackendController
             self::equalTo($sessionMessages),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * Test that custom layout update fields are dealt with properly.
+     *
+     * @magentoDataFixture Magento/Cms/_files/pages_with_layout_xml.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveLayoutXml(): void
+    {
+        $page = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
+        $requestData = [
+            Page::PAGE_ID => $page->getId(),
+            PageInterface::IDENTIFIER => 'test_custom_layout_page_1',
+            PageInterface::TITLE => 'Page title',
+            PageInterface::CUSTOM_LAYOUT_UPDATE_XML => $page->getCustomLayoutUpdateXml(),
+            'layout_update_selected' => '_existing_'
+        ];
+
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->dispatch($this->uri);
+        $this->getRequest()->setDispatched(false);
+
+        $updated = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
+        $this->assertEquals($updated->getCustomLayoutUpdateXml(), $page->getCustomLayoutUpdateXml());
+
+        $requestData = [
+            Page::PAGE_ID => $page->getId(),
+            PageInterface::IDENTIFIER => 'test_custom_layout_page_1',
+            PageInterface::TITLE => 'Page title',
+            PageInterface::CUSTOM_LAYOUT_UPDATE_XML => $page->getCustomLayoutUpdateXml(),
+            'layout_update_selected' => ''
+        ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->dispatch($this->uri);
+        $this->getRequest()->setDispatched(false);
+
+        $updated = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
+        $this->assertEmpty($updated->getCustomLayoutUpdateXml());
     }
 }
