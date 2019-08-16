@@ -44,7 +44,7 @@
     {
         "[data-role=priceBox][data-price-box=product-id-<?= $block->escapeHtml($_product->getId()) ?>]": {
             "priceBox": {
-                "priceConfig":  <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>
+                "priceConfig":  <?= /* @noEscape */ $block->getJsonConfig() ?>
             }
         }
     }
