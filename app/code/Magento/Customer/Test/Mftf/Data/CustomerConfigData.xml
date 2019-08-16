@@ -14,14 +14,24 @@
     <entity name="CustomerAccountSharingPerWebsite" type="account_share_scope_value">
         <data key="value">1</data>
     </entity>
-
     <entity name="CustomerAccountSharingGlobal" type="customer_account_sharing_config">
         <requiredEntity type="account_share_scope_value">GlobalCustomerAccountSharing</requiredEntity>
     </entity>
     <entity name="GlobalCustomerAccountSharing" type="account_share_scope_value">
         <data key="value">0</data>
     </entity>
-
+    <entity name="EnableCustomerRedirectToDashboardConfigData">
+        <data key="path">customer/startup/redirect_dashboard</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableCustomerRedirectToDashboardConfigData">
+        <data key="path">customer/startup/redirect_dashboard</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
     <entity name="CustomerAccountSharingSystemValue" type="customer_account_sharing_config_inherit">
         <requiredEntity type="account_share_scope_inherit">CustomerAccountSharingInherit</requiredEntity>
     </entity>

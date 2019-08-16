@@ -9,11 +9,15 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontEmailTooltipContentOnCheckoutActionGroup">
+        <annotations>
+            <description>Clicks on the Email Address tooltip. Validates that the provided Message appears in the Email Address Tooltip.</description>
+        </annotations>
         <arguments>
-            <argument name="content" type="string" defaultValue="We'll send your order confirmation here." />
+            <argument name="content" type="string" defaultValue="We'll send your order confirmation here."/>
         </arguments>
-        <waitForElementVisible selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailTooltipButton}}" stepKey="waitForTooltipButtonVisible" />
-        <click selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailTooltipButton}}" stepKey="clickEmailTooltipButton" />
-        <see selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailTooltipContent}}" userInput="{{content}}" stepKey="seeEmailTooltipContent" />
+
+        <waitForElementVisible selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailTooltipButton}}" stepKey="waitForTooltipButtonVisible"/>
+        <click selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailTooltipButton}}" stepKey="clickEmailTooltipButton"/>
+        <see selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.emailTooltipContent}}" userInput="{{content}}" stepKey="seeEmailTooltipContent"/>
     </actionGroup>
 </actionGroups>

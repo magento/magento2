@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Variable\Test\TestCase\CreateCustomVariableEntityTest" summary="Create Custom Variable" ticketId="MAGETWO-23293">
         <variation name="CreateCustomVariableEntityTestVariation1">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, mftf_migrated:yes</data>
             <data name="customVariable/data/code" xsi:type="string">variableCode%isolation%</data>
             <data name="customVariable/data/name" xsi:type="string">variableName%isolation%</data>
             <data name="customVariable/data/html_value" xsi:type="string">&lt;h1&gt;variableName%isolation%&lt;/h1&gt;</data>
