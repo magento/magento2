@@ -70,8 +70,11 @@ class CreateCustomer implements ResolverInterface
         if (!$this->config->isActive()) {
             $args['input']['is_subscribed'] = false;
         }
-
-        $customer = $this->createCustomerAccount->execute($args['input']);
+      
+        $customer = $this->createCustomerAccount->execute(
+            $args['input'],
+            $context->getExtensionAttributes()->getStore()
+        );
 
         $data = $this->extractCustomerData->execute($customer);
         return ['customer' => $data];

@@ -13,8 +13,6 @@
         <element name="expandAll" type="button" selector=".tree-actions a:last-child"/>
         <element name="categoryTreeRoot" type="text" selector="div.x-tree-root-node>li.x-tree-node:first-of-type>div.x-tree-node-el:first-of-type" timeout="30"/>
         <element name="categoryInTree" type="text" selector="//a/span[contains(text(), '{{name}}')]" parameterized="true" timeout="30"/>
-        <element name="categoryHighlighted" type="text" selector="//ul[@id='ui-id-2']//li//a/span[contains(text(),'{{name}}')]/../.." parameterized="true" timeout="30"/>
-        <element name="categoryNotHighlighted" type="text" selector="ul[id=\'ui-id-2\'] li[class~=\'active\']" timeout="30"/>
         <element name="categoryInTreeUnderRoot" type="text" selector="//li/ul/li[@class='x-tree-node']/div/a/span[contains(text(), '{{name}}')]" parameterized="true"/>
         <element name="lastCreatedCategory" type="block" selector=".x-tree-root-ct li li:last-child" />
         <element name="treeContainer" type="block" selector=".tree-holder" />

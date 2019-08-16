@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontStoreNotVisibleInFooterActionGroup">
+        <annotations>
+            <description>Goes to the Storefront. Validates that the provided Store is NOT present in the Footer Switch Store View drop down menu.</description>
+        </annotations>
         <arguments>
             <argument name="store" type="string"/>
         </arguments>
+        
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
         <dontSee selector="{{StorefrontFooterSection.storeLink(store)}}" stepKey="AssertStoreNotOnStorefront"/>

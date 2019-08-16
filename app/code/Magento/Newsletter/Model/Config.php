@@ -17,12 +17,12 @@ class Config
     /**
      * Configuration path to newsletter active setting
      */
-    const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
+    private const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
 
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * Config constructor.
