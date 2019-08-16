@@ -97,7 +97,7 @@ class DateTime
     /**
      * Forms GMT timestamp
      *
-     * @param  int|string|\DateTimeInterface $input date in current timezone
+     * @param int|string|\DateTimeInterface $input date in current timezone
      * @return int
      */
     public function gmtTimestamp($input = null)
@@ -125,8 +125,7 @@ class DateTime
      * Converts input date into timestamp with timezone offset
      * Input date must be in GMT timezone
      *
-     * @param  int|string $input date in GMT timezone
-     * @param  null|string $format
+     * @param int|string $input date in GMT timezone
      *
      * @return int
      */
@@ -135,6 +134,14 @@ class DateTime
         $this->convertToTimestamp($input);
     }
 
+    /**
+     * Converts input date into timestamp with corresponded format
+     *
+     * @param int|string $input date in GMT timezone
+     * @param null|string $format
+     *
+     * @return int
+     */
     private function convertToTimestamp($input = null, $format = null)
     {
         switch (true) {
@@ -148,11 +155,7 @@ class DateTime
                 $result = $input->getTimestamp();
                 break;
             default:
-                {
-                    $result = $format ?
-                        \DateTime::createFromFormat($format, $input)
-                        : strtotime($input);
-                }
+                $result = $format ? \DateTime::createFromFormat($format, $input) : strtotime($input);
         }
 
         $date = $this->_localeDate->date($result);
