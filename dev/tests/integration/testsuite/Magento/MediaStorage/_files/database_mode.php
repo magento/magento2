@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+/** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
 /** @var $database \Magento\MediaStorage\Helper\File\Storage\Database */
 $database = $objectManager->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
-
 $database->getStorageDatabaseModel()->init();
 
 $config = $objectManager->get(Magento\Framework\App\Config\ConfigResource\ConfigInterface::class);
