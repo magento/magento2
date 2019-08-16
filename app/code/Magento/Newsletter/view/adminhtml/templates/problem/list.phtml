@@ -17,7 +17,7 @@ require(["prototype", "mage/adminhtml/events"], function(){
 
     problemController = {
         checkCheckboxes:function (controlCheckbox) {
-            var elements = $('problemGrid').getElementsByClassName('problemCheckbox');
+            var elements = $$('input.problemCheckbox');
             if (elements && elements.length) {
                 elements.each(function (obj) {
                     obj.checked = controlCheckbox.checked;
