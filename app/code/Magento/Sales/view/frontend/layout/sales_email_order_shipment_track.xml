@@ -8,6 +8,10 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="sales_email_order_shipment_renderers"/>
     <body>
-        <block class="Magento\Framework\View\Element\Template" name="sales.order.email.shipment.track" template="Magento_Sales::email/shipment/track.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="sales.order.email.shipment.track" template="Magento_Sales::email/shipment/track.phtml">
+            <arguments>
+                <argument name="tracking_url" xsi:type="object">Magento\Sales\Block\DataProviders\Email\Shipment\TrackingUrl</argument>
+            </arguments>
+        </block>
     </body>
 </page>
