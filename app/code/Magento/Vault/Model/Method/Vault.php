@@ -122,7 +122,7 @@ class Vault implements VaultPaymentInterface
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param string $code
-     * @param Json $jsonSerializer
+     * @param Json|null $jsonSerializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -137,7 +137,7 @@ class Vault implements VaultPaymentInterface
         PaymentTokenManagementInterface $tokenManagement,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         $code,
-        Json $jsonSerializer
+        Json $jsonSerializer = null
     ) {
         $this->config = $config;
         $this->configFactory = $configFactory;
@@ -149,7 +149,7 @@ class Vault implements VaultPaymentInterface
         $this->tokenManagement = $tokenManagement;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->code = $code;
-        $this->jsonSerializer = $jsonSerializer;
+        $this->jsonSerializer = $jsonSerializer ?: $this->objectManager->get(Json::class);
     }
 
     /**
