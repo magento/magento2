@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
@@ -504,7 +506,9 @@ class Price
      *
      * @param float $qty
      * @param Product $product
+     *
      * @return array|float
+     *
      * @deprecated
      * @see getFormattedTierPrice()
      */
@@ -528,7 +532,7 @@ class Price
      * Get formatted by currency product price
      *
      * @param Product $product
-     * @return array|float
+     * @return array || float
      *
      * @deprecated
      * @see getFormattedPrice()
@@ -592,10 +596,7 @@ class Price
     ) {
         \Magento\Framework\Profiler::start('__PRODUCT_CALCULATE_PRICE__');
         if ($wId instanceof Store) {
-            $sId = $wId->getId();
             $wId = $wId->getWebsiteId();
-        } else {
-            $sId = $this->_storeManager->getWebsite($wId)->getDefaultGroup()->getDefaultStoreId();
         }
 
         $finalPrice = $basePrice;
@@ -609,7 +610,7 @@ class Price
         );
 
         if ($rulePrice === false) {
-            $date = $this->_localeDate->scopeDate($sId);
+            $date = $this->_localeDate->date(null, null, false);
             $rulePrice = $this->_ruleFactory->create()->getRulePrice($date, $wId, $gId, $productId);
         }
 

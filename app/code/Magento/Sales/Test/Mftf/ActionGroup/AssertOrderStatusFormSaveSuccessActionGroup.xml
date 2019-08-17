@@ -10,6 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert that order status saved with success message -->
     <actionGroup name="AssertOrderStatusFormSaveSuccess">
+        <annotations>
+            <description>Validates that the Success Message is present and correct.</description>
+        </annotations>
+        
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the order status." stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>
