@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Files\File;
  * Ensures styles are indented 4 spaces.
  *
  * @see Squiz_Sniffs_CSS_IndentationSniff
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#indentation
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#indentation
  */
 class IndentationSniff implements Sniff
 {
@@ -97,6 +97,7 @@ class IndentationSniff implements Sniff
                 $phpcsFile->addError($error, $i, 'Incorrect', [$expectedIndent, $foundIndent]);
             }
 
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             if ($indentLevel > $this->maxIndentLevel) {
                 // Will be implemented in MAGETWO-49778
                 // $phpcsFile->addWarning('Avoid using more than three levels of nesting', $i, 'IncorrectNestingLevel');
