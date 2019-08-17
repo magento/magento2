@@ -9,19 +9,23 @@ use Magento\Framework\UrlInterface;
 use Magento\TestFramework\ObjectManager;
 
 $url = ObjectManager::getInstance()->get(UrlInterface::class);
-$baseUrl = $url->getBaseUrl();
+$cancelUrl = $url->getUrl('paypal/express/cancel/');
+$successUrl = $url->getUrl('checkout/onepage/success/');
+$returnUrl = $url->getUrl('paypal/express/return/');
+$pendingUrl = $url->getUrl('checkout/onepage/pending/');
+
 
 return [
         'PAYMENTACTION' => 'Authorization',
         'AMT' => '30.00',
         'CURRENCYCODE' => 'USD',
-        'RETURNURL' => $baseUrl . 'paypal/express/return/',
-        'CANCELURL' => $baseUrl . 'paypal/express/cancel/',
+        'RETURNURL' => $returnUrl,
+        'CANCELURL' => $cancelUrl,
         'INVNUM' => 'test_quote',
         'SOLUTIONTYPE' => 'Mark',
-        'GIROPAYCANCELURL' => $baseUrl . 'paypal/express/cancel/',
-        'GIROPAYSUCCESSURL' => $baseUrl . 'checkout/onepage/success/',
-        'BANKTXNPENDINGURL' => $baseUrl . 'checkout/onepage/pending/',
+        'GIROPAYCANCELURL' => $cancelUrl,
+        'GIROPAYSUCCESSURL' => $successUrl,
+        'BANKTXNPENDINGURL' => $pendingUrl,
         'SHIPPINGAMT' => '10.00',
         'ITEMAMT' => '20.00',
         'TAXAMT' => '0.00',

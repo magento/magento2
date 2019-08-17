@@ -13,7 +13,6 @@ define([
     'moment',
     'tinycolor',
     'jquery/validate',
-    'jquery/ui',
     'mage/translate'
 ], function ($, _, utils, moment, tinycolor) {
     'use strict';
