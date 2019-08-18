@@ -435,7 +435,7 @@
                     <label>Admin Session Lifetime (seconds)</label>
                     <comment>Please enter at least 60 and at most 31536000 (one year).</comment>
                     <backend_model>Magento\Backend\Model\Config\SessionLifetime\BackendModel</backend_model>
-                    <validate>validate-digits</validate>
+                    <validate>validate-digits validate-range range-60-31536000</validate>
                 </field>
             </group>
             <group id="dashboard" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
