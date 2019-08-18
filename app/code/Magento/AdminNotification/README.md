@@ -4,6 +4,10 @@ The Magento_AdminNotification module provides the ability to alert administrator
 
 ## Installation details
 
+The Magento_AdminNotification module creates the following tables in the database:
+- `adminnotification_inbox`
+- `admin_system_messages`
+
 Before disabling or uninstalling this module, note that the Magento_Indexer module depends on this module.
 
 For information about module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/install-cli-subcommands-enable.html).
