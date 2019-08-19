@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * EAV read handler
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadHandler implements AttributeInterface
 {
