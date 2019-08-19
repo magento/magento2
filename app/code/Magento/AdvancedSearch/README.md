@@ -1,6 +1,5 @@
 # Magento_AdvancedSearch module
-Magento_AdvancedSearch module introduces advanced search functionality and provides interfaces that allow to implement 
-this functionality by 3rd party search engines.
+The Magento_AdvancedSearch module introduces advanced search functionality and provides interfaces that allow third-party search engines to implement this functionality.
 
 ## Installation details
 
@@ -26,13 +25,13 @@ For information about an event in Magento 2, see [Events and observers](http://d
 
 ### Layouts
 
-The module interact with the following layout handles in the `view/adminhtml/layout` directory:
+The module interacts with the following layout handles in the `view/adminhtml/layout` directory:
 
 - `catalog_search_block`
 - `catalog_search_edit`
 - `catalog_search_relatedgrid`
 
-The module interact with the following layout handles in the `view/frontend/layout` directory:
+The module interacts with the following layout handles in the `view/frontend/layout` directory:
 
 - `catalogsearch_result_index`
 
