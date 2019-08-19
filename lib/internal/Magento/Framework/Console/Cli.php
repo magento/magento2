@@ -102,7 +102,12 @@ class Cli extends Console\Application
      */
     public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $exitCode = parent::doRun($input, $output);
+        $exitCode = null;
+        try {
+            $exitCode = parent::doRun($input, $output);
+        } catch (\Exception $e) {
+            $output->writeln($e->getTraceAsString());
+        }
 
         if ($this->initException) {
             throw $this->initException;
@@ -209,6 +214,7 @@ class Cli extends Console\Application
         $commands = [];
         foreach (CommandLocator::getCommands() as $commandListClass) {
             if (class_exists($commandListClass)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $commands = array_merge(
                     $commands,
                     $objectManager->create($commandListClass)->getCommands()
