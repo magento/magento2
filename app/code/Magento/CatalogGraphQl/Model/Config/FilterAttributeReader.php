@@ -30,7 +30,9 @@ class FilterAttributeReader implements ReaderInterface
     /**
      * Filter input types
      */
-    private const FILTER_TYPE = 'FilterTypeInput';
+    private const FILTER_EQUAL_TYPE = 'FilterEqualTypeInput';
+    private const FILTER_RANGE_TYPE = 'FilterRangeTypeInput';
+    private const FILTER_LIKE_TYPE = 'FilterLikeTypeInput';
 
     /**
      * @var MapperInterface
@@ -67,16 +69,12 @@ class FilterAttributeReader implements ReaderInterface
         $config = [];
 
         foreach ($this->getAttributeCollection() as $attribute) {
-            if (!$attribute->getIsUserDefined()) {
-                //do not override fields defined in schema.graphqls
-                continue;
-            }
             $attributeCode = $attribute->getAttributeCode();
 
             foreach ($typeNames as $typeName) {
                 $config[$typeName]['fields'][$attributeCode] = [
                     'name' => $attributeCode,
-                    'type' => self::FILTER_TYPE,
+                    'type' => $this->getFilterType($attribute->getFrontendInput()),
                     'arguments' => [],
                     'required' => false,
                     'description' => sprintf('Attribute label: %s', $attribute->getDefaultFrontendLabel())
@@ -85,6 +83,26 @@ class FilterAttributeReader implements ReaderInterface
         }
 
         return $config;
+    }
+
+    /**
+     * Map attribute type to filter type
+     *
+     * @param string $attributeType
+     * @return string
+     */
+    private function getFilterType($attributeType): string
+    {
+        $filterTypeMap = [
+            'price' => self::FILTER_RANGE_TYPE,
+            'date' => self::FILTER_RANGE_TYPE,
+            'select' => self::FILTER_EQUAL_TYPE,
+            'boolean' => self::FILTER_EQUAL_TYPE,
+            'text' => self::FILTER_LIKE_TYPE,
+            'textarea' => self::FILTER_LIKE_TYPE,
+        ];
+
+        return $filterTypeMap[$attributeType] ?? self::FILTER_LIKE_TYPE;
     }
 
     /**

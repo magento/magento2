@@ -49,10 +49,10 @@
                     <item name="checkbox" xsi:type="string">CustomizableCheckboxOption</item>
                 </item>
                 <item name="sort_attributes" xsi:type="array">
-                    <item name="product_sort_attributes" xsi:type="string">ProductSortInput</item>
+                    <item name="product_sort_attributes" xsi:type="string">ProductAttributeSortInput</item>
                 </item>
                 <item name="filter_attributes" xsi:type="array">
-                    <item name="product_filter_attributes" xsi:type="string">ProductFilterInput</item>
+                    <item name="product_filter_attributes" xsi:type="string">ProductAttributeFilterInput</item>
                 </item>
             </argument>
         </arguments>

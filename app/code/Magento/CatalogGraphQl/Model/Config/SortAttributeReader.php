@@ -61,10 +61,6 @@ class SortAttributeReader implements ReaderInterface
         $attributes = $this->attributesCollection->addSearchableAttributeFilter()->addFilter('used_for_sort_by', 1);
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         foreach ($attributes as $attribute) {
-            if (!$attribute->getIsUserDefined()) {
-                //do not override fields defined in schema.graphqls
-                continue;
-            }
             $attributeCode = $attribute->getAttributeCode();
             $attributeLabel = $attribute->getDefaultFrontendLabel();
             foreach ($map as $type) {
