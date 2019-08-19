@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5948beca080ef42e4310331c85c3fba1",
+    "content-hash": "c644bdde283e6b69d3e0b0f1fd069f66",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -4272,8 +4272,8 @@
             "authors": [
                 {
                     "name": "Ivan Krutov",
-                    "email": "vania-pooh@yandex-team.ru",
-                    "role": "Developer"
+                    "role": "Developer",
+                    "email": "vania-pooh@yandex-team.ru"
                 }
             ],
             "description": "A Codeception adapter for Allure report.",
@@ -4327,8 +4327,8 @@
             "authors": [
                 {
                     "name": "Ivan Krutov",
-                    "email": "vania-pooh@yandex-team.ru",
-                    "role": "Developer"
+                    "role": "Developer",
+                    "email": "vania-pooh@yandex-team.ru"
                 }
             ],
             "description": "PHP API for Allure adapter",
@@ -6325,9 +6325,9 @@
             "authors": [
                 {
                     "name": "Phil Bennett",
+                    "role": "Developer",
                     "email": "philipobenito@gmail.com",
-                    "homepage": "http://www.philipobenito.com",
-                    "role": "Developer"
+                    "homepage": "http://www.philipobenito.com"
                 }
             ],
             "description": "A fast and intuitive dependency injection container.",
@@ -6412,16 +6412,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.4.3",
+            "version": "2.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "9e9a20fd4c77833ef41ac07eb076a7f2434ce61c"
+                "reference": "ab347cf23d01f6bb9d158ab37d2dc56594999beb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9e9a20fd4c77833ef41ac07eb076a7f2434ce61c",
-                "reference": "9e9a20fd4c77833ef41ac07eb076a7f2434ce61c",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/ab347cf23d01f6bb9d158ab37d2dc56594999beb",
+                "reference": "ab347cf23d01f6bb9d158ab37d2dc56594999beb",
                 "shasum": ""
             },
             "require": {
@@ -6483,7 +6483,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-08-02T14:26:18+00:00"
+            "time": "2019-08-15T14:46:36+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -7244,8 +7244,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information.",
@@ -8130,8 +8130,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "Copy/Paste Detector (CPD) for PHP code.",
@@ -9052,8 +9052,8 @@
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "email": "arne@blankerts.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "arne@blankerts.de"
                 }
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
