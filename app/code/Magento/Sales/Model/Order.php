@@ -2810,7 +2810,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCustomerMiddlename()
     {
         $isAllowed = $this->isAllowShowMiddlename();
-        if($isAllowed){
+        if ($isAllowed) {
             return $this->getData(OrderInterface::CUSTOMER_MIDDLENAME);
         }
         return false;
@@ -2844,8 +2844,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCustomerPrefix()
     {
         $isAllowed = $this->isAllowShowPrefix();
-        if(!empty($isAllowed)){
-            return $this->getData(OrderInterface::CUSTOMER_PREFIX);            
+        if (!empty($isAllowed)) {
+            return $this->getData(OrderInterface::CUSTOMER_PREFIX);
         }
         return false;
     }
@@ -2858,7 +2858,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCustomerSuffix()
     {
         $isAllowed = $this->isAllowShowSuffix();
-        if(!empty($isAllowed)){
+        if (!empty($isAllowed)) {
             return $this->getData(OrderInterface::CUSTOMER_SUFFIX);
         }
         return false;
