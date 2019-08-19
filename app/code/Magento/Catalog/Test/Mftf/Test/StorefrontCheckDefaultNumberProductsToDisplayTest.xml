@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CheckDefaultNumbersProductsToDisplayTest">
+    <test name="StorefrontCheckDefaultNumbersProductsToDisplayTest">
         <annotations>
             <features value="Catalog"/>
             <title value="Check default numbers: products to display"/>
