@@ -11,7 +11,7 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
 <?php if (count($_items)) : ?>
 <div class="block review-list" id="customer-reviews">
-    <?php if (!$block->getHideTitle()): ?>
+    <?php if (!$block->getHideTitle()) : ?>
         <div class="block-title">
             <strong><?= $block->escapeHtml(__('Customer Reviews')) ?></strong>
         </div>
