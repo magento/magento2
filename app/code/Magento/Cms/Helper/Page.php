@@ -6,8 +6,10 @@
 namespace Magento\Cms\Helper;
 
 use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
+use Magento\Cms\Model\Page\CustomLayoutRepositoryInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * CMS Page Helper
@@ -84,6 +86,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     private $customLayoutManager;
 
     /**
+     * @var CustomLayoutRepositoryInterface
+     */
+    private $customLayoutRepo;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -108,7 +115,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        ?CustomLayoutManagerInterface $customLayoutManager = null
+        ?CustomLayoutManagerInterface $customLayoutManager = null,
+        ?CustomLayoutRepositoryInterface $customLayoutRepo = null
     ) {
         $this->messageManager = $messageManager;
         $this->_page = $page;
@@ -120,6 +128,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $this->resultPageFactory = $resultPageFactory;
         $this->customLayoutManager = $customLayoutManager
             ?? ObjectManager::getInstance()->get(CustomLayoutManagerInterface::class);
+        $this->customLayoutRepo = $customLayoutRepo
+            ?? ObjectManager::getInstance()->get(CustomLayoutRepositoryInterface::class);
         parent::__construct($context);
     }
 
@@ -165,9 +175,10 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $resultPage->addHandle('cms_page_view');
         $pageHandles = ['id' => str_replace('/', '_', $this->_page->getIdentifier())];
         //Selected custom updates.
-        $customLayoutHandle = $this->customLayoutManager->fetchHandle($this->_page->getId());
-        if ($customLayoutHandle) {
-            $pageHandles = array_merge($pageHandles, $customLayoutHandle);
+        try {
+            $this->customLayoutManager->applyUpdate($resultPage, $this->customLayoutRepo->getFor($this->_page->getId()));
+        } catch (NoSuchEntityException $exception) {
+            //No custom layout selected
         }
 
         $resultPage->addPageLayoutHandles($pageHandles);
