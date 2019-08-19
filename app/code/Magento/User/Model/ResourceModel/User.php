@@ -227,9 +227,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->getConnection()->insert($this->getTable('authorization_role'), $insertData);
                 $this->aclDataCache->clean();
             }
-        } else {
-            $role = new \Magento\Framework\DataObject();
-            $role->setTreeLevel(0);
         }
     }
 
