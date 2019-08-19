@@ -99,44 +99,9 @@ QUERY;
      */
     public function testAdvancedSearchByOneCustomAttribute()
     {
-        $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
-        $query = <<<QUERY
-{
-  products(filter:{                   
-                   second_test_configurable: {eq: "{$optionValue}"}
-                   }
-                   pageSize: 3
-                   currentPage: 1
-       )
-  {
-  total_count
-    items 
-     {
-      name
-      sku
-      }
-    page_info{
-      current_page
-      page_size
-      total_pages
-    }
-    filters{
-      name
-      request_var
-      filter_items_count 
-      filter_items{
-        label
-        items_count
-        value_string
-        __typename
-      }
-       
-    }    
-      
-    } 
-}
-QUERY;
-
+        $attributeCode = 'second_test_configurable';
+        $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
+        $query = $this->getQueryProductsWithCustomAttribute($attributeCode, $optionValue);
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -380,7 +345,7 @@ QUERY;
                   'items_count'=> 2
                 ],
             ];
-        $categoryFilterItems = array_map(null, $expectedCategoryFilterItems,$actualCategoryFilterItems);
+        $categoryFilterItems = array_map(null, $expectedCategoryFilterItems, $actualCategoryFilterItems);
 
 //Validate the categories and sub-categories data in the filter layer
         foreach ($categoryFilterItems as $index => $categoryFilterData) {
@@ -398,12 +363,12 @@ QUERY;
         }
     }
 
-    private function getQueryProductsWithCustomAttribute($optionValue)
+    private function getQueryProductsWithCustomAttribute($attributeCode, $optionValue)
     {
         return <<<QUERY
 {
   products(filter:{                   
-                   test_configurable: {eq: "{$optionValue}"}
+                   $attributeCode: {eq: "{$optionValue}"}
                    }
                    pageSize: 3
                    currentPage: 1
@@ -457,10 +422,10 @@ QUERY;
         array_shift($options);
         $firstOption = $options[0]->getValue();
         $secondOption = $options[1]->getValue();
-        $query = $this->getQueryProductsWithCustomAttribute($firstOption);
+        $query = $this->getQueryProductsWithCustomAttribute($attributeCode, $firstOption);
         $response = $this->graphQlQuery($query);
 
-        //Only 1 product will be returned since only one child product with attribute option1 from 1st Configurable product is OOS
+        //1 product will be returned since only one child product with attribute option1 from 1st Configurable product is OOS
         $this->assertEquals(1, $response['products']['total_count']);
 
         // Custom attribute filter layer data
@@ -498,14 +463,12 @@ QUERY;
                 'is_in_stock' => 0]
         );
         $productRepository->save($outOfStockChildProduct);
-        $query = $this->getQueryProductsWithCustomAttribute($firstOption);
+        $query = $this->getQueryProductsWithCustomAttribute($attributeCode, $firstOption);
         $response = $this->graphQlQuery($query);
         $this->assertEquals(0, $response['products']['total_count']);
         $this->assertEmpty($response['products']['items']);
         $this->assertEmpty($response['products']['filters']);
-        $i = 0;
     }
-
 
     /**
      * Get array with expected data for layered navigation filters
@@ -522,14 +485,31 @@ QUERY;
         // Fetching option ID is required for continuous debug as of autoincrement IDs.
         return [
             [
+                'name' => 'Price',
+                'filter_items_count' => 2,
+                'request_var' => 'price',
+                'filter_items' => [
+                    [
+                        'label' => '*-10',
+                        'value_string' => '*_10',
+                        'items_count' => 1,
+                    ],
+                    [
+                        'label' => '10-*',
+                        'value_string' => '10_*',
+                        'items_count' => 1,
+                    ],
+                ],
+            ],
+            [
                 'name' => 'Category',
                 'filter_items_count' => 1,
-                'request_var' => 'cat',
+                'request_var' => 'category_id',
                 'filter_items' => [
                     [
                         'label' => 'Category 1',
                         'value_string' => '333',
-                        'items_count' => 3,
+                        'items_count' => 2,
                     ],
                 ],
             ],
@@ -544,24 +524,7 @@ QUERY;
                         'items_count' => 1,
                     ],
                 ],
-            ],
-            [
-                'name' => 'Price',
-                'filter_items_count' => 2,
-                'request_var' => 'price',
-                'filter_items' => [
-                    [
-                        'label' => '<span class="price">$0.00</span> - <span class="price">$9.99</span>',
-                        'value_string' => '-10',
-                        'items_count' => 1,
-                    ],
-                    [
-                        'label' => '<span class="price">$10.00</span> and above',
-                        'value_string' => '10-',
-                        'items_count' => 1,
-                    ],
-                ],
-            ],
+            ]
         ];
     }
 
