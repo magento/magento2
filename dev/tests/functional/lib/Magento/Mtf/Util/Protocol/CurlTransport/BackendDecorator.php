@@ -8,7 +8,6 @@ namespace Magento\Mtf\Util\Protocol\CurlTransport;
 
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * Curl transport on backend.
@@ -109,7 +108,6 @@ class BackendDecorator implements CurlInterface
                 $isAuthorized = true;
                 $_ENV['app_backend_url'] = $url;
                 break;
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
             } catch (\Exception $e) {
                 continue;
             }

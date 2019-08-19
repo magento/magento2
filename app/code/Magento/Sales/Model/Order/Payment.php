@@ -8,13 +8,13 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
-use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
 
 /**
  * Order payment information
@@ -684,7 +684,6 @@ class Payment extends Info implements OrderPaymentInterface
                         $gateway->refund($this, $baseAmountToRefund);
 
                         $creditmemo->setTransactionId($this->getLastTransId());
-                        // phpcs:ignore Magento2.Exceptions.ThrowCatch
                     } catch (\Magento\Framework\Exception\LocalizedException $e) {
                         if (!$captureTxn) {
                             throw new \Magento\Framework\Exception\LocalizedException(

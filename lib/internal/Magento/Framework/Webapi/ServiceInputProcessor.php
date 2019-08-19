@@ -19,8 +19,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Zend\Code\Reflection\ClassReflection;
 
 /**
@@ -275,7 +275,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                     } else {
                         $setterValue = $this->convertValue($value, $returnType);
                     }
-                // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (SerializationException $e) {
                     throw new SerializationException(
                         new Phrase(
@@ -324,7 +323,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             ) {
                 try {
                     $attributeValue = $this->convertValue($customAttributeValue, $type);
-                // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (SerializationException $e) {
                     throw new SerializationException(
                         new Phrase(

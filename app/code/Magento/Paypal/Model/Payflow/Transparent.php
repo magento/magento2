@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\Payflow;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Model\Method\TransparentInterface;
+use Magento\Paypal\Model\Payflow\Service\Gateway;
+use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
+use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Paypal\Model\Payflow\Service\Gateway;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Payment\Model\Method\TransparentInterface;
-use Magento\Payment\Model\Method\ConfigInterfaceFactory;
-use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
-use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 
@@ -195,7 +195,6 @@ class Transparent extends Payflowpro implements TransparentInterface
         } catch (LocalizedException $exception) {
             $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
             throw new LocalizedException(__("The payment couldn't be processed at this time. Please try again later."));
         }
 

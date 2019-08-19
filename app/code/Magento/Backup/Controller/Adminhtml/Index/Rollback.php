@@ -127,7 +127,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
             $adminSession->destroy();
 
             $response->setRedirectUrl($this->getUrl('*'));
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
+            // phpcs:disable Magento2.Exceptions.ThrowCatch - Required Refactoring see MC-19410
         } catch (\Magento\Framework\Backup\Exception\CantLoadSnapshot $e) {
             $errorMsg = __('We can\'t find the backup file.');
         } catch (\Magento\Framework\Backup\Exception\FtpConnectionFailed $e) {

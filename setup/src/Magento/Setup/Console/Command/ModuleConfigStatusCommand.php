@@ -97,7 +97,7 @@ class ModuleConfigStatusCommand extends Command
             $output->writeln(
                 '<info>The modules configuration is up to date.</info>'
             );
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
+            // phpcs:disable Magento2.Exceptions.ThrowCatch - Required Refactoring see MC-19410
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
