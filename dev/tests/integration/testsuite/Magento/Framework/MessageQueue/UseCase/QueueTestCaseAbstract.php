@@ -45,7 +45,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     /**
      * @var PublisherConsumerController
      */
-    private $publisherConsumerController;
+    protected $publisherConsumerController;
 
     protected function setUp()
     {

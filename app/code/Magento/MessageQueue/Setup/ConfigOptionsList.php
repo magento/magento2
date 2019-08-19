@@ -46,7 +46,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 $this->selectOptions,
                 self::CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES,
-                'Should consumers wait for message from the queue? 1 - Yes, 0 - No',
+                'Should consumers wait for a message from the queue? 1 - Yes, 0 - No',
                 self::DEFULT_CONSUMERS_WAIT_FOR_MESSAGES
             ),
         ];
