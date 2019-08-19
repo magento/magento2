@@ -265,8 +265,6 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['user_id = ?' => $uid, 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            throw $e;
-        } catch (\Exception $e) {
             $connection->rollBack();
             return false;
         }
@@ -474,7 +472,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $users = $role->getRoleUsers();
         $rowsCount = 0;
 
-        if (sizeof($users) > 0) {
+        if (count($users) > 0) {
             $bind = ['reload_acl_flag' => 1];
             $where = ['user_id IN(?)' => $users];
             $rowsCount = $connection->update($this->getTable('admin_user'), $bind, $where);
@@ -616,6 +614,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Get latest password for specified user id
+     *
      * Possible false positive when password was changed several times with different lifetime configuration
      *
      * @param int $userId
