@@ -761,6 +761,7 @@ class Address extends AbstractCustomer
     {
         foreach ($defaults as $tableName => $data) {
             foreach ($data as $customerId => $defaultsData) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $data = array_merge(
                     ['entity_id' => $customerId],
                     $defaultsData
@@ -801,11 +802,13 @@ class Address extends AbstractCustomer
      *
      * @static
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getDefaultAddressAttributeMapping()
     {
         return self::$_defaultAddressAttributeMapping;
     }
+    // phpcs:enable
 
     /**
      * Check if address for import is empty (for customer composite mode)
