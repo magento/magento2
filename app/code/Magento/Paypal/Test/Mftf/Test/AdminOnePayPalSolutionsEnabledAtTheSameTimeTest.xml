@@ -41,13 +41,13 @@
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab('us')}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab('us')}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
-        <actionGroup ref="enablePayPalSolution" stepKey="enableExpressCheckout">
+        <actionGroup ref="EnablePayPalSolution" stepKey="enableExpressCheckout">
             <argument name="payPalConfigType" value="WPSExpressConfigSection"/>
             <argument name="countryCode" value="us"/>
         </actionGroup>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <actionGroup ref="enablePayPalSolution" stepKey="enableExpressCheckout2">
+        <actionGroup ref="EnablePayPalSolution" stepKey="enableExpressCheckout2">
             <argument name="payPalConfigType" value="PayPalExpressCheckoutConfigSection"/>
             <argument name="countryCode" value="us"/>
         </actionGroup>

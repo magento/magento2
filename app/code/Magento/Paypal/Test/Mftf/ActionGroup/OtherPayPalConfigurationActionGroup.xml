@@ -28,7 +28,7 @@
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
     </actionGroup>
-    <actionGroup name="enablePayPalSolution" extends="EnablePayPalConfiguration">
+    <actionGroup name="EnablePayPalSolution" extends="EnablePayPalConfiguration">
         <remove keyForRemoval="waitForOtherPayPalPaymentsSection"/>
         <remove keyForRemoval="clickOtherPayPalPaymentsSection"/>
         <remove keyForRemoval="seeAlertMessage"/>
