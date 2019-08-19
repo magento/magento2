@@ -26,6 +26,7 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCo
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Order model
@@ -300,6 +301,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var ScopeConfigInterface;
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -331,6 +337,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param ProductOption|null $productOption
      * @param OrderItemRepositoryInterface $itemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -364,7 +371,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         ResolverInterface $localeResolver = null,
         ProductOption $productOption = null,
         OrderItemRepositoryInterface $itemRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -392,6 +400,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             ->get(OrderItemRepositoryInterface::class);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
             ->get(SearchCriteriaBuilder::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
 
         parent::__construct(
             $context,
@@ -1984,6 +1993,48 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Return Customer Address Prefixshow availability.
+     *
+     * @return bool|string
+     */
+    private function isAllowShowPrefix()
+    {
+        $isAllowed = $this->scopeConfig->getValue(
+            'customer/address/prefix_show',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $isAllowed;
+    }
+
+    /**
+     * Return Customer Address Middlename availability.
+     *
+     * @return bool
+     */
+    private function isAllowShowMiddlename()
+    {
+        $isAllowed = $this->scopeConfig->getValue(
+            'customer/address/middlename_show',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $isAllowed;
+    }
+
+    /**
+     * Return Customer Address Prefixshow availability.
+     *
+     * @return bool|string
+     */
+    private function isAllowShowSuffix()
+    {
+        $isAllowed = $this->scopeConfig->getValue(
+            'customer/address/suffix_show',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $isAllowed;
+    }
+
+    /**
      * Add New object to related array
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -2758,7 +2809,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getCustomerMiddlename()
     {
-        return $this->getData(OrderInterface::CUSTOMER_MIDDLENAME);
+        $isAllowed = $this->isAllowShowMiddlename();
+        if($isAllowed){
+            return $this->getData(OrderInterface::CUSTOMER_MIDDLENAME);
+        }
+        return false;
     }
 
     /**
@@ -2788,7 +2843,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getCustomerPrefix()
     {
-        return $this->getData(OrderInterface::CUSTOMER_PREFIX);
+        $isAllowed = $this->isAllowShowPrefix();
+        if(!empty($isAllowed)){
+            return $this->getData(OrderInterface::CUSTOMER_PREFIX);            
+        }
+        return false;
     }
 
     /**
@@ -2798,7 +2857,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getCustomerSuffix()
     {
-        return $this->getData(OrderInterface::CUSTOMER_SUFFIX);
+        $isAllowed = $this->isAllowShowSuffix();
+        if(!empty($isAllowed)){
+            return $this->getData(OrderInterface::CUSTOMER_SUFFIX);
+        }
+        return false;
     }
 
     /**
