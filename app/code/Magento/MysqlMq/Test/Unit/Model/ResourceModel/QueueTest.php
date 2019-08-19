@@ -206,7 +206,9 @@ class QueueTest extends \PHPUnit\Framework\TestCase
             ]
         )->willReturnSelf();
         $select->expects($this->once())
-            ->method('order')->with('queue_message_status.updated_at ASC')->willReturnSelf();
+            ->method('order')
+            ->with(['queue_message_status.updated_at ASC', 'queue_message_status.id ASC'])
+            ->willReturnSelf();
         $select->expects($this->once())->method('limit')->with($limit)->willReturnSelf();
         $connection->expects($this->once())->method('fetchAll')->with($select)->willReturn($messages);
         $this->assertEquals($messages, $this->queue->getMessages($queueName, $limit));
