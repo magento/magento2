@@ -51,6 +51,10 @@
         <data key="attribute_code">short_description</data>
         <data key="value">Short Fixedtest 555</data>
     </entity>
+    <entity name="ProductDescriptionAdvancedSearchABC" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">&lt;p&gt;adc_Full&lt;/p&gt;</data>
+    </entity>
     <entity name="ProductShortDescriptionAdvancedSearch" type="custom_attribute">
         <data key="attribute_code">short_description</data>
         <data key="value">&lt;p&gt;abc_short&lt;/p&gt;</data>
