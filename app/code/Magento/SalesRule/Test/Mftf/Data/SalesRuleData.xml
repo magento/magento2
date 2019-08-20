@@ -262,9 +262,4 @@
         <requiredEntity type="SalesRuleLabel">SalesRuleLabelDefault</requiredEntity>
         <requiredEntity type="SalesRuleLabel">SalesRuleLabelStore1</requiredEntity>
     </entity>
-
-    <entity name="SalesRule100PercentDiscountSpecificCoupon" extends="SaleRule50PercentDiscountNoCoupon" type="SalesRule">
-        <data key="discount_amount">100</data>
-        <data key="coupon_type">SPECIFIC_COUPON</data>
-    </entity>
 </entities>

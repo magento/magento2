@@ -21,7 +21,10 @@
         <before>
             <!--Create entities-->
             <createData entity="SimpleProduct3" stepKey="createProduct"/>
-            <createData entity="SalesRule100PercentDiscountSpecificCoupon" stepKey="createCartPriceRule"/>
+            <createData entity="SaleRule50PercentDiscountNoCoupon" stepKey="createCartPriceRule">
+                <field key="discount_amount">100</field>
+                <field key="coupon_type">SPECIFIC_COUPON</field>
+            </createData>
             <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
                 <requiredEntity createDataKey="createCartPriceRule"/>
             </createData>
