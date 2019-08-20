@@ -9,6 +9,7 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader;
 
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DeprecatedEnumAnnotationReader;
 
 /**
  * Composite configuration reader to handle the enum type meta
@@ -21,15 +22,24 @@ class EnumType implements TypeMetaReaderInterface
     private $docReader;
 
     /**
-     * @param DocReader $docReader
+     * @var DeprecatedEnumAnnotationReader
      */
-    public function __construct(DocReader $docReader)
-    {
+    private $deprecatedEnumAnnotationReader;
+
+    /**
+     * @param DocReader $docReader
+     * @param DeprecatedEnumAnnotationReader $deprecatedEnumAnnotationReader
+     */
+    public function __construct(
+        DocReader $docReader,
+        DeprecatedEnumAnnotationReader $deprecatedEnumAnnotationReader
+    ) {
         $this->docReader = $docReader;
+        $this->deprecatedEnumAnnotationReader = $deprecatedEnumAnnotationReader;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -42,12 +52,21 @@ class EnumType implements TypeMetaReaderInterface
             foreach ($typeMeta->getValues() as $enumValueMeta) {
                 $result['items'][$enumValueMeta->value] = [
                     'name' => strtolower($enumValueMeta->name),
-                    '_value' => $enumValueMeta->value
+                    '_value' => $enumValueMeta->value,
+                    'description' => $enumValueMeta->description,
+                    'deprecationReason' =>$enumValueMeta->deprecationReason
                 ];
 
                 if ($this->docReader->read($enumValueMeta->astNode->directives)) {
                     $result['items'][$enumValueMeta->value]['description'] =
                         $this->docReader->read($enumValueMeta->astNode->directives);
+                }
+
+                if (!empty($enumValueMeta->deprecationReason) &&
+                    $this->deprecatedEnumAnnotationReader->read($enumValueMeta->astNode->directives)
+                ) {
+                    $result['items'][$enumValueMeta->value]['deprecationReason'] =
+                        $this->deprecatedEnumAnnotationReader->read($enumValueMeta->astNode->directives);
                 }
             }
 
@@ -56,6 +75,7 @@ class EnumType implements TypeMetaReaderInterface
             }
 
             return $result;
+
         } else {
             return [];
         }

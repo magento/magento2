@@ -28,19 +28,28 @@ class FieldMetaReader
     private $cacheAnnotationReader;
 
     /**
+     * @var DeprecatedAnnotationReader
+     */
+    private $deprecatedAnnotationReader;
+
+    /**
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
      * @param CacheAnnotationReader|null $cacheAnnotationReader
+     * @param DeprecatedAnnotationReader|null $deprecatedAnnotationReader
      */
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
-        CacheAnnotationReader $cacheAnnotationReader = null
+        CacheAnnotationReader $cacheAnnotationReader = null,
+        DeprecatedAnnotationReader $deprecatedAnnotationReader = null
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
-        $this->cacheAnnotationReader = $cacheAnnotationReader ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(CacheAnnotationReader::class);
+        $this->cacheAnnotationReader = $cacheAnnotationReader
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheAnnotationReader::class);
+        $this->deprecatedAnnotationReader = $deprecatedAnnotationReader
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(DeprecatedAnnotationReader::class);
     }
 
     /**
@@ -72,8 +81,12 @@ class FieldMetaReader
             $result['description'] = $this->docReader->read($fieldMeta->astNode->directives);
         }
 
-        if ($this->docReader->read($fieldMeta->astNode->directives)) {
+        if ($this->cacheAnnotationReader->read($fieldMeta->astNode->directives)) {
             $result['cache'] = $this->cacheAnnotationReader->read($fieldMeta->astNode->directives);
+        }
+
+        if ($this->deprecatedAnnotationReader->read($fieldMeta->astNode->directives)) {
+            $result['deprecated'] = $this->deprecatedAnnotationReader->read($fieldMeta->astNode->directives);
         }
 
         $arguments = $fieldMeta->args;
@@ -94,6 +107,11 @@ class FieldMetaReader
             if ($this->docReader->read($argumentMeta->astNode->directives)) {
                 $result['arguments'][$argumentName]['description'] =
                     $this->docReader->read($argumentMeta->astNode->directives);
+            }
+
+            if ($this->deprecatedAnnotationReader->read($argumentMeta->astNode->directives)) {
+                $result['arguments'][$argumentName]['deprecated'] =
+                    $this->deprecatedAnnotationReader->read($argumentMeta->astNode->directives);
             }
         }
         return $result;
