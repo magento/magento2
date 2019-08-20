@@ -133,7 +133,6 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $oldSuperMode = $this->getQuote()->getIsSuperMode();
         $this->getQuote()->setIsSuperMode(false);
         foreach ($items as $item) {
-
             if (!$item->getMessage()) {
                 //Getting product ids for stock item last quantity validation before grid display
                 $stockItemToCheck = [];
