@@ -1236,5 +1236,6 @@
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">ProductDescriptionAdvancedSearchADC123</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ProductShortDescriptionAdvancedSearchADC123</requiredEntity>
     </entity>
 </entities>
