@@ -31,8 +31,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * Default value
      */
-    const DEFULT_CONSUMERS_WAIT_FOR_MESSAGES = 1;
+    const DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES = 1;
 
+    /**
+     * The available configuration values
+     *
+     * @var array
+     */
     private $selectOptions = [0, 1];
 
     /**
@@ -47,7 +52,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 $this->selectOptions,
                 self::CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES,
                 'Should consumers wait for a message from the queue? 1 - Yes, 0 - No',
-                self::DEFULT_CONSUMERS_WAIT_FOR_MESSAGES
+                self::DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES
             ),
         ];
     }
