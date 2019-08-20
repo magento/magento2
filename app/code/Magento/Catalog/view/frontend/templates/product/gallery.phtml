@@ -34,7 +34,7 @@
          id="product-gallery-image"
          class="image"
          data-mage-init='{"catalogGallery":{}}'/>
-    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?= /* @noEscape */ __('Close Window') ?></span></a></div>
+    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?= $block->escapeHtml(__('Close Window')) ?></span></a></div>
     <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()) :?>
         <div class="nav">
             <?php if ($_prevUrl = $block->getPreviousImageUrl()) :?>

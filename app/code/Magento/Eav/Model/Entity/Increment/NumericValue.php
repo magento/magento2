@@ -28,7 +28,7 @@ class NumericValue extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
     {
         $last = $this->getLastId();
 
-        if (strpos($last, $this->getPrefix()) === 0) {
+        if (strpos($last, (string) $this->getPrefix()) === 0) {
             $last = (int)substr($last, strlen($this->getPrefix()));
         } else {
             $last = (int)$last;

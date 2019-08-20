@@ -29,7 +29,9 @@ define([
                 try {
                     error = JSON.parse(response.responseText);
                 } catch (exception) {
-                    error = $t('Something went wrong with your request. Please try again later.');
+                    error = {
+                        message: $t('Something went wrong with your request. Please try again later.')
+                    };
                 }
                 messageContainer.addErrorMessage(error);
             }

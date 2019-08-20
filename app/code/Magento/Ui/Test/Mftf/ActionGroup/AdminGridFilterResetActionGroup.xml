@@ -9,8 +9,12 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminGridFilterResetActionGroup">
-        <scrollToTopOfPage stepKey="scrollToTop" />
-        <conditionalClick selector="{{AdminDataGridFilterSection.clear}}" dependentSelector="{{AdminDataGridFilterSection.clear}}" visible="true" stepKey="clearExistingFilters" />
-        <waitForPageLoad stepKey="waitForFiltersReset" />
+        <annotations>
+            <description>Scrolls to the top of the page. Clicks on the 'Clear Filters' link, if present, in the Admin Grid 'Filters' section.</description>
+        </annotations>
+
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <conditionalClick selector="{{AdminDataGridFilterSection.clear}}" dependentSelector="{{AdminDataGridFilterSection.clear}}" visible="true" stepKey="clearExistingFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersReset"/>
     </actionGroup>
 </actionGroups>

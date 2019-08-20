@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Send to friend form
  */
@@ -93,14 +91,14 @@
         <legend class="legend"><span><?= $block->escapeHtml(__('Invitee')) ?></span></legend>
         <br />
         <div id="recipients-options"></div>
-        <?php if ($block->getMaxRecipients()): ?>
+        <?php if ($block->getMaxRecipients()) : ?>
             <div id="max-recipient-message" style="display: none;" class="message notice limit" role="alert">
                 <span><?= $block->escapeHtml(__('Maximum %1 email addresses allowed.', $block->getMaxRecipients())) ?></span>
             </div>
         <?php endif; ?>
         <div class="actions-toolbar">
             <div class="secondary">
-            <?php if (1 < $block->getMaxRecipients()): ?>
+            <?php if (1 < $block->getMaxRecipients()) : ?>
                 <button type="button" id="add-recipient-button" class="action add">
                     <span><?= $block->escapeHtml(__('Add Invitee')) ?></span></button>
             <?php endif; ?>
@@ -112,7 +110,7 @@
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
-                    class="action submit primary"<?php if (!$block->canSend()): ?> disabled="disabled"<?php endif ?>>
+                    class="action submit primary"<?php if (!$block->canSend()) : ?> disabled="disabled"<?php endif ?>>
                 <span><?= $block->escapeHtml(__('Send Email')) ?></span></button>
         </div>
         <div class="secondary">
