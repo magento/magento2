@@ -177,11 +177,15 @@ class AccountManagement implements AccountManagementInterface
     const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
 
     /**
+     * Configuration path to customer reset password email template
+     *
      * @deprecated
      */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
     /**
+     * Minimum password length
+     *
      * @deprecated
      */
     const MIN_PASSWORD_LENGTH = 6;
