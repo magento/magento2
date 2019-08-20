@@ -11,7 +11,8 @@ define([
     'underscore',
     'mage/template',
     'matchMedia',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'mage/translate'
 ], function ($, _, mageTemplate, mediaCheck) {
     'use strict';
@@ -71,7 +72,7 @@ define([
                     this.isExpandable = true;
                 }.bind(this),
                 exit: function () {
-                    this.isExpandable = false;
+                    this.isExpandable = true;
                 }.bind(this)
             });
 

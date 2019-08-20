@@ -1,0 +1,2870 @@
+{
+  "HighestSeverity": "WARNING",
+  "Notifications": [
+    {
+      "Severity": "WARNING",
+      "Source": "crs",
+      "Code": "835",
+      "Message": "Destination Postal-City Mismatch. ",
+      "LocalizedMessage": "Destination Postal-City Mismatch. "
+    },
+    {
+      "Severity": "NOTE",
+      "Source": "crs",
+      "Code": "819",
+      "Message": "The origin state\/province code has been changed.  ",
+      "LocalizedMessage": "The origin state\/province code has been changed.  "
+    },
+    {
+      "Severity": "NOTE",
+      "Source": "crs",
+      "Code": "820",
+      "Message": "The destination state\/province code has been changed.  ",
+      "LocalizedMessage": "The destination state\/province code has been changed.  "
+    }
+  ],
+  "Version": {
+    "ServiceId": "crs",
+    "Major": 10,
+    "Intermediate": 0,
+    "Minor": 0
+  },
+  "RateReplyDetails": [
+    {
+      "ServiceType": "FIRST_OVERNIGHT",
+      "PackagingType": "YOUR_PACKAGING",
+      "DestinationAirportId": "DFW",
+      "IneligibleForMoneyBackGuarantee": false,
+      "OriginServiceArea": "A1",
+      "DestinationServiceArea": "A6",
+      "SignatureOption": "SERVICE_DEFAULT",
+      "ActualRateType": "PAYOR_ACCOUNT_PACKAGE",
+      "RatedShipmentDetails": [
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_ACCOUNT_PACKAGE",
+            "RateScale": "14",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "102.59"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "102.59"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "9.18"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "6.33"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "PackageRateDetail": {
+              "RateType": "PAYOR_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "102.59"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "102.59"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "9.18"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "111.77"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "111.77"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "6.33"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "RATED_ACCOUNT_PACKAGE",
+            "RateScale": "14",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "102.59"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "102.59"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "9.18"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "6.33"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "PackageRateDetail": {
+              "RateType": "RATED_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "102.59"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "102.59"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "9.18"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "111.77"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "111.77"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "6.33"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_LIST_PACKAGE",
+            "RateScale": "14",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "102.59"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "102.59"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "9.18"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "6.33"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "PAYOR_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "102.59"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "102.59"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "9.18"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "111.77"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "111.77"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "6.33"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "RATED_LIST_PACKAGE",
+            "RateScale": "14",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "102.59"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "102.59"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "9.18"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "111.77"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "6.33"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "RATED_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "102.59"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "102.59"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "9.18"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "111.77"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "111.77"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "6.33"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ServiceType": "PRIORITY_OVERNIGHT",
+      "PackagingType": "YOUR_PACKAGING",
+      "DestinationAirportId": "DFW",
+      "IneligibleForMoneyBackGuarantee": false,
+      "OriginServiceArea": "A1",
+      "DestinationServiceArea": "A6",
+      "SignatureOption": "SERVICE_DEFAULT",
+      "ActualRateType": "PAYOR_ACCOUNT_PACKAGE",
+      "RatedShipmentDetails": [
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "49.92"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_ACCOUNT_PACKAGE",
+            "RateScale": "1",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "25.5"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "25.5"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.55"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "30.05"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "30.05"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "30.05"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "1.7"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "49.92"
+            },
+            "PackageRateDetail": {
+              "RateType": "PAYOR_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "25.5"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "25.5"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.55"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "30.05"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "30.05"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "1.7"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "49.92"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "RATED_ACCOUNT_PACKAGE",
+            "RateScale": "1",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "25.5"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "25.5"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.55"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "30.05"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "30.05"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "30.05"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "1.7"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "49.92"
+            },
+            "PackageRateDetail": {
+              "RateType": "RATED_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "25.5"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "25.5"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.55"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "30.05"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "30.05"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "1.7"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_LIST_PACKAGE",
+            "RateScale": "1574",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "72.59"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "72.59"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "7.38"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "79.97"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "79.97"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "79.97"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "4.53"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "PAYOR_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "72.59"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "72.59"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "7.38"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "79.97"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "79.97"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "4.53"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "RATED_LIST_PACKAGE",
+            "RateScale": "1574",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "72.59"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "72.59"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "7.38"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "79.97"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "79.97"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "79.97"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "4.53"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "RATED_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "72.59"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "72.59"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "7.38"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "79.97"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "79.97"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "4.53"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ServiceType": "FEDEX_2_DAY",
+      "PackagingType": "YOUR_PACKAGING",
+      "DestinationAirportId": "DFW",
+      "IneligibleForMoneyBackGuarantee": false,
+      "OriginServiceArea": "A1",
+      "DestinationServiceArea": "A6",
+      "SignatureOption": "SERVICE_DEFAULT",
+      "ActualRateType": "PAYOR_ACCOUNT_PACKAGE",
+      "RatedShipmentDetails": [
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_ACCOUNT_PACKAGE",
+            "RateScale": "6068",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "30.8"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "30.8"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.87"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.02"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "PackageRateDetail": {
+              "RateType": "PAYOR_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "30.8"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "30.8"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.87"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "35.67"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "35.67"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.02"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "RATED_ACCOUNT_PACKAGE",
+            "RateScale": "6068",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "30.8"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "30.8"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.87"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.02"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "PackageRateDetail": {
+              "RateType": "RATED_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "30.8"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "30.8"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.87"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "35.67"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "35.67"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.02"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_LIST_PACKAGE",
+            "RateScale": "6068",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "30.8"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "30.8"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.87"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.02"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "PAYOR_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "30.8"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "30.8"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.87"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "35.67"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "35.67"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.02"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "RATED_LIST_PACKAGE",
+            "RateScale": "6068",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "30.8"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "30.8"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.87"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "35.67"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.02"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "RATED_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "30.8"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "30.8"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.87"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "35.67"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "35.67"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.02"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ServiceType": "FEDEX_EXPRESS_SAVER",
+      "PackagingType": "YOUR_PACKAGING",
+      "DestinationAirportId": "DFW",
+      "IneligibleForMoneyBackGuarantee": false,
+      "OriginServiceArea": "A1",
+      "DestinationServiceArea": "A6",
+      "SignatureOption": "SERVICE_DEFAULT",
+      "ActualRateType": "PAYOR_ACCOUNT_PACKAGE",
+      "RatedShipmentDetails": [
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_ACCOUNT_PACKAGE",
+            "RateScale": "7175",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "22.37"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "22.37"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.36"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "1.51"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "PackageRateDetail": {
+              "RateType": "PAYOR_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "22.37"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "22.37"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.36"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "26.73"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "26.73"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "1.51"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "RATED_ACCOUNT_PACKAGE",
+            "RateScale": "7175",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "22.37"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "22.37"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.36"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "1.51"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "PackageRateDetail": {
+              "RateType": "RATED_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "22.37"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "22.37"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.36"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "26.73"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "26.73"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "1.51"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_LIST_PACKAGE",
+            "RateScale": "7175",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "22.37"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "22.37"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.36"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "1.51"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "PAYOR_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "22.37"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "22.37"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.36"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "26.73"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "26.73"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "1.51"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "RATED_LIST_PACKAGE",
+            "RateScale": "7175",
+            "RateZone": "6",
+            "PricingCode": "PACKAGE",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "6.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "22.37"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "22.37"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "4.36"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "26.73"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.85"
+                }
+              },
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Description": "Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "1.51"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "RATED_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "22.37"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "22.37"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "4.36"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "26.73"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "26.73"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.85"
+                  }
+                },
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Description": "Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "1.51"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ServiceType": "FEDEX_GROUND",
+      "PackagingType": "YOUR_PACKAGING",
+      "DestinationAirportId": "DFW",
+      "IneligibleForMoneyBackGuarantee": false,
+      "SignatureOption": "SERVICE_DEFAULT",
+      "ActualRateType": "PAYOR_ACCOUNT_PACKAGE",
+      "RatedShipmentDetails": [
+        {
+          "EffectiveNetDiscount": {
+            "Currency": "USD",
+            "Amount": "0.0"
+          },
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_ACCOUNT_PACKAGE",
+            "RateZone": "6",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "7.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "10.82"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "10.82"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "3.65"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "14.47"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "14.47"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "14.47"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Level": "PACKAGE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Level": "PACKAGE",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.7"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Level": "PACKAGE",
+                "Description": "FedEx Ground Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.95"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "EffectiveNetDiscount": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "PackageRateDetail": {
+              "RateType": "PAYOR_ACCOUNT_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "10.82"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "10.82"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "3.65"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "14.47"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "14.47"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Level": "PACKAGE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Level": "PACKAGE",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.7"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Level": "PACKAGE",
+                  "Description": "FedEx Ground Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.95"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ShipmentRateDetail": {
+            "RateType": "PAYOR_LIST_PACKAGE",
+            "RateZone": "6",
+            "RatedWeightMethod": "ACTUAL",
+            "DimDivisor": 0,
+            "FuelSurchargePercent": "7.0",
+            "TotalBillingWeight": {
+              "Units": "LB",
+              "Value": "2.0"
+            },
+            "TotalBaseCharge": {
+              "Currency": "USD",
+              "Amount": "10.82"
+            },
+            "TotalFreightDiscounts": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetFreight": {
+              "Currency": "USD",
+              "Amount": "10.82"
+            },
+            "TotalSurcharges": {
+              "Currency": "USD",
+              "Amount": "3.65"
+            },
+            "TotalNetFedExCharge": {
+              "Currency": "USD",
+              "Amount": "14.47"
+            },
+            "TotalTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetCharge": {
+              "Currency": "USD",
+              "Amount": "14.47"
+            },
+            "TotalRebates": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "0.0"
+            },
+            "TotalNetChargeWithDutiesAndTaxes": {
+              "Currency": "USD",
+              "Amount": "14.47"
+            },
+            "Surcharges": [
+              {
+                "SurchargeType": "INSURED_VALUE",
+                "Level": "PACKAGE",
+                "Description": "Insured value",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.0"
+                }
+              },
+              {
+                "SurchargeType": "DELIVERY_AREA",
+                "Level": "PACKAGE",
+                "Description": "Delivery Area Surcharge Extended Commercial",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "2.7"
+                }
+              },
+              {
+                "SurchargeType": "FUEL",
+                "Level": "PACKAGE",
+                "Description": "FedEx Ground Fuel",
+                "Amount": {
+                  "Currency": "USD",
+                  "Amount": "0.95"
+                }
+              }
+            ]
+          },
+          "RatedPackages": {
+            "GroupNumber": 0,
+            "PackageRateDetail": {
+              "RateType": "PAYOR_LIST_PACKAGE",
+              "RatedWeightMethod": "ACTUAL",
+              "BillingWeight": {
+                "Units": "LB",
+                "Value": "2.0"
+              },
+              "BaseCharge": {
+                "Currency": "USD",
+                "Amount": "10.82"
+              },
+              "TotalFreightDiscounts": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetFreight": {
+                "Currency": "USD",
+                "Amount": "10.82"
+              },
+              "TotalSurcharges": {
+                "Currency": "USD",
+                "Amount": "3.65"
+              },
+              "NetFedExCharge": {
+                "Currency": "USD",
+                "Amount": "14.47"
+              },
+              "TotalTaxes": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "NetCharge": {
+                "Currency": "USD",
+                "Amount": "14.47"
+              },
+              "TotalRebates": {
+                "Currency": "USD",
+                "Amount": "0.0"
+              },
+              "Surcharges": [
+                {
+                  "SurchargeType": "INSURED_VALUE",
+                  "Level": "PACKAGE",
+                  "Description": "Insured value",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.0"
+                  }
+                },
+                {
+                  "SurchargeType": "DELIVERY_AREA",
+                  "Level": "PACKAGE",
+                  "Description": "Delivery Area Surcharge Extended Commercial",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "2.7"
+                  }
+                },
+                {
+                  "SurchargeType": "FUEL",
+                  "Level": "PACKAGE",
+                  "Description": "FedEx Ground Fuel",
+                  "Amount": {
+                    "Currency": "USD",
+                    "Amount": "0.95"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
