@@ -65,6 +65,8 @@
         <waitForPageLoad stepKey="waitForAttributeSelected"/>
         <click selector="{{AdminCartPriceRulesFormSection.condition('is')}}" stepKey="clickOnOperator"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.operator}}" userInput="{{actionOperator}}" stepKey="selectOperator"/>
+        <!-- In case we are choosing already selected value - select is not closed automatically -->
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.condition('...')}}" dependentSelector="{{AdminCartPriceRulesFormSection.operator}}" visible="true" stepKey="closeSelect"/>
         <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" stepKey="clickToChooseOption3"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.actionValue}}" userInput="{{actionValue}}" stepKey="fillActionValue"/>
         <click selector="{{AdminCartPriceRulesFormSection.applyAction}}" stepKey="applyAction"/>
