@@ -18,6 +18,7 @@ use Magento\Framework\View\Model\Layout\Update\Validator;
  * Layout merge model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 {
@@ -462,20 +463,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             return $this;
         }
 
-        // Walk all updates and extract handles before the merge step.
-        foreach ($this->updates as $update) {
-            $updateXml = null;
-
-            try {
-                $updateXml = $this->_loadXmlString($update);
-            } catch (\Exception $exception) {
-                // ignore invalid
-            }
-
-            if ($updateXml && strtolower($updateXml->getName()) == 'update' && isset($updateXml['handle'])) {
-                $this->addHandle((string)$updateXml['handle']);
-            }
-        }
+        $this->extractHandlers();
 
         foreach ($this->getHandles() as $handle) {
             $this->_merge($handle);
@@ -965,5 +953,26 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $layoutCacheKeys = $this->layoutCacheKey->getCacheKeys();
         // phpcs:ignore Magento2.Security.InsecureFunction
         return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
+    }
+
+    /**
+     * Walk all updates and extract handles before the merge step.
+     */
+    private function extractHandlers(): void
+    {
+        foreach ($this->updates as $update) {
+            $updateXml = null;
+
+            try {
+                $updateXml = $this->_loadXmlString($update);
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            } catch (\Exception $exception) {
+                // ignore invalid
+            }
+
+            if ($updateXml && strtolower($updateXml->getName()) == 'update' && isset($updateXml['handle'])) {
+                $this->addHandle((string)$updateXml['handle']);
+            }
+        }
     }
 }
