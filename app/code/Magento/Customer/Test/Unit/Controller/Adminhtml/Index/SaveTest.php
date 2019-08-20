@@ -475,7 +475,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the customer.'))
             ->willReturnSelf();
 
@@ -662,7 +662,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the customer.'))
             ->willReturnSelf();
 
@@ -804,7 +804,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('register');
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->messageManagerMock->expects($this->once())
             ->method('addMessage')
@@ -951,7 +951,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('register');
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->messageManagerMock->expects($this->once())
             ->method('addMessage')
@@ -1099,10 +1099,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('register');
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, __('Something went wrong while saving the customer.'));
 
         $this->sessionMock->expects($this->once())

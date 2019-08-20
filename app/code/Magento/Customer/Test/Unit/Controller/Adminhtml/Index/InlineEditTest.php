@@ -366,7 +366,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->with($this->customerData)
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('[Customer ID: 12] Exception message');
         $this->logger->expects($this->once())
             ->method('critical')
@@ -394,7 +394,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->with($this->customerData)
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('[Customer ID: 12] We can\'t save the customer.');
         $this->logger->expects($this->once())
             ->method('critical')

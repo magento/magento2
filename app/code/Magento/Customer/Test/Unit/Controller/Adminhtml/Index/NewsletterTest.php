@@ -150,7 +150,7 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
         $this->messageManager = $this->getMockBuilder(
             \Magento\Framework\Message\Manager::class
         )->disableOriginalConstructor()->setMethods(
-            ['addSuccess', 'addMessage', 'addException']
+            ['addSuccessMessage', 'addMessageMessage', 'addExceptionMessage']
         )->getMock();
 
         $contextArgs = [
