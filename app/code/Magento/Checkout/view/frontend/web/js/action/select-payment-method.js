@@ -26,6 +26,7 @@ define([
         payload = {
             method: paymentMethod
         };
+
         if (customer.isLoggedIn()) {
             serviceUrl = urlBuilder.createUrl('/carts/mine/selected-payment-method', {});
         } else {
