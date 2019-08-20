@@ -114,8 +114,10 @@
         <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectShippingMethod"/>
         <see userInput="{{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
         <see userInput="({{shippingMethod}})" selector="{{CheckoutCartSummarySection.shippingMethod}}" stepKey="assertShippingMethod"/>
-        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping"/>
-        <see userInput="{{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal"/>
+        <reloadPage stepKey="reloadPage" after="assertShippingMethod" />
+        <waitForPageLoad stepKey="WaitForPageLoaded" after="reloadPage" />
+        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping" after="WaitForPageLoaded"/>
+        <see userInput="{{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal" after="assertShipping"/>
     </actionGroup>
 
     <!-- Open the Cart from Minicart-->
