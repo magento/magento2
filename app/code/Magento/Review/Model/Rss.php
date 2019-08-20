@@ -51,12 +51,8 @@ class Rss extends \Magento\Framework\Model\AbstractModel
     ) {
         $this->reviewFactory = $reviewFactory;
         $this->eventManager = $eventManager;
-        $context = $context ?? ObjectManager::getInstance()->get(
-                \Magento\Framework\Model\Context::class
-            );
-        $registry = $registry ?? ObjectManager::getInstance()->get(
-                \Magento\Framework\Registry::class
-            );
+        $context = $context ?? ObjectManager::getInstance()->get(\Magento\Framework\Model\Context::class);
+        $registry = $registry ?? ObjectManager::getInstance()->get(\Magento\Framework\Registry::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
