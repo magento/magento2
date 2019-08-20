@@ -717,6 +717,7 @@ QUERY;
 
     public function testSearchWithFilterWithPageSizeEqualTotalCount()
     {
+        CacheCleaner::cleanAll();
         $query
             = <<<QUERY
 {
@@ -724,14 +725,7 @@ QUERY;
      search : "simple"
         filter:
         {
-          special_price:{neq:"null"}
-          price:{lt:"60"}
-          or:
-          {
-           sku:{like:"%simple%"}
-           name:{like:"%configurable%"}
-          }
-           weight:{eq:"1"}
+          price:{from:"60"}
         }
         pageSize:2
         currentPage:2
@@ -872,13 +866,16 @@ QUERY;
      */
     public function testQueryProductsSortedByNameASC()
     {
+        CacheCleaner::cleanAll();
         $query
             = <<<QUERY
 {
     products(
         filter:
         {
-            sku:{in:["simple2", "simple1"]}
+            sku: {
+                like:"simple%"
+            }
         }
          pageSize:1
          currentPage:2
@@ -1058,18 +1055,14 @@ QUERY;
      */
     public function testQuerySortByPriceDESCWithDefaultPageSize()
     {
+        CacheCleaner::cleanAll();
         $query
             = <<<QUERY
 {
   products(
         filter:
         {
-            price:{gt: "5", lt: "60"}
-            or:
-            {
-              sku:{like:"%simple%"}
-              name:{like:"%Configurable%"}
-            }
+           sku:{like:"%simple%"}
         }
          sort:
          {
@@ -1130,9 +1123,6 @@ QUERY;
             price:{
                 from:"5" to:"20"
             } 
-        }
-        sort: {
-            sku: DESC
         }
     ) {
         total_count
