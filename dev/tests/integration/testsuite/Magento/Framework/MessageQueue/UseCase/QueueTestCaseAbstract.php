@@ -47,16 +47,22 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
      */
     protected $publisherConsumerController;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
-        $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
-            'consumers' => $this->consumers,
-            'logFilePath' => $this->logFilePath,
-            'maxMessages' => $this->maxMessages,
-            'appInitParams' => \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams()
-        ]);
+        $this->publisherConsumerController = $this->objectManager->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => $this->consumers,
+                'logFilePath' => $this->logFilePath,
+                'maxMessages' => $this->maxMessages,
+                'appInitParams' => \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams()
+            ]
+        );
 
         try {
             $this->publisherConsumerController->initialize();
@@ -70,6 +76,9 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
         $this->publisher = $this->publisherConsumerController->getPublisher();
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         $this->publisherConsumerController->stopConsumers();
@@ -85,16 +94,24 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     {
         try {
             //$expectedLinesCount, $logFilePath
-            $this->publisherConsumerController->waitForAsynchronousResult([$this, 'checkLogsExists'], [
-                $expectedLinesCount, $logFilePath
-            ]);
+            $this->publisherConsumerController->waitForAsynchronousResult(
+                [$this, 'checkLogsExists'],
+                [$expectedLinesCount, $logFilePath]
+            );
         } catch (PreconditionFailedException $e) {
             $this->fail($e->getMessage());
         }
     }
 
+    /**
+     * Checks that logs exist
+     *
+     * @param int $expectedLinesCount
+     * @return bool
+     */
     public function checkLogsExists($expectedLinesCount)
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $actualCount = file_exists($this->logFilePath) ? count(file($this->logFilePath)) : 0;
         return $expectedLinesCount === $actualCount;
     }
@@ -102,7 +119,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     /**
      * Workaround for https://bugs.php.net/bug.php?id=72286
      */
-    public static function tearDownAfterClass()
+    public function tearDownAfterClass()
     {
         if (version_compare(phpversion(), '7') == -1) {
             $closeConnection = new \ReflectionMethod(\Magento\Amqp\Model\Config::class, 'closeConnection');

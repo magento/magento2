@@ -24,17 +24,12 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     private $filesystem;
 
     /**
-     * @var ConfigFilePool
-     */
-    private $configFilePool;
-
-    /**
      * @var array
      */
     private $config;
 
     /**
-     * @var \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
+     * @var AsyncTestData
      */
     protected $msgObject;
 
