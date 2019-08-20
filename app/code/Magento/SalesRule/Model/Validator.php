@@ -244,6 +244,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     {
         $this->validatorUtility->resetRoundingDeltas();
         if ($this->_isFirstTimeResetRun) {
+            $address->setBaseSubtotalWithDiscount($address->getBaseSubtotal());
+            $address->setSubtotalWithDiscount($address->getSubtotal());
             $address->setAppliedRuleIds('');
             $address->getQuote()->setAppliedRuleIds('');
             $this->_isFirstTimeResetRun = false;
