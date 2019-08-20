@@ -72,7 +72,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             );
         }
 
-        return[$configData];
+        return [$configData];
     }
 
     /**
