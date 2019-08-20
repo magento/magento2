@@ -105,7 +105,7 @@ class CurrencyConverterApi extends AbstractImport
             if ($currencyFrom === $to) {
                 $data[$currencyFrom][$to] = $this->_numberFormat(1);
             } else {
-                if (empty($response)) {
+                if (!isset($response[$currencyFrom . '_' . $to])) {
                     $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $to);
                     $data[$currencyFrom][$to] = null;
                 } else {
