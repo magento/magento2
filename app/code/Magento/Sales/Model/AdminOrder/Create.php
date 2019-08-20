@@ -1990,6 +1990,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             /** @var \Magento\Quote\Model\Quote\Item $item */
             $messages = $item->getMessage(false);
             if ($item->getHasError() && is_array($messages) && !empty($messages)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_errors = array_merge($this->_errors, $messages);
             }
         }
