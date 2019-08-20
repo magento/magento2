@@ -54,6 +54,8 @@ class DeleteWidgetById
     }
 
     /**
+     * Get widget instance by given instance ID
+     *
      * @param int $instanceId
      * @return WidgetInstance
      * @throws NoSuchEntityException

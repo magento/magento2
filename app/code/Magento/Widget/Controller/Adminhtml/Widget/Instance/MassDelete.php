@@ -71,7 +71,7 @@ class MassDelete extends Action implements HttpPostActionInterface
 
         foreach ($instanceIds as $instanceId) {
             try {
-                $this->deleteWidgetById->execute((int) $instanceId);
+                $this->deleteWidgetById->execute((int)$instanceId);
                 $deletedInstances++;
             } catch (NoSuchEntityException $e) {
                 $notDeletedInstances[] = $instanceId;
@@ -83,10 +83,12 @@ class MassDelete extends Action implements HttpPostActionInterface
         }
 
         if (count($notDeletedInstances)) {
-            $this->messageManager->addErrorMessage(__(
-                'Widget(s) with ID(s) %1 were not found',
-                trim(implode(', ', $notDeletedInstances))
-            ));
+            $this->messageManager->addErrorMessage(
+                __(
+                    'Widget(s) with ID(s) %1 were not found',
+                    trim(implode(', ', $notDeletedInstances))
+                )
+            );
         }
 
         /** @var Redirect $resultRedirect */
@@ -96,6 +98,8 @@ class MassDelete extends Action implements HttpPostActionInterface
     }
 
     /**
+     * Get instance IDs.
+     *
      * @return array
      */
     private function getInstanceIds(): array
@@ -110,7 +114,9 @@ class MassDelete extends Action implements HttpPostActionInterface
     }
 
     /**
-     * @return ResultInterface|RedirectInterface
+     * Get result page.
+     *
+     * @return ResultInterface|null
      */
     private function getResultPage(): ?ResultInterface
     {
