@@ -66,49 +66,65 @@ use Psr\Log\LoggerInterface as PsrLogger;
 class AccountManagement implements AccountManagementInterface
 {
     /**
-     * Configuration paths for email templates and identities
+     * Configuration paths for create account email template
      *
      * @deprecated
      */
     const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
 
     /**
+     * Configuration paths for register no password email template
+     *
      * @deprecated
      */
     const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
 
     /**
+     * Configuration paths for remind email identity
+     *
      * @deprecated
      */
     const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
 
     /**
+     * Configuration paths for remind email template
+     *
      * @deprecated
      */
     const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
 
     /**
+     * Configuration paths for forgot email email template
+     *
      * @deprecated
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
 
     /**
+     * Configuration paths for forgot email identity
+     *
      * @deprecated
      */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
     /**
+     * Configuration paths for account confirmation required
+     *
      * @deprecated
      * @see AccountConfirmation::XML_PATH_IS_CONFIRM
      */
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     /**
+     * Configuration paths for account confirmation email template
+     *
      * @deprecated
      */
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
     /**
+     * Configuration paths for confirmation confirmed email template
+     *
      * @deprecated
      */
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
