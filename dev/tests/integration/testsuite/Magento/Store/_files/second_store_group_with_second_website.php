@@ -11,7 +11,7 @@ require_once __DIR__ . '/website.php';
 /**
  * @var \Magento\Store\Model\Group $storeGroup
  */
-$storeGroup = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Group::class);
+$storeGroup = $objectManager->create(\Magento\Store\Model\Group::class);
 $storeGroup->setCode('some_group')
     ->setName('custom store group')
     ->setWebsite($website);

@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Tests for \Magento\Indexer\Console\Command\IndexerReindexCommand.
  *
  * @magentoDbIsolation disabled
+ * @magentoAppIsolation enabled
  */
 class IndexerReindexCommandTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,17 +37,21 @@ class IndexerReindexCommandTest extends \PHPUnit\Framework\TestCase
     private $outputMock;
 
     /**
+     * @var IndexerReindexCommand
+     */
+    private $command;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        Bootstrap::getInstance()->reinitialize();
         $this->objectManager = Bootstrap::getObjectManager();
 
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->inputMock = $this->getMockBuilder(InputInterface::class)->getMockForAbstractClass();
+        $this->outputMock = $this->getMockBuilder(OutputInterface::class)->getMockForAbstractClass();
+
+        $this->command = $this->objectManager->get(IndexerReindexCommand::class);
     }
 
     /**
@@ -54,8 +59,11 @@ class IndexerReindexCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testReindexAll()
     {
-        $command = $this->objectManager->create(IndexerReindexCommand::class);
-        $status = $command->run($this->inputMock, $this->outputMock);
-        $this->assertEquals(0, $status, 'Index wasn\'t success');
+        $status = $this->command->run($this->inputMock, $this->outputMock);
+        $this->assertEquals(
+            \Magento\Framework\Console\Cli::RETURN_SUCCESS,
+            $status,
+            'Index wasn\'t success'
+        );
     }
 }
