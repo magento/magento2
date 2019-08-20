@@ -55,10 +55,10 @@ class Unlock extends \Magento\Backend\App\Action
             // unlock customer
             if ($customerId) {
                 $this->authentication->unlock($customerId);
-                $this->getMessageManager()->addSuccess(__('Customer has been unlocked successfully.'));
+                $this->getMessageManager()->addSuccessMessage(__('Customer has been unlocked successfully.'));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

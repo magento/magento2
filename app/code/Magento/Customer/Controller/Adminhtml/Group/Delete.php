@@ -24,12 +24,12 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Group implements Htt
         if ($id) {
             try {
                 $this->groupRepository->deleteById($id);
-                $this->messageManager->addSuccess(__('You deleted the customer group.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the customer group.'));
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addError(__('The customer group no longer exists.'));
+                $this->messageManager->addErrorMessage(__('The customer group no longer exists.'));
                 return $resultRedirect->setPath('customer/*/');
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('customer/group/edit', ['id' => $id]);
             }
         }
