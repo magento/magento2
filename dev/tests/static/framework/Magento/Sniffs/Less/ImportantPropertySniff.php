@@ -13,7 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Ensure that single quotes are used
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#important-property
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#important-property
  */
 class ImportantPropertySniff implements Sniff
 {

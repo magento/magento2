@@ -4,18 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Widget\Gender $block */
 ?>
-<div class="field gender<?php if ($block->isRequired()) echo ' required' ?>">
+<div class="field gender<?= $block->isRequired() ? ' required' : ''?>">
     <label class="label" for="<?= $block->escapeHtmlAttr($block->getFieldId('gender')) ?>"><span><?= $block->escapeHtml($block->getStoreLabel('gender')) ?></span></label>
     <div class="control">
-        <select id="<?= $block->escapeHtmlAttr($block->getFieldId('gender')) ?>" name="<?= $block->escapeHtmlAttr($block->getFieldName('gender')) ?>" title="<?= $block->escapeHtmlAttr($block->getStoreLabel('gender')) ?>"<?php if ($block->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?>>
+        <select id="<?= $block->escapeHtmlAttr($block->getFieldId('gender')) ?>" name="<?= $block->escapeHtmlAttr($block->getFieldName('gender')) ?>" title="<?= $block->escapeHtmlAttr($block->getStoreLabel('gender')) ?>"<?php if ($block->isRequired()) : ?> class="validate-select" data-validate="{required:true}"<?php endif; ?>>
             <?php $options = $block->getGenderOptions(); ?>
-            <?php $value = $block->getGender();?>
-            <?php foreach ($options as $option):?>
-                <option value="<?= $block->escapeHtmlAttr($option->getValue()) ?>"<?php if ($option->getValue() == $value) echo ' selected="selected"' ?>><?= $block->escapeHtml(__($option->getLabel())) ?></option>
+            <?php $value = $block->getGender(); ?>
+            <?php foreach ($options as $option) : ?>
+                <option value="<?= $block->escapeHtmlAttr($option->getValue()) ?>"<?= ($option->getValue() == $value) ? ' selected="selected"' : '' ?>><?= $block->escapeHtml(__($option->getLabel())) ?></option>
             <?php endforeach;?>
         </select>
     </div>

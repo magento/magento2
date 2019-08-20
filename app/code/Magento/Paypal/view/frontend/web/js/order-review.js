@@ -6,7 +6,7 @@
 define([
     'jquery',
     'Magento_Ui/js/modal/alert',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/translate',
     'mage/mage',
     'mage/validation'

@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="DeleteCartPriceRuleByName">
+        <annotations>
+            <description>Goes to the Admin Cart Price Rules grid page. Filters the grid based on the provided Rule Name. Deletes the Price Rule via the grid.</description>
+        </annotations>
         <arguments>
             <argument name="ruleName" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
         <waitForPageLoad stepKey="waitForPriceList"/>
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{ruleName}}" stepKey="filterByName"/>
