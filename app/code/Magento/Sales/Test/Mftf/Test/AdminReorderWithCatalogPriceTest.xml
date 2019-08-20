@@ -20,6 +20,9 @@
             <group value="catalogRule"/>
         </annotations>
         <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllCatalogPriceRule" stepKey="removeAllExistingCartPriceRules"/>
             <!--Create the catalog price rule -->
             <createData entity="CatalogRuleToPercent" stepKey="createCatalogRule"/>
             <!--Create product-->
@@ -44,14 +47,13 @@
             <actionGroup ref="RemoveCatalogPriceRule" stepKey="deletePriceRule">
                 <argument name="ruleName" value="CatalogRuleToPercent.name" />
             </actionGroup>
+
             <!--Clear all filters in grid-->
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetCatalogRuleGridFilters"/>
             <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!--Open order by Id-->
         <actionGroup ref="OpenOrderById" stepKey="openOrderById">
             <argument name="orderId" value="$createGuestCart.return$"/>
