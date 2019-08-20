@@ -13,7 +13,7 @@
         <comment><![CDATA[Accept payments with a PCI-compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflow_advanced/active</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-advanced.html</comment>
+            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-advanced.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="required_settings" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">

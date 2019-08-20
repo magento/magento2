@@ -66,7 +66,7 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
@@ -103,7 +103,7 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
 
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
@@ -134,12 +134,12 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The customer email is missing. Enter and try again.
+     * @expectedExceptionMessage Required parameters are missing: Email
      */
     public function testCreateCustomerIfEmailMissed()
     {
@@ -167,7 +167,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -202,7 +202,7 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -238,7 +238,42 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameters are missing: First Name
+     */
+    public function testCreateCustomerIfNameEmpty()
+    {
+        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
+        $newFirstname = '';
+        $newLastname = 'Rowe';
+        $currentPassword = 'test123#';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            email: "{$newEmail}"
+            firstname: "{$newFirstname}"
+            lastname: "{$newLastname}"
+            password: "{$currentPassword}"
+          	is_subscribed: true
+        }
+    ) {
+        customer {
+            id
+            firstname
+            lastname
+            email
+            is_subscribed
+        }
+    }
+}
+QUERY;
+        $this->graphQlMutation($query);
     }
 
     public function tearDown()

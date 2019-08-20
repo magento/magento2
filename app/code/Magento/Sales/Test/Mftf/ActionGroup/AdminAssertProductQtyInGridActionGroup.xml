@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertProductQtyInGridActionGroup">
+        <annotations>
+            <description>Goes tot he Admin Catalog Product grid page. Filters the grid based on the provided Product SKU. Validates that the provided Product Qty is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="productSku" type="string"/>
+            <argument name="expectedQty" type="string"/>
+        </arguments>
+        
+        <!-- Assert product Qty decreased after CreditMemo -->
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="onProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openOrderGridFilters"/>
+        <waitForPageLoad stepKey="waitForFilter"/>
+        <fillField userInput="{{productSku}}"  selector="{{AdminProductGridFilterSection.skuFilter}}"  stepKey="fillOrderIdFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <see userInput="{{expectedQty}}" stepKey="assertQtyDecreased"/>
+    </actionGroup>
+</actionGroups>

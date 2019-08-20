@@ -11,6 +11,7 @@
     <test name="StorefrontSpecialPriceForDifferentTimezonesForWebsitesTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Special price"/>
             <title value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
             <description value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
             <severity value="MAJOR"/>

@@ -260,17 +260,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->error, $this->model->collectRates($request));
     }
 
-    public function testCollectRatesFail()
-    {
-        $this->scope->method('isSetFlag')
-            ->willReturn(true);
-
-        $request = new RateRequest();
-        $request->setPackageWeight(1);
-
-        $this->assertSame($this->rate, $this->model->collectRates($request));
-    }
-
     /**
      * @param string $data
      * @param array $maskFields
@@ -350,13 +339,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         /** @var RateRequest $request */
         $request = $this->helper->getObject(RateRequest::class);
-        $request->setData([
-            'orig_country' => 'USA',
-            'orig_region_code' => 'CA',
-            'orig_post_code' => 90230,
-            'orig_city' => 'Culver City',
-            'dest_country_id' => $countryCode,
-        ]);
+        $request->setData(
+            [
+                'orig_country' => 'USA',
+                'orig_region_code' => 'CA',
+                'orig_post_code' => 90230,
+                'orig_city' => 'Culver City',
+                'dest_country_id' => $countryCode,
+            ]
+        );
 
         $this->country->expects($this->at(1))
             ->method('load')
@@ -383,34 +374,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Checks a case when UPS processes request to create shipment.
-     *
-     * @return void
-     */
-    public function testRequestToShipment()
-    {
-        // the same tracking number is specified in the fixtures XML file.
-        $trackingNumber = '1Z207W886698856557';
-        $packages = $this->getPackages();
-        $request = new DataObject(['packages' => $packages]);
-        $shipmentResponse = simplexml_load_file(__DIR__ . '/../Fixtures/ShipmentConfirmResponse.xml');
-        $acceptResponse = simplexml_load_file(__DIR__ . '/../Fixtures/ShipmentAcceptResponse.xml');
-
-        $this->httpClient->method('getBody')
-            ->willReturnOnConsecutiveCalls($shipmentResponse->asXML(), $acceptResponse->asXML());
-
-        $this->logger->expects($this->atLeastOnce())
-            ->method('debug')
-            ->with($this->stringContains('<UserId>****</UserId>'));
-
-        $result = $this->model->requestToShipment($request);
-        $this->assertEmpty($result->getErrors());
-
-        $info = $result->getInfo()[0];
-        $this->assertEquals($trackingNumber, $info['tracking_number'], 'Tracking Number must match.');
-    }
-
-    /**
      * Creates mock for XML factory.
      *
      * @return ElementFactory|MockObject
@@ -434,34 +397,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             );
 
         return $xmlElFactory;
-    }
-
-    /**
-     * @return array
-     */
-    private function getPackages(): array
-    {
-        $packages = [
-            'package' => [
-                'params' => [
-                    'width' => '3',
-                    'length' => '3',
-                    'height' => '3',
-                    'dimension_units' => 'INCH',
-                    'weight_units' => 'POUND',
-                    'weight' => '0.454000000001',
-                    'customs_value' => '10.00',
-                    'container' => 'Small Express Box',
-                ],
-                'items' => [
-                    'item1' => [
-                        'name' => 'item_name',
-                    ],
-                ],
-            ],
-        ];
-
-        return $packages;
     }
 
     /**

@@ -7,6 +7,9 @@ namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 
+/**
+ * Test for Magento\Sales\Model\Order\Email\Sender\ShipmentSender class.
+ */
 class ShipmentSenderTest extends AbstractSenderTest
 {
     /**
@@ -90,7 +93,7 @@ class ShipmentSenderTest extends AbstractSenderTest
 
         $this->shipmentMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -136,7 +139,7 @@ class ShipmentSenderTest extends AbstractSenderTest
                     ]
                 );
 
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
@@ -212,7 +215,7 @@ class ShipmentSenderTest extends AbstractSenderTest
 
         $this->shipmentMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with(false);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -247,7 +250,7 @@ class ShipmentSenderTest extends AbstractSenderTest
                 ]
             );
 
-        $this->identityContainerMock->expects($this->once())
+        $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);
         $this->shipmentResourceMock->expects($this->once())

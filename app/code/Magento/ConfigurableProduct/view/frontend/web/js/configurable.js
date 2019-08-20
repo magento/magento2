@@ -12,7 +12,7 @@ define([
     'mage/translate',
     'priceUtils',
     'priceBox',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'jquery/jquery.parsequery'
 ], function ($, _, mageTemplate, $t, priceUtils) {
     'use strict';
@@ -373,10 +373,12 @@ define([
                 allowedProducts,
                 i,
                 j,
-                basePrice = parseFloat(this.options.spConfig.prices.basePrice.amount),
+                finalPrice = parseFloat(this.options.spConfig.prices.finalPrice.amount),
                 optionFinalPrice,
                 optionPriceDiff,
                 optionPrices = this.options.spConfig.optionPrices,
+                allowedOptions = [],
+                indexKey,
                 allowedProductMinPrice;
 
             this._clearSelect(element);
@@ -389,6 +391,13 @@ define([
             }
 
             if (options) {
+                for (indexKey in this.options.spConfig.index) {
+                    /* eslint-disable max-depth */
+                    if (this.options.spConfig.index.hasOwnProperty(indexKey)) {
+                        allowedOptions = allowedOptions.concat(_.values(this.options.spConfig.index[indexKey]));
+                    }
+                }
+
                 for (i = 0; i < options.length; i++) {
                     allowedProducts = [];
                     optionPriceDiff = 0;
@@ -410,7 +419,7 @@ define([
                             typeof optionPrices[allowedProducts[0]] !== 'undefined') {
                             allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
                             optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
-                            optionPriceDiff = optionFinalPrice - basePrice;
+                            optionPriceDiff = optionFinalPrice - finalPrice;
 
                             if (optionPriceDiff !== 0) {
                                 options[i].label = options[i].label + ' ' + priceUtils.formatPrice(
@@ -421,12 +430,16 @@ define([
                         }
                     }
 
-                    if (allowedProducts.length > 0) {
+                    if (allowedProducts.length > 0 || _.include(allowedOptions, options[i].id)) {
                         options[i].allowedProducts = allowedProducts;
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
 
                         if (typeof options[i].price !== 'undefined') {
                             element.options[index].setAttribute('price', options[i].price);
+                        }
+
+                        if (allowedProducts.length === 0) {
+                            element.options[index].disabled = true;
                         }
 
                         element.options[index].config = options[i];

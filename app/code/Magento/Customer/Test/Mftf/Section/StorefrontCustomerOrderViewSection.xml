@@ -16,5 +16,7 @@
         <element name="printOrderLink" type="text" selector="a.action.print" timeout="30"/>
         <element name="shippingAddress" type="text" selector=".box.box-order-shipping-address"/>
         <element name="billingAddress" type="text" selector=".box.box-order-billing-address"/>
+        <element name="orderStatusInGrid" type="text" selector="//td[contains(.,'{{orderId}}')]/../td[contains(.,'{{status}}')]" parameterized="true"/>
+        <element name="pager" type="block" selector=".pager"/>
     </section>
 </sections>

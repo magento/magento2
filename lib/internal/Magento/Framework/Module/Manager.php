@@ -4,20 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 /**
  * Module statuses manager
  */
 namespace Magento\Framework\Module;
 
 /**
- * Module status manager.
- *
- * Usage:
- * ```php
- *  $manager->isEnabled('Vendor_Module');
- * ```
+ * @inheritdoc
  */
-class Manager
+class Manager implements ModuleManagerInterface
 {
     /**
      * @var Output\ConfigInterface
@@ -52,12 +49,9 @@ class Manager
     }
 
     /**
-     * Whether a module is enabled in the configuration or not
-     *
-     * @param string $moduleName Fully-qualified module name
-     * @return boolean
+     * @inheritdoc
      */
-    public function isEnabled($moduleName)
+    public function isEnabled(string $moduleName): bool
     {
         return $this->moduleList->has($moduleName);
     }

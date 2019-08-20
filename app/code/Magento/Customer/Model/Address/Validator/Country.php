@@ -9,6 +9,8 @@ use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\ValidatorInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -16,6 +18,11 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Country implements ValidatorInterface
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
     /**
      * @var Data
      */
@@ -29,13 +36,18 @@ class Country implements ValidatorInterface
     /**
      * @param Data $directoryData
      * @param AllowedCountries $allowedCountriesReader
+     * @param Escaper|null $escaper
      */
     public function __construct(
         Data $directoryData,
-        AllowedCountries $allowedCountriesReader
+        AllowedCountries $allowedCountriesReader,
+        Escaper $escaper = null
     ) {
         $this->directoryData = $directoryData;
         $this->allowedCountriesReader = $allowedCountriesReader;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
     }
 
     /**
@@ -67,7 +79,7 @@ class Country implements ValidatorInterface
             //Checking if such country exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
-                ['fieldName' => 'countryId', 'value' => htmlspecialchars($countryId)]
+                ['fieldName' => 'countryId', 'value' => $this->escaper->escapeHtml($countryId)]
             );
         }
 
@@ -104,7 +116,7 @@ class Country implements ValidatorInterface
             //If a region is selected then checking if it exists.
             $errors[] = __(
                 'Invalid value of "%value" provided for the %fieldName field.',
-                ['fieldName' => 'regionId', 'value' => htmlspecialchars($regionId)]
+                ['fieldName' => 'regionId', 'value' => $this->escaper->escapeHtml($regionId)]
             );
         }
 

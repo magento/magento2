@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Base class for all blocks.
@@ -188,12 +187,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
-     * @param LockGuardedCacheLoader|null $lockQuery
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
-        array $data = [],
-        LockGuardedCacheLoader $lockQuery = null
+        array $data = []
     ) {
         $this->_request = $context->getRequest();
         $this->_layout = $context->getLayout();
@@ -212,12 +209,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->filterManager = $context->getFilterManager();
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
+        $this->lockQuery = $context->getLockGuardedCacheLoader();
         if (isset($data['jsLayout'])) {
             $this->jsLayout = $data['jsLayout'];
             unset($data['jsLayout']);
         }
-        $this->lockQuery = $lockQuery
-            ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
         parent::__construct($data);
         $this->_construct();
     }
@@ -680,10 +676,13 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
                 'html' => $html,
             ]
         );
-        $this->_eventManager->dispatch('view_block_abstract_to_html_after', [
-            'block' => $this,
-            'transport' => $transportObject
-        ]);
+        $this->_eventManager->dispatch(
+            'view_block_abstract_to_html_after',
+            [
+                'block' => $this,
+                'transport' => $transportObject
+            ]
+        );
         $html = $transportObject->getHtml();
 
         return $html;
@@ -726,7 +725,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function getUiId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
-        return ' data-ui-id="' . $this->getJsId($arg1, $arg2, $arg3, $arg4, $arg5) . '" ';
+        return ' data-ui-id="' . $this->escapeHtmlAttr($this->getJsId($arg1, $arg2, $arg3, $arg4, $arg5)) . '" ';
     }
 
     /**
@@ -973,8 +972,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
      *
-     * @param  string $data
-     * @param  bool $addSlashes
+     * @param string $data
+     * @param bool $addSlashes
      * @return string
      * @deprecated 100.2.0
      */
