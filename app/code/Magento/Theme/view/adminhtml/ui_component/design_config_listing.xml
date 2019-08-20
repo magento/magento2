@@ -78,7 +78,7 @@
                 <label translate="true">Store View</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\EditAction">
+        <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\EditAction" sortOrder="50">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="editUrlPath" xsi:type="string">theme/design_config/edit</item>

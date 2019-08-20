@@ -58,7 +58,7 @@
 
                         <?php if ($block->canDisplayItemQty()) : ?>
                             <td class="col-qty">
-                                <?= (int) $block->getItemQty($_item) ?>
+                                <?= (float) $block->getItemQty($_item) ?>
                             </td>
                         <?php endif; ?>
 
@@ -105,7 +105,7 @@
                                            type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[<?= $block->escapeHtmlAttr($block->getSidebarStorageAction()) ?>][<?= (int) $block->getIdentifierId($_item) ?>]"
-                                           value="<?= $block->canDisplayItemQty() ? (int) $_item->getQty() : 1 ?>"
+                                           value="<?= $block->canDisplayItemQty() ? (float) $_item->getQty() : 1 ?>"
                                            title="<?= $block->escapeHtml(__('Add To Order')) ?>"/>
                                     <label class="admin__field-label"
                                            for="sidebar-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getIdentifierId($_item) ?>">
