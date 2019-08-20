@@ -51,6 +51,7 @@
             <argument name="actionsAggregator" type="string" defaultValue="ANY"/>
             <argument name="actionsValue" type="string" defaultValue="FALSE"/>
             <argument name="childAttribute" type="string" defaultValue="Category"/>
+            <argument name="actionOperator" type="string" defaultValue="is"/>
             <argument name="actionValue" type="string"/>
         </arguments>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickOnActionTab"/>
@@ -61,11 +62,14 @@
         <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="selectActionConditions"/>
         <waitForPageLoad stepKey="waitForDropDownOpened"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="{{childAttribute}}" stepKey="selectAttribute"/>
-        <waitForPageLoad stepKey="waitForOperatorOpened"/>
+        <waitForPageLoad stepKey="waitForAttributeSelected"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('is')}}" stepKey="clickOnOperator"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.operator}}" userInput="{{actionOperator}}" stepKey="selectOperator"/>
         <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" stepKey="clickToChooseOption3"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.actionValue}}" userInput="{{actionValue}}" stepKey="fillActionValue"/>
         <click selector="{{AdminCartPriceRulesFormSection.applyAction}}" stepKey="applyAction"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
