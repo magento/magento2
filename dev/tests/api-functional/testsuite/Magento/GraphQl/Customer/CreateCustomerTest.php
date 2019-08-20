@@ -241,7 +241,7 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-     /**
+    /**
      * @expectedException \Exception
      * @expectedExceptionMessage Required parameters are missing: First Name
      */
