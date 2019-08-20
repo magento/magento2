@@ -63,4 +63,8 @@
         <data key="attribute_code">description</data>
         <data key="value">&lt;p&gt;dfj_full&lt;/p&gt;</data>
     </entity>
+    <entity name="ProductShortDescriptionAdvancedSearchADC123" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">&lt;p&gt;dfj_short&lt;/p&gt;</data>
+    </entity>
 </entities>
