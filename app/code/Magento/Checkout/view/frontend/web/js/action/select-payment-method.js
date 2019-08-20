@@ -12,7 +12,7 @@ define([
     '../model/quote',
     '../model/full-screen-loader',
     '../model/url-builder',
-    'Magento_Customer/js/model/customer',
+    'Magento_Customer/js/model/customer'
 ], function (storage, getTotalsAction, quote, fullScreenLoader, urlBuilder, customer) {
     'use strict';
 
