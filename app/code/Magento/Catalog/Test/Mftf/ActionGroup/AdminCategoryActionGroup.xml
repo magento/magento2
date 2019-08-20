@@ -139,7 +139,7 @@
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
         <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryEntity.name)}}" stepKey="dontSeeCategoryInTree"/>
     </actionGroup>
-    <actionGroup name="deleteCategoryByName" extends="DeleteCategory">
+    <actionGroup name="AdminDeleteCategoryByName" extends="DeleteCategory">
         <arguments>
             <argument name="categoryName" type="string" defaultValue="category1"/>
         </arguments>

@@ -10,6 +10,7 @@
     <test name="AdminCategoryWithRestrictedUrlKeyNotCreatedTest">
         <annotations>
             <features value="CatalogUrlRewrite"/>
+            <stoty value="Subcategory 'liquid-hand-soap' is not opened in category 'soap'"/>
             <title value="Category with restricted Url Key cannot be created"/>
             <description value="Category with restricted Url Key cannot be created"/>
             <severity value="MAJOR"/>
@@ -23,16 +24,16 @@
         <after>
             <!--Delete created categories-->
             <comment userInput="Delete created categories" stepKey="commentDeleteCreatedCategories"/>
-            <actionGroup ref="deleteCategoryByName" stepKey="deleteAdminCategory">
+            <actionGroup ref="AdminDeleteCategoryByName" stepKey="deleteAdminCategory">
                 <argument name="categoryName" value="admin"/>
             </actionGroup>
-            <actionGroup ref="deleteCategoryByName" stepKey="deleteSoapCategory">
+            <actionGroup ref="AdminDeleteCategoryByName" stepKey="deleteSoapCategory">
                 <argument name="categoryName" value="soap"/>
             </actionGroup>
-            <actionGroup ref="deleteCategoryByName" stepKey="deleteRestCategory">
+            <actionGroup ref="AdminDeleteCategoryByName" stepKey="deleteRestCategory">
                 <argument name="categoryName" value="rest"/>
             </actionGroup>
-            <actionGroup ref="deleteCategoryByName" stepKey="deleteGraphQlCategory">
+            <actionGroup ref="AdminDeleteCategoryByName" stepKey="deleteGraphQlCategory">
                 <argument name="categoryName" value="graphql"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
