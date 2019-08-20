@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
-            <argument name="short_description" value="dfj_short"/>
+            <argument name="short_description" value="abc_short"/>
         </actionGroup>
     </test>
 </tests>
