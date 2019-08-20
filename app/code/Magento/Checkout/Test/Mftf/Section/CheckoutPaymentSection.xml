@@ -60,6 +60,5 @@
         <element name="billingAddressSelectShared" type="select" selector=".checkout-billing-address select[name='billing_address_id']"/>
         <element name="discount" type="block" selector="tr.totals.discount"/>
         <element name="discountPrice" type="text" selector=".discount .price"/>
-        <element name="changeAddressButton" type="button" selector="(//button[contains(@class,'action action-additional')][contains(@data-bind,'openAddressSelection')])[{{index}}]" parameterized="true"/>
     </section>
 </sections>

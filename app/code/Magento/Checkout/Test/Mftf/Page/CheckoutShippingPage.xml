@@ -12,5 +12,6 @@
         <section name="CheckoutShippingGuestInfoSection"/>
         <section name="CheckoutShippingSection"/>
         <section name="StorefrontCheckoutAddressPopupSection"/>
+        <section name="StorefrontCheckoutAddressSection"/>
     </page>
 </pages>

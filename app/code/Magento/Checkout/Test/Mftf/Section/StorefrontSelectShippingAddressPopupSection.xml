@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontSelectBillingAddressPopupSection">
+        <element name="shippingAddressSearch" type="input" selector="//input[contains(@class,'admin__control-text') and contains(@class, 'admin__action-multiselect-search')]"/>
+        <element name="selectButton" type="button" selector="//button[contains(@class,'action-primary') and contains(@class, 'action-select-billing-item')]"/>
+        <element name="shippingAddressSearchParametrised" type="input" selector="(//input[contains(@class,'admin__control-text') and contains(@class, 'admin__action-multiselect-search')])[{{index}}]" parameterized="true"/>
+    </section>
+</sections>
