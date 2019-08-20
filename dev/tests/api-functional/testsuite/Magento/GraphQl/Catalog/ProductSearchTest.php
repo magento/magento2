@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
+use Magento\Framework\Config\Data;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -21,6 +22,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -37,6 +39,7 @@ class ProductSearchTest extends GraphQlAbstract
      */
     public function testFilterLn()
     {
+        CacheCleaner::cleanAll();
         $query = <<<QUERY
 {
     products (
@@ -99,6 +102,7 @@ QUERY;
      */
     public function testAdvancedSearchByOneCustomAttribute()
     {
+        CacheCleaner::cleanAll();
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = $this->getQueryProductsWithCustomAttribute($attributeCode, $optionValue);
@@ -174,6 +178,7 @@ QUERY;
      */
     public function testFullTextSearchForProductAndFilterByCustomAttribute()
     {
+        CacheCleaner::cleanAll();
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
 
         $query = <<<QUERY
@@ -272,7 +277,7 @@ QUERY;
     }
 
     /**
-     *  Filter by mu;ltiple attributes like category_id and  custom attribute
+     *  Filter by category_id and custom attribute
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -362,8 +367,11 @@ QUERY;
             ) ;
         }
     }
-
-    private function getQueryProductsWithCustomAttribute($attributeCode, $optionValue)
+    /**
+     *
+     * @return string
+     */
+    private function getQueryProductsWithCustomAttribute($attributeCode, $optionValue) : string
     {
         return <<<QUERY
 {
@@ -401,7 +409,6 @@ QUERY;
     } 
 }
 QUERY;
-
     }
 
     /**
@@ -411,7 +418,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testLayeredNavigationForConfigurableProductWithOutOfStockOption()
+    public function testLayeredNavigationWithConfigurableChildrenOutOfStock()
     {
         $attributeCode = 'test_configurable';
         /** @var \Magento\Eav\Model\Config $eavConfig */
@@ -964,7 +971,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      * @return void
      */
-    public function testFilterProductsByCategoryIds()
+    public function testFilterProductsBySingleCategoryId()
     {
         $queryCategoryId = 333;
         $query
