@@ -321,12 +321,14 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn($groupAssetsOne);
         $groupMockOne->expects($this->any())
             ->method('getProperty')
-            ->willReturnMap([
-                [GroupedCollection::PROPERTY_CAN_MERGE, true],
-                [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupOne['type']],
-                ['attributes', $groupOne['attributes']],
-                ['ie_condition', $groupOne['condition']],
-            ]);
+            ->willReturnMap(
+                [
+                    [GroupedCollection::PROPERTY_CAN_MERGE, true],
+                    [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupOne['type']],
+                    ['attributes', $groupOne['attributes']],
+                    ['ie_condition', $groupOne['condition']],
+                ]
+            );
 
         $assetMockTwo = $this->createMock(\Magento\Framework\View\Asset\AssetInterface::class);
         $assetMockTwo->expects($this->once())
@@ -344,12 +346,14 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn($groupAssetsTwo);
         $groupMockTwo->expects($this->any())
             ->method('getProperty')
-            ->willReturnMap([
-                [GroupedCollection::PROPERTY_CAN_MERGE, true],
-                [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupTwo['type']],
-                ['attributes', $groupTwo['attributes']],
-                ['ie_condition', $groupTwo['condition']],
-            ]);
+            ->willReturnMap(
+                [
+                    [GroupedCollection::PROPERTY_CAN_MERGE, true],
+                    [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupTwo['type']],
+                    ['attributes', $groupTwo['attributes']],
+                    ['ie_condition', $groupTwo['condition']],
+                ]
+            );
 
         $this->pageConfigMock->expects($this->once())
             ->method('getAssetCollection')
