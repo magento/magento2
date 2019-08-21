@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminTranslateElementActionGroup">
+        <arguments>
+            <argument name="elementSelector" type="string"/>
+            <argument name="translateText" type="string"/>
+        </arguments>
+        
+        <executeJS function="jQuery('{{elementSelector}}').mousemove()" stepKey="moveMouseOverSelector"/>
+        <executeJS function="jQuery('{{InlineTranslationModeSection.bookIcon}}').click()" stepKey="clickBookIcon"/>
+        <waitForPageLoad stepKey="waitForLoadWindow"/>
+
+        <seeElement selector="{{InlineTranslationModeSection.popUpTranslate}}" stepKey="seeTranslateForm"/>
+        <clearField selector="{{InlineTranslationModeSection.inputCustomTranslate}}" stepKey="clearField"/>
+        <fillField userInput="{{translateText}}" selector="{{InlineTranslationModeSection.inputCustomTranslate}}" stepKey="addTranslate"/>
+        <click selector="{{InlineTranslationModeSection.buttonSubmit}}" stepKey="clickSubmitButton"/>
+    </actionGroup>
+</actionGroups>

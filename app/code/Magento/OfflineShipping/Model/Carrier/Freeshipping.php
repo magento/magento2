@@ -144,6 +144,6 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
      */
     public function getAllowedMethods()
     {
-        return ['freeshipping' => $this->getConfigData('name')];
+        return [$this->_code => $this->getConfigData('name')];
     }
 }

@@ -7,7 +7,7 @@ define([
     'jquery',
     'mage/template',
     'Magento_Ui/js/modal/alert',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/translate'
 ], function ($, mageTemplate, alert) {
     'use strict';

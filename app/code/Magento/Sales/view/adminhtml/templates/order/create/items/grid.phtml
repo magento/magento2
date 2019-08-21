@@ -115,7 +115,7 @@
                         <td class="col-qty">
                             <input name="item[<?= (int) $_item->getId() ?>][qty]"
                                    class="input-text item-qty admin__control-text"
-                                   value="<?= (int) $_item->getQty() ?>"
+                                   value="<?= (float) $_item->getQty() ?>"
                                    maxlength="12" />
                         </td>
                         <td class="col-subtotal col-price">
