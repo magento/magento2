@@ -364,15 +364,13 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
             );
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
             if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
-                $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
-                // @codingStandardsIgnoreStart
-                $this->messageManager->addSuccessMessage(
-                    __(
-                        'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
-                        $email
-                    )
+                $this->messageManager->addComplexSuccessMessage(
+                    'confirmAccountSuccessMessage',
+                    [
+                        'url' => $this->customerUrl->getEmailConfirmationUrl($customer->getEmail()),
+                    ]
                 );
-                // @codingStandardsIgnoreEnd
+
                 $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
                 $resultRedirect->setUrl($this->_redirect->success($url));
             } else {
