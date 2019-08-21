@@ -38,9 +38,16 @@ define([
         storage.put(
             serviceUrl,
             JSON.stringify(payload)
+        ).fail(
+            function (error) {
+                console.log(JSON.stringify(error));
+            }
         ).success(function () {
             getTotalsAction([]);
-            fullScreenLoader.stopLoader();
-        });
+        }).always(
+            function () {
+                fullScreenLoader.stopLoader();
+            }
+        );
     };
 });
