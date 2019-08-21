@@ -118,9 +118,11 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
 
     /**
      * Workaround for https://bugs.php.net/bug.php?id=72286
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public function tearDownAfterClass()
+    public static function tearDownAfterClass()
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         if (version_compare(phpversion(), '7') == -1) {
             $closeConnection = new \ReflectionMethod(\Magento\Amqp\Model\Config::class, 'closeConnection');
             $closeConnection->setAccessible(true);
