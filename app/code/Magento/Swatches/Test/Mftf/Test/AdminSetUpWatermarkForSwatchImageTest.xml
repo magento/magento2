@@ -44,14 +44,14 @@
         <waitForPageLoad stepKey="waitForWatermarksPage"/>
         <!-- See Base, Thumbnail, Small image types are displayed -->
         <comment userInput="See Base, Thumbnail, Small image types are displayed" stepKey="commentSeeImageTypes"/>
-        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkBase}}" stepKey="seeElementBaseWatermark"/>
-        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkThumbnail}}" stepKey="waitForThumbnailVisible" />
-        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkThumbnail}}" stepKey="seeElementThumbnailWatermark"/>
-        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkSmall}}" stepKey="waitForSmallVisible" />
-        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkSmall}}" stepKey="seeElementSmallWatermark"/>
+        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Base')}}" stepKey="seeElementBaseWatermark"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkType('Thumbnail')}}" stepKey="waitForThumbnailVisible" />
+        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Thumbnail')}}" stepKey="seeElementThumbnailWatermark"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkType('Small')}}" stepKey="waitForSmallVisible" />
+        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Small')}}" stepKey="seeElementSmallWatermark"/>
         <!-- See Swatch Image type is absent -->
         <comment userInput="See Swatch Image type is absent" stepKey="commentSeeTypeAbsent"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <dontSeeElement selector="{{AdminDesignConfigSection.imageWatermarkSwatchImage}}" stepKey="dontSeeImageWatermarkSwatchImage"/>
+        <dontSeeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Swatch')}}" stepKey="dontSeeImageWatermarkSwatchImage"/>
     </test>
 </tests>

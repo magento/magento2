@@ -31,9 +31,6 @@
         <element name="storesArrow" type="button" selector="#ZmF2aWNvbi9zdG9yZXM- > .jstree-icon" />
         <element name="checkIfStoresArrowExpand" type="button" selector="//li[@id='ZmF2aWNvbi9zdG9yZXM-' and contains(@class,'jstree-closed')]" />
         <element name="storeLink" type="button" selector="#ZmF2aWNvbi9zdG9yZXMvMQ-- > a"/>
-        <element name="imageWatermarkBase" type="text" selector="//span[contains(@data-bind, 'label') and contains(text(), 'Base')]"/>
-        <element name="imageWatermarkThumbnail" type="text" selector="//span[contains(@data-bind, 'label') and contains(text(), 'Thumbnail')]"/>
-        <element name="imageWatermarkSmall" type="text" selector="//span[contains(@data-bind, 'label') and contains(text(), 'Small')]"/>
-        <element name="imageWatermarkSwatchImage" type="text" selector="//span[contains(@data-bind, 'label') and contains(text(), 'Swatch Image')]"/>
+        <element name="imageWatermarkType" type="text" selector="//div[contains(@class, 'fieldset-wrapper-title')]//span[contains(text(), '{{watermarkType}}')]" parameterized="true"/>
     </section>
 </sections>
