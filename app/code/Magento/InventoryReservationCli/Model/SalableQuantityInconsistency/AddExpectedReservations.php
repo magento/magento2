@@ -68,6 +68,9 @@ class AddExpectedReservations
             $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
 
             foreach ($order->getItems() as $item) {
+                if ($item->getHasChildren()) {
+                    continue;
+                }
                 $reservation = $this->reservationBuilder
                     ->setSku($item->getSku())
                     ->setQuantity((float)$item->getQtyOrdered())
