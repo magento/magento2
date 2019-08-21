@@ -209,20 +209,20 @@ QUERY;
 
         foreach($fieldsArray as $field){
             if ( $field['isDeprecated'] === true){
-                $typeDeprecatedReason = $field['deprecationReason'];
+                $typeDeprecatedReason [] = $field['deprecationReason'];
             }
        }
        $this->assertNotEmpty($typeDeprecatedReason);
-       $this->assertEquals('Deprecated url_path test', $typeDeprecatedReason);
+       $this->assertContains('Deprecated url_path test', $typeDeprecatedReason);
 
         foreach($enumValuesArray as $enumValue){
             if ( $enumValue['isDeprecated'] === true){
-                $enumValueDeprecatedReason = $enumValue['deprecationReason'];
+                $enumValueDeprecatedReason [] = $enumValue['deprecationReason'];
             }
         }
 
         $this->assertNotEmpty($enumValueDeprecatedReason);
-        $this->assertEquals('Deprecated SortEnum Value test',$enumValueDeprecatedReason);
+        $this->assertContains('Deprecated SortEnum Value test',$enumValueDeprecatedReason);
 
     }
 }
