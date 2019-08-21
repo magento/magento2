@@ -64,6 +64,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $this->newsletterConfig = $this->createMock(\Magento\Newsletter\Model\Config::class);
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
+
         $this->_block = new \Magento\Customer\Block\Form\Register(
             $context,
             $this->directoryHelperMock,
@@ -296,6 +297,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($isNewsletterEnabled)
         );
+
         $this->newsletterConfig->expects(
             $this->any()
         )->method(
@@ -303,6 +305,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($isNewsletterActive)
         );
+
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 

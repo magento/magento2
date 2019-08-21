@@ -88,17 +88,21 @@ class PredispatchNewsletterObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getResponse', 'getData', 'setRedirect'])
             ->getMockForAbstractClass();
+
         $this->newsletterConfig->expects($this->once())
             ->method('isActive')
             ->with(ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
+
         $observerMock->expects($this->never())
             ->method('getData')
             ->with('controller_action')
             ->willReturnSelf();
+
         $observerMock->expects($this->never())
             ->method('getResponse')
             ->willReturnSelf();
+
         $this->assertNull($this->mockObject->execute($observerMock));
     }
 
@@ -111,27 +115,34 @@ class PredispatchNewsletterObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getControllerAction', 'getResponse'])
             ->getMockForAbstractClass();
+
         $this->newsletterConfig->expects($this->once())
             ->method('isActive')
             ->with(ScopeInterface::SCOPE_STORE)
             ->willReturn(false);
+
         $expectedRedirectUrl = 'https://test.com/index';
         $this->configMock->expects($this->once())
             ->method('getValue')
             ->with('web/default/no_route', ScopeInterface::SCOPE_STORE)
             ->willReturn($expectedRedirectUrl);
+
         $this->urlMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($expectedRedirectUrl);
+
         $observerMock->expects($this->once())
             ->method('getControllerAction')
             ->willReturnSelf();
+
         $observerMock->expects($this->once())
             ->method('getResponse')
             ->willReturn($this->responseMock);
+
         $this->responseMock->expects($this->once())
             ->method('setRedirect')
             ->with($expectedRedirectUrl);
+
         $this->assertNull($this->mockObject->execute($observerMock));
     }
 }
