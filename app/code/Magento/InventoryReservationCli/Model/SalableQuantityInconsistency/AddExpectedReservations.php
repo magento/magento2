@@ -57,7 +57,8 @@ class AddExpectedReservations
     }
 
     /**
-     * Add expected reservations by current incomplete orders
+     * Add expected reservations by current incomplete orders.
+     *
      * @param Collector $collector
      * @throws ValidationException
      */
