@@ -14,6 +14,8 @@ use Magento\InventoryCatalog\Model\ResourceModel\AddStockStatusToSelect;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\Website;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Adapt adding stock status to select for multi stocks.
@@ -31,15 +33,23 @@ class AdaptAddStockStatusToSelectPlugin
     private $addStockStatusToSelect;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param StockResolverInterface $stockResolver
      * @param AddStockStatusToSelect $addStockStatusToSelect
      */
     public function __construct(
         StockResolverInterface $stockResolver,
-        AddStockStatusToSelect $addStockStatusToSelect
+        AddStockStatusToSelect $addStockStatusToSelect,
+        DefaultStockProviderInterface $defaultStockProvider = null
     ) {
         $this->stockResolver = $stockResolver;
         $this->addStockStatusToSelect = $addStockStatusToSelect;
+        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()
+            ->get(DefaultStockProviderInterface::class);
     }
 
     /**
@@ -64,8 +74,12 @@ class AdaptAddStockStatusToSelectPlugin
 
         $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = (int)$stock->getStockId();
-
-        $this->addStockStatusToSelect->execute($select, $stockId);
+        if ($this->defaultStockProvider->getId() === $stockId) {
+            $proceed($select, $website);
+        }
+        else {
+            $this->addStockStatusToSelect->execute($select, $stockId);
+        }
 
         return $stockStatus;
     }
