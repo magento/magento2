@@ -5,11 +5,16 @@
  * See COPYING.txt for license details.
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertProductPriceOnProductPageActionGroup">
+        <annotations>
+            <description>Validate that the provided Product Price is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="productPrice" type="string"/>
         </arguments>
-        <see selector="{{StorefrontProductInfoMainSection.price}}" userInput="{{productPrice}}" stepKey="seeProductPrice" />
+
+        <see selector="{{StorefrontProductInfoMainSection.price}}" userInput="{{productPrice}}" stepKey="seeProductPrice"/>
     </actionGroup>
 </actionGroups>

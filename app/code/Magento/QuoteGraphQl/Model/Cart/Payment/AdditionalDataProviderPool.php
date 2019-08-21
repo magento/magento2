@@ -29,14 +29,14 @@ class AdditionalDataProviderPool
      * Return additional data for the payment method
      *
      * @param string $methodCode
-     * @param array $args
+     * @param array $data
      * @return array
      */
-    public function getData(string $methodCode, array $args): array
+    public function getData(string $methodCode, array $data): array
     {
         $additionalData = [];
         if (isset($this->dataProviders[$methodCode])) {
-            $additionalData = $this->dataProviders[$methodCode]->getData($args);
+            $additionalData = $this->dataProviders[$methodCode]->getData($data);
         }
 
         return $additionalData;

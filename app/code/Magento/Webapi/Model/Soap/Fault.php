@@ -8,6 +8,8 @@
 namespace Magento\Webapi\Model\Soap;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Webapi Fault Model for Soap.
@@ -43,7 +45,7 @@ class Fault
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -116,7 +118,7 @@ class Fault
      * @param \Magento\Framework\Webapi\Exception $exception
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param State $appState
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -124,7 +126,7 @@ class Fault
         \Magento\Framework\Webapi\Exception $exception,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         State $appState,
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
         $this->_soapFaultCode = $exception->getOriginator();
         $this->_parameters = $exception->getDetails();
@@ -135,8 +137,8 @@ class Fault
         $this->_soapServer = $soapServer;
         $this->_localeResolver = $localeResolver;
         $this->appState = $appState;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 
