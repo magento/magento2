@@ -102,7 +102,7 @@ class PageActions extends Column
                         'post' => true,
                     ];
                 }
-                if (isset($item['identifier'])/* && $isActive*/) {
+                if (isset($item['identifier']) && $isActive) {
                     $item[$name]['preview'] = [
                         'href' => $this->scopeUrlBuilder->getUrl(
                             $item['identifier'],
