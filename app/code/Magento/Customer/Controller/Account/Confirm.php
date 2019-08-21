@@ -151,7 +151,9 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
             $customerId = $this->getRequest()->getParam('id', false);
             $key = $this->getRequest()->getParam('key', false);
             if (empty($customerId) || empty($key)) {
-                throw new \Exception(__('Bad request.'));
+                $this->messageManager->addErrorMessage(__('Bad request.'));
+                $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
+                return $resultRedirect->setUrl($this->_redirect->error($url));
             }
 
             // log in and send greeting email

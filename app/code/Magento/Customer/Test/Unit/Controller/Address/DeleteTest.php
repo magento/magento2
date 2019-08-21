@@ -183,7 +183,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->willReturn(34);
         $exception = new \Exception('Exception');
         $this->messageManager->expects($this->once())
-            ->method('addErrorMessage')
+            ->method('addComplexErrorMessage')
             ->with(__('We can\'t delete the address right now.'))
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())

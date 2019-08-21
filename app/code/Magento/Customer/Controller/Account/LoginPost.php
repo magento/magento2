@@ -26,6 +26,7 @@ use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
 
 /**
+ * Class LoginPost
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface

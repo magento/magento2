@@ -128,10 +128,12 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
 
         $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
-            return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
-                'error' => true,
-            ]);
+            return $resultJson->setData(
+                [
+                    'messages' => [__('Please correct the data sent.')],
+                    'error' => true,
+                ]
+            );
         }
 
         foreach (array_keys($postItems) as $customerId) {
@@ -147,10 +149,12 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             $this->getEmailNotification()->credentialsChanged($this->getCustomer(), $currentCustomer->getEmail());
         }
 
-        return $resultJson->setData([
-            'messages' => $this->getErrorMessages(),
-            'error' => $this->isErrorExists()
-        ]);
+        return $resultJson->setData(
+            [
+                'messages' => $this->getErrorMessages(),
+                'error' => $this->isErrorExists()
+            ]
+        );
     }
 
     /**

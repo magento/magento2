@@ -175,7 +175,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('customer/group')
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addErrorMessage')
+            ->method('addError')
             ->with('Exception');
         $this->dataObjectProcessorMock->expects($this->once())
             ->method('buildOutputDataArray')

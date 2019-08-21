@@ -210,9 +210,11 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomerAddress',
-            ])
+            ->setMethods(
+                [
+                    'getCustomerAddress',
+                ]
+            )
             ->getMock();
         $observer->expects($this->once())
             ->method('getCustomerAddress')
@@ -225,10 +227,12 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->registry->expects($this->any())
             ->method('registry')
-            ->willReturnMap([
-                [AfterAddressSaveObserver::VIV_PROCESSED_FLAG, $processedFlag],
-                [BeforeAddressSaveObserver::VIV_CURRENTLY_SAVED_ADDRESS, $registeredAddressId],
-            ]);
+            ->willReturnMap(
+                [
+                    [AfterAddressSaveObserver::VIV_PROCESSED_FLAG, $processedFlag],
+                    [BeforeAddressSaveObserver::VIV_CURRENTLY_SAVED_ADDRESS, $registeredAddressId],
+                ]
+            );
 
         $this->helperAddress->expects($this->any())
             ->method('getTaxCalculationAddressType')
@@ -266,11 +270,13 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomer',
-                'getForceProcess',
-                'getVatId',
-            ])
+            ->setMethods(
+                [
+                    'getCustomer',
+                    'getForceProcess',
+                    'getVatId',
+                ]
+            )
             ->getMock();
         $address->expects($this->any())
             ->method('getCustomer')
@@ -284,9 +290,11 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomerAddress',
-            ])
+            ->setMethods(
+                [
+                    'getCustomerAddress',
+                ]
+            )
             ->getMock();
         $observer->expects($this->once())
             ->method('getCustomerAddress')
@@ -303,10 +311,12 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
         $this->registry->expects($this->any())
             ->method('register')
-            ->willReturnMap([
-                [AfterAddressSaveObserver::VIV_PROCESSED_FLAG, true, false, $this->registry],
-                [AfterAddressSaveObserver::VIV_PROCESSED_FLAG, false, true, $this->registry],
-            ]);
+            ->willReturnMap(
+                [
+                    [AfterAddressSaveObserver::VIV_PROCESSED_FLAG, true, false, $this->registry],
+                    [AfterAddressSaveObserver::VIV_PROCESSED_FLAG, false, true, $this->registry],
+                ]
+            );
 
         $this->model->execute($observer);
     }
@@ -336,13 +346,15 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getStore',
-                'getDisableAutoGroupChange',
-                'getGroupId',
-                'setGroupId',
-                'save',
-            ])
+            ->setMethods(
+                [
+                    'getStore',
+                    'getDisableAutoGroupChange',
+                    'getGroupId',
+                    'setGroupId',
+                    'save',
+                ]
+            )
             ->getMock();
         $customer->expects($this->exactly(2))
             ->method('getStore')
@@ -363,12 +375,14 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomer',
-                'getForceProcess',
-                'getVatId',
-                'getCountry',
-            ])
+            ->setMethods(
+                [
+                    'getCustomer',
+                    'getForceProcess',
+                    'getVatId',
+                    'getCountry',
+                ]
+            )
             ->getMock();
         $address->expects($this->once())
             ->method('getCustomer')
@@ -385,9 +399,11 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomerAddress',
-            ])
+            ->setMethods(
+                [
+                    'getCustomerAddress',
+                ]
+            )
             ->getMock();
         $observer->expects($this->once())
             ->method('getCustomerAddress')
@@ -457,10 +473,12 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $validationResult = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getIsValid',
-                'getRequestSuccess',
-            ])
+            ->setMethods(
+                [
+                    'getIsValid',
+                    'getRequestSuccess',
+                ]
+            )
             ->getMock();
         $validationResult->expects($this->any())
             ->method('getIsValid')
@@ -471,13 +489,15 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getStore',
-                'getDisableAutoGroupChange',
-                'getGroupId',
-                'setGroupId',
-                'save',
-            ])
+            ->setMethods(
+                [
+                    'getStore',
+                    'getDisableAutoGroupChange',
+                    'getGroupId',
+                    'setGroupId',
+                    'save',
+                ]
+            )
             ->getMock();
         $customer->expects($this->exactly(2))
             ->method('getStore')
@@ -503,14 +523,16 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomer',
-                'getForceProcess',
-                'getVatId',
-                'getCountryId',
-                'getCountry',
-                'setVatValidationResult',
-            ])
+            ->setMethods(
+                [
+                    'getCustomer',
+                    'getForceProcess',
+                    'getVatId',
+                    'getCountryId',
+                    'getCountry',
+                    'setVatValidationResult',
+                ]
+            )
             ->getMock();
         $address->expects($this->any())
             ->method('getCustomer')
@@ -534,9 +556,11 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomerAddress',
-            ])
+            ->setMethods(
+                [
+                    'getCustomerAddress',
+                ]
+            )
             ->getMock();
         $observer->expects($this->once())
             ->method('getCustomerAddress')

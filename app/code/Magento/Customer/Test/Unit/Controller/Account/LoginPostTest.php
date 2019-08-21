@@ -93,12 +93,14 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
         $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'isLoggedIn',
-                'setCustomerDataAsLoggedIn',
-                'regenerateId',
-                'setUsername',
-            ])
+            ->setMethods(
+                [
+                    'isLoggedIn',
+                    'setCustomerDataAsLoggedIn',
+                    'regenerateId',
+                    'setUsername',
+                ]
+            )
             ->getMock();
 
         $this->accountManagement = $this->getMockBuilder(\Magento\Customer\Api\AccountManagementInterface::class)
@@ -253,10 +255,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
@@ -335,10 +339,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
@@ -426,10 +432,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with('login')
-            ->willReturn([
-                'username' => $username,
-                'password' => $password,
-            ]);
+            ->willReturn(
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 
         $exception = new $exceptionData['exception'](__($exceptionData['message']));
 
@@ -488,10 +496,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'isPost',
-                'getPost',
-            ])
+            ->setMethods(
+                [
+                    'isPost',
+                    'getPost',
+                ]
+            )
             ->getMock();
 
         $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)

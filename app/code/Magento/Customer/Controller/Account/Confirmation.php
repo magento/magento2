@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,6 +14,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
+/**
+ * Class Confirmation
+ */
 class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
