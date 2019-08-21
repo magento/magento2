@@ -246,8 +246,10 @@ define(
                             return;
                         }
 
-                        self.setPaymentPayload(payload);
-                        self.placeOrder();
+                        if (self.validateCardType()) {
+                            self.setPaymentPayload(payload);
+                            self.placeOrder();
+                        }
                     });
                 }
             },
