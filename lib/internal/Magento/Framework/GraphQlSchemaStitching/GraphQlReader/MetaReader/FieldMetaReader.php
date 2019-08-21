@@ -99,10 +99,14 @@ class FieldMetaReader
                 $result['arguments'][$argumentName]['defaultValue'] = $argumentMeta->defaultValue;
             }
             $typeMeta = $argumentMeta->getType();
-            $result['arguments'][$argumentName] = array_merge(
-                $result['arguments'][$argumentName],
-                $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
-            );
+            foreach ($result['arguments'][$argumentName] as $argument) {
+                $argument = $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER);
+                return $argument;
+            }
+//            $result['arguments'][$argumentName]  = array_merge_recursive(
+//                $result['arguments'][$argumentName],
+//                $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
+//            );
 
             if ($this->docReader->read($argumentMeta->astNode->directives)) {
                 $result['arguments'][$argumentName]['description'] =

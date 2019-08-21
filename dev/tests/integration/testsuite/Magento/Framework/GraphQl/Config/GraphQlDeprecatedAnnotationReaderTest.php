@@ -194,7 +194,7 @@ QUERY;
         //Checks to make sure that the given description exists in the expectedOutput array
 
         $this->assertTrue(
-             array_key_exists(
+            array_key_exists(
                 array_search(
                     'Comment for SortEnum',
                     array_column($expectedOutput, 'description')
@@ -207,22 +207,20 @@ QUERY;
         $fieldsArray = $expectedOutput[0]['fields'];
         $enumValuesArray = $expectedOutput[1]['enumValues'];
 
-        foreach($fieldsArray as $field){
-            if ( $field['isDeprecated'] === true){
+        foreach ($fieldsArray as $field) {
+            if ($field['isDeprecated'] === true) {
                 $typeDeprecatedReason [] = $field['deprecationReason'];
             }
        }
        $this->assertNotEmpty($typeDeprecatedReason);
        $this->assertContains('Deprecated url_path test', $typeDeprecatedReason);
 
-        foreach($enumValuesArray as $enumValue){
-            if ( $enumValue['isDeprecated'] === true){
+        foreach ($enumValuesArray as $enumValue) {
+            if ($enumValue['isDeprecated'] === true) {
                 $enumValueDeprecatedReason [] = $enumValue['deprecationReason'];
             }
         }
-
         $this->assertNotEmpty($enumValueDeprecatedReason);
         $this->assertContains('Deprecated SortEnum Value test',$enumValueDeprecatedReason);
-
     }
 }
