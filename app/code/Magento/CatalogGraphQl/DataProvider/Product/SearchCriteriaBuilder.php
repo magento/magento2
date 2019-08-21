@@ -84,9 +84,11 @@ class SearchCriteriaBuilder
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
         $searchCriteria = $this->builder->build('products', $args);
+        $this->updateRangeFilters($searchCriteria);
         $searchCriteria->setRequestName(
             $includeAggregation ? 'graphql_product_search_with_aggregation' : 'graphql_product_search'
         );
+
         if ($includeAggregation) {
             $this->preparePriceAggregation($searchCriteria);
         }
@@ -174,5 +176,25 @@ class SearchCriteriaBuilder
             ->setDirection(SortOrder::SORT_DESC)
             ->create();
         $searchCriteria->setSortOrders([$sortOrder]);
+    }
+
+    /**
+     * Format range filters so replacement works
+     *
+     * Range filter fields in search request must replace value like '%field.from%' or '%field.to%'
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     */
+    private function updateRangeFilters(SearchCriteriaInterface $searchCriteria): void
+    {
+        $filterGroups = $searchCriteria->getFilterGroups();
+        foreach ($filterGroups as $filterGroup) {
+            $filters = $filterGroup->getFilters();
+            foreach ($filters as $filter) {
+                if (in_array($filter->getConditionType(), ['from', 'to'])) {
+                    $filter->setField($filter->getField() . '.' . $filter->getConditionType());
+                }
+            }
+        }
     }
 }
