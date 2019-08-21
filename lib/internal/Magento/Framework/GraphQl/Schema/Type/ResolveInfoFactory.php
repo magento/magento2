@@ -7,11 +7,27 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Schema\Type;
 
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * Factory for wrapper of GraphQl ResolveInfo
  */
 class ResolveInfoFactory
 {
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager
+    ) {
+        $this->objectManager = $objectManager;
+    }
+
     /**
      * Create a wrapper resolver info from the instance of the library object
      *
@@ -25,6 +41,6 @@ class ResolveInfoFactory
             $values[$key] = $value;
         }
 
-        return new ResolveInfo($values);
+        return $this->objectManager->create(ResolveInfo::class, $values);
     }
 }
