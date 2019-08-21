@@ -8,9 +8,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCategoriesExpandAllActionGroup">
-        <arguments>
-            <argument name="category" defaultValue="_defaultCategory"/>
-        </arguments>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickExpandAll"/>
     </actionGroup>
 </actionGroups>
