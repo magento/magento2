@@ -394,14 +394,12 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
 
             return $resultRedirect;
         } catch (StateException $e) {
-            $url = $this->urlModel->getUrl('customer/account/forgotpassword');
-            // @codingStandardsIgnoreStart
-            $message = __(
-                'There is already an account with this email address. If you are sure that it is your email address, <a href="%1">click here</a> to get your password and access your account.',
-                $url
+            $this->messageManager->addComplexErrorMessage(
+                'customerAlreadyExistsErrorMessage',
+                [
+                    'url' => $this->urlModel->getUrl('customer/account/forgotpassword'),
+                ]
             );
-            // @codingStandardsIgnoreEnd
-            $this->messageManager->addErrorMessage($message);
         } catch (InputException $e) {
             $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
             foreach ($e->getErrors() as $error) {
