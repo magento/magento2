@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Wishlist item collection grouped by customer id
- */
 namespace Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
 use Magento\Customer\Controller\RegistryConstants as RegistryConstants;
 
 /**
+ * Wishlist item collection grouped by customer id
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
@@ -98,7 +97,12 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         parent::_initSelect();
         $this->addCustomerIdFilter(
             $this->_registryManager->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        )->resetSortOrder()->addDaysInWishlist()->addStoreData();
+        )
+            ->resetSortOrder()
+            ->addDaysInWishlist()
+            ->addStoreData()
+            ->setVisibilityFilter()
+            ->setInStockFilter();
         return $this;
     }
 
@@ -120,6 +124,18 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
             }
             return parent::setOrder($field, $direction);
         }
+    }
+
+    /**
+     * Add quantity to filter
+     *
+     * @param string $field
+     * @param array $condition
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     */
+    private function addQtyFilter(string $field, array $condition)
+    {
+        return parent::addFieldToFilter('main_table.' . $field, $condition);
     }
 
     /**
@@ -145,6 +161,11 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
             case 'days_in_wishlist':
                 if (!isset($condition['datetime'])) {
                     return $this->addDaysFilter($condition);
+                }
+                break;
+            case 'qty':
+                if (isset($condition['from']) || isset($condition['to'])) {
+                    return $this->addQtyFilter($field, $condition);
                 }
         }
         return parent::addFieldToFilter($field, $condition);
