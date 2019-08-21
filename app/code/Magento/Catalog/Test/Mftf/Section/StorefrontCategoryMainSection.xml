@@ -20,7 +20,7 @@
         <element name="addToCartProductBySku" type="button" selector="//form[@data-product-sku='{{productSku}}']//button[contains(@class, 'tocart')]" parameterized="true" />
         <element name="SuccessMsg" type="button" selector="div.message-success"/>
         <element name="productCount" type="text" selector="#toolbar-amount"/>
-        <element name="CatalogDescription" type="text" selector="//div[@class='category-description']//p"/>
+        <element name="CatalogDescription" type="text" selector="//div[@class='category-description']"/>
         <element name="mediaDescription" type="text" selector="img[alt='{{var1}}']" parameterized="true"/>
         <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
         <element name="productImage" type="text" selector="img.product-image-photo"/>
