@@ -10,7 +10,7 @@
     <test name="AdminCategoryWithRestrictedUrlKeyNotCreatedTest">
         <annotations>
             <features value="CatalogUrlRewrite"/>
-            <stoty value="Subcategory 'liquid-hand-soap' is not opened in category 'soap'"/>
+            <stories value="Subcategory 'liquid-hand-soap' is not opened in category 'soap'"/>
             <title value="Category with restricted Url Key cannot be created"/>
             <description value="Category with restricted Url Key cannot be created"/>
             <severity value="MAJOR"/>
