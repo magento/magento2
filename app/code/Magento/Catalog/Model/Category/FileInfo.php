@@ -209,7 +209,7 @@ class FileInfo
     {
         $result = $path;
         try {
-            $storeUrl = $this->storeManager->getStore()->getUrl();
+            $storeUrl = $this->storeManager->getStore()->getBaseUrl();
         } catch (NoSuchEntityException $e) {
             return $result;
         }
@@ -217,8 +217,9 @@ class FileInfo
         $path = parse_url($path, PHP_URL_PATH);
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $storePath = parse_url($storeUrl, PHP_URL_PATH);
-        $result = ltrim($path, $storePath);
+        $storePath = rtrim($storePath, '/');
 
+        $result = preg_replace('/^' . preg_quote($storePath, '/') . '/', '', $path);
         return $result;
     }
 
