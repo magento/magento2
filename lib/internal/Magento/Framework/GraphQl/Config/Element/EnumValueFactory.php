@@ -38,7 +38,8 @@ class EnumValueFactory
      * @return EnumValue
      */
     public function create(
-        string $name, string $value,
+        string $name,
+        string $value,
         string $description = '',
         string $deprecationReason = ''
     ): EnumValue {

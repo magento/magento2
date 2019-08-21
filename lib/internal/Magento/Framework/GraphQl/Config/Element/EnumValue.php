@@ -38,7 +38,7 @@ class EnumValue implements ConfigElementInterface
      * @param string $name
      * @param string $value
      * @param string $description
-     * @param string deprecationReason
+     * @param string $deprecationReason
      */
     public function __construct(string $name, string $value, string $description = '', string $deprecationReason = '')
     {

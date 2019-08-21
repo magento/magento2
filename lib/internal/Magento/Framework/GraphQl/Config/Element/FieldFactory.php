@@ -37,6 +37,7 @@ class FieldFactory
      * @param array $fieldData
      * @param array $arguments
      * @return Field
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function createFromConfigData(
         array $fieldData,
