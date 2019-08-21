@@ -32,7 +32,7 @@ class Delete extends \Magento\Customer\Controller\Address implements HttpPostAct
                     $this->messageManager->addComplexErrorMessage('unableDeleteAddressMessage');
                 }
             } catch (\Exception $other) {
-                $this->messageManager->addExceptionMessage($other, __('We can\'t delete the address right now.'));
+                $this->messageManager->addException($other, __('We can\'t delete the address right now.'));
             }
         }
         return $this->resultRedirectFactory->create()->setPath('*/*/index');

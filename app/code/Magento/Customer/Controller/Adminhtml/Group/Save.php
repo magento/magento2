@@ -96,7 +96,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 $this->messageManager->addSuccessMessage(__('You saved the customer group.'));
                 $resultRedirect->setPath('customer/group');
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 if ($customerGroup != null) {
                     $this->storeCustomerGroupDataToSession(
                         $this->dataObjectProcessor->buildOutputDataArray(
