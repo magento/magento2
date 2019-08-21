@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 /**
  * Create value-object \Magento\Framework\Phrase
+ *
  * @SuppressWarnings(PHPMD.ShortMethodName)
+ * phpcs:disable Squiz.Functions.GlobalFunction
+ * @param array $argc
  * @return \Magento\Framework\Phrase
  */
 function __(...$argc)
