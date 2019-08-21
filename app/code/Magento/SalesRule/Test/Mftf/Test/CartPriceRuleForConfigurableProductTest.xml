@@ -132,7 +132,7 @@
         </actionGroup>
 
         <!--View and edit cart-->
-        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="storefrontOpenCartFromMinicart"/>
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="storefrontOpenCartFromMinicart"/>
 
         <!-- Apply Cart Rule On Storefront -->
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyCartRule">
