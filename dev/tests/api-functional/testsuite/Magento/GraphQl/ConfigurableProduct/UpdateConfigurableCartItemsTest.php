@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Exception\NoSuchEntityException as NoSuchEntityException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
@@ -33,11 +32,6 @@ class UpdateConfigurableCartItemsTest extends GraphQlAbstract
      * @var GetMaskedQuoteIdByReservedOrderId
      */
     private $getMaskedQuoteIdByReservedOrderId;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
 
     /**
      * @var QuoteFactory
@@ -77,7 +71,6 @@ class UpdateConfigurableCartItemsTest extends GraphQlAbstract
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->quoteIdMaskFactory = Bootstrap::getObjectManager()->get(QuoteIdMaskFactory::class);
     }
 
