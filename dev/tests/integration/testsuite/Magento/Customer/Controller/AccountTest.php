@@ -769,9 +769,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        $this->assertContains('To: ' . $email, $rawMessage);
+        $this->assertContains('To: John Smith <' . $email . '>', $rawMessage);
 
-        $content = $message->getBody()->getPartContent(0);
+        $content = $message->getBody()->getParts()[0]->getRawContent();
         $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
         $this->setRequestInfo($confirmationUrl, 'confirm');
         $this->clearCookieMessagesList();

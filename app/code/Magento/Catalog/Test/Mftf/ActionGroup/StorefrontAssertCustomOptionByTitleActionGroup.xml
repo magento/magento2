@@ -6,11 +6,16 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertCustomOptionByTitleActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Option Title is present on the Storefront Product page.</description>
+        </annotations>
         <arguments>
             <argument name="title" type="string"/>
         </arguments>
+
         <seeElement selector="{{StorefrontProductInfoMainSection.customOptionByTitle(title)}}" stepKey="seeCustomOption"/>
     </actionGroup>
 </actionGroups>

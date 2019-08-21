@@ -14,5 +14,4 @@ $objectManager = Bootstrap::getObjectManager();
 $configWriter = $objectManager->create(WriterInterface::class);
 
 $configWriter->delete('carriers/usps/active');
-$configWriter->delete('carriers/usps/userid');
-$configWriter->delete('carriers/usps/password');
+$configWriter->delete(\Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP);
