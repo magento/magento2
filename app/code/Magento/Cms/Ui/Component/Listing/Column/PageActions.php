@@ -83,6 +83,8 @@ class PageActions extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 $name = $this->getData('name');
+                $isActive = $item['is_active'] ?? false;
+
                 if (isset($item['page_id'])) {
                     $item[$name]['edit'] = [
                         'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
@@ -100,7 +102,7 @@ class PageActions extends Column
                         'post' => true,
                     ];
                 }
-                if (isset($item['identifier'])) {
+                if (isset($item['identifier'])/* && $isActive*/) {
                     $item[$name]['preview'] = [
                         'href' => $this->scopeUrlBuilder->getUrl(
                             $item['identifier'],
