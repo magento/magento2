@@ -19,20 +19,13 @@ var config = {
         'jquery/hover-intent': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
-        'mage/common': ['jquery'],
         'mage/new-gallery': ['jquery'],
         'mage/webapi': ['jquery'],
         'jquery/ui': ['jquery'],
         'MutationObserver': ['es6-collections'],
-        'moment': {
-            'exports': 'moment'
-        },
         'matchMedia': {
             'exports': 'mediaCheck'
         },
-        'jquery/jquery-storageapi': {
-            'deps': ['jquery/jquery.cookie']
-        }
     },
     'paths': {
         'jquery/validate': 'jquery/jquery.validate',
