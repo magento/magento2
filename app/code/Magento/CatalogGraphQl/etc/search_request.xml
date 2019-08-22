@@ -34,7 +34,7 @@
             </query>
         </queries>
         <filters>
-            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_id$"/>
             <filter xsi:type="rangeFilter" name="price_filter" field="price" from="$price.from$" to="$price.to$"/>
             <filter xsi:type="termFilter" name="visibility_filter" field="visibility" value="$visibility$"/>
         </filters>
@@ -80,7 +80,7 @@
             </query>
         </queries>
         <filters>
-            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_id$"/>
             <filter xsi:type="rangeFilter" name="price_filter" field="price" from="$price.from$" to="$price.to$"/>
             <filter xsi:type="termFilter" name="visibility_filter" field="visibility" value="$visibility$"/>
         </filters>

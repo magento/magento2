@@ -30,25 +30,15 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
     private $additionalAttributes = ['min_price', 'max_price', 'category_id'];
 
     /**
-     * Array to translate graphql field to internal entity attribute
-     *
-     * @var array
-     */
-    private $translatedAttributes = ['category_id' => 'category_ids'];
-
-    /**
      * @param ConfigInterface $config
      * @param string[] $additionalAttributes
-     * @param array $translatedAttributes
      */
     public function __construct(
         ConfigInterface $config,
-        array $additionalAttributes = [],
-        array $translatedAttributes = []
+        array $additionalAttributes = []
     ) {
         $this->config = $config;
         $this->additionalAttributes = array_merge($this->additionalAttributes, $additionalAttributes);
-        $this->translatedAttributes = array_merge($this->translatedAttributes, $translatedAttributes);
     }
 
     /**
@@ -74,7 +64,7 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
             foreach ($configElement->getFields() as $field) {
                 $fields[$field->getName()] = [
                     'type' => 'String',
-                    'fieldName' => $this->translatedAttributes[$field->getName()] ?? $field->getName(),
+                    'fieldName' => $field->getName(),
                 ];
             }
         }
@@ -82,7 +72,7 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
         foreach ($this->additionalAttributes as $attributeName) {
             $fields[$attributeName] = [
                 'type' => 'String',
-                'fieldName' => $this->translatedAttributes[$attributeName] ?? $attributeName,
+                'fieldName' => $attributeName,
             ];
         }
 

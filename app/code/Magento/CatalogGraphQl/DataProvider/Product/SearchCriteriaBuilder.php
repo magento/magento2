@@ -85,13 +85,14 @@ class SearchCriteriaBuilder
     {
         $searchCriteria = $this->builder->build('products', $args);
         $this->updateRangeFilters($searchCriteria);
-        $searchCriteria->setRequestName(
-            $includeAggregation ? 'graphql_product_search_with_aggregation' : 'graphql_product_search'
-        );
 
         if ($includeAggregation) {
             $this->preparePriceAggregation($searchCriteria);
+            $requestName = 'graphql_product_search_with_aggregation';
+        } else {
+            $requestName = 'graphql_product_search';
         }
+        $searchCriteria->setRequestName($requestName);
 
         if (!empty($args['search'])) {
             $this->addFilter($searchCriteria, 'search_term', $args['search']);
