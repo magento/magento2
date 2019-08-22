@@ -126,6 +126,7 @@ class Mode
      *
      * @throws LocalizedException
      * @return void
+     * @throws \Throwable if error occurred
      */
     public function enableProductionMode()
     {
@@ -136,7 +137,7 @@ class Mode
                     // We have to turn on production mode before generation.
                     // We need this to enable generation of the "min" files.
                     $this->setStoreMode(State::MODE_PRODUCTION);
-                    $this->filesystem->regenerateStatic($this->output);
+                    $this->filesystem->regenerateStatic($this->output, true);
                 } catch (LocalizedException $e) {
                     // We have to return store mode to previous state in case of error.
                     $this->setStoreMode($previousMode);
@@ -152,6 +153,8 @@ class Mode
      * Only lock static resource locations and set store mode, without handling static content
      *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Exception
      */
     public function enableProductionModeMinimal()
     {
@@ -162,6 +165,8 @@ class Mode
      * Enable Developer mode
      *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Exception
      */
     public function enableDeveloperMode()
     {
@@ -181,6 +186,7 @@ class Mode
      * Enable Default mode.
      *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function enableDefaultMode()
     {
@@ -213,6 +219,8 @@ class Mode
      *
      * @param string $mode
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Exception
      */
     protected function setStoreMode($mode)
     {
@@ -230,6 +238,7 @@ class Mode
      *
      * @param string $mode
      * @return void
+     * @throws \Exception
      */
     private function saveAppConfigs($mode)
     {

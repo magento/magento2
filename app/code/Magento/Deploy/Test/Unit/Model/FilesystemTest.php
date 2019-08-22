@@ -165,6 +165,43 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testRegenerateStaticResettingVersion()
+    {
+        $storeLocales = ['fr_FR', 'de_DE', 'nl_NL'];
+        $this->storeView->method('retrieveLocales')
+            ->willReturn($storeLocales);
+
+        $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
+        $this->initAdminLocaleMock('en_US');
+
+        $usedLocales = ['fr_FR', 'de_DE', 'nl_NL', 'en_US'];
+        $cacheFlushCmd = $this->cmdPrefix . 'cache:flush';
+        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
+            . implode(' ', $usedLocales);
+        $this->shell
+            ->expects($this->exactly(4))
+            ->method('execute')
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd]);
+
+        $this->output->expects(self::at(0))
+            ->method('writeln')
+            ->with('Starting compilation');
+        $this->output->expects(self::at(2))
+            ->method('writeln')
+            ->with('Compilation complete');
+        $this->output->expects(self::at(3))
+            ->method('writeln')
+            ->with('Starting deployment of static content');
+        $this->output->expects(self::at(5))
+            ->method('writeln')
+            ->with('Deployment of static content complete');
+
+        $this->deployFilesystem->regenerateStatic($this->output, true);
+    }
+
+    /**
      * Checks a case when configuration contains incorrect locale code.
      *
      * @return void

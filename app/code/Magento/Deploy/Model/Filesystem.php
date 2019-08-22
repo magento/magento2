@@ -149,13 +149,13 @@ class Filesystem
      * Regenerate static
      *
      * @param OutputInterface $output
+     * @param bool $resetStaticVersion
      * @return void
      * @throws LocalizedException
      * @throws \Exception
      */
-    public function regenerateStatic(
-        OutputInterface $output
-    ) {
+    public function regenerateStatic(OutputInterface $output, $resetStaticVersion = false)
+    {
         // Clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
         $this->cleanupFilesystem(
             [
@@ -164,7 +164,8 @@ class Filesystem
                 DirectoryList::GENERATED_METADATA,
                 DirectoryList::TMP_MATERIALIZATION_DIR,
                 DirectoryList::STATIC_VIEW
-            ]
+            ],
+            $resetStaticVersion
         );
 
         $this->reinitCacheDirectories();
@@ -222,7 +223,6 @@ class Filesystem
      *
      * @return array
      * @throws \InvalidArgumentException if unknown locale is provided by the store configuration
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     private function getUsedLocales()
     {
@@ -277,12 +277,18 @@ class Filesystem
      * Deletes specified directories by code
      *
      * @param array $directoryCodeList
+     * @param bool $resetStaticVersion
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function cleanupFilesystem($directoryCodeList)
+    public function cleanupFilesystem($directoryCodeList, $resetStaticVersion = false)
     {
-        $excludePatterns = ['#.htaccess#', '#deployed_version.txt#'];
+        $excludePatterns = ['#.htaccess#'];
+
+        if (!$resetStaticVersion) {
+            $excludePatterns[] = '#deployed_version.txt#';
+        }
+
         foreach ($directoryCodeList as $code) {
             if ($code == DirectoryList::STATIC_VIEW) {
                 $this->cleanupStaticDirectory($excludePatterns);
