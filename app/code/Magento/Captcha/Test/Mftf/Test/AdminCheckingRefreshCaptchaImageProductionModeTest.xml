@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingRefreshCaptchaImageProductionModeTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Cannot refresh Captcha image in production mode"/>
+            <title value="Checking refresh Captcha image in production mode"/>
+            <description value="Checking refresh Captcha image in production mode"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-11701"/>
+            <useCaseId value="MAGETWO-96404"/>
+            <group value="captcha"/>
+        </annotations>
+        <before>
+            <!--Enable JavaScript setting-->
+            <comment userInput="Enable JavaScript setting" stepKey="commentEnableJSSettings"/>
+            <magentoCLI command="config:set dev/js/enable_js_bundling 1" stepKey="enableJSBundling"/>
+            <magentoCLI command="config:set dev/js/minify_files 1" stepKey="enableMinifyJSFiles"/>
+            <!--Enable admin captcha-->
+            <comment userInput="Enable admin captcha" stepKey="commentEnableAdminCaptcha"/>
+            <magentoCLI command="config:set admin/captcha/enable 1" stepKey="enableAdminCaptcha"/>
+            <!--Clean cache-->
+            <comment userInput="Clean cache" stepKey="commentCleanCache"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCaches"/>
+        </before>
+        <after>
+            <!--Disable JavaScript setting-->
+            <comment userInput="Disable JavaScript setting" stepKey="commentDisableJSSettings"/>
+            <magentoCLI command="config:set dev/js/enable_js_bundling 0" stepKey="disableJSBundling"/>
+            <magentoCLI command="config:set dev/js/minify_files 0" stepKey="disableMinifyJSFiles"/>
+        </after>
+        <!--Go to forgot password-->
+        <comment userInput="Go to forgot password" stepKey="commentGoToForgotPassword"/>
+        <amOnPage url="{{AdminForgotPasswordPage.url}}" stepKey="navigateToForgotPasswordPagePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <grabAttributeFrom selector="{{AdminForgotPasswordFormSection.captchaImage}}" userInput="src" stepKey="grabCaptchaImageBeforeRefresh"/>
+        <click selector="{{AdminForgotPasswordFormSection.captchaReload}}" stepKey="reloadCaptcha"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <grabAttributeFrom selector="{{AdminForgotPasswordFormSection.captchaImage}}" userInput="src" stepKey="grabCaptchaImageAfterRefresh"/>
+        <assertNotEquals expected="$grabCaptchaImageBeforeRefresh" expectedType="variable" actual="$grabCaptchaImageAfterRefresh" actualType="variable"  stepKey="assertCaptchaImagesNotEquals"/>
+        <amOnPage url="{{AdminForgotPasswordPage.url}}" stepKey="navigateToForgotPasswordPagePageProdMode"/>
+        <waitForPageLoad stepKey="waitForPageLoadProdMode"/>
+        <grabAttributeFrom selector="{{AdminForgotPasswordFormSection.captchaImage}}" userInput="src" stepKey="grabCaptchaImageBeforeRefreshProdMode"/>
+        <click selector="{{AdminForgotPasswordFormSection.captchaReload}}" stepKey="reloadCaptchaProdMode"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskProdMode"/>
+        <grabAttributeFrom selector="{{AdminForgotPasswordFormSection.captchaImage}}" userInput="src" stepKey="grabCaptchaImageAfterRefreshProdMode"/>
+        <assertNotEquals expected="$grabCaptchaImageBeforeRefreshProdMode" expectedType="variable" actual="$grabCaptchaImageAfterRefreshProdMode" actualType="variable"  stepKey="assertCaptchaImagesNotEqualsProdMode"/>
+    </test>
+</tests>
