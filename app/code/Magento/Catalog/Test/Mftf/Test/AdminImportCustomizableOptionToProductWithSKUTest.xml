@@ -52,11 +52,9 @@
         <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
         <actionGroup ref="AddProductCustomOptionField" stepKey="addCutomOption1">
             <argument name="option" value="ProductOptionField"/>
-            <argument name="optionIndex" value="0"/>
         </actionGroup>
         <actionGroup ref="AddProductCustomOptionField" stepKey="addCutomOption2">
             <argument name="option" value="ProductOptionField2"/>
-            <argument name="optionIndex" value="1"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         <!--Change second product sku to first product sku-->

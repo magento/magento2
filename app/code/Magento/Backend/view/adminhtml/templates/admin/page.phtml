@@ -3,19 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /** @var $block \Magento\Backend\Block\Page */ ?>
 <!doctype html>
-<html lang="<?= /* @escapeNotVerified */ $block->getLang() ?>" class="no-js">
+<html lang="<?= $block->escapeHtmlAttr($block->getLang()) ?>" class="no-js">
 
 <head>
     <?= $block->getChildHtml('head') ?>
 </head>
 
-<body id="html-body"<?= $block->getBodyClass() ? ' class="' . $block->getBodyClass() . '"' : '' ?> data-container="body" data-mage-init='{"loaderAjax":{},"loader":{}}'>
+<body id="html-body" class="<?= $block->escapeHtmlAttr($block->getBodyClass()) ?>" data-container="body" data-mage-init='{"loaderAjax":{},"loader":{}}'>
     <div class="page-wrapper">
         <?= $block->getChildHtml('notification_window') ?>
         <?= $block->getChildHtml('global_notices') ?>
@@ -31,8 +28,8 @@
                 <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
             </div>
             <?= $block->getChildHtml('page_main_actions') ?>
-            <?php if ($block->getChildHtml('left')): ?>
-                <div id="page:main-container" class="<?= /* @escapeNotVerified */ $block->getContainerCssClass() ?> col-2-left-layout">
+            <?php if ($block->getChildHtml('left')) : ?>
+                <div id="page:main-container" class="<?= $block->escapeHtmlAttr($block->getContainerCssClass()) ?> col-2-left-layout">
                     <div class="main-col" id="content">
                         <?= $block->getChildHtml('content') ?>
                     </div>
@@ -41,7 +38,7 @@
                         <?= $block->getChildHtml('left') ?>
                     </div>
                 </div>
-            <?php else: ?>
+            <?php else : ?>
                 <div id="page:main-container" class="col-1-layout">
                     <?= $block->getChildHtml('content') ?>
                 </div>
