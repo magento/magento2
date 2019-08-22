@@ -17,6 +17,7 @@
         <element name="successMessage" type="text" selector="#messages"/>
 
         <element name="ruleName" type="input" selector="[name='name']"/>
+        <element name="ruleNameNew" type="input" selector="[name='staging[name]']"/>
         <element name="description" type="textarea" selector="[name='description']"/>
         <element name="status" type="select" selector="[name='is_active']"/>
 
@@ -26,6 +27,7 @@
         <element name="customerGroupsOptions" type="select" selector="[name='customer_group_ids'] option"/>
 
         <element name="fromDateButton" type="button" selector="[name='from_date'] + button" timeout="15"/>
+        <element name="startDateButton" type="button" selector="[name='staging[start_time]'] + button" timeout="15"/>
         <element name="toDateButton" type="button" selector="[name='to_date'] + button" timeout="15"/>
         <element name="todayDate" type="button" selector="#ui-datepicker-div [data-handler='today']"/>
         <element name="priority" type="input" selector="[name='sort_order']"/>

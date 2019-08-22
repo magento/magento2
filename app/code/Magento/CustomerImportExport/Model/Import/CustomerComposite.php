@@ -270,6 +270,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected function _importData()
     {
         $result = $this->_customerEntity->importData();
+        $this->countItemsCreated += $this->_customerEntity->getCreatedItemsCount();
+        $this->countItemsUpdated += $this->_customerEntity->getUpdatedItemsCount();
+        $this->countItemsDeleted += $this->_customerEntity->getDeletedItemsCount();
+
         if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
             return $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
         }

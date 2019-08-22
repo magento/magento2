@@ -7,11 +7,15 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminReviewOrderActionGroup">
+        <annotations>
+            <description>Clicks on 'REPORTS' in the Admin side menu. Clicks on 'Ordered'. Clicks on 'Refresh'. Validates that the provided Product name appears in the list.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+        
         <click stepKey="openReports" selector="{{OrderedProductsSection.reports}}"/>
         <waitForPageLoad stepKey="waitForReports" time="5"/>
         <click stepKey="openOrdered" selector="{{OrderedProductsSection.ordered}}"/>
