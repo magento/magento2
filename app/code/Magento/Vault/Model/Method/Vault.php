@@ -543,13 +543,16 @@ class Vault implements VaultPaymentInterface
      */
     private function attachCreditCardInfo(OrderPaymentInterface $payment): void
     {
-        $paymentToken = $payment->getExtensionAttributes()
-            ->getVaultPaymentToken();
-        if ($paymentToken) {
-            $tokenDetails = $this->jsonSerializer->unserialize($paymentToken->getTokenDetails());
-            if ($tokenDetails && is_array($tokenDetails)) {
-                $payment->addData($tokenDetails);
+        try {
+            $paymentToken = $payment->getExtensionAttributes()
+                ->getVaultPaymentToken();
+            if ($paymentToken) {
+                $tokenDetails = $this->jsonSerializer->unserialize($paymentToken->getTokenDetails());
+                if ($tokenDetails && is_array($tokenDetails)) {
+                    $payment->addData($tokenDetails);
+                }
             }
+        } catch (Exception $e) {
         }
     }
 
