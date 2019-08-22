@@ -58,6 +58,12 @@ define([
                 expect(rules['validate-number'].handler(value)).toBe(true);
             });
 
+            it('Check on float without leading zero', function () {
+                var value = '.50';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
             it('Check on formatted float', function () {
                 var value = '1,000,000.50';
 
@@ -81,7 +87,7 @@ define([
 
                 expect(rules['validate-number'].handler(value)).toBe(true);
             });
-            
+
             it('Check on not a number', function () {
                 var value = 'string';
 
