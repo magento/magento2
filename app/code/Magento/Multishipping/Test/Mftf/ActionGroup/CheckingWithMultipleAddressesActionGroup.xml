@@ -24,4 +24,3 @@
         <waitForPageLoad stepKey="waitForShippingInformation" after="clickOnUpdateAddress" />
     </actionGroup>
 </actionGroups>
-

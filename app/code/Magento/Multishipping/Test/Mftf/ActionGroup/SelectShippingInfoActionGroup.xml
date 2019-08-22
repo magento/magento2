@@ -30,4 +30,3 @@
         <click stepKey="goToBillingInformation" selector="{{ShippingMethodSection.goToBillingInfo}}"/>
     </actionGroup>
 </actionGroups>
-
