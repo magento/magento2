@@ -123,7 +123,7 @@ class CleanConfigurationTmpImages
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', "[]");
         if (isset($configurableMatrix) && $configurableMatrix !== "") {
-            $configurableMatrix = $this->serialize->unserialize($configurableMatrix);
+            $configurableMatrix = $this->serialize->unserialize($configurableMatrix) ?? [];
 
             foreach ($configurableMatrix as $item) {
                 if (empty($item['was_changed']) && empty($item['newProduct'])) {
