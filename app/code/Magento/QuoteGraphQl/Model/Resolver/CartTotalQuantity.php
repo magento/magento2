@@ -16,7 +16,7 @@ use Magento\Quote\Model\Quote;
 /**
  * @inheritdoc
  */
-class CartSummaryCount implements ResolverInterface
+class CartTotalQuantity implements ResolverInterface
 {
     /**
      * @inheritdoc

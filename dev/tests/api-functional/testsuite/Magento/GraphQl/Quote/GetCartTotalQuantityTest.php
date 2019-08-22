@@ -11,9 +11,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for getting summary count from cart query
+ * Test for getting total quantity from cart query
  */
-class GetCartSummaryCountTest extends GraphQlAbstract
+class GetCartTotalQuantityTest extends GraphQlAbstract
 {
     /**
      * @var GetMaskedQuoteIdByReservedOrderId
@@ -31,7 +31,7 @@ class GetCartSummaryCountTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testSetNewBillingAddress()
+    public function testGetTotalQuantity()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -41,8 +41,8 @@ class GetCartSummaryCountTest extends GraphQlAbstract
 
         self::assertArrayHasKey('cart', $response);
         $cart = $response['cart'];
-        self::assertArrayHasKey('summary_count', $cart);
-        self::assertEquals(2, $cart['summary_count']);
+        self::assertArrayHasKey('total_quantity', $cart);
+        self::assertEquals(2, $cart['total_quantity']);
     }
 
     /**
@@ -56,7 +56,7 @@ class GetCartSummaryCountTest extends GraphQlAbstract
         return <<<QUERY
 {
   cart(cart_id: "{$maskedQuoteId}") {
-    summary_count
+    total_quantity
   }
 }
 QUERY;
