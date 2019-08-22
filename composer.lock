@@ -6545,9 +6545,9 @@
             "authors": [
                 {
                     "name": "Johannes Schmitt",
+                    "role": "Developer of wrapped JMSSerializerBundle",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
-                    "role": "Developer of wrapped JMSSerializerBundle"
+                    "homepage": "https://github.com/schmittjoh"
                 }
             ],
             "description": "Library for (de-)serializing data of any complexity; supports XML, JSON, and YAML.",
