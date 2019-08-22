@@ -34,8 +34,9 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productTitleByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{product.price}}.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct" />
-        <executeInSelenium function="function($webdriver) use ($I) {
-            $productName = '//main//li[.//a[contains(text(), \'' . {{product.name}} . '\' )]]//div[@data-container=\'product-grid\']';
+        <executeJS function="return {{product.name}}" stepKey="getProductName"/>
+        <executeInSelenium function="function($webdriver) use ($I, $getProductName) {
+            $productName = '//main//li[.//a[contains(text(), \'' . $getProductName . '\' )]]//div[@data-container=\'product-grid\']';
             $I->assertEquals('2', $webdriver->findElement(\Facebook\WebDriver\WebDriverBy::xpath($productName))->getCSSValue('z-index'));
         }" stepKey="assertProductContainerIsOpened"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productAddToCartByName(product.name)}}" stepKey="assertAddToCart" />
