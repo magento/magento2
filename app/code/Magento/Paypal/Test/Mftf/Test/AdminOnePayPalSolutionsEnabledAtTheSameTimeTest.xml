@@ -39,8 +39,6 @@
         <!--Try to enable express checkout Solution-->
         <comment userInput="Try to enable express checkout Solution" stepKey="commentTryEnableExpressCheckout"/>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab('us')}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab('us')}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
         <actionGroup ref="EnablePayPalSolution" stepKey="enableExpressCheckout">
             <argument name="payPalConfigType" value="WPSExpressConfigSection"/>
             <argument name="countryCode" value="us"/>
