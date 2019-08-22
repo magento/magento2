@@ -5,6 +5,7 @@
  */
 namespace Magento\Vault\Model\Method;
 
+use Exception;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Command;
@@ -546,7 +547,9 @@ class Vault implements VaultPaymentInterface
             ->getVaultPaymentToken();
         if ($paymentToken) {
             $tokenDetails = $this->jsonSerializer->unserialize($paymentToken->getTokenDetails());
-            $payment->addData($tokenDetails);
+            if ($tokenDetails && is_array($tokenDetails)) {
+                $payment->addData($tokenDetails);
+            }
         }
     }
 
