@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Weee\Model\Attribute\Backend\Weee;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
+/**
+ * Class with fixed product taxes.
+ */
 class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 {
     /**
@@ -62,10 +66,14 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
+     * Get backend model name.
+     *
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getBackendModelName()
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         return \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class;
     }
 
@@ -91,8 +99,10 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             $key1 = implode('-', [$tax['website_id'], $tax['country'], $state]);
             if (!empty($dup[$key1])) {
                 throw new LocalizedException(
-                    __('Set unique country-state combinations within the same fixed product tax. '
-                        . 'Verify the combinations and try again.')
+                    __(
+                        'Set unique country-state combinations within the same fixed product tax. '
+                        . 'Verify the combinations and try again.'
+                    )
                 );
             }
             $dup[$key1] = 1;
@@ -130,7 +140,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -170,7 +180,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function afterDelete($object)
     {
@@ -179,7 +189,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTable()
     {
