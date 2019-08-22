@@ -9,6 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontVisibilityOfDuplicateProductTest">
         <annotations>
+            <stories value="Duplicate Product"/>
             <features value="ConfigurableProduct"/>
             <title value="Visibility of duplicate product on the Storefront"/>
             <description value="Check visibility of duplicate product on the Storefront"/>
@@ -142,6 +143,9 @@
         <reloadPage stepKey="reloadDuplicatedProductPage"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductReload"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="createConfigurationsDuplicatedProduct"/>
+        <waitForElementVisible selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="waitForCreateConfigurationsPageLoad"/>
+        <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Deselect All')}}" stepKey="DeselectAllAttributes"/>
         <actionGroup ref="createOptionsForAttribute" stepKey="createOptionsForDuplicatedProduct">
             <argument name="attributeName" value="{{productAttributeColor.default_label}}"/>
             <argument name="firstOptionName" value="{{colorConfigurableProductAttribute1.name}}"/>

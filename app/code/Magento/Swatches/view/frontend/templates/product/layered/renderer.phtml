@@ -76,8 +76,8 @@
 </div>
 
 <script>
-    require(["jquery", "jquery/ui", "Magento_Swatches/js/swatch-renderer"], function ($) {
-        $('.swatch-layered.<?= /* @escapeNotVerified */ $swatchData['attribute_code'] ?>')
+    require(["jquery", "Magento_Swatches/js/swatch-renderer"], function ($) {
+        $('.swatch-layered.<?= $block->escapeJs($swatchData['attribute_code']) ?>')
             .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
             .SwatchRendererTooltip();
     });

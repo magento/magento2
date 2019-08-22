@@ -237,7 +237,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->expectException('Exception');
         $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
-        $this->model->getList(mt_rand(1, 200), mt_rand(201, 400));
+        $this->model->getList(random_int(1, 200), random_int(201, 400));
     }
 
     public function testClearWithException()
@@ -249,7 +249,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->expectException('Exception');
         $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
-        $this->model->clear(mt_rand(1, 200));
+        $this->model->clear(random_int(1, 200));
     }
 
     /**
