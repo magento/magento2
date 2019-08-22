@@ -184,10 +184,10 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $exception = new \Exception('Exception');
         $this->messageManager->expects($this->once())
             ->method('addComplexErrorMessage')
-            ->with(__('We can\'t delete the address right now.'))
-            ->willThrowException($exception);
+            ->with('unableDeleteAddressMessage')
+            ->willReturnSelf();
         $this->messageManager->expects($this->once())
-            ->method('addExceptionMessage')
+            ->method('addException')
             ->with($exception, __('We can\'t delete the address right now.'));
         $this->resultRedirect->expects($this->once())
             ->method('setPath')

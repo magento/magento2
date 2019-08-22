@@ -345,9 +345,11 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                     $this->getRequest()->getPost('current_password')
                 );
             } catch (InvalidEmailOrPasswordException $e) {
+                // @codingStandardsIgnoreStart
                 throw new InvalidEmailOrPasswordException(
                     __("The password doesn't match this account. Verify the password and try again.")
                 );
+                // @codingStandardsIgnoreEnd
             }
         }
     }

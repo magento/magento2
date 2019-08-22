@@ -205,7 +205,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $exception = new \Exception('Bad request.');
         $this->messageManagerMock->expects($this->once())
-            ->method('addExceptionMessage')
+            ->method('addException')
             ->with($this->equalTo($exception), $this->equalTo('There was an error confirming the account'));
 
         $testUrl = 'http://example.com';

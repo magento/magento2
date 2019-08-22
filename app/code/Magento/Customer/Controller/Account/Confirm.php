@@ -24,7 +24,9 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Confirm extends \Magento\Customer\Controller\AbstractAccount
+class Confirm
+    extends \Magento\Customer\Controller\AbstractAccount
+    implements \Magento\Framework\App\Action\Action\ActionInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
