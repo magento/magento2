@@ -626,6 +626,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                         explode(',', $optionData)
                     )
                 );
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $option = array_merge(...$option);
 
                 if (!empty($option['type']) && !empty($option['name'])) {
@@ -692,12 +693,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 }
             } else {
                 $existingOptionId = array_search($optionKey, $expectedOptions);
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $expectedData[$existingOptionId] = array_merge(
                     $this->getOptionData($option),
                     $expectedData[$existingOptionId]
                 );
                 if ($optionValues) {
                     foreach ($optionValues as $optionKey => $optionValue) {
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                         $expectedValues[$existingOptionId][$optionKey] = array_merge(
                             $optionValue,
                             $expectedValues[$existingOptionId][$optionKey]
@@ -843,6 +846,58 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that new images should be added after the existing ones.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testNewImagesShouldBeAddedAfterExistingOnes()
+    {
+        $this->importDataForMediaTest('import_media.csv');
+
+        $product = $this->getProductBySku('simple_new');
+
+        $items = array_values($product->getMediaGalleryImages()->getItems());
+
+        $images = [
+            ['file' => '/m/a/magento_image.jpg', 'label' => 'Image Label'],
+            ['file' => '/m/a/magento_small_image.jpg', 'label' => 'Small Image Label'],
+            ['file' => '/m/a/magento_thumbnail.jpg', 'label' => 'Thumbnail Label'],
+            ['file' => '/m/a/magento_additional_image_one.jpg', 'label' => 'Additional Image Label One'],
+            ['file' => '/m/a/magento_additional_image_two.jpg', 'label' => 'Additional Image Label Two'],
+        ];
+
+        $this->assertCount(5, $items);
+        $this->assertEquals(
+            $images,
+            array_map(
+                function (\Magento\Framework\DataObject $item) {
+                    return $item->toArray(['file', 'label']);
+                },
+                $items
+            )
+        );
+
+        $this->importDataForMediaTest('import_media_additional_images.csv');
+        $product->cleanModelCache();
+        $product = $this->getProductBySku('simple_new');
+        $items = array_values($product->getMediaGalleryImages()->getItems());
+        $images[] = ['file' => '/m/a/magento_additional_image_three.jpg', 'label' => ''];
+        $images[] = ['file' => '/m/a/magento_additional_image_four.jpg', 'label' => ''];
+        $this->assertCount(7, $items);
+        $this->assertEquals(
+            $images,
+            array_map(
+                function (\Magento\Framework\DataObject $item) {
+                    return $item->toArray(['file', 'label']);
+                },
+                $items
+            )
+        );
+    }
+
+    /**
      * Test that errors occurred during importing images are logged.
      *
      * @magentoAppIsolation enabled
@@ -891,6 +946,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_two.jpg',
                 'dest' => $dirPath . '/magento_additional_image_two.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_three.jpg',
+                'dest' => $dirPath . '/magento_additional_image_three.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_four.jpg',
+                'dest' => $dirPath . '/magento_additional_image_four.jpg',
             ],
         ];
 
@@ -2023,7 +2086,17 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
-        $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == $expectedErrors);
+        $this->assertEquals(
+            $expectedErrors,
+            $this->_model->getErrorAggregator()->getErrorsCount(),
+            array_reduce(
+                $this->_model->getErrorAggregator()->getAllErrors(),
+                function ($output, $error) {
+                    return "$output\n{$error->getErrorMessage()}";
+                },
+                ''
+            )
+        );
     }
 
     /**

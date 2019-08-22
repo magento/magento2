@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Downloadable;
+namespace Magento\GraphQl\DownloadableProduct;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
