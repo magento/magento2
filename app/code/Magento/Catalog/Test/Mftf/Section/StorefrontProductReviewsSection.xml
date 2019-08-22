@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductReviewsSection">
+        <element name="reviewsTab" type="button" selector="#tab-label-reviews-title"/>
+        <element name="nicknameField" type="text" selector="#nickname_field"/>
+        <element name="summaryField" type="text" selector="#summary_field"/>
+        <element name="reviewField" type="textarea" selector="#review_field"/>
+        <element name="submitReview" type="button" selector=".submit"/>
+        <element name="reviewsBlock" type="block" selector="#customer-reviews"/>
+        <element name="reviewTitle" type="text" selector=".item.review-item:nth-of-type({{row}}) .review-title" parameterized="true"/>
+        <element name="reviewContent" type="text" selector=".item.review-item:nth-of-type({{row}}) .review-content" parameterized="true"/>
+        <element name="reviewAuthor" type="text" selector=".item.review-item:nth-of-type({{row}}) .review-author .review-details-value" parameterized="true"/>
+        <!-- The tab transform to an accordion when window resize -->
+        <element name="reviewsSectionToggleState" type="button" selector="//*[@id='tab-label-reviews-title']/ancestor::div[@aria-selected='{{boolean}}'][@aria-expanded='{{boolean}}']" parameterized="true"/>
+    </section>
+</sections>

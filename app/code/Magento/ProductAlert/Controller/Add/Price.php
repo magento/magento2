@@ -6,7 +6,7 @@
 
 namespace Magento\ProductAlert\Controller\Add;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -20,7 +20,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Controller for notifying about price.
  */
-class Price extends AddController implements HttpPostActionInterface
+class Price extends AddController implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -61,8 +61,8 @@ class Price extends AddController implements HttpPostActionInterface
             return false;
         }
         $currentStore = $this->storeManager->getStore();
-        return strpos($url, $currentStore->getBaseUrl()) === 0
-            || strpos($url, $currentStore->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)) === 0;
+        return strpos($url, (string) $currentStore->getBaseUrl()) === 0
+            || strpos($url, (string) $currentStore->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)) === 0;
     }
 
     /**
