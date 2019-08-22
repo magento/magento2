@@ -544,8 +544,10 @@ class Vault implements VaultPaymentInterface
     {
         $paymentToken = $payment->getExtensionAttributes()
             ->getVaultPaymentToken();
-        $tokenDetails = $this->jsonSerializer->unserialize($paymentToken->getTokenDetails());
-        $payment->addData($tokenDetails);
+        if ($paymentToken) {
+            $tokenDetails = $this->jsonSerializer->unserialize($paymentToken->getTokenDetails());
+            $payment->addData($tokenDetails);
+        }
     }
 
     /**
