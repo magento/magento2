@@ -7,6 +7,8 @@
 namespace Magento\Config\Model\Config\Backend\Image;
 
 /**
+ * System config PDF field backend model.
+ *
  * @api
  * @deprecated The wrong file type extensions are returned.
  * @see \Magento\Config\Model\Config\Backend\File\Pdf
@@ -14,7 +16,7 @@ namespace Magento\Config\Model\Config\Backend\Image;
 class Pdf extends \Magento\Config\Model\Config\Backend\Image
 {
     /**
-     * @return string[]
+     * @inheritdoc
      */
     protected function _getAllowedExtensions()
     {

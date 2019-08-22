@@ -4,15 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Config\Model\Config\Backend\Image;
+namespace Magento\Config\Model\Config\Backend\File;
 
 /**
+ * System config PDF field backend model.
+ *
  * @api
  */
 class Pdf extends \Magento\Config\Model\Config\Backend\File
 {
     /**
-     * @return string[]
+     * @inheritdoc
      */
     protected function _getAllowedExtensions()
     {
