@@ -5,10 +5,15 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenNewCartPriceRuleFormPageActionGroup">
-        <amOnPage url="{{PriceRuleNewPage.url}}" stepKey="openNewCartPriceRulePage" />
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <annotations>
+            <description>Goes to the Admin Cart Price Rule creation page.</description>
+        </annotations>
+
+        <amOnPage url="{{PriceRuleNewPage.url}}" stepKey="openNewCartPriceRulePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
