@@ -254,10 +254,12 @@ abstract class AbstractAction
      *
      * @param int $storeId
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _cleanRelationProducts($storeId)
     {
-        if (!$this->_productIndexerHelper->isAddChildData()) {
+        if (!$this->_productIndexerHelper->isAddChildData() || !$this->_isFlatTableExists($storeId)) {
             return $this;
         }
 
