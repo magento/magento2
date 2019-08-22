@@ -14,6 +14,9 @@ use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
  */
 class CategoryTreeIdentity implements IdentityInterface
 {
+    /** @var string */
+    private $cacheTag = \Magento\Catalog\Model\Category::CACHE_TAG;
+
     /**
      * Get category ID from resolved data
      *
@@ -22,6 +25,7 @@ class CategoryTreeIdentity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
-        return empty($resolvedData['id']) ? [] : [$resolvedData['id']];
+        return empty($resolvedData['id']) ?
+            [] : [$this->cacheTag, sprintf('%s_%s', $this->cacheTag, $resolvedData['id'])];
     }
 }

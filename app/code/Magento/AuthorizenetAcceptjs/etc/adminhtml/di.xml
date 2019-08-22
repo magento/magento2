@@ -31,4 +31,9 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="AuthorizenetAcceptjsAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="validator" xsi:type="object">AuthorizenetAcceptjsTransactionValidator</argument>
+        </arguments>
+    </virtualType>
 </config>
