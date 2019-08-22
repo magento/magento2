@@ -100,7 +100,8 @@ class FieldMetaReader
             }
             $typeMeta = $argumentMeta->getType();
 
-            $result['arguments'][$argumentName]  = array_merge_recursive(
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+            $result['arguments'][$argumentName]  = array_merge(
                 $result['arguments'][$argumentName],
                 $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
             );

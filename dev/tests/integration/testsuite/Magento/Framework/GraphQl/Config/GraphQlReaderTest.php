@@ -200,11 +200,13 @@ QUERY;
             $sortFields = ['inputFields', 'fields'];
             foreach ($sortFields as $sortField) {
                 isset($searchTerm[$sortField]) && is_array($searchTerm[$sortField])
-                    ? usort($searchTerm[$sortField], function ($a, $b) {
+                    ? usort(
+                        $searchTerm[$sortField], function ($a, $b) {
                         $cmpField = 'name';
                         return isset($a[$cmpField]) && isset($b[$cmpField])
                             ? strcmp($a[$cmpField], $b[$cmpField]) : 0;
-                    }) : null;
+                        }
+                        ) : null;
             }
 
             $this->assertTrue(
@@ -240,18 +242,13 @@ QUERY;
                 $expectedOutput
             )
         );
-
     }
-
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testDispatchIntrospectionWithDeprecatedSDL()
     {
-
-
-
         $query
             = <<<QUERY
  query IntrospectionQuery {
@@ -367,7 +364,6 @@ QUERY;
         $response = $this->graphQlController->dispatch($request);
         $this->jsonSerializer->unserialize($response->getContent());
         $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_deprecated_annotation.php';
-
 
         //Checks to make sure that the given description exists in the expectedOutput array
 
