@@ -14,7 +14,7 @@ use Magento\InventoryCatalog\Model\ResourceModel\AddIsInStockFilterToCollection;
 use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 
 /**
- * Adapt adding is in stock filter to collection for multi stocks.
+ * Class AdaptAddIsInStockFilterToCollectionPlugin
  */
 class AdaptAddIsInStockFilterToCollectionPlugin
 {
@@ -44,6 +44,8 @@ class AdaptAddIsInStockFilterToCollectionPlugin
     }
 
     /**
+     * Adapt adding is in stock filter to collection for multi stocks.
+     *
      * @param Status $stockStatus
      * @param callable $proceed
      * @param Collection $collection

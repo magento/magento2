@@ -17,7 +17,7 @@ use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\Website;
 
 /**
- * Adapt adding stock status to select for multi stocks.
+ * Class AdaptAddStockStatusToSelectPlugin
  */
 class AdaptAddStockStatusToSelectPlugin
 {
@@ -52,6 +52,8 @@ class AdaptAddStockStatusToSelectPlugin
     }
 
     /**
+     * Adapt adding stock status to select for multi stocks.
+     *
      * @param Status $stockStatus
      * @param callable $proceed
      * @param Select $select

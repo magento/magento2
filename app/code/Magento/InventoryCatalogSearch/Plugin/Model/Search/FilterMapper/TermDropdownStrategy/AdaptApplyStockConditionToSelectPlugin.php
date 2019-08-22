@@ -17,7 +17,7 @@ use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Adapt apply stock condition to multi stocks
+ * Class AdaptApplyStockConditionToSelectPlugin
  */
 class AdaptApplyStockConditionToSelectPlugin
 {
@@ -68,6 +68,8 @@ class AdaptApplyStockConditionToSelectPlugin
     }
 
     /**
+     * Adapt apply stock condition to multi stocks
+     *
      * @param ApplyStockConditionToSelect $applyStockConditionToSelect
      * @param callable $proceed
      * @param string $alias
