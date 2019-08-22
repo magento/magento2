@@ -79,7 +79,7 @@ class EnumValue implements ConfigElementInterface
     }
 
     /**
-     * Get the enum value's description.
+     * Get the enum value's deprecatedReason.
      *
      * @return string
      */

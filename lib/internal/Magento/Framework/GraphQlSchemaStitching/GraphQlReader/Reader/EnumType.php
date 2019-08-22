@@ -10,7 +10,6 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
 
-
 /**
  * Composite configuration reader to handle the enum type meta
  */
