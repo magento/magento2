@@ -400,5 +400,6 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="waitForModalPopUp"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
     </actionGroup>
 </actionGroups>
