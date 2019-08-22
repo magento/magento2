@@ -53,8 +53,8 @@ type DownloadableProduct implements ProductInterface, CustomizableProductInterfa
     links_title: String @doc(description: "The heading above the list of downloadable products")
 }
 
-enum DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample") {
-    FILE
+enum DownloadableFileTypeEnum {
+    FILE @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     URL
 }
 

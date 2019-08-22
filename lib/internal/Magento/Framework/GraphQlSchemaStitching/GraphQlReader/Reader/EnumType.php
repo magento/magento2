@@ -9,7 +9,7 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader;
 
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DeprecatedEnumAnnotationReader;
+
 
 /**
  * Composite configuration reader to handle the enum type meta
@@ -22,20 +22,12 @@ class EnumType implements TypeMetaReaderInterface
     private $docReader;
 
     /**
-     * @var DeprecatedEnumAnnotationReader
-     */
-    private $deprecatedEnumAnnotationReader;
-
-    /**
      * @param DocReader $docReader
-     * @param DeprecatedEnumAnnotationReader $deprecatedEnumAnnotationReader
      */
     public function __construct(
-        DocReader $docReader,
-        DeprecatedEnumAnnotationReader $deprecatedEnumAnnotationReader
+        DocReader $docReader
     ) {
         $this->docReader = $docReader;
-        $this->deprecatedEnumAnnotationReader = $deprecatedEnumAnnotationReader;
     }
 
     /**
@@ -60,13 +52,6 @@ class EnumType implements TypeMetaReaderInterface
                 if ($this->docReader->read($enumValueMeta->astNode->directives)) {
                     $result['items'][$enumValueMeta->value]['description'] =
                         $this->docReader->read($enumValueMeta->astNode->directives);
-                }
-
-                if (!empty($enumValueMeta->deprecationReason) &&
-                    $this->deprecatedEnumAnnotationReader->read($enumValueMeta->astNode->directives)
-                ) {
-                    $result['items'][$enumValueMeta->value]['deprecationReason'] =
-                        $this->deprecatedEnumAnnotationReader->read($enumValueMeta->astNode->directives);
                 }
             }
 
