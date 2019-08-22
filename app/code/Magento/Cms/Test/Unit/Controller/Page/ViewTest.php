@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Page;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Controller\Page\View
@@ -45,8 +45,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -61,8 +61,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->cmsHelperMock = $this->getMock(\Magento\Cms\Helper\Page::class, [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->cmsHelperMock = $this->createMock(\Magento\Cms\Helper\Page::class);
         $objectManagerMock->expects($this->once())->method('get')->willReturn($this->cmsHelperMock);
         $this->controller = $helper->getObject(
             \Magento\Cms\Controller\Page\View::class,

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class ExportConfigFilesTest extends \PHPUnit_Framework_TestCase
+class ExportConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Export\Config\Reader
@@ -24,9 +24,9 @@ class ExportConfigFilesTest extends \PHPUnit_Framework_TestCase
             $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/export.xml,export.xml}')
         );
 
-        $validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
-        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

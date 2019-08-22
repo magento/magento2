@@ -2,7 +2,7 @@
 /**
  * Test for \Magento\Framework\Filesystem
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem;
@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test for Magento\Framework\Filesystem class
  *
  */
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem

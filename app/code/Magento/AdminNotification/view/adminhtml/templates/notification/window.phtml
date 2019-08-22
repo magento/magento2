@@ -1,13 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * @see \Magento\AdminNotification\Block\Window
  */
@@ -19,11 +15,13 @@
             "autoOpen": true,
             "buttons": false,
             "modalClass": "modal-system-messages",
-            "title": "<?php /* @escapeNotVerified */ echo $block->getHeaderText(); ?>"
+            "title": "<?= $block->escapeHtmlAttr($block->getHeaderText()) ?>"
         }
     }'>
     <li class="message message-warning warning">
-        <?php /* @escapeNotVerified */ echo $block->getNoticeMessageText(); ?><br/>
-        <a href="<?php /* @escapeNotVerified */ echo $block->getNoticeMessageUrl(); ?>"><?php /* @escapeNotVerified */ echo $block->getReadDetailsText(); ?></a>
+        <?= $block->escapeHtml($block->getNoticeMessageText()) ?><br/>
+        <a href="<?= $block->escapeUrl($block->getNoticeMessageUrl()) ?>">
+            <?= $block->escapeHtml($block->getReadDetailsText()) ?>
+        </a>
     </li>
 </ul>

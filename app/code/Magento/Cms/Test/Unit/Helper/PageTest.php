@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Helper;
@@ -11,7 +11,7 @@ namespace Magento\Cms\Test\Unit\Helper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Helper\Page
@@ -113,6 +113,14 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultPageFactory;
 
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $httpRequestMock;
+
+    /**
+     * Test Setup
+     */
     protected function setUp()
     {
         $this->actionMock = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
@@ -157,6 +165,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
+        $this->httpRequestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -168,6 +178,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->layoutProcessorMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ProcessorInterface::class)
             ->getMockForAbstractClass();
         $this->blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
+            ->setMethods(['setContentHeading'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->messagesBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
@@ -184,11 +195,12 @@ class PageTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Helper\Context::class,
             [
                 'eventManager' => $this->eventManagerMock,
-                'urlBuilder' => $this->urlBuilderMock
+                'urlBuilder' => $this->urlBuilderMock,
+                'httpRequest' => $this->httpRequestMock,
             ]
         );
 
-        $this->resultPageFactory = $this->getMock(\Magento\Framework\View\Result\PageFactory::class, [], [], '', false);
+        $this->resultPageFactory = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
 
         $this->object = $objectManager->getObject(
             \Magento\Cms\Helper\Page::class,
@@ -318,7 +330,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'cms_page_render',
                 [
                     'page' => $this->pageMock,
-                    'controller_action' => $this->actionMock
+                    'controller_action' => $this->actionMock,
+                    'request' => $this->httpRequestMock,
                 ]
             );
         $this->pageMock->expects($this->any())
@@ -357,6 +370,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function renderPageExtendedDataProvider()
     {
         return [
@@ -457,12 +473,15 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->object->getPageUrl($pageId));
     }
 
+    /**
+     * @return array
+     */
     public function getPageUrlDataProvider()
     {
         return [
             'ids NOT EQUAL BUT page->load() NOT SUCCESSFUL' => [
                 'pageId' => 123,
-                'internalPageId' => 234,
+                'internalPageId' => null,
                 'pageLoadResultIndex' => 0,
                 'expectedResult' => null,
             ],

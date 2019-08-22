@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab;
 /**
  * Order History tab test
  */
-class HistoryTest extends \PHPUnit_Framework_TestCase
+class HistoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -44,8 +44,8 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->coreRegistryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->adminHelperMock = $this->getMock(\Magento\Sales\Helper\Admin::class, [], [], '', false);
+        $this->coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->adminHelperMock = $this->createMock(\Magento\Sales\Helper\Admin::class);
 
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
             ->disableOriginalConstructor()

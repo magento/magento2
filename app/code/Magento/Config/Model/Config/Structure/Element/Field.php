@@ -2,11 +2,17 @@
 /**
  * Represents a Field Element on the UI that can be configured via xml.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure\Element;
 
+/**
+ * Element field.
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 {
     /**
@@ -50,7 +56,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Config\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Config\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Config\Model\Config\CommentFactory $commentFactory
@@ -59,7 +65,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Config\Model\Config\BackendFactory $backendFactory,
         \Magento\Config\Model\Config\SourceFactory $sourceFactory,
         \Magento\Config\Model\Config\CommentFactory $commentFactory,
@@ -239,6 +245,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getGroupPath()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return dirname($this->getConfigPath() ?: $this->getPath());
     }
 
@@ -286,6 +293,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      * Check if the field can be restored to default
      *
      * @return bool
+     * @since 100.1.0
      */
     public function canRestore()
     {

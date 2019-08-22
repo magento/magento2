@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 use Magento\Framework\DB\Transaction;
+use Magento\Sales\Api\InvoiceItemRepositoryInterface;
 use Magento\Sales\Api\InvoiceManagementInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
@@ -85,6 +86,9 @@ $items = [
     ],
 ];
 
+/** @var InvoiceItemRepositoryInterface $invoiceItemRepository */
+$invoiceItemRepository = Bootstrap::getObjectManager()->get(InvoiceItemRepositoryInterface::class);
+
 foreach ($items as $data) {
     /** @var OrderItem $orderItem */
     $orderItem = $objectManager->create(OrderItem::class);
@@ -106,6 +110,7 @@ foreach ($items as $data) {
         ->setName($data['name'])
         ->setOrderItemId($orderItem->getItemId())
         ->setQty($data['qty'])
-        ->setPrice($data['price'])
-        ->save();
+        ->setPrice($data['price']);
+
+    $invoiceItemRepository->save($invoiceItem);
 }

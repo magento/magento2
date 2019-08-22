@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model;
@@ -17,7 +17,7 @@ use Magento\Store\Api\StoreManagementInterface;
  * Class CounterTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CounterTest extends \PHPUnit_Framework_TestCase
+class CounterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\NewRelicReporting\Model\Counter

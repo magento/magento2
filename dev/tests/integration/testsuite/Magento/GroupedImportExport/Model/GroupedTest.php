@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedImportExport\Model;
@@ -9,7 +9,10 @@ use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
 
 class GroupedTest extends AbstractProductExportImportTestCase
 {
-    public function exportImportDataProvider()
+    /**
+     * @return array
+     */
+    public function exportImportDataProvider(): array
     {
         return [
             'grouped-product' => [
@@ -23,17 +26,13 @@ class GroupedTest extends AbstractProductExportImportTestCase
         ];
     }
 
-    public function importReplaceDataProvider()
-    {
-        return $this->exportImportDataProvider();
-    }
-
     /**
-     * @param \Magento\Catalog\Model\Product $expectedProduct
-     * @param \Magento\Catalog\Model\Product $actualProduct
+     * @inheritdoc
      */
-    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
-    {
+    protected function assertEqualsSpecificAttributes(
+        \Magento\Catalog\Model\Product $expectedProduct,
+        \Magento\Catalog\Model\Product $actualProduct
+    ): void {
         $expectedAssociatedProducts = $expectedProduct->getTypeInstance()->getAssociatedProducts($expectedProduct);
         $actualAssociatedProducts = $actualProduct->getTypeInstance()->getAssociatedProducts($actualProduct);
 

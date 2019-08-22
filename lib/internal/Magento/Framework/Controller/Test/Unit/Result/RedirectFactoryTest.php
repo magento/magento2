@@ -2,17 +2,15 @@
 /**
  * Unit test for Magento\Framework\ValidatorFactory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RedirectFactoryTest extends \PHPUnit_Framework_TestCase
+class RedirectFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\ValidatorFactory */
     private $model;
@@ -23,7 +21,7 @@ class RedirectFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = $objectManager->getObject(
             \Magento\Framework\Controller\Result\RedirectFactory::class,
             ['objectManager' => $this->objectManagerMock]

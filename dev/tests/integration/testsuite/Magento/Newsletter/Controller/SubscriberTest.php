@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller;
@@ -57,7 +57,7 @@ class SubscriberTest extends AbstractController
         $this->dispatch('newsletter/subscriber/new');
 
         $this->assertSessionMessages($this->equalTo([
-                'There was a problem with the subscription: This email address is already assigned to another user.',
+                'Thank you for your subscription.',
             ]));
         $this->assertRedirect($this->anything());
     }

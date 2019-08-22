@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -378,7 +382,7 @@ define([
          * Checks if specified view is in editing state.
          *
          * @param {String} index - Index of a view to be checked.
-         * @returns {Bollean}
+         * @returns {Boolean}
          */
         isEditing: function (index) {
             return this.editing === index;

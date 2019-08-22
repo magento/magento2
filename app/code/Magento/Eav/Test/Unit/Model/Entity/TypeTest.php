@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Type
@@ -49,36 +49,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->attrFactoryMock = $this->getMock(
-            \Magento\Eav\Model\Entity\AttributeFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->attrSetFactoryMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Attribute\SetFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->storeFactoryMock = $this->getMock(
-            \Magento\Eav\Model\Entity\StoreFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->universalFactoryMock = $this->getMock(
-            \Magento\Framework\Validator\UniversalFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->attrFactoryMock = $this->createMock(\Magento\Eav\Model\Entity\AttributeFactory::class);
+        $this->attrSetFactoryMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\SetFactory::class);
+        $this->storeFactoryMock = $this->createPartialMock(\Magento\Eav\Model\Entity\StoreFactory::class, ['create']);
+        $this->universalFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
         $this->resourceMock = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],

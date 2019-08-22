@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Fixture\Product;
 
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Repository\RepositoryFactory;
+use Magento\Store\Test\Fixture\Website;
 
 /**
  * TierPrice data source.
@@ -25,6 +26,13 @@ class TierPrice extends DataSource
      * @var array
      */
     private $customerGroups;
+
+    /**
+     * Website fixture.
+     *
+     * @var \Magento\Store\Test\Fixture\Website
+     */
+    private $website;
 
     /**
      * Repository Factory instance.
@@ -80,6 +88,9 @@ class TierPrice extends DataSource
             throw new \Exception("Data must be set");
         }
         $this->data = $this->repositoryFactory->get($this->params['repository'])->get($this->fixtureData['dataset']);
+        if (!empty($this->fixtureData['data']['website'])) {
+            $this->prepareWebsite();
+        }
         foreach ($this->data as $key => $item) {
             /** @var CustomerGroup $customerGroup */
             $customerGroup = $this->fixtureFactory->createByCode(
@@ -97,6 +108,31 @@ class TierPrice extends DataSource
     }
 
     /**
+     * Prepare website data.
+     *
+     * @return void
+     */
+    private function prepareWebsite()
+    {
+        if (is_array($this->fixtureData['data']['website'])
+            && isset($this->fixtureData['data']['website']['dataset'])) {
+            /** @var Website $website */
+            $this->website = $this->fixtureFactory->createByCode(
+                'website',
+                ['dataset' => $this->fixtureData['data']['website']['dataset']]
+            );
+            $this->website->persist();
+        } else {
+            $this->website = $this->fixtureData['data']['website'];
+        }
+
+        $this->fixtureData['data']['website'] = $this->website->getCode();
+        foreach ($this->data as $key => $data) {
+            $this->data[$key] = array_merge($data, $this->fixtureData['data']);
+        }
+    }
+
+    /**
      * Return customer group fixture.
      *
      * @return array
@@ -104,5 +140,15 @@ class TierPrice extends DataSource
     public function getCustomerGroups()
     {
         return $this->customerGroups;
+    }
+
+    /**
+     * Return website fixture.
+     *
+     * @return \Magento\Store\Test\Fixture\Website
+     */
+    public function getWebsite()
+    {
+        return $this->website;
     }
 }

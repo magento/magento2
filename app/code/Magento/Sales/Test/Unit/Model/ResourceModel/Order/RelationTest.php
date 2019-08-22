@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order;
 /**
  * Class RelationTest
  */
-class RelationTest extends \PHPUnit_Framework_TestCase
+class RelationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Relation

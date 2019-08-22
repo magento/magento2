@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Dependency\Data;
@@ -9,7 +9,7 @@ use \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DependencyTest extends \PHPUnit_Framework_TestCase
+class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $module

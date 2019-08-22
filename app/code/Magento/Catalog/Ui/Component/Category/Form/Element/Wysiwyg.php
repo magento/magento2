@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Category\Form\Element;
@@ -16,16 +16,21 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * Catalog Wysiwyg
+ *
+ * @api
+ * @since 101.0.0
  */
 class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
 {
     /**
      * @var DataHelper
+     * @since 101.0.0
      */
     protected $backendHelper;
 
     /**
      * @var LayoutInterface
+     * @since 101.0.0
      */
     protected $layout;
 
@@ -58,43 +63,5 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
 
         $config['wysiwyg'] = (bool)$attrRepository->get($data['name'])->getIsWysiwygEnabled();
         parent::__construct($context, $formFactory, $wysiwygConfig, $components, $data, $config);
-        $this->setData($this->prepareData($this->getData()));
-    }
-
-    /**
-     * Prepare wysiwyg content
-     *
-     * @param array $data
-     * @return array
-     */
-    private function prepareData($data)
-    {
-        if ($this->editor->isEnabled()) {
-            $data['config']['content'] .= $this->getWysiwygButtonHtml();
-        }
-        return $data;
-    }
-
-    /**
-     * Return wysiwyg button html
-     *
-     * @return string
-     */
-    private function getWysiwygButtonHtml()
-    {
-        return $this->layout->createBlock(
-            Button::class,
-            '',
-            [
-                'data' => [
-                    'label' => __('WYSIWYG Editor'),
-                    'type' => 'button',
-                    'class' => 'action-wysiwyg',
-                    'onclick' => 'catalogWysiwygEditor.open(\'' . $this->backendHelper->getUrl(
-                        'catalog/product/wysiwyg'
-                    ) . '\', \'' . $this->editor->getHtmlId() . '\')',
-                ]
-            ]
-        )->toHtml();
     }
 }

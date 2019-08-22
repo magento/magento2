@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
@@ -16,7 +20,10 @@ define([
             loading:        false,
             visible:        true,
             template:       'ui/content/content',
-            additionalClasses: {}
+            additionalClasses: {},
+            ignoreTmpls: {
+                content: true
+            }
         },
 
         /**
@@ -71,6 +78,7 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
         initContainer: function (parent) {
             this._super();
 

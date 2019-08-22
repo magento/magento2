@@ -1,7 +1,7 @@
 # Overview
 ## Purpose of module
 
-The Magento\Ui module introduces a set of common UI components, which could be easily used and configured via layout XML files.
+The Magento\Ui module introduces a set of common UI components, which could be used and configured via layout XML files.
 
 # Deployment
 ## System requirements

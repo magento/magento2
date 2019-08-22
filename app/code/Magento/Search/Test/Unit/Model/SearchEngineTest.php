@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SearchEngineTest extends \PHPUnit_Framework_TestCase
+class SearchEngineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\SearchEngine

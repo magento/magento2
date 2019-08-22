@@ -1,15 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
 /**
  * Key Index action
  */
-class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
+class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key implements HttpGetActionInterface
 {
     /**
      * Render main page with form

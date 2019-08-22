@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!-- Include section -->
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/ui_component.xsd"/>
+
+    <xs:complexType name="componentAction">
+        <xs:sequence>
+            <xs:group ref="configurable" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:group ref="componentActionSettings"/>
+                        <xs:element name="actions">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    A list of available actions.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                    <xs:element name="action">
+                                        <xs:complexType>
+                                            <xs:choice minOccurs="1" maxOccurs="unbounded">
+                                                <xs:element ref="label">
+                                                    <xs:annotation>
+                                                        <xs:documentation>
+                                                            Action's label displayed in the list of actions.
+                                                        </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
+                                                <xs:element ref="param"/>
+                                                <xs:element name="type" type="xs:string">
+                                                    <xs:annotation>
+                                                        <xs:documentation>
+                                                            Action's identifier.
+                                                        </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
+                                                <xs:element name="url" type="urlType">
+                                                    <xs:annotation>
+                                                        <xs:documentation>
+                                                            Path to the controller responsible for action handling.
+                                                        </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
+                                                <xs:element name="actionDisable" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation>
+                                                            Disable and remove this action.
+                                                        </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
+                                            </xs:choice>
+                                            <xs:attribute name="name" use="required"/>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:choice>
+                                <xs:attribute name="class" type="xs:string"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
+
+    <xs:group name="componentActionSettings">
+        <xs:choice>
+            <xs:group ref="uiElementSettings"/>
+            <xs:element ref="label"/>
+            <xs:element name="type" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Action's identifier.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="url" type="urlType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Path to the controller responsible for action handling.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="actionDisable" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation>
+                        Disable and remove this action.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="confirm" type="confirmType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Confirmation message displayed before applying the action.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="callback">
+                <xs:annotation>
+                    <xs:documentation>
+                        Custom action's handler.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:choice minOccurs="1" maxOccurs="unbounded">
+                        <xs:element name="provider" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    Reference to component.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="target" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    Name of the component's method to be invoked.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+
+    <xs:complexType name="confirmType">
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element ref="title"/>
+            <xs:element name="message" type="translatableString"/>
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>

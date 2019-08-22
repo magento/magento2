@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -30,19 +30,6 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
         </variation>
-        <variation name="CreateCmsPageEntityTestVariation3" summary="Create page with widget and system variable">
-            <data name="tag" xsi:type="string">severity:S1</data>
-            <data name="fixtureType" xsi:type="string">cmsPage</data>
-            <data name="data/is_active" xsi:type="string">Yes</data>
-            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
-            <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
-            <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-            <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
-            <data name="data/content/widget/dataset" xsi:type="string">default</data>
-            <data name="data/content/variable" xsi:type="string">General Contact Name</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
-        </variation>
         <variation name="CreateCmsPageEntityTestVariation4" summary="Create disabled page">
             <data name="tag" xsi:type="string">severity:S3</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
@@ -65,6 +52,18 @@
             <data name="displayContent" xsi:type="string">bla bla bla</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
+        </variation>
+        <variation name="CreateCmsPageEntityTestVariation6" summary="Create CMS page with single store mode" ticketId="MAGETWO-59654">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="configData" xsi:type="string">enable_single_store_mode</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
+            <data name="data/is_active" xsi:type="string">Yes</data>
+            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
+            <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageFormSingleStoreMode" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
         </variation>
     </testCase>

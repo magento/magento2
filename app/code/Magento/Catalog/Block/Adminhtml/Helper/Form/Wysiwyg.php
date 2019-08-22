@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form;
 
+/**
+ * Wysiwyg helper.
+ */
 class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
 {
     /**
@@ -23,7 +26,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $_moduleManager = null;
 
@@ -43,7 +46,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
      */
@@ -53,7 +56,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
         \Magento\Framework\Escaper $escaper,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Backend\Helper\Data $backendData,
         array $data = []
     ) {
@@ -102,19 +105,7 @@ require([
 var config = $config,
     editor;
 
-jQuery.extend(config, {
-    settings: {
-        theme_advanced_buttons1 : 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
-            'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
-        theme_advanced_buttons2: null,
-        theme_advanced_buttons3: null,
-        theme_advanced_buttons4: null,
-        theme_advanced_statusbar_location: null
-    },
-    files_browser_window_url: false
-});
-
-editor = new tinyMceWysiwygSetup(
+editor = new wysiwygSetup(
     '{$this->getHtmlId()}',
     config
 );

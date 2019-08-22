@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\License;
 
-class LicenseTest extends \PHPUnit_Framework_TestCase
+class LicenseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\License
@@ -22,7 +22,7 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->licenseModel = $this->getMock(\Magento\Setup\Model\License::class, [], [], '', false);
+        $this->licenseModel = $this->createMock(\Magento\Setup\Model\License::class);
         $this->controller = new License($this->licenseModel);
     }
 

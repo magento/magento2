@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<actionsColumn xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd"
+               name="string"
+               template="string"
+               component="string"
+               class="string"
+               provider="string"
+               sortOrder="0"
+               displayArea="string">
+    <settings>
+
+        <!-- uiElementSettings -->
+        <statefull>
+            <property xsi:type="boolean" name="anySimpleType">true</property>
+        </statefull>
+        <imports>
+            <link name="string">string</link>
+        </imports>
+        <exports>
+            <link name="string">string</link>
+        </exports>
+        <links>
+            <link name="string">string</link>
+        </links>
+        <listens>
+            <link name="string">string</link>
+        </listens>
+        <deps>
+            <dep active="false">string</dep>
+        </deps>
+        <ns>string</ns>
+        <componentType>string</componentType>
+        <dataScope>string</dataScope>
+        <storageConfig>
+            <provider>string</provider>
+            <namespace>string</namespace>
+            <path path="string">
+                <param name="string">string</param>
+            </path>
+        </storageConfig>
+        <!-- /uiElementSettings -->
+
+        <!-- componentColumnSettings-->
+        <draggable>false</draggable>
+        <sorting>asc</sorting>
+        <sortable>false</sortable>
+        <controlVisibility>false</controlVisibility>
+        <bodyTmpl>string</bodyTmpl>
+        <headerTmpl>string</headerTmpl>
+        <label translate="false">
+        </label>
+        <fieldClass>
+            <class name="string">false</class>
+        </fieldClass>
+        <disableAction>false</disableAction>
+        <filter>true</filter>
+        <editor>
+            <param xsi:type="boolean" name="anySimpleType">true</param>
+        </editor>
+        <dataType>string</dataType>
+        <visible>false</visible>
+        <resizeEnabled>false</resizeEnabled>
+        <addField>false</addField>
+        <hasPreview>false</hasPreview>
+        <altField>string</altField>
+        <resizeDefaultWidth>0</resizeDefaultWidth>
+        <fieldAction>
+            <provider>string</provider>
+            <target>string</target>
+            <params>
+                <param xsi:type="boolean" name="0">true</param>
+            </params>
+        </fieldAction>
+        <options class="anySimpleType">
+            <option xsi:type="boolean" name="anySimpleType">true</option>
+        </options>
+        <dateFormat>string</dateFormat>
+        <timeFormat>string</timeFormat>
+        <timezone>false</timezone>
+        <!-- /componentColumnSettings-->
+
+        <!-- componentActionsColumnSettings-->
+        <templates>
+            <actions>
+                <action name="0">
+                    <index>0</index>
+                    <href>string</href>
+                    <label translate="false"/>
+                    <callback>
+                        <target>string</target>
+                        <provider>string</provider>
+                        <params>
+                            <param name="string" xsi:type="string">string</param>
+                        </params>
+                    </callback>
+                    <confirm>
+                        <title translate="true">string</title>
+                        <message translate="true">string</message>
+                        <param name="string" xsi:type="string">string</param>
+                    </confirm>
+                </action>
+            </actions>
+        </templates>
+        <indexField>string</indexField>
+        <!-- /componentColumnSettings-->
+    </settings>
+</actionsColumn>

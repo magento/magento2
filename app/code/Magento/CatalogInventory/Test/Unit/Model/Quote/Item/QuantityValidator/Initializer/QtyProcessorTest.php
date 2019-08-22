@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
 use \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\QtyProcessor;
 
-class QtyProcessorTest extends \PHPUnit_Framework_TestCase
+class QtyProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QtyProcessor

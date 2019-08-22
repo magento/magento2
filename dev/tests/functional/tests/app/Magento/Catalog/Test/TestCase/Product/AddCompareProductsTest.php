@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,7 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
 {
     /* tags */
     const MVP = 'yes';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -75,7 +76,7 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
-        for ($i = 1; $i <= count($this->products); $i++) {
+        for ($i = 1, $count = count($this->products); $i <= $count; $i++) {
             $this->catalogProductCompare->getCompareProductsBlock()->removeProduct();
         }
     }

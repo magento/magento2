@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModuleSample;
 
-class ModuleInstallationTest extends \PHPUnit_Framework_TestCase
+class ModuleInstallationTest extends \PHPUnit\Framework\TestCase
 {
     public function testSampleModuleInstallation()
     {

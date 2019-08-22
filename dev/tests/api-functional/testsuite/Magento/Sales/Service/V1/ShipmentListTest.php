@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -91,5 +91,7 @@ class ShipmentListTest extends WebapiAbstract
         $this->assertEquals($searchData, $result['search_criteria']);
         $this->assertEquals('100000002', $result['items'][0]['increment_id']);
         $this->assertEquals('100000003', $result['items'][1]['increment_id']);
+        $this->assertEquals(base64_encode('shipping_label_100000002'), $result['items'][0]['shipping_label']);
+        $this->assertEquals(base64_encode('shipping_label_100000003'), $result['items'][1]['shipping_label']);
     }
 }

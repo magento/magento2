@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'uiRegistry',
@@ -25,7 +28,7 @@ define([
          * @param {String} field
          */
         filter: function (value, field) {
-            var result;
+            var result, defaultCountry, defaultValue;
 
             if (!field) { //validate field, if we are on update
                 field = this.filterBy.field;
@@ -42,6 +45,18 @@ define([
             });
 
             this.setOptions(result);
+            this.reset();
+
+            if (!this.value()) {
+                defaultCountry = _.filter(result, function (item) {
+                    return item['is_default'] && _.contains(item['is_default'], value);
+                });
+
+                if (defaultCountry.length) {
+                    defaultValue = defaultCountry.shift();
+                    this.value(defaultValue.value);
+                }
+            }
         }
     });
 });

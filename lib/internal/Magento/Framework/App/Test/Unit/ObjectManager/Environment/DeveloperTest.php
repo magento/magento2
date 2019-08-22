@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\ObjectManager\Environment;
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\ObjectManager\Environment;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ObjectManager\Environment\Developer;
 
-class DeveloperTest extends \PHPUnit_Framework_TestCase
+class DeveloperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Developer
@@ -17,7 +17,7 @@ class DeveloperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $envFactoryMock = $this->getMock(\Magento\Framework\App\EnvironmentFactory::class, [], [], '', false);
+        $envFactoryMock = $this->createMock(\Magento\Framework\App\EnvironmentFactory::class);
         $this->_developer = new Developer($envFactoryMock);
     }
 

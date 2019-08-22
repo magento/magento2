@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -12,9 +12,17 @@ use Magento\Framework\View\Asset\Repository;
 use Psr\Log\LoggerInterface;
 use Magento\Payment\Model\Config as PaymentConfig;
 
+/**
+ * Credit card configuration model
+ *
+ * @api
+ * @since 100.0.2
+ */
 class CcConfig
 {
-    /** @var PaymentConfig */
+    /**
+     * @var \Magento\Payment\Model\Config
+     */
     protected $config;
 
     /**
@@ -62,7 +70,7 @@ class CcConfig
      * Solo/switch card start years
      *
      * @return array
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getSsStartYears()
     {
@@ -77,7 +85,7 @@ class CcConfig
     }
 
     /**
-     * Retrieve availables credit card types
+     * Retrieve available credit card types
      *
      * @return array
      */
@@ -120,7 +128,7 @@ class CcConfig
      * Whether switch/solo card type available
      *
      * @return bool
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function hasSsCardType()
     {

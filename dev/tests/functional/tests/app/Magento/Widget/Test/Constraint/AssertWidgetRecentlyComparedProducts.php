@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -89,7 +89,7 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
         $this->addProducts($products);
         $this->removeCompareProducts();
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $this->catalogProductCompare->getWidgetView()->isWidgetVisible($widget, 'Recently Compared'),
             'Widget is absent on Product Compare page.'
         );
@@ -118,6 +118,7 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
     protected function removeCompareProducts()
     {
         $this->cmsIndex->open();
+        $this->cmsIndex->getCompareLinkBlock()->waitForCompareProductsLinks();
         $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
         $this->catalogProductCompare->getCompareProductsBlock()->removeAllProducts();
     }

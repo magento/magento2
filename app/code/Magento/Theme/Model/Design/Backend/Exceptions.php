@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
+use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Validate Eav Model before save.
+ */
 class Exceptions extends ArraySerialized
 {
     /**
@@ -27,6 +31,7 @@ class Exceptions extends ArraySerialized
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -36,10 +41,20 @@ class Exceptions extends ArraySerialized
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->_design = $design;
-        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $config,
+            $cacheTypeList,
+            $resource,
+            $resourceCollection,
+            $data,
+            $serializer
+        );
     }
 
     /**
@@ -88,14 +103,17 @@ class Exceptions extends ArraySerialized
      *
      * @param string $search
      * @return string
+     *
      * @throws \Magento\Framework\Exception\LocalizedException on invalid regular expression
      */
     protected function _composeRegexp($search)
     {
         // If valid regexp entered - do nothing
+        /** @codingStandardsIgnoreStart */
         if (@preg_match($search, '') !== false) {
             return $search;
         }
+        /** @codingStandardsIgnoreEnd */
 
         // Find out - whether user wanted to enter regexp or normal string.
         if ($this->_isRegexp($search)) {
@@ -121,7 +139,7 @@ class Exceptions extends ArraySerialized
         // Limit delimiters to reduce possibility, that we miss string with regexp.
 
         // Starts with a delimiter
-        if (strpos($possibleDelimiters, $search[0]) !== false) {
+        if (strpos($possibleDelimiters, (string) $search[0]) !== false) {
             return true;
         }
 
@@ -151,6 +169,8 @@ class Exceptions extends ArraySerialized
     }
 
     /**
+     * Get Value from data array.
+     *
      * @return array
      */
     public function getValue()

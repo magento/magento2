@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -47,6 +47,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
         'abstract' => 'setAbstract',
         'visibility' => 'setVisibility',
         'body' => 'setBody',
+        'returntype' => 'setReturnType'
     ];
 
     /**
@@ -59,6 +60,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
         'type' => 'setType',
         'defaultValue' => 'setDefaultValue',
         'passedByReference' => 'setPassedByReference',
+        'variadic' => 'setVariadic',
     ];
 
     /**
@@ -127,6 +129,10 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
                 $this->_setDataToObject($docBlockObject, $methodOptions['docblock'], $this->_docBlockOptions);
 
                 $methodObject->setDocBlock($docBlockObject);
+            }
+
+            if (!empty($methodOptions['returnType'])) {
+                $methodObject->setReturnType($methodOptions['returnType']);
             }
 
             $this->addMethodFromGenerator($methodObject);
@@ -206,10 +212,10 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
     public function getNamespaceName()
     {
-        return ltrim(parent::getNamespaceName(), '\\');
+        return ltrim(parent::getNamespaceName(), '\\') ?: null;
     }
 }

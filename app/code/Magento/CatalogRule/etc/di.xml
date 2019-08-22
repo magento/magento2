@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -124,6 +124,44 @@
             <argument name="linkedProductSelectBuilder" xsi:type="array">
                 <item name="catalogRulePrice" xsi:type="object">Magento\CatalogRule\Model\ResourceModel\Product\LinkedProductSelectBuilderByCatalogRulePrice</item>
             </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface" type="Magento\CatalogRule\Model\Indexer\IndexerTableSwapper" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="catalogRulePriceModifier" xsi:type="object">Magento\CatalogRule\Model\Indexer\ProductPriceIndexModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="catalogRulePriceModifier" xsi:type="object">Magento\CatalogRule\Model\Indexer\ProductPriceIndexModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="CatalogRuleCustomConditionProvider" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProvider">
+        <arguments>
+            <argument name="customConditionProcessors" xsi:type="array">
+                <item name="category_ids" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ProductCategoryCondition</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CatalogRuleAdvancedFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\AdvancedFilterProcessor">
+        <arguments>
+            <argument name="defaultConditionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\DefaultCondition</argument>
+            <argument name="customConditionProvider" xsi:type="object">CatalogRuleCustomConditionProvider</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier">
+        <arguments>
+            <argument name="searchCriteriaProcessor" xsi:type="object">CatalogRuleAdvancedFilterProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor">
+        <arguments>
+            <argument name="customConditionProvider" xsi:type="object">CatalogRuleCustomConditionProvider</argument>
         </arguments>
     </type>
 </config>

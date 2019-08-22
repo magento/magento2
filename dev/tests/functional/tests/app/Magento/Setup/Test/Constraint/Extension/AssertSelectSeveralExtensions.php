@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class AssertSelectSeveralExtensions extends AbstractConstraint
     public function processAssert(AbstractGrid $grid, array $extensions)
     {
         $extensions = $grid->selectSeveralExtensions($extensions);
-        \PHPUnit_Framework_Assert::assertEmpty(
+        \PHPUnit\Framework\Assert::assertEmpty(
             $extensions,
             'Next extensions are not found on the grid: ' . $this->getExtensionsNames($extensions)
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,7 @@ class AssertGlobalSearchPreview extends AbstractConstraint
     {
         $adminSearchPreview = '"' . $search->getQuery() . '" in '. $type;
         $isVisibleInResult = $dashboard->getAdminPanelHeader()->isAdminSearchPreviewVisible($adminSearchPreview, $type);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $isVisibleInResult,
             'Search Preview for ' . $type . ' is not in search results'
         );

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,14 +18,11 @@
             <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml"/>
         </referenceContainer>
         <referenceContainer name="left">
-            <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="catalog/category/tree.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="Magento_Catalog::catalog/category/tree.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
             <uiComponent name="category_form"/>
             <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="Magento_Catalog::catalog/category/edit.phtml" />
-        </referenceContainer>
-        <referenceContainer name="js">
-            <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>
         </referenceContainer>
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="catalog_category_page_head_components" template="Magento_Catalog::js/components.phtml"/>

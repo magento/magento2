@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
@@ -9,7 +9,7 @@ use \Magento\Framework\View\Asset\MergeStrategy\FileExists;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class FileExistsTest extends \PHPUnit_Framework_TestCase
+class FileExistsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
@@ -35,13 +35,13 @@ class FileExistsTest extends \PHPUnit_Framework_TestCase
     {
         $this->mergerMock = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\MergeStrategyInterface::class);
         $this->dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->dirMock));
         $this->fileExists = new FileExists($this->mergerMock, $filesystem);
-        $this->resultAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $this->resultAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/file'));
     }
 

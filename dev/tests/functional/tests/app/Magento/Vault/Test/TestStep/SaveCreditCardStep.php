@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\TestStep;
@@ -57,7 +57,7 @@ class SaveCreditCardStep implements TestStepInterface
      */
     public function run()
     {
-        $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->saveCreditCard(
+        $this->checkoutOnepage->getVaultPaymentBlock()->saveCreditCard(
             $this->payment['method'],
             $this->creditCardSave
         );

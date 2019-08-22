@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget;
@@ -10,7 +10,7 @@ use Magento\Backend\Block\Widget\Form;
 use Magento\Framework\Data\Form as DataForm;
 use Magento\Framework\UrlInterface;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Form */
     protected $model;

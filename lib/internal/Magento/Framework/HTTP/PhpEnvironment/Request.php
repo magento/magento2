@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
@@ -13,6 +13,12 @@ use Zend\Stdlib\ParametersInterface;
 use Zend\Uri\UriFactory;
 use Zend\Uri\UriInterface;
 
+/**
+ * HTTP Request for current PHP environment.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Request extends \Zend\Http\PhpEnvironment\Request
 {
     /**#@+
@@ -92,14 +98,14 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @var \Magento\Framework\App\Config
      */
     protected $appConfig;
-    
+
     /**
      * Name of http header to check for ssl offloading default value is X-Forwarded-Proto
      *
      * @var string
      */
     protected $sslOffloadHeader;
-    
+
     /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
@@ -414,20 +420,19 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         if ($this->immediateRequestSecure()) {
             return true;
         }
-      
-        return $this->initialRequestSecure($this->SslOffloadHeader());
+
+        return $this->initialRequestSecure($this->getSslOffloadHeader());
     }
 
-    /***
+    /**
      * Get value of SSL offload http header from configuration - defaults to X-Forwarded-Proto
      *
      * @return string
      */
-    private function SslOffloadHeader()
+    private function getSslOffloadHeader()
     {
         // Lets read from db only one time okay.
         if ($this->sslOffloadHeader === null) {
-
             // @todo: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
             // installed MAGETWO-31756
             // Check if a proxy sent a header indicating an initial secure request
@@ -446,7 +451,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * Create an instance of Magento\Framework\App\Config
      *
      * @return \Magento\Framework\App\Config
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getAppConfig()
     {
@@ -531,7 +536,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
-     * Retrieve GET parameters
+     * Set GET parameters
      *
      * @param string $name
      * @param mixed $value
@@ -565,7 +570,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         return $post;
     }
 
-
     /**
      * Set POST parameters
      *
@@ -585,6 +589,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
 
     /**
      * Access values contained in the superglobals as public members
+     *
      * Order of precedence: 1. GET, 2. POST, 3. COOKIE, 4. SERVER, 5. ENV
      *
      * @see http://msdn.microsoft.com/en-us/library/system.web.httprequest.item.aspx
@@ -682,7 +687,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $name Header name to retrieve.
      * @param mixed|null $default Default value to use when the requested header is missing.
-     * @return bool|HeaderInterface
+     * @return bool|string
      */
     public function getHeader($name, $default = false)
     {
@@ -725,7 +730,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         if ($checkProxy && $this->getServer('HTTP_CLIENT_IP') != null) {
             $ip = $this->getServer('HTTP_CLIENT_IP');
-        } else if ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
+        } elseif ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
             $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
         } else {
             $ip = $this->getServer('REMOTE_ADDR');
@@ -781,7 +786,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         return $this;
     }
 
-
     /**
      * Get base url
      *
@@ -795,6 +799,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
+     * Get flag value for whether the request is forwarded or not.
+     *
      * @return bool
      * @codeCoverageIgnore
      */
@@ -804,6 +810,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
+     * Set flag value for whether the request is forwarded or not.
+     *
      * @param bool $forwarded
      * @return $this
      * @codeCoverageIgnore

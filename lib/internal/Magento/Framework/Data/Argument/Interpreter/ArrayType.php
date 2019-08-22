@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Argument\Interpreter;
@@ -28,7 +28,7 @@ class ArrayType implements InterpreterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @return array
      * @throws \InvalidArgumentException
      */
@@ -90,11 +90,11 @@ class ArrayType implements InterpreterInterface
         $firstValue = 0;
         $secondValue = 0;
         if (isset($firstItem['sortOrder'])) {
-            $firstValue = intval($firstItem['sortOrder']);
+            $firstValue = (int)$firstItem['sortOrder'];
         }
 
         if (isset($secondItem['sortOrder'])) {
-            $secondValue = intval($secondItem['sortOrder']);
+            $secondValue = (int)$secondItem['sortOrder'];
         }
 
         if ($firstValue == $secondValue) {

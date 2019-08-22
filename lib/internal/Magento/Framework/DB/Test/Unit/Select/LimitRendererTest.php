@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Select;
 
 use Magento\Framework\DB\Select;
 
-class LimitRendererTest extends \PHPUnit_Framework_TestCase
+class LimitRendererTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {

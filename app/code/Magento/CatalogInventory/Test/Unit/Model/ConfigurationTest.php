@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model;
@@ -10,7 +10,7 @@ use \Magento\CatalogInventory\Model\Configuration;
 /**
  * Class ConfigurationTest
  */
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Configuration
@@ -144,7 +144,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
 
         $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(
                 Configuration::XML_PATH_ENABLE_QTY_INCREMENTS,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,

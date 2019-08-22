@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Customer Group is created
  * Steps:
  * 1. Log in to backend as admin user
- * 2. Navigate to Stores > Other Settings > Customer Groups
+ * 2. Navigate to Customers > Customer Groups
  * 3. Click on Customer Group from grid
  * 4. Update data according to data set
  * 5. Click "Save Customer Group" button
@@ -32,6 +32,7 @@ class UpdateCustomerGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

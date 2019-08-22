@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Paypal\Model;
 
-class PayflowproTest extends \PHPUnit_Framework_TestCase
+class PayflowproTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -47,20 +47,8 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $httpClientFactoryMock->expects($this->any())->method('create')
             ->will($this->returnValue($this->_httpClientMock));
 
-        $mathRandomMock = $this->getMock(
-            \Magento\Framework\Math\Random::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $loggerMock = $this->getMock(
-            \Magento\Payment\Model\Method\Logger::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $mathRandomMock = $this->createMock(\Magento\Framework\Math\Random::class);
+        $loggerMock = $this->createMock(\Magento\Payment\Model\Method\Logger::class);
         $this->gatewayMock =$this->_objectManager->create(
             \Magento\Paypal\Model\Payflow\Service\Gateway::class,
             [

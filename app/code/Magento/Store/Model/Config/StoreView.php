@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Config;
@@ -14,11 +14,19 @@ use Magento\Store\Model\ScopeInterface;
  */
 class StoreView
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     private $scopeConfig;
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
-    /** @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface */
+
+    /**
+     * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface
+     */
     private $themeProvider;
 
     /**

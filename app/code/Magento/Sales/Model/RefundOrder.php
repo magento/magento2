@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -13,7 +14,7 @@ use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
-use Magento\Sales\Model\Order\PaymentAdapterInterface;
+use Magento\Sales\Model\Order\RefundAdapterInterface;
 use Magento\Sales\Model\Order\Validation\RefundOrderInterface as RefundOrderValidator;
 use Psr\Log\LoggerInterface;
 
@@ -44,9 +45,9 @@ class RefundOrder implements RefundOrderInterface
     private $creditmemoRepository;
 
     /**
-     * @var PaymentAdapterInterface
+     * @var RefundAdapterInterface
      */
-    private $paymentAdapter;
+    private $refundAdapter;
 
     /**
      * @var CreditmemoDocumentFactory
@@ -80,7 +81,7 @@ class RefundOrder implements RefundOrderInterface
      * @param OrderStateResolverInterface $orderStateResolver
      * @param OrderRepositoryInterface $orderRepository
      * @param CreditmemoRepositoryInterface $creditmemoRepository
-     * @param PaymentAdapterInterface $paymentAdapter
+     * @param RefundAdapterInterface $refundAdapter
      * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
      * @param RefundOrderValidator $validator
      * @param NotifierInterface $notifier
@@ -93,7 +94,7 @@ class RefundOrder implements RefundOrderInterface
         OrderStateResolverInterface $orderStateResolver,
         OrderRepositoryInterface $orderRepository,
         CreditmemoRepositoryInterface $creditmemoRepository,
-        PaymentAdapterInterface $paymentAdapter,
+        RefundAdapterInterface $refundAdapter,
         CreditmemoDocumentFactory $creditmemoDocumentFactory,
         RefundOrderValidator $validator,
         NotifierInterface $notifier,
@@ -104,7 +105,7 @@ class RefundOrder implements RefundOrderInterface
         $this->orderStateResolver = $orderStateResolver;
         $this->orderRepository = $orderRepository;
         $this->creditmemoRepository = $creditmemoRepository;
-        $this->paymentAdapter = $paymentAdapter;
+        $this->refundAdapter = $refundAdapter;
         $this->creditmemoDocumentFactory = $creditmemoDocumentFactory;
         $this->validator = $validator;
         $this->notifier = $notifier;
@@ -150,11 +151,14 @@ class RefundOrder implements RefundOrderInterface
         try {
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
             $order->setCustomerNoteNotify($notify);
-            $order = $this->paymentAdapter->refund($creditmemo, $order);
-            $order->setState(
-                $this->orderStateResolver->getStateForOrder($order, [])
-            );
-            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
+            $order = $this->refundAdapter->refund($creditmemo, $order);
+            $orderState = $this->orderStateResolver->getStateForOrder($order, []);
+            $order->setState($orderState);
+            $statuses = $this->config->getStateStatuses($orderState, false);
+            $status = in_array($order->getStatus(), $statuses, true)
+                ? $order->getStatus()
+                : $this->config->getStateDefaultStatus($orderState);
+            $order->setStatus($status);
 
             $order = $this->orderRepository->save($order);
             $creditmemo = $this->creditmemoRepository->save($creditmemo);

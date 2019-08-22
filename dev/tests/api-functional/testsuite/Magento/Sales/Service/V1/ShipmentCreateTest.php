@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Service\V1;
 
@@ -30,6 +28,7 @@ class ShipmentCreateTest extends WebapiAbstract
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
+
     /**
      * @magentoApiDataFixture Magento/Sales/_files/order.php
      */
@@ -44,13 +43,13 @@ class ShipmentCreateTest extends WebapiAbstract
                 'qty' => $orderItem->getQtyOrdered(),
                 'additional_data' => null,
                 'description' => null,
-                'entity_id' => null,
+                'entity_id' => 1,
                 'name' => null,
                 'parent_id' => null,
                 'price' => null,
                 'product_id' => null,
                 'row_total' => null,
-                'sku' => null,
+                'sku' => 'simple',
                 'weight' => null,
             ],
         ];

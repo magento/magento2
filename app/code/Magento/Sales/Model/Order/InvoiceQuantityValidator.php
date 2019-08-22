@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -75,7 +75,7 @@ class InvoiceQuantityValidator implements ValidatorInterface
         if ($qtys) {
             $messages[] = __('The invoice contains one or more items that are not part of the original order.');
         } elseif ($totalQty <= 0) {
-            $messages[] = __('You can\'t create an invoice without products.');
+            $messages[] = __("The invoice can't be created without products. Add products and try again.");
         }
         return $messages;
     }

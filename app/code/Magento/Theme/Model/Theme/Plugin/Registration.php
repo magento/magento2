@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme\Plugin;
@@ -20,19 +20,29 @@ use Magento\Framework\Config\Theme;
  */
 class Registration
 {
-    /** @var ThemeRegistration */
+    /**
+     * @var \Magento\Theme\Model\Theme\Registration
+     */
     protected $themeRegistration;
 
-    /** @var ThemeCollection */
+    /**
+     * @var \Magento\Theme\Model\Theme\Collection
+     */
     protected $themeCollection;
 
-    /** @var ThemeLoader */
+    /**
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
+     */
     protected $themeLoader;
 
-    /** @var LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
 
-    /** @var AppState */
+    /**
+     * @var \Magento\Framework\App\State
+     */
     protected $appState;
 
     /**

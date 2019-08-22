@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -63,10 +63,6 @@
 
             .field {
                 margin: 0 0 16px;
-
-                &.note {
-                    display: none;
-                }
             }
 
             .actions-toolbar {
@@ -101,6 +97,7 @@
                 .field {
                     .radio {
                         float: left;
+                        margin-top: 4px;
                     }
 
                     .radio {
@@ -160,6 +157,10 @@
                 text-align: left;
             }
         }
+
+        .discount.coupon {
+            display: none;
+        }
     }
 
     //  Products table
@@ -209,7 +210,7 @@
                         height: 36px;
                         margin-top: -7px;
                         text-align: center;
-                        width: 45px;
+                        width: 60px;
                     }
                 }
 
@@ -339,6 +340,22 @@
         }
     }
 
+    //  Products pager
+    .cart-products-toolbar {
+        .toolbar-amount {
+            left: inherit;
+            margin: @indent__m 0 15px;
+            padding: 0;
+            position: relative;
+            text-align: center;
+            top: inherit;
+        }
+    }
+
+    .cart-products-toolbar-top {
+        border-bottom: @border-width__base solid @border-color__base;
+    }
+
     //  Discount
     .cart-discount {
         border-bottom: @border-width__base solid @border-color__base;
@@ -438,7 +455,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th);
                         display: block;
                         font-weight: @font-weight__semibold;
@@ -475,6 +492,17 @@
             }
         }
     }
+
+    .cart.table-wrapper,
+    .order-items.table-wrapper {
+        .col.price,
+        .col.qty,
+        .col.subtotal,
+        .col.msrp {
+            text-align: left;
+        }
+    }
+
 }
 
 //
@@ -498,6 +526,18 @@
 //
 //  Desktop
 //  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+    .cart-container {
+        .block.crosssell {
+            .products-grid {
+                .product-item-actions {
+                    margin: 0 0 @indent__s;
+                }
+            }
+        }
+    }
+}
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .checkout-cart-index {
@@ -605,15 +645,53 @@
                 }
 
                 &-item-details {
-                    padding-bottom: 35px;
-                }
-
-                &-item-details {
                     display: table-cell;
+                    padding-bottom: 35px;
                     vertical-align: top;
                     white-space: normal;
                     width: 99%;
                 }
+            }
+        }
+    }
+
+    //  Products pager
+    .cart-products-toolbar {
+        margin: 2px 0 0;
+
+        .toolbar-amount {
+            line-height: 30px;
+            margin: 0;
+        }
+
+        .pages {
+            float: right;
+
+            .item {
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .cart.table-wrapper {
+        .cart-products-toolbar {
+            + .cart {
+                thead {
+                    tr {
+                        th.col {
+                            padding-bottom: @indent__s;
+                            padding-top: @indent__s;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cart {
+            + .cart-products-toolbar {
+                margin-top: @indent__m;
             }
         }
     }
@@ -633,6 +711,9 @@
                     margin-left: @indent__s;
                     position: static;
                 }
+            }
+            &.discount {
+                width: auto;
             }
         }
     }

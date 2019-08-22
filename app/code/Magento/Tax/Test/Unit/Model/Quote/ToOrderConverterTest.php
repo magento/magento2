@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,11 @@ namespace Magento\Tax\Test\Unit\Model\Quote;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class ToOrderConverterTest
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
+class ToOrderConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Api\Data\OrderExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -60,6 +64,9 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function setupOrderExtensionAttributeMock()
     {
         $orderExtensionAttributeMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderExtensionInterface::class)

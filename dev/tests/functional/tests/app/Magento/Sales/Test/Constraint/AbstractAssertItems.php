@@ -1,30 +1,30 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
- * Class AbstractAssertArchiveItems
- * Assert items represented in order's entity view page
+ * Assert items represented in order's entity view page.
  */
 abstract class AbstractAssertItems extends AbstractAssertForm
 {
     /**
-     * Key for sort data
+     * Key for sort data.
      *
      * @var string
      */
     protected $sortKey = "::sku";
 
     /**
-     * List compare fields
+     * List compare fields.
      *
      * @var array
      */
@@ -35,25 +35,32 @@ abstract class AbstractAssertItems extends AbstractAssertForm
     ];
 
     /**
-     * Prepare order products
+     * Prepare order products.
      *
      * @param OrderInjectable $order
      * @param array|null $data [optional]
+     * @param Cart|null $cart [optional]
      * @return array
      */
-    protected function prepareOrderProducts(OrderInjectable $order, array $data = null)
+    protected function prepareOrderProducts(OrderInjectable $order, array $data = null, Cart $cart = null)
     {
-        $products = $order->getEntityId()['products'];
         $productsData = [];
-
-        /** @var CatalogProductSimple $product */
-        foreach ($products as $key => $product) {
+        if ($cart === null) {
+            $cart['data']['items'] = ['products' => $order->getEntityId()['products']];
+            $fixtureFactory = $this->objectManager->create(FixtureFactory::class);
+            $cart = $fixtureFactory->createByCode('cart', $cart);
+        }
+        /** @var \Magento\Catalog\Test\Fixture\Cart\Item $item */
+        foreach ($cart->getItems() as $key => $item) {
+            if (isset($data[$key]['qty']) && $data[$key]['qty'] == 0) {
+                continue;
+            }
             $productsData[] = [
-                'product' => $product->getName(),
-                'sku' => $product->getSku(),
-                'qty' => (isset($data[$key]['qty']) && $data[$key]['qty'] != '-')
+                'product' => $item->getData()['name'],
+                'sku' => $item->getData()['sku'],
+                'qty' => (isset($data[$key]['qty']))
                     ? $data[$key]['qty']
-                    : $product->getCheckoutData()['qty'],
+                    : $item->getData()['qty'],
             ];
         }
 
@@ -61,7 +68,7 @@ abstract class AbstractAssertItems extends AbstractAssertForm
     }
 
     /**
-     * Prepare invoice data
+     * Prepare invoice data.
      *
      * @param array $itemsData
      * @return array

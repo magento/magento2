@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 /**
  * Class FormKeyTest
  */
-class FormKeyTest extends \PHPUnit_Framework_TestCase
+class FormKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Version instance
@@ -46,13 +46,13 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->cookieMetadataFactory = $this->getMockBuilder(
             \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMock(\Magento\Framework\Session\SessionManagerInterface::class);
+        $this->sessionManager = $this->createMock(\Magento\Framework\Session\SessionManagerInterface::class);
         $this->formKey = new FormKey(
             $this->cookieManagerMock,
             $this->cookieMetadataFactory,

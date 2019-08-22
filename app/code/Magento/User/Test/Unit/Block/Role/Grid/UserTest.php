@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\User\Test\Unit\Block\Role\Grid;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Block\Role\Grid\User */
     protected $model;
@@ -131,7 +131,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
-        $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 
         $this->registryMock->expects($this->once())
             ->method('registry')
@@ -158,7 +157,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
-        $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 
         $this->registryMock->expects($this->once())
             ->method('registry')
@@ -183,7 +181,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
-        $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
 
         $this->registryMock->expects($this->once())
             ->method('registry')
@@ -238,5 +235,22 @@ class UserTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
 
         $this->model->toHtml();
+    }
+
+    public function testGetUsersCorrectInRoleUser()
+    {
+        $param = 'in_role_user';
+        $paramValue = '{"a":"role1","1":"role2","2":"role3"}';
+        $this->requestInterfaceMock->expects($this->once())->method('getParam')->with($param)->willReturn($paramValue);
+        $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturn($paramValue);
+        $this->assertEquals($paramValue, $this->model->getUsers(true));
+    }
+
+    public function testGetUsersIncorrectInRoleUser()
+    {
+        $param = 'in_role_user';
+        $paramValue = 'not_JSON';
+        $this->requestInterfaceMock->expects($this->once())->method('getParam')->with($param)->willReturn($paramValue);
+        $this->assertEquals('{}', $this->model->getUsers(true));
     }
 }

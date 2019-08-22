@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations;
@@ -18,7 +18,7 @@ class Config extends Widget implements TabInterface
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/super/config.phtml';
+    protected $_template = 'Magento_ConfigurableProduct::catalog/product/edit/super/config.phtml';
 
     /**
      * Core registry

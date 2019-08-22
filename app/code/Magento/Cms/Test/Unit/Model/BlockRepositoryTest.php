@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model;
@@ -13,7 +13,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
+class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockRepository
@@ -263,22 +263,8 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->blockSearchResult->expects($this->once())
             ->method('setItems')
-            ->with(['someData'])
+            ->with([$this->block])
             ->willReturnSelf();
-
-        $this->block->expects($this->once())
-            ->method('getData')
-            ->willReturn(['data']);
-
-        $this->dataHelper->expects($this->once())
-            ->method('populateWithArray')
-            ->with($this->blockData, ['data'], \Magento\Cms\Api\Data\BlockInterface::class);
-
-        $this->dataObjectProcessor->expects($this->once())
-            ->method('buildOutputDataArray')
-            ->with($this->blockData, \Magento\Cms\Api\Data\BlockInterface::class)
-            ->willReturn('someData');
-
         $this->assertEquals($this->blockSearchResult, $this->repository->getList($criteria));
     }
 }

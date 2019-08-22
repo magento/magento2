@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -102,10 +102,12 @@ class ProductsInCartReportEntityTest extends Injectable
         $productUrl = $_ENV['app_frontend_url'] . $product->getUrlKey() . '.html';
         $browser->open($productUrl);
         $this->catalogProductView->getViewBlock()->addToCart($product);
+        $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         if ($isGuest) {
             $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
             $browser->open($productUrl);
             $this->catalogProductView->getViewBlock()->addToCart($product);
+            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         }
     }
 

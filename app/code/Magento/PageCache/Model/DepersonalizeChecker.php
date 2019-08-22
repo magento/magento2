@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model;
@@ -20,7 +20,7 @@ class DepersonalizeChecker
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     private $moduleManager;
 
@@ -33,12 +33,12 @@ class DepersonalizeChecker
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param Config $cacheConfig
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         Config $cacheConfig
     ) {
         $this->request = $request;

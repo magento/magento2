@@ -3,7 +3,7 @@
  * @category    Magento
  * @package     Magento_CatalogInventory
  * @subpackage  unit_tests
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RowTest extends \PHPUnit_Framework_TestCase
+class RowTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Rows

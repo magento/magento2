@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -104,11 +106,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultPage->getConfig()->getTitle()->prepend(__('Categories'));
         $resultPage->getConfig()->getTitle()->prepend($resultPageTitle);
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
-
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId($storeId);
-        }
 
         return $resultPage;
     }

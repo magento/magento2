@@ -1,6 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
@@ -8,10 +11,13 @@ namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\JsonValidator;
 
 /**
  * Data provider for advanced inventory form
@@ -46,25 +52,43 @@ class AdvancedInventory extends AbstractModifier
     private $meta = [];
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var JsonValidator
+     */
+    private $jsonValidator;
+
+    /**
+     * Constructor
+     *
      * @param LocatorInterface $locator
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
      * @param StockConfigurationInterface $stockConfiguration
+     * @param Json|null $serializer
+     * @param JsonValidator|null $jsonValidator
      */
     public function __construct(
         LocatorInterface $locator,
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager,
-        StockConfigurationInterface $stockConfiguration
+        StockConfigurationInterface $stockConfiguration,
+        Json $serializer = null,
+        JsonValidator $jsonValidator = null
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;
         $this->arrayManager = $arrayManager;
         $this->stockConfiguration = $stockConfiguration;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->jsonValidator = $jsonValidator ?: ObjectManager::getInstance()->get(JsonValidator::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -89,21 +113,23 @@ class AdvancedInventory extends AbstractModifier
         }
 
         if (!empty($this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY))) {
-            $minSaleQtyData = null;
-            $defaultConfigValue = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
+            $minSaleQtyData = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
 
-            if (strpos($defaultConfigValue, 'a:') === 0) {
-                // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
-                $minSaleQtyValue = unserialize($defaultConfigValue);
-
-                foreach ($minSaleQtyValue as $group => $qty) {
-                    $minSaleQtyData[] = [
-                        StockItemInterface::CUSTOMER_GROUP_ID => $group,
-                        StockItemInterface::MIN_SALE_QTY => $qty
-                    ];
+            if (is_string($minSaleQtyData) && $this->jsonValidator->isValid($minSaleQtyData)) {
+                // Set data source for dynamicRows minimum qty allowed in shopping cart
+                $unserializedMinSaleQty = $this->serializer->unserialize($minSaleQtyData);
+                if (is_array($unserializedMinSaleQty)) {
+                    $minSaleQtyData = array_map(
+                        function ($group, $qty) {
+                            return [
+                                StockItemInterface::CUSTOMER_GROUP_ID => $group,
+                                StockItemInterface::MIN_SALE_QTY => $qty
+                            ];
+                        },
+                        array_keys($unserializedMinSaleQty),
+                        array_values($unserializedMinSaleQty)
+                    );
                 }
-            } else {
-                $minSaleQtyData = $defaultConfigValue;
             }
 
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/stock_data/min_qty_allowed_in_shopping_cart';
@@ -140,7 +166,7 @@ class AdvancedInventory extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -152,6 +178,8 @@ class AdvancedInventory extends AbstractModifier
     }
 
     /**
+     * Prepare Meta
+     *
      * @return void
      */
     private function prepareMeta()
@@ -174,6 +202,9 @@ class AdvancedInventory extends AbstractModifier
                     'value' => '1',
                     'dataScope' => $fieldCode . '.is_in_stock',
                     'scopeLabel' => '[GLOBAL]',
+                    'imports' => [
+                        'visible' => '${$.provider}:data.product.stock_data.manage_stock',
+                    ],
                 ]
             );
             $this->meta = $this->arrayManager->merge(
@@ -184,7 +215,6 @@ class AdvancedInventory extends AbstractModifier
                     'scopeLabel' => '[GLOBAL]',
                 ]
             );
-
             $container['arguments']['data']['config'] = [
                 'formElement' => 'container',
                 'componentType' => 'container',
@@ -194,60 +224,92 @@ class AdvancedInventory extends AbstractModifier
                 'dataScope' => $fieldCode,
                 'scopeLabel' => '[GLOBAL]',
                 'source' => 'product_details',
-                'sortOrder' =>
-                    (int) $this->arrayManager->get(
-                        $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
-                        $this->meta
-                    ) - 1,
-            ];
-            $qty['arguments']['data']['config'] = [
-                'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
-                'dataType' => 'number',
-                'formElement' => 'input',
-                'componentType' => 'field',
-                'visible' => '1',
-                'require' => '0',
-                'additionalClasses' => 'admin__field-small',
-                'label' => __('Quantity'),
-                'scopeLabel' => '[GLOBAL]',
-                'dataScope' => 'qty',
-                'validation' => [
-                    'validate-number' => true,
-                    'less-than-equals-to' => StockDataFilter::MAX_QTY_VALUE,
-                ],
-                'imports' => [
-                    'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
-                ],
-                'sortOrder' => 10,
-            ];
-            $advancedInventoryButton['arguments']['data']['config'] = [
-                'displayAsLink' => true,
-                'formElement' => 'container',
-                'componentType' => 'container',
-                'component' => 'Magento_Ui/js/form/components/button',
-                'template' => 'ui/form/components/button/container',
-                'actions' => [
-                    [
-                        'targetName' => 'product_form.product_form.advanced_inventory_modal',
-                        'actionName' => 'toggleModal',
-                    ],
-                ],
-                'title' => __('Advanced Inventory'),
-                'provider' => false,
-                'additionalForGroup' => true,
-                'source' => 'product_details',
-                'sortOrder' => 20,
+                'sortOrder' => (int) $this->arrayManager->get(
+                    $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
+                    $this->meta
+                ) - 1,
+                'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
             ];
             $container['children'] = [
-                'qty' => $qty,
-                'advanced_inventory_button' => $advancedInventoryButton,
+                'qty' => $this->getQtyMetaStructure(),
+                'advanced_inventory_button' => $this->getAdvancedInventoryButtonMetaStructure(),
             ];
 
             $this->meta = $this->arrayManager->merge(
                 $fieldsetPath . '/children',
                 $this->meta,
-                ['quantity_and_stock_status_qty' => $container]
+                ['container_quantity_and_stock_status_qty' => $container]
             );
         }
+    }
+
+    /**
+     * Get Qty meta structure
+     *
+     * @return array
+     */
+    private function getQtyMetaStructure()
+    {
+        return  [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
+                        'group' => 'quantity_and_stock_status_qty',
+                        'dataType' => 'number',
+                        'formElement' => 'input',
+                        'componentType' => 'field',
+                        'visible' => '1',
+                        'require' => '0',
+                        'additionalClasses' => 'admin__field-small',
+                        'label' => __('Quantity'),
+                        'scopeLabel' => '[GLOBAL]',
+                        'dataScope' => 'qty',
+                        'validation' => [
+                            'validate-number' => true,
+                            'less-than-equals-to' => StockDataFilter::MAX_QTY_VALUE,
+                        ],
+                        'imports' => [
+                            'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
+                        ],
+                        'sortOrder' => 10,
+                        'disabled' => $this->locator->getProduct()->isLockedAttribute('quantity_and_stock_status'),
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Get advances inventory button meta structure
+     *
+     * @return array
+     */
+    private function getAdvancedInventoryButtonMetaStructure()
+    {
+        return  [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'displayAsLink' => true,
+                        'formElement' => 'container',
+                        'componentType' => 'container',
+                        'component' => 'Magento_Ui/js/form/components/button',
+                        'template' => 'ui/form/components/button/container',
+                        'actions' => [
+                            [
+                                'targetName' => 'product_form.product_form.advanced_inventory_modal',
+                                'actionName' => 'toggleModal',
+                            ],
+                        ],
+                        'title' => __('Advanced Inventory'),
+                        'provider' => false,
+                        'additionalForGroup' => true,
+                        'source' => 'product_details',
+                        'sortOrder' => 20,
+                    ]
+                ]
+            ]
+        ];
     }
 }

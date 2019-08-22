@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Helper;
@@ -116,7 +116,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * Return result CMS page
      *
      * @param Action $action
-     * @param null $pageId
+     * @param int $pageId
      * @return \Magento\Framework\View\Result\Page|bool
      */
     public function prepareResultPage(Action $action, $pageId = null)
@@ -152,11 +152,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $resultPage = $this->resultPageFactory->create();
         $this->setLayoutType($inRange, $resultPage);
         $resultPage->addHandle('cms_page_view');
-        $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
+        $resultPage->addPageLayoutHandles(['id' => str_replace('/', '_', $this->_page->getIdentifier())]);
 
         $this->_eventManager->dispatch(
             'cms_page_render',
-            ['page' => $this->_page, 'controller_action' => $action]
+            ['page' => $this->_page, 'controller_action' => $action, 'request' => $this->_getRequest()]
         );
 
         if ($this->_page->getCustomLayoutUpdateXml() && $inRange) {
@@ -187,11 +187,9 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     {
         /** @var \Magento\Cms\Model\Page $page */
         $page = $this->_pageFactory->create();
-        if ($pageId !== null && $pageId !== $page->getId()) {
+        if ($pageId !== null) {
             $page->setStoreId($this->_storeManager->getStore()->getId());
-            if (!$page->load($pageId)) {
-                return null;
-            }
+            $page->load($pageId);
         }
 
         if (!$page->getId()) {

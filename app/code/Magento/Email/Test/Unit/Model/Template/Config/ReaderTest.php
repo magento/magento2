@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template\Config;
@@ -8,7 +8,7 @@ namespace Magento\Email\Test\Unit\Model\Template\Config;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Model\Template\Config\Reader
@@ -39,27 +39,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $fileResolver = $this->getMock(
-            \Magento\Email\Model\Template\Config\FileResolver::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $fileResolver = $this->createMock(\Magento\Email\Model\Template\Config\FileResolver::class);
         $this->_paths = [
             __DIR__ . '/_files/Fixture/ModuleOne/etc/email_templates_one.xml',
             __DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml',
         ];
 
-        $this->_converter = $this->getMock(\Magento\Email\Model\Template\Config\Converter::class, ['convert']);
-
-        $moduleReader = $this->getMock(
-            \Magento\Framework\Module\Dir\Reader::class,
-            ['getModuleDir'],
-            [],
-            '',
-            false
+        $this->_converter = $this->createPartialMock(
+            \Magento\Email\Model\Template\Config\Converter::class,
+            ['convert']
         );
+
+        $moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
         $moduleReader->expects(
             $this->once()
         )->method(
@@ -72,32 +63,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $schemaLocator = new \Magento\Email\Model\Template\Config\SchemaLocator($moduleReader);
 
-        $validationStateMock = $this->getMock(
-            \Magento\Framework\Config\ValidationStateInterface::class,
-            [],
-            [],
-            '',
-            true
-        );
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);
 
-        $this->_moduleDirResolver = $this->getMock(
-            \Magento\Framework\Module\Dir\ReverseResolver::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $readFactory = $this->getMock(
-            \Magento\Framework\Filesystem\File\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->read = $this->getMock(\Magento\Framework\Filesystem\File\Read::class, [], [], '', false);
+        $this->_moduleDirResolver = $this->createMock(\Magento\Framework\Module\Dir\ReverseResolver::class);
+        $readFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
+        $this->read = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
         $readFactory->expects($this->any())->method('create')->willReturn($this->read);
 
         $fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
@@ -163,9 +136,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
                 $expected = file_get_contents(__DIR__ . '/_files/email_templates_merged.xml');
                 $expectedNorm = preg_replace('/xsi:noNamespaceSchemaLocation="[^"]*"/', '', $expected, 1);
                 $actualNorm = preg_replace('/xsi:noNamespaceSchemaLocation="[^"]*"/', '', $actual->saveXML(), 1);
-                \PHPUnit_Framework_Assert::assertXmlStringEqualsXmlString($expectedNorm, $actualNorm);
+                \PHPUnit\Framework\Assert::assertXmlStringEqualsXmlString($expectedNorm, $actualNorm);
                 return true;
-            } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 return false;
             }
         };

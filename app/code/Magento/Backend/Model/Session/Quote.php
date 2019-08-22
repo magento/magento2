@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Quote\Api\CartManagementInterface;
 
 /**
  * Adminhtml quote session
  *
+ * @api
  * @method Quote setCustomerId($id)
  * @method int getCustomerId()
  * @method bool hasCustomerId()
@@ -25,6 +24,8 @@ use Magento\Quote\Api\CartManagementInterface;
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @since 100.0.2
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {
@@ -80,11 +81,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @var \Magento\Quote\Model\QuoteFactory
      */
     protected $quoteFactory;
-
-    /**
-     * @var \Magento\Quote\Api\CartManagementInterface;
-     */
-    private $cartManagement;
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
@@ -154,7 +150,8 @@ class Quote extends \Magento\Framework\Session\SessionManager
             $this->_quote = $this->quoteFactory->create();
             if ($this->getStoreId()) {
                 if (!$this->getQuoteId()) {
-                    $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId());
+                    $customerGroupId = $this->groupManagement->getDefaultGroup($this->getStoreId())->getId();
+                    $this->_quote->setCustomerGroupId($customerGroupId);
                     $this->_quote->setIsActive(false);
                     $this->_quote->setStoreId($this->getStoreId());
                     

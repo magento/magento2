@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'Magento_Ui/js/lib/view/utils/async',
@@ -268,7 +271,10 @@ define([
          */
         show: function () {
             this.visible = true;
-
+            //Check admin grid button has addedr not
+            if ($('.page-main-actions').length === 0) {
+                this.$sticky.style.top = 0;
+            }
             this.$sticky.style.display = '';
             this.$toolbar.style.visibility = 'hidden';
 
@@ -554,7 +560,7 @@ define([
         },
 
         /**
-         * Handles changes of windows' top scroll postion.
+         * Handles changes of windows' top scroll position.
          */
         onWindowScrollTop: function () {
             this.updateTableOffset()

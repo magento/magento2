@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 abstract class AbstractFactory implements \Magento\Framework\ObjectManager\FactoryInterface
 {
@@ -38,6 +42,13 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected $globalArguments;
 
     /**
+     * Object creation stack
+     *
+     * @var array
+     */
+    protected $creationStack = [];
+
+    /**
      * @param \Magento\Framework\ObjectManager\ConfigInterface $config
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
@@ -51,7 +62,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     ) {
         $this->config = $config;
         $this->objectManager = $objectManager;
-        $this->definitions = $definitions ?: new \Magento\Framework\ObjectManager\Definition\Runtime();
+        $this->definitions = $definitions ?: $this->getDefinitions();
         $this->globalArguments = $globalArguments;
     }
 
@@ -80,17 +91,40 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     }
 
     /**
+     * @return \Magento\Framework\ObjectManager\DefinitionInterface
+     */
+    public function getDefinitions()
+    {
+        if ($this->definitions === null) {
+            $this->definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
+        }
+        return $this->definitions;
+    }
+
+    /**
      * Create object
      *
      * @param string $type
      * @param array $args
      *
      * @return object
-     *
+     * @throws RuntimeException
      */
     protected function createObject($type, $args)
     {
-        return new $type(...array_values($args));
+        try {
+            return new $type(...array_values($args));
+        } catch (\TypeError $exception) {
+            /** @var LoggerInterface $logger */
+            $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
+            $logger->critical(
+                sprintf('Type Error occurred when creating object: %s, %s', $type, $exception->getMessage())
+            );
+
+            throw new RuntimeException(
+                new Phrase('Type Error occurred when creating object: %type', ['type' => $type])
+            );
+        }
     }
 
     /**
@@ -109,12 +143,12 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected function resolveArgument(&$argument, $paramType, $paramDefault, $paramName, $requestedType)
     {
         if ($paramType && $argument !== $paramDefault && !is_object($argument)) {
-            $argumentType = $argument['instance'];
             if (!isset($argument['instance']) || $argument !== (array)$argument) {
                 throw new \UnexpectedValueException(
                     'Invalid parameter configuration provided for $' . $paramName . ' argument of ' . $requestedType
                 );
             }
+            $argumentType = $argument['instance'];
 
             if (isset($argument['shared'])) {
                 $isShared = $argument['shared'];
@@ -127,15 +161,14 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
             } else {
                 $argument = $this->objectManager->create($argumentType);
             }
-
-        } else if ($argument === (array)$argument) {
+        } elseif ($argument === (array)$argument) {
             if (isset($argument['argument'])) {
                 if (isset($this->globalArguments[$argument['argument']])) {
                     $argument = $this->globalArguments[$argument['argument']];
                 } else {
                     $argument = $paramDefault;
                 }
-            } else if (!empty($argument)) {
+            } elseif (!empty($argument)) {
                 $this->parseArray($argument);
             }
         }
@@ -164,7 +197,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
                     } else {
                         $array[$key] = $this->objectManager->create($item['instance']);
                     }
-
                 } elseif (isset($item['argument'])) {
                     if (isset($this->globalArguments[$item['argument']])) {
                         $array[$key] = $this->globalArguments[$item['argument']];
@@ -176,5 +208,45 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
                 }
             }
         }
+    }
+
+    /**
+     * Resolve constructor arguments
+     *
+     * @param string $requestedType
+     * @param array $parameters
+     * @param array $arguments
+     *
+     * @return array
+     *
+     * @throws \UnexpectedValueException
+     * @throws \BadMethodCallException
+     */
+    protected function resolveArgumentsInRuntime($requestedType, array $parameters, array $arguments = [])
+    {
+        $resolvedArguments = [];
+        foreach ($parameters as $parameter) {
+            list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
+            $argument = null;
+            if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
+                $argument = $arguments[$paramName];
+            } elseif ($paramRequired) {
+                if ($paramType) {
+                    $argument = ['instance' => $paramType];
+                } else {
+                    $this->creationStack = [];
+                    throw new \BadMethodCallException(
+                        'Missing required argument $' . $paramName . ' of ' . $requestedType . '.'
+                    );
+                }
+            } else {
+                $argument = $paramDefault;
+            }
+
+            $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
+
+            $resolvedArguments[] = $argument;
+        }
+        return $resolvedArguments;
     }
 }

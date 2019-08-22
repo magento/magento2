@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
-class TotalsTest extends \PHPUnit_Framework_TestCase
+class TotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var $_model \Magento\Backend\Model\Widget\Grid\Totals
@@ -25,25 +25,12 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         // prepare model
-        $this->_parserMock = $this->getMock(
+        $this->_parserMock = $this->createPartialMock(
             \Magento\Backend\Model\Widget\Grid\Parser::class,
-            ['parseExpression'],
-            [],
-            '',
-            false,
-            false,
-            false
+            ['parseExpression']
         );
 
-        $this->_factoryMock = $this->getMock(
-            \Magento\Framework\DataObject\Factory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false,
-            false
-        );
+        $this->_factoryMock = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
 
         $createValueMap = [
             [['test1' => 3, 'test2' => 2], new \Magento\Framework\DataObject(['test1' => 3, 'test2' => 2])],
@@ -73,7 +60,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     {
         // prepare collection
         $collection = new \Magento\Framework\Data\Collection(
-            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         $items = [
             new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2']),
@@ -96,7 +83,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
 
         // prepare collection
         $collection = new \Magento\Framework\Data\Collection(
-            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         $items = [
             new \Magento\Framework\DataObject(
@@ -118,7 +105,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         foreach ($items as $item) {
             // prepare sub-collection
             $subCollection = new \Magento\Framework\Data\Collection(
-                $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
+                $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
             );
             $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']));
             $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '2', 'test5' => '2']));

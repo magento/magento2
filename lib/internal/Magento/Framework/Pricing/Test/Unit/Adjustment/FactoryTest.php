@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
 /**
  * Test class for \Magento\Framework\Pricing\Adjustment\Factory
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -49,13 +49,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareObjectManager($adjustmentInterface)
     {
-        $objectManager = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->getMockForAbstractClass($adjustmentInterface)));

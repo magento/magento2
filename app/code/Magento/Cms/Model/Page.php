@@ -1,26 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Model\ResourceModel\Page as ResourceCmsPage;
+use Magento\Cms\Helper\Page as PageHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Cms\Helper\Page as PageHelper;
 
 /**
  * Cms Page Model
  *
- * @method ResourceCmsPage _getResource()
- * @method ResourceCmsPage getResource()
- * @method Page setStoreId(array $storeId)
- * @method array getStoreId()
+ * @api
+ * @method Page setStoreId(int $storeId)
+ * @method int getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
@@ -104,8 +103,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * Check if page identifier exist for specific store
-     * return page id if page exists
+     * Check if page identifier exist for specific store return page id if page exists
      *
      * @param string $identifier
      * @param int $storeId
@@ -117,8 +115,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * Prepare page's statuses.
-     * Available event cms_page_get_available_statuses to customize statuses.
+     * Prepare page's statuses, available event cms_page_get_available_statuses to customize statuses.
      *
      * @return array
      */
@@ -181,6 +178,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get meta title
      *
      * @return string|null
+     * @since 101.0.0
      */
     public function getMetaTitle()
     {
@@ -376,6 +374,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $metaTitle
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 101.0.0
      */
     public function setMetaTitle($metaTitle)
     {
@@ -537,12 +536,17 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @since 101.0.0
      */
     public function beforeSave()
     {
         $originalIdentifier = $this->getOrigData('identifier');
         $currentIdentifier = $this->getIdentifier();
+
+        if ($this->hasDataChanges()) {
+            $this->setUpdateTime(null);
+        }
 
         if (!$this->getId() || $originalIdentifier === $currentIdentifier) {
             return parent::beforeSave();
@@ -565,6 +569,8 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
+     * Returns scope config.
+     *
      * @return ScopeConfigInterface
      */
     private function getScopeConfig()

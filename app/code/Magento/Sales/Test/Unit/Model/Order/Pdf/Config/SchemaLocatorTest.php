@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Config;
 
-class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator
@@ -24,13 +24,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_moduleReader = $this->getMock(
-            \Magento\Framework\Module\Dir\Reader::class,
-            ['getModuleDir'],
-            [],
-            '',
-            false
-        );
+        $this->_moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
         $this->_moduleReader->expects(
             $this->once()
         )->method(

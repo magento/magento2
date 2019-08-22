@@ -1,10 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Store;
 
+use Magento\TestFramework\App\Config;
+use Magento\TestFramework\ObjectManager;
+
+/**
+ * Integration tests decoration of store manager
+ *
+ * @package Magento\TestFramework\Store
+ */
 class StoreManager implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
@@ -117,7 +125,16 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      */
     public function reinitStores()
     {
+        //In order to restore configFixture values
+        $testAppConfig = ObjectManager::getInstance()->get(Config::class);
+        $reflection = new \ReflectionClass($testAppConfig);
+        $dataProperty = $reflection->getProperty('data');
+        $dataProperty->setAccessible(true);
+        $savedConfig = $dataProperty->getValue($testAppConfig);
+
         $this->decoratedStoreManager->reinitStores();
+
+        $dataProperty->setValue($testAppConfig, $savedConfig);
         $this->dispatchInitCurrentStoreAfterEvent();
     }
 

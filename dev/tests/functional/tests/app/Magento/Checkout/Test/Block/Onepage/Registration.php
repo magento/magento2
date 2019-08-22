@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class Registration extends Block
      *
      * @var string
      */
-    protected $createAccountButton = '[data-bind*="createAccount"] input';
+    protected $createAccountButton = '[data-bind*="i18n: \'Create an Account\'"]';
 
     /**
      * Click 'Create an Account' button and wait until button will be not visible.

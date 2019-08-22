@@ -1,63 +1,72 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 use Magento\Framework\View\Element\Template;
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Shipping\Block\Tracking\Popup */
+//phpcs:disable Magento2.Files.LineLength.MaxExceeded
 
 $results = $block->getTrackingInfo();
 ?>
 <div class="page tracking">
-    <?php if (!empty($results)): ?>
-        <?php foreach ($results as $shipId => $result): ?>
-            <?php if ($shipId): ?>
-                <div class="order subtitle caption"><?php /* @noEscape */ echo $block->escapeHtml(__('Shipment #')) . $shipId; ?></div>
+    <?php if (!empty($results)) : ?>
+        <?php foreach ($results as $shipId => $result) : ?>
+            <?php if ($shipId) : ?>
+                <div class="order subtitle caption"><?= /* @noEscape */ $block->escapeHtml(__('Shipment #')) . $shipId ?></div>
             <?php endif; ?>
-            <?php if (!empty($result)): ?>
-                <?php foreach ($result as $counter => $track): ?>
+            <?php if (!empty($result)) : ?>
+                <?php foreach ($result as $counter => $track) : ?>
                     <div class="table-wrapper">
                         <?php
-                            $block->addChild('shipping.tracking.details.' . $counter, Template::class, [
+                            $shipmentBlockIdentifier = $shipId . '.' . $counter;
+                            $block->addChild('shipping.tracking.details.' . $shipmentBlockIdentifier, Template::class, [
                                 'track' => $track,
                                 'template' => 'Magento_Shipping::tracking/details.phtml',
                                 'storeSupportEmail' => $block->getStoreSupportEmail()
-                            ]
-                        );
+                            ]);
                         ?>
-                        <?php /* @noEscape */ echo $block->getChildHtml('shipping.tracking.details.' . $counter); ?>
+                        <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.details.' . $shipmentBlockIdentifier) ?>
                     </div>
-                    <?php if (!empty($track->getProgressdetail())): ?>
+                    <?php if (is_object($track) && !empty($track->getProgressdetail())) : ?>
                         <?php
-                            $block->addChild('shipping.tracking.progress.'. $counter, Template::class, [
+                            $block->addChild('shipping.tracking.progress.' . $shipmentBlockIdentifier, Template::class, [
                                 'track' => $track,
                                 'template' => 'Magento_Shipping::tracking/progress.phtml'
                             ]);
                         ?>
-                        <?php /* @noEscape  */echo $block->getChildHtml('shipping.tracking.progress.' . $counter); ?>
+                        <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.progress.' . $shipmentBlockIdentifier) ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
-            <?php else: ?>
+            <?php else : ?>
                 <div class="message info empty">
-                    <div><?php echo $block->escapeHtml(__('There is no tracking available for this shipment.')); ?></div>
+                    <div><?= $block->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
-    <?php else: ?>
+    <?php else : ?>
         <div class="message info empty">
-            <div><?php echo $block->escapeHtml(__('There is no tracking available.')); ?></div>
+            <div><?= $block->escapeHtml(__('There is no tracking available.')) ?></div>
         </div>
     <?php endif; ?>
     <div class="actions">
         <button type="button"
-                title="<?php echo $block->escapeHtml(__('Close Window')); ?>"
+                title="<?= $block->escapeHtml(__('Close Window')) ?>"
                 class="action close"
                 onclick="window.close(); window.opener.focus();">
-            <span><?php echo $block->escapeHtml(__('Close Window')); ?></span>
+            <span><?= $block->escapeHtml(__('Close Window')) ?></span>
         </button>
     </div>
 </div>
+<script>
+    require([
+        'jquery'
+    ], function (jQuery) {
+        /* hide the close button when the content doesn't open in a modal window */
+        if (window.opener === null || typeof window.opener === "undefined") {
+            jQuery('.actions button.close').hide();
+        }
+    });
+</script>

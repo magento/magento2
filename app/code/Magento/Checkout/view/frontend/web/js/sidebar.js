@@ -1,20 +1,21 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global confirm:true*/
+
 define([
     'jquery',
     'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
-    'jquery/ui',
+    'underscore',
+    'jquery-ui-modules/widget',
     'mage/decorate',
     'mage/collapsible',
     'mage/cookies'
-], function ($, authenticationPopup, customerData, alert, confirm) {
+], function ($, authenticationPopup, customerData, alert, confirm, _) {
+    'use strict';
 
     $.widget('mage.sidebar', {
         options: {
@@ -24,6 +25,7 @@ define([
             }
         },
         scrollHeight: 0,
+        shoppingCartUrl: window.checkout.shoppingCartUrl,
 
         /**
          * Create sidebar.
@@ -42,24 +44,33 @@ define([
             this._isOverflowed();
         },
 
+        /**
+         * @private
+         */
         _initContent: function () {
             var self = this,
                 events = {};
 
             this.element.decorate('list', this.options.isRecursive);
 
+            /**
+             * @param {jQuery.Event} event
+             */
             events['click ' + this.options.button.close] = function (event) {
                 event.stopPropagation();
                 $(self.options.targetElement).dropdownDialog('close');
             };
             events['click ' + this.options.button.checkout] = $.proxy(function () {
                 var cart = customerData.get('cart'),
-                    customer = customerData.get('customer');
+                    customer = customerData.get('customer'),
+                    element = $(this.options.button.checkout);
 
                 if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     // set URL for redirect on successful login/registration. It's postprocessed on backend.
                     $.cookie('login_redirect', this.options.url.checkout);
+
                     if (this.options.url.isRedirectRequired) {
+                        element.prop('disabled', true);
                         location.href = this.options.url.loginUrl;
                     } else {
                         authenticationPopup.showModal();
@@ -67,29 +78,56 @@ define([
 
                     return false;
                 }
+                element.prop('disabled', true);
                 location.href = this.options.url.checkout;
             }, this);
+
+            /**
+             * @param {jQuery.Event} event
+             */
             events['click ' + this.options.button.remove] =  function (event) {
                 event.stopPropagation();
                 confirm({
                     content: self.options.confirmMessage,
                     actions: {
+                        /** @inheritdoc */
                         confirm: function () {
                             self._removeItem($(event.currentTarget));
                         },
-                        always: function (event) {
-                            event.stopImmediatePropagation();
+
+                        /** @inheritdoc */
+                        always: function (e) {
+                            e.stopImmediatePropagation();
                         }
                     }
                 });
             };
+
+            /**
+             * @param {jQuery.Event} event
+             */
             events['keyup ' + this.options.item.qty] = function (event) {
                 self._showItemButton($(event.target));
             };
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['change ' + this.options.item.qty] = function (event) {
+                self._showItemButton($(event.target));
+            };
+
+            /**
+             * @param {jQuery.Event} event
+             */
             events['click ' + this.options.item.button] = function (event) {
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
             };
+
+            /**
+             * @param {jQuery.Event} event
+             */
             events['focusout ' + this.options.item.qty] = function (event) {
                 self._validateQty($(event.currentTarget));
             };
@@ -115,13 +153,17 @@ define([
             }
         },
 
+        /**
+         * @param {HTMLElement} elem
+         * @private
+         */
         _showItemButton: function (elem) {
             var itemId = elem.data('cart-item'),
                 itemQty = elem.data('item-qty');
 
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
-            } else if (elem.val() == 0) {
+            } else if (elem.val() == 0) { //eslint-disable-line eqeqeq
                 this._hideItemButton(elem);
             } else {
                 this._hideItemButton(elem);
@@ -129,16 +171,16 @@ define([
         },
 
         /**
-         * @param origin - origin qty. 'data-item-qty' attribute.
-         * @param changed - new qty.
-         * @returns {boolean}
+         * @param {*} origin - origin qty. 'data-item-qty' attribute.
+         * @param {*} changed - new qty.
+         * @returns {Boolean}
          * @private
          */
         _isValidQty: function (origin, changed) {
-            return (origin != changed) &&
-                (changed.length > 0) &&
-                (changed - 0 == changed) &&
-                (changed - 0 > 0);
+            return origin != changed && //eslint-disable-line eqeqeq
+                changed.length > 0 &&
+                changed - 0 == changed && //eslint-disable-line eqeqeq
+                changed - 0 > 0;
         },
 
         /**
@@ -153,43 +195,86 @@ define([
             }
         },
 
+        /**
+         * @param {HTMLElement} elem
+         * @private
+         */
         _hideItemButton: function (elem) {
             var itemId = elem.data('cart-item');
+
             $('#update-cart-item-' + itemId).hide('fade', 300);
         },
 
+        /**
+         * @param {HTMLElement} elem
+         * @private
+         */
         _updateItemQty: function (elem) {
             var itemId = elem.data('cart-item');
+
             this._ajax(this.options.url.update, {
-                item_id: itemId,
-                item_qty: $('#cart-item-' + itemId + '-qty').val()
+                'item_id': itemId,
+                'item_qty': $('#cart-item-' + itemId + '-qty').val()
             }, elem, this._updateItemQtyAfter);
         },
 
         /**
          * Update content after update qty
          *
-         * @param elem
+         * @param {HTMLElement} elem
          */
         _updateItemQtyAfter: function (elem) {
+            var productData = this._getProductById(Number(elem.data('cart-item')));
+
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:updateCartItemQty');
+
+                if (window.location.href === this.shoppingCartUrl) {
+                    window.location.reload(false);
+                }
+            }
             this._hideItemButton(elem);
         },
 
+        /**
+         * @param {HTMLElement} elem
+         * @private
+         */
         _removeItem: function (elem) {
             var itemId = elem.data('cart-item');
+
             this._ajax(this.options.url.remove, {
-                item_id: itemId
+                'item_id': itemId
             }, elem, this._removeItemAfter);
         },
 
         /**
          * Update content after item remove
          *
-         * @param elem
-         * @param response
+         * @param {Object} elem
          * @private
          */
-        _removeItemAfter: function (elem, response) {
+        _removeItemAfter: function (elem) {
+            var productData = this._getProductById(Number(elem.data('cart-item')));
+
+            if (!_.isUndefined(productData)) {
+                $(document).trigger('ajax:removeFromCart', {
+                    productIds: [productData['product_id']]
+                });
+            }
+        },
+
+        /**
+         * Retrieves product data by Id.
+         *
+         * @param {Number} productId - product Id
+         * @returns {Object|undefined}
+         * @private
+         */
+        _getProductById: function (productId) {
+            return _.find(customerData.get('cart')().items, function (item) {
+                return productId === Number(item['item_id']);
+            });
         },
 
         /**
@@ -209,18 +294,24 @@ define([
                 type: 'post',
                 dataType: 'json',
                 context: this,
+
+                /** @inheritdoc */
                 beforeSend: function () {
                     elem.attr('disabled', 'disabled');
                 },
+
+                /** @inheritdoc */
                 complete: function () {
                     elem.attr('disabled', null);
                 }
             })
                 .done(function (response) {
+                    var msg;
+
                     if (response.success) {
                         callback.call(this, elem, response);
                     } else {
-                        var msg = response.error_message;
+                        msg = response['error_message'];
 
                         if (msg) {
                             alert({

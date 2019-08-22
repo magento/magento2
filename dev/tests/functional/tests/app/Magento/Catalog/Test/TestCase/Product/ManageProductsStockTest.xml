@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\ManageProductsStockTest" summary="Managing products stock with several conditions" ticketId="MAGETWO-29543">
+        <variation name="ManageProductsStockTestVariation1" summary="Adding Out of Stock product to cart">
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="product/data/qty_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+            <data name="configData" xsi:type="string">display_out_of_stock,backorders_allow_qty_below</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertAddedProductToCartSuccessMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+        </variation>
+        <variation name="ManageProductsStockTestVariation2" summary="Checking that Out of Stock products are not visible in category" ticketId="MAGETWO-13645">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="product/dataset" xsi:type="string">product_with_category</data>
+            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
+            <data name="product/data/stock_data/use_config_min_sale_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/min_sale_qty" xsi:type="string">1</data>
+            <data name="product/data/stock_data/use_config_max_sale_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/max_sale_qty" xsi:type="string">10000</data>
+            <data name="product/data/stock_data/is_qty_decimal" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/enable_qty_increments" xsi:type="string">No</data>
+            <data name="product/data/stock_data/use_config_notify_stock_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/notify_stock_qty" xsi:type="string">1</data>
+            <data name="product/data/stock_data/use_config_backorders" xsi:type="string">No</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+            <data name="skipAddingToCart" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+        </variation>
+        <variation name="ManageProductsStockTestVariation3" summary="Add In Stock product to cart" ticketId="MAGETWO-13645">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="product/dataset" xsi:type="string">product_with_category</data>
+            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/stock_data/use_config_min_sale_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/min_sale_qty" xsi:type="string">1</data>
+            <data name="product/data/stock_data/use_config_max_sale_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/max_sale_qty" xsi:type="string">10000</data>
+            <data name="product/data/stock_data/is_qty_decimal" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/enable_qty_increments" xsi:type="string">No</data>
+            <data name="product/data/stock_data/use_config_notify_stock_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/notify_stock_qty" xsi:type="string">1</data>
+            <data name="product/data/stock_data/use_config_backorders" xsi:type="string">No</data>
+            <data name="skipAddingToCart" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="ManageProductsStockTestVariation4" summary="Enable displaying of out of stock products in category" ticketId="MAGETWO-13645">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="product/dataset" xsi:type="string">product_with_category</data>
+            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/stock_data/use_config_min_sale_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/min_sale_qty" xsi:type="string">1</data>
+            <data name="product/data/stock_data/use_config_max_sale_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/max_sale_qty" xsi:type="string">10000</data>
+            <data name="product/data/stock_data/is_qty_decimal" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/enable_qty_increments" xsi:type="string">No</data>
+            <data name="product/data/stock_data/use_config_notify_stock_qty" xsi:type="string">Yes</data>
+            <data name="product/data/stock_data/notify_stock_qty" xsi:type="string">1</data>
+            <data name="product/data/stock_data/use_config_backorders" xsi:type="string">No</data>
+            <data name="skipAddingToCart" xsi:type="string">Yes</data>
+            <data name="configData" xsi:type="string">display_out_of_stock</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+        </variation>
+    </testCase>
+</config>

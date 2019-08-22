@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Adminhtml\System\Config;
@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Class CountryTest
  *
  */
-class CountryTest extends \PHPUnit_Framework_TestCase
+class CountryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Braintree\Model\Adminhtml\System\Config\Country

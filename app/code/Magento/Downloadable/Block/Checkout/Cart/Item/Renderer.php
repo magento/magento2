@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,12 @@ namespace Magento\Downloadable\Block\Checkout\Cart\Item;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
+/**
+ * Item renderer.
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
     /**
@@ -31,7 +37,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param \Magento\Downloadable\Helper\Catalog\Product\Configuration $downloadableProductConfiguration
      * @param array $data
@@ -45,7 +51,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         InterpretationStrategyInterface $messageInterpretationStrategy,
         \Magento\Downloadable\Helper\Catalog\Product\Configuration $downloadableProductConfiguration,
         array $data = []
@@ -99,7 +105,8 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     }
 
     /**
-     * Get list of all options for product
+     * Get list of all options for product.
+     *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
      */

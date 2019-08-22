@@ -1,21 +1,32 @@
 <?php
 /**
- * Product initialzation helper
+ * Product initialization helper
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use \Magento\Catalog\Model\Product\Edit\WeightResolver;
+
+/**
+ * Update Configurations for configurable product
+ */
 class UpdateConfigurations
 {
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface  */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $request;
 
-    /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\VariationHandler
+     */
     protected $variationHandler;
 
     /**
@@ -87,23 +98,29 @@ class UpdateConfigurations
     protected function getConfigurations()
     {
         $result = [];
-        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
-        if ($configurableMatrix != null && !empty($configurableMatrix)) {
+        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', "[]");
+        if (isset($configurableMatrix) && $configurableMatrix != "") {
             $configurableMatrix = json_decode($configurableMatrix, true);
-        }
 
-        foreach ($configurableMatrix as $item) {
-            if (empty($item['was_changed'])) {
-                continue;
-            } else {
-                unset($item['was_changed']);
-            }
+            foreach ($configurableMatrix as $item) {
+                if (empty($item['was_changed'])) {
+                    continue;
+                } else {
+                    unset($item['was_changed']);
+                }
 
-            if (!$item['newProduct']) {
-                $result[$item['id']] = $this->mapData($item);
+                if (!$item['newProduct']) {
+                    $result[$item['id']] = $this->mapData($item);
 
-                if (isset($item['qty'])) {
-                    $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                    if (isset($item['qty'])) {
+                        $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                    }
+                    
+                    // Changing product to simple on weight change
+                    if (isset($item['weight']) && $item['weight'] >= 0) {
+                        $result[$item['id']]['type_id'] = \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE;
+                        $result[$item['id']]['product_has_weight'] = WeightResolver::HAS_WEIGHT;
+                    }
                 }
             }
         }

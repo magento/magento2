@@ -1,15 +1,13 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
-/*global alert*/
 
 define([
     'jquery',
     'mage/template',
     'Magento_Ui/js/modal/alert',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/translate'
 ], function ($, mageTemplate, alert) {
     'use strict';
@@ -22,6 +20,7 @@ define([
             tmpl: '<input id="hidden-free" type="hidden" name="payment[method]" value="free">'
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.element.find('dd [name^="payment["]').prop('disabled', true).end()
                 .on('click', this.options.continueSelector, $.proxy(this._submitHandler, this))
@@ -37,7 +36,8 @@ define([
                     }
 
                     if (this.options.checkoutPrice <= this.options.minBalance) {
-                        // Add free input field, hide and disable unchecked checkbox payment method and all radio button payment methods
+                        // Add free input field, hide and disable unchecked
+                        // checkbox payment method and all radio button payment methods
                         this._disablePaymentMethods();
                     } else {
                         // Remove free input field, show all payment method
@@ -63,8 +63,12 @@ define([
                 parentsDl = element.closest('dl');
 
             parentsDl.find('dt input:radio').prop('checked', false);
-            parentsDl.find('.items').hide().find('[name^="payment["]').prop('disabled', true);
-            element.prop('checked', true).parent().nextUntil('dt').find('.items').show().find('[name^="payment["]').prop('disabled', false);
+            parentsDl.find('dd').addClass('no-display').end()
+                .find('.items').hide()
+                .find('[name^="payment["]').prop('disabled', true);
+            element.prop('checked', true).parent()
+                .next('dd').removeClass('no-display')
+                .find('.items').show().find('[name^="payment["]').prop('disabled', false);
         },
 
         /**
@@ -122,15 +126,34 @@ define([
         },
 
         /**
+         * Returns checked payment method.
+         *
+         * @private
+         */
+        _getSelectedPaymentMethod: function () {
+            return this.element.find('input[name=\'payment[method]\']:checked');
+        },
+
+        /**
          * Validate  before form submit
          * @private
          * @param {EventObject} e
          */
         _submitHandler: function (e) {
+            var currentMethod,
+                submitButton;
+
             e.preventDefault();
 
             if (this._validatePaymentMethod()) {
-                this.element.submit();
+                currentMethod = this._getSelectedPaymentMethod();
+                submitButton = currentMethod.parent().next('dd').find('button[type=submit]');
+
+                if (submitButton.length) {
+                    submitButton.first().trigger('click');
+                } else {
+                    this.element.submit();
+                }
             }
         }
     });

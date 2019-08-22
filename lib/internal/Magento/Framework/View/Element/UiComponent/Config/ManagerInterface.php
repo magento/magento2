@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
 /**
  * Interface ManagerInterface
+ * @deprecated 100.2.0
  */
 interface ManagerInterface
 {

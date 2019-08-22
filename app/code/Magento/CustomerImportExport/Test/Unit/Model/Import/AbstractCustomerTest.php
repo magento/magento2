@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,7 +69,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     protected function _getModelMock()
     {
         $customerCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         foreach ($this->_customers as $customer) {
             $customerCollection->addItem(new \Magento\Framework\DataObject($customer));

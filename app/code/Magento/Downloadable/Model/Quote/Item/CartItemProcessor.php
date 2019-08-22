@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Quote\Item;
@@ -63,6 +63,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
         if ($cartItem->getProductOption()
+            && $cartItem->getProductOption()->getExtensionAttributes()
             && $cartItem->getProductOption()->getExtensionAttributes()->getDownloadableOption()
         ) {
             $downloadableLinks = $cartItem->getProductOption()->getExtensionAttributes()->getDownloadableOption()

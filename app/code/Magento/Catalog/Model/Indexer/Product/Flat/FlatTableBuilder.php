@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
@@ -10,7 +10,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Class FlatTableBuilder
+ * Class for building flat index
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FlatTableBuilder
@@ -179,6 +180,11 @@ class FlatTableBuilder
 
             $columnComment = isset($fieldProp['comment']) ? $fieldProp['comment'] : $fieldName;
 
+            if ($fieldName == 'created_at') {
+                $columnDefinition['nullable'] = true;
+                $columnDefinition['default'] = null;
+            }
+
             $table->addColumn($fieldName, $fieldProp['type'], $columnLength, $columnDefinition, $columnComment);
         }
 
@@ -281,7 +287,7 @@ class FlatTableBuilder
             if (!empty($columnValueNames)) {
                 $select->joinLeft(
                     $temporaryValueTableName,
-                    sprintf('e.%1$s = %2$s.%1$s', $linkField, $temporaryTableName),
+                    sprintf('e.%1$s = %2$s.%1$s', $linkField, $temporaryValueTableName),
                     $columnValueNames
                 );
                 $allColumns = array_merge($allColumns, $columnValueNames);
@@ -341,12 +347,21 @@ class FlatTableBuilder
                 }
 
                 //Update not simple attributes (eg. dropdown)
-                if (isset($flatColumns[$attributeCode . $valueFieldSuffix])) {
-                    $select = $this->_connection->select()->joinInner(
-                        ['t' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
-                        't.option_id = et.' . $attributeCode . ' AND t.store_id=' . $storeId,
-                        [$attributeCode . $valueFieldSuffix => 't.value']
-                    );
+                $columnName = $attributeCode . $valueFieldSuffix;
+                if (isset($flatColumns[$columnName])) {
+                    $columnValue = $this->_connection->getIfNullSql('ts.value', 't0.value');
+                    $select = $this->_connection->select();
+                    $select->joinLeft(
+                        ['t0' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
+                        't0.option_id = et.' . $attributeCode . ' AND t0.store_id = 0',
+                        []
+                    )->joinLeft(
+                        ['ts' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
+                        'ts.option_id = et.' . $attributeCode . ' AND ts.store_id = ' . $storeId,
+                        []
+                    )->columns(
+                        [$columnName => $columnValue]
+                    )->where($columnValue . ' IS NOT NULL');
                     if (!empty($changedIds)) {
                         $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
                     }
@@ -369,6 +384,8 @@ class FlatTableBuilder
     }
 
     /**
+     * Get metadata pool
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

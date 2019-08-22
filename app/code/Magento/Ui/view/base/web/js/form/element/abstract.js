@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'mageUtils',
@@ -37,6 +40,7 @@ define([
             showFallbackReset: false,
             additionalClasses: {},
             isUseDefault: '',
+            serviceDisabled: false,
             valueUpdate: false, // ko binding valueUpdate
 
             switcherConfig: {
@@ -52,6 +56,9 @@ define([
                 '${ $.provider }:data.overload': 'overload',
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
                 'isUseDefault': 'toggleUseDefault'
+            },
+            ignoreTmpls: {
+                value: true
             },
 
             links: {
@@ -94,7 +101,7 @@ define([
             this._super();
 
             this.observe('error disabled focused preview visible value warn notice isDifferedFromDefault')
-                .observe('isUseDefault')
+                .observe('isUseDefault serviceDisabled')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -115,8 +122,8 @@ define([
 
             this._super();
 
-            scope = this.dataScope;
-            name = scope.split('.').slice(1);
+            scope = this.dataScope.split('.');
+            name = scope.length > 1 ? scope.slice(1) : scope;
 
             valueUpdate = this.showFallbackReset ? 'afterkeydown' : this.valueUpdate;
 
@@ -170,7 +177,7 @@ define([
         _setClasses: function () {
             var additional = this.additionalClasses;
 
-            if (_.isString(additional)){
+            if (_.isString(additional)) {
                 this.additionalClasses = {};
 
                 if (additional.trim().length) {
@@ -206,8 +213,10 @@ define([
             values.some(function (v) {
                 if (v !== null && v !== undefined) {
                     value = v;
+
                     return true;
                 }
+
                 return false;
             });
 
@@ -215,7 +224,7 @@ define([
         },
 
         /**
-         * Sets 'value' as 'hidden' propertie's value, triggers 'toggle' event,
+         * Sets 'value' as 'hidden' property's value, triggers 'toggle' event,
          * sets instance's hidden identifier in params storage based on
          * 'value'.
          *
@@ -287,7 +296,7 @@ define([
                 this.validation[rule] = options;
             }
 
-            changed = utils.compare(rules, this.validation).equal;
+            changed = !utils.compare(rules, this.validation).equal;
 
             if (changed) {
                 this.required(!!rules['required-entry']);
@@ -399,10 +408,11 @@ define([
                 isValid = this.disabled() || !this.visible() || result.passed;
 
             this.error(message);
+            this.error.valueHasMutated();
             this.bubble('error', message);
 
             //TODO: Implement proper result propagation for form
-            if (!isValid) {
+            if (this.source && !isValid) {
                 this.source.set('params.invalid', true);
             }
 
@@ -435,6 +445,7 @@ define([
         setDifferedFromDefault: function () {
             var value = typeof this.value() != 'undefined' && this.value() !== null ? this.value() : '',
                 defaultValue = typeof this.default != 'undefined' && this.default !== null ? this.default : '';
+
             this.isDifferedFromDefault(value !== defaultValue);
         },
 
@@ -443,6 +454,10 @@ define([
          */
         toggleUseDefault: function (state) {
             this.disabled(state);
+
+            if (this.source && this.hasService()) {
+                this.source.set('data.use_default.' + this.index, Number(state));
+            }
         },
 
         /**

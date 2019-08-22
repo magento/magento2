@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -11,9 +11,6 @@ define([
 
     return Abstract.extend({
         defaults: {
-            listens: {
-                isConfigurable: 'handlePriceValue'
-            },
             imports: {
                 isConfigurable: '!ns = ${ $.ns }, index = configurable-matrix:isEmpty'
             },
@@ -22,12 +19,15 @@ define([
             }
         },
 
-        /**
-         * Invokes initialize method of parent class,
-         * contains initialization logic
-         */
+        /** @inheritdoc */
         initialize: function () {
             this._super();
+            // resolve initial disable state
+            this.handlePriceValue(this.isConfigurable);
+            // add listener to track "configurable" type
+            this.setListeners({
+                isConfigurable: 'handlePriceValue'
+            });
 
             return this;
         },
@@ -50,11 +50,10 @@ define([
          * @param {String} isConfigurable
          */
         handlePriceValue: function (isConfigurable) {
+            this.disabled(!!this.isUseDefault() || isConfigurable);
+
             if (isConfigurable) {
-                this.disable();
                 this.clear();
-            } else {
-                this.enable();
             }
         }
     });

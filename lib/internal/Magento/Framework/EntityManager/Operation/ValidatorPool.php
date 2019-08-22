@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,6 +24,11 @@ class ValidatorPool
     protected $validators;
 
     /**
+     * @var array
+     */
+    private $actions;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param array $extensionActions
      */
@@ -36,6 +41,8 @@ class ValidatorPool
     }
 
     /**
+     * Get list of validators
+     *
      * @param string $entityType
      * @param string $actionName
      * @return object[]

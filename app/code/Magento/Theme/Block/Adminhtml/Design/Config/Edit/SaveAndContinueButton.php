@@ -1,17 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\Design\Config\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
+/**
+ * "Save and continue" button data provider
+ *
+ * @api
+ * @since 100.1.0
+ */
 class SaveAndContinueButton implements ButtonProviderInterface
 {
-
     /**
      * @return array
+     * @since 100.1.0
      */
     public function getButtonData()
     {

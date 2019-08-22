@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Validator;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Magento\Payment\Gateway\Validator\ValidatorPool;
 
-class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
+class ValidatorPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {
@@ -50,7 +50,7 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
 
     public function testGetException()
     {
-        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
 
         $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()

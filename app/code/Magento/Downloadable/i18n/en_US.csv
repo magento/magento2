@@ -16,6 +16,7 @@ Unlimited,Unlimited
 "Something went wrong while saving the file(s).","Something went wrong while saving the file(s)."
 "Provided content must be valid base64 encoded data.","Provided content must be valid base64 encoded data."
 "Provided file name contains forbidden characters.","Provided file name contains forbidden characters."
+"Link file not provided","Link file not provided"
 "Link price must have numeric positive value.","Link price must have numeric positive value."
 "Number of downloads must be a positive integer.","Number of downloads must be a positive integer."
 "Sort order must be a positive integer.","Sort order must be a positive integer."
@@ -24,15 +25,20 @@ Unlimited,Unlimited
 "Sample URL must have valid format.","Sample URL must have valid format."
 "Order id cannot be null","Order id cannot be null"
 "Order item id cannot be null","Order item id cannot be null"
+"Provided product must be type 'downloadable'.","Provided product must be type 'downloadable'."
+"Provided link information is invalid.","Provided link information is invalid."
 "Invalid link type.","Invalid link type."
 "Link title cannot be empty.","Link title cannot be empty."
 "There is no downloadable link with provided ID.","There is no downloadable link with provided ID."
+"Provided downloadable link is not related to given product.","Provided downloadable link is not related to given product."
 "Cannot delete link with id %1","Cannot delete link with id %1"
 "Please specify product link(s).","Please specify product link(s)."
-"Product type of the product must be \'downloadable\'.","Product type of the product must be \'downloadable\'."
+"Sample file not provided","Sample file not provided"
+"Provided sample information is invalid.","Provided sample information is invalid."
 "Invalid sample type.","Invalid sample type."
 "Sample title cannot be empty.","Sample title cannot be empty."
 "There is no downloadable sample with provided ID.","There is no downloadable sample with provided ID."
+"Provided downloadable sample is not related to given product.","Provided downloadable sample is not related to given product."
 "Cannot delete sample with id %1","Cannot delete sample with id %1"
 Yes,Yes
 No,No
@@ -48,7 +54,7 @@ Invoiced,Invoiced
 Links,Links
 Title,Title
 "Links can be purchased separately","Links can be purchased separately"
-"Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.","Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'."
+"Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with '_'.","Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with '_'."
 "Add Link","Add Link"
 Price,Price
 File,File
@@ -58,6 +64,7 @@ Shareable,Shareable
 Samples,Samples
 "Use Default Value","Use Default Value"
 sample,sample
+"Is this a downloadable Product?","Is this a downloadable Product?"
 "Add links to your product files here.","Add links to your product files here."
 "[STORE VIEW]","[STORE VIEW]"
 [GLOBAL],[GLOBAL]

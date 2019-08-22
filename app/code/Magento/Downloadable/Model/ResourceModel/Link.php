@@ -1,26 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\EntityManager\MetadataPool;
-
 /**
  * Downloadable Product  Samples resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
     /**
      * Catalog data
      *
@@ -209,10 +201,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             []
         )->join(
             ['cpe' => $this->getTable('catalog_product_entity')],
-            sprintf(
-                'cpe.entity_id = m.product_id',
-                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
-            ),
+            'cpe.entity_id = m.product_id',
             []
         )->joinLeft(
             ['st' => $this->getTable('downloadable_link_title')],
@@ -227,22 +216,12 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Get Currency model.
+     *
      * @return \Magento\Directory\Model\Currency
      */
     protected function _createCurrency()
     {
         return $this->_currencyFactory->create();
-    }
-
-    /**
-     * Get MetadataPool instance
-     * @return MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        }
-        return $this->metadataPool;
     }
 }

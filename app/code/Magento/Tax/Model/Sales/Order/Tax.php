@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Order;
 
 /**
- * @method \Magento\Tax\Model\ResourceModel\Sales\Order\Tax _getResource()
- * @method \Magento\Tax\Model\ResourceModel\Sales\Order\Tax getResource()
  * @method int getOrderId()
  * @method \Magento\Tax\Model\Sales\Order\Tax setOrderId(int $value)
  * @method int getPriority()

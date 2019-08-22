@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 /**
  * @magentoAppArea adminhtml
  */
-class SelectTest extends \PHPUnit_Framework_TestCase
+class SelectTest extends \PHPUnit\Framework\TestCase
 {
     public function testToHtmlFormId()
     {

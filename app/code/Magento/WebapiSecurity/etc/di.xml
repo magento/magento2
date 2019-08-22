@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <type name="Magento\Webapi\Model\Config\Converter">
         <plugin name="webapiResourceSecurity" type="Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity" />
     </type>
-    <type name="\Magento\Framework\App\Config\Value">
+    <type name="Magento\Framework\App\Config\Value">
         <plugin name="webapiResourceSecurityCacheInvalidate" type="Magento\WebapiSecurity\Model\Plugin\CacheInvalidator" />
     </type>
 

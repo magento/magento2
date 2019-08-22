@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Block\Adminhtml\Export;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD)
  */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -129,97 +129,57 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->modelContext = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->extensionFactory = $this->getMock(
-            \Magento\Framework\Api\ExtensionAttributesFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->customAttributeFactory = $this->getMock(
-            \Magento\Framework\Api\AttributeValueFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
-        $this->eavTypeFactory = $this->getMock(\Magento\Eav\Model\Entity\TypeFactory::class, [], [], '', false);
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
-        $this->resourceHelper = $this->getMock(\Magento\Eav\Model\ResourceModel\Helper::class, [], [], '', false);
-        $this->universalFactory = $this->getMock(
-            \Magento\Framework\Validator\UniversalFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->optionDataFactory = $this->getMock(
-            \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->dataObjectProcessor = $this->getMock(
-            \Magento\Framework\Reflection\DataObjectProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
-        $this->localeDate = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false);
+        $this->modelContext = $this->createMock(\Magento\Framework\Model\Context::class);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->extensionFactory = $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
+        $this->customAttributeFactory = $this->createMock(\Magento\Framework\Api\AttributeValueFactory::class);
+        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
+        $this->eavTypeFactory = $this->createMock(\Magento\Eav\Model\Entity\TypeFactory::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->resourceHelper = $this->createMock(\Magento\Eav\Model\ResourceModel\Helper::class);
+        $this->universalFactory = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
+        $this->optionDataFactory = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class);
+        $this->dataObjectProcessor = $this->createMock(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
         $this->localeDate->expects($this->any())->method('getDateFormat')->will($this->returnValue('12-12-2012'));
-        $this->reservedAttributeList = $this->getMock(
-            \Magento\Catalog\Model\Product\ReservedAttributeList::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->localeResolver = $this->getMock(\Magento\Framework\Locale\Resolver::class, [], [], '', false);
-        $this->resource = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
+        $this->reservedAttributeList = $this->createMock(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
+        $this->localeResolver = $this->createMock(\Magento\Framework\Locale\Resolver::class);
+        $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         $this->resourceCollection = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Collection\AbstractDb::class,
             [],
             '',
             false
         );
-        $this->context = $this->getMock(
+        $this->context = $this->createPartialMock(
             \Magento\Backend\Block\Template\Context::class,
-            ['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout'],
-            [],
-            '',
-            false
+            ['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout']
         );
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->context->expects($this->any())->method('getFileSystem')->will($this->returnValue($filesystem));
-        $escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
+        $escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
         $escaper->expects($this->any())->method('escapeHtml')->will($this->returnValue(''));
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($escaper));
-        $timeZone = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false);
+        $timeZone = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
         $timeZone->expects($this->any())->method('getDateFormat')->will($this->returnValue('M/d/yy'));
         $this->context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timeZone));
-        $dateBlock = $this->getMock(
+        $dateBlock = $this->createPartialMock(
             \Magento\Framework\View\Element\Html\Date::class,
-            ['setValue', 'getHtml', 'setId', 'getId'],
-            [],
-            '',
-            false
+            ['setValue', 'getHtml', 'setId', 'getId']
         );
         $dateBlock->expects($this->any())->method('setValue')->will($this->returnSelf());
         $dateBlock->expects($this->any())->method('getHtml')->will($this->returnValue(''));
         $dateBlock->expects($this->any())->method('setId')->will($this->returnSelf());
         $dateBlock->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $layout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $layout = $this->createMock(\Magento\Framework\View\Layout::class);
         $layout->expects($this->any())->method('createBlock')->will($this->returnValue($dateBlock));
         $this->context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
-        $this->backendHelper = $this->getMock(\Magento\Backend\Helper\Data::class, [], [], '', false);
-        $this->importExportData = $this->getMock(\Magento\ImportExport\Helper\Data::class, [], [], '', false);
-        $this->dateTimeFormatter = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class);
+        $this->backendHelper = $this->createMock(\Magento\Backend\Helper\Data::class);
+        $this->importExportData = $this->createMock(\Magento\ImportExport\Helper\Data::class);
+        $this->dateTimeFormatter = $this->createMock(
+            \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class
+        );
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->filter = $this->objectManagerHelper->getObject(
             \Magento\ImportExport\Block\Adminhtml\Export\Filter::class,
@@ -270,7 +230,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $column = new \Magento\Framework\DataObject();
         $column->setData($columnValue, 'value');
         $isExport = true;
-        $this->filter->decorateFilter($value, $attribute, $column, $isExport);
+        $result = $this->filter->decorateFilter($value, $attribute, $column, $isExport);
+        $this->assertNotNull($result);
     }
 
     /**

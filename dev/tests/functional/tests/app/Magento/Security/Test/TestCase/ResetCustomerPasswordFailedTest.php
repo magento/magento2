@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\ObjectManager;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
@@ -38,6 +37,13 @@ class ResetCustomerPasswordFailedTest extends Injectable
     protected $forgotPassword;
 
     /**
+     * Configuration setting.
+     *
+     * @var string
+     */
+    protected $configData;
+
+    /**
      * Preparing pages for test.
      *
      * @param CustomerAccountForgotPassword $forgotPassword
@@ -53,12 +59,22 @@ class ResetCustomerPasswordFailedTest extends Injectable
      * Run reset customer password failed test.
      * @param Customer $customer
      * @param int $attempts
+     * @param string $configData
      * @return void
      */
     public function test(
         Customer $customer,
-        $attempts
+        $attempts,
+        $configData = null
     ) {
+        $this->configData = $configData;
+
+        // Preconditions
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData]
+        )->run();
+
         // Steps
         $customer->persist();
         for ($i = 0; $i < $attempts; $i++) {

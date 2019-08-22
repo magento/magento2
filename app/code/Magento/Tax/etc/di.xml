@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -43,7 +43,7 @@
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface" type="Magento\Tax\Model\Sales\Order\Tax" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsInterface" type="Magento\Tax\Model\Sales\Order\Details" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface" type="Magento\Sales\Model\Order\Tax\Item" />
-    <preference for="Magento\Tax\Api\TaxClassManagementInterface" type="\Magento\Tax\Model\TaxClass\Management" />
+    <preference for="Magento\Tax\Api\TaxClassManagementInterface" type="Magento\Tax\Model\TaxClass\Management" />
     <preference for="Magento\Tax\Api\TaxClassRepositoryInterface" type="Magento\Tax\Model\TaxClass\Repository" />
     <preference for="Magento\Tax\Api\Data\TaxClassInterface" type="Magento\Tax\Model\ClassModel" />
     <preference for="Magento\Tax\Api\Data\TaxRuleInterface" type="Magento\Tax\Model\Calculation\Rule" />
@@ -54,13 +54,14 @@
     <preference for="Magento\Tax\Api\Data\TaxRateInterface" type="Magento\Tax\Model\Calculation\Rate" />
     <preference for="Magento\Tax\Api\Data\QuoteDetailsInterface" type="Magento\Tax\Model\Sales\Quote\QuoteDetails" />
     <preference for="Magento\Tax\Api\Data\QuoteDetailsItemInterface" type="Magento\Tax\Model\Sales\Quote\ItemDetails" />
-    <preference for="Magento\Tax\Api\Data\TaxClassKeyInterface" type="\Magento\Tax\Model\TaxClass\Key" />
+    <preference for="Magento\Tax\Api\Data\TaxClassKeyInterface" type="Magento\Tax\Model\TaxClass\Key" />
     <preference for="Magento\Tax\Api\Data\AppliedTaxInterface" type="Magento\Tax\Model\TaxDetails\AppliedTax" />
     <preference for="Magento\Tax\Api\Data\AppliedTaxRateInterface" type="Magento\Tax\Model\TaxDetails\AppliedTaxRate" />
     <preference for="Magento\Tax\Api\Data\TaxDetailsInterface" type="Magento\Tax\Model\TaxDetails\TaxDetails" />
     <preference for="Magento\Tax\Api\Data\TaxDetailsItemInterface" type="Magento\Tax\Model\TaxDetails\ItemDetails" />
     <preference for="Magento\Tax\Api\Data\GrandTotalDetailsInterface" type="Magento\Tax\Model\Calculation\GrandTotalDetails" />
     <preference for="Magento\Tax\Api\Data\GrandTotalRatesInterface" type="Magento\Tax\Model\Calculation\GrandTotalRates" />
+    <preference for="Magento\Tax\Api\TaxAddressManagerInterface" type="Magento\Tax\Model\TaxAddressManager" />
     <type name="Magento\Quote\Model\Quote\Address\ToOrder">
         <plugin name="add_tax_to_order" type="Magento\Tax\Model\Quote\ToOrderConverter"/>
     </type>
@@ -115,6 +116,7 @@
                 <item name="zip_is_range" xsi:type="string">main_table.zip_is_range</item>
                 <item name="zip_from" xsi:type="string">main_table.zip_from</item>
                 <item name="zip_to" xsi:type="string">main_table.zip_to</item>
+                <item name="region_name" xsi:type="string">region_table.code</item>
             </argument>
         </arguments>
     </virtualType>
@@ -122,6 +124,7 @@
         <arguments>
             <argument name="customJoins" xsi:type="array">
                 <item name="rate.tax_calculation_rate_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\Rate</item>
+                <item name="rc.code" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\RateCode</item>
                 <item name="ctc.customer_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\CustomerTaxClass</item>
                 <item name="ptc.product_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\ProductTaxClass</item>
                 <item name="cd.customer_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\CalculationData</item>
@@ -140,6 +143,7 @@
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
                 <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="code" xsi:type="string">main_table.code</item>
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
@@ -151,6 +155,7 @@
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
                 <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="code" xsi:type="string">main_table.code</item>
                 <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
                 <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
                 <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
@@ -168,4 +173,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="tax" xsi:type="object">Magento\Tax\Ui\DataProvider\Product\Listing\Collector\Tax</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider">
+        <plugin name="taxSettingsProvider" type="Magento\Tax\Plugin\Ui\DataProvider\TaxSettings"/>
+    </type>
 </config>

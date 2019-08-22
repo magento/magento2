@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     './abstract',
@@ -128,6 +131,7 @@ define([
     return Abstract.extend({
         defaults: {
             options: [],
+            total: 0,
             listVisible: false,
             value: [],
             filterOptions: false,
@@ -150,6 +154,7 @@ define([
             labelsDecoration: false,
             disableLabel: false,
             filterRateLimit: 500,
+            filterRateLimitMethod: 'notifyAtFixedRate',
             closeBtnLabel: $t('Done'),
             optgroupTmpl: 'ui/grid/filters/elements/ui-select-optgroup',
             quantityPlaceholder: $t('options'),
@@ -161,8 +166,23 @@ define([
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
             },
-            hoverElIndex: null,
             separator: 'optgroup',
+            searchOptions: false,
+            loading: false,
+            searchUrl: false,
+            lastSearchKey: '',
+            lastSearchPage: 1,
+            filterPlaceholder: '',
+            emptyOptionsHtml: '',
+            cachedSearchResults: {},
+            pageLimit: 50,
+            deviation: 30,
+            validationLoading: false,
+            isRemoveSelectedIcon: false,
+            debounce: 300,
+            missingValuePlaceholder: $t('Entity with ID: %s doesn\'t exist'),
+            isDisplayMissingValuePlaceholder: false,
+            currentSearchKey: '',
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList',
@@ -255,7 +275,13 @@ define([
             if (!data.hasOwnProperty(this.separator)) {
                 !this.cacheOptions.lastOptions ? this.cacheOptions.lastOptions = [] : false;
 
-                if (!_.findWhere(this.cacheOptions.lastOptions, {value: data.value})) {
+                if (!_.findWhere(
+                    this.cacheOptions.lastOptions,
+                        {
+                            value: data.value
+                        }
+                    )
+                ) {
                     this.cacheOptions.lastOptions.push(data);
                 }
 
@@ -295,16 +321,23 @@ define([
             this._super();
             this.observe([
                 'listVisible',
-                'hoverElIndex',
                 'placeholder',
                 'multiselectFocus',
                 'options',
                 'itemsQuantity',
                 'filterInputValue',
-                'filterOptionsFocus'
+                'filterOptionsFocus',
+                'loading',
+                'validationLoading',
+                'isDisplayMissingValuePlaceholder'
             ]);
 
-            this.filterInputValue.extend({rateLimit: this.filterRateLimit});
+            this.filterInputValue.extend({
+                rateLimit: {
+                    timeout: this.filterRateLimit,
+                    method: this.filterRateLimitMethod
+                }
+            });
 
             return this;
         },
@@ -377,7 +410,7 @@ define([
             options = options || this.cacheOptions.tree;
 
             _.each(options, function (opt) {
-                if (opt.value == option.parent) { /* eslint eqeqeq:0 */
+                if (opt.value == option.parent) { //eslint-disable-line eqeqeq
                     delete  option.parent;
                     opt[this.separator] ? opt[this.separator].push(option) : opt[this.separator] = [option];
                     copyOptionsTree = JSON.parse(JSON.stringify(this.cacheOptions.tree));
@@ -395,8 +428,8 @@ define([
         outerClick: function () {
             this.listVisible() ? this.listVisible(false) : false;
 
-            if(isTouchDevice) {
-               this.multiselectFocus(false);
+            if (isTouchDevice) {
+                this.multiselectFocus(false);
             }
         },
 
@@ -428,8 +461,8 @@ define([
             var value = this.filterInputValue().trim().toLowerCase(),
                 array = [];
 
-            if (value && value.length < 2) {
-                return false;
+            if (this.searchOptions) {
+                return this.loadOptions(value);
             }
 
             this.cleanHoveredElement();
@@ -516,9 +549,19 @@ define([
         _setItemsQuantity: function (data) {
             if (this.showFilteredQuantity) {
                 data || parseInt(data, 10) === 0 ?
-                    this.itemsQuantity(data + ' ' + this.quantityPlaceholder) :
+                    this.itemsQuantity(this.getItemsPlaceholder(data)) :
                     this.itemsQuantity('');
             }
+        },
+
+        /**
+         * Return formatted items placeholder.
+         *
+         * @param {Object} data - option data
+         * @returns {String}
+         */
+        getItemsPlaceholder: function (data) {
+            return data + ' ' + this.quantityPlaceholder;
         },
 
         /**
@@ -539,7 +582,7 @@ define([
         },
 
         /**
-         * Clean hoverElIndex variable
+         * Clean hoveredElement variable
          *
          * @returns {Object} Chainable
          */
@@ -563,6 +606,20 @@ define([
          */
         isSelected: function (value) {
             return this.multiple ? _.contains(this.value(), value) : this.value() === value;
+        },
+
+        /**
+         * Check selected option
+         *
+         * @param {Object} option - option value
+         * @return {Boolean}
+         */
+        isSelectedValue: function (option) {
+            if (_.isUndefined(option)) {
+                return false;
+            }
+
+            return this.isSelected(option.value);
         },
 
         /**
@@ -591,6 +648,10 @@ define([
 
             elementData = ko.dataFor(this.hoveredElement);
 
+            if (_.isUndefined(elementData)) {
+                return false;
+            }
+
             return data.value === elementData.value;
         },
 
@@ -616,7 +677,7 @@ define([
             return this.cacheOptions.plain.filter(function (opt) {
                 return _.isArray(selected) ?
                     _.contains(selected, opt.value) :
-                selected == opt.value;
+                selected == opt.value;//eslint-disable-line eqeqeq
             });
         },
 
@@ -849,7 +910,7 @@ define([
          * Find current hovered element
          * and change scroll position
          *
-         * @param {Number} index - element index
+         * @param {Number} element - element index
          */
         _scrollTo: function (element) {
             var curEl = $(element).children(this.actionTargetSelector),
@@ -912,7 +973,7 @@ define([
          * Set caption
          */
         setCaption: function () {
-            var length;
+            var length, caption = '';
 
             if (!_.isArray(this.value()) && this.value()) {
                 length = 1;
@@ -921,6 +982,16 @@ define([
             } else {
                 this.value([]);
                 length = 0;
+            }
+            this.warn(caption);
+
+            //check if option was removed
+            if (this.isDisplayMissingValuePlaceholder && length && !this.getSelected().length) {
+                caption = this.missingValuePlaceholder.replace('%s', this.value());
+                this.placeholder(caption);
+                this.warn(caption);
+
+                return this.placeholder();
             }
 
             if (length > 1) {
@@ -974,12 +1045,10 @@ define([
 
             previousElement = $(currentElement).prev()[0];
 
-            return (
-                this._getLastIn(previousElement) ||
+            return this._getLastIn(previousElement) ||
                 previousElement ||
                 this._getFirstParentOf(currentElement) ||
-                lastElement
-            );
+                lastElement;
         },
 
         /**
@@ -996,12 +1065,10 @@ define([
                 return firstElement;
             }
 
-            return (
-                this._getFirstIn(currentElement) ||
+            return this._getFirstIn(currentElement) ||
                 $(currentElement).next()[0] ||
                 this._getParentsOf(currentElement).next()[0] ||
-                firstElement
-            );
+                firstElement;
         },
 
         /**
@@ -1049,7 +1116,7 @@ define([
          *
          * @param {Element} element
          */
-        _hoverTo: function(element) {
+        _hoverTo: function (element) {
             if (this.hoveredElement) {
                 $(this.hoveredElement)
                     .children(this.actionTargetSelector)
@@ -1078,6 +1145,166 @@ define([
                 targetSelector,
                 this.onDelegatedMouseMouve.bind(this)
             );
+        },
+
+        /**
+         * Returns options from cache or send request
+         *
+         * @param {String} searchKey
+         */
+        loadOptions: function (searchKey) {
+            var currentPage = searchKey === this.lastSearchKey ? this.lastSearchPage + 1 : 1,
+                cachedSearchResult;
+
+            this.renderPath = !!this.showPath;
+
+            if (this.isSearchKeyCached(searchKey)) {
+                cachedSearchResult = this.getCachedSearchResults(searchKey);
+                this.options(cachedSearchResult.options);
+                this.afterLoadOptions(searchKey, cachedSearchResult.lastPage, cachedSearchResult.total);
+
+                return;
+            }
+
+            if (searchKey !== this.lastSearchKey) {
+                this.options([]);
+            }
+            this.processRequest(searchKey, currentPage);
+        },
+
+        /**
+         * Load more options on scroll down
+         * @param {Object} data
+         * @param {Event} event
+         */
+        onScrollDown: function (data, event) {
+            var clientHight = event.target.scrollTop + event.target.clientHeight,
+                scrollHeight = event.target.scrollHeight;
+
+            if (!this.searchOptions) {
+                return;
+            }
+
+            if (clientHight > scrollHeight - this.deviation && !this.isSearchKeyCached(data.filterInputValue())) {
+                this.loadOptions(data.filterInputValue());
+            }
+        },
+
+        /**
+         * Returns cached search result by search key
+         *
+         * @param {String} searchKey
+         * @return {Object}
+         */
+        getCachedSearchResults: function (searchKey) {
+            if (this.cachedSearchResults.hasOwnProperty(searchKey)) {
+                return this.cachedSearchResults[searchKey];
+            }
+
+            return {
+                options: [],
+                lastPage: 1,
+                total: 0
+            };
+        },
+
+        /**
+         * Cache loaded data
+         *
+         * @param {String} searchKey
+         * @param {Array} optionsArray
+         * @param {Number} page
+         * @param {Number} total
+         */
+        setCachedSearchResults: function (searchKey, optionsArray, page, total) {
+            var cachedData = {};
+
+            cachedData.options = optionsArray;
+            cachedData.lastPage = page;
+            cachedData.total = total;
+            this.cachedSearchResults[searchKey] = cachedData;
+        },
+
+        /**
+         * Check if search key cached
+         *
+         * @param {String} searchKey
+         * @return {Boolean}
+         */
+        isSearchKeyCached: function (searchKey) {
+            var totalCached = this.cachedSearchResults.hasOwnProperty(searchKey) ?
+                this.deviation * this.cachedSearchResults[searchKey].lastPage :
+                0;
+
+            return totalCached > 0 && totalCached >= this.cachedSearchResults[searchKey].total;
+        },
+
+        /**
+         * Submit request to load data
+         *
+         * @param {String} searchKey
+         * @param {Number} page
+         */
+        processRequest: function (searchKey, page) {
+            this.loading(true);
+            this.currentSearchKey = searchKey;
+            $.ajax({
+                url: this.searchUrl,
+                type: 'get',
+                dataType: 'json',
+                context: this,
+                data: {
+                    searchKey: searchKey,
+                    page: page,
+                    limit: this.pageLimit
+                },
+                success: $.proxy(this.success, this),
+                error: $.proxy(this.error, this),
+                beforeSend: $.proxy(this.beforeSend, this),
+                complete: $.proxy(this.complete, this, searchKey, page)
+            });
+        },
+
+        /** @param {Object} response */
+        success: function (response) {
+            var existingOptions = this.options();
+
+            _.each(response.options, function (opt) {
+                existingOptions.push(opt);
+            });
+
+            this.total = response.total;
+            this.options(existingOptions);
+        },
+
+        /** add actions before ajax request */
+        beforeSend: function () {
+
+        },
+
+        /** set empty array if error occurs */
+        error: function () {
+            this.options([]);
+        },
+
+        /** cache options and stop loading*/
+        complete: function (searchKey, page) {
+            this.setCachedSearchResults(searchKey, this.options(), page, this.total);
+            this.afterLoadOptions(searchKey, page, this.total);
+        },
+
+        /**
+         * Stop loading and update data after options were updated
+         *
+         * @param {String} searchKey
+         * @param {Number} page
+         * @param {Number} total
+         */
+        afterLoadOptions: function (searchKey, page, total) {
+            this.lastSearchKey = searchKey;
+            this.lastSearchPage = page;
+            this._setItemsQuantity(total);
+            this.loading(false);
         }
     });
 });

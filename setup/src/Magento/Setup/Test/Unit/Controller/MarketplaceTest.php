@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\Marketplace;
 
-class MarketplaceTest extends \PHPUnit_Framework_TestCase
+class MarketplaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PackagesAuth
@@ -29,8 +29,8 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->packagesAuth = $this->getMock(\Magento\Setup\Model\PackagesAuth::class, [], [], '', false);
-        $this->packagesData = $this->getMock(\Magento\Setup\Model\PackagesData::class, [], [], '', false);
+        $this->packagesAuth = $this->createMock(\Magento\Setup\Model\PackagesAuth::class);
+        $this->packagesData = $this->createMock(\Magento\Setup\Model\PackagesData::class);
         $this->controller = new Marketplace($this->packagesAuth, $this->packagesData);
     }
 
@@ -39,7 +39,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('checkCredentials')
-            ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
+            ->will($this->returnValue(json_encode(['success' => true])));
         $this->packagesAuth
             ->expects($this->once())
             ->method('saveAuthJson')
@@ -75,7 +75,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('checkCredentials')
-            ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
+            ->will($this->returnValue(json_encode(['success' => true])));
         $jsonModel = $this->controller->checkAuthAction();
         $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();

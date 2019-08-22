@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Translation\Block\Js $block */
 ?>
-<?php if ($block->dictionaryEnabled()): ?>
+<?php if ($block->dictionaryEnabled()) : ?>
     <script>
         require.config({
             deps: [
@@ -26,11 +24,11 @@
                 $.initNamespaceStorage('mage-translation-file-version');
                 versionObj = $.localStorage.get('mage-translation-file-version');
 
-                <?php $version = sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()); ?>
+                <?php $version = $block->getTranslationFileVersion(); ?>
 
-                if (versionObj.version !== '<?php /* @noEscape */ echo $version ?>') {
+                if (versionObj.version !== '<?= $block->escapeJs($version) ?>') {
                     dependencies.push(
-                        'text!<?php /* @noEscape */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
+                        'text!<?= /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
                     );
 
                 }
@@ -44,7 +42,7 @@
                             $.localStorage.set(
                                 'mage-translation-file-version',
                                 {
-                                    version: '<?php /* @noEscape */ echo $version ?>'
+                                    version: '<?= $block->escapeJs($version) ?>'
                                 }
                             );
                         } else {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,8 +11,24 @@ use Magento\Mtf\Util\Command\Cli;
 /**
  * Handle cache for tests executions.
  */
-class Cache extends Cli
+class Cache
 {
+    /**
+     * Perform bin/magento commands from command line for functional tests executions.
+     *
+     * @var Cli
+     */
+    private $cli;
+
+    /**
+     * Cache constructor.
+     * @param Cli $cli
+     */
+    public function __construct(Cli $cli)
+    {
+        $this->cli = $cli;
+    }
+
     /**
      * Parameter for flush cache command.
      */
@@ -29,13 +45,16 @@ class Cache extends Cli
     const PARAM_CACHE_ENABLE = 'cache:enable';
 
     /**
-     * Flush cache.
+     * Flush Cache.
+     * If no parameters are set, all cache types are flushed.
      *
+     * @param array $cacheTypes
      * @return void
      */
-    public function flush()
+    public function flush(array $cacheTypes = [])
     {
-        parent::execute(Cache::PARAM_CACHE_FLUSH);
+        $options = empty($cacheTypes) ? '' : ' ' . implode(' ', $cacheTypes);
+        $this->cli->execute(Cache::PARAM_CACHE_FLUSH . $options);
     }
 
     /**
@@ -46,7 +65,7 @@ class Cache extends Cli
      */
     public function disableCache($cacheType = null)
     {
-        parent::execute(Cache::PARAM_CACHE_DISABLE . ($cacheType ? " $cacheType" : ''));
+        $this->cli->execute(Cache::PARAM_CACHE_DISABLE . ($cacheType ? " $cacheType" : ''));
     }
 
     /**
@@ -57,6 +76,6 @@ class Cache extends Cli
      */
     public function enableCache($cacheType = null)
     {
-        parent::execute(Cache::PARAM_CACHE_ENABLE . ($cacheType ? " $cacheType" : ''));
+        $this->cli->execute(Cache::PARAM_CACHE_ENABLE . ($cacheType ? " $cacheType" : ''));
     }
 }

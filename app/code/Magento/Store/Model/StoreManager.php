@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 
 /**
+ * Service contract, which manage scopes
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StoreManager implements
@@ -27,7 +30,7 @@ class StoreManager implements
     const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
 
     /**
-     * Wether single store mode enabled or not
+     * Whether single store mode enabled or not
      */
     const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
 
@@ -66,7 +69,7 @@ class StoreManager implements
     /**
      * Default store code
      *
-     * @var string
+     * @var string|int|\Magento\Store\Api\Data\StoreInterface
      */
     protected $currentStoreId = null;
 
@@ -85,6 +88,8 @@ class StoreManager implements
     protected $isSingleStoreAllowed;
 
     /**
+     * StoreManager constructor.
+     *
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
@@ -112,7 +117,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCurrentStore($store)
     {
@@ -120,7 +125,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsSingleStoreModeAllowed($value)
     {
@@ -128,7 +133,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function hasSingleStore()
     {
@@ -137,7 +142,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isSingleStoreMode()
     {
@@ -145,12 +150,12 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStore($storeId = null)
     {
         if (!isset($storeId) || '' === $storeId || $storeId === true) {
-            if (!$this->currentStoreId) {
+            if (null === $this->currentStoreId) {
                 \Magento\Framework\Profiler::start('store.resolve');
                 $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
                 \Magento\Framework\Profiler::stop('store.resolve');
@@ -169,7 +174,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStores($withDefault = false, $codeKey = false)
     {
@@ -188,7 +193,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsite($websiteId = null)
     {
@@ -198,14 +203,17 @@ class StoreManager implements
             $website = $websiteId;
         } elseif ($websiteId === true) {
             $website = $this->websiteRepository->getDefault();
-        } else {
+        } elseif (is_numeric($websiteId)) {
             $website = $this->websiteRepository->getById($websiteId);
+        } else {
+            $website = $this->websiteRepository->get($websiteId);
         }
+
         return $website;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsites($withDefault = false, $codeKey = false)
     {
@@ -224,19 +232,20 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function reinitStores()
     {
         $this->currentStoreId = null;
+        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
+        $this->scopeConfig->clean();
         $this->storeRepository->clean();
         $this->websiteRepository->clean();
         $this->groupRepository->clean();
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [StoreResolver::CACHE_TAG]);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultStoreView()
     {
@@ -246,7 +255,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGroup($groupId = null)
     {
@@ -261,7 +270,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGroups($withDefault = false)
     {
@@ -285,14 +294,16 @@ class StoreManager implements
      */
     protected function isSingleStoreModeEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
-     * @deprecated
+     * Get Store Website Relation
+     *
+     * @deprecated 100.2.0
      * @return StoreWebsiteRelation
      */
     private function getStoreWebsiteRelation()

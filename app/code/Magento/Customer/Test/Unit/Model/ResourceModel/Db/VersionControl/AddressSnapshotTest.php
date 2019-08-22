@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Db\VersionControl;
 
 use Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot;
 
-class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
+class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AddressSnapshot

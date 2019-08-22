@@ -1,0 +1,46 @@
+OPEN,Open
+PROCESSING,Processing
+FLAGGED,Flagged
+DISMISSED,Dismissed
+HELD,Held
+GOOD,Good
+FRAUDULENT,Fraudulent
+UNSET,Unset
+NULL,Unset
+APPROVED,Approved
+DECLINED,Declined
+PENDING,Pending
+CANCELED,Canceled
+IN_REVIEW,"In review"
+Approved,Approved
+Declined,Declined
+Pending,Pending
+Canceled,Canceled
+"In Review","In Review"
+Unrequested,Unrequested
+"Learn more","Learn more"
+"This order already has associated case entity","This order already has associated case entity"
+"The case entity should not be empty.","The case entity should not be empty."
+"Cannot update Case entity.","Cannot update Case entity."
+"The ""%1"" should not be empty.","The ""%1"" should not be empty."
+"Case entity not found.","Case entity not found."
+"Case Update: New score for the order is %1. Previous score was %2.","Case Update: New score for the order is %1. Previous score was %2."
+"Awaiting the Signifyd guarantee disposition.","Awaiting the Signifyd guarantee disposition."
+"Only single entrance of ""%1"" node is required.","Only single entrance of ""%1"" node is required."
+"Not empty value for ""%1"" node is required.","Not empty value for ""%1"" node is required."
+"%1 must implement %2","%1 must implement %2"
+Error,Error
+"Cannot generate message.","Cannot generate message."
+"Message is generated.","Message is generated."
+"Case with the same order id already exists.","Case with the same order id already exists."
+"Fraud Protection Information","Fraud Protection Information"
+"Signifyd Guarantee Decision","Signifyd Guarantee Decision"
+"Fraud Protection Section","Fraud Protection Section"
+"Fraud Protection","Fraud Protection"
+"Protect your store from fraud with Guaranteed Fraud Protection by Signifyd.","Protect your store from fraud with Guaranteed Fraud Protection by Signifyd."
+Configuration,Configuration
+"Enable this Solution","Enable this Solution"
+"API Key","API Key"
+"API URL","API URL"
+Debug,Debug
+"Webhook URL","Webhook URL"

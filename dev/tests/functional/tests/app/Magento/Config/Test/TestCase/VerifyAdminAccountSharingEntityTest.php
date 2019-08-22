@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Config\Test\Page\Adminhtml\AdminAccountSharing;
  * Steps:
  * 1. Log in to Admin.
  * 2. Go to Stores>Configuration>Advanced>admin>Security.
- * 3. * 7. Verify admin Acoount Sharing option availability.
+ * 3. * 7. Verify admin Account Sharing option availability.
  *
  * @group Config_(PS)
  * @ZephyrId MAGETWO-47822
@@ -23,13 +23,14 @@ class VerifyAdminAccountSharingEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'PS';
+    const TO_MAINTAIN = 'yes';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**
      * Admin account settings page.
      *
-     * @var adminAccountSharing
+     * @var AdminAccountSharing
      */
     private $adminAccountSharing;
 

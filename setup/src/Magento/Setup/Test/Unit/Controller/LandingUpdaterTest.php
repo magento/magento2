@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Framework\App\ProductMetadata;
 use \Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class LandingUpdaterTest extends \PHPUnit_Framework_TestCase
+class LandingUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test Product Version Value

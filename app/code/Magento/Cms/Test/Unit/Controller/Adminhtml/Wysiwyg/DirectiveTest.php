@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Wysiwyg;
@@ -9,7 +9,7 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Wysiwyg;
  * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DirectiveTest extends \PHPUnit_Framework_TestCase
+class DirectiveTest extends \PHPUnit\Framework\TestCase
 {
     const IMAGE_PATH = 'pub/media/wysiwyg/image.jpg';
 

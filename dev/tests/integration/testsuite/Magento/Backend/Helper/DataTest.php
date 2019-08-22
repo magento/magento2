@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper;
@@ -10,7 +10,7 @@ namespace Magento\Backend\Helper;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Helper\Data

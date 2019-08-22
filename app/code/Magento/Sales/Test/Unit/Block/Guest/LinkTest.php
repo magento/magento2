@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Guest;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Block\Guest;
 /**
  * Test class for \Magento\Sales\Block\Guest\Link
  */
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     public function testToHtml()
     {

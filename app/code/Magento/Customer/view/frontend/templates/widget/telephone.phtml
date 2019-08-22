@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Customer\Block\Widget\Telephone $block */
+?>
+
+<div class="field telephone <?= $block->isRequired() ? 'required' : '' ?>">
+    <label for="telephone" class="label">
+        <span>
+            <?= $block->escapeHtml(__('Phone Number')) ?>
+        </span>
+    </label>
+    <div class="control">
+            <?php
+            $_validationClass = $block->escapeHtmlAttr(
+                $this->helper(\Magento\Customer\Helper\Address::class)
+                     ->getAttributeValidationClass('telephone')
+            );
+            ?>
+        <input type="text"
+               name="telephone"
+               id="telephone"
+               value="<?= $block->escapeHtmlAttr($block->getTelephone()) ?>"
+               title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
+               class="input-text <?= $_validationClass ?: '' ?>"
+        >
+    </div>
+</div>

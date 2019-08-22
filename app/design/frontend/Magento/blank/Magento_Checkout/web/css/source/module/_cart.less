@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -79,6 +79,10 @@
         .table-wrapper {
             margin-bottom: 0;
             overflow: inherit;
+        }
+
+        .discount.coupon {
+            display: none;
         }
     }
 
@@ -222,6 +226,30 @@
         }
     }
 
+    //  Products pager
+    .cart-products-toolbar {
+        .toolbar-amount {
+            margin: @indent__m 0 15px;
+            padding: 0;
+            text-align: center;
+        }
+
+        .pages {
+            margin: 0 0 @indent__m;
+            text-align: center;
+
+            .items {
+                > .item {
+                    border-bottom: 0;
+                }
+            }
+        }
+    }
+
+    .cart-products-toolbar-top {
+        border-bottom: @border-width__base solid @border-color__base;
+    }
+
     //
     //  Cross sell
     //  ---------------------------------------------
@@ -277,7 +305,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;
@@ -394,6 +422,46 @@
 
         .action {
             margin-bottom: @indent__s;
+        }
+    }
+
+    //  Products pager
+    .cart-products-toolbar {
+        .toolbar-amount {
+            line-height: 30px;
+            margin: 0;
+        }
+
+        .pages {
+            float: right;
+            margin: 0 0 1px;
+
+            .item {
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .cart.table-wrapper {
+        .cart-products-toolbar {
+            + .cart {
+                thead {
+                    tr {
+                        th.col {
+                            padding-bottom: 7px;
+                            padding-top: 8px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cart {
+            + .cart-products-toolbar {
+                margin-top: @indent__m;
+            }
         }
     }
 }

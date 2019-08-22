@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -53,11 +54,6 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     protected $totalsCollector;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     */
-    private $minimumAmountErrorMessage;
-
-    /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param QuoteAddressValidator $addressValidator
      * @param Logger $logger
@@ -83,7 +79,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
@@ -92,14 +88,14 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
+                __('The Cart includes virtual product(s) only, so a shipping address is not used.')
             );
         }
 
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
-        $this->addressValidator->validate($address);
+        $this->addressValidator->validateForCart($quote, $address);
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
 
@@ -117,21 +113,17 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
 
-        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException($this->getMinimumAmountErrorMessage()->getMessage());
-        }
-
         try {
             $address->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please check input data.'));
+            throw new InputException(__('The address failed to save. Verify the address and try again.'));
         }
         return $quote->getShippingAddress()->getId();
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function get($cartId)
     {
@@ -139,25 +131,10 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
+                __('The Cart includes virtual product(s) only, so a shipping address is not used.')
             );
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */
         return $quote->getShippingAddress();
-    }
-
-    /**
-     * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     * @deprecated
-     */
-    private function getMinimumAmountErrorMessage()
-    {
-        if ($this->minimumAmountErrorMessage === null) {
-            $objectManager = ObjectManager::getInstance();
-            $this->minimumAmountErrorMessage = $objectManager->get(
-                \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
-            );
-        }
-        return $this->minimumAmountErrorMessage;
     }
 }

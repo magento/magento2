@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Library\PhpParser;
@@ -9,7 +9,7 @@ use Magento\TestFramework\Integrity\Library\PhpParser\Tokens;
 
 /**
  */
-class TokensTest extends \PHPUnit_Framework_TestCase
+class TokensTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Tokens
@@ -45,7 +45,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseContent()
     {
-        $parser = $this->getMock(\Magento\TestFramework\Integrity\Library\PhpParser\ParserInterface::class);
+        $parser = $this->createMock(\Magento\TestFramework\Integrity\Library\PhpParser\ParserInterface::class);
 
         $this->parseFactory->expects($this->any())->method('createParsers')->will($this->returnValue([$parser]));
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -145,7 +145,7 @@ class SchemaXml
         foreach ($fields as $fieldName => $fieldValue) {
             $field = $this->dom->createElement('field');
             $field->setAttribute('name', $fieldName);
-            $field->setAttribute('is_required', intval($fieldValue['is_required']));
+            $field->setAttribute('is_required', (int)$fieldValue['is_required']);
             $fixture->appendChild($field);
         }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Config\Integration;
@@ -10,7 +10,7 @@ use Magento\Framework\Module\Dir;
 /**
  * Integration config schema locator.
  *
- * @deprecated
+ * @deprecated 100.1.0
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {

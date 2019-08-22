@@ -1,11 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-use Magento\Framework\Json\Helper\Data;
 
 /** @var \Magento\Payment\Block\Transparent\Iframe $block */
 $params = $block->getParams();
@@ -13,49 +10,64 @@ $params = $block->getParams();
 <html>
     <head>
         <script>
-        <?php if (isset($params['redirect'])): ?>
-            window.location="<?php echo $block->escapeUrl($params['redirect']); ?>";
-        <?php elseif (isset($params['redirect_parent'])): ?>
-            var require = window.top.require;
+        <?php if (isset($params['redirect'])) : ?>
+            window.location="<?= $block->escapeUrl($params['redirect']) ?>";
+        <?php elseif (isset($params['redirect_parent'])) : ?>
+            var require = window.parent.require;
             require(
                 [
                     'jquery'
                 ],
                 function($) {
-                    var parent = window.top;
+                    var parent = window.parent;
                     $(parent).trigger('clearTimeout');
-                    parent.location="<?php echo $block->escapeUrl($params['redirect_parent']); ?>";
+                    parent.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
                 }
             );
-        <?php elseif (isset($params['error_msg'])): ?>
-            var require = window.top.require;
+        <?php elseif (isset($params['error_msg'])) : ?>
+            var require = window.parent.require;
             require(
                 [
                     'jquery',
                     'Magento_Ui/js/model/messageList',
-                    'mage/translate'
+                    'mage/translate',
+                    'Magento_Checkout/js/model/full-screen-loader'
                 ],
-                function($, globalMessageList, $t) {
-                    var parent = window.top;
+                function($, globalMessageList, $t, fullScreenLoader) {
+                    var parent = window.parent;
                     $(parent).trigger('clearTimeout');
+                    fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
-                        message: $t('An error occurred on the server. Please try to place the order again.')
+                        message: $t(<?= /* @noEscape */ json_encode($params['error_msg'])?>)
                     });
                 }
             );
-        <?php elseif (isset($params['order_success'])): ?>
-            window.top.location = "<?php echo $block->escapeUrl($params['order_success']); ?>";
-        <?php else: ?>
-            var require = window.top.require;
+        <?php elseif (isset($params['multishipping'])) : ?>
+            var require = window.parent.require;
+            require(
+                [
+                    'jquery'
+                ],
+                function($) {
+                    var parent = window.parent;
+                    $(parent).trigger('clearTimeout');
+                    $(parent.document).find('#multishipping-billing-form').submit();
+                }
+            );
+        <?php elseif (isset($params['order_success'])) : ?>
+            window.parent.location = "<?= $block->escapeUrl($params['order_success']) ?>";
+        <?php else : ?>
+            var require = window.parent.require;
             require(
                 [
                     'jquery',
                     'Magento_Checkout/js/model/quote',
                     'Magento_Checkout/js/action/place-order',
-                    'Magento_Checkout/js/action/redirect-on-success'
+                    'Magento_Checkout/js/action/redirect-on-success',
+                    'Magento_Checkout/js/model/full-screen-loader'
                 ],
-                function($, quote, placeOrderAction, redirectOnSuccessAction) {
-                    var parent = window.top;
+                function($, quote, placeOrderAction, redirectOnSuccessAction, fullScreenLoader) {
+                    var parent = window.parent;
 
                     $(parent).trigger('clearTimeout');
                     $.when(
@@ -63,6 +75,12 @@ $params = $block->getParams();
                     ).done(
                         function () {
                             redirectOnSuccessAction.execute();
+                        }
+                    ).fail(
+                        function () {
+                            var parent = window.parent;
+                            $(parent).trigger('clearTimeout');
+                            fullScreenLoader.stopLoader();
                         }
                     );
                 }

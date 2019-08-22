@@ -1,18 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions $block */
 ?>
 <?php $children = $block->getChildNames(); ?>
-<?php if ($children): ?>
-    <div class="<?php echo $block->escapeHtmlAttr($block->getCssClass()) ?>">
-        <?php foreach ($children as $childName):?>
-            <?php /* @noEscape */ echo $block->getLayout()->renderElement($childName, false);?>
+<?php if ($children) : ?>
+    <div class="<?= $block->escapeHtmlAttr($block->getCssClass()) ?>">
+        <?php foreach ($children as $childName) : ?>
+            <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
         <?php endforeach;?>
     </div>
 <?php endif; ?>

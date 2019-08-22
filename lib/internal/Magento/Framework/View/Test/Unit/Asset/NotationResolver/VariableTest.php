@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\NotationResolver\Variable;
 use Magento\Framework\View\Asset\Repository;
 
-class VariableTest extends \PHPUnit_Framework_TestCase
+class VariableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FallbackContext|\PHPUnit_Framework_MockObject_MockObject

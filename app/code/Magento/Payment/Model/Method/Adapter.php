@@ -1,28 +1,34 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Payment\Model\InfoInterface;
-use Magento\Payment\Observer\AbstractDataAssignObserver;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Command\CommandManagerInterface;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
-use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\CartInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Payment method facade. Abstract method adapter
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api Use this class as a base for virtual types declaration
+ * @since 100.0.2
  */
 class Adapter implements MethodInterface
 {
@@ -82,15 +88,24 @@ class Adapter implements MethodInterface
     private $commandExecutor;
 
     /**
+     * Logger for exception details
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ManagerInterface $eventManager
      * @param ValueHandlerPoolInterface $valueHandlerPool
      * @param PaymentDataObjectFactory $paymentDataObjectFactory
      * @param string $code
      * @param string $formBlockType
      * @param string $infoBlockType
-     * @param CommandPoolInterface $commandPool
-     * @param ValidatorPoolInterface $validatorPool
-     * @param CommandManagerInterface $commandExecutor
+     * @param CommandPoolInterface|null $commandPool
+     * @param ValidatorPoolInterface|null $validatorPool
+     * @param CommandManagerInterface|null $commandExecutor
+     * @param LoggerInterface|null $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ManagerInterface $eventManager,
@@ -101,7 +116,8 @@ class Adapter implements MethodInterface
         $infoBlockType,
         CommandPoolInterface $commandPool = null,
         ValidatorPoolInterface $validatorPool = null,
-        CommandManagerInterface $commandExecutor = null
+        CommandManagerInterface $commandExecutor = null,
+        LoggerInterface $logger = null
     ) {
         $this->valueHandlerPool = $valueHandlerPool;
         $this->validatorPool = $validatorPool;
@@ -112,6 +128,7 @@ class Adapter implements MethodInterface
         $this->eventManager = $eventManager;
         $this->paymentDataObjectFactory = $paymentDataObjectFactory;
         $this->commandExecutor = $commandExecutor;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -301,7 +318,7 @@ class Adapter implements MethodInterface
      */
     public function isActive($storeId = null)
     {
-        return $this->getConfiguredValue('active', $storeId);
+        return (bool)$this->getConfiguredValue('active', $storeId);
     }
 
     /**
@@ -403,7 +420,7 @@ class Adapter implements MethodInterface
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
-        $this->executeCommand(
+        return $this->executeCommand(
             'fetch_transaction_information',
             ['payment' => $payment, 'transactionId' => $transactionId]
         );
@@ -522,13 +539,12 @@ class Adapter implements MethodInterface
         }
 
         if ($this->commandPool === null) {
-            throw new \DomainException('Command pool is not configured for use.');
+            throw new \DomainException("The command pool isn't configured for use.");
         }
 
         $command = $this->commandPool->get($commandCode);
 
         return $command->execute($arguments);
-
     }
 
     /**

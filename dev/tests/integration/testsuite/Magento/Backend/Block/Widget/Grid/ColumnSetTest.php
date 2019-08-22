@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget\Grid;
 /**
  * @magentoAppArea adminhtml
  */
-class ColumnSetTest extends \PHPUnit_Framework_TestCase
+class ColumnSetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\ColumnSet
@@ -29,14 +29,11 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->_columnMock = $this->getMock(
+        $this->_columnMock = $this->createPartialMock(
             \Magento\Backend\Block\Widget\Grid\Column::class,
-            ['setSortable', 'setRendererType', 'setFilterType', 'addHeaderCssClass', 'setGrid'],
-            [],
-            '',
-            false
+            ['setSortable', 'setRendererType', 'setFilterType', 'addHeaderCssClass', 'setGrid']
         );
-        $this->_layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->_layoutMock->expects(
             $this->any()
         )->method(

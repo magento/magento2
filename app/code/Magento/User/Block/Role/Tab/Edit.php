@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,13 +11,15 @@ use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
 /**
  * Rolesedit Tab Display Block.
  *
+ * @api
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var string
      */
-    protected $_template = 'role/edit.phtml';
+    protected $_template = 'Magento_User::role/edit.phtml';
 
     /**
      * Root ACL Resource
@@ -47,13 +49,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     protected $_aclResourceProvider;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     */
     protected $_integrationData;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
+     * @since 100.1.0
      */
     protected $coreRegistry = null;
 
@@ -88,7 +93,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     public function setCoreRegistry(\Magento\Framework\Registry $coreRegistry)
     {
@@ -99,7 +105,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get core registry
      *
      * @return \Magento\Framework\Registry
-     * @deprecated
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     public function getCoreRegistry()
     {
@@ -166,6 +173,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * Get selected resources
      *
      * @return array|mixed|\string[]
+     * @since 100.1.0
      */
     public function getSelectedResources()
     {
@@ -209,7 +217,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
         $configResource = array_filter(
             $resources,
             function ($node) {
-                return $node['id'] == 'Magento_Backend::admin';
+                return isset($node['id'])
+                    && $node['id'] == 'Magento_Backend::admin';
             }
         );
         $configResource = reset($configResource);

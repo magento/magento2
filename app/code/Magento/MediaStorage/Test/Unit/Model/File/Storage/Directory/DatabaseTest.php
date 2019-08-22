@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage\Directory;
@@ -10,7 +10,7 @@ use Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database;
 /**
  * Class DatabaseTest
  */
-class DatabaseTest extends \PHPUnit_Framework_TestCase
+class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit_Framework_MockObject_MockObject
@@ -72,44 +72,22 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->helperStorageDatabase = $this->getMock(
-            \Magento\MediaStorage\Helper\File\Storage\Database::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->dateModelMock = $this->getMock(
-            \Magento\Framework\Stdlib\DateTime\DateTime::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->directoryMock = $this->getMock(
+        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->helperStorageDatabase = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+        $this->dateModelMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        $this->directoryMock = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\Storage\Directory\Database::class,
-            ['setPath', 'setName', '__wakeup', 'save', 'getParentId'],
-            [],
-            '',
-            false
+            ['setPath', 'setName', '__wakeup', 'save', 'getParentId']
         );
-        $this->directoryFactoryMock = $this->getMock(
+        $this->directoryFactoryMock = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resourceDirectoryDatabaseMock = $this->getMock(
-            \Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database::class,
-            [],
-            [],
-            '',
-            false
+        $this->resourceDirectoryDatabaseMock = $this->createMock(
+            \Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database::class
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->directoryFactoryMock->expects(
             $this->any()
@@ -119,7 +97,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->directoryMock)
         );
 
-        $this->configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->configMock->expects(
             $this->any()
         )->method(

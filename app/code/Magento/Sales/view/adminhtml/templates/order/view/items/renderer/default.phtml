@@ -1,11 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /** @var \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer $block */ ?>
 <?php $_item = $block->getItem() ?>
@@ -14,8 +11,10 @@
     <?php $i = 0;
     $columns = $block->getColumns();
     $lastItemNumber = count($columns) ?>
-    <?php foreach ($columns as $columnName => $columnClass):?>
+    <?php foreach ($columns as $columnName => $columnClass) : ?>
         <?php $i++; ?>
-        <td class="<?php echo /* @noEscape */ $columnClass?><?php /* @noEscape */ echo ($i === $lastItemNumber ? ' last' : '')?>"><?php /* @escapeNotVerified */ echo $block->getColumnHtml($_item, $columnName) ?></td>
+        <td class="<?= /* @noEscape */ $columnClass ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>">
+            <?= $block->getColumnHtml($_item, $columnName) ?>
+        </td>
     <?php endforeach; ?>
 </tr>

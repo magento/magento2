@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -70,6 +70,14 @@
                     <item name="path" xsi:type="string">design/watermark/swatch_image_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Swatches\Model\SwatchAttributeCodes">
+        <arguments>
+            <argument name="cacheKey" xsi:type="string">swatch-attribute-list</argument>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="0" xsi:type="const">Magento\Eav\Model\Entity\Attribute::CACHE_TAG</item>
             </argument>
         </arguments>
     </type>

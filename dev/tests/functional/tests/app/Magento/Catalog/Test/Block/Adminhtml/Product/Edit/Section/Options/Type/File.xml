@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,5 +26,8 @@
         <image_size_y>
             <selector>[name$='[image_size_y]']</selector>
         </image_size_y>
+        <add_before>
+            <selector>[class*="admin__addon-prefix"]</selector>
+        </add_before>
     </fields>
 </mapping>

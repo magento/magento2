@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class DesignExceptions
@@ -32,18 +35,28 @@ class DesignExceptions
     protected $scopeType;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * DesignExceptions constructor
+     *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $exceptionConfigPath
      * @param string $scopeType
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $exceptionConfigPath,
-        $scopeType
+        $scopeType,
+        Json $serializer = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->exceptionConfigPath = $exceptionConfigPath;
         $this->scopeType = $scopeType;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -65,7 +78,7 @@ class DesignExceptions
         if (!$expressions) {
             return false;
         }
-        $expressions = unserialize($expressions);
+        $expressions = $this->serializer->unserialize($expressions);
         foreach ($expressions as $rule) {
             if (preg_match($rule['regexp'], $userAgent)) {
                 return $rule['value'];

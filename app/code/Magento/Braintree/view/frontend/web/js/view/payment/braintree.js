@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -23,7 +23,7 @@ define(
             rendererList.push(
                 {
                     type: braintreeType,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/hosted-fields'
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/cc-form'
                 }
             );
         }

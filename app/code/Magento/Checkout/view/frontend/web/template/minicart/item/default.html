@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -24,7 +24,7 @@
         <div class="product-item-details">
             <strong class="product-item-name">
                 <!-- ko if: product_has_url -->
-                <a data-bind="attr: {href: product_url}, text: product_name"></a>
+                <a data-bind="attr: {href: product_url}, html: product_name"></a>
                 <!-- /ko -->
                 <!-- ko ifnot: product_has_url -->
                     <!-- ko text: product_name --><!-- /ko -->
@@ -45,7 +45,7 @@
                                 <span data-bind="html: option.value.join('<br>')"></span>
                             <!-- /ko -->
                             <!-- ko ifnot: Array.isArray(option.value) -->
-                                <span data-bind="html: option.value"></span>
+                                <span data-bind="text: option.value"></span>
                             <!-- /ko -->
                         </dd>
                         <!-- /ko -->
@@ -79,8 +79,7 @@
                            }, value: qty"
                            type="number"
                            size="4"
-                           class="item-qty cart-item-qty"
-                           maxlength="12"/>
+                           class="item-qty cart-item-qty">
                     <button data-bind="attr: {
                            id: 'update-cart-item-'+item_id,
                            'data-cart-item': item_id,

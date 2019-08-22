@@ -1,5 +1,6 @@
+"Consumer is not authorized to access %resources","Consumer is not authorized to access %resources"
 "Operation allowed only in HTTPS","Operation allowed only in HTTPS"
-"Cannot perform GET operation with store code \'all\'","Cannot perform GET operation with store code \'all\'"
+"Cannot perform GET operation with store code 'all'","Cannot perform GET operation with store code 'all'"
 "Request does not match any route.","Request does not match any route."
 "Not allowed parameters: %1. Please use only %2 and %3.","Not allowed parameters: %1. Please use only %2 and %3."
 "Requested service is not available: ""%1""","Requested service is not available: ""%1"""

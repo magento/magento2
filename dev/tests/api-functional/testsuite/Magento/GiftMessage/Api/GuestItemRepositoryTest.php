@@ -1,11 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Api;
-
-// @codingStandardsIgnoreFile
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -119,7 +117,6 @@ class GuestItemRepositoryTest extends WebapiAbstract
             ],
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
-//        $quote->load('test_order_item_with_message', 'reserved_order_id');
         $messageId = $quote->getItemByProduct($product)->getGiftMessageId();
         /** @var  \Magento\GiftMessage\Model\Message $message */
         $message = $this->objectManager->create(\Magento\GiftMessage\Model\Message::class)->load($messageId);

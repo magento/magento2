@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd" component="Magento_Customer/js/form/components/form">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">customer_address_form.customer_address_form_data_source</item>
+        </item>
+        <item name="config" xsi:type="array">
+            <item name="deleteConfirmationMessage" translate="true" xsi:type="string">Are you sure you want to delete this address?</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Update Address</item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="cancel" class="Magento\Customer\Block\Adminhtml\Edit\Address\CancelButton"/>
+            <button name="delete" class="Magento\Customer\Block\Adminhtml\Edit\Address\DeleteButton"/>
+            <button name="save" class="Magento\Customer\Block\Adminhtml\Edit\Address\SaveButton"/>
+        </buttons>
+        <namespace>customer_address_form</namespace>
+        <ajaxSave>true</ajaxSave>
+        <ajaxSaveType>simple</ajaxSaveType>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>customer_address_form.customer_address_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="customer_address_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="customer/address/save"/>
+            <validateUrl path="customer/address/validate"/>
+        </settings>
+        <aclResource>Magento_Customer::manage</aclResource>
+        <dataProvider class="Magento\Customer\Model\Address\DataProvider" name="customer_address_form_data_source">
+            <settings>
+                <requestFieldName>entity_id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <container name="messages" component="Magento_Ui/js/form/components/html">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="additionalClasses" xsi:type="string">message message-error</item>
+                <item name="visible" xsi:type="boolean">false</item>
+                <item name="imports" xsi:type="array">
+                    <item name="responseData" xsi:type="string">${ $.parentName }:responseData</item>
+                </item>
+                <item name="listens" xsi:type="array">
+                    <item name="responseData.error" xsi:type="string">visible</item>
+                    <item name="responseData.messages" xsi:type="string">content</item>
+                </item>
+            </item>
+        </argument>
+    </container>
+    <fieldset name="general">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="is_collection" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <settings>
+            <label/>
+            <dataScope/>
+        </settings>
+
+        <field name="entity_id" formElement="hidden">
+            <settings>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+        <field name="default_billing" sortOrder="5" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Default Billing Address</label>
+                <dataScope>default_billing</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="default_shipping" sortOrder="7" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">0</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Default Shipping Address</label>
+                <dataScope>default_shipping</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="prefix" sortOrder="10" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+                <label translate="true">Name Prefix</label>
+            </settings>
+        </field>
+        <field name="firstname" sortOrder="20" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+                <label translate="true">First Name</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="lastname" sortOrder="30" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+                <label translate="true">Last Name</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="suffix" sortOrder="40" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+                <label translate="true">Name Suffix</label>
+            </settings>
+        </field>
+        <field name="middlename" sortOrder="50" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+                <label translate="true">Middle Name/Initial</label>
+            </settings>
+        </field>
+        <field name="company" sortOrder="60" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+                <label translate="true">Company</label>
+            </settings>
+        </field>
+        <field name="city" sortOrder="80" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">City</label>
+                <visible>true</visible>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="country_id" component="Magento_Customer/js/form/element/country" sortOrder="90" formElement="select">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Directory\Model\ResourceModel\Country\Collection"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="region_id" component="Magento_Customer/js/form/element/region" formElement="select">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">State/Province</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <filterBy>
+                            <field>country_id</field>
+                            <target>${ $.provider }:${ $.parentScope }.country_id</target>
+                        </filterBy>
+                        <customEntry>region</customEntry>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="postcode" component="Magento_Ui/js/form/element/post-code" sortOrder="120" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+                <label translate="true">Zip/Postal Code</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="telephone" sortOrder="130" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>true</visible>
+                <label translate="true">Phone Number</label>
+            </settings>
+        </field>
+        <field name="vat_id" sortOrder="140" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">VAT Number</label>
+                <validation>
+                    <rule name="validate-alphanum" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+    </fieldset>
+</form>

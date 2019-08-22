@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\Filter\Test\Unit\Input;
 
 use \Magento\Framework\Filter\Input\MaliciousCode;
 
-class MaliciousCodeTest extends \PHPUnit_Framework_TestCase
+class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Filter\Input\MaliciousCode */
     protected $filter;
@@ -33,6 +33,9 @@ class MaliciousCodeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         return [
@@ -89,6 +92,7 @@ class MaliciousCodeTest extends \PHPUnit_Framework_TestCase
                     'Tag is removed <link>SomeLink</link>',
                     'Tag is removed <frame>SomeFrame</frame>',
                     'Tag is removed <iframe>SomeIFrame</iframe>',
+                    'Tag is removed <object>SomeObject</object>',
                 ],
                 [
                     'Tag is removed SomeScript',
@@ -96,6 +100,7 @@ class MaliciousCodeTest extends \PHPUnit_Framework_TestCase
                     'Tag is removed SomeLink',
                     'Tag is removed SomeFrame',
                     'Tag is removed SomeIFrame',
+                    'Tag is removed SomeObject',
                 ],
             ],
             'Base64' => [

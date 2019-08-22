@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
@@ -10,7 +10,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Adminhtml sales order create sidebar block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -69,7 +71,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retrieve disply item qty availablity
+     * Retrieve display item qty availability
      *
      * @return false
      */
@@ -194,7 +196,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     }
 
     /**
-     * Retrieve disply price availablity
+     * Retrieve display price availability
      *
      * @return true
      */

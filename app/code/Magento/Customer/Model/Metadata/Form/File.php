@@ -1,22 +1,22 @@
 <?php
 /**
- * Form Element File Data Model
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
+use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Api\ArrayObjectSearch;
 
 /**
+ * Processes files that are save for customer.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class File extends AbstractData
@@ -57,21 +57,25 @@ class File extends AbstractData
 
     /**
      * @var FileProcessorFactory
+     * @deprecated 100.2.0
      */
     protected $fileProcessorFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param null $value
+     * @param string|array $value
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param Filesystem $fileSystem
      * @param UploaderFactory $uploaderFactory
+     * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -85,17 +89,21 @@ class File extends AbstractData
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
-        UploaderFactory $uploaderFactory
+        UploaderFactory $uploaderFactory,
+        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null
     ) {
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->urlEncoder = $urlEncoder;
         $this->_fileValidator = $fileValidator;
         $this->_fileSystem = $fileSystem;
         $this->uploaderFactory = $uploaderFactory;
+        $this->fileProcessorFactory = $fileProcessorFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Customer\Model\FileProcessorFactory::class);
+        $this->fileProcessor = $this->fileProcessorFactory->create(['entityTypeCode' => $this->_entityTypeCode]);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
@@ -103,7 +111,7 @@ class File extends AbstractData
         $extend = $this->_getRequestValue($request);
 
         $attrCode = $this->getAttribute()->getAttributeCode();
-        if ($this->_requestScope) {
+        if ($this->_requestScope || !isset($_FILES[$attrCode])) {
             $value = [];
             if (strpos($this->_requestScope, '/') !== false) {
                 $scopes = explode('/', $this->_requestScope);
@@ -127,7 +135,7 @@ class File extends AbstractData
                         $value[$fileKey] = $scopeData[$attrCode];
                     }
                 }
-            } else if (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
+            } elseif (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
                 /**
                  * This case is required by file uploader UI component
                  *
@@ -154,8 +162,7 @@ class File extends AbstractData
     }
 
     /**
-     * Validate file by attribute validate rules
-     * Return array of errors
+     * Validate file by attribute validate rules. Returns array of errors.
      *
      * @param array $value
      * @return string[]
@@ -218,7 +225,7 @@ class File extends AbstractData
 
         // This case is required for file uploader UI component
         $temporaryFile = FileProcessor::TMP_DIR . '/' . pathinfo($filename)['basename'];
-        if ($this->getFileProcessor()->isExist($temporaryFile)) {
+        if ($this->fileProcessor->isExist($temporaryFile)) {
             return true;
         }
 
@@ -226,7 +233,7 @@ class File extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -267,7 +274,7 @@ class File extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return ImageContentInterface|array|string|null
      */
@@ -279,7 +286,7 @@ class File extends AbstractData
 
         // Remove outdated file (in the case of file uploader UI component)
         if (empty($value) && !empty($this->_value)) {
-            $this->getFileProcessor()->removeUploadedFile($this->_value);
+            $this->fileProcessor->removeUploadedFile($this->_value);
             return $value;
         }
 
@@ -303,7 +310,7 @@ class File extends AbstractData
      */
     protected function processUiComponentValue(array $value)
     {
-        $result = $this->getFileProcessor()->moveTemporaryFile($value['file']);
+        $result = $this->fileProcessor->moveTemporaryFile($value['file']);
         return $result;
     }
 
@@ -352,7 +359,7 @@ class File extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function restoreValue($value)
     {
@@ -360,7 +367,7 @@ class File extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {
@@ -377,35 +384,13 @@ class File extends AbstractData
     }
 
     /**
-     * Get FileProcessor instance
+     * Get file processor
      *
      * @return FileProcessor
-     *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     protected function getFileProcessor()
     {
-        if ($this->fileProcessor === null) {
-            $this->fileProcessor = $this->getFileProcessorFactory()->create([
-                'entityTypeCode' => $this->_entityTypeCode,
-            ]);
-        }
         return $this->fileProcessor;
-    }
-
-    /**
-     * Get FileProcessorFactory instance
-     *
-     * @return FileProcessorFactory
-     *
-     * @deprecated
-     */
-    protected function getFileProcessorFactory()
-    {
-        if ($this->fileProcessorFactory === null) {
-            $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
-        }
-        return $this->fileProcessorFactory;
     }
 }

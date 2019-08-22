@@ -1,13 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Autoload\AutoloaderRegistry;
 
+/**
+ * phpcs:disable PSR1.Files.SideEffects
+ * phpcs:disable Squiz.Functions.GlobalFunction
+ * phpcs:disable Magento2.Security.IncludeFile
+ */
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
 
+// phpcs:ignore Magento2.Functions.DiscouragedFunction
 $testsBaseDir = dirname(__DIR__);
 $fixtureBaseDir = $testsBaseDir. '/testsuite';
 
@@ -15,8 +21,9 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
 }
 
-$testFrameworkDir = __DIR__;
-require_once 'deployTestModules.php';
+if (!defined('INTEGRATION_TESTS_DIR')) {
+    define('INTEGRATION_TESTS_DIR', $testsBaseDir);
+}
 
 try {
     setCustomErrorHandler();
@@ -24,26 +31,35 @@ try {
     /* Bootstrap the application */
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
+    $testFrameworkDir = __DIR__;
+    require_once 'deployTestModules.php';
+
     if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
-        $logWriter = new \Zend_Log_Writer_Stream('php://output');
-        $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
+        $filesystem = new \Magento\Framework\Filesystem\Driver\File();
+        $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception($filesystem);
+        $loggerHandlers = [
+            'system'    => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
+            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
+        ];
         $shell = new \Magento\Framework\Shell(
             new \Magento\Framework\Shell\CommandRenderer(),
-            new \Zend_Log($logWriter)
+            new \Monolog\Logger('main', $loggerHandlers)
         );
     } else {
         $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
     }
 
     $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
     if (!file_exists($installConfigFile)) {
         $installConfigFile .= '.dist';
     }
     $globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
     if (!file_exists($globalConfigFile)) {
         $globalConfigFile .= '.dist';
     }
-    $sandboxUniqueId = md5(sha1_file($installConfigFile));
+    $sandboxUniqueId = hash('sha256', sha1_file($installConfigFile));
     $installDir = TESTS_TEMP_DIR . "/sandbox-{$settings->get('TESTS_PARALLEL_THREAD', 0)}-{$sandboxUniqueId}";
     $application = new \Magento\TestFramework\Application(
         $shell,
@@ -70,7 +86,7 @@ try {
         $application->cleanup();
     }
     if (!$application->isInstalled()) {
-        $application->install();
+        $application->install($settings->getAsBoolean('TESTS_CLEANUP'));
     }
     $application->initialize([]);
 
@@ -91,7 +107,9 @@ try {
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
     unset($testsBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);
 } catch (\Exception $e) {
+    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
     echo $e . PHP_EOL;
+    // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
     exit(1);
 }
 
@@ -123,7 +141,7 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit_Framework_Exception(
+                throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );

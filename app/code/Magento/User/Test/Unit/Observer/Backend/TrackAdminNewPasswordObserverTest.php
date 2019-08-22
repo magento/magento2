@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ namespace Magento\User\Test\Unit\Observer\Backend;
  * Test class for Magento\User\Observer\Backend\TrackAdminNewPasswordObserver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
+class TrackAdminNewPasswordObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\Backend\Config\ObserverConfig */
     protected $observerConfig;
@@ -105,10 +105,6 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
         $eventMock->expects($this->once())->method('getObject')->willReturn($userMock);
         $userMock->expects($this->once())->method('getId')->willReturn($uid);
         $userMock->expects($this->once())->method('getPassword')->willReturn($newPW);
-        $this->configInterfaceMock
-            ->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->willReturn(1);
         $userMock->expects($this->once())->method('getForceNewPassword')->willReturn(false);
 
         /** @var \Magento\Framework\Message\Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */

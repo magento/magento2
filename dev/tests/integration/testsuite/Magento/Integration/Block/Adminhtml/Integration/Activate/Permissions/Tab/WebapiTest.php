@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -12,7 +12,7 @@ use Magento\Integration\Model\Integration;
 /**
  * @magentoDataFixture Magento/Integration/_files/integration_all_permissions.php
  */
-class WebapiTest extends \PHPUnit_Framework_TestCase
+class WebapiTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Registry */
     protected $registry;

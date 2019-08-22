@@ -2,12 +2,12 @@
 /**
  * Test Webapi Request model.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Request mock.
@@ -32,21 +32,28 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         )->setMethods(
             ['deserialize', 'get']
         )->disableOriginalConstructor()->getMock();
-        $areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
-        $configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
+        $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
+        $configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
         $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
         /** Instantiate request. */
         // TODO: Get rid of SUT mocks.
-        $this->_cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->_cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
-        $this->_request = $this->getMock(
-            \Magento\Framework\Webapi\Rest\Request::class,
-            ['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'],
-            [$this->_cookieManagerMock, $converterMock, $areaListMock, $configScopeMock, $this->_deserializerFactory]
-        );
+        $this->_request = $this->getMockBuilder(\Magento\Framework\Webapi\Rest\Request::class)
+            ->setMethods(['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'])
+            ->setConstructorArgs(
+                [
+                    $this->_cookieManagerMock,
+                    $converterMock,
+                    $areaListMock,
+                    $configScopeMock,
+                    $this->_deserializerFactory
+                ]
+            )
+            ->getMock();
 
         parent::setUp();
     }

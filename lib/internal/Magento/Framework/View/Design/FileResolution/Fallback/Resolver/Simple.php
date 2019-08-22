@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
+use function GuzzleHttp\Psr7\str;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
@@ -49,7 +50,7 @@ class Simple implements Fallback\ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
@@ -103,7 +104,8 @@ class Simple implements Fallback\ResolverInterface
         $fileRead = $this->readFactory->create($realPath);
 
         // Check if file path starts with web lib directory path
-        if (strpos($fileRead->getAbsolutePath(), $directoryWeb->getAbsolutePath()) === 0) {
+        $absolutePath = $directoryWeb->getAbsolutePath();
+        if ($absolutePath && strpos($fileRead->getAbsolutePath(), $absolutePath) === 0) {
             return true;
         }
 

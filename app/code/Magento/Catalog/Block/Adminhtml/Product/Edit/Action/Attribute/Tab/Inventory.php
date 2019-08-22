@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 /**
  * Products mass update inventory tab
+ *
+ * @api
+ * @since 100.0.2
  */
 class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -22,6 +25,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $disabledFields = [];
 
@@ -66,11 +70,11 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * Retrieve current store id
      *
      * @return int
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getStoreId()
     {
-        $storeId = $this->getRequest()->getParam('store');
-        return intval($storeId);
+        return (int)$this->getRequest()->getParam('store');
     }
 
     /**
@@ -95,6 +99,8 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
+     * Return Tab title.
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
@@ -103,7 +109,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -111,7 +117,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function isHidden()
     {
@@ -119,9 +125,12 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
+     * Get availability status.
+     *
      * @param string $fieldName
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 101.0.0
      */
     public function isAvailable($fieldName)
     {

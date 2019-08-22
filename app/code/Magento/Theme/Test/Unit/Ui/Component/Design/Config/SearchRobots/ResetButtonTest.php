@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Ui\Component\Design\Config\SearchRobots;
@@ -12,7 +12,7 @@ use Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Form\Field;
 
-class ResetButtonTest extends \PHPUnit_Framework_TestCase
+class ResetButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | ContextInterface

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -14,6 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * document lists the products and their quantities in the delivery package. Merchants and customers can track
  * shipments.
  * @api
+ * @since 100.0.2
  */
 interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
 {

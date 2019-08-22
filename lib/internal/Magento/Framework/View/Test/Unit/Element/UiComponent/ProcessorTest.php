@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject

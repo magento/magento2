@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\App\Action;
@@ -11,7 +11,7 @@ namespace Magento\Weee\Test\Unit\App\Action;
  * @package Magento\Weee\Test\Unit\App\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ContextPluginTest extends \PHPUnit_Framework_TestCase
+class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Helper\Data
@@ -39,7 +39,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     protected $taxCalculationMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManagerMock;
 
@@ -85,13 +85,15 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->setMethods(
+                [
                 'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
                 'getWebsiteId', 'isLoggedIn'
-            ])
+                ]
+            )
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -186,7 +188,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 0], 0);
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
 
         $this->contextPlugin->beforeDispatch($action, $request);
     }
@@ -215,7 +217,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->willReturn('origin');
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
 
         $this->contextPlugin->beforeDispatch($action, $request);
     }
@@ -287,7 +289,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 1], 0);
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
 
         $this->contextPlugin->beforeDispatch($action, $request);
     }
@@ -359,7 +361,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 1], 0);
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
 
         $this->contextPlugin->beforeDispatch($action, $request);
     }

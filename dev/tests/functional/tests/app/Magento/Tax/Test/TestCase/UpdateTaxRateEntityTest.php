@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,6 +33,7 @@ class UpdateTaxRateEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const MFTF_MIGRATED = 'yes';
     /* end tags */
 
     /**

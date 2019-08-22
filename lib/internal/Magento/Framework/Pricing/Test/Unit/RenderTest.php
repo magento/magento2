@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit;
@@ -10,7 +10,7 @@ use \Magento\Framework\Pricing\Render;
 /**
  * Test class for \Magento\Framework\Pricing\Render
  */
-class RenderTest extends \PHPUnit_Framework_TestCase
+class RenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Render
@@ -84,7 +84,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->priceLayout->expects($this->once())
             ->method('loadLayout');
 
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->model->setPriceRenderHandle($priceRenderHandle);
         $this->model->setLayout($layout);
     }
@@ -112,7 +112,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $arguments = ['param' => 1];
         $result = 'simple.final';
 
-        $pricingRender = $this->getMock(\Magento\Framework\Pricing\Render::class, [], [], '', false, true, true, false);
+        $pricingRender = $this->createMock(\Magento\Framework\Pricing\Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
             ->will($this->returnValue($pricingRender));
@@ -131,7 +131,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $priceType = 'special';
         $arguments = ['param' => 15];
         $result = 'default.special';
-        $pricingRender = $this->getMock(\Magento\Framework\Pricing\Render::class, [], [], '', false, true, true, false);
+        $pricingRender = $this->createMock(\Magento\Framework\Pricing\Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
             ->will($this->returnValue($pricingRender));
@@ -152,7 +152,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $arguments = ['param' => 15];
         $result = 'default.default';
 
-        $pricingRender = $this->getMock(\Magento\Framework\Pricing\Render::class, [], [], '', false, true, true, false);
+        $pricingRender = $this->createMock(\Magento\Framework\Pricing\Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
             ->will($this->returnValue($pricingRender));
@@ -172,15 +172,8 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $arguments = ['param' => 15];
         $expectedResult = 'default.default';
 
-        $pricingRender = $this->getMock(
-            \Magento\Framework\Pricing\Render\Amount::class,
-            [],
-            [],
-            '',
-            false,
-            true,
-            true,
-            false
+        $pricingRender = $this->createMock(
+            \Magento\Framework\Pricing\Render\Amount::class
         );
         $this->renderPool->expects($this->once())
             ->method('createAmountRender')

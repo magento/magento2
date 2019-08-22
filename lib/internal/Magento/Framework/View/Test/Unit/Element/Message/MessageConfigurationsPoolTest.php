@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message;
 
 use Magento\Framework\View\Element\Message\MessageConfigurationsPool;
 
-class MessageConfigurationsPoolTest extends \PHPUnit_Framework_TestCase
+class MessageConfigurationsPoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetMessageConfiguration()
     {
@@ -38,7 +38,7 @@ class MessageConfigurationsPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructNoRendererException(array $configuration)
     {
-        static::setExpectedException(
+        static::expectException(
             '\InvalidArgumentException',
             'Renderer should be defined.'
         );
@@ -64,7 +64,7 @@ class MessageConfigurationsPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructWrongDataException(array $configuration)
     {
-        static::setExpectedException(
+        static::expectException(
             '\InvalidArgumentException',
             'Data should be of array type.'
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\Logger\Handler;
@@ -13,11 +13,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class DebugTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DebugTest extends \PHPUnit_Framework_TestCase
+class DebugTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Debug
@@ -44,6 +46,14 @@ class DebugTest extends \PHPUnit_Framework_TestCase
      */
     private $formatterMock;
 
+    /**
+     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
@@ -55,6 +65,10 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->formatterMock = $this->getMockBuilder(FormatterInterface::class)
             ->getMockForAbstractClass();
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->getMock();
 
         $this->formatterMock->expects($this->any())
             ->method('format')
@@ -64,54 +78,102 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             'filesystem' => $this->filesystemMock,
             'state' => $this->stateMock,
             'scopeConfig' => $this->scopeConfigMock,
+            'deploymentConfig' => $this->deploymentConfigMock
         ]);
         $this->model->setFormatter($this->formatterMock);
     }
 
-    public function testHandle()
+    /**
+     * @return void
+     */
+    public function testHandleEnabledInDeveloperMode()
     {
-        $this->stateMock->expects($this->once())
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->stateMock
+            ->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, null)
-            ->willReturn(true);
+        $this->scopeConfigMock
+            ->expects($this->never())
+            ->method('getValue');
 
-        $this->model->handle(['formatted' => false, 'level' => Logger::DEBUG]);
+        $this->assertTrue($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
     }
 
+    /**
+     * @return void
+     */
+    public function testHandleEnabledInDefaultMode()
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->stateMock
+            ->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_DEFAULT);
+        $this->scopeConfigMock
+            ->expects($this->never())
+            ->method('getValue');
+
+        $this->assertTrue($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
+    }
+
+    /**
+     * @return void
+     */
     public function testHandleDisabledByProduction()
     {
-        $this->stateMock->expects($this->once())
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->stateMock
+            ->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_PRODUCTION);
-        $this->scopeConfigMock->expects($this->never())
+        $this->scopeConfigMock
+            ->expects($this->never())
             ->method('getValue');
 
-        $this->model->handle(['formatted' => false, 'level' => Logger::DEBUG]);
+        $this->assertFalse($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
     }
 
-    public function testHandleDisabledByConfig()
-    {
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->willReturn(State::MODE_DEVELOPER);
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, null)
-            ->willReturn(false);
-
-        $this->model->handle(['formatted' => false, 'level' => Logger::DEBUG]);
-    }
-
+    /**
+     * @return void
+     */
     public function testHandleDisabledByLevel()
     {
-        $this->stateMock->expects($this->never())
-            ->method('getMode');
-        $this->scopeConfigMock->expects($this->never())
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->stateMock
+            ->expects($this->never())
+            ->method('getMode')
+            ->willReturn(State::MODE_DEVELOPER);
+        $this->scopeConfigMock
+            ->expects($this->never())
             ->method('getValue');
 
-        $this->model->handle(['formatted' => false, 'level' => Logger::API]);
+        $this->assertFalse($this->model->isHandling(['formatted' => false, 'level' => Logger::API]));
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeploymentConfigIsNotAvailable()
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(false);
+        $this->stateMock
+            ->expects($this->never())
+            ->method('getMode');
+        $this->scopeConfigMock
+            ->expects($this->never())
+            ->method('getValue');
+
+        $this->assertTrue($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
     }
 }

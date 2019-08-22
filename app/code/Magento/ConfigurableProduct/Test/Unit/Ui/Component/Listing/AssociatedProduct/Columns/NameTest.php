@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\Component\Listing\AssociatedProduct\Columns;
@@ -11,7 +11,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor as UiElementProcessor;
 
-class NameTest extends \PHPUnit_Framework_TestCase
+class NameTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var NameColumn
@@ -48,7 +48,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->contextMock->expects(static::any())
+        $this->contextMock->expects(static::never())
             ->method('getProcessor')
             ->willReturn($this->uiElementProcessorMock);
 

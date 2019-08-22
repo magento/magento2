@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page layout="fixture_handle_page_layout">
     <body>
         <referenceContainer name="main.container">
-            <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
         </referenceContainer>
     </body>
 </page>

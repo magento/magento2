@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block\Relation\Store;
@@ -10,7 +10,7 @@ use Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Cms\Api\Data\BlockInterface;
 
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveHandler

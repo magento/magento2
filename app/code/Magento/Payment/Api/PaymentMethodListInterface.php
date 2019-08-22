@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Api;
@@ -9,6 +9,7 @@ namespace Magento\Payment\Api;
  * Payment method list interface.
  *
  * @api
+ * @since 100.1.3
  */
 interface PaymentMethodListInterface
 {
@@ -17,6 +18,7 @@ interface PaymentMethodListInterface
      *
      * @param int $storeId
      * @return \Magento\Payment\Api\Data\PaymentMethodInterface[]
+     * @since 100.1.3
      */
     public function getList($storeId);
 
@@ -25,6 +27,7 @@ interface PaymentMethodListInterface
      *
      * @param int $storeId
      * @return \Magento\Payment\Api\Data\PaymentMethodInterface[]
+     * @since 100.1.3
      */
     public function getActiveList($storeId);
 }

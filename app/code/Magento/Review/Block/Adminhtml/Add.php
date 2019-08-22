@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Review\Block\Adminhtml;
 
@@ -41,6 +39,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             });
         ';
 
+        // @codingStandardsIgnoreStart
         $this->_formInitScripts[] = '
             require(["jquery","prototype"], function(jQuery){
             window.review = function() {
@@ -57,7 +56,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                     },
                     loadProductData : function() {
                         jQuery.ajax({
-                            type: "POST",
+                            type: "GET",
                             url: review.productInfoUrl,
                             data: {
                                 form_key: FORM_KEY
@@ -94,13 +93,14 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         if( response.error ) {
                             alert(response.message);
                         } else if( response.id ){
+                            var productName = response.name;
                             $("product_id").value = response.id;
 
                             $("product_name").innerHTML = \'<a href="' .
             $this->getUrl(
                 'catalog/product/edit'
             ) .
-            'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
+            'id/\' + response.id + \'" target="_blank">\' + productName.escapeHTML() + \'</a>\';
                         } else if ( response.message ) {
                             alert(response.message);
                         }
@@ -115,6 +115,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             });
            //]]>
         ';
+        // @codingStandardsIgnoreEnd
     }
 
     /**

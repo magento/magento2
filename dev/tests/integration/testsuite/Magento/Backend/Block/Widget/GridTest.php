@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\Widget;
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\ColumnSet
@@ -28,7 +28,10 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->_layoutMock = $this->createPartialMock(
+            \Magento\Framework\View\Layout::class,
+            ['getChildName', 'getBlock', 'createBlock', 'helper', 'renameElement', 'unsetChild', 'setChild']
+        );
         $this->_columnSetMock = $this->_getColumnSetMock();
 
         $returnValueMap = [
@@ -102,24 +105,24 @@ class GridTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Filesystem\DirectoryList::class,
             ['root' => __DIR__]
         );
-        return $this->getMock(
-            \Magento\Backend\Block\Widget\Grid\ColumnSet::class,
-            [],
-            [
-                $objectManager->create(
-                    \Magento\Framework\View\Element\Template\Context::class,
-                    [
-                        'filesystem' => $objectManager->create(
-                            \Magento\Framework\Filesystem::class,
-                            ['directoryList' => $directoryList]
-                        )
-                    ]
-                ),
-                $objectManager->create(\Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory::class),
-                $objectManager->create(\Magento\Backend\Model\Widget\Grid\SubTotals::class),
-                $objectManager->create(\Magento\Backend\Model\Widget\Grid\Totals::class)
-            ]
-        );
+        return $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\ColumnSet::class)
+            ->setConstructorArgs(
+                [
+                    $objectManager->create(
+                        \Magento\Framework\View\Element\Template\Context::class,
+                        [
+                            'filesystem' => $objectManager->create(
+                                \Magento\Framework\Filesystem::class,
+                                ['directoryList' => $directoryList]
+                            )
+                        ]
+                    ),
+                    $objectManager->create(\Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory::class),
+                    $objectManager->create(\Magento\Backend\Model\Widget\Grid\SubTotals::class),
+                    $objectManager->create(\Magento\Backend\Model\Widget\Grid\Totals::class)
+                ]
+            )
+            ->getMock();
     }
 
     public function testToHtmlPreparesColumns()

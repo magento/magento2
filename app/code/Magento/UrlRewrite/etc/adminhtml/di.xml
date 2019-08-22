@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Message\ExceptionMessageFactoryPool">
+        <arguments>
+            <argument name="exceptionMessageFactoryMap" xsi:type="array">
+                <item name="Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException" xsi:type="object">\Magento\UrlRewrite\Model\Message\UrlRewriteExceptionMessageFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="urlDuplicateMessageMapId" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_UrlRewrite::messages/url_duplicate_message.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

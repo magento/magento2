@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
 use Magento\Store\Test\Fixture\Website;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Config\Test\TestStep\SetupConfigurationStep;
 
 /**
  * Delete Website (Store Management)
@@ -39,6 +40,7 @@ class DeleteWebsiteEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const SEVERITY = 'S3';
+    const STABLE = 'no';
     /* end tags */
 
     /**
@@ -101,7 +103,15 @@ class DeleteWebsiteEntityTest extends Injectable
     {
         //Preconditions
         $website->persist();
-        $this->backupIndex->open()->getBackupGrid()->massaction([], 'Delete', true, 'Select All');
+        /** @var SetupConfigurationStep $enableBackupsStep */
+        $enableBackupsStep = $this->objectManager->create(
+            SetupConfigurationStep::class,
+            ['configData' => 'enable_backups_functionality']
+        );
+        $enableBackupsStep->run();
+        $this->backupIndex->open()
+            ->getBackupGrid()
+            ->massaction([], 'Delete', true, 'Select All');
 
         //Steps
         $this->storeIndex->open();

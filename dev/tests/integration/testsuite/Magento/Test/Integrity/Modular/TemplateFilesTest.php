@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -72,10 +72,10 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 if ($module == 'Magento_Backend' || strpos(
                     $blockClass,
                     '\\Adminhtml\\'
-                ) || strpos(
+                ) !== false || strpos(
                     $blockClass,
                     '\\Backend\\'
-                ) || $class->isSubclassOf(
+                ) !== false || $class->isSubclassOf(
                     \Magento\Backend\Block\Template::class
                 )
                 ) {

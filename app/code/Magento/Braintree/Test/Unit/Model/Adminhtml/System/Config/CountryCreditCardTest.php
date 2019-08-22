@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Class CountryCreditCardTest
  *
  */
-class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
+class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard
@@ -37,12 +37,18 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
      */
     protected $mathRandomMock;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->resourceMock = $this->getMockForAbstractClass(AbstractResource::class);
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -50,18 +56,28 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
             [
                 'mathRandom' => $this->mathRandomMock,
                 'resource' => $this->resourceMock,
+                'serializer' => $this->serializerMock
             ]
         );
     }
 
     /**
      * @dataProvider beforeSaveDataProvider
+     * @param array $value
+     * @param array $expectedValue
+     * @param string $encodedValue
      */
-    public function testBeforeSave($value, $expectedValue)
+    public function testBeforeSave(array $value, array $expectedValue, $encodedValue)
     {
         $this->model->setValue($value);
+
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($expectedValue)
+            ->willReturn($encodedValue);
+
         $this->model->beforeSave();
-        $this->assertEquals($expectedValue, $this->model->getValue());
+        $this->assertEquals($encodedValue, $this->model->getValue());
     }
 
     /**
@@ -73,11 +89,13 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
         return [
             'empty_value' => [
                 'value' => [],
-                'expected' => serialize([]),
+                'expected' => [],
+                'encoded' => '[]'
             ],
             'not_array' => [
                 'value' => ['US'],
-                'expected' => serialize([]),
+                'expected' => [],
+                'encoded' => '[]'
             ],
             'array_with_invalid_format' => [
                 'value' => [
@@ -85,7 +103,8 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                         'country_id' => 'US',
                     ],
                 ],
-                'expected' => serialize([]),
+                'expected' => [],
+                'encoded' => '[]'
             ],
             'array_with_two_countries' => [
                 'value' => [
@@ -99,12 +118,11 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                     ],
                     '__empty' => "",
                 ],
-                'expected' => serialize(
-                    [
-                        'AF' => ['AE', 'VI'],
-                        'US' => ['AE', 'VI', 'MA'],
-                    ]
-                ),
+                'expected' => [
+                    'AF' => ['AE', 'VI'],
+                    'US' => ['AE', 'VI', 'MA'],
+                ],
+                'encoded' => '{"AF":["AE","VI"],"US":["AE","VI","MA"]}'
             ],
             'array_with_two_same_countries' => [
                 'value' => [
@@ -122,69 +140,87 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                     ],
                     '__empty' => "",
                 ],
-                'expected' => serialize(
-                    [
-                        'AF' => ['AE', 'VI'],
-                        'US' => ['AE', 'VI', 'MA', 'OT'],
-                    ]
-                ),
+                'expected' => [
+                    'AF' => ['AE', 'VI'],
+                    'US' => ['AE', 'VI', 'MA', 'OT'],
+                ],
+                'encoded' => '{"AF":["AE","VI"],"US":["AE","VI","MA","OT"]}'
             ],
         ];
     }
 
     /**
+     * @param string $encodedValue
+     * @param array|null $value
+     * @param array $hashData
+     * @param array|null $expected
+     * @param int $unserializeCalledNum
      * @dataProvider afterLoadDataProvider
      */
-    public function testAfterLoad($value, $hashData, $expected)
-    {
-        $this->model->setValue($value);
+    public function testAfterLoad(
+        $encodedValue,
+        $value,
+        array $hashData,
+        $expected,
+        $unserializeCalledNum = 1
+    ) {
+        $this->model->setValue($encodedValue);
         $index = 0;
         foreach ($hashData as $hash) {
-            $this->mathRandomMock->expects(static::at($index))
+            $this->mathRandomMock->expects($this->at($index))
                 ->method('getUniqueHash')
                 ->willReturn($hash);
-            $index ++;
+            $index++;
         }
+
+        $this->serializerMock->expects($this->exactly($unserializeCalledNum))
+            ->method('unserialize')
+            ->with($encodedValue)
+            ->willReturn($value);
+
         $this->model->afterLoad();
         $this->assertEquals($expected, $this->model->getValue());
     }
 
     /**
      * Get data to test saved credit cards types
+     *
      * @return array
      */
     public function afterLoadDataProvider()
     {
         return [
             'empty' => [
-                'value' => serialize([]),
+                'encoded' => '[]',
+                'value' => [],
                 'randomHash' => [],
-                'expected' => [],
+                'expected' => []
             ],
             'null' => [
+                'encoded' => '',
                 'value' => null,
                 'randomHash' => [],
                 'expected' => null,
+                0
             ],
-            'valid_data' => [
-                'value' => serialize(
-                    [
-                        'US' => ['AE', 'VI', 'MA'],
-                        'AF' => ['AE', 'MA'],
-                    ]
-                ),
+            'valid data' => [
+                'encoded' => '{"US":["AE","VI","MA"],"AF":["AE","MA"]}',
+                'value' => [
+                    'US' => ['AE', 'VI', 'MA'],
+                    'AF' => ['AE', 'MA']
+                ],
                 'randomHash' => ['hash_1', 'hash_2'],
                 'expected' => [
                     'hash_1' => [
                         'country_id' => 'US',
-                        'cc_types' => ['AE', 'VI', 'MA'],
+                        'cc_types' => ['AE', 'VI', 'MA']
                     ],
                     'hash_2' => [
                         'country_id' => 'AF',
-                        'cc_types' => ['AE', 'MA'],
-                    ],
+                        'cc_types' => ['AE', 'MA']
+                    ]
                 ]
-            ],
+            ]
         ];
     }
 }

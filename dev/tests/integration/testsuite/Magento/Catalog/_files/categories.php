@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -34,7 +34,6 @@ foreach ($properties as $key => $value) {
         $reflectionProperty->setValue($categoryLinkManagement, $value);
     }
 }
-
 
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
@@ -179,6 +178,7 @@ $category->setId(13)
     ->setParentId(3)
     ->setPath('1/2/3/13')
     ->setLevel(3)
+    ->setDescription('Its a description of Test Category 1.2')
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
     ->setIsActive(true)

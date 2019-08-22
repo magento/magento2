@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Ui\DataProvider\Product\Form\Modifier;
@@ -22,9 +22,7 @@ class Msrp extends AbstractModifier
     const FIELD_MSRP_DISPLAY_ACTUAL_PRICE = 'msrp_display_actual_price_type';
     /**#@-*/
 
-    /**
-     * @var LocatorInterface
-     */
+    /**#@-*/
     protected $locator;
 
     /**

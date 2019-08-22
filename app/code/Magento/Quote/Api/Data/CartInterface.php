@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api\Data;
@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface CartInterface
  * @api
+ * @since 100.0.2
  */
 interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -222,14 +223,14 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Returns the reserved order ID for the cart.
      *
-     * @return int|null Reserved order ID. Otherwise, null.
+     * @return string|null Reserved order ID. Otherwise, null.
      */
     public function getReservedOrderId();
 
     /**
      * Sets the reserved order ID for the cart.
      *
-     * @param int $reservedOrderId
+     * @param string $reservedOrderId
      * @return $this
      */
     public function setReservedOrderId($reservedOrderId);

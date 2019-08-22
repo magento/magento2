@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -149,13 +149,17 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         $this->customerAccountEdit->getAccountInfoForm()->fill($customer);
         $this->customerAccountEdit->getAccountInfoForm()->submit();
 
-        \PHPUnit_Framework_Assert::assertThat($this->getName(), $assertCustomerInfoSuccessSavedMessage);
+        \PHPUnit\Framework\Assert::assertThat($this->getName(), $assertCustomerInfoSuccessSavedMessage);
 
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->customerAccountIndex->getDashboardAddress()->editBillingAddress();
         $this->customerAddressEdit->getEditForm()->fill($address);
         $this->customerAddressEdit->getEditForm()->saveAddress();
 
-        return ['customer' => $this->prepareCustomer($customer, $initialCustomer)];
+        return [
+            'customer' => $this->prepareCustomer($customer, $initialCustomer),
+            'shippingAddress' => $address,
+            'billingAddress' => $address
+        ];
     }
 }

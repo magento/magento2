@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml\Tax;
@@ -51,8 +51,8 @@ class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
         }
 
         // clear the block html cache
-        $this->_cacheTypeList->cleanType('block_html');
-        $this->_eventManager->dispatch('adminhtml_cache_refresh_type', ['type' => 'block_html']);
+        $this->_cacheTypeList->cleanType('config');
+        $this->_eventManager->dispatch('adminhtml_cache_refresh_type', ['type' => 'config']);
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

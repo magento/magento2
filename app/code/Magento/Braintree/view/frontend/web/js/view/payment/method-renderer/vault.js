@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -51,15 +51,7 @@ define([
         placeOrder: function () {
             var self = this;
 
-            /**
-             * Define already callback
-             */
-            Braintree.onReady = function () {
-                self.getPaymentMethodNonce();
-            };
-            self.hostedFields(function (formComponent) {
-                formComponent.initBraintree();
-            });
+            self.getPaymentMethodNonce();
         },
 
         /**
@@ -69,15 +61,16 @@ define([
             var self = this;
 
             fullScreenLoader.startLoader();
-            $.get(self.nonceUrl, {
+            $.getJSON(self.nonceUrl, {
                 'public_hash': self.publicHash
             })
                 .done(function (response) {
                     fullScreenLoader.stopLoader();
                     self.hostedFields(function (formComponent) {
-                        formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
+                        formComponent.paymentPayload.nonce = response.paymentMethodNonce;
                         formComponent.additionalData['public_hash'] = self.publicHash;
                         formComponent.code = self.code;
+                        formComponent.messageContainer = self.messageContainer;
                         formComponent.placeOrder();
                     });
                 })

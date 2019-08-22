@@ -1,4 +1,4 @@
-Options All -Indexes
+Options -Indexes
 
 <IfModule mod_php5.c>
 php_flag engine 0
@@ -11,6 +11,10 @@ php_flag engine 0
 AddHandler cgi-script .php .pl .py .jsp .asp .htm .shtml .sh .cgi
 Options -ExecCGI
 
+<FilesMatch ".+\.(ph(p[3457]?|t|tml)|[aj]sp|p[ly]|sh|cgi|shtml?|html?)$">
+SetHandler default-handler
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
 
 ############################################
@@ -19,12 +23,15 @@ Options -ExecCGI
     Options +FollowSymLinks
     RewriteEngine on
 
+    ## you can put here your pub/media folder path relative to web root
+    #RewriteBase /magento/pub/media/
+
 ############################################
 ## never rewrite for existing files
     RewriteCond %{REQUEST_FILENAME} !-f
 
 ############################################
-## rewrite everything else to index.php
+## rewrite everything else to get.php
 
     RewriteRule .* ../get.php [L]
 </IfModule>

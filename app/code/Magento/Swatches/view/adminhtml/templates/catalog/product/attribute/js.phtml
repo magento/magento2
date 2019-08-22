@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <script type="text/x-magento-init">
     {
         "*": {
             "swatchesProductAttributes": {
-                "hiddenFields": <?php /* @escapeNotVerified */ echo json_encode($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields()); ?>
-            },
-            "swatchesTypeChange": { }
+                "hiddenFields": <?= /* @noEscape */ json_encode($this->helper(Magento\Catalog\Helper\Data::class)->getAttributeHiddenFields()) ?>
+            }
         }
     }
 </script>

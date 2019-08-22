@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
@@ -19,7 +17,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadata;
  *
  * @coversDefaultClass Magento\Framework\Stdlib\Cookie\CookieScope
  */
-class CookieScopeTest extends \PHPUnit_Framework_TestCase
+class CookieScopeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -117,7 +115,8 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
             ],
-            $cookieScope->getSensitiveCookieMetadata()->__toArray());
+            $cookieScope->getSensitiveCookieMetadata()->__toArray()
+        );
     }
 
     /**

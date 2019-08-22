@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Controller\Store;
@@ -21,7 +21,7 @@ class SwitchActionTest extends \Magento\TestFramework\TestCase\AbstractControlle
      */
     public function testExecuteWithCustomDefaultStore()
     {
-
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
         $defaultStoreCode = 'default';
         $modifiedDefaultCode = 'modified_default_code';
         $this->changeStoreCode($defaultStoreCode, $modifiedDefaultCode);
@@ -48,8 +48,5 @@ class SwitchActionTest extends \Magento\TestFramework\TestCase\AbstractControlle
         $store->load($from, 'code');
         $store->setCode($to);
         $store->save();
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeManager->reinitStores();
     }
 }

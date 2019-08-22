@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\SearchCriteria\CollectionProcessor;
@@ -9,7 +9,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-class PaginationProcessorTest extends \PHPUnit_Framework_TestCase
+class PaginationProcessorTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {

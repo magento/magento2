@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -12,7 +12,7 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     \Magento\Checkout\Api\Data\PaymentDetailsInterface
 {
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getPaymentMethods()
     {
@@ -20,7 +20,7 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function setPaymentMethods($paymentMethods)
     {
@@ -28,7 +28,7 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function getTotals()
     {
@@ -36,7 +36,7 @@ class PaymentDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function setTotals($totals)
     {

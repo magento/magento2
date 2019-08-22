@@ -1,10 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Data;
 
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Provides scoped configuration
+ * @api
+ */
 class Scoped extends \Magento\Framework\Config\Data
 {
     /**
@@ -50,23 +57,31 @@ class Scoped extends \Magento\Framework\Config\Data
     protected $_loadedScopes = [];
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId
+        $cacheId,
+        SerializerInterface $serializer = null
     ) {
         $this->_reader = $reader;
         $this->_configScope = $configScope;
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -98,11 +113,14 @@ class Scoped extends \Magento\Framework\Config\Data
                 if (false == isset($this->_loadedScopes[$scopeCode])) {
                     if ($scopeCode !== 'primary' && ($data = $this->_cache->load($scopeCode . '::' . $this->_cacheId))
                     ) {
-                        $data = unserialize($data);
+                        $data = $this->serializer->unserialize($data);
                     } else {
                         $data = $this->_reader->read($scopeCode);
                         if ($scopeCode !== 'primary') {
-                            $this->_cache->save(serialize($data), $scopeCode . '::' . $this->_cacheId);
+                            $this->_cache->save(
+                                $this->serializer->serialize($data),
+                                $scopeCode . '::' . $this->_cacheId
+                            );
                         }
                     }
                     $this->merge($data);

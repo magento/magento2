@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Test\Unit\Config;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\Config\Reader
@@ -24,16 +24,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileResolverMock = $this->getMock(
-            \Magento\Framework\App\Config\FileResolver::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->_fileResolverMock = $this->createPartialMock(\Magento\Framework\App\Config\FileResolver::class, ['get']);
 
-        $this->_converter = $this->getMock(\Magento\Framework\Indexer\Config\Converter::class, ['convert']);
-        $validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $this->_converter = $this->createPartialMock(\Magento\Framework\Indexer\Config\Converter::class, ['convert']);
+        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);
@@ -67,9 +61,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $constraint = function (\DOMDocument $actual) use ($expectedFile) {
             try {
                 $expected = file_get_contents(__DIR__ . '/../_files/' . $expectedFile);
-                \PHPUnit_Framework_Assert::assertXmlStringEqualsXmlString($expected, $actual->saveXML());
+                \PHPUnit\Framework\Assert::assertXmlStringEqualsXmlString($expected, $actual->saveXML());
                 return true;
-            } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 return false;
             }
         };

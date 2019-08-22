@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $mediaDirectory;
@@ -22,6 +22,16 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     /** @var File */
     protected $fileBackend;
+
+    /**
+     * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mime;
+
+    /**
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $databaseHelper;
 
     public function setUp()
     {
@@ -46,6 +56,21 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
 
+        $this->mime = $this->getMockBuilder(\Magento\Framework\File\Mime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->databaseHelper = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $abstractResource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
+            ->getMockForAbstractClass();
+
+        $abstractDb = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->fileBackend = new File(
             $context,
             $registry,
@@ -54,7 +79,18 @@ class FileTest extends \PHPUnit_Framework_TestCase
             $uploaderFactory,
             $requestData,
             $filesystem,
-            $this->urlBuilder
+            $this->urlBuilder,
+            $abstractResource,
+            $abstractDb,
+            [],
+            $this->databaseHelper
+        );
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->fileBackend,
+            'mime',
+            $this->mime
         );
     }
 
@@ -91,6 +127,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testAfterLoad()
     {
         $value = 'filename.jpg';
+        $mime = 'image/jpg';
+
+        $absoluteFilePath = '/absolute_path/' . $value;
+
         $this->fileBackend->setValue($value);
         $this->fileBackend->setFieldConfig(
             [
@@ -109,6 +149,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with('value/' . $value)
             ->willReturn(true);
+        $this->mediaDirectory->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('value/' . $value)
+            ->willReturn($absoluteFilePath);
+
         $this->urlBuilder->expects($this->once())
             ->method('getBaseUrl')
             ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
@@ -122,6 +167,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->with('value/' . $value)
             ->willReturn(['size' => 234234]);
 
+        $this->mime->expects($this->once())
+            ->method('getMimeType')
+            ->with($absoluteFilePath)
+            ->willReturn($mime);
+
         $this->fileBackend->afterLoad();
         $this->assertEquals(
             [
@@ -130,23 +180,29 @@ class FileTest extends \PHPUnit_Framework_TestCase
                     'file' => $value,
                     'size' => 234234,
                     'exists' => true,
+                    'name' => $value,
+                    'type' => $mime,
                 ]
             ],
             $this->fileBackend->getValue()
         );
     }
 
-    public function testBeforeSave()
+    /**
+     * @dataProvider beforeSaveDataProvider
+     * @param string $fileName
+     */
+    public function testBeforeSave($fileName)
     {
-        $value = 'filename.jpg';
-        $tmpMediaPath = 'tmp/design/file/' . $value;
+        $expectedFileName = basename($fileName);
+        $expectedTmpMediaPath = 'tmp/design/file/' . $expectedFileName;
         $this->fileBackend->setScope('store');
         $this->fileBackend->setScopeId(1);
         $this->fileBackend->setValue(
             [
                 [
-                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $value,
-                    'file' => $value,
+                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $fileName,
+                    'file' => $fileName,
                     'size' => 234234,
                 ]
             ]
@@ -160,16 +216,32 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $this->databaseHelper->expects($this->once())
+            ->method('renameFile')
+            ->with($expectedTmpMediaPath, '/' . $expectedFileName)
+            ->willReturn(true);
+
         $this->mediaDirectory->expects($this->once())
             ->method('copyFile')
-            ->with($tmpMediaPath, '/' . $value)
+            ->with($expectedTmpMediaPath, '/' . $expectedFileName)
             ->willReturn(true);
         $this->mediaDirectory->expects($this->once())
             ->method('delete')
-            ->with($tmpMediaPath);
+            ->with($expectedTmpMediaPath);
 
         $this->fileBackend->beforeSave();
-        $this->assertEquals('filename.jpg', $this->fileBackend->getValue());
+        $this->assertEquals($expectedFileName, $this->fileBackend->getValue());
+    }
+
+    /**
+     * @return array
+     */
+    public function beforeSaveDataProvider()
+    {
+        return [
+            'Normal file name' => ['filename.jpg'],
+            'Vulnerable file name' => ['../../../../../../../../etc/passwd'],
+        ];
     }
 
     /**

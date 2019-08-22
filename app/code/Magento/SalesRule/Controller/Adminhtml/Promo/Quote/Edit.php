@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -51,7 +53,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         if ($id) {
             $model->load($id);
             if (!$model->getRuleId()) {
-                $this->messageManager->addError(__('This rule no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This rule no longer exists.'));
                 $this->_redirect('sales_rule/*');
                 return;
             }

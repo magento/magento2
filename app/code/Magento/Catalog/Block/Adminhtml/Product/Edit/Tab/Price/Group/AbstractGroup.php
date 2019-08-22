@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group;
@@ -41,7 +41,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -81,7 +81,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * @param \Magento\Backend\Block\Template\Context $context
      * @param GroupRepositoryInterface $groupRepository
      * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Framework\Registry $registry
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -92,7 +92,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
         \Magento\Backend\Block\Template\Context $context,
         GroupRepositoryInterface $groupRepository,
         \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Framework\Registry $registry,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,

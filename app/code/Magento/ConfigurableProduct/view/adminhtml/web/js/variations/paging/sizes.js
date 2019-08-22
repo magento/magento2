@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -9,21 +9,21 @@ define([
 
     return Sizes.extend({
         defaults: {
-            excludedOptions: ['100', '200']
-        },
-
-        /**
-         * @override
-         */
-        initialize: function () {
-            this._super();
-
-            this.excludedOptions.forEach(function (excludedOption) {
-                delete this.options[excludedOption];
-            }, this);
-            this.updateArray();
-
-            return this;
+            options: {
+                '20': {
+                    value: 20,
+                    label: 20
+                },
+                '30': {
+                    value: 30,
+                    label: 30
+                },
+                '50': {
+                    value: 50,
+                    label: 50
+                }
+            },
+            value: 20
         }
     });
 });

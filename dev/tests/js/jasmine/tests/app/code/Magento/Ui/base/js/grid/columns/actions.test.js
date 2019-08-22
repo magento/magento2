@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,9 @@ define([
                 index: 'delete',
                 hidden: true,
                 rowIndex: 0,
-                callback: function() {
+
+                /** Stub */
+                callback: function () {
                     return true;
                 }
             };
@@ -49,7 +51,7 @@ define([
             var someAction = _.clone(action);
 
             someAction.hidden = false;
-            someAction.index= 'view';
+            someAction.index = 'view';
             model.addAction('delete', action);
             model.addAction('view', someAction);
             expect(model.getVisibleActions('0')).toEqual([someAction]);
@@ -81,20 +83,6 @@ define([
             expect(model.isActionVisible(action)).toBeFalsy();
             action.hidden = false;
             expect(model.isActionVisible(action)).toBeTruthy();
-        });
-
-        it('Check toggleList function', function () {
-            model.toggleList(0);
-            expect(model.opened()).toEqual(0);
-            model.toggleList(0);
-            expect(model.opened()).toBeFalsy();
-        });
-
-        it('Check closeList function', function () {
-            model.toggleList(0);
-            expect(model.opened()).toEqual(0);
-            model.closeList(0);
-            expect(model.opened()).toBeFalsy();
         });
     });
 });

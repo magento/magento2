@@ -1,23 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Directory\Model\Config\Source\Country as SourceCountry;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form\Element\DataType\Price;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
-use Magento\Directory\Model\Config\Source\Country as SourceCountry;
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
-use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
 use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager\Website as WebsiteManager;
 
 /**
@@ -85,7 +85,7 @@ class Weee extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -93,7 +93,7 @@ class Weee extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -116,8 +116,7 @@ class Weee extends AbstractModifier
             foreach ($metaConfig['children'] as $attributeCode => $attributeConfig) {
                 if ($this->startsWith($attributeCode, self::CONTAINER_PREFIX)) {
                     $metaConfig['children'][$attributeCode] = $this->modifyMetaConfig($attributeConfig);
-                } elseif (
-                    !empty($attributeConfig['arguments']['data']['config']['formElement']) &&
+                } elseif (!empty($attributeConfig['arguments']['data']['config']['formElement']) &&
                     $attributeConfig['arguments']['data']['config']['formElement'] === static::FORM_ELEMENT_WEEE
                 ) {
                     $metaConfig['children'][$attributeCode] =
@@ -156,6 +155,7 @@ class Weee extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
+                        'required' => (bool)$attributeConfig['arguments']['data']['config']['required'],
                     ],
                 ],
             ],
@@ -181,6 +181,7 @@ class Weee extends AbstractModifier
                                         'component' => 'Magento_Weee/js/fpt-group',
                                         'visible' => true,
                                         'label' => __('Country/State'),
+                                        'showLabel' => false,
                                     ],
                                 ],
                             ],
@@ -198,6 +199,7 @@ class Weee extends AbstractModifier
                                                 'validation' => [
                                                     'required-entry' => true,
                                                 ],
+                                                'showLabel' => false,
                                             ],
                                         ],
                                     ],
@@ -217,6 +219,7 @@ class Weee extends AbstractModifier
                                                 ],
                                                 'caption' => '*',
                                                 'visible' => true,
+                                                'showLabel' => false,
                                             ],
                                         ],
                                     ],
@@ -234,6 +237,7 @@ class Weee extends AbstractModifier
                                                 'validation' => [
                                                     'validate-fpt-group' => true
                                                 ],
+                                                'showLabel' => false,
                                             ],
                                         ],
                                     ],
@@ -253,6 +257,7 @@ class Weee extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true
                                         ],
+                                        'showLabel' => false,
                                     ],
                                 ],
                             ],
@@ -268,6 +273,7 @@ class Weee extends AbstractModifier
                                         'label' => __('Website'),
                                         'visible' => $this->websiteManager->isMultiWebsites(),
                                         'options' => $this->websiteManager->getWebsites($product, $eavAttribute),
+                                        'showLabel' => false,
                                     ],
                                 ],
                             ],

@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\View\Page\Config;
 
 use Magento\Developer\Model\Config\Source\WorkflowType;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Factory class for \Magento\Framework\View\Page\Config\RendererInterface
+ *
+ * @api
+ * @since 100.0.2
  */
 class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactory
 {

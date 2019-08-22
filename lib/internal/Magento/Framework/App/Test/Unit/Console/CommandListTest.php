@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,12 @@ namespace Magento\Framework\App\Test\Unit\Console;
 use Magento\Framework\Console\CommandList;
 use Symfony\Component\Console\Command\Command;
 
-class CommandListTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for
+ *
+ * @see Magento\Framework\Console\CommandList
+ */
+class CommandListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Console\CommandList
@@ -17,7 +22,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
     private $commandList;
 
     /**
-     * @var Symfony\Component\Console\Command\Command
+     * @var Command
      */
     private $testCommand;
 

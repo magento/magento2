@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
 use Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache;
 
-class InterceptionCacheTest extends \PHPUnit_Framework_TestCase
+class InterceptionCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Interception\Config\Config

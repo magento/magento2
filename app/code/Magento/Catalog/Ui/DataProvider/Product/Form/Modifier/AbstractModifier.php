@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 /**
  * Class AbstractModifier
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 101.0.0
  */
 abstract class AbstractModifier implements ModifierInterface
 {
@@ -47,6 +51,7 @@ abstract class AbstractModifier implements ModifierInterface
      * @param int $defaultSortOrder
      * @param int $iteration
      * @return int
+     * @since 101.0.0
      */
     protected function getNextGroupSortOrder(array $meta, $groupCodes, $defaultSortOrder, $iteration = 1)
     {
@@ -69,6 +74,7 @@ abstract class AbstractModifier implements ModifierInterface
      * @param int $defaultSortOrder
      * @param int $iteration
      * @return int
+     * @since 101.0.0
      */
     protected function getNextAttributeSortOrder(array $meta, $attributeCodes, $defaultSortOrder, $iteration = 1)
     {
@@ -106,8 +112,7 @@ abstract class AbstractModifier implements ModifierInterface
                         $defaultSortOrder,
                         $iteration
                     );
-                } elseif (
-                    in_array($attributeCode, $attributeCodes)
+                } elseif (in_array($attributeCode, $attributeCodes)
                     && isset($attributeMeta['arguments']['data']['config']['sortOrder'])
                 ) {
                     $defaultSortOrder = $attributeMeta['arguments']['data']['config']['sortOrder'] + $iteration;
@@ -124,10 +129,11 @@ abstract class AbstractModifier implements ModifierInterface
      * @param string $haystack
      * @param string $needle
      * @return bool
+     * @since 101.0.0
      */
     protected function startsWith($haystack, $needle)
     {
-        return $needle === '' || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+        return $needle === '' || strrpos($haystack, (string) $needle, -strlen($haystack)) !== false;
     }
 
     /**
@@ -135,6 +141,7 @@ abstract class AbstractModifier implements ModifierInterface
      *
      * @param array $meta
      * @return string
+     * @since 101.0.0
      */
     protected function getGeneralPanelName(array $meta)
     {
@@ -154,6 +161,7 @@ abstract class AbstractModifier implements ModifierInterface
      *
      * @param array $meta
      * @return string|null
+     * @since 101.0.0
      */
     protected function getFirstPanelCode(array $meta)
     {
@@ -161,8 +169,7 @@ abstract class AbstractModifier implements ModifierInterface
         $name = null;
 
         foreach ($meta as $fieldSetName => $fieldSetMeta) {
-            if (
-                isset($fieldSetMeta['arguments']['data']['config']['sortOrder'])
+            if (isset($fieldSetMeta['arguments']['data']['config']['sortOrder'])
                 && (null === $min || $fieldSetMeta['arguments']['data']['config']['sortOrder'] <= $min)
             ) {
                 $min = $fieldSetMeta['arguments']['data']['config']['sortOrder'];
@@ -179,12 +186,12 @@ abstract class AbstractModifier implements ModifierInterface
      * @param array $meta
      * @param string $field
      * @return string|bool
+     * @since 101.0.0
      */
     protected function getGroupCodeByField(array $meta, $field)
     {
         foreach ($meta as $groupCode => $groupData) {
-            if (
-                isset($groupData['children'][$field])
+            if (isset($groupData['children'][$field])
                 || isset($groupData['children'][static::CONTAINER_PREFIX . $field])
             ) {
                 return $groupCode;
@@ -199,6 +206,7 @@ abstract class AbstractModifier implements ModifierInterface
      *
      * @param mixed $value
      * @return string
+     * @since 101.0.0
      */
     protected function formatPrice($value)
     {
@@ -210,6 +218,7 @@ abstract class AbstractModifier implements ModifierInterface
      *
      * @param mixed $value
      * @return string
+     * @since 101.0.0
      */
     protected function formatWeight($value)
     {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -29,8 +29,8 @@
             <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccess" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLoginWithError"/>
+            <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccessWithError" />
         </variation>
         <variation name="UpdateAdminUserRoleEntityTestVariation3">
             <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>

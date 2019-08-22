@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Model\Method;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Command\CommandManagerInterface;
 use Magento\Payment\Gateway\Command\CommandManagerPoolInterface;
+use Magento\Payment\Gateway\Config\ValueHandlerInterface;
+use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
@@ -19,21 +23,29 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Model\VaultPaymentInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class VaultTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VaultTest extends \PHPUnit_Framework_TestCase
+class VaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
      */
     private $objectManager;
 
+    /**
+     * @var MethodInterface|MockObject
+     */
+    private $vaultProvider;
+
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
+        $this->vaultProvider = $this->createMock(MethodInterface::class);
     }
 
     /**
@@ -42,7 +54,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuthorizeNotOrderPayment()
     {
-        $paymentModel = $this->getMock(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class);
@@ -95,7 +107,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $tokenManagement = $this->getMock(PaymentTokenManagementInterface::class);
+        $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('getAdditionalInformation')
@@ -131,16 +143,14 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken'])
-            ->getMock();
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->getMockForAbstractClass();
 
-        $commandManagerPool = $this->getMock(CommandManagerPoolInterface::class);
-        $commandManager = $this->getMock(CommandManagerInterface::class);
+        $commandManagerPool = $this->createMock(CommandManagerPoolInterface::class);
+        $commandManager = $this->createMock(CommandManagerInterface::class);
 
-        $vaultProvider = $this->getMock(MethodInterface::class);
-
-        $tokenManagement = $this->getMock(PaymentTokenManagementInterface::class);
-        $token = $this->getMock(PaymentTokenInterface::class);
+        $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
+        $token = $this->createMock(PaymentTokenInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('getAdditionalInformation')
@@ -161,7 +171,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->method('setVaultPaymentToken')
             ->with($token);
 
-        $vaultProvider->expects(static::atLeastOnce())
+        $this->vaultProvider->expects(static::atLeastOnce())
             ->method('getCode')
             ->willReturn($vaultProviderCode);
         $commandManagerPool->expects(static::once())
@@ -188,7 +198,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             [
                 'tokenManagement' => $tokenManagement,
                 'commandManagerPool' => $commandManagerPool,
-                'vaultProvider' => $vaultProvider
+                'vaultProvider' => $this->vaultProvider
             ]
         );
         $model->authorize($paymentModel, $amount);
@@ -200,7 +210,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
      */
     public function testCaptureNotOrderPayment()
     {
-        $paymentModel = $this->getMock(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class);
@@ -217,7 +227,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $authorizationTransaction = $this->getMock(TransactionInterface::class);
+        $authorizationTransaction = $this->createMock(TransactionInterface::class);
         $paymentModel->expects(static::once())
             ->method('getAuthorizationTransaction')
             ->willReturn($authorizationTransaction);
@@ -228,24 +238,26 @@ class VaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Vault\Model\Method\Vault::isAvailable
+     * @covers       \Magento\Vault\Model\Method\Vault::isAvailable
      * @dataProvider isAvailableDataProvider
      */
     public function testIsAvailable($isAvailableProvider, $isActive, $expected)
     {
         $storeId = 1;
         $quote = $this->getMockForAbstractClass(CartInterface::class);
-        $vaultProvider = $this->getMockForAbstractClass(MethodInterface::class);
         $config = $this->getMockForAbstractClass(ConfigInterface::class);
 
-        $vaultProvider->expects(static::once())
+        $this->vaultProvider->expects(static::once())
             ->method('isAvailable')
             ->with($quote)
             ->willReturn($isAvailableProvider);
 
         $config->expects(static::any())
             ->method('getValue')
-            ->with('active', $storeId)
+            ->with(
+                'active',
+                $storeId
+            )
             ->willReturn($isActive);
 
         $quote->expects(static::any())
@@ -253,10 +265,13 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->willReturn($storeId);
 
         /** @var Vault $model */
-        $model = $this->objectManager->getObject(Vault::class, [
-            'config' => $config,
-            'vaultProvider' => $vaultProvider
-        ]);
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'config' => $config,
+                'vaultProvider' => $this->vaultProvider
+            ]
+        );
         $actual = $model->isAvailable($quote);
         static::assertEquals($expected, $actual);
     }
@@ -281,25 +296,87 @@ class VaultTest extends \PHPUnit_Framework_TestCase
     public function testIsAvailableWithoutQuote()
     {
         $quote = null;
-
-        $vaultProvider = $this->getMockForAbstractClass(MethodInterface::class);
         $config = $this->getMockForAbstractClass(ConfigInterface::class);
 
-        $vaultProvider->expects(static::once())
+        $this->vaultProvider->expects(static::once())
             ->method('isAvailable')
             ->with($quote)
             ->willReturn(true);
 
         $config->expects(static::once())
             ->method('getValue')
-            ->with('active', $quote)
+            ->with(
+                'active',
+                $quote
+            )
             ->willReturn(false);
 
         /** @var Vault $model */
-        $model = $this->objectManager->getObject(Vault::class, [
-            'config' => $config,
-            'vaultProvider' => $vaultProvider
-        ]);
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'config' => $config,
+                'vaultProvider' => $this->vaultProvider
+            ]
+        );
         static::assertFalse($model->isAvailable($quote));
+    }
+
+    /**
+     * @covers       \Magento\Vault\Model\Method\Vault::canUseInternal
+     * @param bool|null $configValue
+     * @param bool|null $paymentValue
+     * @param bool $expected
+     * @dataProvider internalUsageDataProvider
+     */
+    public function testCanUseInternal($configValue, $paymentValue, $expected)
+    {
+        $handlerPool = $this->createMock(ValueHandlerPoolInterface::class);
+        $handler = $this->createMock(ValueHandlerInterface::class);
+
+        $handlerPool->expects(static::once())
+            ->method('get')
+            ->with('can_use_internal')
+            ->willReturn($handler);
+
+        $handler->expects(static::once())
+            ->method('handle')
+            ->with(
+                ['field' => 'can_use_internal'],
+                null
+            )
+            ->willReturn($configValue);
+
+        $this->vaultProvider->expects(static::any())
+            ->method('canUseInternal')
+            ->willReturn($paymentValue);
+
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'vaultProvider' => $this->vaultProvider,
+                'valueHandlerPool' => $handlerPool,
+            ]
+        );
+        static::assertEquals($expected, $model->canUseInternal());
+    }
+
+    /**
+     * Get list of variations for testing canUseInternal method
+     * @return array
+     */
+    public function internalUsageDataProvider()
+    {
+        return [
+            ['configValue' => true, 'paymentValue' => true, 'expected' => true],
+            ['configValue' => true, 'paymentValue' => null, 'expected' => true],
+            ['configValue' => true, 'paymentValue' => false, 'expected' => true],
+            ['configValue' => false, 'paymentValue' => true, 'expected' => false],
+            ['configValue' => false, 'paymentValue' => false, 'expected' => false],
+            ['configValue' => null, 'paymentValue' => true, 'expected' => true],
+            ['configValue' => null, 'paymentValue' => false, 'expected' => false],
+            ['configValue' => null, 'paymentValue' => null, 'expected' => false],
+        ];
     }
 }

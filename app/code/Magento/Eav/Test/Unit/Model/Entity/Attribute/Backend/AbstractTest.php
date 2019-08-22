@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit_Framework_MockObject_MockObject
@@ -27,12 +27,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $valueId = 10;
         $attributeId = 42;
 
-        $attribute = $this->getMock(
+        $attribute = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            ['getBackendTable', 'isStatic', 'getAttributeId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getBackendTable', 'isStatic', 'getAttributeId', '__wakeup']
         );
         $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
 

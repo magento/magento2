@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
@@ -59,7 +59,7 @@ class Save extends \Magento\Backend\App\Action
             $synGroup = $this->synGroupRepository->get($synGroupId);
 
             if (!$synGroup->getGroupId() && $synGroupId) {
-                $this->messageManager->addError(__('This synonym group no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This synonym group no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
 

@@ -1,22 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Catalog Price rules observer model
- */
 namespace Magento\CatalogRule\Observer;
 
-use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Customer\Model\Session as CustomerModelSession;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Observer for applying catalog rules on product for admin area
+ */
 class ProcessAdminFinalPriceObserver implements ObserverInterface
 {
     /**
@@ -36,7 +33,9 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
      */
     protected $resourceRuleFactory;
 
-    /** @var RulePricesStorage  */
+    /**
+     * @var \Magento\CatalogRule\Observer\RulePricesStorage
+     */
     protected $rulePricesStorage;
 
     /**
@@ -66,8 +65,7 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $product = $observer->getEvent()->getProduct();
-        $storeId = $product->getStoreId();
-        $date = $this->localeDate->scopeDate($storeId);
+        $date = $this->localeDate->date(null, null, false);
         $key = false;
 
         $ruleData = $this->coreRegistry->registry('rule_data');

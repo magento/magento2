@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data\Order;
@@ -12,7 +12,7 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 /**
  * Class OrderAdapterTest
  */
-class OrderAdapterTest extends \PHPUnit_Framework_TestCase
+class OrderAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var OrderAdapter */
     protected $model;

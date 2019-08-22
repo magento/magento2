@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
@@ -13,16 +13,27 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Generate url rewrites for anchor categories
+ */
 class AnchorUrlRewriteGenerator
 {
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $urlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var CategoryRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     */
     private $categoryRepository;
 
     /**
@@ -41,12 +52,12 @@ class AnchorUrlRewriteGenerator
     }
 
     /**
-     * Generate list based on categories
+     * Generate product rewrites for anchor categories
      *
      * @param int $storeId
      * @param Product $product
      * @param ObjectRegistry $productCategories
-     * @return UrlRewrite[]
+     * @return UrlRewrite[]|array
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories)
     {

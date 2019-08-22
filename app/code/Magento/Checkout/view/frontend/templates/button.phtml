@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
 
 <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
-    <?php /* @escapeNotVerified */ echo __('<a href="%1" onclick="this.target=\'_blank\'" class="print">Print receipt</a>', $block->getPrintUrl()) ?>
-    <?php echo $block->getChildHtml() ?>
+    <a href="<?= $block->escapeUrl($block->getPrintUrl()) ?>" target="_blank" class="print">
+        <?= $block->escapeHtml(__('Print receipt')) ?>
+    </a>
+    <?= $block->getChildHtml() ?>
 <?php endif;?>

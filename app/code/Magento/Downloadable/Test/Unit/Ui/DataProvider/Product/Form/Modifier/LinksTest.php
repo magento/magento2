@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -20,7 +20,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  * Class LinksTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinksTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -78,14 +78,14 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->locatorMock = $this->getMock(LocatorInterface::class);
-        $this->productMock = $this->getMock(ProductInterface::class);
-        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
-        $this->urlBuilderMock = $this->getMock(UrlInterface::class);
-        $this->linksDataMock = $this->getMock(LinksData::class, [], [], '', false);
-        $this->typeUploadMock = $this->getMock(TypeUpload::class, [], [], '', false);
-        $this->shareableMock = $this->getMock(Shareable::class, [], [], '', false);
-        $this->arrayManagerMock = $this->getMock(ArrayManager::class, [], [], '', false);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->linksDataMock = $this->createMock(LinksData::class);
+        $this->typeUploadMock = $this->createMock(TypeUpload::class);
+        $this->shareableMock = $this->createMock(Shareable::class);
+        $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->links = $this->objectManagerHelper->getObject(
             Links::class,
             [
@@ -175,7 +175,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilderMock->expects($this->exactly(2))
             ->method('getUrl');
 
-        $currencyMock = $this->getMock(\Magento\Directory\Model\Currency::class, [], [], '', false);
+        $currencyMock = $this->createMock(\Magento\Directory\Model\Currency::class);
         $currencyMock->expects($this->once())
             ->method('getCurrencySymbol');
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)

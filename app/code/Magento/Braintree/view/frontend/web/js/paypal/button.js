@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -9,7 +9,9 @@ define(
         'uiComponent',
         'underscore',
         'jquery',
-        'braintree',
+        'braintreeClient',
+        'braintreePayPal',
+        'braintreePayPalCheckout',
         'Magento_Braintree/js/paypal/form-builder',
         'domReady!'
     ],
@@ -19,7 +21,9 @@ define(
         Component,
         _,
         $,
-        braintree,
+        braintreeClient,
+        braintreePayPal,
+        braintreePayPalCheckout,
         formBuilder
     ) {
         'use strict';
@@ -27,58 +31,34 @@ define(
         return Component.extend({
 
             defaults: {
-
-                integrationName: 'braintreePaypal.currentIntegration',
-
-                /**
-                 * {String}
-                 */
                 displayName: null,
-
-                /**
-                 * {String}
-                 */
                 clientToken: null,
-
-                /**
-                 * {Object}
-                 */
-                clientConfig: {
-
-                    /**
-                     * @param {Object} integration
-                     */
-                    onReady: function (integration) {
-                        resolver(function () {
-                            registry.set(this.integrationName, integration);
-                            $('#' + this.id).removeAttr('disabled');
-                        }, this);
-                    },
-
-                    /**
-                     * @param {Object} payload
-                     */
-                    onPaymentMethodReceived: function (payload) {
-                        $('body').trigger('processStart');
-
-                        formBuilder.build(
-                            {
-                                action: this.actionSuccess,
-                                fields: {
-                                    result: JSON.stringify(payload)
-                                }
-                            }
-                        ).submit();
-                    }
-                }
+                paypalCheckoutInstance: null
             },
 
             /**
              * @returns {Object}
              */
             initialize: function () {
-                this._super()
-                    .initComponent();
+                var self = this;
+
+                self._super();
+
+                braintreeClient.create({
+                    authorization: self.clientToken
+                })
+                    .then(function (clientInstance) {
+                        return braintreePayPal.create({
+                            client: clientInstance
+                        });
+                    })
+                    .then(function (paypalCheckoutInstance) {
+                        self.paypalCheckoutInstance = paypalCheckoutInstance;
+
+                        return self.paypalCheckoutInstance;
+                    });
+
+                self.initComponent();
 
                 return this;
             },
@@ -87,60 +67,76 @@ define(
              * @returns {Object}
              */
             initComponent: function () {
-                var currentIntegration = registry.get(this.integrationName),
-                    $this = $('#' + this.id),
-                    self = this,
+                var self = this,
+                    selector = '#' + self.id,
+                    $this = $(selector),
                     data = {
                         amount: $this.data('amount'),
                         locale: $this.data('locale'),
                         currency: $this.data('currency')
+                    };
+
+                $this.html('');
+                braintreePayPalCheckout.Button.render({
+                    env: self.environment,
+                    style: {
+                        color: 'blue',
+                        shape: 'rect',
+                        size: 'medium',
+                        label: 'pay',
+                        tagline: false
                     },
-                    initCallback = function () {
-                        $this.attr('disabled', 'disabled');
-                        registry.remove(this.integrationName);
-                        braintree.setup(this.clientToken, 'custom', this.getClientConfig(data));
 
-                        $this.off('click')
-                            .on('click', function (event) {
-                                event.preventDefault();
+                    /**
+                     * Payment setup
+                     */
+                    payment: function () {
+                        return self.paypalCheckoutInstance.createPayment(self.getClientConfig(data));
+                    },
 
-                                registry.get(self.integrationName, function (integration) {
-                                    integration.paypal.initAuthFlow();
-                                });
+                    /**
+                     * Triggers on `onAuthorize` event
+                     *
+                     * @param {Object} response
+                     */
+                    onAuthorize: function (response) {
+                        return self.paypalCheckoutInstance.tokenizePayment(response)
+                            .then(function (payload) {
+                                $('body').trigger('processStart');
+
+                                formBuilder.build(
+                                    {
+                                        action: self.actionSuccess,
+                                        fields: {
+                                            result: JSON.stringify(payload)
+                                        }
+                                    }
+                                ).submit();
                             });
-                    }.bind(this);
-
-                currentIntegration ?
-                    currentIntegration.teardown(initCallback) :
-                    initCallback();
+                    }
+                }, selector);
 
                 return this;
             },
 
             /**
              * @returns {Object}
+             * @private
              */
             getClientConfig: function (data) {
-                this.clientConfig.paypal = {
-                    singleUse: true,
+                var config = {
+                    flow: 'checkout',
                     amount: data.amount,
                     currency: data.currency,
                     locale: data.locale,
-                    enableShippingAddress: true,
-                    headless: true
+                    enableShippingAddress: true
                 };
 
                 if (this.displayName) {
-                    this.clientConfig.paypal.displayName = this.displayName;
+                    config.displayName = this.displayName;
                 }
 
-                _.each(this.clientConfig, function (fn, name) {
-                    if (typeof fn === 'function') {
-                        this.clientConfig[name] = fn.bind(this);
-                    }
-                }, this);
-
-                return this.clientConfig;
+                return config;
             }
         });
     }

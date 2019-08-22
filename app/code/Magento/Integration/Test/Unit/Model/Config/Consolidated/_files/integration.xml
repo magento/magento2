@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,6 +18,7 @@
     <integration name="TestIntegration2">
         <email>test-integration2@magento.com</email>
         <resources>
+            <resource name="Magento_Backend::admin" />
             <resource name="Magento_Sales::sales" />
         </resources>
     </integration>

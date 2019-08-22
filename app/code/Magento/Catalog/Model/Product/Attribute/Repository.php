@@ -1,16 +1,18 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Eav\Api\Data\AttributeInterface;
 
 /**
+ * Product attribute repository
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInterface
@@ -51,11 +53,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
-     */
-    private $optionManagement;
-
-    /**
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
@@ -83,7 +80,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($attributeCode)
     {
@@ -94,7 +91,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -105,12 +102,17 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
+        $attribute->setEntityTypeId(
+            $this->eavConfig
+                ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+                ->getId()
+        );
         if ($attribute->getAttributeId()) {
             $existingModel = $this->get($attribute->getAttributeCode());
 
@@ -124,20 +126,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
 
-            if (is_array($attribute->getFrontendLabels())) {
-                $defaultFrontendLabel = $attribute->getDefaultFrontendLabel();
-                $frontendLabel[0] = !empty($defaultFrontendLabel)
-                    ? $defaultFrontendLabel
-                    : $existingModel->getDefaultFrontendLabel();
-                foreach ($attribute->getFrontendLabels() as $item) {
-                    $frontendLabel[$item->getStoreId()] = $item->getLabel();
-                }
-                $attribute->setDefaultFrontendLabel($frontendLabel);
-            }
-            if (!$attribute->getIsUserDefined()) {
-                // Unset attribute field for system attributes
-                $attribute->setApplyTo(null);
-            }
+            $this->updateDefaultFrontendLabel($attribute, $existingModel);
         } else {
             $attribute->setAttributeId(null);
 
@@ -145,22 +134,10 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 throw InputException::requiredField('frontend_label');
             }
 
-            $frontendLabels = [];
-            if ($attribute->getDefaultFrontendLabel()) {
-                $frontendLabels[0] = $attribute->getDefaultFrontendLabel();
-            }
-            if ($attribute->getFrontendLabels() && is_array($attribute->getFrontendLabels())) {
-                foreach ($attribute->getFrontendLabels() as $label) {
-                    $frontendLabels[$label->getStoreId()] = $label->getLabel();
-                }
-                if (!isset($frontendLabels[0]) || !$frontendLabels[0]) {
-                    throw InputException::invalidFieldValue('frontend_label', null);
-                }
+            $frontendLabel = $this->updateDefaultFrontendLabel($attribute, null);
 
-                $attribute->setDefaultFrontendLabel($frontendLabels);
-            }
             $attribute->setAttributeCode(
-                $attribute->getAttributeCode() ?: $this->generateCode($frontendLabels[0])
+                $attribute->getAttributeCode() ?: $this->generateCode($frontendLabel)
             );
             $this->validateCode($attribute->getAttributeCode());
             $this->validateFrontendInput($attribute->getFrontendInput());
@@ -174,25 +151,38 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setBackendModel(
                 $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
             );
-            $attribute->setEntityTypeId(
-                $this->eavConfig
-                    ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
-                    ->getId()
-            );
             $attribute->setIsUserDefined(1);
         }
-        $this->attributeResource->save($attribute);
-
         if (!empty($attribute->getData(AttributeInterface::OPTIONS))) {
+            $options = [];
+            $sortOrder = 0;
+            $default = [];
+            $optionIndex = 0;
             foreach ($attribute->getOptions() as $option) {
-                $this->getOptionManagement()->add($attribute->getAttributeCode(), $option);
+                $optionIndex++;
+                $optionId = $option->getValue() ?: 'option_' . $optionIndex;
+                $options['value'][$optionId][0] = $option->getLabel();
+                $options['order'][$optionId] = $option->getSortOrder() ?: $sortOrder++;
+                if (is_array($option->getStoreLabels())) {
+                    foreach ($option->getStoreLabels() as $label) {
+                        $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
+                    }
+                }
+                if ($option->getIsDefault()) {
+                    $default[] = $optionId;
+                }
+            }
+            $attribute->setDefault($default);
+            if (count($options)) {
+                $attribute->setOption($options);
             }
         }
+        $this->attributeResource->save($attribute);
         return $this->get($attribute->getAttributeCode());
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
@@ -201,7 +191,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($attributeCode)
     {
@@ -212,7 +202,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
@@ -268,14 +258,50 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * @return \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
+     * This method sets default frontend value using given default frontend value or frontend value from admin store
+     * if default frontend value is not presented.
+     * If both default frontend label and admin store frontend label are not given it throws exception
+     * for attribute creation process or sets existing attribute value for attribute update action.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface|null $existingModel
+     * @return string|null
+     * @throws InputException
      */
-    private function getOptionManagement()
+    private function updateDefaultFrontendLabel($attribute, $existingModel)
     {
-        if (null === $this->optionManagement) {
-            $this->optionManagement = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class);
+        $frontendLabel = $attribute->getDefaultFrontendLabel();
+        if (empty($frontendLabel)) {
+            $frontendLabel = $this->extractAdminStoreFrontendLabel($attribute);
+            if (empty($frontendLabel)) {
+                if ($existingModel) {
+                    $frontendLabel = $existingModel->getDefaultFrontendLabel();
+                } else {
+                    throw InputException::invalidFieldValue('frontend_label', null);
+                }
+            }
+            $attribute->setDefaultFrontendLabel($frontendLabel);
         }
-        return $this->optionManagement;
+        return $frontendLabel;
+    }
+
+    /**
+     * This method extracts frontend label from FrontendLabel object for admin store.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @return string|null
+     */
+    private function extractAdminStoreFrontendLabel($attribute)
+    {
+        $frontendLabel = [];
+        $frontendLabels = $attribute->getFrontendLabels();
+        if (isset($frontendLabels[0])
+            && $frontendLabels[0] instanceof \Magento\Eav\Api\Data\AttributeFrontendLabelInterface
+        ) {
+            foreach ($attribute->getFrontendLabels() as $label) {
+                $frontendLabel[$label->getStoreId()] = $label->getLabel();
+            }
+        }
+        return $frontendLabel[0] ?? null;
     }
 }

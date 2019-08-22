@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,14 @@ use Magento\Framework\Api\Filter;
  */
 class FulltextFilter implements FilterApplierInterface
 {
+    /**
+     * Patterns using for escaping special characters
+     */
+    private $escapePatterns = [
+        '/[@\.]/' => '\_',
+        '/([+\-><\(\)~*]+)/' => ' ',
+    ];
+
     /**
      * Returns list of columns from fulltext index (doesn't support more then one FTI per table)
      *
@@ -63,6 +71,17 @@ class FulltextFilter implements FilterApplierInterface
     }
 
     /**
+     * Escape against value
+     *
+     * @param string $value
+     * @return string
+     */
+    private function escapeAgainstValue(string $value): string
+    {
+        return preg_replace(array_keys($this->escapePatterns), array_values($this->escapePatterns), $value);
+    }
+
+    /**
      * Apply fulltext filters
      *
      * @param Collection $collection
@@ -86,7 +105,7 @@ class FulltextFilter implements FilterApplierInterface
         $collection->getSelect()
             ->where(
                 'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
-                $filter->getValue()
+                $this->escapeAgainstValue($filter->getValue())
             );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel;
@@ -99,7 +99,7 @@ class CreateHandler implements AttributeInterface
             $entityLinkField = $metadata->getLinkField();
             $attributeSetId = isset($entityData[AttributeLoader::ATTRIBUTE_SET_ID])
                 ? $entityData[AttributeLoader::ATTRIBUTE_SET_ID]
-                : null; // @todo verify is it normal to not have attributer_set_id
+                : null; // @todo verify is it normal to not have attribute_set_id
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
             foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
                 if ($attribute->isStatic()) {

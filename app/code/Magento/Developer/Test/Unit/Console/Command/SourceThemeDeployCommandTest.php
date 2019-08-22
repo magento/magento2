@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Console\Command;
@@ -18,7 +18,7 @@ use Magento\Developer\Console\Command\SourceThemeDeployCommand;
  *
  * @see \Magento\Developer\Console\Command\SourceThemeDeployCommand
  */
-class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
+class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
 {
     const AREA_TEST_VALUE = 'area-test-value';
 

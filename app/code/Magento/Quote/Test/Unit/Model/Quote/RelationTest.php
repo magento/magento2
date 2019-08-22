@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote;
@@ -8,7 +8,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote;
 use Magento\Quote\Model\Quote\Relation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RelationTest extends \PHPUnit_Framework_TestCase
+class RelationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Relation
@@ -25,7 +25,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -38,40 +38,22 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessRelation()
     {
-        $addressCollectionMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $addressCollectionMock = $this->createMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class);
         $this->quoteMock->expects($this->once())->method('addressCollectionWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getAddressesCollection')->willReturn($addressCollectionMock);
         $addressCollectionMock->expects($this->once())->method('save');
 
-        $itemsCollectionMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $itemsCollectionMock = $this->createMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class);
         $this->quoteMock->expects($this->once())->method('itemsCollectionWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getItemsCollection')->willReturn($itemsCollectionMock);
         $itemsCollectionMock->expects($this->once())->method('save');
 
-        $paymentCollectionMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $paymentCollectionMock = $this->createMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class);
         $this->quoteMock->expects($this->once())->method('paymentsCollectionWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getPaymentsCollection')->willReturn($paymentCollectionMock);
         $paymentCollectionMock->expects($this->once())->method('save');
 
-        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
+        $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
         $this->quoteMock->expects($this->once())->method('currentPaymentWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
         $paymentMock->expects($this->once())->method('save');

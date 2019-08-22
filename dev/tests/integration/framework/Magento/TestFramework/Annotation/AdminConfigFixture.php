@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,12 +9,17 @@
  */
 namespace Magento\TestFramework\Annotation;
 
+/**
+ * Handler for applying magentoAdminConfig annotation
+ *
+ * @package Magento\TestFramework\Annotation
+ */
 class AdminConfigFixture
 {
     /**
      * Test instance that is available between 'startTest' and 'stopTest' events
      *
-     * @var \PHPUnit_Framework_TestCase
+     * @var \PHPUnit\Framework\TestCase
      */
     protected $_currentTest;
 
@@ -34,7 +39,7 @@ class AdminConfigFixture
     protected function _getConfigValue($configPath)
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\App\ConfigInterface::class
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->getValue(
             $configPath
         );
@@ -49,7 +54,7 @@ class AdminConfigFixture
     protected function _setConfigValue($configPath, $value)
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\App\ConfigInterface::class
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             $configPath,
             $value
@@ -59,9 +64,9 @@ class AdminConfigFixture
     /**
      * Assign required config values and save original ones
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    protected function _assignConfigData(\PHPUnit_Framework_TestCase $test)
+    protected function _assignConfigData(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $test->getAnnotations();
         if (!isset($annotations['method']['magentoAdminConfigFixture'])) {
@@ -91,9 +96,9 @@ class AdminConfigFixture
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         $this->_currentTest = $test;
         $this->_assignConfigData($test);
@@ -102,11 +107,11 @@ class AdminConfigFixture
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         $this->_currentTest = null;
         $this->_restoreConfigData();

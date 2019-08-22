@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Test class for \Magento\AdminNotification\Block\ToolbarEntry
  */
 namespace Magento\AdminNotification\Test\Unit\Block;
 
-class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
+class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Retrieve toolbar entry block instance
@@ -23,12 +21,9 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // mock collection of unread notifications
-        $notificationList = $this->getMock(
+        $notificationList = $this->createPartialMock(
             \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class,
-            ['getSize', 'setCurPage', 'setPageSize'],
-            [],
-            '',
-            false
+            ['getSize', 'setCurPage', 'setPageSize']
         );
         $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
 
@@ -53,7 +48,8 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
 
         // 1. Create mocks
         $notificationList = $this->getMockBuilder(
-            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class)
+            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 

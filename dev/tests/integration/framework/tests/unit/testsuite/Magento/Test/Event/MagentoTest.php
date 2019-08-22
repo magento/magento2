@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Event;
 
-class MagentoTest extends \PHPUnit_Framework_TestCase
+class MagentoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Event\Magento
@@ -23,11 +23,10 @@ class MagentoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManager = $this->getMock(
-            \Magento\TestFramework\EventManager::class,
-            ['fireEvent'],
-            [[]]
-        );
+        $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
+            ->setMethods(['fireEvent'])
+            ->setConstructorArgs([[]])
+            ->getMock();
         $this->_object = new \Magento\TestFramework\Event\Magento($this->_eventManager);
     }
 
@@ -61,6 +60,6 @@ class MagentoTest extends \PHPUnit_Framework_TestCase
     public function testInitStoreAfter()
     {
         $this->_eventManager->expects($this->once())->method('fireEvent')->with('initStoreAfter');
-        $this->_object->execute($this->getMock(\Magento\Framework\Event\Observer::class));
+        $this->_object->execute($this->createMock(\Magento\Framework\Event\Observer::class));
     }
 }

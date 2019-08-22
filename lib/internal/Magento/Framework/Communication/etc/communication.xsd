@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -40,6 +40,7 @@
         <xs:attribute type="schemaType" name="schema" use="optional"/>
         <xs:attribute type="xs:string" name="request" use="optional"/>
         <xs:attribute type="xs:string" name="response" use="optional"/>
+        <xs:attribute type="xs:boolean" name="is_synchronous" use="optional"/>
     </xs:complexType>
     <xs:complexType name="handlerType">
         <xs:attribute type="xs:string" name="name" use="required"/>
@@ -54,7 +55,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z\\]+::[a-zA-Z]+" />
+            <xs:pattern value="[a-zA-Z]+[a-zA-Z0-9\\]+::[a-zA-Z0-9]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
@@ -65,7 +66,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z\\]+" />
+            <xs:pattern value="[a-zA-Z]+[a-zA-Z0-9\\]+" />
             <xs:minLength value="4" />
         </xs:restriction>
     </xs:simpleType>
@@ -76,7 +77,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z]+" />
+            <xs:pattern value="[a-zA-Z0-9]+" />
             <xs:minLength value="2" />
         </xs:restriction>
     </xs:simpleType>

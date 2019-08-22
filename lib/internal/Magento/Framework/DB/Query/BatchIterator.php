@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Query;
@@ -11,7 +11,7 @@ use Magento\Framework\DB\Select;
 /**
  * Query batch iterator
  */
-class BatchIterator implements \Iterator
+class BatchIterator implements BatchIteratorInterface
 {
     /**
      * @var int
@@ -88,6 +88,8 @@ class BatchIterator implements \Iterator
     }
 
     /**
+     * Returns current select
+     *
      * @return Select
      */
     public function current()
@@ -101,6 +103,8 @@ class BatchIterator implements \Iterator
     }
 
     /**
+     * Returns next select
+     *
      * @return Select
      */
     public function next()
@@ -121,6 +125,8 @@ class BatchIterator implements \Iterator
     }
 
     /**
+     * Returns key
+     *
      * @return int
      */
     public function key()
@@ -129,6 +135,8 @@ class BatchIterator implements \Iterator
     }
 
     /**
+     * Returns is valid
+     *
      * @return bool
      */
     public function valid()
@@ -137,6 +145,8 @@ class BatchIterator implements \Iterator
     }
 
     /**
+     * Rewind
+     *
      * @return void
      */
     public function rewind()
@@ -165,7 +175,7 @@ class BatchIterator implements \Iterator
         );
         $row = $this->connection->fetchRow($wrapperSelect);
         $this->minValue = $row['max'];
-        return intval($row['cnt']);
+        return (int)$row['cnt'];
     }
 
     /**

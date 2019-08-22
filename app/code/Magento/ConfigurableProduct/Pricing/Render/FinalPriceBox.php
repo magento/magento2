@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Pricing\Render;
 
+use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
@@ -13,6 +15,9 @@ use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * Class for final_price box rendering
+ */
 class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
 {
     /**
@@ -25,6 +30,8 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param SaleableInterface $saleableItem
      * @param PriceInterface $price
      * @param RendererPool $rendererPool
+     * @param SalableResolverInterface $salableResolver
+     * @param MinimalPriceCalculatorInterface $minimalPriceCalculator
      * @param ConfigurableOptionsProviderInterface $configurableOptionsProvider
      * @param array $data
      */
@@ -33,11 +40,22 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         SaleableInterface $saleableItem,
         PriceInterface $price,
         RendererPool $rendererPool,
+        SalableResolverInterface $salableResolver,
+        MinimalPriceCalculatorInterface $minimalPriceCalculator,
         ConfigurableOptionsProviderInterface $configurableOptionsProvider,
         array $data = []
     ) {
+        parent::__construct(
+            $context,
+            $saleableItem,
+            $price,
+            $rendererPool,
+            $data,
+            $salableResolver,
+            $minimalPriceCalculator
+        );
+
         $this->configurableOptionsProvider = $configurableOptionsProvider;
-        parent::__construct($context, $saleableItem, $price, $rendererPool, $data);
     }
 
     /**

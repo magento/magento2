@@ -1,12 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * Credit memo adjustments block
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Adjustments extends \Magento\Backend\Block\Template
 {
     /**
@@ -46,7 +52,7 @@ class Adjustments extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Initialize creditmemo agjustment totals
+     * Initialize creditmemo adjustment totals
      *
      * @return $this
      */
@@ -104,5 +110,21 @@ class Adjustments extends \Magento\Backend\Block\Template
             $label = __('Refund Shipping');
         }
         return $label;
+    }
+
+    /**
+     * Get update totals url.
+     *
+     * @return string
+     */
+    public function getUpdateTotalsUrl(): string
+    {
+        return $this->getUrl(
+            'sales/*/updateQty',
+            [
+                'order_id' => $this->getSource()->getOrderId(),
+                'invoice_id' => $this->getRequest()->getParam('invoice_id', null),
+            ]
+        );
     }
 }

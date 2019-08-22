@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,6 +69,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         if (isset($data['id'])) {
             $this->setId($data['id']);
         }
+        if (isset($data[self::EXTENSION_ATTRIBUTES_KEY]) && is_array($data[self::EXTENSION_ATTRIBUTES_KEY])) {
+            $this->populateExtensionAttributes($data[self::EXTENSION_ATTRIBUTES_KEY]);
+        }
     }
 
     /**
@@ -113,7 +116,12 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             $customAttributeCodes = $this->getCustomAttributesCodes();
 
             foreach ($customAttributeCodes as $customAttributeCode) {
-                if (isset($this->_data[$customAttributeCode])) {
+                if (isset($this->_data[self::CUSTOM_ATTRIBUTES][$customAttributeCode])) {
+                    $customAttribute = $this->customAttributeFactory->create()
+                        ->setAttributeCode($customAttributeCode)
+                        ->setValue($this->_data[self::CUSTOM_ATTRIBUTES][$customAttributeCode]->getValue());
+                    $customAttributes[$customAttributeCode] = $customAttribute;
+                } elseif (isset($this->_data[$customAttributeCode])) {
                     $customAttribute = $this->customAttributeFactory->create()
                         ->setAttributeCode($customAttributeCode)
                         ->setValue($this->_data[$customAttributeCode]);
@@ -146,13 +154,11 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     public function getCustomAttribute($attributeCode)
     {
         $this->initializeCustomAttributes();
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
-            ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
-            : null;
+        return $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] ?? null;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -160,7 +166,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -176,15 +182,17 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc} Added custom attributes support.
      *
-     * Added custom attributes support.
+     * @param string|array $key
+     * @param mixed $value
+     * @return $this
      */
     public function setData($key, $value = null)
     {
         if (is_array($key)) {
             $key = $this->filterCustomAttributes($key);
-        } else if ($key == self::CUSTOM_ATTRIBUTES) {
+        } elseif ($key == self::CUSTOM_ATTRIBUTES) {
             $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
             $value = $filteredData[self::CUSTOM_ATTRIBUTES];
         }
@@ -194,9 +202,10 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc} Unset customAttributesChanged flag
      *
-     * Unset customAttributesChanged flag
+     * @param null|string|array $key
+     * @return $this
      */
     public function unsetData($key = null)
     {
@@ -254,12 +263,18 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             $data = parent::getData($key, $index);
             if ($data === null) {
                 /** Try to find necessary data in custom attributes */
-                $data = parent::getData(self::CUSTOM_ATTRIBUTES . "/{$key}", $index);
+                $data = isset($this->_data[self::CUSTOM_ATTRIBUTES][$key])
+                    ? $this->_data[self::CUSTOM_ATTRIBUTES][$key]
+                    : null;
                 if ($data instanceof \Magento\Framework\Api\AttributeValue) {
                     $data = $data->getValue();
                 }
+                if (null !== $index && isset($data[$index])) {
+                    return $data[$index];
+                }
             }
         }
+
         return $data;
     }
 
@@ -327,7 +342,22 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      */
     protected function _getExtensionAttributes()
     {
+        if (!$this->getData(self::EXTENSION_ATTRIBUTES_KEY)) {
+            $this->populateExtensionAttributes([]);
+        }
         return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
+    }
+
+    /**
+     * Instantiate extension attributes object and populate it with the provided data.
+     *
+     * @param array $extensionAttributesData
+     * @return void
+     */
+    private function populateExtensionAttributes(array $extensionAttributesData = [])
+    {
+        $extensionAttributes = $this->extensionAttributesFactory->create(get_class($this), $extensionAttributesData);
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 
     /**

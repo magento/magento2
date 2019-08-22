@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
+class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

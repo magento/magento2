@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class AssertOrderNotVisibleOnMyAccount extends AbstractConstraint
             ['customer' => $customer]
         )->run();
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Orders');
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $orderHistory->getOrderHistoryBlock()->isVisible()
             && $orderHistory->getOrderHistoryBlock()->isOrderVisible($filter),
             'Order with following data \'' . implode(', ', $filter) . '\' is present in Orders block on frontend.'

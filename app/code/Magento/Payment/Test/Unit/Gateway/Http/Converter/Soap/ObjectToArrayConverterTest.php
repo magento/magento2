@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Http\Converter\Soap;
 
 use Magento\Payment\Gateway\Http\Converter\Soap\ObjectToArrayConverter;
 
-class ObjectToArrayConverterTest extends \PHPUnit_Framework_TestCase
+class ObjectToArrayConverterTest extends \PHPUnit\Framework\TestCase
 {
     public function testConvert()
     {
@@ -30,6 +30,5 @@ class ObjectToArrayConverterTest extends \PHPUnit_Framework_TestCase
 
         $converter = new ObjectToArrayConverter();
         static::assertEquals($output, $converter->convert($input));
-
     }
 }

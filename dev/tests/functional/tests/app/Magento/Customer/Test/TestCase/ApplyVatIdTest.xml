@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -23,6 +23,16 @@
             <data name="customer/dataset" xsi:type="string">customer_UK_1_default_billing_address</data>
             <data name="vatId/data/vat_id" xsi:type="string">123456789</data>
             <data name="customerGroup" xsi:type="string">invalid_group</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+        </variation>
+        <variation name="ApplyVatIdTestVariation3" summary="Enable Automatic Assignment of Customers to Appropriate VAT Group (valid Domestic group)" ticketId="MAGETWO-12447">
+            <data name="vatConfig/dataset" xsi:type="string">enable_VAT_on_frontend</data>
+            <data name="configData" xsi:type="string">store_information_DE_with_VAT, enable_VAT_on_frontend</data>
+            <data name="customer/dataset" xsi:type="string">customer_DE_default_billing_address</data>
+            <data name="vatId/data/vat_id" xsi:type="string">111607872</data>
+            <data name="customerGroup" xsi:type="string">valid_domestic_group</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />

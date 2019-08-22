@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -488,6 +488,7 @@
 
         .product-items-names {
             .product-item {
+                display: flex;
                 margin-bottom: @indent__s;
             }
 
@@ -497,6 +498,15 @@
         }
     }
 
+    //
+    //  Category page 1 column layout
+    //  ---------------------------------------------
+
+    .catalog-category-view.page-layout-1column {
+        .column.main {
+            min-height: inherit;
+        }
+    }
 }
 
 //

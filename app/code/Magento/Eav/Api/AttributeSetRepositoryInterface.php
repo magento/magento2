@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Api;
@@ -9,6 +9,7 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeSetRepositoryInterface
  * @api
+ * @since 100.0.2
  */
 interface AttributeSetRepositoryInterface
 {
@@ -16,7 +17,7 @@ interface AttributeSetRepositoryInterface
      * Retrieve list of Attribute Sets
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See http://devdocs.magento.com/codelinks/attributes.html#AttributeSetRepositoryInterface to determine
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#AttributeSetRepositoryInterface to determine
      * which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

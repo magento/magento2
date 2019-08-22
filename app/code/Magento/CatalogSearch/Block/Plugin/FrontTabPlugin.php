@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Block\Plugin;
@@ -11,7 +11,7 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Fieldset;
 
 /**
- * Plugin for Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front
+ * Add Search Weight field to the product attribute add/edit tab
  */
 class FrontTabPlugin
 {

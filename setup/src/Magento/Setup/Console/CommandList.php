@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Console;
 
+use Magento\Setup\Console\Command\TablesWhitelistGenerateCommand;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * Class CommandList contains predefined list of commands for Setup
+ * Class CommandList contains predefined list of commands for Setup.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -65,6 +66,7 @@ class CommandList
             \Magento\Setup\Console\Command\ModuleDisableCommand::class,
             \Magento\Setup\Console\Command\ModuleStatusCommand::class,
             \Magento\Setup\Console\Command\ModuleUninstallCommand::class,
+            \Magento\Setup\Console\Command\ModuleConfigStatusCommand::class,
             \Magento\Setup\Console\Command\MaintenanceAllowIpsCommand::class,
             \Magento\Setup\Console\Command\MaintenanceDisableCommand::class,
             \Magento\Setup\Console\Command\MaintenanceEnableCommand::class,
@@ -72,11 +74,12 @@ class CommandList
             \Magento\Setup\Console\Command\RollbackCommand::class,
             \Magento\Setup\Console\Command\UpgradeCommand::class,
             \Magento\Setup\Console\Command\UninstallCommand::class,
+            \Magento\Setup\Console\Command\DeployStaticContentCommand::class
         ];
     }
 
     /**
-     * Gets list of command instances
+     * Gets list of command instances.
      *
      * @return \Symfony\Component\Console\Command\Command[]
      * @throws \Exception
@@ -87,8 +90,9 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $commands[] = $this->serviceManager->create($class);
+                $commands[] = $this->serviceManager->get($class);
             } else {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Class ' . $class . ' does not exist');
             }
         }

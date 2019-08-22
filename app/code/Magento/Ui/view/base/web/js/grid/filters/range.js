@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -23,7 +27,8 @@ define([
                 },
                 date: {
                     component: 'Magento_Ui/js/form/element/date',
-                    dateFormat: 'MM/dd/YYYY'
+                    dateFormat: 'MM/dd/YYYY',
+                    shiftedValue: 'filter'
                 },
                 text: {
                     component: 'Magento_Ui/js/form/element/abstract'

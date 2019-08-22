@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Autoload\Test\Unit;
 
 use Composer\Autoload\ClassLoader;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ClassLoaderWrapperTest extends \PHPUnit_Framework_TestCase
+class ClassLoaderWrapperTest extends \PHPUnit\Framework\TestCase
 {
     const PREFIX = 'Namespace\\Prefix\\';
 
@@ -31,8 +29,9 @@ class ClassLoaderWrapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->autoloaderMock = $this->getMock(\Composer\Autoload\ClassLoader::class);
-        $this->model = (new ObjectManager($this))->getObject(\Magento\Framework\Autoload\ClassLoaderWrapper::class,
+        $this->autoloaderMock = $this->createMock(\Composer\Autoload\ClassLoader::class);
+        $this->model = (new ObjectManager($this))->getObject(
+            \Magento\Framework\Autoload\ClassLoaderWrapper::class,
             [
                 'autoloader' => $this->autoloaderMock
             ]

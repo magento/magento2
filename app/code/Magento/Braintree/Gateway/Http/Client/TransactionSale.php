@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Http\Client;
@@ -15,6 +15,10 @@ class TransactionSale extends AbstractTransaction
      */
     protected function process(array $data)
     {
-        return $this->adapter->sale($data);
+        $storeId = $data['store_id'] ?? null;
+        // sending store id and other additional keys are restricted by Braintree API
+        unset($data['store_id']);
+
+        return $this->adapterFactory->create($storeId)->sale($data);
     }
 }

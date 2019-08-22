@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddImageForCategoryTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add image to a Category"/>
+            <description value="Admin should be able to add image to a Category"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-188"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCategory" stepKey="DeleteCategory">
+                <argument name="categoryEntity" value="SimpleSubCategory"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to create a new category with image -->
+        <actionGroup ref="goToCreateCategoryPage" stepKey="goToCreateCategoryPage"/>
+        <actionGroup ref="fillCategoryForm" stepKey="fillCategoryForm">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <actionGroup ref="addCategoryImage" stepKey="addCategoryImage"/>
+        <actionGroup ref="saveCategoryForm" stepKey="saveCategoryForm"/>
+
+        <!-- Verify category with image in admin -->
+        <actionGroup ref="checkCategoryImageInAdmin" stepKey="checkCategoryImageInAdmin"/>
+
+        <!-- Verify category with image in storefront -->
+        <actionGroup ref="CheckCategoryOnStorefront" stepKey="CheckCategoryOnStorefront">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontCategoryMainSection.imageSource(ProductImage.filename)}}" stepKey="seeImage"/>
+    </test>
+</tests>

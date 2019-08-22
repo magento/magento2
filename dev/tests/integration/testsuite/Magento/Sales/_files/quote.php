@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
@@ -21,6 +21,7 @@ $product->setTypeId('simple')
         [
             'qty' => 100,
             'is_in_stock' => 1,
+            'manage_stock' => 1,
         ]
     )->save();
 
@@ -53,7 +54,10 @@ $quote->setCustomerIsGuest(true)
 $quote->getPayment()->setMethod('checkmo');
 $quote->setIsMultiShipping('1');
 $quote->collectTotals();
-$quote->save();
+
+$quoteRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+$quoteRepository->save($quote);
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

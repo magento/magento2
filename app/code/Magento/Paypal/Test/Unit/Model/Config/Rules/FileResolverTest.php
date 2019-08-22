@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
@@ -10,7 +10,7 @@ namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
  *
  * Test for class \Magento\Paypal\Model\Config\Rules\FileResolver
  */
-class FileResolverTest extends \PHPUnit_Framework_TestCase
+class FileResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @vat \Magento\Paypal\Model\Config\Rules\FileResolver

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <container name="root">
-        <block class="Magento\ImportExport\Block\Adminhtml\Import\Frame\Result" template="import/frame/result.phtml" name="import.frame.result" as="import_frame_result"/>
+        <block class="Magento\ImportExport\Block\Adminhtml\Import\Frame\Result" template="Magento_ImportExport::import/frame/result.phtml" name="import.frame.result" as="import_frame_result"/>
     </container>
 </layout>

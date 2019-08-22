@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,11 +59,11 @@ class AssertWidgetCatalogNewProductsList extends AbstractConstraint
         $cmsIndex->open();
         $categoryName = $widget->getWidgetInstance()[0]['entities']->getName();
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogCategoryView->getWidgetView()->isWidgetVisible($widget, 'New Products'),
             'Widget is absent on Category page.'
         );
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $products,
             $this->catalogCategoryView->getViewBlock()->getProductsFromCatalogNewProductsListBlock(),
             'There are wrong products or products are absent on Catalog New Products List block on Category page.'

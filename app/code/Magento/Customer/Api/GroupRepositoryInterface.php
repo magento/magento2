@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api;
@@ -8,6 +8,7 @@ namespace Magento\Customer\Api;
 /**
  * Customer group CRUD interface
  * @api
+ * @since 100.0.2
  */
 interface GroupRepositoryInterface
 {
@@ -41,7 +42,7 @@ interface GroupRepositoryInterface
      * be filtered by tax class.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See http://devdocs.magento.com/codelinks/attributes.html#GroupRepositoryInterface to determine
+     * included. See https://devdocs.magento.com/codelinks/attributes.html#GroupRepositoryInterface to determine
      * which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 use \Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Webapi\Controller\Rest\ParamsOverrider;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test Magento\Webapi\Controller\Rest\ParamsOverrider
  */
-class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
+class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $requestData Data from the request
@@ -36,10 +39,31 @@ class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
             ['userContext' => $userContextMock]
         );
 
-        /** @var \Magento\Webapi\Controller\Rest\ParamsOverrider $paramsOverrider */
+        /** @var MockObject $objectConverter */
+        $objectConverter = $this->getMockBuilder(SimpleDataObjectConverter::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['convertKeysToCamelCase'])
+            ->getMock();
+        $objectConverter->expects($this->any())
+            ->method('convertKeysToCamelCase')
+            ->willReturnCallback(
+                function (array $array) {
+                    $converted = [];
+                    foreach ($array as $key => $value) {
+                        $converted[mb_strtolower($key)] = $value;
+                    }
+
+                    return $converted;
+                }
+            );
+
+        /** @var ParamsOverrider $paramsOverrider */
         $paramsOverrider = $objectManager->getObject(
-            \Magento\Webapi\Controller\Rest\ParamsOverrider::class,
-            ['paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ]]
+            ParamsOverrider::class,
+            [
+                'paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ],
+                'dataObjectConverter' => $objectConverter
+            ]
         );
 
         $this->assertEquals($expectedOverriddenParams, $paramsOverrider->override($requestData, $parameters));

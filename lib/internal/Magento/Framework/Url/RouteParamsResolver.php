@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Url;
@@ -154,7 +154,7 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
      * Get escaper
      *
      * @return \Magento\Framework\Escaper
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getEscaper()
     {

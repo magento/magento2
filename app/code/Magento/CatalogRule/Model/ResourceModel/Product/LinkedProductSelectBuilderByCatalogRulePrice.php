@@ -1,15 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
+/**
+ * Provide Select object for retrieve product id with minimal price
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelectBuilderInterface
 {
     /**
@@ -43,12 +51,18 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
     private $metadataPool;
 
     /**
+     * @var BaseSelectProcessorInterface
+     */
+    private $baseSelectProcessor;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param BaseSelectProcessorInterface $baseSelectProcessor
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -56,7 +70,8 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        BaseSelectProcessorInterface $baseSelectProcessor = null
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;
@@ -64,37 +79,42 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
         $this->dateTime = $dateTime;
         $this->localeDate = $localeDate;
         $this->metadataPool = $metadataPool;
+        $this->baseSelectProcessor = (null !== $baseSelectProcessor)
+            ? $baseSelectProcessor : ObjectManager::getInstance()->get(BaseSelectProcessorInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build($productId)
     {
-        $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
-        $currentDate = $this->dateTime->formatDate($timestamp, false);
+        $currentDate = $this->dateTime->formatDate($this->localeDate->date(null, null, false), false);
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productTable = $this->resource->getTableName('catalog_product_entity');
 
-        return [$this->resource->getConnection()->select()
-                ->from(['parent' => $productTable], '')
-                ->joinInner(
-                    ['link' => $this->resource->getTableName('catalog_product_relation')],
-                    "link.parent_id = parent.$linkField",
-                    []
-                )->joinInner(
-                    ['child' => $productTable],
-                    "child.entity_id = link.child_id",
-                    ['entity_id']
-                )->joinInner(
-                    ['t' => $this->resource->getTableName('catalogrule_product_price')],
-                    't.product_id = child.entity_id',
-                    []
-                )->where('parent.entity_id = ? ', $productId)
+        $priceSelect = $this->resource->getConnection()->select()
+            ->from(['parent' => $productTable], '')
+            ->joinInner(
+                ['link' => $this->resource->getTableName('catalog_product_relation')],
+                "link.parent_id = parent.$linkField",
+                []
+            )->joinInner(
+                [BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS => $productTable],
+                sprintf('%s.entity_id = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
+                ['entity_id']
+            )->joinInner(
+                ['t' => $this->resource->getTableName('catalogrule_product_price')],
+                sprintf('t.product_id = %s.%s', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
+                []
+            )->where('parent.entity_id = ?', $productId)
             ->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId())
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->where('t.rule_date = ?', $currentDate)
             ->order('t.rule_price ' . Select::SQL_ASC)
-            ->limit(1)];
+            ->order(BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . '.' . $linkField . ' ' . Select::SQL_ASC)
+            ->limit(1);
+        $priceSelect = $this->baseSelectProcessor->process($priceSelect);
+
+        return [$priceSelect];
     }
 }

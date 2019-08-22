@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ use Magento\Framework\Phrase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ActivityTest extends \PHPUnit_Framework_TestCase
+class ActivityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Controller\Adminhtml\Session\Activity
@@ -47,7 +47,7 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getView')
             ->will($this->returnValue($this->viewMock));

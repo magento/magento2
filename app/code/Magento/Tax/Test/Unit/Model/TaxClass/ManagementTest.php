@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
 use \Magento\Tax\Model\TaxClass\Management;
 
-class ManagementTest extends \PHPUnit_Framework_TestCase
+class ManagementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Management */
     protected $model;
@@ -32,15 +32,9 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->classRepository = $this->getMock(\Magento\Tax\Model\TaxClass\Repository::class, [], [], '', false);
-        $this->searchCriteriaBuilder = $this->getMock(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterBuilder = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
+        $this->classRepository = $this->createMock(\Magento\Tax\Model\TaxClass\Repository::class);
+        $this->searchCriteriaBuilder = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         $this->model = $helper->getObject(
             \Magento\Tax\Model\TaxClass\Management::class,
             [
@@ -58,7 +52,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTaxClassIdByIDType()
     {
-        $taxClassKey = $this->getMock(\Magento\Tax\Api\Data\TaxClassKeyInterface::class);
+        $taxClassKey = $this->createMock(\Magento\Tax\Api\Data\TaxClassKeyInterface::class);
         $taxClassKey->expects($this->once())
             ->method('getType')
             ->willReturn(\Magento\Tax\Api\Data\TaxClassKeyInterface::TYPE_ID);
@@ -68,7 +62,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTaxClassIdByNameType()
     {
-        $taxClassKey = $this->getMock(\Magento\Tax\Api\Data\TaxClassKeyInterface::class);
+        $taxClassKey = $this->createMock(\Magento\Tax\Api\Data\TaxClassKeyInterface::class);
         $taxClassKey->expects($this->once())
             ->method('getType')
             ->willReturn(\Magento\Tax\Api\Data\TaxClassKeyInterface::TYPE_NAME);
@@ -94,7 +88,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
                 )
             )->willReturnSelf();
 
-        $filter = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
+        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
         $this->filterBuilder->expects($this->exactly(2))->method('create')->willReturn($filter);
         $this->searchCriteriaBuilder
             ->expects($this->exactly(2))
@@ -102,10 +96,10 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ->with([$filter])
             ->willReturnSelf();
 
-        $searchCriteria = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
         $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
 
-        $result = $this->getMock(\Magento\Tax\Api\Data\TaxRateSearchResultsInterface::class);
+        $result = $this->createMock(\Magento\Tax\Api\Data\TaxRateSearchResultsInterface::class);
         $result->expects($this->once())->method('getItems')->willReturn([]);
         $this->classRepository->expects($this->once())->method('getList')->with($searchCriteria)->willReturn($result);
 

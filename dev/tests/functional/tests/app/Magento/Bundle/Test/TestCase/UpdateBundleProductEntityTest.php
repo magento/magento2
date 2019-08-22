@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\TestCase;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
+use Magento\Store\Test\Fixture\Store;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Test Flow:
@@ -50,46 +52,84 @@ class UpdateBundleProductEntityTest extends Injectable
     protected $catalogProductEdit;
 
     /**
-     * Injection data
+     * Fixture Factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
+     * Injection data.
      *
      * @param CatalogProductIndex $catalogProductIndexNewPage
      * @param CatalogProductEdit $catalogProductEditPage
+     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CatalogProductIndex $catalogProductIndexNewPage,
-        CatalogProductEdit $catalogProductEditPage
+        CatalogProductEdit $catalogProductEditPage,
+        FixtureFactory $fixtureFactory
     ) {
         $this->catalogProductIndex = $catalogProductIndexNewPage;
         $this->catalogProductEdit = $catalogProductEditPage;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
-     * Test update bundle product
+     * Test update bundle product.
      *
      * @param BundleProduct $product
      * @param BundleProduct $originalProduct
+     * @param Store|null $store
      * @return array
      */
-    public function test(BundleProduct $product, BundleProduct $originalProduct)
-    {
+    public function test(
+        BundleProduct $product,
+        BundleProduct $originalProduct,
+        Store $store = null
+    ) {
         // Preconditions
         $originalProduct->persist();
-        $originalCategory = $originalProduct->hasData('category_ids')
-            ? $originalProduct->getDataFieldConfig('category_ids')['source']->getCategories()
-            : null;
-        $category = $product->hasData('category_ids')
-            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
-            : $originalCategory;
+        $category = $this->getCategories($originalProduct, $product);
+
+        if ($store) {
+            $store->persist();
+            $optionTitle[$store->getStoreId()] = $product->getBundleSelections()['bundle_options'][0]['title'];
+        }
 
         // Steps
         $filter = ['sku' => $originalProduct->getSku()];
 
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductGrid()->searchAndOpen($filter);
+        if ($store) {
+            $this->catalogProductEdit->getFormPageActions()->changeStoreViewScope($store);
+        }
         $this->catalogProductEdit->getProductForm()->fill($product);
         $this->catalogProductEdit->getFormPageActions()->save();
 
-        return ['category' => $category];
+        return [
+            'category' => $category,
+            'stores' => isset($store) ? [$store] : [],
+            'optionTitles' => isset($optionTitle) ? $optionTitle : []
+        ];
+    }
+
+    /**
+     * Get Category instances.
+     *
+     * @param BundleProduct $originalProduct
+     * @param BundleProduct $product
+     * @return array
+     */
+    protected function getCategories(BundleProduct $originalProduct, BundleProduct $product)
+    {
+        $originalCategory = $originalProduct->hasData('category_ids')
+            ? $originalProduct->getDataFieldConfig('category_ids')['source']->getCategories()
+            : null;
+        return $product->hasData('category_ids')
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
+            : $originalCategory;
     }
 }

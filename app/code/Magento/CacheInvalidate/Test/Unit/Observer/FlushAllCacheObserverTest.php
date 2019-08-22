@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Test\Unit\Observer;
 
-class FlushAllCacheObserverTest extends \PHPUnit_Framework_TestCase
+class FlushAllCacheObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Observer\FlushAllCacheObserver */
     protected $model;
@@ -24,25 +24,13 @@ class FlushAllCacheObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configMock = $this->getMock(
-            \Magento\PageCache\Model\Config::class,
-            ['getType', 'isEnabled'],
-            [],
-            '',
-            false
-        );
-        $this->purgeCache = $this->getMock(\Magento\CacheInvalidate\Model\PurgeCache::class, [], [], '', false);
+        $this->configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
+        $this->purgeCache = $this->createMock(\Magento\CacheInvalidate\Model\PurgeCache::class);
         $this->model = new \Magento\CacheInvalidate\Observer\FlushAllCacheObserver(
             $this->configMock,
             $this->purgeCache
         );
-        $this->observerMock = $this->getMock(
-            \Magento\Framework\Event\Observer::class,
-            ['getEvent'],
-            [],
-            '',
-            false
-        );
+        $this->observerMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
     }
 
     /**

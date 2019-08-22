@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
@@ -29,6 +28,13 @@ class OptionTier extends AbstractOptions
      * @var string
      */
     protected $customerGroup = '//*[contains(@name, "[cust_group]")]';
+
+    /**
+     * Locator for Products Tier Price Rows.
+     *
+     * @var string
+     */
+    private $tierPriceRows = ".//*[@data-index='tier_price']/tbody/tr";
 
     /**
      * Fill product form 'Tier price'.
@@ -68,6 +74,32 @@ class OptionTier extends AbstractOptions
     }
 
     /**
+     * Get tier price rows data.
+     *
+     * @param array|null $fields
+     * @param SimpleElement|null $element
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getFieldsData($fields = null, SimpleElement $element = null)
+    {
+        $fieldsData = [];
+        $rows = $this->_rootElement->getElements($this->tierPriceRows, Locator::SELECTOR_XPATH);
+
+        if (null !== $rows) {
+            foreach ($rows as $row) {
+                $data = $this->dataMapping($fields);
+                if ($row->find($data['value_type']['selector'])->getValue() == "fixed") {
+                    unset($data['percentage_value']);
+                }
+                $fieldsData[] = $this->_getData($data, $row);
+            }
+        }
+
+        return $fieldsData;
+    }
+
+    /**
      * Check whether Customer Group is visible.
      *
      * @param CustomerGroup $customerGroup
@@ -79,5 +111,29 @@ class OptionTier extends AbstractOptions
 
         $options = $this->_rootElement->find($this->customerGroup, Locator::SELECTOR_XPATH)->getText();
         return false !== strpos($options, $customerGroup->getCustomerGroupCode());
+    }
+
+    /**
+     * Checking group price options is visible.
+     *
+     * @return bool
+     */
+    public function hasGroupPriceOptions()
+    {
+        return $this->_rootElement->find('tbody tr')->isPresent();
+    }
+
+    /**
+     * Waiting until advanced price form becomes hidden
+     *
+     * @return void
+     */
+    public function waitTierPriceFormLocks()
+    {
+        $this->_rootElement->waitUntil(
+            function () {
+                return $this->isVisible() ? null : true;
+            }
+        );
     }
 }

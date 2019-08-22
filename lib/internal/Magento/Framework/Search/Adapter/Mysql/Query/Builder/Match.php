@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Adapter\Mysql\Query\Builder;
 
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
@@ -14,11 +16,21 @@ use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
+/**
+ * MySQL search query match.
+ *
+ * @api
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Match implements QueryInterface
 {
+    /**
+     * @var string
+     */
     const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
 
-    const MINIMAL_CHARACTER_LENGTH = 3;
+    const MINIMAL_CHARACTER_LENGTH = 1;
 
     /**
      * @var string[]
@@ -42,6 +54,7 @@ class Match implements QueryInterface
 
     /**
      * @var PreprocessorInterface[]
+     * @since 100.1.0
      */
     protected $preprocessors;
 
@@ -65,7 +78,7 @@ class Match implements QueryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(
         ScoreBuilder $scoreBuilder,
@@ -109,6 +122,8 @@ class Match implements QueryInterface
     }
 
     /**
+     * Prepare query value for build function.
+     *
      * @param string $queryValue
      * @param string $conditionType
      * @return string

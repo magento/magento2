@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
@@ -139,21 +139,18 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
         $themeId = 23;
 
         $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
-        $tab = $this->getMock(
+        $tab = $this->createPartialMock(
             \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css::class,
-            ['setFiles', 'canShowTab'],
-            [],
-            '',
-            false
+            ['setFiles', 'canShowTab']
         );
-        $menu = $this->getMock(\Magento\Backend\Block\Menu::class, ['setActive', 'getMenuModel'], [], '', false);
-        $menuModel = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
-        $themeHelper = $this->getMock(\Magento\Theme\Helper\Theme::class, [], [], '', false);
+        $menu = $this->createPartialMock(\Magento\Backend\Block\Menu::class, ['setActive', 'getMenuModel']);
+        $menuModel = $this->createMock(\Magento\Backend\Model\Menu::class);
+        $themeHelper = $this->createMock(\Magento\Theme\Helper\Theme::class);
         $cssAsset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class, [], '', false);
-        $menuItem = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
-        $resultPage = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
-        $pageConfig = $this->getMock(\Magento\Framework\View\Page\Config::class, [], [], '', false);
-        $pageTitle = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+        $menuItem = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
+        $resultPage = $this->createMock(\Magento\Framework\View\Result\Page::class);
+        $pageConfig = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $pageTitle = $this->createMock(\Magento\Framework\View\Page\Title::class);
         $this->_request->expects($this->at(0))
             ->method('getParam')
             ->with('id')

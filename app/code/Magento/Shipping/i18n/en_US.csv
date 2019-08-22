@@ -1,6 +1,6 @@
 "New Shipment for Order #%1","New Shipment for Order #%1"
 "Submit Shipment","Submit Shipment"
-"You are trying to add a quantity for some products that doesn\'t match the quantity that was shipped.","You are trying to add a quantity for some products that doesn\'t match the quantity that was shipped."
+"You are trying to add a quantity for some products that doesn't match the quantity that was shipped.","You are trying to add a quantity for some products that doesn't match the quantity that was shipped."
 "Products should be added to package(s)","Products should be added to package(s)"
 "The value that you entered is not valid.","The value that you entered is not valid."
 "Add Tracking Number","Add Tracking Number"
@@ -24,7 +24,7 @@ Print,Print
 "Please specify a carrier.","Please specify a carrier."
 "Please enter a tracking number.","Please enter a tracking number."
 Shipments,Shipments
-"We can\'t initialize shipment for adding tracking number.","We can\'t initialize shipment for adding tracking number."
+"We can't initialize shipment for adding tracking number.","We can't initialize shipment for adding tracking number."
 "Cannot add tracking number.","Cannot add tracking number."
 "You created the shipping label.","You created the shipping label."
 "An error occurred while creating shipping label.","An error occurred while creating shipping label."
@@ -32,11 +32,12 @@ Shipments,Shipments
 "Cannot send shipment information.","Cannot send shipment information."
 "There are no shipping labels related to selected orders.","There are no shipping labels related to selected orders."
 "New Shipment","New Shipment"
-"We don\'t recognize or support the file extension in this shipment: %1.","We don\'t recognize or support the file extension in this shipment: %1."
-"We can\'t initialize shipment for delete tracking number.","We can\'t initialize shipment for delete tracking number."
-"We can\'t delete tracking number.","We can\'t delete tracking number."
-"We can\'t load track with retrieving identifier right now.","We can\'t load track with retrieving identifier right now."
-"We can\'t save the shipment right now.","We can\'t save the shipment right now."
+"We don't recognize or support the file extension in this shipment: %1.","We don't recognize or support the file extension in this shipment: %1."
+"We can't initialize shipment for delete tracking number.","We can't initialize shipment for delete tracking number."
+"We can't delete tracking number.","We can't delete tracking number."
+"We can't load track with retrieving identifier right now.","We can't load track with retrieving identifier right now."
+"We can't save the shipment right now.","We can't save the shipment right now."
+"""Shipment Document Validation Error(s):\n"" .","""Shipment Document Validation Error(s):\n"" ."
 "The shipment has been created.","The shipment has been created."
 "Cannot save shipment.","Cannot save shipment."
 "The order no longer exists.","The order no longer exists."
@@ -45,7 +46,7 @@ Shipments,Shipments
 "There are no shipping labels related to selected shipments.","There are no shipping labels related to selected shipments."
 "Page not found.","Page not found."
 "Tracking Information","Tracking Information"
-"Sorry, but we can\'t deliver to the destination country with this shipping module.","Sorry, but we can\'t deliver to the destination country with this shipping module."
+"Sorry, but we can't deliver to the destination country with this shipping module.","Sorry, but we can't deliver to the destination country with this shipping module."
 "The shipping module is not available.","The shipping module is not available."
 "This shipping method is not available. Please specify the zip code.","This shipping method is not available. Please specify the zip code."
 "No packages for request","No packages for request"
@@ -77,7 +78,7 @@ Qty,Qty
 "Shipping labels is not available.","Shipping labels is not available."
 "Response info is not exist.","Response info is not exist."
 "Invalid carrier: %1","Invalid carrier: %1"
-"We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.","We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete."
+"We don't have enough information to create shipping labels. Please make sure your store information and settings are complete.","We don't have enough information to create shipping labels. Please make sure your store information and settings are complete."
 "Per Order","Per Order"
 "Per Package","Per Package"
 Fixed,Fixed
@@ -111,7 +112,7 @@ Save,Save
 "Add Package","Add Package"
 "Add Selected Product(s) to Package","Add Selected Product(s) to Package"
 "Add Products to Package","Add Products to Package"
-"USPS domestic shipments don\'t use package types.","USPS domestic shipments don\'t use package types."
+"USPS domestic shipments don't use package types.","USPS domestic shipments don't use package types."
 in,in
 cm,cm
 lb,lb
@@ -147,22 +148,17 @@ Error:,Error:
 "email us at ","email us at "
 Info:,Info:
 Track:,Track:
-Status:,Status:
+". ':'",". ':'"
 "Delivered on:","Delivered on:"
-"Signed by:","Signed by:"
-"Delivered to:","Delivered to:"
-"Shipped or billed on:","Shipped or billed on:"
-"Service Type:","Service Type:"
-Weight:,Weight:
 N/A,N/A
+"There is no tracking available for this shipment.","There is no tracking available for this shipment."
+"There is no tracking available.","There is no tracking available."
+"Close Window","Close Window"
 "Track history","Track history"
 Location,Location
 Date,Date
 "Local Time","Local Time"
 Description,Description
-"There is no tracking available for this shipment.","There is no tracking available for this shipment."
-"There is no tracking available.","There is no tracking available."
-"Close Window","Close Window"
 "See our Shipping Policy","See our Shipping Policy"
 "Shipping Settings Section","Shipping Settings Section"
 "Shipping Policy Parameters Section","Shipping Policy Parameters Section"
@@ -180,3 +176,4 @@ City,City
 "Shipping Policy","Shipping Policy"
 "Shipping Methods","Shipping Methods"
 "Track your order","Track your order"
+"Track All Shipments","Track All Shipments"

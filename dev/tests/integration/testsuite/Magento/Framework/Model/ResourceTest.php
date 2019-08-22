@@ -2,12 +2,12 @@
 /**
  * Test for \Magento\Framework\Model\ResourceModel
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model;
 
-class ResourceTest extends \PHPUnit_Framework_TestCase
+class ResourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection

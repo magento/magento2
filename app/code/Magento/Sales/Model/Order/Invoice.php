@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -11,6 +11,9 @@ use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 
 /**
+ * Invoice model.
+ *
+ * @api
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
  * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
  * @method string getCustomerNote()
@@ -19,6 +22,7 @@ use Magento\Sales\Model\EntityInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 {
@@ -360,9 +364,18 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 
         $this->setState(self::STATE_PAID);
 
-        $this->getOrder()->getPayment()->pay($this);
-        $this->getOrder()->setTotalPaid($this->getOrder()->getTotalPaid() + $this->getGrandTotal());
-        $this->getOrder()->setBaseTotalPaid($this->getOrder()->getBaseTotalPaid() + $this->getBaseGrandTotal());
+        $order = $this->getOrder();
+        $order->getPayment()->pay($this);
+        $totalPaid = $this->getGrandTotal();
+        $baseTotalPaid = $this->getBaseGrandTotal();
+        $invoiceList = $order->getInvoiceCollection();
+        // calculate all totals
+        if (count($invoiceList->getItems()) > 1) {
+            $totalPaid += $order->getTotalPaid();
+            $baseTotalPaid += $order->getBaseTotalPaid();
+        }
+        $order->setTotalPaid($totalPaid);
+        $order->setBaseTotalPaid($baseTotalPaid);
         $this->_eventManager->dispatch('sales_order_invoice_pay', [$this->_eventObject => $this]);
         return $this;
     }
@@ -396,6 +409,9 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function cancel()
     {
+        if (!$this->canCancel()) {
+            return $this;
+        }
         $order = $this->getOrder();
         $order->getPayment()->cancelInvoice($this);
         foreach ($this->getAllItems() as $item) {
@@ -431,10 +447,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setBaseDiscountInvoiced($order->getBaseDiscountInvoiced() - $this->getBaseDiscountAmount());
         $order->setBaseTotalInvoicedCost($order->getBaseTotalInvoicedCost() - $this->getBaseCost());
 
-        if ($this->getState() == self::STATE_PAID) {
-            $order->setTotalPaid($order->getTotalPaid() - $this->getGrandTotal());
-            $order->setBaseTotalPaid($order->getBaseTotalPaid() - $this->getBaseGrandTotal());
-        }
         $this->setState(self::STATE_CANCELED);
         $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
             ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING));
@@ -494,6 +506,8 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * Get all Invoice Items.
+     *
      * @return array
      */
     public function getAllItems()
@@ -508,6 +522,8 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * Get Invoice Item by id.
+     *
      * @param int|string $itemId
      * @return bool|\Magento\Sales\Model\Order\Invoice\Item
      */
@@ -522,8 +538,11 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * Add Item to Invoice.
+     *
      * @param \Magento\Sales\Model\Order\Invoice\Item $item
      * @return $this
+     * @throws \Exception
      */
     public function addItem(\Magento\Sales\Model\Order\Invoice\Item $item)
     {
@@ -542,14 +561,14 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public static function getStates()
     {
-        if (null === self::$_states) {
-            self::$_states = [
+        if (null === static::$_states) {
+            static::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_PAID => __('Paid'),
                 self::STATE_CANCELED => __('Canceled'),
             ];
         }
-        return self::$_states;
+        return static::$_states;
     }
 
     /**
@@ -564,11 +583,11 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
             $stateId = $this->getState();
         }
 
-        if (null === self::$_states) {
-            self::getStates();
+        if (null === static::$_states) {
+            static::getStates();
         }
-        if (isset(self::$_states[$stateId])) {
-            return self::$_states[$stateId];
+        if (isset(static::$_states[$stateId])) {
+            return static::$_states[$stateId];
         }
         return __('Unknown State');
     }
@@ -668,13 +687,13 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * Adds comment to invoice with additional possibility to send it to customer via email
-     * and show it in customer account
+     * Add comment with possibility to send it to customer via email and show it in customer account.
      *
      * @param string $comment
      * @param bool $notify
      * @param bool $visibleOnFront
      * @return $this
+     * @throws \Exception
      */
     public function addComment($comment, $notify = false, $visibleOnFront = false)
     {
@@ -696,6 +715,8 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * Get Invoice comments.
+     *
      * @param bool $reload
      * @return \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\Collection
      */
@@ -825,7 +846,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setItems($items)
     {
@@ -993,7 +1014,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -1252,7 +1273,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setComments($comments)
     {
@@ -1260,7 +1281,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUpdatedAt($timestamp)
     {
@@ -1268,7 +1289,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreId($id)
     {
@@ -1276,7 +1297,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseGrandTotal($amount)
     {
@@ -1284,7 +1305,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingTaxAmount($amount)
     {
@@ -1292,7 +1313,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTaxAmount($amount)
     {
@@ -1300,7 +1321,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTaxAmount($amount)
     {
@@ -1308,7 +1329,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreToOrderRate($rate)
     {
@@ -1316,7 +1337,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingTaxAmount($amount)
     {
@@ -1324,7 +1345,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountAmount($amount)
     {
@@ -1332,7 +1353,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseToOrderRate($rate)
     {
@@ -1340,7 +1361,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGrandTotal($amount)
     {
@@ -1348,7 +1369,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingAmount($amount)
     {
@@ -1356,7 +1377,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotalInclTax($amount)
     {
@@ -1364,7 +1385,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotalInclTax($amount)
     {
@@ -1372,7 +1393,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreToBaseRate($rate)
     {
@@ -1380,7 +1401,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingAmount($amount)
     {
@@ -1388,7 +1409,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTotalQty($qty)
     {
@@ -1396,7 +1417,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseToGlobalRate($rate)
     {
@@ -1404,7 +1425,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSubtotal($amount)
     {
@@ -1412,7 +1433,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseSubtotal($amount)
     {
@@ -1420,7 +1441,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountAmount($amount)
     {
@@ -1428,7 +1449,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBillingAddressId($id)
     {
@@ -1436,7 +1457,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsUsedForRefund($isUsedForRefund)
     {
@@ -1444,7 +1465,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderId($id)
     {
@@ -1452,7 +1473,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEmailSent($emailSent)
     {
@@ -1460,7 +1481,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCanVoidFlag($canVoidFlag)
     {
@@ -1468,7 +1489,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setState($state)
     {
@@ -1476,7 +1497,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingAddressId($id)
     {
@@ -1484,7 +1505,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreCurrencyCode($code)
     {
@@ -1492,7 +1513,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderCurrencyCode($code)
     {
@@ -1500,7 +1521,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseCurrencyCode($code)
     {
@@ -1508,7 +1529,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGlobalCurrencyCode($code)
     {
@@ -1516,7 +1537,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIncrementId($id)
     {
@@ -1524,7 +1545,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountTaxCompensationAmount($amount)
     {
@@ -1532,7 +1553,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseDiscountTaxCompensationAmount($amount)
     {
@@ -1540,7 +1561,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingDiscountTaxCompensationAmount($amount)
     {
@@ -1548,7 +1569,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingDiscountTaxCompensationAmnt($amnt)
     {
@@ -1556,7 +1577,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingInclTax($amount)
     {
@@ -1564,7 +1585,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseShippingInclTax($amount)
     {
@@ -1572,7 +1593,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBaseTotalRefunded($amount)
     {
@@ -1580,7 +1601,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountDescription($description)
     {
@@ -1588,7 +1609,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\InvoiceExtensionInterface|null
      */
@@ -1598,7 +1619,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\InvoiceExtensionInterface $extensionAttributes
      * @return $this
@@ -1607,5 +1628,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

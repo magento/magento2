@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Model\Export;
@@ -24,7 +24,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
+class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConvertToXml

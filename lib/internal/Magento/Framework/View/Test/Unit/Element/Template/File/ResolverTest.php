@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
+
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class ResolverTest
  * @package Magento\Framework\View\Test\Unit\Element\Template\File
  */
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Resolver object
@@ -26,15 +28,34 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     protected $_viewFileSystemMock;
 
     /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    /**
      * Test Setup
      *
      * @return void
      */
     protected function setUp()
     {
-        $this->_viewFileSystemMock = $this->getMock(\Magento\Framework\View\FileSystem::class, [], [], '', false);
+        $this->_viewFileSystemMock = $this->createMock(\Magento\Framework\View\FileSystem::class);
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->setMethods(['serialize'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
         $this->_resolver = new \Magento\Framework\View\Element\Template\File\Resolver(
-            $this->_viewFileSystemMock
+            $this->_viewFileSystemMock,
+            $this->serializerMock
         );
     }
 

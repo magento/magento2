@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Report;
@@ -34,14 +34,13 @@ class BraintreeTransactionStub
     {
         if (array_key_exists($name, $this->_attributes)) {
             return $this->_attributes[$name];
-        } else {
-            trigger_error('Undefined property on ' . get_class($this) . ': ' . $name, E_USER_NOTICE);
-            return null;
         }
+        trigger_error('Undefined property on ' . get_class($this) . ': ' . $name, E_USER_NOTICE);
+        return null;
     }
 
     /**
-     * Checks for the existance of a property stored in the private $_attributes property
+     * Checks for the existence of a property stored in the private $_attributes property
      *
      * @ignore
      * @param string $name

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="\Magento\Wishlist\Model\AuthenticationStateInterface" type="\Magento\Wishlist\Model\AuthenticationState" />
-    <preference for="\Magento\Wishlist\Controller\WishlistProviderInterface" type="\Magento\Wishlist\Controller\WishlistProvider" />
+    <preference for="Magento\Wishlist\Model\AuthenticationStateInterface" type="Magento\Wishlist\Model\AuthenticationState" />
+    <preference for="Magento\Wishlist\Controller\WishlistProviderInterface" type="Magento\Wishlist\Controller\WishlistProvider" />
     <type name="Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid">
         <arguments>
             <argument name="resource" xsi:type="object">Magento\Wishlist\Model\ResourceModel\Item</argument>
@@ -19,7 +19,7 @@
         </arguments>
     </type>
     <type name="Magento\Wishlist\Controller\AbstractIndex">
-        <plugin name="authentication" type="\Magento\Wishlist\Controller\Index\Plugin" sortOrder="10"/>
+        <plugin name="authentication" type="Magento\Wishlist\Controller\Index\Plugin" sortOrder="10"/>
     </type>
     <virtualType name="Magento\Wishlist\Block\Context" type="Magento\Catalog\Block\Product\Context">
         <arguments>
@@ -68,4 +68,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider">
+        <plugin name="wishlistSettingsDataProvider" type="Magento\Wishlist\Plugin\Ui\DataProvider\WishlistSettings"/>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="wishlist_url" xsi:type="object">\Magento\Wishlist\Ui\DataProvider\Product\Collector\Button</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

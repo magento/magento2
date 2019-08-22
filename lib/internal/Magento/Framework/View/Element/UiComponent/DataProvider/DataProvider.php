@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
@@ -123,7 +123,7 @@ class DataProvider implements DataProviderInterface
             }
             if ($paramValue) {
                 $this->data['config']['update_url'] = sprintf(
-                    '%s%s/%s',
+                    '%s%s/%s/',
                     $this->data['config']['update_url'],
                     $paramName,
                     $paramValue
@@ -181,7 +181,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getFieldSetMetaInfo($fieldSetName)
     {
-        return isset($this->meta[$fieldSetName]) ? $this->meta[$fieldSetName] : [];
+        return $this->meta[$fieldSetName] ?? [];
     }
 
     /**
@@ -190,7 +190,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
-        return isset($this->meta[$fieldSetName]['children']) ? $this->meta[$fieldSetName]['children'] : [];
+        return $this->meta[$fieldSetName]['children'] ?? [];
     }
 
     /**
@@ -200,9 +200,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
-        return isset($this->meta[$fieldSetName]['children'][$fieldName])
-            ? $this->meta[$fieldSetName]['children'][$fieldName]
-            : [];
+        return $this->meta[$fieldSetName]['children'][$fieldName] ?? [];
     }
 
     /**
@@ -291,7 +289,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getConfigData()
     {
-        return isset($this->data['config']) ? $this->data['config'] : [];
+        return $this->data['config'] ?? [];
     }
 
     /**

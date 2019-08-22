@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth;
@@ -98,6 +98,32 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'type = "' . \Magento\Integration\Model\Oauth\Token::TYPE_REQUEST . '" AND created_at <= ?',
                     $this->_dateTime->formatDate($this->date->gmtTimestamp() - $minutes * 60)
                 )
+            );
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Delete expired tokens for the specified user types
+     *
+     * @param int $hours token lifetime
+     * @param int[] $userTypes @see \Magento\Authorization\Model\UserContextInterface
+     * @return int number of deleted tokens
+     */
+    public function deleteExpiredTokens($hours, $userTypes)
+    {
+        if ($hours > 0) {
+            $connection = $this->getConnection();
+
+            $userTypeCondition = $connection->quoteInto('user_type IN (?)', $userTypes);
+            $createdAtCondition = $connection->quoteInto(
+                'created_at <= ?',
+                $this->_dateTime->formatDate($this->date->gmtTimestamp() - $hours * 60 * 60)
+            );
+            return $connection->delete(
+                $this->getMainTable(),
+                $userTypeCondition . ' AND ' . $createdAtCondition
             );
         } else {
             return 0;

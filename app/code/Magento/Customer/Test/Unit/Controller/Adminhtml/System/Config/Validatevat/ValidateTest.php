@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\System\Config\Validatevat;
 
-class ValidateTest extends \PHPUnit_Framework_TestCase
+class ValidateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat\Validate

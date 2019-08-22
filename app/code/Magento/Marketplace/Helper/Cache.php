@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Marketplace\Helper;
 
-use Magento\Framework\Filesystem;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Cache helper
@@ -26,14 +27,22 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
     protected $cache;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Config\CacheInterface $cache
+        \Magento\Framework\Config\CacheInterface $cache,
+        SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         parent::__construct($context);
     }
 
@@ -46,7 +55,7 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $data = $this->getCache()->load($this->pathToCacheFile);
         if (false !== $data) {
-            $data = unserialize($data);
+            $data = $this->serializer->unserialize($data);
         }
         return $data;
     }
@@ -59,7 +68,7 @@ class Cache extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function savePartnersToCache($partners)
     {
-        return $this->getCache()->save(serialize($partners), $this->pathToCacheFile);
+        return $this->getCache()->save($this->serializer->serialize($partners), $this->pathToCacheFile);
     }
 
     /**

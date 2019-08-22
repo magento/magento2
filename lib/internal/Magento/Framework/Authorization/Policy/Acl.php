@@ -3,7 +3,7 @@
  * Uses ACL to control access. If ACL doesn't contain provided resource,
  * permission for all resources is checked
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Authorization\Policy;

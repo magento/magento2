@@ -1,0 +1,45 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Components -> Image Uploader
+//  _____________________________________________
+
+.image-uploader {
+    .image-upload-requirements {
+        margin-top: 8px;
+        font-size: .9em;
+    }
+
+    .image-placeholder {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .image-uploader-spinner {
+        width: 50%;
+        height: 50%;
+        background-size: auto;
+        margin: 0;
+        transform: translate(50%, 50%);
+        position: absolute;
+    }
+
+    .image-uploader-preview {
+        width: auto;
+    }
+
+    .image-uploader-preview-link,
+    .image-uploader-preview-link .preview-image {
+        height: inherit;
+    }
+}
+
+.image-uploader._loading {
+    .image-placeholder-text,
+    .product-image-wrapper:before {
+        display: none;
+    }
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,9 +53,9 @@ $invoices = [
     ],
 ];
 
-/** @var array $creditMemoData */
+/** @var array $invoiceData */
 foreach ($invoices as $invoiceData) {
-    /** @var \Magento\Sales\Model\Order\Creditmemo $creditMemo */
+    /** @var \Magento\Sales\Model\Order\Invoice $invoice */
     $invoice = $objectManager->create(\Magento\Sales\Model\Order\Invoice::class);
     $invoice
         ->setData($invoiceData)

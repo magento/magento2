@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\Css\PreProcessor\FileGenerator;
@@ -20,7 +20,7 @@ use Magento\Framework\View\Asset\Repository;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
+class PublicationDecoratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PublicationDecorator
@@ -102,7 +102,6 @@ class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(PublicationDecorator::class, [
-            'filesystem' => $this->filesystemMock,
             'assetRepository' => $this->assetRepositoryMock,
             'temporaryFile' => $this->temporaryFileMock,
             'assetPublisher' => $this->publisherMock,

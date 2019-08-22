@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Grid;
@@ -34,5 +34,20 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         $resourceModel = \Magento\Sales\Model\ResourceModel\Order::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+
+        $tableDescription = $this->getConnection()->describeTable($this->getMainTable());
+        foreach ($tableDescription as $columnInfo) {
+            $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.' . $columnInfo['COLUMN_NAME']);
+        }
+
+        return $this;
     }
 }

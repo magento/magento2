@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Quote\Model\ResourceModel;
 
@@ -25,8 +23,8 @@ class Quote extends AbstractDb
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param Snapshot $entitySnapshot,
-     * @param RelationComposite $entityRelationComposite,
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param string $connectionName
      */
@@ -167,7 +165,7 @@ class Quote extends AbstractDb
     {
         return $this->sequenceManager->getSequence(
             \Magento\Sales\Model\Order::ENTITY,
-            $quote->getStore()->getGroup()->getDefaultStoreId()
+            $quote->getStoreId()
         )
         ->getNextValue();
     }
@@ -211,7 +209,7 @@ class Quote extends AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
-    public function substractProductFromQuotes($product)
+    public function subtractProductFromQuotes($product)
     {
         $productId = (int)$product->getId();
         if (!$productId) {
@@ -219,6 +217,9 @@ class Quote extends AbstractDb
         }
         $connection = $this->getConnection();
         $subSelect = $connection->select();
+        $conditionCheck = $connection->quoteIdentifier('q.items_count') . " > 0";
+        $conditionTrue = $connection->quoteIdentifier('q.items_count') . ' - 1';
+        $ifSql = "IF (" . $conditionCheck . "," . $conditionTrue . ", 0)";
 
         $subSelect->from(
             false,
@@ -226,7 +227,7 @@ class Quote extends AbstractDb
                 'items_qty' => new \Zend_Db_Expr(
                     $connection->quoteIdentifier('q.items_qty') . ' - ' . $connection->quoteIdentifier('qi.qty')
                 ),
-                'items_count' => new \Zend_Db_Expr($connection->quoteIdentifier('q.items_count') . ' - 1')
+                'items_count' => new \Zend_Db_Expr($ifSql)
             ]
         )->join(
             ['qi' => $this->getTable('quote_item')],
@@ -246,6 +247,21 @@ class Quote extends AbstractDb
         $connection->query($updateQuery);
 
         return $this;
+    }
+
+    /**
+     * Subtract product from all quotes quantities
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     *
+     * @deprecated 101.0.1
+     * @see \Magento\Quote\Model\ResourceModel\Quote::subtractProductFromQuotes
+     *
+     * @return $this
+     */
+    public function substractProductFromQuotes($product)
+    {
+        return $this->subtractProductFromQuotes($product);
     }
 
     /**
@@ -280,7 +296,7 @@ class Quote extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

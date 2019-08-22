@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,6 +26,7 @@
             <rule type="inContextActivate" event="activate-in-context-api"/>
             <rule type="inContextDeactivate" event="deactivate-in-context-api"/>
             <rule type="inContextDisableConditional" event=":load"/>
+            <rule type="removeCreditOptionConditional" event=":load"/>
         </relation>
     </payment>
 </rules>

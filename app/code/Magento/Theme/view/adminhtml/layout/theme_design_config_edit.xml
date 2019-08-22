@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,7 +12,7 @@
         <referenceContainer name="page.main.actions">
             <block class="Magento\Theme\Block\Adminhtml\Design\Config\Edit\Scope"
                    name="design.config.edit.scope"
-                   template="design/config/edit/scope.phtml"/>
+                   template="Magento_Theme::design/config/edit/scope.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
             <uiComponent name="design_config_form"/>

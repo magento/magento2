@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Console\Command\GenerateFixturesCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
+class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FixtureModel|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModel = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
+        $this->fixtureModel = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
         $this->command = new GenerateFixturesCommand($this->fixtureModel);
     }
 
@@ -33,14 +33,14 @@ class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
         $this->fixtureModel->expects($this->once())->method('loadConfig')->with('path_to_profile.xml');
         $this->fixtureModel->expects($this->once())->method('initObjectManager');
         $this->fixtureModel->expects($this->once())->method('loadFixtures');
-        
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['profile' => 'path_to_profile.xml']);
     }
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Not enough arguments.
+     * @expectedExceptionMessage Not enough arguments
      */
     public function testExecuteInvalidLanguageArgument()
     {

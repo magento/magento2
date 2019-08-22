@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Bootstrap;
 
-class ProfilerTest extends \PHPUnit_Framework_TestCase
+class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Bootstrap\Profiler
@@ -17,14 +17,15 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected $_object;
 
     /**
-     * @var \Magento\Framework\Profiler\Driver\Standard|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Profiler\Driver\Standard|PHPUnit\Framework\MockObject_MockObject
      */
     protected $_driver;
 
     protected function setUp()
     {
         $this->expectOutputString('');
-        $this->_driver = $this->getMock(\Magento\Framework\Profiler\Driver\Standard::class, ['registerOutput']);
+        $this->_driver =
+            $this->createPartialMock(\Magento\Framework\Profiler\Driver\Standard::class, ['registerOutput']);
         $this->_object = new \Magento\TestFramework\Bootstrap\Profiler($this->_driver);
     }
 

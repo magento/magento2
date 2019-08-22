@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\CustomerData\Plugin;
 
-use \Magento\Framework\Session\SessionManager;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
+/**
+ * Class SessionChecker
+ */
 class SessionChecker
 {
     /**
@@ -36,9 +39,12 @@ class SessionChecker
     /**
      * Delete frontend session cookie if customer session is expired
      *
-     * @param SessionManager $sessionManager
+     * @param SessionManagerInterface $sessionManager
+     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
-    public function beforeStart(SessionManager $sessionManager)
+    public function beforeStart(SessionManagerInterface $sessionManager)
     {
         if (!$this->cookieManager->getCookie($sessionManager->getName())
             && $this->cookieManager->getCookie('mage-cache-sessid')

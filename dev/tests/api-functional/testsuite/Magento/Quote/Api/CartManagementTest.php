@@ -1,13 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Api;
 
+use Magento\Framework\App\Config;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Class CartManagementTest
+ * @package Magento\Quote\Api
+ * @magentoAppIsolation enabled
+ */
 class CartManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
@@ -25,6 +32,8 @@ class CartManagementTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $appConfig = $this->objectManager->get(Config::class);
+        $appConfig->clean();
     }
 
     public function tearDown()
@@ -58,7 +67,7 @@ class CartManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_one_address.php
      */
     public function testCreateEmptyCartForCustomer()
     {
@@ -86,7 +95,7 @@ class CartManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_one_address.php
      */
     public function testCreateEmptyCartAndGetCartForCustomer()
     {
@@ -97,7 +106,10 @@ class CartManagementTest extends WebapiAbstract
         $customerTokenService = $this->objectManager->create(
             \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
-        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+        $token = $customerTokenService->createCustomerAccessToken(
+            'customer_one_address@test.com',
+            'password'
+        );
 
         $serviceInfo = [
             'rest' => [
@@ -229,7 +241,7 @@ class CartManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart is not anonymous.
+     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
@@ -264,7 +276,7 @@ class CartManagementTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_non_default_website_id.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart belongs to different store.
+     * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
      */
     public function testAssignCustomerThrowsExceptionIfCartIsAssignedToDifferentStore()
     {
@@ -301,7 +313,6 @@ class CartManagementTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Cannot assign customer to the given cart. Customer already has active cart.
      */
     public function testAssignCustomerThrowsExceptionIfCustomerAlreadyHasActiveCart()
     {
@@ -336,6 +347,10 @@ class CartManagementTest extends WebapiAbstract
             'storeId' => 1,
         ];
         $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->expectExceptionMessage(
+            "The customer can't be assigned to the cart because the customer already has an active cart."
+        );
     }
 
     /**

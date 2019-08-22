@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -24,13 +24,12 @@ try {
     //already deleted
 }
 
-/** @var $virtualProduct \Magento\Catalog\Model\Product */
-$virtualProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Catalog\Model\Product::class
-);
-$virtualProduct->load(21);
-if ($virtualProduct->getId()) {
+try {
+    /** @var $virtualProduct \Magento\Catalog\Model\Product */
+    $virtualProduct = $productRepository->get('virtual-product', false, null, true);
     $virtualProduct->delete();
+} catch (NoSuchEntityException $e) {
+    //already deleted
 }
 
 try {

@@ -1,20 +1,25 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
     'uiLayout',
     'mage/translate',
     'mageUtils',
-    'uiElement'
-], function (_, layout, $t, utils, Element) {
+    'uiElement',
+    'jquery'
+], function (_, layout, $t, utils, Element, $) {
     'use strict';
 
     return Element.extend({
         defaults: {
             template: 'ui/grid/search/search',
-            placeholder: $t('Search by keyword'),
+            placeholder: 'Search by keyword',
             label: $t('Keyword'),
             value: '',
             previews: [],
@@ -25,11 +30,13 @@ define([
             tracks: {
                 value: true,
                 previews: true,
-                inputValue: true
+                inputValue: true,
+                focused: true
             },
             imports: {
                 inputValue: 'value',
-                updatePreview: 'value'
+                updatePreview: 'value',
+                focused: false
             },
             exports: {
                 value: '${ $.provider }:params.search'
@@ -85,6 +92,18 @@ define([
         },
 
         /**
+         * Click To ScrollTop.
+         */
+        scrollTo: function ($data) {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'slow', function () {
+                $data.focused = false;
+                $data.focused = true;
+            });
+        },
+
+        /**
          * Resets input value to the last applied state.
          *
          * @returns {Search} Chainable.
@@ -98,7 +117,7 @@ define([
         /**
          * Applies search query.
          *
-         * @param {String} [value=inputValue] - If not specfied, then
+         * @param {String} [value=inputValue] - If not specified, then
          *      value of the input field will be used.
          * @returns {Search} Chainable.
          */

@@ -2,7 +2,7 @@
 /**
  * Customer address entity resource model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel;
@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Address
+ *
  * @package Magento\Customer\Model\ResourceModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -31,8 +32,8 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
-     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
@@ -98,6 +99,9 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     protected function _validate($address)
     {
+        if ($address->getDataByKey('should_ignore_validation')) {
+            return;
+        };
         $validator = $this->_validatorFactory->createValidator('customer_address', 'save');
 
         if (!$validator->isValid($address)) {
@@ -110,7 +114,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($object)
     {
@@ -120,7 +124,9 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * @deprecated
+     * Get instance of DeleteRelation class
+     *
+     * @deprecated 100.2.0
      * @return DeleteRelation
      */
     private function getDeleteRelation()
@@ -129,7 +135,9 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * @deprecated
+     * Get instance of CustomerRegistry class
+     *
+     * @deprecated 100.2.0
      * @return CustomerRegistry
      */
     private function getCustomerRegistry()
@@ -138,6 +146,8 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
+     * After delete entity process
+     *
      * @param \Magento\Customer\Model\Address $address
      * @return $this
      */

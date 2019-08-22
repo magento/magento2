@@ -1,11 +1,19 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
 //  Actions -> Action select
 //  _____________________________________________
+
+//
+//  Variables
+//  _____________________________________________
+
+@_dropdown__padding-right: @action__height;
+@_triangle__height: @button-marker-triangle__height;
+@_triangle__width: @button-marker-triangle__width;
 
 //  Action select have the same visual styles and functionality as native <select>
 .action-select-wrap {
@@ -18,9 +26,9 @@
 
     .action-select {
         .action-toggle-triangle(
-        @_dropdown__padding-right: @_action-select-toggle__size;
-        @_triangle__height: @button-marker-triangle__height;
-        @_triangle__width: @button-marker-triangle__width;
+        @_dropdown__padding-right;
+        @_triangle__height;
+        @_triangle__width;
         );
         .lib-text-overflow-ellipsis();
 
@@ -110,6 +118,7 @@
 
             .action-submenu {
                 position: absolute;
+                right: -100%;
             }
         }
     }

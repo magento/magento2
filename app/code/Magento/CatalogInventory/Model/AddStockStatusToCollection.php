@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,9 +17,8 @@ class AddStockStatusToCollection
      * @var \Magento\CatalogInventory\Helper\Stock
      */
     protected $stockHelper;
-    
+
     /**
-     * @param \Magento\CatalogInventory\Model\Configuration $configuration
      * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
      */
     public function __construct(
@@ -29,6 +28,8 @@ class AddStockStatusToCollection
     }
 
     /**
+     * Add stock filter to collection.
+     *
      * @param Collection $productCollection
      * @param bool $printQuery
      * @param bool $logQuery

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

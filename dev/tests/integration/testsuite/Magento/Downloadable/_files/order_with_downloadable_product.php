@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
+declare(strict_types=1);
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Sales\Model\Order\Address::class,
@@ -25,15 +24,27 @@ $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
 $billingAddress->setAddressType('billing');
 
 $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Sales\Model\Order\Payment::class);
+    \Magento\Sales\Model\Order\Payment::class
+);
 $payment->setMethod('checkmo');
 
+/** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Sales\Model\Order\Item::class);
+    \Magento\Sales\Model\Order\Item::class
+);
+
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$product = $productRepository->getById(1);
+$link = $product->getExtensionAttributes()->getDownloadableProductLinks()[0];
+
 $orderItem->setProductId(
     1
 )->setProductType(
     \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
+)->setProductOptions(
+    ['links' => [$link->getId()]]
 )->setBasePrice(
     100
 )->setQtyOrdered(
@@ -41,8 +52,9 @@ $orderItem->setProductId(
 );
 
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
-$order->setCustomerEmail('mail@to.co')
-    ->addItem(
+$order->setCustomerEmail(
+    'mail@to.co'
+)->addItem(
     $orderItem
 )->setIncrementId(
     '100000001'

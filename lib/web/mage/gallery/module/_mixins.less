@@ -1,5 +1,5 @@
 // /**
-// * Copyright © 2016 Magento. All rights reserved.
+// * Copyright © Magento, Inc. All rights reserved.
 // * See COPYING.txt for license details.
 // */
 
@@ -28,6 +28,13 @@
     -ms-transform: translateY(@value);
     -o-transform: translateY(@value);
     transform: translateY(@value);
+}
+
+.translate(@x, @y) {
+    -webkit-transform: translate(@x, @y);
+    -ms-transform: translateY(@x, @y);
+    -o-transform: translateY(@x, @y);
+    transform: translateY(@x, @y);
 }
 
 .fotorama-shadow-gradient(@x, @y) {

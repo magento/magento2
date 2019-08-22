@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminInvoicePaymentShippingSection">
+        <element name="PaymentMethod" type="text" selector=".order-payment-method .order-payment-method-title"/>
+        <element name="CurrencyInformation" type="text" selector=".order-payment-method .order-payment-currency"/>
+        <element name="PaymentAdditional" type="text" selector=".order-payment-method .order-payment-additional"/>
+        <element name="ShippingMethod" type="text" selector=".order-shipping-address .shipping-description-title"/>
+        <element name="ShippingPrice" type="text" selector=".order-shipping-address .shipping-description-content .price"/>
+        <element name="CreateShipment" type="checkbox" selector=".order-shipping-address input[name='invoice[do_shipment]']"/>
+        <element name="getShippingMethodAndRates" type="button" selector="//span[text()='Get shipping methods and rates']" timeout="60"/>
+        <element name="shippingMethod" type="button" selector="//label[contains(text(), 'Fixed')]" timeout="60"/>
+    </section>
+</sections>

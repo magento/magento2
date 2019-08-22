@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model;
@@ -15,7 +15,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
+class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -100,7 +100,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage entity_type_code is a required field.
+     * @expectedExceptionMessage "entity_type_code" is required. Enter and try again.
      */
     public function testGetListInputException()
     {
@@ -124,7 +124,12 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
         $collectionSize = 1;
 
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
+            ->setMethods(['getPageSize'])
             ->getMockForAbstractClass();
+
+        $searchCriteriaMock->expects($this->any())
+            ->method('getPageSize')
+            ->willReturn($collectionSize);
 
         $attributeMock = $this->createAttributeMock($attributeCode, $attributeId);
 

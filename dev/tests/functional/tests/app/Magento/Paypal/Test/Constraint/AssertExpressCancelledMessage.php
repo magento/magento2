@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class AssertExpressCancelledMessage extends AbstractConstraint
      */
     public function processAssert(CheckoutCart $checkoutCart)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $checkoutCart->getMessagesBlock()->getSuccessMessage(),
             'Success message about Express Checkout cancellation is not present or wrong.'

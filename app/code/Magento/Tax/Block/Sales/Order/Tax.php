@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,12 @@ namespace Magento\Tax\Block\Sales\Order;
 
 use Magento\Sales\Model\Order;
 
+/**
+ *  Tax totals modification block.
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Tax extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -99,6 +105,10 @@ class Tax extends \Magento\Framework\View\Element\Template
     protected function _addTax($after = 'discount')
     {
         $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
+        $totals = $this->getParentBlock()->getTotals();
+        if ($totals['grand_total']) {
+            $this->getParentBlock()->addTotalBefore($taxTotal, 'grand_total');
+        }
         $this->getParentBlock()->addTotal($taxTotal, $after);
         return $this;
     }
@@ -114,6 +124,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Initialization grand total.
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -195,6 +207,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init shipping.
+     *
      * @return $this
      */
     protected function _initShipping()
@@ -256,19 +270,19 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init discount.
+     *
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+     *
      * @return void
      */
     protected function _initDiscount()
     {
-        //        $store  = $this->getStore();
-        //        $parent = $this->getParentBlock();
-        //        if ($this->_config->displaySales) {
-        //
-        //        } elseif ($this->_config->displaySales) {
-        //        }
     }
-
+    //phpcs:enable
     /**
+     * Init grand total.
+     *
      * @return $this
      */
     protected function _initGrandTotal()
@@ -306,13 +320,15 @@ class Tax extends \Magento\Framework\View\Element\Template
                 ]
             );
             $parent->addTotal($totalExcl, 'grand_total');
-            $this->_addTax('grand_total');
             $parent->addTotal($totalIncl, 'tax');
+            $this->_addTax('grand_total');
         }
         return $this;
     }
 
     /**
+     * Return order.
+     *
      * @return Order
      */
     public function getOrder()
@@ -321,6 +337,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return label properties.
+     *
      * @return array
      */
     public function getLabelProperties()
@@ -329,6 +347,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retuen value properties.
+     *
      * @return array
      */
     public function getValueProperties()

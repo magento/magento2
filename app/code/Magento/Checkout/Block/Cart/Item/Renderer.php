@@ -1,25 +1,29 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Item;
 
+use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 
 /**
  * Shopping cart item render block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setProductName(string)
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Renderer extends \Magento\Framework\View\Element\Template implements
     \Magento\Framework\DataObject\IdentityInterface
@@ -81,7 +85,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     public $moduleManager;
 
@@ -89,6 +93,9 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @var InterpretationStrategyInterface
      */
     private $messageInterpretationStrategy;
+
+    /** @var ItemResolverInterface */
+    private $itemResolver;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -98,9 +105,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
+     * @param ItemResolverInterface|null $itemResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -112,9 +120,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         InterpretationStrategyInterface $messageInterpretationStrategy,
-        array $data = []
+        array $data = [],
+        ItemResolverInterface $itemResolver = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->imageBuilder = $imageBuilder;
@@ -126,6 +135,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         $this->_isScopePrivate = true;
         $this->moduleManager = $moduleManager;
         $this->messageInterpretationStrategy = $messageInterpretationStrategy;
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
     }
 
     /**
@@ -171,10 +181,12 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getProductForThumbnail()
     {
-        return $this->getProduct();
+        return $this->itemResolver->getFinalProduct($this->getItem());
     }
 
     /**
+     * Override product url.
+     *
      * @param string $productUrl
      * @return $this
      * @codeCoverageIgnore
@@ -268,7 +280,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
-     * Get list of all otions for product
+     * Get list of all options for product
      *
      * @return array
      * @codeCoverageIgnore
@@ -303,11 +315,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
-     * Retrieve item messages
-     * Return array with keys
-     *
-     * text => the message text
-     * type => type of a message
+     * Retrieve item messages, return array with keys, text => the message text, type => type of a message
      *
      * @return array
      */
@@ -462,6 +470,8 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
+     * Get price renderer.
+     *
      * @return \Magento\Framework\Pricing\Render
      * @codeCoverageIgnore
      */
@@ -610,9 +620,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        return $this->imageBuilder->setProduct($product)
-            ->setImageId($imageId)
-            ->setAttributes($attributes)
-            ->create();
+        return $this->imageBuilder->create($product, $imageId, $attributes);
     }
 }

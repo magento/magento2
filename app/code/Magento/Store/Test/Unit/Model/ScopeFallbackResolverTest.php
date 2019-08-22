@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class ScopeFallbackResolverTest extends \PHPUnit_Framework_TestCase
+class ScopeFallbackResolverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ScopeFallbackResolver */
     protected $model;

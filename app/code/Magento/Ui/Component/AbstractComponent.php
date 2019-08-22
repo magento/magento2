@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
@@ -16,7 +16,10 @@ use Magento\Framework\Data\ValueSourceInterface;
 
 /**
  * Abstract class AbstractComponent
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractComponent extends DataObject implements UiComponentInterface
 {
@@ -56,9 +59,8 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     ) {
         $this->context = $context;
         $this->components = $components;
-        $this->initObservers($data);
-        $this->context->getProcessor()->register($this);
         $this->_data = array_replace_recursive($this->_data, $data);
+        $this->initObservers($this->_data);
     }
 
     /**
@@ -113,6 +115,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
         if ($this->hasData('buttons')) {
             $this->getContext()->addButtons($this->getData('buttons'), $this);
         }
+        $this->context->getProcessor()->register($this);
         $this->getContext()->getProcessor()->notify($this->getComponentName());
     }
 
@@ -121,6 +124,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      *
      * @param UiComponentInterface $component
      * @return $this
+     * @since 100.1.0
      */
     protected function prepareChildComponent(UiComponentInterface $component)
     {

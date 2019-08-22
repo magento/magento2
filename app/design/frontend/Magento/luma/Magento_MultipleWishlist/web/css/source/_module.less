@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -40,6 +40,18 @@
             .items {
                 padding: 6px 0;
                 text-align: left;
+                
+                .item {
+                    > span {
+                        display: block;
+                        padding: 5px 5px 5px 23px;
+                    }
+
+                }
+                
+                li {
+                    padding: 0;
+                }
             }
 
             > .action {
@@ -105,6 +117,7 @@
                     &.split,
                     &.toggle {
                         .lib-css(color, @link__color);
+                        
                         &:before {
                             display: none;
                         }
@@ -125,6 +138,7 @@
 
         &.overlay {
             .lib-window-overlay();
+            
             &.active {
                 display: block;
             }
@@ -213,7 +227,7 @@
                 &-select {
                     margin-right: @indent__base;
                 }
-                
+
                 .copy {
                     .dropdown {
                         right: 0;
@@ -244,7 +258,7 @@
         }
 
         .form-wishlist-search {
-            .lib-css(margin-bottom, @indent__l*2);
+            margin-bottom: @indent__l * 2;
             max-width: 500px;
 
             .fieldset {
@@ -271,7 +285,7 @@
 
     .block-wishlist-info-items {
         .block-title {
-            .lib-css(margin-bottom, @indent__base);
+            margin-bottom: @indent__base;
             .lib-font-size(22px);
 
             > strong {
@@ -342,6 +356,7 @@
             //  Select wish list
             &-select {
                 margin: 0 -@layout__width-xs-indent 20px;
+                
                 .wishlist-name {
                     .lib-font-size(16);
                     &:extend(.abs-toggling-title-mobile all);
@@ -414,7 +429,7 @@
         .product {
             &-item {
                 &-checkbox {
-                    left: 20px;
+                    left: 0;
                     position: absolute;
                     top: 20px;
                 }

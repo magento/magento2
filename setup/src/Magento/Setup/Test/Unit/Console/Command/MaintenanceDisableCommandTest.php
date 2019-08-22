@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Setup\Console\Command\MaintenanceDisableCommand;
 use Magento\Setup\Validator\IpValidator;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
+class MaintenanceDisableCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
@@ -29,8 +29,8 @@ class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
-        $this->ipValidator = $this->getMock(\Magento\Setup\Validator\IpValidator::class, [], [], '', false);
+        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $this->ipValidator = $this->createMock(\Magento\Setup\Validator\IpValidator::class);
         $this->command = new MaintenanceDisableCommand($this->maintenanceMode, $this->ipValidator);
     }
 

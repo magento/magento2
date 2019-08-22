@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\DataProvider;
@@ -13,17 +13,18 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Ui\Component\DataProvider\Document;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Sales\Model\Order\Invoice;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Phrase;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class DocumentTest
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DocumentTest extends \PHPUnit_Framework_TestCase
+class DocumentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GroupRepositoryInterface|MockObject
@@ -46,6 +47,11 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfig;
+
+    /**
      * @var Document
      */
     private $document;
@@ -53,18 +59,21 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->initAttributeValueFactoryMock();
-        
+
         $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
-        
+
         $this->customerMetadata = $this->getMockForAbstractClass(CustomerMetadataInterface::class);
 
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->document = new Document(
             $this->attributeValueFactory,
             $this->groupRepository,
             $this->customerMetadata,
-            $this->storeManager
+            $this->storeManager,
+            $this->scopeConfig
         );
     }
 
@@ -155,6 +164,41 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->document->getCustomAttribute('website_id');
         static::assertEquals('Main Website', $attribute->getValue());
+    }
+
+    /**
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testGetConfirmationAttribute()
+    {
+        $websiteId = 1;
+        $this->document->setData('original_website_id', $websiteId);
+
+        $this->scopeConfig->expects(static::once())
+            ->method('isSetFlag')
+            ->with()
+            ->willReturn(true);
+
+        $this->document->setData('confirmation', null);
+        $attribute = $this->document->getCustomAttribute('confirmation');
+
+        $value = $attribute->getValue();
+        static::assertInstanceOf(Phrase::class, $value);
+        static::assertEquals('Confirmed', (string)$value);
+    }
+
+    /**
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testGetAccountLockValue()
+    {
+        $this->document->setData('lock_expires', null);
+
+        $attribute = $this->document->getCustomAttribute('lock_expires');
+
+        $value = $attribute->getValue();
+        static::assertInstanceOf(Phrase::class, $value);
+        static::assertEquals('Unlocked', (string)$value);
     }
 
     /**

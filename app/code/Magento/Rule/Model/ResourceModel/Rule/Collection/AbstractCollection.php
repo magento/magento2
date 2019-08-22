@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Rule\Model\ResourceModel\Rule\Collection;
 
 /**
  * Abstract Rule entity resource collection model
  *
- * @author Magento Core Team <core@magentocommerce.com>
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Rule\Model\ResourceModel\Rule\Collection;
-
 abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -82,11 +84,21 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
                 if ($website instanceof \Magento\Store\Model\Website) {
                     $websiteIds[$index] = $website->getId();
                 }
+                $websiteIds[$index] = (int) $websiteIds[$index];
             }
+
+            $websiteSelect = $this->getConnection()->select();
+            $websiteSelect->from(
+                $this->getTable($entityInfo['associations_table']),
+                [$entityInfo['rule_id_field']]
+            )->distinct(
+                true
+            )->where(
+                $this->getConnection()->quoteInto($entityInfo['entity_id_field'] . ' IN (?)', $websiteIds)
+            );
             $this->getSelect()->join(
-                ['website' => $this->getTable($entityInfo['associations_table'])],
-                $this->getConnection()->quoteInto('website.' . $entityInfo['entity_id_field'] . ' IN (?)', $websiteIds)
-                . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field'],
+                ['website' => $websiteSelect],
+                'main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field'],
                 []
             );
         }
@@ -126,11 +138,11 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     }
 
     /**
-     * Retrieve correspondent entity information (associations table name, columns names)
-     * of rule's associated entity by specified entity type
+     * Retrieve correspondent entity information of rule's associated entity by specified entity type
+     *
+     * (associations table name, columns names)
      *
      * @param string $entityType
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */

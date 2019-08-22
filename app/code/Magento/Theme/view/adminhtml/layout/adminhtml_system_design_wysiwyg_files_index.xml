@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,8 +12,8 @@
             <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree" name="wysiwyg_files.tree" template="Magento_Cms::browser/tree.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content" name="wysiwyg_files.content" template="browser/content.phtml">
-                <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Uploader" name="wysiwyg_files.uploader" template="browser/content/uploader.phtml"/>
+            <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content" name="wysiwyg_files.content" template="Magento_Theme::browser/content.phtml">
+                <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Uploader" name="wysiwyg_files.uploader" template="Magento_Theme::browser/content/uploader.phtml"/>
             </block>
         </referenceContainer>
     </body>

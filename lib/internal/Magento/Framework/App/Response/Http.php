@@ -2,18 +2,25 @@
 /**
  * HTTP response
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Response;
 
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Session\Config\ConfigInterface;
 
+/**
+ * HTTP response
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
     /** Cookie to store page vary string */
@@ -25,20 +32,35 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     /** X-FRAME-OPTIONS Header name */
     const HEADER_X_FRAME_OPT = 'X-Frame-Options';
 
-    /** @var \Magento\Framework\App\Request\Http */
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
     protected $request;
 
-    /** @var \Magento\Framework\Stdlib\CookieManagerInterface */
+    /**
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     */
     protected $cookieManager;
 
-    /** @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory */
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
     protected $cookieMetadataFactory;
 
-    /** @var \Magento\Framework\App\Http\Context */
+    /**
+     * @var \Magento\Framework\App\Http\Context
+     */
     protected $context;
 
-    /** @var DateTime */
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
     protected $dateTime;
+
+    /**
+     * @var \Magento\Framework\Session\Config\ConfigInterface
+     */
+    private $sessionConfig;
 
     /**
      * @param HttpRequest $request
@@ -46,19 +68,22 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param Context $context
      * @param DateTime $dateTime
+     * @param ConfigInterface|null $sessionConfig
      */
     public function __construct(
         HttpRequest $request,
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         Context $context,
-        DateTime $dateTime
+        DateTime $dateTime,
+        ConfigInterface $sessionConfig = null
     ) {
         $this->request = $request;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->context = $context;
         $this->dateTime = $dateTime;
+        $this->sessionConfig = $sessionConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
     }
 
     /**
@@ -75,13 +100,18 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     /**
      * Send Vary cookie
      *
-     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function sendVary()
     {
         $varyString = $this->context->getVaryString();
         if ($varyString) {
-            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
+            $cookieLifeTime = $this->sessionConfig->getCookieLifetime();
+            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata(
+                [CookieMetadata::KEY_DURATION => $cookieLifeTime]
+            )->setPath('/');
             $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $varyString, $sensitiveCookMetadata);
         } elseif ($this->request->get(self::COOKIE_VARY_STRING)) {
             $cookieMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
@@ -91,6 +121,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 
     /**
      * Set headers for public cache
+     *
      * Accepts the time-to-live (max-age) parameter
      *
      * @param int $ttl
@@ -151,6 +182,8 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     }
 
     /**
+     * Sleep magic method.
+     *
      * @return string[]
      * @codeCoverageIgnore
      */

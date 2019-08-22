@@ -1,18 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Controller\Directpost;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Payment\Block\Transparent\Iframe;
+use Magento\Framework\App\Action\Action;
 
 /**
  * DirectPost Payment Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
  */
-abstract class Payment extends \Magento\Framework\App\Action\Action
+abstract class Payment extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Core registry
@@ -44,6 +50,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Get checkout model
+     *
      * @return \Magento\Checkout\Model\Session
      */
     protected function _getCheckout()
@@ -63,6 +71,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
 
     /**
      * Response action.
+     *
      * Action for Authorize.net SIM Relay Request.
      *
      * @param string $area
@@ -73,7 +82,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
         $helper = $this->dataFactory->create($area);
 
         $params = [];
-        $data = $this->getRequest()->getPostValue();
+        $data = $this->getRequest()->getParams();
+
         /* @var $paymentMethod \Magento\Authorizenet\Model\DirectPost */
         $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
 
@@ -110,9 +120,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
             $params['redirect'] = $helper->getRedirectIframeUrl($result);
         }
 
+        //registering parameter for iframe content
         $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false)->renderLayout();
     }
 
     /**

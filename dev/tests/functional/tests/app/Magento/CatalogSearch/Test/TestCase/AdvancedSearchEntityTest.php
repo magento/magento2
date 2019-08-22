@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Perform all asserts
  *
  * @group Search_Frontend
- * @ZephyrId MAGETWO-24729
+ * @ZephyrId MAGETWO-24729, MAGETWO-14859
  */
 class AdvancedSearchEntityTest extends Injectable
 {

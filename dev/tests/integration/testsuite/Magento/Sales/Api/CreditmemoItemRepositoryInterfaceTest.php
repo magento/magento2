@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api;
@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CreditmemoItemRepositoryInterfaceTest extends \PHPUnit_Framework_TestCase
+class CreditmemoItemRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CreditmemoItemRepositoryInterface

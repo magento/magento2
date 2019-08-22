@@ -1,14 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Advanced search form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogSearch\Block\Advanced;
 
 use Magento\CatalogSearch\Model\Advanced;
@@ -20,6 +15,12 @@ use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * Advanced search form
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Form extends Template
 {
     /**
@@ -54,7 +55,7 @@ class Form extends Template
     }
 
     /**
-     * @return AbstractBlock
+     * @inheritdoc
      */
     public function _prepareLayout()
     {
@@ -173,19 +174,11 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCurrency($attribute)
     {
         return $this->_storeManager->getStore()->getCurrentCurrencyCode();
-
-        $baseCurrency = $this->_storeManager->getStore()->getBaseCurrency()->getCurrencyCode();
-        return $this->getAttributeValue(
-            $attribute,
-            'currency'
-        ) ? $this->getAttributeValue(
-            $attribute,
-            'currency'
-        ) : $baseCurrency;
     }
 
     /**
@@ -197,16 +190,16 @@ class Form extends Template
     public function getAttributeInputType($attribute)
     {
         $dataType = $attribute->getBackend()->getType();
-        $imputType = $attribute->getFrontend()->getInputType();
-        if ($imputType == 'select' || $imputType == 'multiselect') {
+        $inputType = $attribute->getFrontend()->getInputType();
+        if ($inputType == 'select' || $inputType == 'multiselect') {
             return 'select';
         }
 
-        if ($imputType == 'boolean') {
+        if ($inputType == 'boolean') {
             return 'yesno';
         }
 
-        if ($imputType == 'price') {
+        if ($inputType == 'price') {
             return 'price';
         }
 
@@ -290,6 +283,8 @@ class Form extends Template
     }
 
     /**
+     * Get select block.
+     *
      * @return BlockInterface
      */
     protected function _getSelectBlock()
@@ -303,6 +298,8 @@ class Form extends Template
     }
 
     /**
+     * Get date block.
+     *
      * @return BlockInterface|mixed
      */
     protected function _getDateBlock()

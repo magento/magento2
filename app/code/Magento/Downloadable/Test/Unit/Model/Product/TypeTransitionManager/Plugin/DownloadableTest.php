@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeTransitionManager\Plugin;
 
-class DownloadableTest extends \PHPUnit_Framework_TestCase
+class DownloadableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -39,22 +39,13 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->productMock = $this->getMock(
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getTypeId', 'setTypeId'],
-            [],
-            '',
-            false
+            ['getTypeId', 'setTypeId']
         );
-        $this->weightResolver = $this->getMock(\Magento\Catalog\Model\Product\Edit\WeightResolver::class);
-        $this->subjectMock = $this->getMock(
-            \Magento\Catalog\Model\Product\TypeTransitionManager::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->weightResolver = $this->createMock(\Magento\Catalog\Model\Product\Edit\WeightResolver::class);
+        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\TypeTransitionManager::class);
         $this->closureMock = function () {
         };
         $this->model = new \Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable(

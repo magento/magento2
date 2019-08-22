@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -13,7 +13,12 @@ use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper as ProductInitializationHelper;
 use Magento\Catalog\Model\Product;
 
-class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class UpdateConfigurationsTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @package Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin
+ */
+class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpdateConfigurations
@@ -69,10 +74,14 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterInitialize()
+    /**
+     * Prepare configurable matrix
+     *
+     * @return array
+     */
+    private function getConfigurableMatrix()
     {
-        $productMock = $this->getProductMock();
-        $configurableMatrix = [
+        return [
             [
                 'newProduct' => true,
                 'id' => 'product1'
@@ -109,6 +118,12 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'weight' => '5.55',
             ],
         ];
+    }
+
+    public function testAfterInitialize()
+    {
+        $productMock = $this->getProductMock();
+        $configurableMatrix = $this->getConfigurableMatrix();
         $configurations = [
             'product2' => [
                 'status' => 'simple2_status',
@@ -121,7 +136,9 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'swatch_image' => 'simple2_swatch_image',
                 'small_image' => 'simple2_small_image',
                 'thumbnail' => 'simple2_thumbnail',
-                'image' => 'simple2_image'
+                'image' => 'simple2_image',
+                'product_has_weight' => 1,
+                'type_id' => 'simple'
             ],
             'product3' => [
                 'quantity_and_stock_status' => ['qty' => '3']
@@ -138,7 +155,7 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['store', 0, 0],
-                    ['configurable-matrix-serialized', '[]', json_encode($configurableMatrix)]
+                    ['configurable-matrix-serialized', "[]", json_encode($configurableMatrix)]
                 ]
             );
         $this->variationHandlerMock->expects(static::once())
@@ -194,5 +211,31 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 ->willReturnSelf();
         }
         return $productMock;
+    }
+
+    /**
+     * Test for no exceptions if configurable matrix is empty string.
+     */
+    public function testAfterInitializeEmptyMatrix()
+    {
+        $productMock = $this->getProductMock();
+
+        $this->requestMock->expects(static::any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['store', 0, 0],
+                    ['configurable-matrix-serialized', null, ''],
+                ]
+            );
+
+        $this->variationHandlerMock->expects(static::once())
+            ->method('duplicateImagesForVariations')
+            ->with([])
+            ->willReturn([]);
+
+        $this->updateConfigurations->afterInitialize($this->subjectMock, $productMock);
+
+        $this->assertEmpty($productMock->getData());
     }
 }

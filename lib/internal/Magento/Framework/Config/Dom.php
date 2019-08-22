@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Magento configuration XML DOM utility
@@ -19,6 +17,7 @@ use Magento\Framework\Phrase;
  * Class Dom
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Dom
 {
@@ -83,6 +82,12 @@ class Dom
     private static $urnResolver;
 
     /**
+     * @var array
+     * @since 2.2.0
+     */
+    private static $resolvedSchemaPaths = [];
+
+    /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
      *
      * Format of $idAttributes: array('/xpath/to/some/node' => 'id_attribute_name')
@@ -115,8 +120,9 @@ class Dom
     /**
      * Retrieve array of xml errors
      *
-     * @param $errorFormat
+     * @param string $errorFormat
      * @return string[]
+     * @since 2.1.0
      */
     private static function getXmlErrors($errorFormat)
     {
@@ -166,15 +172,10 @@ class Dom
         /* Update matched node attributes and value */
         if ($matchedNode) {
             //different node type
-            if ($this->typeAttributeName && $node->hasAttribute(
-                $this->typeAttributeName
-            ) && $matchedNode->hasAttribute(
-                $this->typeAttributeName
-            ) && $node->getAttribute(
-                $this->typeAttributeName
-            ) !== $matchedNode->getAttribute(
-                $this->typeAttributeName
-            )
+            if ($this->typeAttributeName &&
+                $node->hasAttribute($this->typeAttributeName) &&
+                $matchedNode->hasAttribute($this->typeAttributeName) &&
+                $node->getAttribute($this->typeAttributeName) !== $matchedNode->getAttribute($this->typeAttributeName)
             ) {
                 $parentMatchedNode = $this->_getMatchedNode($parentPath);
                 $newNode = $this->dom->importNode($node, true);
@@ -189,9 +190,20 @@ class Dom
             /* override node value */
             if ($this->_isTextNode($node)) {
                 /* skip the case when the matched node has children, otherwise they get overridden */
-                if (!$matchedNode->hasChildNodes() || $this->_isTextNode($matchedNode)) {
+                if (!$matchedNode->hasChildNodes()
+                    || $this->_isTextNode($matchedNode)
+                    || $this->isCdataNode($matchedNode)
+                ) {
                     $matchedNode->nodeValue = $node->childNodes->item(0)->nodeValue;
                 }
+            } elseif ($this->isCdataNode($node) && $this->_isTextNode($matchedNode)) {
+                /* Replace text node with CDATA section */
+                if ($this->findCdataSection($node)) {
+                    $matchedNode->nodeValue = $this->findCdataSection($node)->nodeValue;
+                }
+            } elseif ($this->isCdataNode($node) && $this->isCdataNode($matchedNode)) {
+                /* Replace CDATA with new one */
+                $this->replaceCdataNode($matchedNode, $node);
             } else {
                 /* recursive merge for all child nodes */
                 foreach ($node->childNodes as $childNode) {
@@ -220,6 +232,56 @@ class Dom
     }
 
     /**
+     * Check if the node content is CDATA (probably surrounded with text nodes) or just text node
+     *
+     * @param \DOMNode $node
+     * @return bool
+     */
+    private function isCdataNode($node)
+    {
+        // If every child node of current is NOT \DOMElement
+        // It is arbitrary combination of text nodes and CDATA sections.
+        foreach ($node->childNodes as $childNode) {
+            if ($childNode instanceof \DOMElement) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Finds CDATA section from given node children
+     *
+     * @param \DOMNode $node
+     * @return \DOMCdataSection|null
+     */
+    private function findCdataSection($node)
+    {
+        foreach ($node->childNodes as $childNode) {
+            if ($childNode instanceof \DOMCdataSection) {
+                return $childNode;
+            }
+        }
+    }
+
+    /**
+     * Replaces CDATA section in $oldNode with $newNode's
+     *
+     * @param \DOMNode $oldNode
+     * @param \DOMNode $newNode
+     */
+    private function replaceCdataNode($oldNode, $newNode)
+    {
+        $oldCdata = $this->findCdataSection($oldNode);
+        $newCdata = $this->findCdataSection($newNode);
+
+        if ($oldCdata && $newCdata) {
+            $oldCdata->nodeValue = $newCdata->nodeValue;
+        }
+    }
+
+    /**
      * Merges attributes of the merge node to the base node
      *
      * @param \DOMElement $baseNode
@@ -242,7 +304,7 @@ class Dom
      */
     protected function _getNodePathByParent(\DOMElement $node, $parentPath)
     {
-        $prefix = is_null($this->rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
+        $prefix = $this->rootNamespace === null ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
         $path = $parentPath . '/' . $prefix . $node->tagName;
         $idAttribute = $this->nodeMergingConfig->getIdAttribute($path);
         if (is_array($idAttribute)) {
@@ -276,7 +338,10 @@ class Dom
         $node = null;
         if ($matchedNodes->length > 1) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("More than one node matching the query: %1", [$nodePath])
+                new \Magento\Framework\Phrase(
+                    "More than one node matching the query: %1, Xml is: %2",
+                    [$nodePath, $this->dom->saveXML()]
+                )
             );
         } elseif ($matchedNodes->length == 1) {
             $node = $matchedNodes->item(0);
@@ -305,7 +370,11 @@ class Dom
         if (!self::$urnResolver) {
             self::$urnResolver = new UrnResolver();
         }
-        $schema = self::$urnResolver->getRealPath($schema);
+        if (!isset(self::$resolvedSchemaPaths[$schema])) {
+            self::$resolvedSchemaPaths[$schema] = self::$urnResolver->getRealPath($schema);
+        }
+        $schema = self::$resolvedSchemaPaths[$schema];
+
         libxml_use_internal_errors(true);
         libxml_set_external_entity_loader([self::$urnResolver, 'registerEntityLoader']);
         $errors = [];
@@ -432,7 +501,7 @@ class Dom
      */
     private function _getAttributeName($attribute)
     {
-        if (!is_null($attribute->prefix) && !empty($attribute->prefix)) {
+        if ($attribute->prefix !== null && !empty($attribute->prefix)) {
             $attributeName = $attribute->prefix . ':' . $attribute->name;
         } else {
             $attributeName = $attribute->name;

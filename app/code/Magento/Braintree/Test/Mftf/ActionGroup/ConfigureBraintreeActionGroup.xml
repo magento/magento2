@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ConfigureBraintree">
+        <annotations>
+            <description>Sets up the Braintree configuration setting using the BraintreeConfigurationSection Data Entity. PLEASE NOTE: The Action Group values are Hardcoded.</description>
+        </annotations>
+
+        <!-- GoTo ConfigureBraintree fields -->
+        <click stepKey="clickOnSTORES" selector="{{AdminMenuSection.stores}}"/>
+        <waitForPageLoad stepKey="waitForConfiguration" time="2"/>
+        <click stepKey="clickOnConfigurations" selector="{{AdminMenuSection.configuration}}"/>
+        <waitForPageLoad stepKey="waitForSales" time="2"/>
+        <click stepKey="clickOnSales" selector="{{ConfigurationListSection.sales}}"/>
+        <waitForPageLoad stepKey="waitForPaymentMethods" time="2"/>
+        <click stepKey="clickOnPaymentMethods" selector="{{ConfigurationListSection.salesPaymentMethods}}"/>
+        <waitForPageLoad stepKey="waitForConfigureButton" time="2"/>
+        <click stepKey="clickOnConfigureButtonForBraintree" selector="{{ConfigurationPaymentSection.configureButton}}"/>
+        <waitForPageLoad stepKey="BraintreeSettings" time="2"/>
+
+        <!-- Fill Braintree fields -->
+        <fillField stepKey="fillTitleForBraintreeSettings" selector="{{BraintreeConfiguraionSection.titleForBraintreeSettings}}" userInput="{{BraintreeConfigurationData.title}}"/>
+        <click stepKey="openEnvironmentSelect" selector="{{BraintreeConfiguraionSection.environment}}"/>
+        <click stepKey="chooseEnvironment" selector="{{BraintreeConfiguraionSection.sandbox}}"/>
+        <click stepKey="openPaymentActionSelect" selector="{{BraintreeConfiguraionSection.paymentActionSelect}}"/>
+        <click stepKey="choosePaymentAction" selector="{{BraintreeConfiguraionSection.paymentAction}}"/>
+        <fillField stepKey="fillMerchantID" selector="{{BraintreeConfiguraionSection.merchantID}}" userInput="{{BraintreeConfigurationData.merchantID}}"/>
+        <fillField stepKey="fillPublicKey" selector="{{BraintreeConfiguraionSection.publicKey}}" userInput="{{BraintreeConfigurationData.publicKey}}"/>
+        <fillField stepKey="fillPrivateKey" selector="{{BraintreeConfiguraionSection.privateKey}}" userInput="{{BraintreeConfigurationData.privateKey}}"/>
+        <click stepKey="expandEnableThisSolution" selector="{{BraintreeConfiguraionSection.enableThisSolution}}"/>
+        <click stepKey="chooseYesForEnableThisSolution" selector="{{BraintreeConfiguraionSection.yesForEnable}}"/>
+        <click stepKey="expandEnablePayPalThroughBraintree" selector="{{BraintreeConfiguraionSection.payPalThroughBraintree}}"/>
+        <click stepKey="chooseYesForEnablePayPalThroughBraintree" selector="{{BraintreeConfiguraionSection.yesForPayPalThroughBraintree}}"/>
+        <click stepKey="expandAdvancedBraintreeSettings" selector="{{BraintreeConfiguraionSection.advancedBraintreeSettings}}"/>
+        <fillField stepKey="fillMerchantAccountID" selector="{{BraintreeConfiguraionSection.merchantAccountID}}" userInput="{{BraintreeConfigurationData.merchantAccountID}}"/>
+        <click stepKey="expandCVVVerification" selector="{{BraintreeConfiguraionSection.CVVVerification}}"/>
+        <click stepKey="chooseYes" selector="{{BraintreeConfiguraionSection.yesForCVV}}"/>
+        <click stepKey="expandPayPalThroughBraintree" selector="{{BraintreeConfiguraionSection.payPalThroughBraintreeSelector}}"/>
+        <fillField stepKey="fillTitleForPayPalThroughBraintree" selector="{{BraintreeConfiguraionSection.titleForPayPalThroughBraintree}}" userInput="{{BraintreeConfigurationData.titleForPayPalThroughBraintree}}"/>
+        <click stepKey="expandPaymentAction" selector="{{BraintreeConfiguraionSection.paymentActionInPayPal}}"/>
+        <click stepKey="chooseAuthorize" selector="{{BraintreeConfiguraionSection.actionAuthorize}}"/>
+        <click stepKey="save" selector="{{BraintreeConfiguraionSection.save}}"/>
+        <waitForElementVisible selector="{{BraintreeConfiguraionSection.successfulMessage}}" stepKey="waitForSuccessfullyConfigured" time="10"/>
+    </actionGroup>
+
+    <actionGroup name="DisableBrainTree">
+        <annotations>
+            <description>Disables the Braintree and BraintreePaypal configuration settings via the CLI.</description>
+        </annotations>
+
+        <magentoCLI stepKey="disableBrainTree" command="config:set payment/braintree/active 0"/>
+        <magentoCLI stepKey="disableBrainTreePaypal" command="config:set payment/braintree_paypal/active 0"/>
+    </actionGroup>
+</actionGroups>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Helper;
 
 use \Magento\Sales\Helper\Reorder;
 
-class ReorderTest extends \PHPUnit_Framework_TestCase
+class ReorderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Helper\Reorder

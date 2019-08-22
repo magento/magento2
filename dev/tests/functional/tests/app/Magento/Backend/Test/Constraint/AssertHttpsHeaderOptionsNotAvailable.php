@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -62,7 +62,7 @@ class AssertHttpsHeaderOptionsNotAvailable extends AbstractConstraint
             $fieldName = $parts[2];
             $isVisible = $systemConfigEdit->getForm()->getGroup($tabName, $groupName)
                 ->isFieldVisible($tabName, $groupName, $fieldName);
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 !$isVisible,
                 $fieldName . " configuration is not visible."
             );

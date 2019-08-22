@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Customer\Block\Address;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class BookTest extends \PHPUnit_Framework_TestCase
+class BookTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Address\Book
@@ -65,6 +65,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider hasPrimaryAddressDataProvider
+     * @magentoAppIsolation enabled
      */
     public function testHasPrimaryAddress($customerId, $expected)
     {
@@ -82,6 +83,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoAppIsolation enabled
      */
     public function testGetAdditionalAddresses()
     {
@@ -98,6 +100,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider getAdditionalAddressesDataProvider
+     * @magentoAppIsolation enabled
      */
     public function testGetAdditionalAddressesNegative($customerId, $expected)
     {
@@ -115,11 +118,12 @@ class BookTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoAppIsolation enabled
      */
     public function testGetAddressHtml()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>" .
-            "\nUnited States<br/>\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />" .
+            "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         $address = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AddressRepositoryInterface::class
         )->getById(1);
@@ -134,6 +138,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
      */
     public function testGetCustomer()
     {
@@ -158,6 +163,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider getDefaultBillingDataProvider
+     * @magentoAppIsolation enabled
      */
     public function testGetDefaultBilling($customerId, $expected)
     {
@@ -175,6 +181,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider getDefaultShippingDataProvider
+     * @magentoAppIsolation enabled
      */
     public function testGetDefaultShipping($customerId, $expected)
     {

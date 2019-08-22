@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order;
 /**
  * Class AddressTest
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Address
@@ -47,47 +47,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->addressMock = $this->getMock(
+        $this->addressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
-            ['__wakeup', 'getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder']
         );
-        $this->orderMock = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            ['__wakeup', 'getId'],
-            [],
-            '',
-            false
-        );
-        $this->appResourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->connectionMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->validatorMock = $this->getMock(
-            \Magento\Sales\Model\Order\Address\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->entitySnapshotMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
-            [],
-            [],
-            '',
-            false
+        $this->orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['__wakeup', 'getId']);
+        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->validatorMock = $this->createMock(\Magento\Sales\Model\Order\Address\Validator::class);
+        $this->entitySnapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')

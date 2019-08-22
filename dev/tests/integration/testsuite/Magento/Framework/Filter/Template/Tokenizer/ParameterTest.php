@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Template\Tokenizer;
 
-class ParameterTest extends \PHPUnit_Framework_TestCase
+class ParameterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $string

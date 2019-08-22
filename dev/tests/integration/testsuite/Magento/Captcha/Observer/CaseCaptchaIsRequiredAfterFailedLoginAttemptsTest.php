@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Message\MessageInterface;
 
+/**
+ * Test captcha observer behavior.
+ *
+ * @magentoAppArea adminhtml
+ */
 class CaseCaptchaIsRequiredAfterFailedLoginAttemptsTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**

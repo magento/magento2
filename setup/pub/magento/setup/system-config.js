@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7,6 +7,7 @@
 angular.module('system-config', ['ngStorage'])
     .controller('systemConfigController', ['$scope', '$state', '$http', '$localStorage', '$rootScope', 'authService',
         function ($scope, $state, $http, $localStorage, $rootScope, authService) {
+        $scope.isHiddenSpinner = false;
         $scope.user = {
             username : $localStorage.marketplaceUsername ? $localStorage.marketplaceUsername : '',
             password : '',
@@ -27,6 +28,8 @@ angular.module('system-config', ['ngStorage'])
                     $scope.isHiddenSpinner = true;
                 }
             });
+        } else {
+            $scope.isHiddenSpinner = true;
         }
 
         $scope.saveAuthJson = function () {

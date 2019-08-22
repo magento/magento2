@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
@@ -28,11 +28,11 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
                 )->markAsRead(
                     $notificationId
                 );
-                $this->messageManager->addSuccess(__('The message has been marked as Read.'));
+                $this->messageManager->addSuccessMessage(__('The message has been marked as Read.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __("We couldn't mark the notification as Read because of an error.")
                 );

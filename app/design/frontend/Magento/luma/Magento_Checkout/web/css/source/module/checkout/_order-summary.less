@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -11,7 +11,7 @@
 @checkout-summary__padding: 22px @indent__l;
 
 @checkout-summary-title__margin: @indent__s;
-@checkout-summary-mark-value__color: @color-gray60;
+@checkout-summary-mark-value__color: @color-gray40;
 
 @checkout-summary-items__max-height: 370px;
 @checkout-summary-items__padding: 15px;
@@ -47,6 +47,10 @@
                 .lib-css(color, @checkout-summary-mark-value__color);
                 display: block;
             }
+        }
+
+        .discount.coupon {
+            display: none;
         }
 
         .grand.incl {
@@ -114,6 +118,10 @@
 
             .product {
                 position: relative;
+                .item-options {
+                    &:extend(.abs-product-options-list all);
+                    &:extend(.abs-add-clearfix all);
+                }
             }
         }
 
@@ -133,6 +141,10 @@
         }
 
         .product-item {
+            .product-item-details {
+                &:extend(.abs-add-clearfix all);
+            }
+
             .product-item-inner {
                 display: table;
                 margin: 0 0 @indent__s;
@@ -140,14 +152,14 @@
             }
 
             .product-item-name-block {
-                display: table-cell;
+                display: block;
                 padding-right: @indent__xs;
                 text-align: left;
             }
 
             .subtotal {
-                display: table-cell;
-                text-align: right;
+                display: block;
+                text-align: left;
             }
 
             .price {
@@ -160,6 +172,27 @@
                     .price {
                         .lib-font-size(10);
                     }
+                }
+            }
+
+            .message {
+                margin-top: 10px;
+            }
+        }
+
+        .actions-toolbar {
+            position: relative;
+            z-index: 1;
+
+            .secondary {
+                border-top: @border-width__base solid @border-color__base;
+                display: block;
+                margin: -1px 0 0;
+                padding: 15px 0 0;
+                text-align: left;
+
+                .action {
+                    margin: 0;
                 }
             }
         }
@@ -194,6 +227,30 @@
         .modal-header {
             .action-close {
                 display: none;
+            }
+        }
+    }
+}
+
+//
+//  Tablet
+//  _____________________________________________
+
+@media only screen and (max-width: @screen__m) {
+    .opc-block-summary {
+        .product-item {
+            .product-item-inner {
+                display: block;
+            }
+
+            .product-item-name-block {
+                display: block;
+                text-align: left;
+            }
+
+            .subtotal {
+                display: block;
+                text-align: left;
             }
         }
     }

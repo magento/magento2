@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class ContextPlugin
     protected $weeeHelper;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -63,7 +63,7 @@ class ContextPlugin
      * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Weee\Helper\Data $weeeHelper
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -74,7 +74,7 @@ class ContextPlugin
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Weee\Helper\Data $weeeHelper,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\PageCache\Model\Config $cacheConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -91,6 +91,8 @@ class ContextPlugin
     }
 
     /**
+     * Before dispatch.
+     *
      * @param \Magento\Framework\App\ActionInterface $subject
      * @param \Magento\Framework\App\RequestInterface $request
      * @return void
@@ -123,7 +125,7 @@ class ContextPlugin
         if (!$countryId && !$regionId) {
             // country and region does not exist
             return;
-        } else if ($countryId && !$regionId) {
+        } elseif ($countryId && !$regionId) {
             // country exist and region does not exist
             $regionId = 0;
             $exist = $this->weeeTax->isWeeeInLocation(
@@ -159,6 +161,8 @@ class ContextPlugin
     }
 
     /**
+     * Get wee tax region.
+     *
      * @param string $basedOn
      * @return array
      */
@@ -186,8 +190,7 @@ class ContextPlugin
                 $countryId = $defaultShippingAddress['country_id'];
                 $regionId = $defaultShippingAddress['region_id'];
             }
-
-        } else if ($basedOn == 'billing') {
+        } elseif ($basedOn == 'billing') {
             $defaultBillingAddress = $this->customerSession->getDefaultTaxBillingAddress();
             if (empty($defaultBillingAddress)) {
                 $countryId = $defaultCountryId;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -32,7 +32,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @var string
      */
-    protected $eventObject = 'stock';
+    protected $_eventObject = 'stock';
 
     const BACKORDERS_NO = 0;
 
@@ -145,5 +145,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

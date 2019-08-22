@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,6 +26,11 @@ try {
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed
 }
+
+/** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+$stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+$stockRegistryStorage->removeStockItem(1);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

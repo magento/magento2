@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Report statistics admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Backend\Model\Session;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-abstract class Statistics extends \Magento\Backend\App\Action
+/**
+ * Report statistics admin controller.
+ *
+ * @api
+ * @since 100.0.2
+ */
+abstract class Statistics extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -45,7 +47,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param [] $reportTypes
+     * @param array $reportTypes
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

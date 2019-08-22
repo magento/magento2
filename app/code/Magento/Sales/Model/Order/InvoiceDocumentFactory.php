@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,7 @@ use Magento\Sales\Model\Service\InvoiceService;
  * Class InvoiceDocumentFactory
  *
  * @api
+ * @since 100.1.2
  */
 class InvoiceDocumentFactory
 {
@@ -43,6 +44,7 @@ class InvoiceDocumentFactory
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return InvoiceInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 100.1.2
      */
     public function create(
         OrderInterface $order,

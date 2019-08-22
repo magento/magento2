@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Design\Config\Scope;
@@ -135,7 +135,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Retrieve scope data
-     * 
+     *
      * @param array $websiteScope
      * @param array $groupScope
      * @param array $storeScope

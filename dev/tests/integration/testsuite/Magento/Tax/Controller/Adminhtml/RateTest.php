@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Tax\Controller\Adminhtml;
 
 /**
@@ -16,7 +17,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testAjaxSaveAction($postData, $expectedData)
     {
-        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setPostValue($postData)->setMethod('POST');
 
         $this->dispatch('backend/tax/rate/ajaxSave');
 
@@ -84,7 +85,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testAjaxSaveActionInvalidData($postData, $expectedData)
     {
-        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setPostValue($postData)->setMethod('POST');
 
         $this->dispatch('backend/tax/rate/ajaxSave');
 
@@ -109,7 +110,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $expectedData = [
             'success' => false,
-            'error_message' => 'Make sure all required information is valid.',
+            'error_message' => 'The required information is invalid. Verify the information and try again.',
         ];
         return [
             [
@@ -145,20 +146,6 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 [
                     'rate' => rand(1, 10000),
                     'tax_country_id' => '',
-                    'tax_region_id' => '0',
-                    'code' => 'Rate ' . uniqid(),
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
-                    'tax_postcode' => '*',
-                ],
-                $expectedData
-            ],
-            // Rate empty
-            [
-                [
-                    'rate' => '',
-                    'tax_country_id' => 'US',
                     'tax_region_id' => '0',
                     'code' => 'Rate ' . uniqid(),
                     'zip_is_range' => '0',

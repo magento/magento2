@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Payment\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Payment\Test\Repository\CreditCardAdmin;
+use Magento\Payment\Test\Repository\CreditCard;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 
 /**
@@ -30,16 +30,16 @@ class AssertCardRequiredFields extends AbstractConstraint
     /**
      * Assert required fields on credit card payment method in backend.
      * @param OrderCreateIndex $orderCreateIndex
-     * @param CreditCardAdmin $creditCard
+     * @param CreditCard $creditCard
      * @return void
      */
-    public function processAssert(OrderCreateIndex $orderCreateIndex, CreditCardAdmin $creditCard)
+    public function processAssert(OrderCreateIndex $orderCreateIndex, CreditCard $creditCard)
     {
         $actualRequiredFields = $orderCreateIndex->getCreateBlock()->getBillingMethodBlock()
             ->getJsErrors();
         $creditCardEmpty = $creditCard->get('visa_empty');
         foreach (array_keys($creditCardEmpty) as $field) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 isset($actualRequiredFields[$field]),
                 "Field '$field' is not highlighted with an JS error."
             );
@@ -47,7 +47,7 @@ class AssertCardRequiredFields extends AbstractConstraint
             if (in_array($field, ['cc_number', 'cc_cid'])) {
                 $expected = self::VALID_NUMBER_MESSAGE;
             }
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $expected,
                 $actualRequiredFields[$field],
                 "Field '$field' is not highlighted as required."

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -11,7 +11,7 @@ use Magento\Integration\Model\Config\Consolidated\Reader as ConfigReader;
 /**
  * Integration config reader test.
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $fileResolverMock;

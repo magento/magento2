@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Controller\Ajax;
@@ -9,40 +9,43 @@ namespace Magento\Swatches\Test\Unit\Controller\Ajax;
 /**
  * Class Media
  */
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     /** @var array */
-    protected $mediaGallery;
+    private $mediaGallery;
 
     /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $swatchHelperMock;
+    private $swatchHelperMock;
 
     /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $productModelFactoryMock;
+    private $productModelFactoryMock;
+
+    /** @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    private $config;
 
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
-    protected $productMock;
-
-    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
-    protected $attributeMock;
+    private $productMock;
 
     /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $contextMock;
+    private $contextMock;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $requestMock;
+    private $requestMock;
+
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $responseMock;
 
     /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $resultFactory;
+    private $resultFactory;
 
     /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
-    protected $jsonMock;
+    private $jsonMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
-    protected $objectManager;
+    private $objectManager;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\Magento\Swatches\Controller\Ajax\Media */
-    protected $controller;
+    private $controller;
 
     protected function setUp()
     {
@@ -55,45 +58,29 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->swatchHelperMock = $this->getMock(\Magento\Swatches\Helper\Data::class, [], [], '', false);
-        $this->productModelFactoryMock = $this->getMock(
+        $this->swatchHelperMock = $this->createMock(\Magento\Swatches\Helper\Data::class);
+        $this->productModelFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->attributeMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
+        $this->config = $this->createMock(\Magento\PageCache\Model\Config::class);
+        $this->config->method('getTtl')->willReturn(1);
 
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->requestMock->expects($this->any())->method('getParam')->withConsecutive(
-            ['product_id'],
-            ['attributes'],
-            ['additional']
-        )->willReturnOnConsecutiveCalls(
-            59,
-            ['size' => 454],
-            ['color' => 43]
-        );
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
+
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
-        $this->resultFactory = $this->getMock(
-            \Magento\Framework\Controller\ResultFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setPublicHeaders'])
+            ->getMockForAbstractClass();
+        $this->responseMock->method('setPublicHeaders')->willReturnSelf();
+        $this->contextMock->method('getResponse')->willReturn($this->responseMock);
+        $this->resultFactory = $this->createPartialMock(\Magento\Framework\Controller\ResultFactory::class, ['create']);
         $this->contextMock->method('getResultFactory')->willReturn($this->resultFactory);
 
-        $this->jsonMock = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
+        $this->jsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonMock);
 
         $this->controller = $this->objectManager->getObject(
@@ -101,83 +88,29 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->contextMock,
                 'swatchHelper' => $this->swatchHelperMock,
-                'productModelFactory' => $this->productModelFactoryMock
+                'productModelFactory' => $this->productModelFactoryMock,
+                'config' => $this->config
             ]
         );
     }
 
     public function testExecute()
     {
-        $this->attributeMock
-            ->expects($this->any())
-            ->method('offsetGet')
-            ->with('attribute_code')
-            ->willReturn('color');
-
+        $this->requestMock->expects($this->any())->method('getParam')->with('product_id')->willReturn(59);
         $this->productMock
             ->expects($this->once())
             ->method('load')
             ->with(59)
             ->willReturn($this->productMock);
-
-        $this->productModelFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->productMock);
-
-        $this->swatchHelperMock
-            ->expects($this->once())
-            ->method('getAttributesFromConfigurable')
-            ->with($this->productMock)
-            ->willReturn([$this->attributeMock]);
-
-        $this->swatchHelperMock
-            ->expects($this->once())
-            ->method('loadVariationByFallback')
-            ->with($this->productMock, ['size' => 454, 'color' => 43])
-            ->willReturn($this->productMock);
-
-        $this->swatchHelperMock
-            ->expects($this->once())
-            ->method('getProductMediaGallery')
-            ->with($this->productMock)
-            ->willReturn($this->mediaGallery);
-
-        $this->jsonMock
-            ->expects($this->once())
-            ->method('setData')
-            ->with($this->mediaGallery)
-            ->will($this->returnSelf());
-
-        $result = $this->controller->execute();
-
-        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Json::class, $result);
-    }
-
-    public function testExecuteNullProduct()
-    {
         $this->productMock
             ->expects($this->once())
-            ->method('load')
-            ->with(59)
-            ->willReturn($this->productMock);
+            ->method('getIdentities')
+            ->willReturn(['tags']);
 
         $this->productModelFactoryMock
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->productMock);
-
-        $this->swatchHelperMock
-            ->expects($this->once())
-            ->method('getAttributesFromConfigurable')
-            ->with($this->productMock)
-            ->willReturn([$this->attributeMock]);
-
-        $this->swatchHelperMock
-            ->expects($this->once())
-            ->method('loadVariationByFallback')
-            ->with($this->productMock, ['size' => 454])
-            ->willReturn(null);
 
         $this->swatchHelperMock
             ->expects($this->once())

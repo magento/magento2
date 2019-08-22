@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -9,7 +9,7 @@ define([
     'uiRegistry',
     'underscore',
     '../template/renderer',
-    'jquery/ui'
+    'jquery-ui-modules/resizable'
 ], function (ko, $, async, registry, _, renderer) {
     'use strict';
 

@@ -1,11 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\TemplateEngine;
 
-class PhpTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test template engine that enables PHP templates to be used for rendering.
+ */
+class PhpTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_PROP_VALUE = 'TEST_PROP_VALUE';
 
@@ -22,7 +27,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helperFactoryMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_helperFactoryMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_phpEngine = new \Magento\Framework\View\TemplateEngine\Php($this->_helperFactoryMock);
     }
 
@@ -55,7 +60,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      * Test the render() function with a nonexistent filename.
      *
      * Expect an exception if the specified file does not exist.
-     * @expectedException \Exception
+     * @expectedException PHPUnit\Framework\Exception
      */
     public function testRenderException()
     {
@@ -66,6 +71,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
 
         $filename = 'This_is_not_a_file';
+
         $this->_phpEngine->render($blockMock, $filename);
     }
 
@@ -75,7 +81,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     public function testHelperWithInvalidClass()
     {
         $class = \Magento\Framework\DataObject::class;
-        $object = $this->getMock($class, [], [], '', false);
+        $object = $this->createMock($class);
         $this->_helperFactoryMock->expects(
             $this->once()
         )->method(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Carrier;
@@ -13,6 +13,9 @@ use Magento\Shipping\Model\Rate\Result;
 
 /**
  * Flat rate shipping model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Flatrate extends AbstractCarrier implements CarrierInterface
 {
@@ -66,6 +69,8 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
     }
 
     /**
+     * Collect and get rates
+     *
      * @param RateRequest $request
      * @return Result|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -94,6 +99,8 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
     }
 
     /**
+     * Get count of free boxes
+     *
      * @param RateRequest $request
      * @return int
      */
@@ -117,14 +124,18 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
     }
 
     /**
+     * Get allowed shipping methods
+     *
      * @return array
      */
     public function getAllowedMethods()
     {
-        return ['flatrate' => $this->getConfigData('name')];
+        return [$this->_code => $this->getConfigData('name')];
     }
 
     /**
+     * Returns shipping price
+     *
      * @param RateRequest $request
      * @param int $freeBoxes
      * @return bool|float
@@ -144,16 +155,15 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
 
         $shippingPrice = $this->getFinalPriceWithHandlingFee($shippingPrice);
 
-        if ($shippingPrice !== false && (
-                $request->getFreeShipping() === true || $request->getPackageQty() == $freeBoxes
-            )
-        ) {
+        if ($shippingPrice !== false && $request->getPackageQty() == $freeBoxes) {
             $shippingPrice = '0.00';
         }
         return $shippingPrice;
     }
 
     /**
+     * Creates result method
+     *
      * @param int|float $shippingPrice
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
      */
@@ -174,6 +184,8 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
     }
 
     /**
+     * Returns free boxes count of children
+     *
      * @param mixed $item
      * @return mixed
      */

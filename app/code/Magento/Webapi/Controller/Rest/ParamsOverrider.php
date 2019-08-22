@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Webapi\Rest\Request\ParamOverriderInterface;
 use Magento\Webapi\Model\Config\Converter;
 use Magento\Framework\Reflection\MethodsMap;
@@ -27,14 +28,23 @@ class ParamsOverrider
     private $methodsMap;
 
     /**
+     * @var SimpleDataObjectConverter
+     */
+    private $dataObjectConverter;
+
+    /**
      * Initialize dependencies
      *
      * @param ParamOverriderInterface[] $paramOverriders
+     * @param SimpleDataObjectConverter|null $dataObjectConverter
      */
     public function __construct(
-        array $paramOverriders = []
+        array $paramOverriders = [],
+        SimpleDataObjectConverter $dataObjectConverter = null
     ) {
         $this->paramOverriders = $paramOverriders;
+        $this->dataObjectConverter = $dataObjectConverter
+            ?? ObjectManager::getInstance()->get(SimpleDataObjectConverter::class);
     }
 
     /**
@@ -64,15 +74,17 @@ class ParamsOverrider
     /**
      * Determine if a nested array value is set.
      *
-     * @param array &$nestedArray
+     * @param array $nestedArray
      * @param string[] $arrayKeys
      * @return bool true if array value is set
      */
-    protected function isNestedArrayValueSet(&$nestedArray, $arrayKeys)
+    protected function isNestedArrayValueSet($nestedArray, $arrayKeys)
     {
-        $currentArray = &$nestedArray;
+        //Converting input data to camelCase in order to process both snake and camel style data equally.
+        $currentArray = $this->dataObjectConverter->convertKeysToCamelCase($nestedArray);
 
         foreach ($arrayKeys as $key) {
+            $key = SimpleDataObjectConverter::snakeCaseToCamelCase($key);
             if (!isset($currentArray[$key])) {
                 return false;
             }
@@ -95,10 +107,20 @@ class ParamsOverrider
         $lastKey = array_pop($arrayKeys);
 
         foreach ($arrayKeys as $key) {
+            if (!array_key_exists($key, $currentArray)) {
+                //In case input data uses camelCase format
+                $key = SimpleDataObjectConverter::snakeCaseToCamelCase($key);
+            }
             if (!isset($currentArray[$key])) {
                 $currentArray[$key] = [];
             }
             $currentArray = &$currentArray[$key];
+        }
+
+        //In case input data uses camelCase format
+        $camelCaseKey = SimpleDataObjectConverter::snakeCaseToCamelCase($lastKey);
+        if (array_key_exists($camelCaseKey, $currentArray)) {
+            $lastKey = $camelCaseKey;
         }
 
         $currentArray[$lastKey] = $valueToSet;
@@ -197,7 +219,7 @@ class ParamsOverrider
             $index = array_search($serviceMethodParamName, array_column($methodParams, 'name'));
             if ($index !== false) {
                 $paramObjectType = $methodParams[$index][MethodsMap::METHOD_META_TYPE];
-                $setter = 'set' . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($objectProperty));
+                $setter = 'set' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($objectProperty);
                 if (array_key_exists(
                     $setter,
                     $this->getMethodsMap()->getMethodsMap($paramObjectType)
@@ -214,7 +236,7 @@ class ParamsOverrider
      *
      * @return \Magento\Framework\Reflection\MethodsMap
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getMethodsMap()
     {

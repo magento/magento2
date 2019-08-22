@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -11,9 +11,11 @@
 @account-nav-color: false;
 
 @account-nav-current-border: 3px solid transparent;
-@account-nav-current-border-color: @color-orange-red1;
+@account-nav-current-border-color: @active__color;
 @account-nav-current-color: false;
 @account-nav-current-font-weight: @font-weight__semibold;
+
+@account-nav-delimiter__border-color: @color-gray82;
 
 @account-nav-item-hover: @color-gray91;
 
@@ -63,7 +65,7 @@
     }
 
     .form-address-edit {
-        #region_id {
+        .region_id {
             display: none;
         }
 
@@ -163,7 +165,7 @@
 
     //  Checkout address (create shipping address)
     .field.street {
-        .field.additional {
+        .field {
             .label {
                 &:extend(.abs-visually-hidden all);
             }
@@ -218,6 +220,12 @@
                 a {
                     .lib-css(border-color, @account-nav-current-border-color);
                 }
+            }
+
+            .delimiter {
+                border-top: 1px solid @account-nav-delimiter__border-color;
+                display: block;
+                margin: @indent__s 1.8rem;
             }
         }
     }
@@ -359,8 +367,8 @@
     }
 
     .account {
-        .page.messages {
-            margin-bottom: @indent__xl;
+        .messages {
+            margin-bottom: 0;
         }
 
         .toolbar {
@@ -378,6 +386,17 @@
     .customer-account-index {
         .page-title-wrapper {
             position: relative;
+        }
+    }
+
+    .form.search.advanced {
+        .field.price {
+            .with-addon {
+                .input-text {
+                    flex-basis: auto;
+                    width: 100%;
+                }
+            }
         }
     }
 }
@@ -413,7 +432,7 @@
 
             > .field {
                 > .control {
-                    width: 55%;
+                    width: 80%;
                 }
             }
         }
@@ -443,7 +462,9 @@
     .form.password.reset,
     .form.send.confirmation,
     .form.password.forget,
-    .form.create.account {
+    .form.create.account,
+    .form.search.advanced,
+    .form.form-orders-search {
         min-width: 600px;
         width: 50%;
     }
@@ -484,14 +505,22 @@
     .block-addresses-list {
         .items.addresses {
             &:extend(.abs-add-clearfix-desktop all);
+            font-size: 0;
 
             > .item {
-                &:extend(.abs-blocks-2columns all);
+                display: inline-block;
+                font-size: @font-size__base;
                 margin-bottom: @indent__base;
+                vertical-align: top;
+                width: 48.8%;
 
                 &:nth-last-child(1),
                 &:nth-last-child(2) {
                     margin-bottom: 0;
+                }
+
+                &:nth-child(even) {
+                    margin-left: 2.4%;
                 }
             }
         }

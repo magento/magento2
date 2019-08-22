@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Class CreditmemoCommentSender
@@ -62,6 +63,8 @@ class CreditmemoCommentSender extends NotifySender
     public function send(Creditmemo $creditmemo, $notify = true, $comment = '')
     {
         $order = $creditmemo->getOrder();
+        $this->identityContainer->setStore($order->getStore());
+
         $transport = [
             'order' => $order,
             'creditmemo' => $creditmemo,
@@ -71,13 +74,17 @@ class CreditmemoCommentSender extends NotifySender
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
         ];
+        $transportObject = new DataObject($transport);
 
+        /**
+         * Event argument `transport` is @deprecated. Use `transportObject` instead.
+         */
         $this->eventManager->dispatch(
             'email_creditmemo_comment_set_template_vars_before',
-            ['sender' => $this, 'transport' => $transport]
+            ['sender' => $this, 'transport' => $transportObject->getData(), 'transportObject' => $transportObject]
         );
 
-        $this->templateContainer->setTemplateVars($transport);
+        $this->templateContainer->setTemplateVars($transportObject->getData());
 
         return $this->checkAndSend($order, $notify);
     }

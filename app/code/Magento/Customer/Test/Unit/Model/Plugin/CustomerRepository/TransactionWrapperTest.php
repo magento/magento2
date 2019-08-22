@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Plugin\CustomerRepository;
 
-class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
+class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper
@@ -46,15 +46,9 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceMock = $this->getMock(\Magento\Customer\Model\ResourceModel\Customer::class, [], [], '', false);
-        $this->subjectMock = $this->getMock(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->customerMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
+        $this->resourceMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
+        $this->subjectMock = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customerMock = $this->customerMock;
         $this->closureMock = function () use ($customerMock) {
             return $customerMock;

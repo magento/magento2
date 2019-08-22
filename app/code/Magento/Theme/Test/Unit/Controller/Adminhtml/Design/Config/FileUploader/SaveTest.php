@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config\FileUploader;
@@ -8,7 +8,7 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config\FileUploade
 use Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader\Save;
 use Magento\Framework\Controller\ResultFactory;
 
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
@@ -45,6 +45,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultFactory);
 
         $this->controller = new Save($this->context, $this->fileProcessor);
+    }
+
+    protected function tearDown()
+    {
+        $_FILES = [];
     }
 
     public function testExecute()

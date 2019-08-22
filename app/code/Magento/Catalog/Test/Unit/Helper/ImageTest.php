@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Helper;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+use Magento\Catalog\Helper\Image;
+
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var Image
      */
     protected $helper;
 
@@ -42,6 +44,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
+    /**
+     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $placeholderFactory;
+
     protected function setUp()
     {
         $this->mockContext();
@@ -54,11 +61,16 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\ConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->helper = new \Magento\Catalog\Helper\Image(
+        $this->placeholderFactory = $this->getMockBuilder(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->helper = new Image(
             $this->context,
             $this->imageFactory,
             $this->assetRepository,
-            $this->viewConfig
+            $this->viewConfig,
+            $this->placeholderFactory
         );
     }
 
@@ -108,7 +120,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->prepareWatermarkProperties($data);
 
         $this->assertInstanceOf(
-            \Magento\Catalog\Helper\Image::class,
+            Image::class,
             $this->helper->init($productMock, $imageId, $attributes)
         );
     }
@@ -150,7 +162,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $configViewMock->expects($this->once())
             ->method('getMediaAttributes')
-            ->with('Magento_Catalog', 'images', $imageId)
+            ->with('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId)
             ->willReturn($data);
 
         $this->viewConfig->expects($this->once())
@@ -424,7 +436,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      * @param string $imageId
      * @param string $imageFile
      * @param string $baseFile
-     * @param string $newFile
      * @param string $destination
      * @param boolean $setImageFile
      * @param boolean $isCached
@@ -436,7 +447,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageId,
         $imageFile,
         $baseFile,
-        $newFile,
         $destination,
         $setImageFile,
         $isCached,
@@ -477,9 +487,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->image->expects($this->any())
             ->method('isBaseFilePlaceholder')
             ->willReturn($isBaseFilePlaceholder);
-        $this->image->expects($this->any())
-            ->method('getNewFile')
-            ->willReturn($newFile);
 
         $this->prepareAttributes([], $imageId);
 
@@ -502,7 +509,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => '/path/to/base_image.png',
-                'new_file' => '/path/to/base_image.png',
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,
@@ -516,7 +522,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
-                'new_file' => true,
                 'destination' => 'small_image',
                 'set_image_file' => false,
                 'is_cached' => false,
@@ -530,7 +535,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
-                'new_file' => false,
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,
@@ -544,7 +548,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
-                'new_file' => true,
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,
@@ -558,7 +561,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
-                'new_file' => '/path/to/test_image_id.png',
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,

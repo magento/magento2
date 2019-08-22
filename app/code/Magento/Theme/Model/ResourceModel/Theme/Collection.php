@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Theme;
@@ -16,6 +16,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Default page size
      */
     const DEFAULT_PAGE_SIZE = 6;
+
+    /**
+     * @var string
+     */
+    protected $_idFieldName = 'theme_id';
 
     /**
      * Collection initialization

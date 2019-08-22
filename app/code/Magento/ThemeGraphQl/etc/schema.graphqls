@@ -1,0 +1,19 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type StoreConfig @doc(description: "The type contains information about a store config") {
+    head_shortcut_icon : String @doc(description: "Favicon Icon")
+    default_title : String @doc(description: "Default Page Title")
+    title_prefix : String @doc(description: "Page Title Prefix")
+    title_suffix : String @doc(description: "Page Title Suffix")
+    default_description : String @doc(description: "Default Meta Description")
+    default_keywords : String @doc(description: "Default Meta Keywords")
+    head_includes : String @doc(description: "Scripts and Style Sheets")
+    demonotice : Int @doc(description: "Display Demo Store Notice")
+    header_logo_src : String @doc(description: "Logo Image")
+    logo_width : Int @doc(description: "Logo Attribute Width")
+    logo_height : Int @doc(description: "Logo Attribute Height")
+    welcome : String @doc(description: "Welcome Text")
+    logo_alt : String @doc(description: "Logo Image Alt")
+    absolute_footer : String @doc(description: "Footer Miscellaneous HTML")
+    copyright : String @doc(description: "Copyright")
+}

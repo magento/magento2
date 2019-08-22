@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector;
@@ -9,7 +9,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\View\File\Collector\Theme;
 use Magento\Framework\View\File\Factory;
 
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Theme path
@@ -66,13 +66,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             ->method('getFullPath')
             ->will($this->returnValue($this->themePath));
 
-        $this->readDirFactory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->themeDirectoryMock));

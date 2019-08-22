@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sitemap\Test\TestCase\UpdateSitemapEntityTest" summary="Update Sitemap" ticketId="MAGETWO-25362">
+        <variation name="UpdateSitemapEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S1</data>
+            <data name="catalog/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="cmsPage/dataset" xsi:type="string">default</data>
+            <data name="sitemap/dataset" xsi:type="string">default</data>
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessGenerateMessage" />
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapContent" />
+        </variation>
+    </testCase>
+</config>

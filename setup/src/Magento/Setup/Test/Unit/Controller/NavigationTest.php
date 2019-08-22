@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Setup\Controller\Navigation;
 use Magento\Setup\Model\Navigation as NavModel;
 use Magento\Setup\Model\ObjectManagerProvider;
 
-class NavigationTest extends \PHPUnit_Framework_TestCase
+class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Navigation
@@ -34,10 +34,10 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->navigationModel = $this->getMock(\Magento\Setup\Model\Navigation::class, [], [], '', false);
-        $this->status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
+        $this->navigationModel = $this->createMock(\Magento\Setup\Model\Navigation::class);
+        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
         $this->objectManagerProvider =
-            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->controller = new Navigation($this->navigationModel, $this->status, $this->objectManagerProvider);
     }
 

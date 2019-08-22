@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Website\ReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
 
-class ReadHandlerTest extends \PHPUnit_Framework_TestCase
+class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ResourceModel\Website\Link | \PHPUnit_Framework_MockObject_MockObject */
     private $websiteLink;

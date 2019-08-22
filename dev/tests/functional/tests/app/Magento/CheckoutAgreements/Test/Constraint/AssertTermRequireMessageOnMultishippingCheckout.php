@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Constraint;
@@ -69,7 +69,7 @@ class AssertTermRequireMessageOnMultishippingCheckout extends AbstractConstraint
             ['agreementValue' => 'No']
         )->run();
         $stepFactory->create(\Magento\Multishipping\Test\TestStep\PlaceOrderStep::class)->run();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::NOTIFICATION_MESSAGE,
             $page->getAgreementReview()->getNotificationMassage(),
             'Notification required message of Terms and Conditions is absent.'

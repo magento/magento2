@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Block\Adminhtml\Attribute;
 
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 
-class PropertyLockerTest extends \PHPUnit_Framework_TestCase
+class PropertyLockerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PropertyLocker */
     protected $object;

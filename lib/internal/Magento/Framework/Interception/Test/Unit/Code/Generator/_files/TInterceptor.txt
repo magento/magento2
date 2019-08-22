@@ -1,0 +1,105 @@
+namespace Magento\Framework\Interception\Code\Generator\TSample;
+
+/**
+ * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\TSample
+ */
+class Interceptor extends \Magento\Framework\Interception\Code\Generator\TSample implements \Magento\Framework\Interception\InterceptorInterface
+{
+    use \Magento\Framework\Interception\Interceptor;
+
+    public function __construct()
+    {
+        $this->___init();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function returnVoid() : void
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'returnVoid');
+        if (!$pluginInfo) {
+            parent::returnVoid();
+        } else {
+            $this->___callPlugins('returnVoid', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNullableValue() : ?string
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getNullableValue');
+        if (!$pluginInfo) {
+            return parent::getNullableValue();
+        } else {
+            return $this->___callPlugins('getNullableValue', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue() : string
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getValue');
+        if (!$pluginInfo) {
+            return parent::getValue();
+        } else {
+            return $this->___callPlugins('getValue', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue(string $value)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setValue');
+        if (!$pluginInfo) {
+            return parent::setValue($value);
+        } else {
+            return $this->___callPlugins('setValue', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function typeHintedFirstVariadicParameter(string ... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'typeHintedFirstVariadicParameter');
+        if (!$pluginInfo) {
+            return parent::typeHintedFirstVariadicParameter(... $variadicValue);
+        } else {
+            return $this->___callPlugins('typeHintedFirstVariadicParameter', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function typeHintedSecondVariadicParameter(string $value, string ... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'typeHintedSecondVariadicParameter');
+        if (!$pluginInfo) {
+            return parent::typeHintedSecondVariadicParameter($value, ... $variadicValue);
+        } else {
+            return $this->___callPlugins('typeHintedSecondVariadicParameter', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function byRefTypeHintedVariadic(string &... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'byRefTypeHintedVariadic');
+        if (!$pluginInfo) {
+            return parent::byRefTypeHintedVariadic(... $variadicValue);
+        } else {
+            return $this->___callPlugins('byRefTypeHintedVariadic', func_get_args(), $pluginInfo);
+        }
+    }
+}

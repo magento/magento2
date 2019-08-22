@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Controller\Adminhtml\System;
 
@@ -16,6 +14,7 @@ use Magento\Framework\Filesystem;
  * Store controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class Store extends Action
 {
@@ -88,6 +87,8 @@ abstract class Store extends Action
      * Backup database
      *
      * @return bool
+     *
+     * @deprecated Backup module is to be removed.
      */
     protected function _backupDatabase()
     {
@@ -105,12 +106,12 @@ abstract class Store extends Action
                 ->setType('db')
                 ->setPath($filesystem->getDirectoryRead(DirectoryList::VAR_DIR)->getAbsolutePath('backups'));
             $backupDb->createBackup($backup);
-            $this->messageManager->addSuccess(__('The database was backed up.'));
+            $this->messageManager->addSuccessMessage(__('The database was backed up.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             return false;
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t create a backup right now. Please try again later.')
             );
@@ -127,9 +128,11 @@ abstract class Store extends Action
      */
     protected function _addDeletionNotice($typeTitle)
     {
-        $this->messageManager->addNotice(
+        $this->messageManager->addNoticeMessage(
             __(
-                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.',
+                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.)'
+                . ', but the %1 will not be able to be restored. It is suggested that you create a database backup '
+                . 'before deleting the %1.',
                 $typeTitle
             )
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,7 +59,7 @@ class AssertTermAbsentOnCheckout extends AbstractConstraint
         )->run();
         $objectManager->create(\Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class, $paymentData)->run();
 
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $checkoutOnepage->getAgreementReview()->checkAgreement($agreement),
             'Checkout Agreement \'' . $agreement->getName() . '\' is present in the Place order step.'
         );

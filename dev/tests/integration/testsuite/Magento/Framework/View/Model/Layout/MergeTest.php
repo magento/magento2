@@ -1,21 +1,29 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Model\Layout;
 
-class MergeTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+
+class MergeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Fixture XML instruction(s) to be used in tests
      */
-    const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture.phtml"/>';
+    const FIXTURE_LAYOUT_XML
+        = '<block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture.phtml"/>';
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Merge
      */
     protected $model;
+
+    /**
+     * @var LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutCacheKeyMock;
 
     protected function setUp()
     {
@@ -32,7 +40,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $layoutUpdate1->setHandle('fixture_handle_one');
         $layoutUpdate1->setXml(
             '<body>
-                <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" 
+                       template="Magento_Framework::fixture_template_one.phtml"/>
             </body>'
         );
         $layoutUpdate1->setHasDataChanges(true);
@@ -49,7 +58,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $layoutUpdate2->setHandle('fixture_handle_two');
         $layoutUpdate2->setXml(
             '<body>
-                <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+                <block class="Magento\Framework\View\Element\Template"
+                       template="Magento_Framework::fixture_template_two.phtml"/>
             </body>'
         );
         $layoutUpdate2->setHasDataChanges(true);
@@ -59,9 +69,17 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $link2->setLayoutUpdateId($layoutUpdate2->getId());
         $link2->save();
 
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock->expects($this->any())
+            ->method('getCacheKeys')
+            ->willReturn([]);
+
         $this->model = $objectManager->create(
             \Magento\Framework\View\Model\Layout\Merge::class,
-            ['theme' => $theme]
+            [
+                'theme' => $theme,
+                'layoutCacheKey' => $this->layoutCacheKeyMock,
+            ]
         );
     }
 
@@ -74,10 +92,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $expectedResult = '
             <root>
                 <body>
-                    <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+                    <block class="Magento\Framework\View\Element\Template"
+                           template="Magento_Framework::fixture_template_one.phtml"/>
                 </body>
                 <body>
-                    <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+                    <block class="Magento\Framework\View\Element\Template" 
+                           template="Magento_Framework::fixture_template_two.phtml"/>
                 </body>
             </root>
         ';

@@ -1,12 +1,12 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-class GuestCouponManagementTest extends \PHPUnit_Framework_TestCase
+class GuestCouponManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\GuestCart\GuestCouponManagement
@@ -46,13 +46,7 @@ class GuestCouponManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->couponManagementMock = $this->getMock(
-            \Magento\Quote\Api\CouponManagementInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->couponManagementMock = $this->createMock(\Magento\Quote\Api\CouponManagementInterface::class);
 
         $this->couponCode = 'test_coupon_code';
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -79,14 +79,14 @@ class AssertSuccessInstall extends AbstractConstraint
     private function checkInstallData(array $allData, array $adminData, array $dbData)
     {
         foreach ($this->adminFieldsList as $field) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $allData[$field['fixture']],
                 $adminData[$field['pageData']],
                 'Wrong admin information is displayed.'
             );
         }
         foreach ($this->dbFieldsList as $field) {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $allData[$field['fixture']],
                 $dbData[$field['pageData']],
                 'Wrong database information is displayed.'

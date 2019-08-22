@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Export;
@@ -10,7 +10,7 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Ui\Controller\Adminhtml\Export\GridToXml;
 use Magento\Ui\Model\Export\ConvertToXml;
 
-class GridToXmlTest extends \PHPUnit_Framework_TestCase
+class GridToXmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GridToXml

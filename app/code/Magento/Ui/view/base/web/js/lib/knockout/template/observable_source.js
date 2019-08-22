@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /**
@@ -29,7 +29,7 @@ define([
          * Else, writes into it.
          * @param  {String} key - key to write to or to read from
          * @param  {*} value
-         * @return {*} - if 1 arg provided, returnes _data[key] property
+         * @return {*} - if 1 arg provided, Returns _data[key] property
          */
         data: function (key, value) {
             if (arguments.length === 1) {

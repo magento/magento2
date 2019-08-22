@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Search\Model\ResourceModel;
 
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -85,9 +85,10 @@ class SynonymReader extends AbstractDb
      */
     private function queryByPhrase($phrase)
     {
+        $phrase = $this->fullTextSelect->removeSpecialCharacters($phrase);
         $matchQuery = $this->fullTextSelect->getMatchQuery(
             ['synonyms' => 'synonyms'],
-            $phrase,
+            $this->escapePhrase($phrase),
             Fulltext::FULLTEXT_MODE_BOOLEAN
         );
         $query = $this->getConnection()->select()->from(
@@ -95,6 +96,18 @@ class SynonymReader extends AbstractDb
         )->where($matchQuery);
 
         return $this->getConnection()->fetchAll($query);
+    }
+
+    /**
+     * Cut trailing plus or minus sign, and @ symbol, using of which causes InnoDB to report a syntax error.
+     *
+     * @see https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html
+     * @param string $phrase
+     * @return string
+     */
+    private function escapePhrase(string $phrase): string
+    {
+        return preg_replace('/@+|[@+-]+$|[<>]/', '', $phrase);
     }
 
     /**
@@ -116,10 +129,10 @@ class SynonymReader extends AbstractDb
             if ($this->isSynRowForStoreView($row)) {
                 // Check for current store view
                 $synRowsForStoreView[] = $row;
-            } else if (empty($synRowsForStoreView) && $this->isSynRowForWebsite($row)) {
+            } elseif (empty($synRowsForStoreView) && $this->isSynRowForWebsite($row)) {
                 // Check for current website
                 $synRowsForWebsite[] = $row;
-            } else if (empty($synRowsForStoreView)
+            } elseif (empty($synRowsForStoreView)
                 && empty($synRowsForWebsite)
                 && $this->isSynRowForDefaultScope($row)) {
                 // Check for all store views (i.e. global/default config)

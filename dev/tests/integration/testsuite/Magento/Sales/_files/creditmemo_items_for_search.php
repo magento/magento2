@@ -1,9 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+use Magento\Sales\Api\CreditmemoItemRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Item;
@@ -82,6 +83,9 @@ $items = [
     ],
 ];
 
+/** @var CreditmemoItemRepositoryInterface $creditmemoItemRepository */
+$creditmemoItemRepository = $objectManager->get(CreditmemoItemRepositoryInterface::class);
+
 foreach ($items as $data) {
     /** @var OrderItem $orderItem */
     $orderItem = $objectManager->create(OrderItem::class);
@@ -103,6 +107,7 @@ foreach ($items as $data) {
         ->setName($data['name'])
         ->setOrderItemId($orderItem->getItemId())
         ->setQty($data['qty'])
-        ->setPrice($data['price'])
-        ->save();
+        ->setPrice($data['price']);
+
+    $creditmemoItemRepository->save($creditmemoItem);
 }

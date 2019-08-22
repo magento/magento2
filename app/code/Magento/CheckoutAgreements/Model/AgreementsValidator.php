@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Model;
@@ -10,7 +10,9 @@ namespace Magento\CheckoutAgreements\Model;
  */
 class AgreementsValidator implements \Magento\Checkout\Api\AgreementsValidatorInterface
 {
-    /** @var  AgreementsProviderInterface[] */
+    /**
+     * @var \Magento\CheckoutAgreements\Model\AgreementsProviderInterface[]
+     */
     protected $agreementsProviders;
 
     /**

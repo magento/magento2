@@ -1,12 +1,19 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Page;
 
-class View extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\Action;
+
+/**
+ * Custom page for storefront. Needs to be accessible by POST because of the store switching.
+ */
+class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory

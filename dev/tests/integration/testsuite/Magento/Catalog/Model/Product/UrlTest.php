@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -11,7 +11,7 @@ namespace Magento\Catalog\Model\Product;
  * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
  * @magentoAppArea frontend
  */
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Url
@@ -40,6 +40,46 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         );
         $product = $repository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->_model->getUrlInStore($product));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture default_store web/unsecure/base_url http://sample.com/
+     * @magentoConfigFixture default_store web/unsecure/base_link_url http://sample.com/
+     * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://sample-second.com/
+     * @magentoConfigFixture fixturestore_store web/unsecure/base_link_url http://sample-second.com/
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
+     * @dataProvider getUrlsWithSecondStoreProvider
+     * @magentoAppArea adminhtml
+     */
+    public function testGetUrlInStoreWithSecondStore($storeCode, $expectedProductUrl)
+    {
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
+        );
+        /** @var \Magento\Store\Model\Store $store */
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Store\Model\Store::class);
+        $store->load($storeCode, 'code');
+        /** @var \Magento\Store\Model\Store $store */
+
+        $product = $repository->get('simple');
+
+        $this->assertEquals(
+            $expectedProductUrl,
+            $this->_model->getUrlInStore($product, ['_scope' => $store->getId(), '_nosid' => true])
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getUrlsWithSecondStoreProvider()
+    {
+        return [
+           'case1' => ['fixturestore', 'http://sample-second.com/index.php/simple-product-one.html'],
+           'case2' => ['default', 'http://sample.com/index.php/simple-product-one.html']
+        ];
     }
 
     public function testGetProductUrl()

@@ -1,12 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-?>
-<?php
 /**
  * @var \Magento\Sales\Block\Adminhtml\Order\View\Items $block
  */
@@ -18,22 +15,22 @@ $_order = $block->getOrder() ?>
                 <?php $i = 0;
                 $columns = $block->getColumns();
                 $lastItemNumber = count($columns) ?>
-                <?php foreach ($columns as $columnName => $columnTitle):?>
+                <?php foreach ($columns as $columnName => $columnTitle) : ?>
                     <?php $i++; ?>
-                    <th class="col-<?php /* @noEscape */ echo $columnName ?><?php /* @noEscape */ echo ($i === $lastItemNumber ? ' last' : '')?>"><span><?php /* @noEscape */ echo $columnTitle ?></span></th>
+                    <th class="col-<?= $block->escapeHtmlAttr($columnName) ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>"><span><?= $block->escapeHtml($columnTitle) ?></span></th>
                 <?php endforeach; ?>
             </tr>
         </thead>
         <?php $_items = $block->getItemsCollection();?>
-        <?php $i = 0; foreach ($_items as $_item):?>
-            <?php if ($_item->getParentItem()) {
+        <?php $i = 0; foreach ($_items as $_item) : ?>
+            <?php if ($_item->getParentItem()) :
                 continue;
-            } else {
+            else :
                 $i++;
-            }?>
-            <tbody class="<?php /* @noEscape */ echo $i%2 ? 'even' : 'odd' ?>">
-                <?php echo $block->getItemHtml($_item) ?>
-                <?php echo $block->getItemExtraInfoHtml($_item) ?>
+            endif; ?>
+            <tbody class="<?= /* @noEscape */ $i%2 ? 'even' : 'odd' ?>">
+                <?= $block->getItemHtml($_item) ?>
+                <?= $block->getItemExtraInfoHtml($_item) ?>
             </tbody>
         <?php endforeach; ?>
     </table>

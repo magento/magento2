@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
@@ -16,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
+class ProductUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $canonicalUrlRewriteGenerator;
@@ -56,9 +54,10 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->categoriesCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class)
+            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
+        )
             ->disableOriginalConstructor()->getMock();
         $this->product->expects($this->any())->method('getCategoryCollection')
             ->will($this->returnValue($this->categoriesCollection));
@@ -129,6 +128,6 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->productScopeRewriteGenerator->expects($this->once())
             ->method('generateForSpecificStoreView')
             ->willReturn($urls);
-        $this->assertEquals($urls, $this->productUrlRewriteGenerator->generate($productMock));
+        $this->assertEquals($urls, $this->productUrlRewriteGenerator->generate($productMock, 1));
     }
 }

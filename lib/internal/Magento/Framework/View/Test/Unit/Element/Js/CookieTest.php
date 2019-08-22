@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Js;
 
-class CookieTest extends \PHPUnit_Framework_TestCase
+class CookieTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Js\Cookie
@@ -83,6 +83,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public static function domainDataProvider()
     {
         return [

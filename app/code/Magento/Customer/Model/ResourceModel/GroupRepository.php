@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -109,7 +109,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Customer\Api\Data\GroupInterface $group)
     {
@@ -156,11 +156,16 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
             ->setCode($groupModel->getCode())
             ->setTaxClassId($groupModel->getTaxClassId())
             ->setTaxClassName($groupModel->getTaxClassName());
+
+        if ($group->getExtensionAttributes()) {
+            $groupDataObject->setExtensionAttributes($group->getExtensionAttributes());
+        }
+
         return $groupDataObject;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getById($id)
     {
@@ -174,7 +179,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -215,7 +220,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -238,7 +243,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Translates a field name to a DB column name for use in collection queries.
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @param string $field a field name that should be translated to a DB column name.
      * @return string
      */
@@ -296,6 +301,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      *
      * @param \Magento\Customer\Api\Data\GroupInterface $group
      * @throws InputException
+     * @throws \Zend_Validate_Exception
      * @return void
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -305,7 +311,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     {
         $exception = new InputException();
         if (!\Zend_Validate::is($group->getCode(), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'code']));
+            $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
         }
 
         if ($exception->wasErrorAdded()) {
@@ -337,7 +343,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

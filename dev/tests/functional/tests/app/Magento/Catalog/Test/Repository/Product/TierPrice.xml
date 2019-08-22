@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -74,6 +74,51 @@
                 <item name="price_qty" xsi:type="string">2</item>
                 <item name="customer_group" xsi:type="array">
                     <item name="dataset" xsi:type="string">NOT_LOGGED_IN</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_with_fixed_discount">
+            <field name="0" xsi:type="array">
+                <item name="value_type" xsi:type="string">Fixed</item>
+                <item name="price" xsi:type="string">95</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">5</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_with_percentage_discount">
+            <field name="0" xsi:type="array">
+                <item name="value_type" xsi:type="string">Discount</item>
+                <item name="percentage_value" xsi:type="string">3</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">10</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_for_qty_1">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">5</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">1</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="high_cost">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">500000</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">1</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
                 </item>
             </field>
         </dataset>

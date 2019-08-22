@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
 
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Framework\Convert\DataSize;
+use Magento\Setup\Controller\ResponseTypeInterface;
 
 /**
  * Checks for PHP readiness. It is used by both Cron and Setup wizard.
@@ -179,6 +179,7 @@ class PhpReadinessCheck
 
     /**
      * Checks php memory limit
+     *
      * @return array
      */
     public function checkMemoryLimit()
@@ -192,10 +193,9 @@ class PhpReadinessCheck
 
         $currentMemoryLimit = ini_get('memory_limit');
 
-        $currentMemoryInteger = intval($currentMemoryLimit);
+        $currentMemoryInteger = (int)$currentMemoryLimit;
 
-        if (
-            $currentMemoryInteger > 0
+        if ($currentMemoryInteger > 0
             && $this->dataSize->convertSizeToBytes($currentMemoryLimit)
             < $this->dataSize->convertSizeToBytes($minimumRequiredMemoryLimit)
         ) {
@@ -209,8 +209,7 @@ class PhpReadinessCheck
                 $currentMemoryLimit,
                 $minimumRequiredMemoryLimit
             );
-        } elseif (
-            $currentMemoryInteger > 0
+        } elseif ($currentMemoryInteger > 0
             && $this->dataSize->convertSizeToBytes($currentMemoryLimit)
             < $this->dataSize->convertSizeToBytes($recommendedForUpgradeMemoryLimit)
         ) {
@@ -237,6 +236,7 @@ class PhpReadinessCheck
 
     /**
      * Checks if xdebug.max_nesting_level is set 200 or more
+     *
      * @return array
      */
     private function checkXDebugNestedLevel()
@@ -246,8 +246,7 @@ class PhpReadinessCheck
 
         $currentExtensions = $this->phpInformation->getCurrent();
         if (in_array('xdebug', $currentExtensions)) {
-
-            $currentXDebugNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
+            $currentXDebugNestingLevel = (int)ini_get('xdebug.max_nesting_level');
             $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
 
             if ($minimumRequiredXDebugNestedLevel > $currentXDebugNestingLevel) {
@@ -289,7 +288,7 @@ class PhpReadinessCheck
 
         $data = [];
         $error = false;
-        $iniSetting = intVal(ini_get('always_populate_raw_post_data'));
+        $iniSetting = (int)ini_get('always_populate_raw_post_data');
 
         $checkVersionConstraint = $this->versionParser->parseConstraints('~5.6.0');
         $normalizedPhpVersion = $this->getNormalizedCurrentPhpVersion(PHP_VERSION);
@@ -305,7 +304,7 @@ class PhpReadinessCheck
 	        Please open your php.ini file and set always_populate_raw_post_data to -1.
  	        If you need more help please call your hosting provider.',
             PHP_VERSION,
-            intVal(ini_get('always_populate_raw_post_data'))
+            (int)ini_get('always_populate_raw_post_data')
         );
 
         $data['always_populate_raw_post_data'] = [

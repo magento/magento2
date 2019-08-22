@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\File\Test\Unit;
 
@@ -13,7 +11,7 @@ use Magento\Framework\Filesystem\Driver\File;
 /**
  * Test class for \Magento\Framework\File\Csv.
  */
-class CsvTest extends \PHPUnit_Framework_TestCase
+class CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Csv model

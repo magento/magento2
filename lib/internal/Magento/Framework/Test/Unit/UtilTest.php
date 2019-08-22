@@ -2,12 +2,12 @@
 /**
  * Collection of various useful functions
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
 
-class UtilTest extends \PHPUnit_Framework_TestCase
+class UtilTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetTrimmedPhpVersion()
     {

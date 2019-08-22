@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -33,11 +33,11 @@ class Capture extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             )->addObject(
                 $invoice->getOrder()
             )->save();
-            $this->messageManager->addSuccess(__('The invoice has been captured.'));
+            $this->messageManager->addSuccessMessage(__('The invoice has been captured.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('Invoice capturing error'));
+            $this->messageManager->addErrorMessage(__('Invoice capturing error'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

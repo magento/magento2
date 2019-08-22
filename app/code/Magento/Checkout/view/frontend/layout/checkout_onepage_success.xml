@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,16 +11,16 @@
     </head>
     <body>
         <referenceBlock name="page.main.title">
-            <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success.print.button" template="button.phtml"/>
+            <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success.print.button" template="Magento_Checkout::button.phtml"/>
             <action method="setPageTitle">
                 <argument translate="true" name="title" xsi:type="string">Thank you for your purchase!</argument>
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success" template="success.phtml" cacheable="false">
+            <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success" template="Magento_Checkout::success.phtml" cacheable="false">
                 <container name="order.success.additional.info" label="Order Success Additional Info"/>
             </block>
-            <block class="Magento\Checkout\Block\Registration" name="checkout.registration" template="registration.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Registration" name="checkout.registration" template="Magento_Checkout::registration.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

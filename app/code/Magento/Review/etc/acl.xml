@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,8 @@
                 </resource>
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_Backend::marketing_user_content">
-                        <resource id="Magento_Review::reviews_all" title="Reviews" translate="title" sortOrder="10"/>
+                        <resource id="Magento_Review::pending" title="Pending Reviews" translate="title" sortOrder="20"/>
+                        <resource id="Magento_Review::reviews_all" title="All Reviews" translate="title" sortOrder="10"/>
                     </resource>
                 </resource>
             </resource>

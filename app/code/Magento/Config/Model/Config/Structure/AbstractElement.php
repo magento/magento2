@@ -1,14 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure;
 
+use Magento\Config\Model\Config\StructureElementInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
 
-abstract class AbstractElement implements ElementInterface
+/**
+ * Abstract element.
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
+ * @since 100.0.2
+ */
+abstract class AbstractElement implements StructureElementInterface
 {
     /**
      * Element data
@@ -32,16 +40,25 @@ abstract class AbstractElement implements ElementInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @var ElementVisibilityInterface
      */
-    public function __construct(StoreManagerInterface $storeManager, \Magento\Framework\Module\Manager $moduleManager)
-    {
+    private $elementVisibility;
+
+    /**
+     * Construct.
+     *
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     */
+    public function __construct(
+        StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+    ) {
         $this->_storeManager = $storeManager;
         $this->moduleManager = $moduleManager;
     }
@@ -141,6 +158,10 @@ abstract class AbstractElement implements ElementInterface
      */
     public function isVisible()
     {
+        if ($this->getElementVisibility()->isHidden($this->getPath())) {
+            return false;
+        }
+
         if (isset($this->_data['if_module_enabled']) &&
             !$this->moduleManager->isOutputEnabled($this->_data['if_module_enabled'])) {
             return false;
@@ -202,5 +223,23 @@ abstract class AbstractElement implements ElementInterface
     public function getPath($fieldPrefix = '')
     {
         return $this->_getPath($this->getId(), $fieldPrefix);
+    }
+
+    /**
+     * Get instance of ElementVisibilityInterface.
+     *
+     * @return ElementVisibilityInterface
+     * @deprecated 100.2.0 Added to not break backward compatibility of the constructor signature
+     *             by injecting the new dependency directly.
+     *             The method can be removed in a future major release, when constructor signature can be changed.
+     * @since 100.2.0
+     */
+    public function getElementVisibility()
+    {
+        if (null === $this->elementVisibility) {
+            $this->elementVisibility = ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
+        }
+
+        return $this->elementVisibility;
     }
 }

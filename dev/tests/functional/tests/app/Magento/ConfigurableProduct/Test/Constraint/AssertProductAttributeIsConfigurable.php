@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,7 +41,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         $variationsSection = $productBlockForm->getSection('variations');
         $variationsSection->createConfigurations();
         $attributesGrid = $variationsSection->getAttributeBlock()->getAttributesGrid();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $attributesGrid->isRowVisible(['frontend_label' => $attribute->getFrontendLabel()]),
             "Product attribute is absent on the product page."
         );

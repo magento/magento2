@@ -1,10 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-'use strict';
 
 (function () {
+    'use strict';
+
     require.config({
         config: {
             'Magento_Ui/js/lib/knockout/bindings/i18n': {

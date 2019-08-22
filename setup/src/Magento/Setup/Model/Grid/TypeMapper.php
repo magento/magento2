@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Grid;
@@ -25,7 +25,9 @@ class TypeMapper
     const LIBRARY_PACKAGE_TYPE = 'Library';
     /**#@-*/
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $packageTypesMap = [
         ComposerInformation::THEME_PACKAGE_TYPE => self::THEME_PACKAGE_TYPE,
         ComposerInformation::LANGUAGE_PACKAGE_TYPE => self::LANGUAGE_PACKAGE_TYPE,

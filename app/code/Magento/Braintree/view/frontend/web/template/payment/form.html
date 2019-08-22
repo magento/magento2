@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -87,7 +87,7 @@
                         <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
                     </label>
                     <div class="control _with-tooltip">
-                        <div data-bind="attr: {id: getCode() + '_cc_cid'}" class="hosted-control hosted-cid"></div>
+                        <div data-bind="afterRender: initHostedFields, attr: {id: getCode() + '_cc_cid'}" class="hosted-control hosted-cid"></div>
                         <div class="hosted-error"><!-- ko i18n: 'Please, enter valid Card Verification Number'--><!-- /ko --></div>
 
                         <div class="field-tooltip toggle">
@@ -139,9 +139,11 @@
                 <button class="action primary checkout"
                         type="submit"
                         data-bind="
-                        click: placeOrderClick,
-                        attr: {title: $t('Place Order')}
-                ">
+                            click: placeOrderClick,
+                            attr: {title: $t('Place Order')},
+                            enable: isButtonActive()
+                        "
+                        disabled>
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>

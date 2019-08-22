@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use Magento\Setup\Model\Grid\TypeMapper;
 /**
  * Class TypeMapperTest
  */
-class TypeMapperTest extends \PHPUnit_Framework_TestCase
+class TypeMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model
@@ -39,6 +39,9 @@ class TypeMapperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function mapDataProvider()
     {
         return [

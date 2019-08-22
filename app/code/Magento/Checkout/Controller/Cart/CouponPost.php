@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CouponPost extends \Magento\Checkout\Controller\Cart
+class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * Sales quote repository
@@ -90,28 +92,19 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
 
             if ($codeLength) {
                 $escaper = $this->_objectManager->get(\Magento\Framework\Escaper::class);
+                $coupon = $this->couponFactory->create();
+                $coupon->load($couponCode, 'code');
                 if (!$itemsCount) {
-                    if ($isCodeLengthValid) {
-                        $coupon = $this->couponFactory->create();
-                        $coupon->load($couponCode, 'code');
-                        if ($coupon->getId()) {
-                            $this->_checkoutSession->getQuote()->setCouponCode($couponCode)->save();
-                            $this->messageManager->addSuccess(
-                                __(
-                                    'You used coupon code "%1".',
-                                    $escaper->escapeHtml($couponCode)
-                                )
-                            );
-                        } else {
-                            $this->messageManager->addError(
-                                __(
-                                    'The coupon code "%1" is not valid.',
-                                    $escaper->escapeHtml($couponCode)
-                                )
-                            );
-                        }
+                    if ($isCodeLengthValid && $coupon->getId()) {
+                        $this->_checkoutSession->getQuote()->setCouponCode($couponCode)->save();
+                        $this->messageManager->addSuccessMessage(
+                            __(
+                                'You used coupon code "%1".',
+                                $escaper->escapeHtml($couponCode)
+                            )
+                        );
                     } else {
-                        $this->messageManager->addError(
+                        $this->messageManager->addErrorMessage(
                             __(
                                 'The coupon code "%1" is not valid.',
                                 $escaper->escapeHtml($couponCode)
@@ -119,30 +112,29 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                         );
                     }
                 } else {
-                    if ($isCodeLengthValid && $couponCode == $cartQuote->getCouponCode()) {
-                        $this->messageManager->addSuccess(
+                    if ($isCodeLengthValid && $coupon->getId() && $couponCode == $cartQuote->getCouponCode()) {
+                        $this->messageManager->addSuccessMessage(
                             __(
                                 'You used coupon code "%1".',
                                 $escaper->escapeHtml($couponCode)
                             )
                         );
                     } else {
-                        $this->messageManager->addError(
+                        $this->messageManager->addErrorMessage(
                             __(
                                 'The coupon code "%1" is not valid.',
                                 $escaper->escapeHtml($couponCode)
                             )
                         );
-                        $this->cart->save();
                     }
                 }
             } else {
-                $this->messageManager->addSuccess(__('You canceled the coupon code.'));
+                $this->messageManager->addSuccessMessage(__('You canceled the coupon code.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We cannot apply the coupon code.'));
+            $this->messageManager->addErrorMessage(__('We cannot apply the coupon code.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
 

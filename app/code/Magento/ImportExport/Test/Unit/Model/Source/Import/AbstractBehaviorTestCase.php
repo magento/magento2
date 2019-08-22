@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Source\Import;
 
-abstract class AbstractBehaviorTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractBehaviorTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model for testing

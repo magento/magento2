@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rss\Controller\Adminhtml;
@@ -11,6 +11,11 @@ namespace Magento\Rss\Controller\Adminhtml;
  */
 abstract class Feed extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Rss::rss';
+
     /**
      * @var \Magento\Rss\Model\RssManager
      */

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class EavAttributesConfigFilesTest extends \PHPUnit_Framework_TestCase
+class EavAttributesConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Config\Reader
@@ -24,9 +24,9 @@ class EavAttributesConfigFilesTest extends \PHPUnit_Framework_TestCase
             $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/eav_attributes.xml,eav_attributes.xml}')
         );
 
-        $validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
-        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

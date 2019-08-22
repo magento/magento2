@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\DB\Test\Unit;
 
@@ -13,7 +11,7 @@ use Magento\Framework\DB\Select;
 /**
  * Class AbstractMapperTest
  */
-class AbstractMapperTest extends \PHPUnit_Framework_TestCase
+class AbstractMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
@@ -80,14 +78,8 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->selectMock = $this->getMock(
-            \Magento\Framework\DB\Select::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->fetchStrategyMock = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class,
             [],
@@ -97,20 +89,8 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->objectFactoryMock = $this->getMock(
-            \Magento\Framework\Data\ObjectFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->mapperFactoryMock = $this->getMock(
-            \Magento\Framework\DB\MapperFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectFactoryMock = $this->createMock(\Magento\Framework\Data\ObjectFactory::class);
+        $this->mapperFactoryMock = $this->createMock(\Magento\Framework\DB\MapperFactory::class);
     }
 
     /**
@@ -159,6 +139,47 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($this->selectMock, $mapper->map($criteriaMock));
+    }
+
+    public function testMapException()
+    {
+        $mapperMethods = [
+            'my-test-value1' => 'mapMyMapperMethodOne'
+        ];
+
+        $criteriaParts = [
+            'my_mapper_method_one' => 'my-test-value1'
+        ];
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        $mapper = $this->getMockForAbstractClass(
+            \Magento\Framework\DB\AbstractMapper::class,
+            [
+                'logger' => $this->loggerMock,
+                'fetchStrategy' => $this->fetchStrategyMock,
+                'objectFactory' => $this->objectFactoryMock,
+                'mapperFactory' => $this->mapperFactoryMock,
+                'select' => $this->selectMock
+            ],
+            '',
+            true,
+            true,
+            true,
+            $mapperMethods
+        );
+        $criteriaMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Api\CriteriaInterface::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['toArray']
+        );
+        $criteriaMock->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue($criteriaParts));
+        $this->expectException(\InvalidArgumentException::class);
+        $mapper->map($criteriaMock);
     }
 
     /**
@@ -247,8 +268,10 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($resultCondition));
 
         if (is_array($field)) {
-            $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR
-                    . ' (', array_fill(0, count($field), $resultCondition)) . ')';
+            $resultCondition = '(' . implode(
+                ') ' . \Magento\Framework\DB\Select::SQL_OR . ' (',
+                array_fill(0, count($field), $resultCondition)
+            ) . ')';
         }
 
         $this->selectMock->expects($this->once())
@@ -272,8 +295,8 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
                     'my-test-value2' => 'mapMyMapperMethodTwo',
                 ],
                 'criteriaParts' => [
-                    'my_mapper_method_one' => 'my-test-value1',
-                    'my_mapper_method_two' => 'my-test-value2',
+                    'my_mapper_method_one' => ['my-test-value1'],
+                    'my_mapper_method_two' => ['my-test-value2'],
                 ],
             ]
         ];

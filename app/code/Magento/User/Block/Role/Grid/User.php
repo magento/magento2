@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\Role\Grid;
@@ -9,6 +9,9 @@ use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Acl role user grid.
+ *
+ * @api
+ * @since 100.0.2
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -38,6 +41,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @var bool|array
+     * @since 100.1.0
      */
     protected $restoredUsersFormData;
 
@@ -81,6 +85,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Adds column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -105,6 +111,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares collection
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -117,6 +125,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares columns
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -173,6 +183,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Gets grid url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -182,49 +194,46 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Gets users
+     *
      * @param bool $json
      * @return string|array
      */
     public function getUsers($json = false)
     {
-        if ($this->getRequest()->getParam('in_role_user') != "") {
-            return $this->getRequest()->getParam('in_role_user');
+        $inRoleUser = $this->getRequest()->getParam('in_role_user');
+        if ($inRoleUser) {
+            if ($json) {
+                return $this->getJSONString($inRoleUser);
+            }
+            return $this->escapeJs($this->escapeHtml($inRoleUser));
         }
-        $roleId = $this->getRequest()->getParam(
-            'rid'
-        ) > 0 ? $this->getRequest()->getParam(
-            'rid'
-        ) : $this->_coreRegistry->registry(
-            'RID'
-        );
-
+        $roleId = $this->getRoleId();
         $users = $this->getUsersFormData();
         if (false === $users) {
             $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
         }
-        if (sizeof($users) > 0) {
+        if (!empty($users)) {
             if ($json) {
                 $jsonUsers = [];
-                foreach ($users as $usrid) {
-                    $jsonUsers[$usrid] = 0;
+                foreach ($users as $userid) {
+                    $jsonUsers[$userid] = 0;
                 }
                 return $this->_jsonEncoder->encode((object)$jsonUsers);
-            } else {
-                return array_values($users);
             }
-        } else {
-            if ($json) {
-                return '{}';
-            } else {
-                return [];
-            }
+            return array_values($users);
         }
+        if ($json) {
+            return '{}';
+        }
+        return [];
     }
 
     /**
      * Get Form Data if exist
      *
      * @return array|bool
+     * @since 100.1.0
      */
     protected function getUsersFormData()
     {
@@ -239,6 +248,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Restore Users Form Data from the registry
      *
      * @return array|bool
+     * @since 100.1.0
      */
     protected function restoreUsersFormData()
     {
@@ -246,10 +256,37 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
         );
         if (null !== $sessionData) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             parse_str($sessionData, $sessionData);
             return array_keys($sessionData);
         }
 
         return false;
+    }
+
+    /**
+     * Gets role ID
+     *
+     * @return string
+     */
+    private function getRoleId()
+    {
+        $roleId = $this->getRequest()->getParam('rid');
+        if ($roleId <= 0) {
+            $roleId = $this->_coreRegistry->registry('RID');
+        }
+        return $roleId;
+    }
+
+    /**
+     * Gets JSON string
+     *
+     * @param string $input
+     * @return string
+     */
+    private function getJSONString($input)
+    {
+        $output = json_decode($input);
+        return $output ? $this->_jsonEncoder->encode($output) : '{}';
     }
 }

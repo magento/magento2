@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <columns name="widget_columns">
+        <!--        <column name="review">
+                                                <argument name="data" xsi:type="array">
+                                                                <item name="config" xsi:type="array">
+                                                                                <item name="label" xsi:type="string" translate="true">Review</item>
+                                                                                <item name="displayArea" xsi:type="string">details-area</item>
+                                                                                <item name="bodyTmpl" xsi:type="string">Magento_Review/product/summary</item>
+                                                                                <item name="component" xsi:type="string">Magento_Review/js/product/summary</item>
+                                                                                <item name="sortOrder" xsi:type="number">2</item>
+                                                                </item>
+                                                </argument>
+                                </column>-->
+        <column name="review" sortOrder="3">
+            <settings>
+                <label>review</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+    </columns>
+</listing>

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Relation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ActionPoolTest extends \PHPUnit_Framework_TestCase
+class ActionPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool

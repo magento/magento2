@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,6 +22,7 @@ class Area implements \Magento\Framework\App\AreaInterface
     const AREA_CRONTAB = 'crontab';
     const AREA_WEBAPI_REST = 'webapi_rest';
     const AREA_WEBAPI_SOAP = 'webapi_soap';
+    const AREA_GRAPHQL = 'graphql';
 
     /**
      * @deprecated

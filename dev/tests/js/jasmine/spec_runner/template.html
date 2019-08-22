@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,11 @@
         <link rel="shortcut icon" type="image/png" href="<%= temp %>/jasmine_favicon.png">
         <% css.forEach(function (style) { %>
         <link rel="stylesheet" href="<%= style %>">
+        <script type="text/javascript">
+            var require = {
+                baseUrl: '<%= options.baseUrl %>'
+            };
+        </script>
         <% }); %>
         <% with (scripts) { %>
             <% [].concat(polyfills, jasmine, boot, vendor, src, reporters).forEach(function (script) { %>

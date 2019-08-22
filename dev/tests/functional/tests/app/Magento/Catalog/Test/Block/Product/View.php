@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Block\Product;
 
 use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Block\Cart\Sidebar;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Product view block on the product page.
@@ -68,7 +68,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $inContextPaypalCheckout = '#paypal-express-in-context-mini-cart';
+    protected $inContextPaypalCheckout = 'ul.checkout-methods-items a[data-action="paypal-in-context-checkout"]';
 
     /**
      * Product name element.
@@ -89,7 +89,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $productDescription = '.product.attribute.description';
+    protected $productDescription = '.product.attribute.description .value';
 
     /**
      * Product short-description element.
@@ -145,7 +145,14 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $miniCartBlock = '[data-block="minicart"]';
+    protected $miniCartBlockSelector = '[data-block="minicart"]';
+
+    /**
+     * Minicart block element.
+     *
+     * @var Sidebar
+     */
+    private $miniCartBlock;
 
     /**
      * Success message selector.
@@ -202,12 +209,64 @@ class View extends AbstractConfigureBlock
     private $videoContainer = 'div.fotorama-video-container';
 
     /**
+     * @var string
+     */
+    private $productVideo = '.product-video';
+
+    /**
+     * Threshold message selector.
+     *
+     * @var string
+     */
+    private $thresholdMessage = '.availability.only';
+
+    /**
+     * Qty field error message selector.
+     *
+     * @var string
+     */
+    private $qtyErrorMessage = '#qty-error';
+
+    /**
+     * Checks if threshold message is displayed.
+     *
+     * @return bool
+     */
+    public function isThresholdMessageDisplayed()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->isVisible();
+    }
+
+    /**
+     * Gets threshold message.
+     *
+     * @return string
+     */
+    public function getThresholdMessage()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->getText();
+    }
+
+    /**
      * Get block price.
+     *
+     * @param FixtureInterface|null $product
      *
      * @return Price
      */
-    public function getPriceBlock()
+    public function getPriceBlock(FixtureInterface $product = null)
     {
+        $typeId = '';
+
+        if ($product) {
+            $dataConfig = $product->getDataConfig();
+            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        }
+
+        if ($this->hasRender($typeId)) {
+            return $this->callRender($typeId, 'getPriceBlock');
+        }
+
         return $this->blockFactory->create(
             \Magento\Catalog\Test\Block\Product\Price::class,
             ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
@@ -222,21 +281,44 @@ class View extends AbstractConfigureBlock
      */
     public function addToCart(FixtureInterface $product)
     {
-        /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
-        $miniCart = $this->blockFactory->create(
-            \Magento\Checkout\Test\Block\Cart\Sidebar::class,
-            ['element' => $this->browser->find($this->miniCartBlock)]
-        );
+        $this->configure($product);
+        $this->clickAddToCart();
+        $this->getMiniCartBlock()->waitLoader();
+    }
+
+    /**
+     * Configure Product.
+     *
+     * @param FixtureInterface $product
+     * @return void
+     */
+    public function configure(FixtureInterface $product)
+    {
         /** @var CatalogProductSimple $product */
         $checkoutData = $product->getCheckoutData();
 
-        $miniCart->waitInit();
+        $this->getMiniCartBlock()->waitInit();
         $this->fillOptions($product);
         if (isset($checkoutData['qty'])) {
             $this->setQty($checkoutData['qty']);
         }
-        $this->clickAddToCart();
-        $miniCart->waitLoader();
+    }
+
+    /**
+     * Get MiniCart block.
+     *
+     * @return Sidebar
+     */
+    private function getMiniCartBlock()
+    {
+        if ($this->miniCartBlock === null) {
+            $this->miniCartBlock = $this->blockFactory->create(
+                Sidebar::class,
+                ['element' => $this->browser->find($this->miniCartBlockSelector)]
+            );
+        }
+
+        return $this->miniCartBlock;
     }
 
     /**
@@ -307,20 +389,14 @@ class View extends AbstractConfigureBlock
 
     /**
      * Press 'Check out with Braintree PayPal' button.
-     * 
+     *
      * @return string
      */
     public function braintreePaypalCheckout()
     {
         $currentWindow = $this->browser->getCurrentWindow();
-        /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
-        $miniCart = $this->blockFactory->create(
-            \Magento\Checkout\Test\Block\Cart\Sidebar::class,
-            ['element' => $this->browser->find($this->miniCartBlock)]
-        );
-
-        $miniCart->openMiniCart();
-        $miniCart->clickBraintreePaypalButton();
+        $this->getMiniCartBlock()->openMiniCart();
+        $this->getMiniCartBlock()->clickBraintreePaypalButton();
         return $currentWindow;
     }
 
@@ -494,18 +570,23 @@ class View extends AbstractConfigureBlock
      */
     public function waitLoader()
     {
-        $this->waitForElementNotVisible($this->ajaxLoading);
+        try {
+            $this->waitForElementNotVisible($this->ajaxLoading);
+        } catch (\Exception $e) {
+        }
     }
 
     /**
-     * Check id media gallery is visible for the product.
+     * Check if media gallery is visible for the product.
      *
      * @return bool
      */
     public function isGalleryVisible()
     {
         $this->waitForElementNotVisible($this->galleryLoader);
-        return $this->_rootElement->find($this->mediaGallery)->isVisible();
+        $this->waitForElementVisible($this->mediaGallery);
+
+        return true;
     }
 
     /**
@@ -590,5 +671,29 @@ class View extends AbstractConfigureBlock
     public function isVideoVisible()
     {
         return $this->_rootElement->find($this->videoContainer)->isVisible();
+    }
+
+    /**
+     * Check definite video data is presented on product page
+     *
+     * @param string $videoData
+     * @return bool
+     */
+    public function checkVideoDataPresence($videoData)
+    {
+        $dataVideoSelector = $this->productVideo . '[data-code="' . $videoData. '"]';
+        return $this->_rootElement->find($dataVideoSelector)->isPresent();
+    }
+
+    /**
+     * Resolve qty field error message.
+     *
+     * @return string
+     */
+    public function getQtyErrorMessage()
+    {
+        $this->waitForElementVisible($this->qtyErrorMessage);
+
+        return $this->_rootElement->find($this->qtyErrorMessage)->getText();
     }
 }

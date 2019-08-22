@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Search\Plugin;
@@ -9,6 +9,9 @@ namespace Magento\CatalogSearch\Model\Layer\Search\Plugin;
 use Magento\Catalog\Model\Category;
 use Magento\Search\Model\QueryFactory;
 
+/**
+ * Catalog search plugin for search collection filter in layered navigation.
+ */
 class CollectionFilter
 {
     /**

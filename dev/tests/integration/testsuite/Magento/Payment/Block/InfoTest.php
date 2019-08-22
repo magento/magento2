@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block;
 
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoConfigFixture current_store payment/banktransfer/title Bank Method Title

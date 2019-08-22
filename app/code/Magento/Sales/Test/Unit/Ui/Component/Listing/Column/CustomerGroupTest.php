@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\CustomerGroup;
 /**
  * Class CustomerGroupTest
  */
-class CustomerGroupTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerGroup
@@ -32,7 +32,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->groupRepository = $this->getMockForAbstractClass(\Magento\Customer\Api\GroupRepositoryInterface::class);
         $this->model = $objectManager->getObject(
             \Magento\Sales\Ui\Component\Listing\Column\CustomerGroup::class,

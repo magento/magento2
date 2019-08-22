@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Communication\Config;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -25,12 +26,12 @@ class ConfigParser
      */
     public function parseServiceMethod($serviceMethod)
     {
-        $pattern = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
+        $pattern = '/^([a-zA-Z]+[a-zA-Z0-9\\\\]+)::([a-zA-Z0-9]+)$/';
         preg_match($pattern, $serviceMethod, $matches);
         if (!isset($matches[1]) || !isset($matches[2])) {
             throw new LocalizedException(
                 new Phrase(
-                    'Service method "%serviceMethod" must match the following pattern: "%pattern"',
+                    'The "%serviceMethod" service method must match the "%pattern" pattern.',
                     ['serviceMethod' => $serviceMethod, 'pattern' => $pattern]
                 )
             );

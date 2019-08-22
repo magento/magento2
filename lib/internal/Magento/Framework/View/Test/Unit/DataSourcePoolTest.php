@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\View\Test\Unit;
 
@@ -13,7 +11,7 @@ use \Magento\Framework\View\DataSourcePool;
 /**
  * Test for view Context model
  */
-class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
+class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataSourcePool
@@ -33,9 +31,9 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->dataSourcePool = $objectManager->getObject(
-            \Magento\Framework\View\DataSourcePool::class, [
-            'blockFactory' => $this->blockFactory
-        ]);
+            \Magento\Framework\View\DataSourcePool::class,
+            ['blockFactory' => $this->blockFactory]
+        );
     }
 
     /**
@@ -47,9 +45,13 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
         $this->dataSourcePool->add('DataSourcePoolTestBlock', 'NotExistingBlockClass');
     }
 
+    /**
+     * @param $blockClass
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function createBlock($blockClass)
     {
-        $block = $this->getMock(\Magento\Framework\View\Element\BlockInterface::class);
+        $block = $this->createMock(\Magento\Framework\View\Element\BlockInterface::class);
 
         $this->blockFactory->expects($this->once())
             ->method('createBlock')

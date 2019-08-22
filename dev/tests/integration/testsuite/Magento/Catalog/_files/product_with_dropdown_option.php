@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,8 @@ $product->setTypeId(
 )->setStockData(
     [
         'qty' => 0,
-        'is_in_stock' => 0
+        'is_in_stock' => 0,
+        'manage_stock' => 1,
     ]
 );
 

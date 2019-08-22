@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit;
@@ -29,6 +29,13 @@ class PromoQuoteForm extends FormSections
     protected $waitForSelectorVisible = false;
 
     /**
+     * Selector of name element on the form.
+     *
+     * @var string
+     */
+    private $nameElementSelector = 'input[name=name]';
+
+    /**
      * Fill form with sections.
      *
      * @param FixtureInterface $fixture
@@ -38,6 +45,8 @@ class PromoQuoteForm extends FormSections
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, array $replace = null)
     {
+        $this->waitForElementNotVisible($this->waitForSelector);
+        $this->waitForElementVisible($this->nameElementSelector);
         $sections = $this->getFixtureFieldsByContainers($fixture);
         if ($replace) {
             $sections = $this->prepareData($sections, $replace);

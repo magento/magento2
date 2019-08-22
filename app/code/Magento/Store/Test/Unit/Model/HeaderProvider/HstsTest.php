@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Store\Model\Store;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 
-class HstsTest extends \PHPUnit_Framework_TestCase
+class HstsTest extends \PHPUnit\Framework\TestCase
 {
     /** Strict-Transport-Security (HSTS) Header name */
     const HEADER_NAME = 'Strict-Transport-Security';
@@ -56,7 +56,7 @@ class HstsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param [] $configValuesMap
      * @param bool $expected
-     * @dataProvider testCanApplyDataProvider
+     * @dataProvider canApplyDataProvider
      */
     public function testCanApply($configValuesMap, $expected)
     {
@@ -71,7 +71,7 @@ class HstsTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function testCanApplyDataProvider()
+    public function canApplyDataProvider()
     {
         return [
             [

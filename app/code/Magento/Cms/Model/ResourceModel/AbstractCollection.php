@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\ResourceModel;
@@ -175,5 +175,33 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
 
         return $countSelect;
+    }
+
+    /**
+     * Returns pairs identifier - title for unique identifiers
+     * and pairs identifier|entity_id - title for non-unique after first
+     *
+     * @return array
+     */
+    public function toOptionIdArray()
+    {
+        $res = [];
+        $existingIdentifiers = [];
+        foreach ($this as $item) {
+            $identifier = $item->getData('identifier');
+
+            $data['value'] = $identifier;
+            $data['label'] = $item->getData('title');
+
+            if (in_array($identifier, $existingIdentifiers)) {
+                $data['value'] .= '|' . $item->getData($this->getIdFieldName());
+            } else {
+                $existingIdentifiers[] = $identifier;
+            }
+
+            $res[] = $data;
+        }
+
+        return $res;
     }
 }

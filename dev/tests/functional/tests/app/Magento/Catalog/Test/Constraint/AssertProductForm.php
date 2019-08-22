@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,7 +69,7 @@ class AssertProductForm extends AbstractAssertForm
         $fixtureData = $this->prepareFixtureData($productData, $this->sortFields);
         $formData = $this->prepareFormData($productPage->getProductForm()->getData($product), $this->sortFields);
         $error = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertTrue(empty($error), $error);
+        \PHPUnit\Framework\Assert::assertTrue(empty($error), $error);
     }
 
     /**

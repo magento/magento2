@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\Escaper;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -13,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class OrdersTest extends \PHPUnit_Framework_TestCase
+class OrdersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The orders block under test.
@@ -28,6 +29,11 @@ class OrdersTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Registry
      */
     private $coreRegistry;
+
+    /**
+     * @var Escaper
+     */
+    private $escaper;
 
     /**
      * Execute per test initialization.
@@ -48,6 +54,7 @@ class OrdersTest extends \PHPUnit_Framework_TestCase
             ['coreRegistry' => $this->coreRegistry]
         );
         $this->block->getPreparedCollection();
+        $this->escaper = $objectManager->get(Escaper::class);
     }
 
     /**
@@ -81,6 +88,9 @@ class OrdersTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        $this->assertContains("We couldn't find any records.", $this->block->toHtml());
+        $this->assertContains(
+            $this->escaper->escapeHtml("We couldn't find any records."),
+            $this->block->toHtml()
+        );
     }
 }

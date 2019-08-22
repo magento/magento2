@@ -1,30 +1,83 @@
 /**
- * Handles additional ajax request for rendering user private content
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 define([
     'jquery',
     'domReady',
-    'jquery/ui',
+    'consoleLogger',
+    'jquery-ui-modules/widget',
     'mage/cookies'
-], function ($, domReady) {
+], function ($, domReady, consoleLogger) {
     'use strict';
+
+    /**
+     * Helper. Generate random string
+     * TODO: Merge with mage/utils
+     * @param {String} chars - list of symbols
+     * @param {Number} length - length for need string
+     * @returns {String}
+     */
+    function generateRandomString(chars, length) {
+        var result = '';
+
+        length = length > 0 ? length : 1;
+
+        while (length--) {
+            result += chars[Math.round(Math.random() * (chars.length - 1))];
+        }
+
+        return result;
+    }
 
     /**
      * Nodes tree to flat list converter
      * @returns {Array}
      */
     $.fn.comments = function () {
-        var elements = [];
+        var elements = [],
+            contents,
+            elementContents;
 
         /**
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
-            $(element).contents().each(function (index, el) {
+            var iframeHostName;
+
+            // prevent cross origin iframe content reading
+            if ($(element).prop('tagName') === 'IFRAME') {
+                iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                    .prop('hostname');
+
+                if (window.location.hostname !== iframeHostName) {
+                    return [];
+                }
+            }
+
+            /**
+             * Rewrite jQuery contents().
+             *
+             * @param {jQuery} elem
+             */
+            contents = function (elem) {
+                return $.map(elem, function (el) {
+                    try {
+                        return $.nodeName(el, 'iframe') ?
+                            el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
+                            $.merge([], el.childNodes);
+                    } catch (e) {
+                        consoleLogger.error(e);
+
+                        return [];
+                    }
+                });
+            };
+
+            elementContents = contents($(element));
+
+            $.each(elementContents, function (index, el) {
                 switch (el.nodeType) {
                     case 1: // ELEMENT_NODE
                         lookup(el);
@@ -35,14 +88,7 @@ define([
                         break;
 
                     case 9: // DOCUMENT_NODE
-                        var hostName = window.location.hostname,
-                            iFrameHostName = $('<a>')
-                                .prop('href', $(element).prop('src'))
-                                .prop('hostname');
-
-                        if (hostName === iFrameHostName) {
-                            lookup($(el).find('body'));
-                        }
+                        lookup($(el).find('body'));
                         break;
                 }
             });
@@ -78,6 +124,7 @@ define([
 
     /**
      * PageCache Widget
+     * Handles additional ajax request for rendering user private content.
      */
     $.widget('mage.pageCache', {
         options: {
@@ -137,10 +184,10 @@ define([
                 } else {
                     matches = this.options.patternPlaceholderClose.exec(el.nodeValue);
 
-                    if (matches) {
+                    if (matches) { //eslint-disable-line max-depth
                         name = matches[1];
 
-                        if (tmp[name]) {
+                        if (tmp[name]) { //eslint-disable-line max-depth
                             tmp[name].closeElement = el;
                             placeholders.push(tmp[name]);
                             delete tmp[name];
@@ -159,33 +206,32 @@ define([
          * @protected
          */
         _replacePlaceholder: function (placeholder, html) {
+            var startReplacing = false,
+                prevSibling = null,
+                parent, contents, yy, len, element;
+
             if (!placeholder || !html) {
                 return;
             }
 
-            var parent = $(placeholder.openElement).parent(),
-                contents = parent.contents(),
-                startReplacing = false,
-                prevSibling = null,
-                yy,
-                len,
-                element;
+            parent = $(placeholder.openElement).parent();
+            contents = parent.contents();
 
             for (yy = 0, len = contents.length; yy < len; yy++) {
                 element = contents[yy];
 
-                if (element == placeholder.openElement) {
+                if (element == placeholder.openElement) { //eslint-disable-line eqeqeq
                     startReplacing = true;
                 }
 
                 if (startReplacing) {
                     $(element).remove();
-                } else if (element.nodeType != 8) {
+                } else if (element.nodeType != 8) { //eslint-disable-line eqeqeq
                     //due to comment tag doesn't have siblings we try to find it manually
                     prevSibling = element;
                 }
 
-                if (element == placeholder.closeElement) {
+                if (element == placeholder.closeElement) { //eslint-disable-line eqeqeq
                     break;
                 }
             }
@@ -257,22 +303,4 @@ define([
         'pageCache': $.mage.pageCache,
         'formKey': $.mage.formKey
     };
-
-    /**
-     * Helper. Generate random string
-     * TODO: Merge with mage/utils
-     * @param {String} chars - list of symbols
-     * @param {Number} length - length for need string
-     * @returns {String}
-     */
-    function generateRandomString(chars, length) {
-        var result = '';
-        length = length > 0 ? length : 1;
-
-        while (length--) {
-            result += chars[Math.round(Math.random() * (chars.length - 1))];
-        }
-
-        return result;
-    }
 });

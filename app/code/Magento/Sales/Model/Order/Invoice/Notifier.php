@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Invoice;
@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order\Invoice;
  * Invoice notifier.
  *
  * @api
+ * @since 100.1.2
  */
 class Notifier implements \Magento\Sales\Model\Order\Invoice\NotifierInterface
 {
@@ -27,6 +28,7 @@ class Notifier implements \Magento\Sales\Model\Order\Invoice\NotifierInterface
 
     /**
      * {@inheritdoc}
+     * @since 100.1.2
      */
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,

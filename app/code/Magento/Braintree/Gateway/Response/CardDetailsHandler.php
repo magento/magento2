@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Response;
 
-use \Braintree\Transaction;
 use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Helper\ContextHelper;
-use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class CardDetailsHandler
@@ -86,7 +85,7 @@ class CardDetailsHandler implements HandlerInterface
     private function getCreditCardType($type)
     {
         $replaced = str_replace(' ', '-', strtolower($type));
-        $mapper = $this->config->getCctypesMapper();
+        $mapper = $this->config->getCcTypesMapper();
 
         return $mapper[$replaced];
     }

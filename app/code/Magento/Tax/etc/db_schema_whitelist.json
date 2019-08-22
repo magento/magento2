@@ -1,0 +1,128 @@
+{
+    "tax_class": {
+        "column": {
+            "class_id": true,
+            "class_name": true,
+            "class_type": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "tax_calculation_rule": {
+        "column": {
+            "tax_calculation_rule_id": true,
+            "code": true,
+            "priority": true,
+            "position": true,
+            "calculate_subtotal": true
+        },
+        "index": {
+            "TAX_CALCULATION_RULE_PRIORITY_POSITION": true,
+            "TAX_CALCULATION_RULE_CODE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "tax_calculation_rate": {
+        "column": {
+            "tax_calculation_rate_id": true,
+            "tax_country_id": true,
+            "tax_region_id": true,
+            "tax_postcode": true,
+            "code": true,
+            "rate": true,
+            "zip_is_range": true,
+            "zip_from": true,
+            "zip_to": true
+        },
+        "index": {
+            "TAX_CALCULATION_RATE_TAX_COUNTRY_ID_TAX_REGION_ID_TAX_POSTCODE": true,
+            "TAX_CALCULATION_RATE_CODE": true,
+            "IDX_CA799F1E2CB843495F601E56C84A626D": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "tax_calculation": {
+        "column": {
+            "tax_calculation_id": true,
+            "tax_calculation_rate_id": true,
+            "tax_calculation_rule_id": true,
+            "customer_tax_class_id": true,
+            "product_tax_class_id": true
+        },
+        "index": {
+            "TAX_CALCULATION_TAX_CALCULATION_RULE_ID": true,
+            "TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID": true,
+            "TAX_CALCULATION_PRODUCT_TAX_CLASS_ID": true,
+            "TAX_CALC_TAX_CALC_RATE_ID_CSTR_TAX_CLASS_ID_PRD_TAX_CLASS_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "TAX_CALCULATION_PRODUCT_TAX_CLASS_ID_TAX_CLASS_CLASS_ID": true,
+            "TAX_CALCULATION_CUSTOMER_TAX_CLASS_ID_TAX_CLASS_CLASS_ID": true,
+            "TAX_CALC_TAX_CALC_RATE_ID_TAX_CALC_RATE_TAX_CALC_RATE_ID": true,
+            "TAX_CALC_TAX_CALC_RULE_ID_TAX_CALC_RULE_TAX_CALC_RULE_ID": true
+        }
+    },
+    "tax_calculation_rate_title": {
+        "column": {
+            "tax_calculation_rate_title_id": true,
+            "tax_calculation_rate_id": true,
+            "store_id": true,
+            "value": true
+        },
+        "index": {
+            "TAX_CALCULATION_RATE_TITLE_TAX_CALCULATION_RATE_ID_STORE_ID": true,
+            "TAX_CALCULATION_RATE_TITLE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "TAX_CALCULATION_RATE_TITLE_STORE_ID_STORE_STORE_ID": true,
+            "FK_37FB965F786AD5897BB3AE90470C42AB": true
+        }
+    },
+    "tax_order_aggregated_created": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "code": true,
+            "order_status": true,
+            "percent": true,
+            "orders_count": true,
+            "tax_base_amount_sum": true
+        },
+        "index": {
+            "TAX_ORDER_AGGREGATED_CREATED_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "TAX_ORDER_AGGREGATED_CREATED_STORE_ID_STORE_STORE_ID": true,
+            "TAX_ORDER_AGGRED_CREATED_PERIOD_STORE_ID_CODE_PERCENT_ORDER_STS": true
+        }
+    },
+    "tax_order_aggregated_updated": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "code": true,
+            "order_status": true,
+            "percent": true,
+            "orders_count": true,
+            "tax_base_amount_sum": true
+        },
+        "index": {
+            "TAX_ORDER_AGGREGATED_UPDATED_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "TAX_ORDER_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID": true,
+            "TAX_ORDER_AGGRED_UPDATED_PERIOD_STORE_ID_CODE_PERCENT_ORDER_STS": true
+        }
+    }
+}

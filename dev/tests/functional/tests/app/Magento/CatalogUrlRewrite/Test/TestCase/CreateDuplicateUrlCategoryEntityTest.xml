@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CatalogUrlRewrite\Test\TestCase\CreateDuplicateUrlCategoryEntityTest" summary="Create Category from Category Page" ticketId="MAGETWO-70307">
+        <variation name="CreateDuplicateUrlCategoryEntityTestVariation1_Subcategory_RequiredFields" summary="Create Duplicate urls categories from Category page with Required Fields Only and assert error message">
+            <data name="addCategory" xsi:type="string">addSubcategory</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
+            <data name="category/data/is_active" xsi:type="string">Yes</data>
+            <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+            <data name="category/data/url_key" xsi:type="string">subcategory-%isolation%</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1, mftf_migrated:yes</data>
+            <constraint name="Magento\CatalogUrlRewrite\Test\Constraint\AssertCategoryUrlDuplicateErrorMessage" />
+        </variation>
+    </testCase>
+</config>

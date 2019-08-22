@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,10 +11,15 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Model\Indexer\Category\Product\Processor;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category as CategoryEntity;
 
 /**
+ * Resource model for category entity
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends AbstractResource
@@ -84,6 +89,10 @@ class Category extends AbstractResource
     protected $aggregateCount;
 
     /**
+     * @var Processor
+     */
+    private $indexerProcessor;
+    /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -91,7 +100,10 @@ class Category extends AbstractResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
+     * @param Processor $indexerProcessor
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -100,7 +112,9 @@ class Category extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        $data = []
+        Processor $indexerProcessor,
+        $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -112,6 +126,9 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
         $this->connectionName  = 'catalog';
+        $this->indexerProcessor = $indexerProcessor;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -185,13 +202,25 @@ class Category extends AbstractResource
      * delete child categories
      *
      * @param \Magento\Framework\DataObject $object
-     * @return $this
+     * @return void
      */
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
         parent::_beforeDelete($object);
         $this->getAggregateCount()->processDelete($object);
         $this->deleteChildren($object);
+    }
+
+    /**
+     * Mark Category indexer as invalid to be picked up by cron.
+     *
+     * @param DataObject $object
+     * @return $this
+     */
+    protected function _afterDelete(DataObject $object)
+    {
+        $this->indexerProcessor->markIndexerAsInvalid();
+        return parent::_afterDelete($object);
     }
 
     /**
@@ -224,7 +253,8 @@ class Category extends AbstractResource
 
     /**
      * Process category data before saving
-     * prepare path and increment children count for parent categories
+     *
+     * Prepare path and increment children count for parent categories
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -273,7 +303,8 @@ class Category extends AbstractResource
 
     /**
      * Process category data after save category object
-     * save related products ids and update path value
+     *
+     * Save related products ids and update path value
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -407,9 +438,18 @@ class Category extends AbstractResource
          * Update product positions in category
          */
         if (!empty($update)) {
+            $newPositions = [];
             foreach ($update as $productId => $position) {
-                $where = ['category_id = ?' => (int)$id, 'product_id = ?' => (int)$productId];
-                $bind = ['position' => (int)$position];
+                $delta = $position - $oldProducts[$productId];
+                if (!isset($newPositions[$delta])) {
+                    $newPositions[$delta] = [];
+                }
+                $newPositions[$delta][] = $productId;
+            }
+
+            foreach ($newPositions as $delta => $productIds) {
+                $bind = ['position' => new \Zend_Db_Expr("position + ({$delta})")];
+                $where = ['category_id = ?' => (int)$id, 'product_id IN (?)' => $productIds];
                 $connection->update($this->getCategoryProductTable(), $bind, $where);
             }
         }
@@ -420,6 +460,8 @@ class Category extends AbstractResource
                 'catalog_category_change_products',
                 ['category' => $category, 'product_ids' => $productIds]
             );
+
+            $category->setChangedProductIds($productIds);
         }
 
         if (!empty($insert) || !empty($update) || !empty($delete)) {
@@ -446,15 +488,27 @@ class Category extends AbstractResource
             $this->getCategoryProductTable(),
             ['product_id', 'position']
         )->where(
-            'category_id = :category_id'
+            "{$this->getTable('catalog_category_product')}.category_id = ?",
+            $category->getId()
         );
+        $websiteId = $category->getStore()->getWebsiteId();
+        if ($websiteId) {
+            $select->join(
+                ['product_website' => $this->getTable('catalog_product_website')],
+                "product_website.product_id = {$this->getTable('catalog_category_product')}.product_id",
+                []
+            )->where(
+                'product_website.website_id = ?',
+                $websiteId
+            );
+        }
         $bind = ['category_id' => (int)$category->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
 
     /**
-     * Get chlden categories count
+     * Get children categories count
      *
      * @param int $categoryId
      * @return int
@@ -580,7 +634,10 @@ class Category extends AbstractResource
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
-        $entityIdsFilterHash = md5(serialize($entityIdsFilter));
+        // @codingStandardsIgnoreStart
+        $serializeData = $this->serializer->serialize($entityIdsFilter);
+        $entityIdsFilterHash = md5($serializeData);
+        // @codingStandardsIgnoreEnd
 
         if (!isset($this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue])) {
             $linkField = $this->getLinkField();
@@ -625,7 +682,7 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
-        return intval($counts);
+        return (int) $counts;
     }
 
     /**
@@ -744,7 +801,7 @@ class Category extends AbstractResource
         )->setOrder(
             'position',
             \Magento\Framework\DB\Select::SQL_ASC
-        )->joinUrlRewrite()->load();
+        )->joinUrlRewrite();
 
         return $collection;
     }
@@ -763,7 +820,6 @@ class Category extends AbstractResource
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $category->getStoreId(),
@@ -824,6 +880,7 @@ class Category extends AbstractResource
 
     /**
      * Check category is forbidden to delete.
+     *
      * If category is root and assigned to store group return false
      *
      * @param integer $categoryId
@@ -880,7 +937,7 @@ class Category extends AbstractResource
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
         $connection = $this->getConnection();
-        $levelFiled = $connection->quoteIdentifier('level');
+        $levelField = $connection->quoteIdentifier('level');
         $pathField = $connection->quoteIdentifier('path');
 
         /**
@@ -920,7 +977,7 @@ class Category extends AbstractResource
                         $newPath . '/'
                     ) . ')'
                 ),
-                'level' => new \Zend_Db_Expr($levelFiled . ' + ' . $levelDisposition)
+                'level' => new \Zend_Db_Expr($levelField . ' + ' . $levelDisposition)
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );
@@ -944,6 +1001,7 @@ class Category extends AbstractResource
 
     /**
      * Process positions of old parent category children and new parent category children.
+     *
      * Get position for moved category
      *
      * @param \Magento\Catalog\Model\Category $category
@@ -970,7 +1028,7 @@ class Category extends AbstractResource
         if ($afterCategoryId) {
             $select = $connection->select()->from($table, 'position')->where('entity_id = :entity_id');
             $position = $connection->fetchOne($select, ['entity_id' => $afterCategoryId]);
-            $position += 1;
+            $position++;
         } else {
             $position = 1;
         }
@@ -1006,7 +1064,16 @@ class Category extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->_attributes = [];
-        $this->loadAttributesMetadata($attributes);
+        $select = $this->_getLoadRowSelect($object, $entityId);
+        $row = $this->getConnection()->fetchRow($select);
+
+        if (is_array($row)) {
+            $object->addData($row);
+        } else {
+            $object->isObjectNew(true);
+        }
+
+        $this->loadAttributesForObject($attributes, $object);
         $object = $this->getEntityManager()->load($object, $entityId);
         if (!$this->getEntityManager()->has($object)) {
             $object->isObjectNew(true);
@@ -1015,14 +1082,14 @@ class Category extends AbstractResource
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($object)
     {
         $this->getEntityManager()->delete($object);
         $this->_eventManager->dispatch(
             'catalog_category_delete_after_done',
-            ['product' => $object]
+            ['product' => $object, 'category' => $object]
         );
         return $this;
     }
@@ -1041,6 +1108,8 @@ class Category extends AbstractResource
     }
 
     /**
+     * Returns EntityManager object
+     *
      * @return EntityManager
      */
     private function getEntityManager()
@@ -1053,6 +1122,8 @@ class Category extends AbstractResource
     }
 
     /**
+     * Returns AggregateCount object
+     *
      * @return Category\AggregateCount
      */
     private function getAggregateCount()

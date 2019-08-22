@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -24,6 +24,7 @@
 & when (@media-common = true) {
     .checkout-payment-method {
         .step-title {
+            border-bottom: 0;
             margin-bottom: 0;
         }
 
@@ -37,6 +38,12 @@
             &._active {
                 .payment-method-content {
                     display: block;
+                }
+            }
+
+            & + .payment-method {
+                .payment-method-title {
+                    .lib-css(border-top, @checkout-payment-method-title__border);
                 }
             }
         }
@@ -54,7 +61,6 @@
         }
 
         .payment-method-title {
-            .lib-css(border-top, @checkout-payment-method-title__border);
             .lib-css(padding, @checkout-payment-method-title__padding 0);
             margin: 0;
 
@@ -76,6 +82,14 @@
             .fieldset {
                 &:not(:last-child) {
                     margin: 0 0 @indent__base;
+                }
+            }
+        }
+
+        .payment-group {
+            & + .payment-group {
+                .step-title {
+                    margin: @indent__base 0 0;
                 }
             }
         }
@@ -148,6 +162,11 @@
             .lib-css(margin, 0 -(@checkout-payment-method-title-mobile__padding));
         }
 
+        .step-title {
+            .lib-css(padding-left, @checkout-payment-method-title-mobile__padding);
+            .lib-css(padding-right, @checkout-payment-method-title-mobile__padding)
+        }
+
         .payment-method-title {
             .lib-css(padding, @checkout-payment-method-title-mobile__padding)
         }
@@ -190,6 +209,13 @@
             .fieldset {
                 > .field {
                     margin: 0 0 @indent__base;
+                    
+                    &.choice {
+                        &:before {
+                            padding: 0;
+                            width: 0;
+                        }
+                    }
 
                     &.type {
                         .control {

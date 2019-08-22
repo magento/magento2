@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class SalesTest extends \PHPUnit_Framework_TestCase
+class SalesTest extends \PHPUnit\Framework\TestCase
 {
     const MAIN_WEBSITE = 1;
 
@@ -53,7 +53,7 @@ class SalesTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
             \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales::class,
-            'sales_' . mt_rand(),
+            'sales_' . random_int(0, PHP_INT_MAX),
             ['coreRegistry' => $this->coreRegistry]
         )->setTemplate(
             'tab/view/sales.phtml'

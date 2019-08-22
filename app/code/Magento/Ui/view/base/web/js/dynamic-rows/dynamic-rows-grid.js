@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     './dynamic-rows'
@@ -31,6 +34,15 @@ define([
         },
 
         /**
+         * @inheritdoc
+         */
+        initialize: function () {
+            this.setToInsertData = _.debounce(this.setToInsertData, 200);
+
+            return this._super();
+        },
+
+        /**
          * Calls 'initObservable' of parent
          *
          * @returns {Object} Chainable.
@@ -52,13 +64,15 @@ define([
                 obj;
 
             if (this.recordData().length && !this.update) {
-                this.recordData.each(function (recordData) {
+                _.each(this.recordData(), function (recordData) {
                     obj = {};
                     obj[this.map[this.identificationProperty]] = recordData[this.identificationProperty];
                     insertData.push(obj);
                 }, this);
 
-                this.source.set(this.dataProvider, insertData);
+                if (insertData.length) {
+                    this.source.set(this.dataProvider, insertData);
+                }
             }
         },
 
@@ -104,9 +118,8 @@ define([
          * @param {String|Number} recordId
          */
         deleteRecord: function (index, recordId) {
-            this._super();
-
             this.updateInsertData(recordId);
+            this._super();
         },
 
         /**
@@ -119,7 +132,7 @@ define([
             prop = this.map[this.identificationDRProperty];
 
             this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
-                return ~~recordData[prop] === ~~data[prop];
+                return recordData[prop].toString() === data[prop].toString();
             }, this));
         },
 
@@ -178,7 +191,7 @@ define([
                 tmpObj = {};
 
             if (data.length !== this.relatedData.length) {
-                data.forEach(function (obj) {
+                _.each(data, function (obj) {
                     tmpObj[this.identificationDRProperty] = obj[this.identificationDRProperty];
 
                     if (!_.findWhere(this.relatedData, tmpObj)) {
@@ -193,7 +206,7 @@ define([
         /**
          * Processing insert data
          *
-         * @param {Array} data
+         * @param {Object} data
          */
         processingInsertData: function (data) {
             var changes,
@@ -209,7 +222,7 @@ define([
                     return false;
                 }
 
-                changes.each(function (changedObject) {
+                changes.forEach(function (changedObject) {
                     this.mappingValue(changedObject);
                 }, this);
             }
@@ -261,7 +274,7 @@ define([
                 changes = [],
                 obj = {};
 
-            max.each(function (record, index) {
+            max.forEach(function (record, index) {
                 obj[this.map[this.identificationDRProperty]] = record[this.map[this.identificationDRProperty]];
 
                 if (!_.where(this.cacheGridData, obj).length) {

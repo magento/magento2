@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message;
@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\Message\MessageConfigurationsPool;
 use Magento\Framework\View\Element\Message\Renderer\RendererInterface;
 use Magento\Framework\View\Element\Message\Renderer\RenderersPool;
 
-class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
+class InterpretationStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RenderersPool | \PHPUnit_Framework_MockObject_MockObject
@@ -50,10 +50,10 @@ class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageMock = $this->getMock(
+        $this->messageMock = $this->createMock(
             \Magento\Framework\Message\MessageInterface::class
         );
-        $this->renderer = $this->getMock(
+        $this->renderer = $this->createMock(
             \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
         );
 
@@ -74,7 +74,7 @@ class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
         ];
         $renderedMessage = 'Script';
 
-        $renderer = $this->getMock(
+        $renderer = $this->createMock(
             \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
         );
 
@@ -116,7 +116,7 @@ class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
                 null
             );
 
-        $this->setExpectedException('LogicException');
+        $this->expectException('LogicException');
 
         $this->renderersPool->expects(static::never())
             ->method('get');
@@ -148,7 +148,7 @@ class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
             ->with($messageConfiguration['renderer'])
             ->willReturn(null);
 
-        $this->setExpectedException('LogicException');
+        $this->expectException('LogicException');
 
         $this->interpretationStrategy->interpret($this->messageMock);
     }

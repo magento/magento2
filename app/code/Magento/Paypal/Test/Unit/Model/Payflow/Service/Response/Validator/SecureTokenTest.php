@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
@@ -13,7 +13,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
  *
  * Test class for \Magento\Paypal\Model\Payflow\Service\Response\Validator\SecureToken
  */
-class SecureTokenTest extends \PHPUnit_Framework_TestCase
+class SecureTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Model\Payflow\Service\Response\Validator\SecureToken

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
@@ -9,7 +9,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 
-class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
+/**
+ * Test for \Magento\CatalogSearch\Model\Search\RequestGenerator
+ */
+class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
@@ -61,7 +64,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'quick_search_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0],
+                    'quick_search_container' => ['queries' => 1, 'filters' => 0, 'aggregations' => 0],
                     'advanced_search_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0],
                     'catalog_view_container' => ['queries' => 0, 'filters' => 0, 'aggregations' => 0]
                 ],
@@ -170,6 +173,16 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
             $this->countVal($result['catalog_view_container']['queries']),
             'Queries count for "catalog_view_container" doesn\'t match'
         );
+        foreach ($result as $key => $value) {
+            if (isset($value['queries'][$key]['queryReference'])) {
+                foreach ($value['queries'][$key]['queryReference'] as $reference) {
+                    $this->assertEquals(
+                        'must',
+                        $reference['clause']
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -229,6 +242,10 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
         return $attribute;
     }
 
+    /**
+     * @param $value
+     * @return int|void
+     */
     private function countVal(&$value)
     {
         return !empty($value) ? count($value) : 0;

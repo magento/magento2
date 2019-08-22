@@ -37,7 +37,9 @@ Direct,Direct
 Indirect,Indirect
 Pounds,Pounds
 Kilograms,Kilograms
-"For some reason we can\'t retrieve tracking info right now.","For some reason we can\'t retrieve tracking info right now."
+"Invalid response from carrier","Invalid response from carrier"
+"No available tracking items","No available tracking items"
+"For some reason we can't retrieve tracking info right now.","For some reason we can't retrieve tracking info right now."
 status,status
 "Empty response","Empty response"
 None,None
@@ -67,8 +69,8 @@ Dropoff,Dropoff
 "Hub ID","Hub ID"
 "The field is applicable if the Smart Post method is selected.","The field is applicable if the Smart Post method is selected."
 "Free Method","Free Method"
-"Free Shipping Amount Threshold","Free Shipping Amount Threshold"
 "Enable Free Shipping Threshold","Enable Free Shipping Threshold"
+"Free Shipping Amount Threshold","Free Shipping Amount Threshold"
 "Displayed Error Message","Displayed Error Message"
 "Ship to Applicable Countries","Ship to Applicable Countries"
 "Ship to Specific Countries","Ship to Specific Countries"

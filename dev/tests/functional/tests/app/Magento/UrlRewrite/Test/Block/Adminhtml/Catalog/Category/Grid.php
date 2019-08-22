@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,13 +9,12 @@ namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category;
 use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
 
 /**
- * Class Grid
- * URL Rewrite grid
+ * URL Rewrite grid.
  */
 class Grid extends ParentGrid
 {
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
@@ -25,6 +24,14 @@ class Grid extends ParentGrid
         ],
         'target_path' => [
             'selector' => 'input[name="target_path"]',
+        ],
+        'store_id' => [
+            'selector' => 'select[name="store_id"]',
+            'input' => 'select',
+        ],
+        'redirect_type' => [
+            'selector' => 'select[name="redirect_type"]',
+            'input' => 'select',
         ],
     ];
 }

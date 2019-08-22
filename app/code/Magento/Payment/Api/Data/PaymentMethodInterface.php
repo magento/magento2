@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Api\Data;
@@ -9,6 +9,7 @@ namespace Magento\Payment\Api\Data;
  * Payment method interface.
  *
  * @api
+ * @since 100.1.3
  */
 interface PaymentMethodInterface
 {
@@ -16,6 +17,7 @@ interface PaymentMethodInterface
      * Get code.
      *
      * @return string
+     * @since 100.1.3
      */
     public function getCode();
 
@@ -23,6 +25,7 @@ interface PaymentMethodInterface
      * Get title.
      *
      * @return string
+     * @since 100.1.3
      */
     public function getTitle();
 
@@ -30,6 +33,7 @@ interface PaymentMethodInterface
      * Get store id.
      *
      * @return int
+     * @since 100.1.3
      */
     public function getStoreId();
 
@@ -38,6 +42,7 @@ interface PaymentMethodInterface
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @since 100.1.3
      */
     public function getIsActive();
 }

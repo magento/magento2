@@ -1,24 +1,28 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Checkout\Test\Fixture\Cart;
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceView;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Sales\Test\TestStep\Utils\CompareQtyTrait;
 use Magento\Shipping\Test\Page\Adminhtml\OrderShipmentView;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Create invoice from order on backend.
  */
 class CreateInvoiceStep implements TestStepInterface
 {
+    use CompareQtyTrait;
+
     /**
      * Orders Page.
      *
@@ -62,20 +66,6 @@ class CreateInvoiceStep implements TestStepInterface
     private $order;
 
     /**
-     * Invoice data.
-     *
-     * @var array|null
-     */
-    private $data;
-
-    /**
-     * Whether Invoice is partial.
-     *
-     * @var string
-     */
-    private $isInvoicePartial;
-
-    /**
      * Payment Action.
      *
      * @var string
@@ -83,36 +73,39 @@ class CreateInvoiceStep implements TestStepInterface
     private $paymentAction;
 
     /**
-     * @construct
+     * Checkout Cart fixture.
+     *
+     * @var Cart
+     */
+    private $cart;
+
+    /**
+     * @param Cart $cart
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
      * @param OrderInvoiceNew $orderInvoiceNew
      * @param OrderInvoiceView $orderInvoiceView
      * @param OrderInjectable $order
      * @param OrderShipmentView $orderShipmentView
-     * @param array|null $data [optional]
-     * @param string $isInvoicePartial [optional]
      * @param string $paymentAction
      */
     public function __construct(
+        Cart $cart,
         OrderIndex $orderIndex,
         SalesOrderView $salesOrderView,
         OrderInvoiceNew $orderInvoiceNew,
         OrderInvoiceView $orderInvoiceView,
         OrderInjectable $order,
         OrderShipmentView $orderShipmentView,
-        $data = null,
-        $isInvoicePartial = null,
         $paymentAction = 'authorize'
     ) {
+        $this->cart = $cart;
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
         $this->orderInvoiceNew = $orderInvoiceNew;
         $this->orderInvoiceView = $orderInvoiceView;
         $this->order = $order;
         $this->orderShipmentView = $orderShipmentView;
-        $this->data = $data;
-        $this->isInvoicePartial = $isInvoicePartial;
         $this->paymentAction = $paymentAction;
     }
 
@@ -128,24 +121,21 @@ class CreateInvoiceStep implements TestStepInterface
         }
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->invoice();
-        if (!empty($this->data)) {
-            $this->orderInvoiceNew->getFormBlock()->fillProductData(
-                $this->data,
-                $this->order->getEntityId()['products']
-            );
-            $this->orderInvoiceNew->getFormBlock()->updateQty();
-            $this->orderInvoiceNew->getFormBlock()->fillFormData($this->data);
-            if (isset($this->isInvoicePartial)) {
-                $this->orderInvoiceNew->getFormBlock()->submit();
-                $this->salesOrderView->getPageActions()->invoice();
+        $invoicesData = $this->order->getInvoice() !== null ? $this->order->getInvoice() : ['invoiceData' => []];
+        foreach ($invoicesData as $invoiceData) {
+            $this->salesOrderView->getPageActions()->invoice();
+
+            $items = $this->getItems();
+            $this->orderInvoiceNew->getFormBlock()->fillProductData($invoiceData, $items);
+            if ($this->compare($this->cart->getItems(), $invoiceData)) {
+                $this->orderInvoiceNew->getFormBlock()->updateQty();
             }
-        }
-        $this->orderInvoiceNew->getFormBlock()->submit();
-        $invoiceIds = $this->getInvoiceIds();
-        if (!empty($this->data)) {
+
+            $this->orderInvoiceNew->getFormBlock()->fillFormData($invoiceData);
+            $this->orderInvoiceNew->getFormBlock()->submit();
             $shipmentIds = $this->getShipmentIds();
         }
+        $invoiceIds = $this->getInvoiceIds();
 
         return [
             'ids' => [
@@ -175,5 +165,15 @@ class CreateInvoiceStep implements TestStepInterface
     {
         $this->salesOrderView->getOrderForm()->openTab('shipments');
         return $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getIds();
+    }
+
+    /**
+     * Get cart items
+     *
+     * @return mixed
+     */
+    protected function getItems()
+    {
+        return $this->cart->getItems();
     }
 }

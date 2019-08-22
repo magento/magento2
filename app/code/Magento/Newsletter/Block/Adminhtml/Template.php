@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class Template extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'template/list.phtml';
+    protected $_template = 'Magento_Newsletter::template/list.phtml';
 
     /**
      * @return $this

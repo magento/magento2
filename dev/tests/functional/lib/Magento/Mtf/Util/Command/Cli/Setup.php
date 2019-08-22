@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,11 +19,9 @@ class Setup extends Cli
     const PARAM_SETUP_UNINSTALL = 'setup:uninstall';
 
     /**
-     * Options for uninstall Magento command.
-     *
-     * @var array
+     * Parameter for DI compile Magento command.
      */
-    private $options = ['-n'];
+    const PARAM_SETUP_DI_COMPILE = 'setup:di:compile';
 
     /**
      * Uninstall Magento.
@@ -32,6 +30,16 @@ class Setup extends Cli
      */
     public function uninstall()
     {
-        parent::execute(Setup::PARAM_SETUP_UNINSTALL, $this->options);
+        parent::execute(Setup::PARAM_SETUP_UNINSTALL);
+    }
+
+    /**
+     * DI Compile.
+     *
+     * @return void
+     */
+    public function diCompile()
+    {
+        parent::execute(Setup::PARAM_SETUP_DI_COMPILE);
     }
 }

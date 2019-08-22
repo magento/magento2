@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,14 +33,15 @@ use Magento\Mtf\TestCase\Scenario;
  * 14. Perform assertions.
  *
  * @group One_Page_Checkout
- * @ZephyrId MAGETWO-27485, MAGETWO-12412, MAGETWO-12429
+ * @ZephyrId MAGETWO-27485, MAGETWO-12412, MAGETWO-12429, MAGETWO-49917, MAGETWO-27485
  * @ZephyrId MAGETWO-12444, MAGETWO-12848, MAGETWO-12849, MAGETWO-12850
  */
 class OnePageCheckoutTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const TEST_TYPE = 'acceptance_test, extended_acceptance_test, 3rd_party_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test, 3rd_party_test, 3rd_party_test_single_flow';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**

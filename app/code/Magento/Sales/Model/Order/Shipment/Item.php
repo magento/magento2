@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Model\Order\Shipment;
 
@@ -13,9 +11,9 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item getResource()
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements ShipmentItemInterface
 {
@@ -146,7 +144,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      * Declare qty
      *
      * @param float $qty
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return \Magento\Sales\Model\Order\Shipment\Item
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
@@ -168,6 +166,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns additional_data
      *
@@ -378,5 +377,6 @@ class Item extends AbstractModel implements ShipmentItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

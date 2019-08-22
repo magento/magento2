@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,16 +12,22 @@ namespace Magento\Downloadable\Model\Product;
 /**
  * Test for \Magento\Downloadable\Model\Product\Type
  */
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Downloadable\Model\Product\Type
      */
     protected $_model;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_model = $this->objectManager->create(
             \Magento\Downloadable\Model\Product\Type::class
         );
     }
@@ -215,5 +221,38 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey($key, $sample);
             $this->assertEquals($value, $sample[$key]);
         }
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @covers \Magento\Downloadable\Model\Product\Type::checkProductBuyState()
+     */
+    public function testCheckProductBuyState()
+    {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository =$this->objectManager->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        $product = $productRepository->get('downloadable-product');
+        $product->setLinksPurchasedSeparately(false);
+        $productRepository->save($product);
+        /** @var \Magento\Quote\Model\Quote\Item\Option $option */
+        $option = $this->objectManager->create(
+            \Magento\Quote\Model\Quote\Item\Option::class,
+            ['data' => ['code' => 'info_buyRequest', 'value' => '{"qty":23}']]
+        );
+        $option->setProduct($product);
+        $product->setCustomOptions(['info_buyRequest' => $option]);
+
+        $this->_model->checkProductBuyState($product);
+        $linksFactory = $this->objectManager
+            ->get(\Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory::class);
+        $allLinksIds = $linksFactory->create()->addProductToFilter($product->getEntityId())->getAllIds();
+        $this->assertEquals(
+            '{"qty":23,"links":["' . implode('","', $allLinksIds). '"]}',
+            $product->getCustomOption('info_buyRequest')->getValue()
+        );
     }
 }

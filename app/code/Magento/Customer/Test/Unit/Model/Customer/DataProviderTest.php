@@ -1,101 +1,102 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Config\Share;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Customer\DataProvider as CustomerDataProvider;
+use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class DataProviderTest
- *
- * Test for class \Magento\Customer\Model\Customer\DataProvider
+ * Unit tests for \Magento\Customer\Model\Customer\DataProvider class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     const ATTRIBUTE_CODE = 'test-code';
     const OPTIONS_RESULT = 'test-options';
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $eavConfigMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $customerCollectionFactoryMock;
 
     /**
-     * @var EavValidationRules|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavValidationRules|MockObject
      */
     protected $eavValidationRulesMock;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManagerInterface|MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fileProcessorFactory;
-
-    /**
-     * @var \Magento\Customer\Model\FileProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessor|MockObject
      */
     protected $fileProcessor;
 
     /**
-     * Set up
-     *
-     * @return void
+     * @var FileUploaderDataResolver|MockObject
+     */
+    private $fileUploaderDataResolver;
+
+    /**
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+        $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerCollectionFactoryMock = $this->getMock(
-            \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->customerCollectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->eavValidationRulesMock = $this
-            ->getMockBuilder(\Magento\Ui\DataProvider\EavValidationRules::class)
+            ->getMockBuilder(EavValidationRules::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionMock = $this
-            ->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
+            ->getMockBuilder(SessionManagerInterface::class)
             ->setMethods(['getCustomerFormData', 'unsCustomerFormData'])
             ->getMockForAbstractClass();
 
-        $this->fileProcessor = $this->getMockBuilder(\Magento\Customer\Model\FileProcessor::class)
+        $this->fileProcessor = $this->getMockBuilder(FileProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->fileProcessorFactory = $this->getMockBuilder(\Magento\Customer\Model\FileProcessorFactory::class)
+        $this->fileUploaderDataResolver = $this->getMockBuilder(FileUploaderDataResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['overrideFileUploaderMetadata', 'overrideFileUploaderData'])
             ->getMock();
     }
 
     /**
-     * Run test getAttributesMeta method
+     * Run test getAttributesMeta method.
      *
      * @param array $expected
      * @return void
@@ -105,23 +106,18 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributesMetaWithOptions(array $expected)
     {
         $helper = new ObjectManager($this);
-        /** @var \Magento\Customer\Model\Customer\DataProvider $dataProvider */
+        /** @var CustomerDataProvider $dataProvider */
         $dataProvider = $helper->getObject(
-            \Magento\Customer\Model\Customer\DataProvider::class,
+            CustomerDataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->getCustomerCollectionFactoryMock(),
-                'eavConfig' => $this->getEavConfigMock()
+                'eavConfig' => $this->getEavConfigMock(),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
             ]
-        );
-
-        $helper->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
         );
 
         $meta = $dataProvider->getMeta();
@@ -130,7 +126,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for testGetAttributesMeta
+     * Data provider for testGetAttributesMeta.
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -149,9 +145,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
                                             'options' => 'test-options',
-                                            'visible' => 'is_visible',
+                                            'visible' => null,
                                             'required' => 'is_required',
-                                            'label' => 'frontend_label',
+                                            'label' => __('frontend_label'),
                                             'sortOrder' => 'sort_order',
                                             'notice' => 'note',
                                             'default' => 'default_value',
@@ -167,9 +163,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                         'config' => [
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
-                                            'visible' => 'is_visible',
+                                            'visible' => null,
                                             'required' => 'is_required',
-                                            'label' => 'frontend_label',
+                                            'label' => __('frontend_label'),
                                             'sortOrder' => 'sort_order',
                                             'notice' => 'note',
                                             'default' => 'default_value',
@@ -195,9 +191,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
                                             'options' => 'test-options',
-                                            'visible' => 'is_visible',
+                                            'visible' => null,
                                             'required' => 'is_required',
-                                            'label' => 'frontend_label',
+                                            'label' => __('frontend_label'),
                                             'sortOrder' => 'sort_order',
                                             'notice' => 'note',
                                             'default' => 'default_value',
@@ -213,7 +209,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                         'config' => [
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
-                                            'visible' => 'is_visible',
+                                            'visible' => null,
                                             'required' => 'is_required',
                                             'label' => 'frontend_label',
                                             'sortOrder' => 'sort_order',
@@ -237,7 +233,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                             'dataType' => 'frontend_input',
                                             'formElement' => 'frontend_input',
                                             'options' => 'test-options',
-                                            'visible' => 'is_visible',
+                                            'visible' => null,
                                             'required' => 'is_required',
                                             'label' => __('frontend_label'),
                                             'sortOrder' => 'sort_order',
@@ -247,8 +243,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                             'componentType' => Field::NAME,
                                             'filterBy' => [
                                                 'target' => '${ $.provider }:data.customer.website_id',
-                                                'field' => 'website_ids'
-                                            ]
+                                                'field' => 'website_ids',
+                                            ],
                                         ],
                                     ],
                                 ],
@@ -261,11 +257,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return CollectionFactory|MockObject
      */
     protected function getCustomerCollectionFactoryMock()
     {
-        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -281,14 +277,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Config|\PHPUnit_Framework_MockObject_MockObject
+     * @return Config|MockObject
      */
-    protected function getEavConfigMock()
+    protected function getEavConfigMock($customerAttributes = [])
     {
         $this->eavConfigMock->expects($this->at(0))
             ->method('getEntityType')
             ->with('customer')
-            ->willReturn($this->getTypeCustomerMock());
+            ->willReturn($this->getTypeCustomerMock($customerAttributes));
         $this->eavConfigMock->expects($this->at(1))
             ->method('getEntityType')
             ->with('customer_address')
@@ -298,27 +294,36 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Type|\PHPUnit_Framework_MockObject_MockObject
+     * @return Type|MockObject
      */
-    protected function getTypeCustomerMock()
+    protected function getTypeCustomerMock($customerAttributes = [])
     {
-        $typeCustomerMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+        $typeCustomerMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $attributesCollection = !empty($customerAttributes) ? $customerAttributes : $this->getAttributeMock();
+        $typeCustomerMock->expects($this->any())
+            ->method('getEntityTypeCode')
+            ->willReturn('customer');
+        foreach ($attributesCollection as $attribute) {
+            $attribute->expects($this->any())
+                ->method('getEntityType')
+                ->willReturn($typeCustomerMock);
+        }
 
         $typeCustomerMock->expects($this->once())
             ->method('getAttributeCollection')
-            ->willReturn($this->getAttributeMock());
+            ->willReturn($attributesCollection);
 
         return $typeCustomerMock;
     }
 
     /**
-     * @return Type|\PHPUnit_Framework_MockObject_MockObject
+     * @return Type|MockObject
      */
     protected function getTypeAddressMock()
     {
-        $typeAddressMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+        $typeAddressMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -330,33 +335,94 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return AbstractAttribute[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @param MockObject $attributeMock
+     * @param MockObject $attributeBooleanMock
+     * @param array $options
      */
-    protected function getAttributeMock($type = 'customer')
+    private function injectVisibilityProps(
+        MockObject $attributeMock,
+        MockObject $attributeBooleanMock,
+        array $options = []
+    ) {
+        if (isset($options[self::ATTRIBUTE_CODE]['visible'])) {
+            $attributeMock->expects($this->any())
+                ->method('getIsVisible')
+                ->willReturn($options[self::ATTRIBUTE_CODE]['visible']);
+        }
+
+        if (isset($options[self::ATTRIBUTE_CODE]['user_defined'])) {
+            $attributeMock->expects($this->any())
+                ->method('getIsUserDefined')
+                ->willReturn($options[self::ATTRIBUTE_CODE]['user_defined']);
+        }
+
+        if (isset($options[self::ATTRIBUTE_CODE]['is_used_in_forms'])) {
+            $attributeMock->expects($this->any())
+                ->method('getUsedInForms')
+                ->willReturn($options[self::ATTRIBUTE_CODE]['is_used_in_forms']);
+        }
+
+        if (isset($options['test-code-boolean']['visible'])) {
+            $attributeBooleanMock->expects($this->any())
+                ->method('getIsVisible')
+                ->willReturn($options['test-code-boolean']['visible']);
+        }
+
+        if (isset($options['test-code-boolean']['user_defined'])) {
+            $attributeBooleanMock->expects($this->any())
+                ->method('getIsUserDefined')
+                ->willReturn($options['test-code-boolean']['user_defined']);
+        }
+
+        if (isset($options['test-code-boolean']['is_used_in_forms'])) {
+            $attributeBooleanMock->expects($this->any())
+                ->method('getUsedInForms')
+                ->willReturn($options['test-code-boolean']['is_used_in_forms']);
+        }
+    }
+
+    /**
+     * @return AbstractAttribute[]|MockObject[]
+     */
+    protected function getAttributeMock($type = 'customer', $options = [])
     {
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource'])
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(
+                [
+                    'getAttributeCode',
+                    'getDataUsingMethod',
+                    'usesSource',
+                    'getFrontendInput',
+                    'getIsVisible',
+                    'getSource',
+                    'getIsUserDefined',
+                    'getUsedInForms',
+                    'getEntityType',
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $sourceMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
+        $sourceMock = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        $attributeCode = self::ATTRIBUTE_CODE;
+        if (isset($options[self::ATTRIBUTE_CODE]['specific_code_prefix'])) {
+            $attributeCode = $attributeCode . $options[self::ATTRIBUTE_CODE]['specific_code_prefix'];
+        }
+
+        $attributeMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
 
         $sourceMock->expects($this->any())
             ->method('getAllOptions')
             ->willReturn(self::OPTIONS_RESULT);
 
-        $attributeMock->expects($this->exactly(2))
-            ->method('getAttributeCode')
-            ->willReturn(self::ATTRIBUTE_CODE);
-
         $attributeMock->expects($this->any())
             ->method('getDataUsingMethod')
-            ->willReturnCallback(
-                function ($origName) {
-                    return $origName;
-                }
-            );
+            ->willReturnCallback($this->attributeGetUsingMethodCallback());
+
         $attributeMock->expects($this->any())
             ->method('usesSource')
             ->willReturn(true);
@@ -364,41 +430,73 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getSource')
             ->willReturn($sourceMock);
 
-        $attributeBooleanMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getFrontendInput'])
+        $attributeBooleanMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(
+                [
+                    'getAttributeCode',
+                    'getDataUsingMethod',
+                    'usesSource',
+                    'getFrontendInput',
+                    'getIsVisible',
+                    'getIsUserDefined',
+                    'getUsedInForms',
+                    'getSource',
+                    'getEntityType',
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $attributeBooleanMock->expects($this->exactly(2))
-            ->method('getAttributeCode')
-            ->willReturn('test-code-boolean');
+
         $attributeBooleanMock->expects($this->any())
             ->method('getFrontendInput')
             ->willReturn('boolean');
         $attributeBooleanMock->expects($this->any())
             ->method('getDataUsingMethod')
-            ->willReturnCallback(
-                function ($origName) {
-                    return $origName;
-                }
-            );
+            ->willReturnCallback($this->attributeGetUsingMethodCallback());
+
         $attributeBooleanMock->expects($this->once())
             ->method('usesSource')
             ->willReturn(false);
+        $booleanAttributeCode = 'test-code-boolean';
+        if (isset($options['test-code-boolean']['specific_code_prefix'])) {
+            $booleanAttributeCode = $booleanAttributeCode . $options['test-code-boolean']['specific_code_prefix'];
+        }
+
+        $attributeBooleanMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn($booleanAttributeCode);
 
         $this->eavValidationRulesMock->expects($this->any())
             ->method('build')
-            ->willReturnMap([
-                [$attributeMock, $this->logicalNot($this->isEmpty()), []],
-                [$attributeBooleanMock, $this->logicalNot($this->isEmpty()), []],
-            ]);
+            ->willReturnMap(
+                [
+                    [$attributeMock, $this->logicalNot($this->isEmpty()), []],
+                    [$attributeBooleanMock, $this->logicalNot($this->isEmpty()), []],
+                ]
+            );
         $mocks = [$attributeMock, $attributeBooleanMock];
-
+        $this->injectVisibilityProps($attributeMock, $attributeBooleanMock, $options);
         if ($type == "address") {
             $mocks[] = $this->getCountryAttrMock();
         }
         return $mocks;
     }
 
+    /**
+     * Callback for ::getDataUsingMethod.
+     *
+     * @return \Closure
+     */
+    private function attributeGetUsingMethodCallback()
+    {
+        return function ($origName) {
+            return $origName;
+        };
+    }
+
+    /**
+     * @return MockObject
+     */
     private function getCountryAttrMock()
     {
         $countryByWebsiteMock = $this->getMockBuilder(CountryWithWebsites::class)
@@ -410,16 +508,18 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $shareMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->willReturnMap([
-                [CountryWithWebsites::class, $countryByWebsiteMock],
-                [Share::class, $shareMock],
-            ]);
+            ->willReturnMap(
+                [
+                    [CountryWithWebsites::class, $countryByWebsiteMock],
+                    [Share::class, $shareMock],
+                ]
+            );
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
-        $countryAttrMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource'])
+        $countryAttrMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource', 'getLabel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -453,13 +553,27 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetData()
     {
-        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $customerData = [
+            'email' => 'test@test.ua',
+            'default_billing' => 2,
+            'default_shipping' => 2,
+            'password_hash' => 'password_hash',
+            'rp_token' => 'rp_token',
+            'confirmation' => 'confirmation',
+        ];
+        $addressData = [
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'street' => "street\nstreet",
+        ];
+
+        $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+        $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -476,18 +590,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$customer]);
         $customer->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'email' => 'test@test.ua',
-                'default_billing' => 2,
-                'default_shipping' => 2,
-            ]);
+            ->willReturn($customerData);
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
-        $customer->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
-
         $address->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(2);
@@ -497,25 +603,19 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $address->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'firstname' => 'firstname',
-                'lastname' => 'lastname',
-                'street' => "street\nstreet",
-            ]);
-        $address->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
+            ->willReturn($addressData);
 
         $helper = new ObjectManager($this);
         $dataProvider = $helper->getObject(
-            \Magento\Customer\Model\Customer\DataProvider::class,
+            CustomerDataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->getEavConfigMock()
+                'eavConfig' => $this->getEavConfigMock(),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
             ]
         );
 
@@ -527,12 +627,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->sessionMock->expects($this->once())
             ->method('getCustomerFormData')
             ->willReturn(null);
-
-        $helper->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
-        );
 
         $this->assertEquals(
             [
@@ -546,15 +640,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                         2 => [
                             'firstname' => 'firstname',
                             'lastname' => 'lastname',
-                            'street' => [
-                                'street',
-                                'street',
-                            ],
+                            // Won't be an array because it isn't defined as a multiline field in this test
+                            'street' => "street\nstreet",
                             'default_billing' => 2,
                             'default_shipping' => 2,
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             $dataProvider->getData()
         );
@@ -588,13 +680,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+        $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -611,21 +703,19 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$customer]);
         $customer->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'email' => 'test@test.ua',
-                'default_billing' => 2,
-                'default_shipping' => 2,
-            ]);
+            ->willReturn(
+                [
+                    'email' => 'test@test.ua',
+                    'default_billing' => 2,
+                    'default_shipping' => 2,
+                ]
+            );
         $customer->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
-        $customer->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
-
         $address->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(2);
@@ -635,25 +725,24 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $address->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'firstname' => 'firstname',
-                'lastname' => 'lastname',
-                'street' => "street\nstreet",
-            ]);
-        $address->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([]);
-
+            ->willReturn(
+                [
+                    'firstname' => 'firstname',
+                    'lastname' => 'lastname',
+                    'street' => "street\nstreet",
+                ]
+            );
         $helper = new ObjectManager($this);
         $dataProvider = $helper->getObject(
-            \Magento\Customer\Model\Customer\DataProvider::class,
+            CustomerDataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->getEavConfigMock()
+                'eavConfig' => $this->getEavConfigMock(),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
             ]
         );
 
@@ -668,12 +757,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->sessionMock->expects($this->once())
             ->method('unsCustomerFormData');
 
-        $helper->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
-        );
-
         $this->assertEquals([$customerId => $customerFormData], $dataProvider->getData());
     }
 
@@ -687,179 +770,25 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $customerEmail = 'user1@example.com';
 
         $filename = '/filename.ext1';
-        $viewUrl = 'viewUrl';
 
-        $expectedData = [
-            $customerId => [
-                'customer' => [
-                    'email' => $customerEmail,
-                    'img1' => [
-                        [
-                            'file' => $filename,
-                            'size' => 1,
-                            'url' => $viewUrl,
-                            'name' => 'filename.ext1',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock->expects($this->exactly(2))
-            ->method('getFrontendInput')
-            ->willReturn('image');
-        $attributeMock->expects($this->exactly(2))
-            ->method('getAttributeCode')
-            ->willReturn('img1');
-
-        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $entityTypeMock->expects($this->once())
-            ->method('getEntityTypeCode')
-            ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-
-        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerMock->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'email' => $customerEmail,
-                'img1' => $filename,
-            ]);
+            ->willReturn(
+                [
+                    'email' => $customerEmail,
+                    'img1' => $filename,
+                ]
+            );
         $customerMock->expects($this->once())
             ->method('getAddresses')
             ->willReturn([]);
         $customerMock->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
-        $customerMock->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([$attributeMock]);
-        $customerMock->expects($this->once())
-            ->method('getEntityType')
-            ->willReturn($entityTypeMock);
-
-        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$customerMock]);
-
-        $this->customerCollectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($collectionMock);
-
-        $this->sessionMock->expects($this->once())
-            ->method('getCustomerFormData')
-            ->willReturn([]);
-
-        $this->fileProcessorFactory->expects($this->any())
-            ->method('create')
-            ->with([
-                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-            ])
-            ->willReturn($this->fileProcessor);
-
-        $this->fileProcessor->expects($this->once())
-            ->method('isExist')
-            ->with($filename)
-            ->willReturn(true);
-        $this->fileProcessor->expects($this->once())
-            ->method('getStat')
-            ->with($filename)
-            ->willReturn(['size' => 1]);
-        $this->fileProcessor->expects($this->once())
-            ->method('getViewUrl')
-            ->with('/filename.ext1', 'image')
-            ->willReturn($viewUrl);
-
-        $objectManager = new ObjectManager($this);
-        $dataProvider = $objectManager->getObject(
-            \Magento\Customer\Model\Customer\DataProvider::class,
-            [
-                'name' => 'test-name',
-                'primaryFieldName' => 'primary-field-name',
-                'requestFieldName' => 'request-field-name',
-                'eavValidationRules' => $this->eavValidationRulesMock,
-                'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->getEavConfigMock()
-            ]
-        );
-
-        $objectManager->setBackwardCompatibleProperty(
-            $dataProvider,
-            'session',
-            $this->sessionMock
-        );
-
-        $objectManager->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
-        );
-
-        $this->assertEquals($expectedData, $dataProvider->getData());
-    }
-
-    public function testGetDataWithCustomAttributeImageNoData()
-    {
-        $customerId = 1;
-        $customerEmail = 'user1@example.com';
-
-        $expectedData = [
-            $customerId => [
-                'customer' => [
-                    'email' => $customerEmail,
-                    'img1' => [],
-                ],
-            ],
-        ];
-
-        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock->expects($this->once())
-            ->method('getFrontendInput')
-            ->willReturn('image');
-        $attributeMock->expects($this->exactly(2))
-            ->method('getAttributeCode')
-            ->willReturn('img1');
-
-        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $entityTypeMock->expects($this->once())
-            ->method('getEntityTypeCode')
-            ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-
-        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerMock->expects($this->once())
-            ->method('getData')
-            ->willReturn([
-                'email' => $customerEmail,
-            ]);
-        $customerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn([]);
-        $customerMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($customerId);
-        $customerMock->expects($this->once())
-            ->method('getAttributes')
-            ->willReturn([$attributeMock]);
-        $customerMock->expects($this->once())
-            ->method('getEntityType')
-            ->willReturn($entityTypeMock);
-
-        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
@@ -876,14 +805,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
-            \Magento\Customer\Model\Customer\DataProvider::class,
+            CustomerDataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->getEavConfigMock()
+                'eavConfig' => $this->getEavConfigMock(),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
             ]
         );
 
@@ -893,13 +823,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->sessionMock
         );
 
-        $objectManager->setBackwardCompatibleProperty(
-            $dataProvider,
-            'fileProcessorFactory',
-            $this->fileProcessorFactory
-        );
-
-        $this->assertEquals($expectedData, $dataProvider->getData());
+        $this->fileUploaderDataResolver->expects($this->atLeastOnce())->method('overrideFileUploaderData')
+            ->with(
+                $customerMock,
+                [
+                    'email' => $customerEmail,
+                    'img1' => $filename,
+                ]
+            );
+        $dataProvider->getData();
     }
 
     /**
@@ -913,7 +845,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $attributeCode = 'img1';
 
-        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
@@ -924,12 +856,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collectionMock);
 
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->setMethods([
-                'getAttributeCode',
-                'getFrontendInput',
-                'getDataUsingMethod',
-            ])
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(
+                [
+                    'getAttributeCode',
+                    'getFrontendInput',
+                    'getDataUsingMethod',
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attributeMock->expects($this->any())
@@ -946,7 +880,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $typeCustomerMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+        $typeCustomerMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $typeCustomerMock->expects($this->once())
@@ -956,7 +890,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityTypeCode')
             ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $typeAddressMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+        $typeAddressMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $typeAddressMock->expects($this->once())
@@ -974,32 +908,30 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->eavValidationRulesMock->expects($this->once())
             ->method('build')
-            ->with($attributeMock, [
-                'dataType' => 'frontend_input',
-                'formElement' => 'frontend_input',
-                'visible' => 'is_visible',
-                'required' => 'is_required',
-                'sortOrder' => 'sort_order',
-                'notice' => 'note',
-                'default' => 'default_value',
-                'size' => 'multiline_count',
-                'label' => __('frontend_label'),
-            ])
-            ->willReturn([
-                'max_file_size' => $maxFileSize,
-                'file_extensions' => 'ext1, eXt2 ', // Added spaces and upper-cases
-            ]);
-
-        $this->fileProcessorFactory->expects($this->any())
-            ->method('create')
-            ->with([
-                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-            ])
-            ->willReturn($this->fileProcessor);
+            ->with(
+                $attributeMock,
+                [
+                    'dataType' => 'frontend_input',
+                    'formElement' => 'frontend_input',
+                    'visible' => 'is_visible',
+                    'required' => 'is_required',
+                    'sortOrder' => 'sort_order',
+                    'notice' => 'note',
+                    'default' => 'default_value',
+                    'size' => 'multiline_count',
+                    'label' => __('frontend_label'),
+                ]
+            )
+            ->willReturn(
+                [
+                    'max_file_size' => $maxFileSize,
+                    'file_extensions' => 'ext1, eXt2 ', // Added spaces and upper-cases
+                ]
+            );
 
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
-            \Magento\Customer\Model\Customer\DataProvider::class,
+            CustomerDataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
@@ -1007,7 +939,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
                 'eavConfig' => $this->eavConfigMock,
-                'fileProcessorFactory' => $this->fileProcessorFactory,
             ]
         );
 
@@ -1022,6 +953,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                         'arguments' => [
                             'data' => [
                                 'config' => [
+                                    'dataType' => 'frontend_input',
                                     'formElement' => 'fileUploader',
                                     'componentType' => 'fileUploader',
                                     'maxFileSize' => $maxFileSize,
@@ -1031,7 +963,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                     ],
                                     'sortOrder' => 'sort_order',
                                     'required' => 'is_required',
-                                    'visible' => 'is_visible',
+                                    'visible' => null,
                                     'validation' => [
                                         'max_file_size' => $maxFileSize,
                                         'file_extensions' => 'ext1, eXt2 ',
@@ -1049,5 +981,313 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetDataWithVisibleAttributes()
+    {
+
+        $firstAttributesBundle = $this->getAttributeMock(
+            'customer',
+            [
+                self::ATTRIBUTE_CODE => [
+                    'visible' => true,
+                    'is_used_in_forms' => ['customer_account_edit'],
+                    'user_defined' => true,
+                    'specific_code_prefix' => "_1",
+                ],
+                'test-code-boolean' => [
+                    'visible' => true,
+                    'is_used_in_forms' => ['customer_account_create'],
+                    'user_defined' => true,
+                    'specific_code_prefix' => "_1",
+                ]
+            ]
+        );
+        $secondAttributesBundle = $this->getAttributeMock(
+            'customer',
+            [
+                self::ATTRIBUTE_CODE => [
+                    'visible' => true,
+                    'is_used_in_forms' => ['customer_account_create'],
+                    'user_defined' => false,
+                    'specific_code_prefix' => "_2",
+                ],
+                'test-code-boolean' => [
+                    'visible' => true,
+                    'is_used_in_forms' => ['customer_account_create'],
+                    'user_defined' => true,
+                    'specific_code_prefix' => "_2",
+                ]
+            ]
+        );
+
+        $helper = new ObjectManager($this);
+        /** @var DataProvider $dataProvider */
+        $dataProvider = $helper->getObject(
+            CustomerDataProvider::class,
+            [
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'customerCollectionFactory' => $this->getCustomerCollectionFactoryMock(),
+                'eavConfig' => $this->getEavConfigMock(array_merge($firstAttributesBundle, $secondAttributesBundle)),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
+            ]
+        );
+
+        $meta = $dataProvider->getMeta();
+        $this->assertNotEmpty($meta);
+        $this->assertEquals($this->getExpectationForVisibleAttributes(), $meta);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetDataWithVisibleAttributesWithAccountEdit()
+    {
+        $firstAttributesBundle = $this->getAttributeMock(
+            'customer',
+            [
+                self::ATTRIBUTE_CODE => [
+                    'visible' => true,
+                    'is_used_in_forms' => ['customer_account_edit'],
+                    'user_defined' => true,
+                    'specific_code_prefix' => "_1",
+                ],
+                'test-code-boolean' => [
+                    'visible' => true,
+                    'is_used_in_forms' => ['customer_account_create'],
+                    'user_defined' => true,
+                    'specific_code_prefix' => "_1",
+                ]
+            ]
+        );
+        $secondAttributesBundle = $this->getAttributeMock(
+            'customer',
+            [
+                self::ATTRIBUTE_CODE => [
+                    'visible' => true,
+                    'is_used_in_forms' => ['customer_account_create'],
+                    'user_defined' => false,
+                    'specific_code_prefix' => "_2",
+                ],
+                'test-code-boolean' => [
+                    'visible' => true,
+                    'is_used_in_forms' => ['customer_account_create'],
+                    'user_defined' => true,
+                    'specific_code_prefix' => "_2",
+                ]
+            ]
+        );
+
+        $helper = new ObjectManager($this);
+        $context = $this->getMockBuilder(ContextInterface::class)
+            ->setMethods(['getRequestParam'])
+            ->getMockForAbstractClass();
+        $context->expects($this->any())
+            ->method('getRequestParam')
+            ->with('request-field-name')
+            ->willReturn(1);
+        /** @var DataProvider $dataProvider */
+        $dataProvider = $helper->getObject(
+            CustomerDataProvider::class,
+            [
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'customerCollectionFactory' => $this->getCustomerCollectionFactoryMock(),
+                'context' => $context,
+                'eavConfig' => $this->getEavConfigMock(array_merge($firstAttributesBundle, $secondAttributesBundle)),
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
+
+            ]
+        );
+
+        $meta = $dataProvider->getMeta();
+        $this->assertNotEmpty($meta);
+        $this->assertEquals($this->getExpectationForVisibleAttributes(), $meta);
+    }
+
+    /**
+     * Retrieve all customer variations of attributes with all variations of visibility.
+     *
+     * @return array
+     */
+    private function getCustomerAttributeExpectations()
+    {
+        return [
+            self::ATTRIBUTE_CODE . "_1" => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => 'frontend_input',
+                            'formElement' => 'frontend_input',
+                            'options' => 'test-options',
+                            'visible' => true,
+                            'required' => 'is_required',
+                            'label' => __('frontend_label'),
+                            'sortOrder' => 'sort_order',
+                            'notice' => 'note',
+                            'default' => 'default_value',
+                            'size' => 'multiline_count',
+                            'componentType' => Field::NAME,
+                        ],
+                    ],
+                ],
+            ],
+            self::ATTRIBUTE_CODE . "_2" => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => 'frontend_input',
+                            'formElement' => 'frontend_input',
+                            'options' => 'test-options',
+                            'visible' => true,
+                            'required' => 'is_required',
+                            'label' => __('frontend_label'),
+                            'sortOrder' => 'sort_order',
+                            'notice' => 'note',
+                            'default' => 'default_value',
+                            'size' => 'multiline_count',
+                            'componentType' => Field::NAME,
+                        ],
+                    ],
+                ],
+            ],
+            'test-code-boolean_1' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => 'frontend_input',
+                            'formElement' => 'frontend_input',
+                            'visible' => true,
+                            'required' => 'is_required',
+                            'label' => __('frontend_label'),
+                            'sortOrder' => 'sort_order',
+                            'notice' => 'note',
+                            'default' => 'default_value',
+                            'size' => 'multiline_count',
+                            'componentType' => Field::NAME,
+                            'prefer' => 'toggle',
+                            'valueMap' => [
+                                'true' => 1,
+                                'false' => 0,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'test-code-boolean_2' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => 'frontend_input',
+                            'formElement' => 'frontend_input',
+                            'visible' => true,
+                            'required' => 'is_required',
+                            'label' => __('frontend_label'),
+                            'sortOrder' => 'sort_order',
+                            'notice' => 'note',
+                            'default' => 'default_value',
+                            'size' => 'multiline_count',
+                            'componentType' => Field::NAME,
+                            'prefer' => 'toggle',
+                            'valueMap' => [
+                                'true' => 1,
+                                'false' => 0,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Retrieve all variations of attributes with all variations of visibility.
+     *
+     * @return  array
+     */
+    private function getExpectationForVisibleAttributes()
+    {
+        return [
+            'customer' => [
+                'children' => $this->getCustomerAttributeExpectations(),
+            ],
+            'address' => [
+                'children' => [
+                    self::ATTRIBUTE_CODE => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'dataType' => 'frontend_input',
+                                    'formElement' => 'frontend_input',
+                                    'options' => 'test-options',
+                                    'visible' => null,
+                                    'required' => 'is_required',
+                                    'label' => __('frontend_label'),
+                                    'sortOrder' => 'sort_order',
+                                    'notice' => 'note',
+                                    'default' => 'default_value',
+                                    'size' => 'multiline_count',
+                                    'componentType' => Field::NAME,
+                                ],
+                            ],
+                        ],
+                    ],
+                    'test-code-boolean' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'dataType' => 'frontend_input',
+                                    'formElement' => 'frontend_input',
+                                    'visible' => null,
+                                    'required' => 'is_required',
+                                    'label' => 'frontend_label',
+                                    'sortOrder' => 'sort_order',
+                                    'notice' => 'note',
+                                    'default' => 'default_value',
+                                    'size' => 'multiline_count',
+                                    'componentType' => Field::NAME,
+                                    'prefer' => 'toggle',
+                                    'valueMap' => [
+                                        'true' => 1,
+                                        'false' => 0,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'country_id' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'dataType' => 'frontend_input',
+                                    'formElement' => 'frontend_input',
+                                    'options' => 'test-options',
+                                    'visible' => null,
+                                    'required' => 'is_required',
+                                    'label' => __('frontend_label'),
+                                    'sortOrder' => 'sort_order',
+                                    'notice' => 'note',
+                                    'default' => 'default_value',
+                                    'size' => 'multiline_count',
+                                    'componentType' => Field::NAME,
+                                    'filterBy' => [
+                                        'target' => '${ $.provider }:data.customer.website_id',
+                                        'field' => 'website_ids',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 }

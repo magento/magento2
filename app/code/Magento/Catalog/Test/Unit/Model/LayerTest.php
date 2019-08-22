@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class LayerTest extends \PHPUnit_Framework_TestCase
+class LayerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Layer
@@ -169,13 +169,10 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->categoryRepository = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
-        $this->currentCategory = $this->getMock(
+        $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $this->currentCategory = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
-            ['getId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getId', '__wakeup']
         );
 
         $this->model = $helper->getObject(
@@ -273,7 +270,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
 
         $this->category->expects($this->any())->method('getId')->will($this->returnValue($categoryId));
         $this->categoryRepository->expects($this->once())->method('get')->with($categoryId)
-            ->willReturn($this->category);
+            ->willReturn($this->currentCategory);
 
         $this->currentCategory->expects($this->any())->method('getId')->willReturn($currentCategoryId);
         $this->registry->expects($this->once())->method('registry')->with('current_category')
@@ -349,7 +346,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
             ->willReturn(null);
         $this->categoryRepository->expects($this->once())->method('get')->with($rootCategoryId)
-            ->willReturn($this->category);
+            ->willReturn($this->currentCategory);
         $this->store->expects($this->any())->method('getRootCategoryId')
             ->will($this->returnValue($rootCategoryId));
 

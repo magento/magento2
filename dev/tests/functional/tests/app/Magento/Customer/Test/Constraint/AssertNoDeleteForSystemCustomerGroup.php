@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class AssertNoDeleteForSystemCustomerGroup extends AbstractConstraint
      */
     public function processAssert(CustomerGroupEdit $customerGroupEdit)
     {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $customerGroupEdit->getPageMainActions()->checkDeleteButton(),
             "Delete button is visible."
         );

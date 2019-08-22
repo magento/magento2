@@ -1,19 +1,39 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <ruleset name="Magento">
     <description>Custom Magento coding standard.</description>
-    <rule ref="Magento.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="120"/>
-            <property name="absoluteLineLimit" value="120"/>
-        </properties>
-    </rule>
-    <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
+    <rule ref="./../../../../../vendor/magento/magento-coding-standard/Magento2"/>
+
+    <!-- ToDo: Improve Annotation sniffs in magento/magento-coding-standard and remove from here. -->
+    <rule ref="Magento.Annotation">
         <exclude-pattern>*/_files/*</exclude-pattern>
+        <exclude-pattern>*/Test/*</exclude-pattern>
+        <exclude-pattern>*Test.php</exclude-pattern>
+    </rule>
+    <rule ref="Magento2.Files.LineLength.MaxExceeded">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Operators.IncrementDecrementUsage">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="PEAR.ControlStructures.ControlSignature">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.ScopeClosingBrace">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="PEAR.Functions.FunctionCallSignature">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace">
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Magento2.Security.LanguageConstruct.DirectOutput">
+        <exclude-pattern>*.phtml</exclude-pattern>
     </rule>
 </ruleset>

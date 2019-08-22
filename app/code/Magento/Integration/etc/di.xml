@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -28,5 +28,11 @@
     </type>
     <type name="Magento\Integration\Api\IntegrationServiceInterface">
         <plugin name="webapiIntegrationService" type="Magento\Integration\Model\Plugin\Integration"/>
+    </type>
+    <type name="Magento\User\Model\User">
+        <plugin name="revokeTokensFromInactiveAdmins" type="Magento\Integration\Plugin\Model\AdminUser" />
+    </type>
+    <type name="Magento\Customer\Model\Customer">
+        <plugin name="revokeTokensFromInactiveCustomers" type="Magento\Integration\Plugin\Model\CustomerUser" />
     </type>
 </config>

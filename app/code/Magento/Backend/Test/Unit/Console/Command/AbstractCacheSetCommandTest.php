@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ abstract class AbstractCacheSetCommandTest extends AbstractCacheManageCommandTes
     /**
      * @return array
      */
-    public function testExecuteDataProvider()
+    public function executeDataProvider()
     {
         return [
             'implicit all' => [

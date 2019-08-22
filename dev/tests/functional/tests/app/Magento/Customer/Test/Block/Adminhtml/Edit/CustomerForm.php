@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Customer\Test\Fixture\Address;
 
 /**
  * Form for creation of the customer.
@@ -21,7 +22,7 @@ class CustomerForm extends FormTabs
      *
      * @var string
      */
-    protected $spinner = '[data-role="spinner"]';
+    protected $spinner = '#container [data-role="spinner"]';
 
     /**
      * Customer form to load.
@@ -45,11 +46,18 @@ class CustomerForm extends FormTabs
     protected $fieldWrapperControl = './/*[contains(@class, "admin__field")]/*[contains(@class,"control")]';
 
     /**
-     * Selector for wainting tab content to load.
+     * Selector for waiting tab content to load.
      *
      * @var string
      */
     protected $tabReadiness = '.admin__page-nav-item._active._loading';
+
+    /**
+     * Personal information xpath selector.
+     *
+     * @var string
+     */
+    protected $information = './/th[contains(text(), "%s")]/following-sibling::td[1]';
 
     /**
      * Fill Customer forms on tabs by customer, addresses data.
@@ -57,6 +65,7 @@ class CustomerForm extends FormTabs
      * @param FixtureInterface $customer
      * @param FixtureInterface|FixtureInterface[]|null $address
      * @return $this
+     * @throws \Exception
      */
     public function fillCustomer(FixtureInterface $customer, $address = null)
     {
@@ -68,8 +77,25 @@ class CustomerForm extends FormTabs
         }
         if (null !== $address) {
             $this->openTab('addresses');
-            $this->getTab('addresses')->fillAddresses($address);
+            $this->fillCustomerAddress($address);
         }
+
+        return $this;
+    }
+
+    /**
+     * Fill customer address by provided in parameter data
+     *
+     * @param FixtureInterface|FixtureInterface[] $address
+     * @return $this
+     * @throws \Exception
+     */
+    public function fillCustomerAddress($address)
+    {
+        $addressesTab = $this->getTab('addresses');
+        $this->openTab('addresses');
+        $addressesTab->waitForAddressesGrid();
+        $addressesTab->fillAddresses($address);
 
         return $this;
     }
@@ -90,13 +116,16 @@ class CustomerForm extends FormTabs
         if ($isHasData) {
             parent::fill($customer);
         }
+        $addressesTab = $this->getTab('addresses');
         if ($addressToDelete !== null) {
             $this->openTab('addresses');
-            $this->getTab('addresses')->deleteCustomerAddress($addressToDelete);
+            $addressesTab->waitForAddressesGrid();
+            $addressesTab->deleteCustomerAddress($addressToDelete);
         }
         if ($address !== null) {
             $this->openTab('addresses');
-            $this->getTab('addresses')->updateAddresses($address);
+            $addressesTab->waitForAddressesGrid();
+            $addressesTab->updateAddresses($address);
         }
 
         return $this;
@@ -116,6 +145,9 @@ class CustomerForm extends FormTabs
         $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
         if (null !== $address) {
             $this->openTab('addresses');
+            $this->waitForElementNotVisible($this->tabReadiness);
+            $this->waitForm();
+            $this->getTab('addresses')->waitForAddressesGrid();
             $data['addresses'] = $this->getTab('addresses')->getDataAddresses($address);
         }
 
@@ -140,8 +172,10 @@ class CustomerForm extends FormTabs
      */
     public function openTab($tabName)
     {
+        $this->waitForElementNotVisible($this->tabReadiness);
         parent::openTab($tabName);
         $this->waitForElementNotVisible($this->tabReadiness);
+        $this->waitForm();
 
         return $this;
     }
@@ -153,13 +187,23 @@ class CustomerForm extends FormTabs
      */
     public function getJsErrors()
     {
-        $tabs = ['account_information', 'addresses'];
         $jsErrors = [];
-        foreach ($tabs as $tabName) {
-            $tab = $this->getTab($tabName);
-            $this->openTab($tabName);
-            $jsErrors = array_merge($jsErrors, $tab->getJsErrors());
-        }
+        $tab = $this->getTab('account_information');
+        $this->openTab('account_information');
+        $jsErrors = array_merge($jsErrors, $tab->getJsErrors());
         return $jsErrors;
+    }
+
+    /**
+     * Get personal information.
+     *
+     * @param string $title
+     * @return string
+     */
+    public function getPersonalInformation($title)
+    {
+        return $this->_rootElement
+            ->find(sprintf($this->information, $title), Locator::SELECTOR_XPATH)
+            ->getText();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Cron;
@@ -8,6 +8,9 @@ namespace Magento\Backup\Cron;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Performs scheduled backup.
+ */
 class SystemBackup
 {
     const XML_PATH_BACKUP_ENABLED = 'system/backup/enabled';
@@ -101,6 +104,10 @@ class SystemBackup
      */
     public function execute()
     {
+        if (!$this->_backupData->isEnabled()) {
+            return $this;
+        }
+
         if (!$this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_ENABLED, ScopeInterface::SCOPE_STORE)) {
             return $this;
         }

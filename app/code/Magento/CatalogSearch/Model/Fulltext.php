@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model;
@@ -15,8 +15,6 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Catalog advanced search model
  *
- * @method \Magento\CatalogSearch\Model\ResourceModel\Fulltext _getResource()
- * @method \Magento\CatalogSearch\Model\ResourceModel\Fulltext getResource()
  * @method int getProductId()
  * @method \Magento\CatalogSearch\Model\Fulltext setProductId(int $value)
  * @method int getStoreId()
@@ -24,7 +22,8 @@ use Magento\Search\Model\QueryFactory;
  * @method string getDataIndex()
  * @method \Magento\CatalogSearch\Model\Fulltext setDataIndex(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class Fulltext extends \Magento\Framework\Model\AbstractModel
 {
@@ -77,6 +76,8 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      * Reset search results cache
      *
      * @return $this
+     * @deprecated Not used anymore
+     * @see \Magento\CatalogSearch\Model\ResourceModel\Fulltext::resetSearchResultsByStore
      */
     public function resetSearchResults()
     {

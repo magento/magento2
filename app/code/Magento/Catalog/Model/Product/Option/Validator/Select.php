@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 
 use Magento\Catalog\Model\Product\Option;
 
+/**
+ * Select validator class
+ */
 class Select extends DefaultValidator
 {
     /**
@@ -80,7 +83,10 @@ class Select extends DefaultValidator
         if ($storeId > \Magento\Store\Model\Store::DEFAULT_STORE_ID && $priceType === null && $price === null) {
             return true;
         }
-        if (!$this->isInRange($priceType, $this->priceTypes) || $this->isNegative($price)) {
+        if (!$priceType && !$price) {
+            return true;
+        }
+        if (!$this->isInRange($priceType, $this->priceTypes) || !$this->isNumber($price)) {
             return false;
         }
 

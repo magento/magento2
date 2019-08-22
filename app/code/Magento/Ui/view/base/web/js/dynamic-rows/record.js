@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'uiCollection',
@@ -22,7 +25,7 @@ define([
             },
             listens: {
                 position: 'initPosition',
-                elems: 'setColumnVisibileListener'
+                elems: 'setColumnVisibleListener'
             },
             links: {
                 position: '${ $.name }.${ $.positionProvider }:value'
@@ -108,11 +111,11 @@ define([
          * @param {Number} position - element position
          */
         initPosition: function (position) {
-            var pos = ~~position;
+            var pos = parseInt(position, 10);
 
             this.parentComponent().setMaxPosition(pos, this);
 
-            if (!pos) {
+            if (!pos && pos !== 0) {
                 this.position = this.parentComponent().maxPosition;
             }
         },
@@ -120,7 +123,7 @@ define([
         /**
          * Set column visibility listener
          */
-        setColumnVisibileListener: function () {
+        setColumnVisibleListener: function () {
             var elem = _.find(this.elems(), function (curElem) {
                 return !curElem.hasOwnProperty('visibleListener');
             });
@@ -242,7 +245,7 @@ define([
                 label = _.findWhere(this.parentComponent().labels(), {
                     name: index
                 });
-                label.visible() !== state ? label.visible(state) : false;
+                label.defaultLabelVisible && label.visible(state);
             } else {
                 elems[curElem].visible(state);
             }

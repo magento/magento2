@@ -1,0 +1,58 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+.magento-placeholder {
+    display: inline-block;
+    margin: 0 5px;
+    background: #dff7ff;
+    outline: 2px solid #c0dffa;
+    padding: 2px 4px;
+    vertical-align: bottom;
+    height: 20px;
+    cursor: pointer !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+    color: #000;
+    box-sizing: initial;
+    word-break: break-all;
+}
+
+.magento-placeholder-error {
+    display: inline-block;
+    margin: 0 5px;
+    background: #ffc0cb;
+    outline: 2px solid #F7AAAA !important;
+    padding: 2px 4px;
+    vertical-align: bottom;
+    height: 20px;
+}
+
+.magento-placeholder-error:before {
+    content: '';
+    display: inline-block;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABWUlEQVR42qVTS07DMBD1pggqcQAQEofINbrNvh977Au04gJtxZYiVZwLJJasAhJJ3LBrI4Xwxm3SKErCz9Koqec9e/xmnhBYdjK5tlo/R8ZsI63XIdGFqK1QSg+5MNY6scbMXobDU5eIpbyKiaZIpLExOX4/cdg6IOoXZP6OlbpDPjtgUks0y4l6An8esbl1iUPghgyA5ZPvnzAo0XphC/IRkyZKKVEnl8GVEK04+LsRY8yb4HJbAVpnLprJmVVqIcLx+DIieqiX2Bl8ITQB93wv0mDQb3pnGxkXLqsiu8WCufd2H5KBfM/Yepv/d0Du+2c/fQJjIilvyyfwhLEgvxHR7itZORFjHs82clcbuRNazwXm/uOvg4RKAoFSbkofVMjJN6MMzG5DNBI5XAVDTeG0XaE0a9JpJviADejM5LrgeT1UMsJmAOC8nLCqnbG3QQ6Y13ciWbTyC+DUOUqNY1A2AAAAAElFTkSuQmCC);
+    background-repeat: no-repeat;
+    background-position-x: 1px;
+    background-position-y: 1px;
+    width: 20px;
+    height: inherit;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+.magento-placeholder-error img {
+    display: none;
+}
+
+.magento-placeholder-error[data-mce-selected] {
+    outline: 2px solid #E12525 !important;
+}
+
+.magento-placeholder-error img,
+.magento-placeholder img {
+    vertical-align: middle;
+    max-height: 20px;
+    margin-right: 5px;
+}

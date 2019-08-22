@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,7 +60,6 @@ foreach ($attributesData as $data) {
     /* Assign attribute to attribute set */
     $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
 }
-
 
 /** @var \Magento\Eav\Model\Config $eavConfig */
 $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);

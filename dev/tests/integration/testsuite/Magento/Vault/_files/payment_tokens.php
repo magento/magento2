@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,6 +42,22 @@ $paymentTokens = [
         'type' => 'simple',
         'expires_at' => '2016-12-04 10:18:15',
         'is_active' => 0
+    ],
+    [
+        'customer_id' => 1,
+        'public_hash' => '34567',
+        'payment_method_code' => 'fifth',
+        'type' => 'card',
+        'expires_at' => date('Y-m-d h:i:s', strtotime('+1 month')),
+        'is_active' => 1
+    ],
+    [
+        'customer_id' => 1,
+        'public_hash' => '345678',
+        'payment_method_code' => 'sixth',
+        'type' => 'account',
+        'expires_at' => date('Y-m-d h:i:s', strtotime('+1 month')),
+        'is_active' => 1
     ],
 ];
 /** @var array $tokenData */

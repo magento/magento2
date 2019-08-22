@@ -1,13 +1,18 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
     'uiComponent',
     'Magento_Customer/js/customer-data',
+    'underscore',
     'jquery/jquery-storageapi'
-], function ($, Component, customerData) {
+], function ($, Component, customerData, _) {
     'use strict';
 
     return Component.extend({
@@ -22,7 +27,7 @@ define([
         initialize: function () {
             this._super();
 
-            this.cookieMessages = $.cookieStorage.get('mage-messages');
+            this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
             this.messages = customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
             });

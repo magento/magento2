@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\CheckoutData">
+        <dataset name="two_text_swatches">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">option_key_2</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">42</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">48</item>
+            </field>
+        </dataset>
+        <dataset name="swatches_with_dropdown">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">42</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">47</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

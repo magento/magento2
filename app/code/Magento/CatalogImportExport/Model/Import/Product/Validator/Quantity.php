@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
@@ -15,18 +15,12 @@ class Quantity extends AbstractImportValidator implements RowValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function init($context)
-    {
-        return parent::init($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['qty']) && !is_numeric($value['qty'])) {
+        if (!empty($value['qty']) && (!is_numeric($value['qty'])
+            && $value['qty'] !== $this->context->getEmptyAttributeValueConstant())
+        ) {
             $this->_addMessages(
                 [
                     sprintf(

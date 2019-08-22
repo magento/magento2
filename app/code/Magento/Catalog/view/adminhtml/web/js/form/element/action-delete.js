@@ -1,14 +1,14 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
     'underscore',
     'Magento_Ui/js/form/element/abstract'
-], function (_, Acstract) {
+], function (_, Abstract) {
     'use strict';
 
-    return Acstract.extend({
+    return Abstract.extend({
         defaults: {
             prefixName: '',
             prefixElementName: '',

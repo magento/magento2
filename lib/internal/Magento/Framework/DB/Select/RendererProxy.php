@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Select;
@@ -56,6 +56,8 @@ class RendererProxy extends SelectRenderer
     }
 
     /**
+     * Sleep magic method.
+     *
      * @return array
      */
     public function __sleep()
@@ -99,7 +101,7 @@ class RendererProxy extends SelectRenderer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render(\Magento\Framework\DB\Select $select, $sql = '')
     {

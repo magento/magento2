@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FilterOrderStatusByLabelAndCodeActionGroup">
+        <arguments>
+            <argument name="statusLabel" type="string"/>
+            <argument name="statusCode" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminOrderStatusGridSection.resetFilter}}" dependentSelector="{{AdminOrderStatusGridSection.resetFilter}}" visible="true" stepKey="clearOrderStatusFilters" />
+        <fillField selector="{{AdminOrderStatusGridSection.statusLabel}}" userInput="{{statusLabel}}" stepKey="fillStatusLabel"/>
+        <fillField selector="{{AdminOrderStatusGridSection.statusCode}}" userInput="{{statusCode}}" stepKey="fillStatusCode"/>
+        <click selector="{{AdminOrderStatusGridSection.search}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForSearch"/>
+    </actionGroup>
+</actionGroups>

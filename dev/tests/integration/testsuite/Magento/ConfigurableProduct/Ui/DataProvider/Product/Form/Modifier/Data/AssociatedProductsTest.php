@@ -1,11 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data;
 
-class AssociatedProductsTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel;
+use Magento\Framework\App\RequestInterface;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * AssociatedProductsTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AssociatedProductsTest extends TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface $objectManager
@@ -17,11 +29,13 @@ class AssociatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     private $registry;
 
-    public function setUp()
+    /**
+     * @inheritdoc
+     */
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(\Magento\Framework\Registry::class);
-
     }
 
     /**
@@ -63,6 +77,53 @@ class AssociatedProductsTest extends \PHPUnit_Framework_TestCase
                 $productMatrixData['price']
             );
         }
+    }
+
+    /**
+     * Tests configurable product won't appear in product listing.
+     *
+     * Tests configurable product won't appear in configurable associated product listing if its options attribute
+     * is not filterable in grid.
+     *
+     * @return void
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoAppArea adminhtml
+     */
+    public function testAddManuallyConfigurationsWithNotFilterableInGridAttribute(): void
+    {
+        /** @var RequestInterface $request */
+        $request = $this->objectManager->get(RequestInterface::class);
+        $request->setParams([
+            FilterModifier::FILTER_MODIFIER => [
+                'test_configurable' => [
+                    'condition_type' => 'notnull',
+                ],
+            ],
+            'attributes_codes' => [
+                'test_configurable'
+            ],
+        ]);
+        $context = $this->objectManager->create(ContextInterface::class, ['request' => $request]);
+        /** @var UiComponentFactory $uiComponentFactory */
+        $uiComponentFactory = $this->objectManager->get(UiComponentFactory::class);
+        $uiComponent = $uiComponentFactory->create(
+            ConfigurablePanel::ASSOCIATED_PRODUCT_LISTING,
+            null,
+            ['context' => $context]
+        );
+
+        foreach ($uiComponent->getChildComponents() as $childUiComponent) {
+            $childUiComponent->prepare();
+        }
+
+        $dataSource = $uiComponent->getDataSourceData();
+        $skus = array_column($dataSource['data']['items'], 'sku');
+
+        $this->assertNotContains(
+            'configurable',
+            $skus,
+            'Only products with specified attribute should be in product list'
+        );
     }
 
     /**

@@ -1,13 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class PreventClearCheckoutSessionObserverTest extends \PHPUnit_Framework_TestCase
+class PreventClearCheckoutSessionObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\PreventClearCheckoutSessionObserver
@@ -52,12 +52,12 @@ class PreventClearCheckoutSessionObserverTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $eventMethods = ['getControllerAction', 'dispatch', '__wakeUp'];
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->sessionHelperMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
-        $this->helperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
-        $this->eventMock = $this->getMock(\Magento\Framework\Event::class, $eventMethods, [], '', false);
-        $this->actionMock = $this->getMock(\Magento\Persistent\Controller\Index::class, [], [], '', false);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->eventMock = $this->createPartialMock(\Magento\Framework\Event::class, $eventMethods);
+        $this->actionMock = $this->createMock(\Magento\Persistent\Controller\Index::class);
         $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
         $this->model = new \Magento\Persistent\Observer\PreventClearCheckoutSessionObserver(
             $this->sessionHelperMock,

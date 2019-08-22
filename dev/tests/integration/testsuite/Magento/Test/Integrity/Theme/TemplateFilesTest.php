@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Theme;
@@ -21,7 +21,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                     ->get(\Magento\Framework\View\FileSystem::class)
                     ->getTemplateFileName($file, $params);
                 $this->assertFileExists($templateFilename);
-            } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+            } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
                 $invalidTemplates[] = "File \"{$templateFilename}\" does not exist." .
                     PHP_EOL .
                     "Parameters: {$area}/{$themeId} {$module}::{$file}" .

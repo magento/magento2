@@ -1,13 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Error;
-use Magento\Framework\Filesystem\DriverInterface;
+
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Error processor
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:ignoreFile
  */
 class Processor
 {
@@ -20,42 +26,42 @@ class Processor
      * Page title
      *
      * @var string
-    */
+     */
     public $pageTitle;
 
     /**
      * Skin URL
      *
      * @var string
-    */
+     */
     public $skinUrl;
 
     /**
      * Base URL
      *
      * @var string
-    */
+     */
     public $baseUrl;
 
     /**
      * Post data
      *
      * @var array
-    */
+     */
     public $postData;
 
     /**
      * Report data
      *
      * @var array
-    */
+     */
     public $reportData;
 
     /**
      * Report action
      *
      * @var string
-    */
+     */
     public $reportAction;
 
     /**
@@ -69,28 +75,28 @@ class Processor
      * Report file
      *
      * @var string
-    */
+     */
     protected $_reportFile;
 
     /**
      * Show error message
      *
      * @var bool
-    */
+     */
     public $showErrorMsg;
 
     /**
      * Show message after sending email
      *
      * @var bool
-    */
+     */
     public $showSentMsg;
 
     /**
      * Show form for sending
      *
      * @var bool
-    */
+     */
     public $showSendForm;
 
     /**
@@ -102,21 +108,21 @@ class Processor
      * Server script name
      *
      * @var string
-    */
+     */
     protected $_scriptName;
 
     /**
      * Is root
      *
      * @var bool
-    */
+     */
     protected $_root;
 
     /**
      * Internal config object
      *
      * @var \stdClass
-    */
+     */
     protected $_config;
 
     /**
@@ -127,13 +133,22 @@ class Processor
     protected $_response;
 
     /**
-     * @param \Magento\Framework\App\Response\Http $response
+     * JSON serializer
+     *
+     * @var Json
      */
-    public function __construct(\Magento\Framework\App\Response\Http $response)
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\App\Response\Http $response
+     * @param Json $serializer
+     */
+    public function __construct(\Magento\Framework\App\Response\Http $response, Json $serializer = null)
     {
         $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
@@ -203,7 +218,7 @@ class Processor
     public function processReport()
     {
         $this->pageTitle = 'There has been an error processing your request';
-        $this->_response->setHttpResponseCode(503);
+        $this->_response->setHttpResponseCode(500);
 
         $this->showErrorMsg = false;
         $this->showSentMsg  = false;
@@ -245,6 +260,28 @@ class Processor
         /**
          * Define server http host
          */
+        $host = $this->resolveHostName();
+
+        $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== 'off')
+            || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+        $url = ($isSecure ? 'https://' : 'http://') . $host;
+
+        $port = explode(':', $host);
+        if (isset($port[1]) && !in_array($port[1], [80, 443])
+            && !preg_match('/.*?\:[0-9]+$/', $url)
+        ) {
+            $url .= ':' . $port[1];
+        }
+        return  $url;
+    }
+
+    /**
+     * Resolve hostname
+     *
+     * @return string
+     */
+    private function resolveHostName() : string
+    {
         if (!empty($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } elseif (!empty($_SERVER['SERVER_NAME'])) {
@@ -252,16 +289,7 @@ class Processor
         } else {
             $host = 'localhost';
         }
-
-        $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
-        $url = ($isSecure ? 'https://' : 'http://') . $host;
-
-        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], [80, 433])
-            && !preg_match('/.*?\:[0-9]+$/', $url)
-        ) {
-            $url .= ':' . $_SERVER['SERVER_PORT'];
-        }
-        return  $url;
+        return $host;
     }
 
     /**
@@ -310,6 +338,8 @@ class Processor
      * Prepare config data
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareConfig()
     {
@@ -325,10 +355,10 @@ class Processor
         $config->skin           = self::DEFAULT_SKIN;
 
         //combine xml data to one object
-        if (!is_null($design) && (string)$design->skin) {
+        if ($design !== null && (string)$design->skin) {
             $this->_setSkin((string)$design->skin, $config);
         }
-        if (!is_null($local)) {
+        if ($local !== null) {
             if ((string)$local->report->action) {
                 $config->action = $local->report->action;
             }
@@ -356,7 +386,7 @@ class Processor
      * Load xml file
      *
      * @param string $xmlFile
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     protected function _loadXml($xmlFile)
     {
@@ -365,6 +395,8 @@ class Processor
     }
 
     /**
+     * Render page
+     *
      * @param string $template
      * @return string
      */
@@ -391,7 +423,7 @@ class Processor
      */
     protected function _getFilePath($file, $directories = null)
     {
-        if (is_null($directories)) {
+        if ($directories === null) {
             $directories[] = $this->_errorDir;
         }
 
@@ -444,12 +476,12 @@ class Processor
      * Create report
      *
      * @param array $reportData
-     * @return void
+     * @return string
      */
     public function saveReport($reportData)
     {
         $this->reportData = $reportData;
-        $this->reportId   = abs(intval(microtime(true) * rand(100, 1000)));
+        $this->reportId   = abs((int)(microtime(true) * random_int(100, 1000)));
         $this->_reportFile = $this->_reportDir . '/' . $this->reportId;
         $this->_setReportData($reportData);
 
@@ -457,19 +489,14 @@ class Processor
             @mkdir($this->_reportDir, 0777, true);
         }
 
-        @file_put_contents($this->_reportFile, serialize($reportData));
+        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData));
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
         }
         $this->_setReportUrl();
 
-        if (headers_sent()) {
-            echo '<script type="text/javascript">';
-            echo "window.location.href = '{$this->reportUrl}';";
-            echo '</script>';
-            exit;
-        }
+        return $this->reportUrl;
     }
 
     /**
@@ -487,13 +514,15 @@ class Processor
             header("Location: " . $this->getBaseUrl());
             die();
         }
-        $this->_setReportData(unserialize(file_get_contents($this->_reportFile)));
+        $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));
     }
 
     /**
      * Send report
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sendReport()
     {

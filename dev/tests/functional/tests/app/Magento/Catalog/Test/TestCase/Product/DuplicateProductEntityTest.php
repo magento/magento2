@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -90,6 +90,8 @@ class DuplicateProductEntityTest extends Injectable
      */
     public function test($productType)
     {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/666');
+
         // Precondition
         $product = $this->createProduct($productType);
 

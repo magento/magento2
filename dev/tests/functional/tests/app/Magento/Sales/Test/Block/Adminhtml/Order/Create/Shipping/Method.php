@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,14 +44,18 @@ class Method extends Block
     public function selectShippingMethod(array $shippingMethod)
     {
         $this->waitFormLoading();
-        if ($this->_rootElement->find($this->shippingMethodsLink)->isVisible()) {
-            $this->_rootElement->find($this->shippingMethodsLink)->click();
+        $shippingMethodsLink = $this->_rootElement->find($this->shippingMethodsLink);
+        if ($shippingMethodsLink->isPresent()) {
+            $shippingMethodsLink->click();
+            $this->waitFormLoading();
         }
+
         $selector = sprintf(
             $this->shippingMethod,
             $shippingMethod['shipping_service'],
             $shippingMethod['shipping_method']
         );
+        $this->waitFormLoading();
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
     }
 
@@ -62,7 +66,6 @@ class Method extends Block
      */
     private function waitFormLoading()
     {
-        $this->_rootElement->click();
         $this->browser->waitUntil(
             function () {
                 return $this->browser->find($this->waitElement)->isVisible() ? null : true;

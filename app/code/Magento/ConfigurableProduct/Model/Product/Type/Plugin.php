@@ -1,24 +1,27 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 
+/**
+ * Type plugin.
+ */
 class Plugin
 {
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
     /**
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      */
-    public function __construct(Manager $moduleManager)
+    public function __construct(ModuleManagerInterface $moduleManager)
     {
         $this->moduleManager = $moduleManager;
     }

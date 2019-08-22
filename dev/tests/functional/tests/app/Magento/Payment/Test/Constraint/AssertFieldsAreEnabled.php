@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class AssertFieldsAreEnabled extends AbstractConstraint
     public function processAssert(SystemConfigEditSectionPayment $configEditSectionPayment, array $fieldIds)
     {
         foreach ($fieldIds as $fieldId) {
-            \PHPUnit_Framework_Assert::assertTrue(
+            \PHPUnit\Framework\Assert::assertTrue(
                 $configEditSectionPayment->getPaymentsConfigBlock()->isFieldEnabled($fieldId),
                 'Field is active.'
             );

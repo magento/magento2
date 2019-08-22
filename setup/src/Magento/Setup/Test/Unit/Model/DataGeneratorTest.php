@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,10 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\DataGenerator;
 
-class DataGeneratorTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class DataGeneratorTest
+ */
+class DataGeneratorTest extends \PHPUnit\Framework\TestCase
 {
 
     const PATH_TO_CSV_FILE = '/_files/dictionary.csv';
@@ -38,7 +41,7 @@ class DataGeneratorTest extends \PHPUnit_Framework_TestCase
         $key = 'generate-test';
 
         $data = file(__DIR__ . self::PATH_TO_CSV_FILE);
-        $wordCount = mt_rand(1, count($data));
+        $wordCount = random_int(1, count($data));
         $model = new DataGenerator(__DIR__ . self::PATH_TO_CSV_FILE);
         $result = $model->generate($wordCount, $wordCount, $key);
 

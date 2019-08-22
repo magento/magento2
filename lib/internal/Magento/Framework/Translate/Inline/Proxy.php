@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Translate\Inline;
@@ -55,6 +55,8 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
     }
 
     /**
+     * Sleep magic method.
+     *
      * @return array
      */
     public function __sleep()
@@ -120,7 +122,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
     /**
      * Replace translation templates with HTML fragments
      *
-     * @param array|string &$body
+     * @param array|string $body
      * @param bool $isJson
      * @return $this
      */

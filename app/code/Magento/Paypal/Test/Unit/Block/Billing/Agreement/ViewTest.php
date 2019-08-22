@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
@@ -9,7 +9,7 @@ namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
  * Class ViewTest
  * @package Magento\Paypal\Block\Billing\Agreement
  */
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -30,14 +30,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderCollectionFactory = $this->getMock(
+        $this->orderCollectionFactory = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->orderConfig = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
+        $this->orderConfig = $this->createMock(\Magento\Sales\Model\Order\Config::class);
 
         $this->block = $objectManager->getObject(
             \Magento\Paypal\Block\Billing\Agreement\View::class,
@@ -52,12 +49,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $visibleStatuses = [];
 
-        $orderCollection = $this->getMock(
+        $orderCollection = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Collection::class,
-            ['addFieldToSelect', 'addFieldToFilter', 'setOrder'],
-            [],
-            '',
-            false
+            ['addFieldToSelect', 'addFieldToFilter', 'setOrder']
         );
         $orderCollection->expects($this->at(0))
             ->method('addFieldToSelect')

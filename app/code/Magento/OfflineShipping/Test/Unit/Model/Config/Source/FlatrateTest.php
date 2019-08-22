@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\Config\Source;
 
-class FlatrateTest extends \PHPUnit_Framework_TestCase
+class FlatrateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\Config\Source\Flatrate

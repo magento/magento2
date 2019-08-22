@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,13 +8,9 @@ namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Tax\Api\Data\TaxClassInterface;
 
 /**
  * Tax class model
- *
- * @method \Magento\Tax\Model\ResourceModel\TaxClass _getResource()
- * @method \Magento\Tax\Model\ResourceModel\TaxClass getResource()
  */
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
@@ -186,6 +182,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     {
         return $this->setData(self::KEY_TYPE, $classType);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

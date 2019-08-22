@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,8 +11,8 @@
             <span class="data-grid-row-changed" css="_changed: $parent.hasChanges">
                 <span class="data-grid-row-changed-tooltip" translate="'Record contains unsaved changes.'"/>
             </span>
-        </td>        
-        
+        </td>
+
         <!-- ko ifnot: $parent.isActionsColumn($data) -->
             <td if="$col.isEditor" template="$parent.fieldTmpl"/>
             <td ifnot="$col.isEditor" css="$col.getFieldClass()" template="$col.getBody()"/>

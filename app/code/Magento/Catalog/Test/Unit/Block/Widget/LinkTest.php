@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Widget;
@@ -9,7 +9,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
@@ -33,16 +33,16 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->urlFinder = $this->getMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->urlFinder = $this->createMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
 
-        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())
             ->method('getStoreManager')
             ->will($this->returnValue($this->storeManager));
 
         $this->entityResource =
-            $this->getMock(\Magento\Catalog\Model\ResourceModel\AbstractResource::class, [], [], '', false);
+            $this->createMock(\Magento\Catalog\Model\ResourceModel\AbstractResource::class);
 
         $this->block = (new ObjectManager($this))->getObject(\Magento\Catalog\Block\Widget\Link::class, [
             'context' => $context,
@@ -90,7 +90,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->block->setData('id_path', 'entity_type/entity_id');
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeUp'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeUp']);
         $store->expects($this->any())
             ->method('getId');
 
@@ -116,17 +116,14 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $requestPath = 'request-path';
         $this->block->setData('id_path', 'entity_type/entity_id');
 
-        $rewrite = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $rewrite = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
         $rewrite->expects($this->once())
             ->method('getRequestPath')
             ->will($this->returnValue($requestPath));
 
-        $store = $this->getMock(
+        $store = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['getId', 'getUrl', 'getCode', '__wakeUp'],
-            [],
-            '',
-            false
+            ['getId', 'getUrl', 'getCode', '__wakeUp']
         );
         $store->expects($this->once())
             ->method('getId')
@@ -191,7 +188,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $storeId = 15;
         $this->block->setData('id_path', ProductUrlRewriteGenerator::ENTITY_TYPE . '/entity_id/category_id');
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeUp'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeUp']);
         $store->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($storeId));

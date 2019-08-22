@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -79,11 +79,19 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('Add to Cart', $responseBody);
         /* Meta info */
         $this->assertContains('<title>Simple Product 1 Meta Title</title>', $responseBody);
-        $this->assertSelectCount('meta[name="keywords"][content="Simple Product 1 Meta Keyword"]', 1, $responseBody);
-        $this->assertSelectCount(
-            'meta[name="description"][content="Simple Product 1 Meta Description"]',
+        $this->assertEquals(
             1,
-            $responseBody
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//meta[@name="keywords" and @content="Simple Product 1 Meta Keyword"]',
+                $responseBody
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//meta[@name="description" and @content="Simple Product 1 Meta Description"]',
+                $responseBody
+            )
         );
     }
 
@@ -101,7 +109,13 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $repository->get('simple');
         $this->dispatch(sprintf('catalog/product/view/id/%s', $product->getEntityId()));
         $html = $this->getResponse()->getBody();
-        $this->assertSelectCount('#product-options-wrapper', 1, $html);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="product-options-wrapper"]',
+                $html
+            )
+        );
     }
 
     public function testViewActionNoProductId()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,7 +44,7 @@ class AssertSearchTermInGrid extends AbstractConstraint
         $filters = array_filter($filters);
         $grid->search($filters);
         unset($filters['store_id']);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $grid->isRowVisible($filters, false),
             'Row terms according to the filters is not found.'
         );

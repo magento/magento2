@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Webapi\Test\Unit;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
@@ -25,7 +26,7 @@ use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
+class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ServiceInputProcessor */
     protected $serviceInputProcessor;
@@ -45,6 +46,11 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $fieldNamer;
 
+    /**
+     * @var ServiceTypeToEntityTypeMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serviceTypeToEntityTypeMap;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -54,8 +60,8 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
-                function ($className) use ($objectManager) {
-                    return $objectManager->getObject($className);
+                function ($className, $arguments = []) use ($objectManager) {
+                    return $objectManager->getObject($className, $arguments);
                 }
             );
 
@@ -67,7 +73,8 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->any())->method('load')->willReturn(false);
 
         $this->customAttributeTypeLocator = $this->getMockBuilder(
-            \Magento\Eav\Model\EavCustomAttributeTypeLocator::class)
+            \Magento\Eav\Model\TypeLocator::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,6 +104,19 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
+        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock->method('serialize')
+            ->willReturn('serializedData');
+        $serializerMock->method('unserialize')
+            ->willReturn('unserializedData');
+        $objectManager->setBackwardCompatibleProperty(
+            $this->methodsMap,
+            'serializer',
+            $serializerMock
+        );
+        $this->serviceTypeToEntityTypeMap = $this->getMockBuilder(ServiceTypeToEntityTypeMap::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->serviceInputProcessor = $objectManager->getObject(
             \Magento\Framework\Webapi\ServiceInputProcessor::class,
@@ -105,16 +125,18 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'objectManager' => $this->objectManagerMock,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
-                'methodsMap' => $this->methodsMap
+                'methodsMap' => $this->methodsMap,
+                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap
             ]
         );
 
         /** @var \Magento\Framework\Reflection\NameFinder $nameFinder */
         $nameFinder = $objectManager->getObject(\Magento\Framework\Reflection\NameFinder::class);
-        $serviceInputProcessorReflection = new \ReflectionClass(get_class($this->serviceInputProcessor));
-        $typeResolverReflection = $serviceInputProcessorReflection->getProperty('nameFinder');
-        $typeResolverReflection->setAccessible(true);
-        $typeResolverReflection->setValue($this->serviceInputProcessor, $nameFinder);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->serviceInputProcessor,
+            'nameFinder',
+            $nameFinder
+        );
     }
 
     public function testSimpleProperties()
@@ -179,6 +201,22 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($details instanceof Simple);
         $this->assertEquals(15, $details->getEntityId());
         $this->assertEquals('Test', $details->getName());
+    }
+
+    public function testSimpleConstructorProperties()
+    {
+        $data = ['simpleConstructor' => ['entityId' => 15, 'name' => 'Test']];
+        $result = $this->serviceInputProcessor->process(
+            \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
+            'simpleConstructor',
+            $data
+        );
+        $this->assertNotNull($result);
+        $arg = $result[0];
+
+        $this->assertTrue($arg instanceof SimpleConstructor);
+        $this->assertEquals(15, $arg->getEntityId());
+        $this->assertEquals('Test', $arg->getName());
     }
 
     public function testSimpleArrayProperties()
@@ -371,6 +409,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     public function testCustomAttributesProperties($customAttributeType, $inputData, $expectedObject)
     {
         $this->customAttributeTypeLocator->expects($this->any())->method('getType')->willReturn($customAttributeType);
+        $this->serviceTypeToEntityTypeMap->expects($this->any())->method('getEntityType')->willReturn($expectedObject);
 
         $result = $this->serviceInputProcessor->process(
             \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService::class,
@@ -460,7 +499,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $customAttributeValue = null;
-        switch($type) {
+        switch ($type) {
             case 'integer':
                 $customAttributeValue = $value;
                 break;
@@ -522,6 +561,9 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function invalidCustomAttributesDataProvider()
     {
         return [

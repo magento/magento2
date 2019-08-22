@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Framework\View\Layout\Reader\Container;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -56,9 +56,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @param string $containerName
      * @param array $structureElement
      * @param array $expectedData
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getStructureCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setStructureCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setRemoveCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getStructureCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setStructureCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setRemoveCondition
      *
      * @dataProvider processDataProvider
      */
@@ -102,6 +102,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->with($contextMock, $elementCurrent)
             ->willReturnSelf();
 
+        if ($elementCurrent->getAttribute('remove') == 'false') {
+            $scheduledStructureMock->expects($this->once())
+                ->method('unsetElementFromListToRemove')
+                ->with($elementCurrent->getAttribute('name'));
+        }
+        
         $this->container->interpret($contextMock, $elementCurrent);
     }
 

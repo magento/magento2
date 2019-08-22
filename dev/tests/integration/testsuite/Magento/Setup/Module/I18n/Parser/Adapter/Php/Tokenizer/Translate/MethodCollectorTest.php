@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate;
@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector
  */
-class MethodCollectorTest extends \PHPUnit_Framework_TestCase
+class MethodCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MethodCollector

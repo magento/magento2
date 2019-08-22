@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SendFriend\Controller;
@@ -33,7 +33,9 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      */
     protected $sendFriend;
 
-    /** @var  \Magento\Catalog\Api\ProductRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
     /**
@@ -59,6 +61,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
 
     /**
      * Check if module is enabled
+     *
      * If allow only for customer - redirect to login page
      *
      * @param RequestInterface $request
@@ -100,7 +103,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
         }
         try {
             $product = $this->productRepository->getById($productId);
-            if (!$product->isVisibleInCatalog()) {
+            if (!$product->isVisibleInSiteVisibility() || !$product->isVisibleInCatalog()) {
                 return false;
             }
         } catch (NoSuchEntityException $noEntityException) {

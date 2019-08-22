@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -17,7 +17,6 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
 
     public function testGetItems()
     {
-        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $testAttributeCode = 'quantity_and_stock_status';
         $expectedOptions = [
             [
@@ -54,7 +53,6 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      */
     public function testAdd($optionData)
     {
-        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $testAttributeCode = 'select_attribute';
         $serviceInfo = [
             'rest' => [
@@ -76,7 +74,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
             ]
         );
 
-        $this->assertTrue($response);
+        $this->assertNotNull($response);
         $updatedData = $this->getAttributeOptions($testAttributeCode);
         $lastOption = array_pop($updatedData);
         $this->assertEquals(
@@ -100,6 +98,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
                     AttributeOptionLabelInterface::STORE_ID => 1,
                 ],
             ],
+            AttributeOptionInterface::VALUE => ''
         ];
 
         return [
@@ -112,6 +111,9 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
             'option_with_value_node_that_starts_with_a_number' => [
                 array_merge($optionPayload, [AttributeOptionInterface::VALUE => '123_some_text'])
             ],
+            'option_with_value_node_that_is_a_number' => [
+                array_merge($optionPayload, [AttributeOptionInterface::VALUE => '123'])
+            ],
 
         ];
     }
@@ -121,7 +123,6 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      */
     public function testDelete()
     {
-        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $attributeCode = 'select_attribute';
         //get option Id
         $optionList = $this->getAttributeOptions($attributeCode);

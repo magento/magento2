@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\SearchEngine\Config;
 
 use Magento\Framework\Search\SearchEngine\Config\SchemaLocator;
 
-class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SchemaLocator
@@ -16,7 +16,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $urnResolver = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
+        $urnResolver = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
         $urnResolver->expects($this->any())
             ->method('getRealPath')
             ->with(SchemaLocator::SEARCH_ENGINE_XSD_PATH)

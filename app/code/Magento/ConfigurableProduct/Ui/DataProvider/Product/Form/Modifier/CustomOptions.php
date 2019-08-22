@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
@@ -127,8 +127,8 @@ class CustomOptions extends AbstractModifier
                     'bannedOptions' => ['percent'],
                     'imports' => [
                         'updateOptions' => 'ns = ${ $.ns }, index = '
-                            . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty'
-                    ]
+                            . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                    ],
                 ]
             );
         }

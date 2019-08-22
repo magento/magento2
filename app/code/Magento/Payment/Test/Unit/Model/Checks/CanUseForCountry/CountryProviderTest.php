@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Checks\CanUseForCountry;
@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * CountryProviderTest contains tests for CountryProvider class
  */
-class CountryProviderTest extends \PHPUnit_Framework_TestCase
+class CountryProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CountryProvider

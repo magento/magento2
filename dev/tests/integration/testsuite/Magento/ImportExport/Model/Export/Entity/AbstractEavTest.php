@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
-class AbstractEavTest extends \PHPUnit_Framework_TestCase
+class AbstractEavTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Skipped attribute codes
@@ -39,12 +39,11 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
         );
 
-        $this->_model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Export\Entity\AbstractEav::class,
-            [],
-            '',
-            false
-        );
+        $this->_model = $this->getMockBuilder(\Magento\ImportExport\Model\Export\Entity\AbstractEav::class)
+            ->setMethods(['getEntityTypeCode', 'getAttributeCollection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->_model->expects(
             $this->any()
         )->method(

@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary */
 ?>
-<div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName()?>'">
-    <h2 class="steps-wizard-title"><?php echo $block->escapeHtml(
-            __('Step 4: Summary')
-        ); ?></h2>
+<div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
+    <h2 class="steps-wizard-title"><?= $block->escapeHtml(
+        __('Step 4: Summary')
+    ); ?></h2>
 
     <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
         <!-- ko if: gridNew().length -->
@@ -51,9 +49,9 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= /* @noEscape */  $block->getComponentName()?>": {
+                    "<?= /* @noEscape */  $block->getComponentName() ?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
-                        "appendTo": "<?= /* @noEscape */  $block->getParentComponentName()?>",
+                        "appendTo": "<?= /* @noEscape */  $block->getParentComponentName() ?>",
                         "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableVariations",
                         "modalComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableModal"
                     }

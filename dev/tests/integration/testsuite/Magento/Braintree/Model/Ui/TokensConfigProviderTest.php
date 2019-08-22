@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Ui;
@@ -14,12 +14,12 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\TokensConfigProvider;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 
 /**
  * Class TokensConfigProviderTest
  */
-class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
+class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

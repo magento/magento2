@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
@@ -13,8 +16,12 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Import entity abstract model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
@@ -41,6 +48,9 @@ abstract class AbstractEntity
     const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
     const ERROR_CODE_CATEGORY_NOT_VALID = 'categoryNotValid';
 
+    /**
+     * @var array
+     */
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
         self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
@@ -243,8 +253,16 @@ abstract class AbstractEntity
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
+
+    /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -293,7 +311,7 @@ abstract class AbstractEntity
     protected function _getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a source.'));
+            throw new LocalizedException(__('Please specify a source.'));
         }
         return $this->_source;
     }
@@ -361,7 +379,7 @@ abstract class AbstractEntity
     /**
      * Validate data rows and save bunches to DB.
      *
-     * @return $this|void
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveValidatedBunches()
@@ -373,6 +391,7 @@ abstract class AbstractEntity
         $nextRowBackup = [];
         $maxDataSize = $this->_resourceHelper->getMaxDataSize();
         $bunchSize = $this->_importExportData->getBunchSize();
+        $skuSet = [];
 
         $source->rewind();
         $this->_dataSourceModel->cleanBunches();
@@ -382,13 +401,16 @@ abstract class AbstractEntity
                 $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = $nextRowBackup;
-                $currentDataSize = strlen(serialize($bunchRows));
+                $currentDataSize = strlen($this->getSerializer()->serialize($bunchRows));
                 $startNewBunch = false;
                 $nextRowBackup = [];
             }
             if ($source->valid()) {
                 try {
                     $rowData = $source->current();
+                    if (array_key_exists('sku', $rowData)) {
+                        $skuSet[$rowData['sku']] = true;
+                    }
                 } catch (\InvalidArgumentException $e) {
                     $this->addRowError($e->getMessage(), $this->_processedRowsCount);
                     $this->_processedRowsCount++;
@@ -416,7 +438,25 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
+        $this->_processedEntitiesCount = (count($skuSet)) ? : $this->_processedRowsCount;
+
         return $this;
+    }
+
+    /**
+     * Get Serializer instance
+     *
+     * Workaround. Only way to implement dependency and not to break inherited child classes
+     *
+     * @return Json
+     * @deprecated 100.2.0
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 
     /**
@@ -515,11 +555,13 @@ abstract class AbstractEntity
         if (!isset(
             $this->_parameters['behavior']
         ) ||
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND &&
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE &&
-            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_APPEND &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_ADD_UPDATE &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_REPLACE &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_CUSTOM &&
+            $this->_parameters['behavior'] != ImportExport::BEHAVIOR_DELETE
         ) {
-            return \Magento\ImportExport\Model\Import::getDefaultBehavior();
+            return ImportExport::getDefaultBehavior();
         }
         return $this->_parameters['behavior'];
     }
@@ -571,7 +613,7 @@ abstract class AbstractEntity
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The source is not set.'));
+            throw new LocalizedException(__('The source is not set.'));
         }
         return $this->_source;
     }
@@ -790,6 +832,8 @@ abstract class AbstractEntity
     }
 
     /**
+     * Get error aggregator object
+     *
      * @return ProcessingErrorAggregatorInterface
      */
     public function getErrorAggregator()
@@ -841,11 +885,12 @@ abstract class AbstractEntity
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {
         if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->metadataPool = ObjectManager::getInstance()
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;

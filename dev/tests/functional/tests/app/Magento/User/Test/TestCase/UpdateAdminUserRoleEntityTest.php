@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -121,6 +121,11 @@ class UpdateAdminUserRoleEntityTest extends Injectable
      */
     public function tearDown()
     {
+        sleep(3);
+        $modalMessage = $this->dashboard->getModalMessage();
+        if ($modalMessage->isVisible()) {
+            $modalMessage->acceptAlert();
+        }
         $this->dashboard->getAdminPanelHeader()->logOut();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -111,12 +111,9 @@ class Decimal extends AbstractFilter
                 $from = '';
             }
             if ($to == '*') {
-                $to = '';
+                $to = null;
             }
-            $label = $this->renderRangeLabel(
-                empty($from) ? 0 : $from,
-                empty($to) ? $to : $to
-            );
+            $label = $this->renderRangeLabel(empty($from) ? 0 : $from, $to);
             $value = $from . '-' . $to;
 
             $data[] = [
@@ -141,7 +138,7 @@ class Decimal extends AbstractFilter
     protected function renderRangeLabel($fromPrice, $toPrice)
     {
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
-        if ($toPrice === '') {
+        if ($toPrice === null) {
             return __('%1 and above', $formattedFromPrice);
         } else {
             if ($fromPrice != $toPrice) {

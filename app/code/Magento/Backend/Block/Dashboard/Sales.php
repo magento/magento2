@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
-
 
 /**
  * Adminhtml dashboard sales statistics bar
@@ -16,23 +15,23 @@ class Sales extends \Magento\Backend\Block\Dashboard\Bar
     /**
      * @var string
      */
-    protected $_template = 'dashboard/salebar.phtml';
+    protected $_template = 'Magento_Backend::dashboard/salebar.phtml';
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $_moduleManager;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
@@ -40,6 +39,8 @@ class Sales extends \Magento\Backend\Block\Dashboard\Bar
     }
 
     /**
+     * Prepare layout.
+     *
      * @return $this|void
      */
     protected function _prepareLayout()

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -25,13 +25,13 @@
 @message-global-caution__border-color: none;
 
 @header__background-color: false;
-@header-panel__background-color: @color-gray-middle3;
+@header-panel__background-color: @color-gray-middle4;
 @header-panel__text-color: @color-white;
-@header-icons-color: @color-gray56;
+@header-icons-color: @color-gray46;
 @header-icons-color-hover: @color-gray20;
 @customer-welcome__z-index: @dropdown-list__z-index + 1;
 
-@addto-color: @color-gray60;
+@addto-color: @color-gray40;
 @addto-hover-color: @primary__color;
 @minicart-icons-color: @header-icons-color;
 @minicart-icons-color-hover: @header-icons-color-hover;
@@ -56,7 +56,7 @@
 @filter-title-background-color: @color-gray94;
 @filter-link: @color-gray-darken4;
 @filter-link-hover: darken(@filter-link, 30%);
-@filter-quantity: @color-gray52;
+@filter-quantity: @color-gray46;
 
 //
 //  Common
@@ -67,11 +67,21 @@
         .lib-css(background-color, @page__background-color);
     }
 
-    //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
     .page-wrapper {
-        .ie9 & {
-            .lib-css(background-color, @page__background-color);
-            min-height: 0;
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
+        min-height: 100vh; // Stretch content area for sticky footer
+    }
+
+    .page-main {
+        .lib-vendor-prefix-flex-grow(1);
+    }
+
+    .page-main {
+        > .page-title-wrapper {
+            .page-title {
+                hyphens: auto;
+            }
         }
     }
 
@@ -101,6 +111,10 @@
             > li {
                 font-size: @font-size__base;
                 margin: 0 0 0 15px;
+
+                &.customer-welcome {
+                    margin: 0 0 0 5px;
+                }
 
                 > a {
                     .lib-link(
@@ -139,6 +153,12 @@
         .page-print & {
             display: inline-block;
             float: none;
+        }
+    }
+
+    .page-print {
+        .nav-toggle {
+            display: none;
         }
     }
 
@@ -262,6 +282,7 @@
     .copyright {
         .lib-css(background-color, @copyright__background-color);
         .lib-css(color, @color-white);
+        box-sizing: border-box;
         display: block;
         padding: @indent__s;
         text-align: center;
@@ -309,11 +330,27 @@
             }
         }
     }
+    .page-header {
+        .switcher {
+            .options {
+                ul.dropdown {
+                    right: 0;
+                    &:before {
+                        left: auto;
+                        right: 10px;
+                    }
+                    &:after {
+                        left: auto;
+                        right: 9px;
+                    }
+                }
+            }
+        }
+    }
 
     //
     //  Widgets
     //  ---------------------------------------------
-
     .sidebar {
         .widget.block:not(:last-child),
         .widget:not(:last-child) {
@@ -332,6 +369,10 @@
     .page-footer {
         .widget.block {
             .lib-css(margin, @indent__base 0);
+        }
+
+        .links .widget.block {
+            margin: 0;
         }
     }
 
@@ -416,10 +457,21 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .logo {
         margin-bottom: 13px;
         margin-top: 4px;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .cms-page-view .page-main {
+        padding-top: 0;
+        position: relative;
     }
 }
 
@@ -431,12 +483,6 @@
     html,
     body {
         height: 100%; // Stretch screen area for sticky footer
-    }
-
-    body {
-        .ie9 & {
-            .lib-css(background-color, @copyright__background-color);
-        }
     }
 
     .navigation ul {
@@ -527,6 +573,7 @@
 
         .header.links {
             min-width: 175px;
+            z-index: 1000;
         }
 
         &.active {
@@ -577,6 +624,12 @@
                         display: inline-block;
                         margin: 0 -@indent__xs 0 @indent__xs;
                     }
+
+                    &:last-child {
+                        &:after {
+                            display: none;
+                        }
+                    }
                 }
 
                 > .customer-welcome + .authorization-link {
@@ -599,10 +652,7 @@
     }
 
     .page-wrapper {
-        .lib-vendor-prefix-display(flex);
-        .lib-vendor-prefix-flex-direction(column);
         margin: 0;
-        min-height: 100%; // Stretch content area for sticky footer
         position: relative;
         transition: margin .3s ease-out 0s;
 
@@ -611,11 +661,6 @@
         > .widget {
             box-sizing: border-box;
             width: 100%;
-        }
-
-        .ie10 &,
-        .ie11 & {
-            height: 100%;
         }
     }
 

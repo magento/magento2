@@ -1,15 +1,18 @@
 <?php
 /**
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 
-class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+/**
+ * Controller class Delete. Represents adminhtml request flow for a sitemap deletion
+ */
+class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Filesystem
@@ -20,6 +23,21 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * @var \Magento\Sitemap\Model\SitemapFactory
      */
     private $sitemapFactory;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Sitemap\Model\SitemapFactory|null $sitemapFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Sitemap\Model\SitemapFactory $sitemapFactory = null
+    ) {
+        parent::__construct($context);
+        $this->sitemapFactory = $sitemapFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Sitemap\Model\SitemapFactory::class);
+    }
 
     /**
      * Delete action
@@ -35,32 +53,36 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             try {
                 // init model and delete
                 /** @var \Magento\Sitemap\Model\Sitemap $sitemap */
-                $sitemap = $this->getSitemapFactory()->create();
+                $sitemap = $this->sitemapFactory->create();
                 $sitemap->load($id);
                 // delete file
                 $sitemapPath = $sitemap->getSitemapPath();
+                if ($sitemapPath && $sitemapPath[0] === DIRECTORY_SEPARATOR) {
+                    $sitemapPath = mb_substr($sitemapPath, 1);
+                }
                 $sitemapFilename = $sitemap->getSitemapFilename();
-
-                $path = $directory->getRelativePath($sitemapPath . $sitemapFilename);
+                $path = $directory->getRelativePath(
+                    $sitemapPath .$sitemapFilename
+                );
                 if ($sitemap->getSitemapFilename() && $directory->isFile($path)) {
                     $directory->delete($path);
                 }
                 $sitemap->delete();
                 // display success message
-                $this->messageManager->addSuccess(__('You deleted the sitemap.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the sitemap.'));
                 // go to grid
                 $this->_redirect('adminhtml/*/');
                 return;
             } catch (\Exception $e) {
                 // display error message
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 // go back to edit form
                 $this->_redirect('adminhtml/*/edit', ['sitemap_id' => $id]);
                 return;
             }
         }
         // display error message
-        $this->messageManager->addError(__('We can\'t find a sitemap to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a sitemap to delete.'));
         // go to grid
         $this->_redirect('adminhtml/*/');
     }
@@ -69,33 +91,15 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * The getter function to get Filesystem object for real application code
      *
      * @return \Magento\Framework\Filesystem
-     *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getFilesystem()
     {
-        if ($this->filesystem === null) {
+        if (null === $this->filesystem) {
             $this->filesystem = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\Filesystem::class
             );
         }
         return $this->filesystem;
-    }
-
-    /**
-     * The getter function to get SitemapFactory object for real application code
-     *
-     * @return \Magento\Sitemap\Model\SitemapFactory
-     *
-     * @deprecated
-     */
-    private function getSitemapFactory()
-    {
-        if ($this->sitemapFactory === null) {
-            $this->sitemapFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Sitemap\Model\SitemapFactory::class
-            );
-        }
-        return $this->sitemapFactory;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Config\Consolidated;
@@ -21,7 +21,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**#@-*/
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface */
+    /**#@-*/
     protected $resourceProvider;
 
     /**
@@ -36,7 +36,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convert($source)
     {
@@ -80,9 +80,16 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $result[$integrationName][self::API_RESOURCES][] = $name;
                 }
             }
+
+            // Add root resource if any child has been added
+            if (!empty($result[$integrationName][self::API_RESOURCES])) {
+                array_unshift($result[$integrationName][self::API_RESOURCES], $allResources[1]['id']);
+            }
+
             // Remove any duplicates added parents
-            $result[$integrationName][self::API_RESOURCES] =
-                array_values(array_unique($result[$integrationName][self::API_RESOURCES]));
+            $result[$integrationName][self::API_RESOURCES] = array_values(
+                array_unique($result[$integrationName][self::API_RESOURCES])
+            );
         }
         return $result;
     }

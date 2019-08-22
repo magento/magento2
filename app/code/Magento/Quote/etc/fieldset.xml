@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -184,6 +184,11 @@
             </field>
             <field name="customer_address_id">
                 <aspect name="to_order_address" />
+            </field>
+        </fieldset>
+        <fieldset id="quote_convert_address_item">
+            <field name="quote_item_id">
+                <aspect name="to_order_item" />
             </field>
         </fieldset>
         <fieldset id="quote_convert_item">

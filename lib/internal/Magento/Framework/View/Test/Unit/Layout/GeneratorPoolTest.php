@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use \Magento\Framework\View\Layout\GeneratorPool;
 use \Magento\Framework\View\Layout\ScheduledStructure;
 use \Magento\Framework\View\Layout\Data\Structure as DataStructure;
 
-class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
+class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit_Framework_MockObject_MockObject
@@ -88,11 +88,11 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected function getGeneratorsMocks()
     {
-        $firstGenerator = $this->getMock(\Magento\Framework\View\Layout\GeneratorInterface::class);
+        $firstGenerator = $this->createMock(\Magento\Framework\View\Layout\GeneratorInterface::class);
         $firstGenerator->expects($this->any())->method('getType')->willReturn('first_generator');
         $firstGenerator->expects($this->atLeastOnce())->method('process');
 
-        $secondGenerator = $this->getMock(\Magento\Framework\View\Layout\GeneratorInterface::class);
+        $secondGenerator = $this->createMock(\Magento\Framework\View\Layout\GeneratorInterface::class);
         $secondGenerator->expects($this->any())->method('getType')->willReturn('second_generator');
         $secondGenerator->expects($this->atLeastOnce())->method('process');
         return [$firstGenerator, $secondGenerator];
@@ -137,7 +137,7 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
                  */
                 $this->assertContains($elementName, $schedule['structure']);
                 $scheduledStructure->unsetStructureElement($elementName);
-                $scheduledStructure->setElement($elementName, []);
+                $scheduledStructure->setElement($elementName, ['block', []]);
                 $structure->createStructuralElement($elementName, 'block', 'someClass');
             });
 
@@ -171,7 +171,10 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'expectedScheduledElements' => [
-                    'first.element' => [], 'second.element' => [], 'third.element' => [], 'sort.element' => []
+                    'first.element' => ['block', []],
+                    'second.element' => ['block', []],
+                    'third.element' => ['block', []],
+                    'sort.element' => ['block', []],
                 ],
             ],
         ];

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Vault\Test\TestCase\ReorderUsingVaultTest" summary="Reorder from Admin with saved within PayPal Payflow Pro credit card">
-        <variation name="ReorderUsingVaultPayflowProTestVariation1" summary="Reorder from Admin with saved within PayPal Payflow Pro credit card for Guest Customer" ticketId="MAGETWO-54872">
+        <variation name="ReorderUsingVaultPayflowProTestVariation1" summary="Reorder from Admin with saved within PayPal Payflow Pro credit card for Guest Customer" ticketId="MAGETWO-34217, MAGETWO-54872">
             <data name="description" xsi:type="string">Reorder from Admin with saved within PayPal Payflow Pro credit card for Guest Customer</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -19,7 +19,7 @@
                 <item name="grandTotal" xsi:type="string">15.00</item>
             </data>
             <data name="payment/method" xsi:type="string">payflowpro</data>
-            <data name="creditCardClass" xsi:type="string">credit_card</data>
+            <data name="vault/method" xsi:type="string">payflowpro_cc_vault</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>

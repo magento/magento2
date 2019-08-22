@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Swatches\Test\Unit\Model\Form\Element;
 
-class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
+class AbstractSwatchTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Swatches\Model\Form\Element\AbstractSwatch|\PHPUnit_Framework_MockObject_MockObject */
     private $swatch;

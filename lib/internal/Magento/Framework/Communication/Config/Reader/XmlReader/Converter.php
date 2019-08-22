@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Communication\Config\Reader\XmlReader;
 
-use Magento\Framework\Communication\ConfigInterface as Config;
-use Magento\Framework\Phrase;
-use Magento\Framework\Communication\Config\ReflectionGenerator;
-use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Communication\Config\ConfigParser;
-use Magento\Framework\Communication\Config\Reader\XmlReader\Validator;
+use Magento\Framework\Communication\Config\ReflectionGenerator;
+use Magento\Framework\Communication\ConfigInterface as Config;
+use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Converts Communication config from \DOMDocument to array
@@ -19,7 +17,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @deprecated
-     * @see ConfigParser::SERVICE_METHOD_NAME_PATTERN
+     * @see ConfigParser::parseServiceMethod
      */
     const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
 
@@ -64,7 +62,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * The getter function to get the new ConfigParser dependency.
      *
      * @return \Magento\Framework\Communication\Config\ConfigParser
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getConfigParser()
     {
@@ -126,23 +124,25 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $requestSchema,
                 $responseSchema
             );
+            $isSynchronous = $this->extractTopicIsSynchronous($topicNode);
             if ($serviceMethod) {
                 $output[$topicName] = $this->reflectionGenerator->generateTopicConfigForServiceMethod(
                     $topicName,
                     $serviceMethod[ConfigParser::TYPE_NAME],
                     $serviceMethod[ConfigParser::METHOD_NAME],
-                    $handlers
+                    $handlers,
+                    $isSynchronous
                 );
-            } else if ($requestSchema && $responseSchema) {
+            } elseif ($requestSchema && $responseSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
-                    Config::TOPIC_IS_SYNCHRONOUS => true,
+                    Config::TOPIC_IS_SYNCHRONOUS => $isSynchronous,
                     Config::TOPIC_REQUEST => $requestSchema,
                     Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_CLASS,
-                    Config::TOPIC_RESPONSE => $responseSchema,
+                    Config::TOPIC_RESPONSE => ($isSynchronous) ? $responseSchema: null,
                     Config::TOPIC_HANDLERS => $handlers
                 ];
-            } else if ($requestSchema) {
+            } elseif ($requestSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
                     Config::TOPIC_IS_SYNCHRONOUS => false,
@@ -259,5 +259,21 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $parsedServiceMethod[ConfigParser::METHOD_NAME]
         );
         return $parsedServiceMethod;
+    }
+
+    /**
+     * Extract is_synchronous topic value.
+     *
+     * @param \DOMNode $topicNode
+     * @return bool
+     */
+    private function extractTopicIsSynchronous($topicNode): bool
+    {
+        $attributeName = Config::TOPIC_IS_SYNCHRONOUS;
+        $topicAttributes = $topicNode->attributes;
+        if (!$topicAttributes->getNamedItem($attributeName)) {
+            return true;
+        }
+        return $this->booleanUtils->toBoolean($topicAttributes->getNamedItem($attributeName)->nodeValue);
     }
 }

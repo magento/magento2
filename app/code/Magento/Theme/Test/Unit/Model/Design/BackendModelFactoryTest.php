@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design;
 
-// @codingStandardsIgnoreFile
-
-class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
+class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Theme\Model\Design\BackendModelFactory */
     protected $model;
@@ -38,7 +36,7 @@ class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
-            )
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

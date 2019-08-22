@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -14,7 +14,7 @@ namespace Magento\Catalog\Model;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Store
@@ -293,7 +293,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->isObjectNew(true);
 
         $repository->save($model);
-        $this->assertNull($model->getImage());
+        $this->assertEmpty($model->getImage());
     }
 
     /**
@@ -318,6 +318,44 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->_model->unsetData();
         $this->_model->load(5);
         $this->assertEquals($this->_model->getId(), null);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDbIsolation disabled
+     * @return void
+     */
+    public function testCreateSubcategoryWithMultipleStores()
+    {
+        $parentCategoryId = 3;
+        $storeManager = $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
+        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
+        $storeRepository = $this->objectManager->get(\Magento\Store\Api\StoreRepositoryInterface::class);
+        $storeId = $storeRepository->get('fixture_second_store')->getId();
+        /** @var \Magento\Catalog\Api\CategoryRepositoryInterface $repository */
+        $repository = $this->objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $parentCategory = $repository->get($parentCategoryId, $storeId);
+        $parentAllStoresPath = $parentCategory->getUrlPath();
+        $parentSecondStoreKey = 'parent-category-url-key-second-store';
+        $parentCategory->setUrlKey($parentSecondStoreKey);
+        $repository->save($parentCategory);
+        /** @var \Magento\Catalog\Model\Category $childCategory */
+        $childCategory = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
+        $childCategory->setName('Test Category 100')
+            ->setParentId($parentCategoryId)
+            ->setLevel(2)
+            ->setAvailableSortBy(['position', 'name'])
+            ->setDefaultSortBy('name')
+            ->setIsActive(true)
+            ->setPosition(1)
+            ->isObjectNew(true);
+        $repository->save($childCategory);
+        $childCategorySecondStore = $repository->get($childCategory->getId(), $storeId);
+
+        $this->assertEquals($parentAllStoresPath . '/test-category-100', $childCategory->getUrlPath());
+        $this->assertEquals($parentSecondStoreKey . '/test-category-100', $childCategorySecondStore->getUrlPath());
     }
 
     protected function getCategoryByName($categoryName)

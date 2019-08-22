@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Block\Product;
 
+/**
+ * Interface \Magento\Catalog\Block\Product\ReviewRendererInterface
+ *
+ */
 interface ReviewRendererInterface
 {
     const SHORT_VIEW = 'short';

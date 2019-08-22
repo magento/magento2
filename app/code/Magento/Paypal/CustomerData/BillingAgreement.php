@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\CustomerData;
@@ -79,7 +79,7 @@ class BillingAgreement implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
@@ -93,7 +93,7 @@ class BillingAgreement implements SectionSourceInterface
                         [\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => 1]
                     )
                 ),
-                'confirmMessage' => $this->escaper->escapeJs(
+                'confirmMessage' => $this->escaper->escapeHtml(
                     __('Would you like to sign a billing agreement to streamline further purchases with PayPal?')
                 )
             ];

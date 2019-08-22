@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
+class DiConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Primary DI configs from app/etc
@@ -111,10 +111,15 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergedDiConfig(array $files)
     {
-        $mapperMock = $this->getMock(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class, [], [], '', false);
-        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $mapperMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class);
+        $fileResolverMock = $this->getMockBuilder(\Magento\Framework\Config\FileResolverInterface::class)
+            ->setMethods(['read'])
+            ->getMockForAbstractClass();
         $fileResolverMock->expects($this->any())->method('read')->will($this->returnValue($files));
-        $validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->createPartialMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            ['isValidationRequired']
+        );
         $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
         /** @var \Magento\Framework\ObjectManager\Config\SchemaLocator $schemaLocator */

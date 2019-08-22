@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Constraint;
@@ -21,7 +21,7 @@ class AssertEmailTemplateSuccessSaveMessage extends AbstractConstraint
     public function processAssert(EmailTemplateIndex $emailTemplateIndex)
     {
         $actualMessage = $emailTemplateIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

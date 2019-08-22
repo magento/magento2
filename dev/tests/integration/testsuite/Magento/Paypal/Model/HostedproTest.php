@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Class HostedproTest
  * @package Magento\Paypal\Model
  */
-class HostedproTest extends \PHPUnit_Framework_TestCase
+class HostedproTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

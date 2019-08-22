@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -14,6 +14,9 @@ use Magento\Ui\Component\Container;
 
 /**
  * Class Attributes
+ *
+ * @api
+ * @since 101.0.0
  */
 class Attributes extends AbstractModifier
 {
@@ -23,21 +26,25 @@ class Attributes extends AbstractModifier
 
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var Registry
+     * @since 101.0.0
      */
     protected $registry;
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var AuthorizationInterface
+     * @since 101.0.0
      */
     protected $authorization;
 
@@ -60,7 +67,9 @@ class Attributes extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -68,6 +77,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Check if can add attributes on product form.
+     *
      * @return boolean
      */
     private function canAddAttributes()
@@ -81,7 +92,9 @@ class Attributes extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -102,6 +115,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta customize attribute modal.
+     *
      * @param array $meta
      * @return array
      */
@@ -174,6 +189,11 @@ class Attributes extends AbstractModifier
                                             'actionName' => 'toggleModal',
                                         ],
                                         [
+                                            'targetName' => 'product_form.product_form.add_attribute_modal'
+                                                . '.create_new_attribute_modal.product_attribute_add_form',
+                                            'actionName' => 'destroyInserted'
+                                        ],
+                                        [
                                             'targetName'
                                             => 'product_form.product_form.add_attribute_modal'
                                                 . '.create_new_attribute_modal.product_attribute_add_form',
@@ -193,6 +213,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta to customize create attribute modal.
+     *
      * @param array $meta
      * @return array
      */
@@ -275,6 +297,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta to customize attribute grid.
+     *
      * @param array $meta
      * @return array
      */
@@ -295,7 +319,7 @@ class Attributes extends AbstractModifier
                         'immediateUpdateBySelection' => true,
                         'behaviourType' => 'edit',
                         'externalFilterMode' => true,
-                        'dataLinks' => ['imports' => false, 'exports' => true],
+                        'dataLinks' => ['imports' => false, 'exports' => false],
                         'formProvider' => 'ns = ${ $.namespace }, index = product_form',
                         'groupCode' => static::GROUP_CODE,
                         'groupName' => static::GROUP_NAME,

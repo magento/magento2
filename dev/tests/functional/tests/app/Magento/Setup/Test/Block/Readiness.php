@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -190,6 +190,14 @@ class Readiness extends Block
     public function getDependencyCheck()
     {
         return $this->_rootElement->find($this->dependencyCheck, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPhpVersionCheckVisible() : bool
+    {
+        return $this->_rootElement->find($this->phpVersionCheck)->isVisible();
     }
 
     /**

@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
+/**
+ * Test product viewed backend controller.
+ */
 class ProductsViewedTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
@@ -14,6 +18,7 @@ class ProductsViewedTest extends \Magento\TestFramework\TestCase\AbstractBackend
      */
     public function testExecute()
     {
+        $this->getRequest()->setMethod("POST");
         $this->dispatch('backend/admin/dashboard/productsViewed/');
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());

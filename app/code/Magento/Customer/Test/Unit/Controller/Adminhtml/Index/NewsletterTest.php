@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
@@ -10,7 +10,7 @@ namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewsletterTest extends \PHPUnit_Framework_TestCase
+class NewsletterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Request mock instance
@@ -238,13 +238,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
 
     public function testNewsletterAction()
     {
-        $subscriberMock = $this->getMock(
-            \Magento\Newsletter\Model\Subscriber::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
         $this->resultLayoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultLayoutMock);

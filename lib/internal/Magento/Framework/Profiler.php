@@ -2,7 +2,7 @@
 /**
  * Static class that represents profiling tool
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -349,6 +349,7 @@ class Profiler
      * @param bool $isAjax
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected static function _parseConfig($profilerConfig, $baseDir, $isAjax)
     {
@@ -356,7 +357,7 @@ class Profiler
 
         if (is_scalar($profilerConfig)) {
             $config['drivers'] = [
-                ['output' => $isAjax ? 'firebug' : (is_numeric($profilerConfig) ? 'html' : $profilerConfig)],
+                ['output' => is_numeric($profilerConfig) ? 'html' : $profilerConfig],
             ];
         } else {
             $config = array_merge($config, $profilerConfig);

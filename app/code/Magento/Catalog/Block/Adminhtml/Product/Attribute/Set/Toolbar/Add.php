@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class Add extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/attribute/set/toolbar/add.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/attribute/set/toolbar/add.phtml';
 
     /**
      * @return AbstractBlock

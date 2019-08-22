@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -131,7 +131,9 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      */
     public function isMsgVisible()
     {
-        return $this->getStockQty() > 0 && $this->getStockQtyLeft() <= $this->getThresholdQty();
+        return $this->getStockQty() > 0
+            && $this->getStockQtyLeft() > 0
+            && $this->getStockQtyLeft() <= $this->getThresholdQty();
     }
 
     /**

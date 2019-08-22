@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
@@ -47,11 +47,11 @@ class Cancel extends \Magento\Backend\App\Action
                     \Magento\Sales\Api\CreditmemoManagementInterface::class
                 );
                 $creditmemoManagement->cancel($creditmemoId);
-                $this->messageManager->addSuccess(__('The credit memo has been canceled.'));
+                $this->messageManager->addSuccessMessage(__('The credit memo has been canceled.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Credit memo has not been canceled.'));
+                $this->messageManager->addErrorMessage(__('Credit memo has not been canceled.'));
             }
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('sales/*/view', ['creditmemo_id' => $creditmemoId]);
