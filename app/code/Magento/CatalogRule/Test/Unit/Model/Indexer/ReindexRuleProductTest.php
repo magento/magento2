@@ -89,17 +89,6 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
             6 => [$websiteId => 1],
         ];
 
-        $ruleMock = $this->createMock(Rule::class);
-        $ruleMock->expects($this->once())
-            ->method('getIsActive')
-            ->willReturn(true);
-        $ruleMock->expects($this->exactly(2))
-            ->method('getWebsiteIds')
-            ->willReturn([$websiteId]);
-        $ruleMock->expects($this->once())
-            ->method('getMatchingProductIds')
-            ->willReturn($productIds);
-
         $this->tableSwapperMock->expects($this->once())
             ->method('getWorkingTableName')
             ->with('catalogrule_product')
@@ -118,30 +107,18 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
             ->with('catalogrule_product_replica')
             ->willReturn('catalogrule_product_replica');
 
-        $ruleMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(100);
-        $ruleMock->expects($this->once())
-            ->method('getCustomerGroupIds')
-            ->willReturn([10]);
-        $ruleMock->expects($this->atLeastOnce())
-            ->method('getFromDate')
-            ->willReturn('2017-06-21');
-        $ruleMock->expects($this->atLeastOnce())
-            ->method('getToDate')
-            ->willReturn('2017-06-30');
-        $ruleMock->expects($this->once())
-            ->method('getSortOrder')
-            ->willReturn(1);
-        $ruleMock->expects($this->once())
-            ->method('getSimpleAction')
-            ->willReturn('simple_action');
-        $ruleMock->expects($this->once())
-            ->method('getDiscountAmount')
-            ->willReturn(43);
-        $ruleMock->expects($this->once())
-            ->method('getStopRulesProcessing')
-            ->willReturn(true);
+        $ruleMock = $this->createMock(Rule::class);
+        $ruleMock->expects($this->once())->method('getIsActive')->willReturn(true);
+        $ruleMock->expects($this->exactly(2))->method('getWebsiteIds')->willReturn([$websiteId]);
+        $ruleMock->expects($this->once())->method('getMatchingProductIds')->willReturn($productIds);
+        $ruleMock->expects($this->once())->method('getId')->willReturn(100);
+        $ruleMock->expects($this->once())->method('getCustomerGroupIds')->willReturn([10]);
+        $ruleMock->expects($this->atLeastOnce())->method('getFromDate')->willReturn('2017-06-21');
+        $ruleMock->expects($this->atLeastOnce())->method('getToDate')->willReturn('2017-06-30');
+        $ruleMock->expects($this->once())->method('getSortOrder')->willReturn(1);
+        $ruleMock->expects($this->once())->method('getSimpleAction')->willReturn('simple_action');
+        $ruleMock->expects($this->once())->method('getDiscountAmount')->willReturn(43);
+        $ruleMock->expects($this->once())->method('getStopRulesProcessing')->willReturn(true);
 
         $this->localeDateMock->expects($this->once())
             ->method('getConfigTimezone')
