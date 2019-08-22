@@ -10,12 +10,11 @@ namespace Magento\InventoryCatalogSearch\Plugin\Model\Search\FilterMapper\TermDr
 use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy\ApplyStockConditionToSelect;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Adapt apply stock condition to multi stocks
@@ -52,20 +51,20 @@ class AdaptApplyStockConditionToSelectPlugin
      * @param StockIndexTableNameResolverInterface $stockIndexTableNameResolver
      * @param StoreManagerInterface $storeManager
      * @param StockResolverInterface $stockResolver
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         StockIndexTableNameResolverInterface $stockIndexTableNameResolver,
         StoreManagerInterface $storeManager,
         StockResolverInterface $stockResolver,
-        DefaultStockProviderInterface $defaultStockProvider = null
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->stockIndexTableNameResolver = $stockIndexTableNameResolver;
         $this->storeManager = $storeManager;
         $this->stockResolver = $stockResolver;
-        $this->defaultStockProvider = $defaultStockProvider ?: ObjectManager::getInstance()
-            ->get(DefaultStockProviderInterface::class);
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -76,6 +75,8 @@ class AdaptApplyStockConditionToSelectPlugin
      * @param Select $select
      * @return void
      *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
@@ -85,13 +86,11 @@ class AdaptApplyStockConditionToSelectPlugin
         string $stockAlias,
         Select $select
     ) {
-
         $websiteCode = $this->storeManager->getWebsite()->getCode();
         $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         if ($this->defaultStockProvider->getId() === $stock->getStockId()) {
             $proceed($alias, $stockAlias, $select);
-        }
-        else {
+        } else {
             $select->joinInner(
                 ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
                 sprintf('product.entity_id = %s.source_id', $alias),
