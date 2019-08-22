@@ -117,18 +117,25 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
+        <!--Go to product page-->
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+
          <!--Add the configurable product with first option to the cart -->
-        <actionGroup ref="StorefrontAddConfigurableProductToCartActionGroup" stepKey="addToCartFirstOptionOfConfigProduct">
-            <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
-            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
-            <argument name="productOption" value="$$getConfigAttributeOption1.value$$"/>
+        <actionGroup ref="StorefrontSelectConfigurableAttributeOptionActionGroup" stepKey="selectFirstOptionOfConfigProduct">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_label$$"/>
+            <argument name="optionValue" value="$$getConfigAttributeOption1.value$$"/>
+        </actionGroup>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFirstOptionOfConfigProduct">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
         <!--Add the configurable product with second option to the cart -->
-        <actionGroup ref="StorefrontAddConfigurableProductToCartActionGroup" stepKey="addToCartSecondOptionOfConfigProduct">
-            <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
-            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
-            <argument name="productOption" value="$$getConfigAttributeOption2.value$$"/>
+        <actionGroup ref="StorefrontSelectConfigurableAttributeOptionActionGroup" stepKey="selectSecondOptionOfConfigProduct">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_label$$"/>
+            <argument name="optionValue" value="$$getConfigAttributeOption2.value$$"/>
+        </actionGroup>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartSecondOptionOfConfigProduct">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
         <!--View and edit cart-->

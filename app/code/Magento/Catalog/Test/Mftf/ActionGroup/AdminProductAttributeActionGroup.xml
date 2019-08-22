@@ -21,7 +21,7 @@
             <argument name="useForPromoRule" type="string" defaultValue="Yes"/>
         </arguments>
         <click selector="{{AdminEditAttributeStorefrontPropertiesSection.storeFrontPropertiesTab}}" stepKey="clickStoreFrontPropertiesTab"/>
-        <scrollTo selector="{{AdminEditAttributeStorefrontPropertiesSection.useForPromoRuleConditions}}" stepKey="scrollToUseForPromoRuleConditions"/>
+        <waitForElementVisible selector="{{AdminEditAttributeStorefrontPropertiesSection.useForPromoRuleConditions}}" stepKey="waitForUseForPromoRuleConditionsVisible"/>
         <selectOption selector="{{AdminEditAttributeStorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="{{useForPromoRule}}" stepKey="changeOption"/>
         <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
