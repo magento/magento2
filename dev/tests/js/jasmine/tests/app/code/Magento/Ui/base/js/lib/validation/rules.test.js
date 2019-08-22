@@ -83,7 +83,7 @@ define([
             });
 
             it('Check on formatted float (For International price)', function () {
-                var value = "10'000.00";
+                var value = '10\'000.00';
 
                 expect(rules['validate-number'].handler(value)).toBe(true);
             });
