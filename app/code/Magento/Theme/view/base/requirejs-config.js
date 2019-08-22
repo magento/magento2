@@ -25,7 +25,7 @@ var config = {
         'MutationObserver': ['es6-collections'],
         'matchMedia': {
             'exports': 'mediaCheck'
-        },
+        }
     },
     'paths': {
         'jquery/validate': 'jquery/jquery.validate',
