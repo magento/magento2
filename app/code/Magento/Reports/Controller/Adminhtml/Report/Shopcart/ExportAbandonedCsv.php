@@ -4,12 +4,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Reports\Controller\Adminhtml\Report\Shopcart\Abandoned as ShopCartAbandoned;
 
-class ExportAbandonedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportAbandonedCsv
+ */
+class ExportAbandonedCsv extends ShopCartAbandoned implements HttpGetActionInterface
 {
     /**
      * Export abandoned carts report grid to CSV format
