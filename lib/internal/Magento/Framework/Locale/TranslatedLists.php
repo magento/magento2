@@ -11,6 +11,9 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 
+/**
+ * Translated lists.
+ */
 class TranslatedLists implements ListsInterface
 {
     /**
@@ -176,6 +179,8 @@ class TranslatedLists implements ListsInterface
     }
 
     /**
+     * Sort option array.
+     *
      * @param array $option
      * @return array
      */
