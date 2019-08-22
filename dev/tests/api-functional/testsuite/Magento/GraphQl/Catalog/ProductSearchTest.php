@@ -1113,60 +1113,6 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
-    public function testProductQueryUsingFromAndToFilterInput()
-    {
-        $query
-            = <<<QUERY
-{
-    products(
-        filter: { 
-            price:{
-                from:"5" to:"20"
-            } 
-        }
-    ) {
-        total_count
-        items {
-            attribute_set_id
-            sku
-            name
-            price {
-                minimalPrice {
-                    amount {
-                        value
-                        currency
-                    }
-                }
-                maximalPrice {
-                    amount {
-                        value
-                        currency
-                    }
-                }
-            }     
-            type_id
-            ...on PhysicalProductInterface {
-                weight
-            }
-        }
-    }
-}
-QUERY;
-
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product1 = $productRepository->get('simple1');
-        $product2 = $productRepository->get('simple2');
-        $filteredProducts = [$product2, $product1];
-
-        $this->assertProductItemsWithMaximalAndMinimalPriceCheck($filteredProducts, $response);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
-     */
     public function testProductBasicFullTextSearchQuery()
     {
         $textToSearch = 'Simple';
@@ -1230,7 +1176,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
-    public function testProductsThatMatchWithPricesFromList()
+    public function testProductsThatMatchWithinASpecificPriceRange()
     {
         $query
             =<<<QUERY
@@ -1238,14 +1184,14 @@ QUERY;
     products(
         filter:
         {
-            price:{in:["10","20"]}
+            price:{from:"5" to: "20"}
 
         }
          pageSize:4
          currentPage:1
          sort:
          {
-          name:DESC
+          price:DESC
          }
     )
     {
@@ -1254,6 +1200,18 @@ QUERY;
          attribute_set_id
          sku
          price {
+            minimalPrice {
+                    amount {
+                        value
+                        currency
+                    }
+                }
+                maximalPrice {
+                    amount {
+                        value
+                        currency
+                    }
+                }
             regularPrice {
                 amount {
                     value
@@ -1284,27 +1242,7 @@ QUERY;
         $prod1 = $productRepository->get('simple2');
         $prod2 = $productRepository->get('simple1');
         $filteredProducts = [$prod1, $prod2];
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
-            $this->assertNotEmpty($itemArray);
-            $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
-                ['attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
-                    'sku' => $filteredProducts[$itemIndex]->getSku(),
-                    'name' => $filteredProducts[$itemIndex]->getName(),
-                    'price' => [
-                        'regularPrice' => [
-                            'amount' => [
-                                'value' => $filteredProducts[$itemIndex]->getPrice(),
-                                'currency' => 'USD'
-                            ]
-                        ]
-                    ],
-                    'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
-                    'weight' => $filteredProducts[$itemIndex]->getWeight()
-                ]
-            );
-        }
+        $this->assertProductItemsWithPriceCheck($filteredProducts, $response);
     }
 
     /**
@@ -1320,21 +1258,17 @@ QUERY;
 {
 products(
     filter:
-    {
-        special_price:{lt:"15"}
-        price:{lt:"50"}
-        weight:{gt:"4"}
-        or:
-        {
-            sku:{like:"simple%"}
-            name:{like:"%simple%"}
-        }
+    {        
+        price:{from:"50"}
+        sku:{like:"simple%"}
+        name:{like:"simple%"}
+        
     }
     pageSize:2
     currentPage:1
     sort:
    {
-    sku:ASC
+    position:ASC
    }
 )
 {
@@ -1384,7 +1318,7 @@ QUERY;
     products(
         filter:
         {
-            price:{eq:"10"}
+            price:{to:"10"}
         }
          pageSize:2
          currentPage:2
@@ -1605,7 +1539,7 @@ QUERY;
         }
     }
 
-    private function assertProductItemsWithMaximalAndMinimalPriceCheck(array $filteredProducts, array $actualResponse)
+    private function assertProductItemsWithPriceCheck(array $filteredProducts, array $actualResponse)
     {
         $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
 
@@ -1628,7 +1562,14 @@ QUERY;
                                 'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
                                 'currency' => 'USD'
                             ]
-                        ]
+                        ],
+                            'regularPrice' => [
+                                'amount' => [
+                                    'value' => $filteredProducts[$itemIndex]->getPrice(),
+                                    'currency' => 'USD'
+                                ]
+                            ]
+
                     ],
                     'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
                     'weight' => $filteredProducts[$itemIndex]->getWeight()

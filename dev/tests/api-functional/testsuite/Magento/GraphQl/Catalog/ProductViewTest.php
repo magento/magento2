@@ -592,7 +592,7 @@ QUERY;
         $secondProductSku = 'simple-156';
         $query = <<<QUERY
        {
-           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           products(filter: {price: {from: "150.0", to: "250.0"}})
            {
                items {
                    attribute_set_id
