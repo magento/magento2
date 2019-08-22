@@ -20,9 +20,6 @@
             <group value="captcha"/>
         </annotations>
         <before>
-            <!--Switch to developer mode-->
-            <comment userInput="Switch to developer mode" stepKey="commentSwitchDevMode"/>
-            <magentoCLI command="deploy:mode:set developer" stepKey="switchToDeveloperMode"/>
             <!--Enable JavaScript setting-->
             <comment userInput="Enable JavaScript setting" stepKey="commentEnableJSSettings"/>
             <magentoCLI command="config:set dev/js/enable_js_bundling 1" stepKey="enableJSBundling"/>
@@ -32,13 +29,13 @@
             <magentoCLI command="config:set admin/captcha/enable 1" stepKey="enableAdminCaptcha"/>
             <!--Clean cache-->
             <comment userInput="Clean cache" stepKey="commentCleanCache"/>
-            <!--<magentoCLI command="cache:clean" stepKey="cleanCaches"/>-->
+            <magentoCLI command="cache:clean" stepKey="cleanCaches"/>
         </before>
         <after>
-            <!--Set default settings-->
-            <comment userInput="Set default settings" stepKey="commentSetDafault"/>
-            <createData entity="SetDefaultJavaScriptBundling" stepKey="setDefaultJavaScriptBundling"/>
-            <createData entity="SetDefaultMinifyJavaScriptFiles" stepKey="setDefaultMinifyJavaScriptFiles"/>
+            <!--Disable JavaScript setting-->
+            <comment userInput="Disable JavaScript setting" stepKey="commentDisableJSSettings"/>
+            <magentoCLI command="config:set dev/js/enable_js_bundling 0" stepKey="disableJSBundling"/>
+            <magentoCLI command="config:set dev/js/minify_files 0" stepKey="disableMinifyJSFiles"/>
         </after>
         <!--Go to forgot password-->
         <comment userInput="Go to forgot password" stepKey="commentGoToForgotPassword"/>
@@ -49,9 +46,6 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <grabAttributeFrom selector="{{AdminForgotPasswordFormSection.captchaImage}}" userInput="src" stepKey="grabCaptchaImageAfterRefresh"/>
         <assertNotEquals expected="$grabCaptchaImageBeforeRefresh" expectedType="variable" actual="$grabCaptchaImageAfterRefresh" actualType="variable"  stepKey="assertCaptchaImagesNotEquals"/>
-        <!--Switch to production mode-->
-        <comment userInput="Switch to production mode" stepKey="commentSwitchProdMode"/>
-        <magentoCLI command="deploy:mode:set production" stepKey="switchToProductionMode"/>
         <amOnPage url="{{AdminForgotPasswordPage.url}}" stepKey="navigateToForgotPasswordPagePageProdMode"/>
         <waitForPageLoad stepKey="waitForPageLoadProdMode"/>
         <grabAttributeFrom selector="{{AdminForgotPasswordFormSection.captchaImage}}" userInput="src" stepKey="grabCaptchaImageBeforeRefreshProdMode"/>
