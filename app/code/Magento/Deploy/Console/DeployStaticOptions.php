@@ -138,6 +138,11 @@ class DeployStaticOptions
     const CONTENT_VERSION = 'content-version';
 
     /**
+     * Key for languages parameter
+     */
+    const DELETE_PREVIOUS_FILES = 'delete-previous-files';
+
+    /**
      * Key for refresh content version only mode
      */
     const REFRESH_CONTENT_VERSION_ONLY = 'refresh-content-version-only';
@@ -250,6 +255,12 @@ class DeployStaticOptions
                 InputOption::VALUE_NONE,
                 'Refreshing the version of static content only can be used to refresh static content '
                 . 'in browser cache and CDN cache.'
+            ),
+            new InputOption(
+                self::DELETE_PREVIOUS_FILES,
+                null,
+                InputOption::VALUE_NONE,
+                'Delete previous deploy.'
             ),
             new InputArgument(
                 self::LANGUAGES_ARGUMENT,

@@ -8,7 +8,9 @@ namespace Magento\Setup\Console\Command;
 use Magento\Deploy\Console\InputValidator;
 use Magento\Deploy\Console\ConsoleLoggerFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Filesystem\Driver\File;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -58,20 +60,33 @@ class DeployStaticContentCommand extends Command
      * @var \Magento\Framework\App\State
      */
     private $appState;
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+    /**
+     * @var File
+     */
+    private $driverFile;
 
     /**
      * StaticContentCommand constructor
      *
-     * @param InputValidator        $inputValidator
-     * @param ConsoleLoggerFactory  $consoleLoggerFactory
-     * @param Options               $options
+     * @param InputValidator $inputValidator
+     * @param ConsoleLoggerFactory $consoleLoggerFactory
+     * @param Options $options
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param DirectoryList $directoryList
+     * @param File $driverFile
+     * @throws \Magento\Setup\Exception
      */
     public function __construct(
         InputValidator $inputValidator,
         ConsoleLoggerFactory $consoleLoggerFactory,
         Options $options,
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        DirectoryList $directoryList,
+        File $driverFile
     ) {
         $this->inputValidator = $inputValidator;
         $this->consoleLoggerFactory = $consoleLoggerFactory;
@@ -79,6 +94,8 @@ class DeployStaticContentCommand extends Command
         $this->objectManager = $objectManagerProvider->get();
 
         parent::__construct();
+        $this->directoryList = $directoryList;
+        $this->driverFile = $driverFile;
     }
 
     /**
@@ -137,6 +154,12 @@ class DeployStaticContentCommand extends Command
             'logger' => $logger
         ]);
 
+
+        if ($this->isDeletePreviousDeploy($options)) {
+            $logger->warning("Erasing previous static files...");
+            $this->cleanupStaticDirectory();
+        }
+
         $deployService->deploy($options);
 
         if (!$refreshOnly) {
@@ -169,5 +192,43 @@ class DeployStaticContentCommand extends Command
             $this->appState = $this->objectManager->get(State::class);
         }
         return $this->appState;
+    }
+
+    /**
+     * Checks if need to refresh only version.
+     *
+     * @param array $options
+     * @return bool
+     */
+    private function isDeletePreviousDeploy(array $options)
+    {
+        return isset($options[Options::DELETE_PREVIOUS_FILES])
+            && $options[Options::DELETE_PREVIOUS_FILES];
+    }
+
+    /**
+     * Cleanup directory with static view files.
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function cleanupStaticDirectory(): void
+    {
+        $excludePatterns = ['#.htaccess#'];
+        $directoryPath = $this->directoryList->getPath(DirectoryList::STATIC_VIEW);
+        if ($this->driverFile->isExists($directoryPath)) {
+            $files = $this->driverFile->readDirectory($directoryPath);
+            foreach ($files as $file) {
+                foreach ($excludePatterns as $pattern) {
+                    if (preg_match($pattern, $file)) {
+                        continue 2;
+                    }
+                }
+                if ($this->driverFile->isFile($file)) {
+                    $this->driverFile->deleteFile($file);
+                } else {
+                    $this->driverFile->deleteDirectory($file);
+                }
+            }
+        }
     }
 }
