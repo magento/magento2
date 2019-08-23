@@ -1154,13 +1154,16 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($this->isDutiable($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId())) {
             // IsDutiable flag and Dutiable node indicates that cargo is not a documentation
-            $nodeBkgDetails->addChild('IsDutiable', 'Y');
-            $nodeDutiable = $nodeGetQuote->addChild('Dutiable');
-            $baseCurrencyCode = $this->_storeManager
-                ->getWebsite($this->_request->getWebsiteId())
-                ->getBaseCurrencyCode();
-            $nodeDutiable->addChild('DeclaredCurrency', $baseCurrencyCode);
-            $nodeDutiable->addChild('DeclaredValue', sprintf("%.2F", $rawRequest->getValue()));
+            if ($rawRequest->getOrigCountryId() != "MX") {
+                // Dhl for Mexico isn´t needed this parameters.
+                $nodeBkgDetails->addChild('IsDutiable', 'Y');
+                $nodeDutiable = $nodeGetQuote->addChild('Dutiable');
+                $baseCurrencyCode = $this->_storeManager
+                    ->getWebsite($this->_request->getWebsiteId())
+                    ->getBaseCurrencyCode();
+                $nodeDutiable->addChild('DeclaredCurrency', $baseCurrencyCode);
+                $nodeDutiable->addChild('DeclaredValue', sprintf("%.2F", $rawRequest->getValue()));
+            }
         }
 
         return $xml;
