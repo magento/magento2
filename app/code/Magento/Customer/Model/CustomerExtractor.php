@@ -1,9 +1,9 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -11,6 +11,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Customer Extractor model.
+ */
 class CustomerExtractor
 {
     /**
