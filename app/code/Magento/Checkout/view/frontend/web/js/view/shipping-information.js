@@ -28,8 +28,8 @@ define([
          * @return {String}
          */
         getShippingMethodTitle: function () {
-            var shippingMethod = quote.shippingMethod();
-            var shippingMethodTitle = '';
+            var shippingMethod = quote.shippingMethod(),
+                shippingMethodTitle = '';
 
             if (typeof shippingMethod['method_title'] !== 'undefined') {
                 shippingMethodTitle = ' - ' + shippingMethod['method_title'];
