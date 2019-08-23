@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogGraphQl\Model\Resolver\Category\CheckCategoryIsActive;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -67,11 +68,17 @@ class CategoryTree implements ResolverInterface
      *
      * @param array $args
      * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws GraphQlNoSuchEntityException
      */
     private function getCategoryId(array $args) : int
     {
-        return isset($args['id']) ? (int)$args['id'] : $this->getRootCategoryId->execute();
+        $rootCategoryId = 0;
+        try {
+            $rootCategoryId = isset($args['id']) ? (int)$args['id'] : $this->getRootCategoryId->execute();
+        } catch (LocalizedException $exception) {
+            throw new GraphQlNoSuchEntityException(__('Store doesn\'t exist'));
+        }
+        return $rootCategoryId;
     }
 
     /**

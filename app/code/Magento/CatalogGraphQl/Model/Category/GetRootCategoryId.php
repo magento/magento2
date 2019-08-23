@@ -1,25 +1,33 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Category;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
+
 class GetRootCategoryId
 {
-
     /**
      * @var int
      */
-    private $rootCategoryId = null;
+    private $rootCategoryId;
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
      * GetRootCategoryId constructor.
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager
     ) {
         $this->storeManager = $storeManager;
     }
@@ -27,12 +35,16 @@ class GetRootCategoryId
     /**
      * Get Root Category Id
      * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
      */
     public function execute()
     {
         if ($this->rootCategoryId == null) {
-            $this->rootCategoryId = (int)$this->storeManager->getStore()->getRootCategoryId();
+            try {
+                $this->rootCategoryId = (int)$this->storeManager->getStore()->getRootCategoryId();
+            } catch (NoSuchEntityException $noSuchEntityException) {
+                throw new LocalizedException(__("Store does not exist."));
+            }
         }
 
         return $this->rootCategoryId;
