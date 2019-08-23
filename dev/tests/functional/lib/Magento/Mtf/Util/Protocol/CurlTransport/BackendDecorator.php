@@ -8,6 +8,7 @@ namespace Magento\Mtf\Util\Protocol\CurlTransport;
 
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * Curl transport on backend.
