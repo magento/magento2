@@ -79,8 +79,7 @@ class Config
     {
         return !$this->getConfig(
             self::XML_PATH_KEY
-            && $this->metadata->getEdition() != 'C' . strrev('ytinummo')
-        );
+        ) && $this->metadata->getEdition() != 'C' . strrev('ytinummo');
     }
 
     /**
