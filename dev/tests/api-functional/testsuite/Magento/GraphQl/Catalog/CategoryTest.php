@@ -115,6 +115,80 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testRootCategoryTree()
+    {
+        $query = <<<QUERY
+{
+  category {
+      id
+      level
+      description
+      path
+      path_in_store
+      product_count
+      url_key
+      url_path
+      children {
+        id
+        description
+        available_sort_by
+        default_sort_by
+        image
+        level
+        children {
+          id
+          filter_price_range
+          description
+          image
+          meta_keywords
+          level
+          is_anchor
+          children {
+            level
+            id
+          }
+        }
+      }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $responseDataObject = new DataObject($response);
+        //Some sort of smoke testing
+        self::assertEquals(
+            'Its a description of Test Category 1.2',
+            $responseDataObject->getData('category/children/0/children/1/description')
+        );
+        self::assertEquals(
+            'default-category',
+            $responseDataObject->getData('category/url_key')
+        );
+        self::assertEquals(
+            [],
+            $responseDataObject->getData('category/children/0/available_sort_by')
+        );
+        self::assertEquals(
+            'name',
+            $responseDataObject->getData('category/children/0/default_sort_by')
+        );
+        self::assertCount(
+            7,
+            $responseDataObject->getData('category/children')
+        );
+        self::assertCount(
+            2,
+            $responseDataObject->getData('category/children/0/children')
+        );
+        self::assertEquals(
+            13,
+            $responseDataObject->getData('category/children/0/children/1/id')
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testCategoriesTreeWithDisabledCategory()
     {
