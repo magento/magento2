@@ -63,6 +63,8 @@ class CustomerExtractor
     }
 
     /**
+     * Creates a Customer object populated with the given form code and request data.
+     * 
      * @param string $formCode
      * @param RequestInterface $request
      * @param array $attributeValues
