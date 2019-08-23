@@ -10,15 +10,20 @@ namespace Magento\SalesRule\Model\Rule\Action\Discount;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\GuestCartItemRepositoryInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\GuestCartTotalRepositoryInterface;
 use Magento\Quote\Api\GuestCouponManagementInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
+ *
+ * @magentoAppArea frontend
  */
 class CartFixedTest extends \PHPUnit\Framework\TestCase
 {
@@ -38,10 +43,16 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     private $couponManagement;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->cartManagement = Bootstrap::getObjectManager()->create(GuestCartManagementInterface::class);
         $this->couponManagement = Bootstrap::getObjectManager()->create(GuestCouponManagementInterface::class);
         $this->cartItemRepository = Bootstrap::getObjectManager()->create(GuestCartItemRepositoryInterface::class);
@@ -80,6 +91,30 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $total = $cartTotalRepository->get($cartId);
 
         $this->assertEquals($expectedDiscount, $total->getBaseDiscountAmount());
+    }
+
+    /**
+     * Applies fixed discount amount on whole cart and created order with it
+     *
+     * @return void
+     * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount_subtotal_with_discount.php
+     * @magentoDataFixture Magento/SalesRule/_files/quote_with_coupon.php
+     *
+     */
+    public function testOrderWithFixedDiscount(): void
+    {
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
+        $quote->load('test01', 'reserved_order_id');
+        $quoteIdMask->load($quote->getId(), 'quote_id');
+        Bootstrap::getInstance()->reinitialize();
+
+        $cartManagement = Bootstrap::getObjectManager()->create(GuestCartManagementInterface::class);
+        $cartManagement->placeOrder($quoteIdMask->getMaskedId());
+        $order = $this->getOrder('test01');
+        $this->assertEquals($quote->getGrandTotal(), $order->getGrandTotal());
     }
 
     /**
@@ -149,5 +184,26 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             ->setWeight(1);
 
         return $productRepository->save($product);
+    }
+
+    /**
+     * Gets order entity by increment id.
+     *
+     * @param string $incrementId
+     * @return OrderInterface
+     */
+    private function getOrder(string $incrementId): OrderInterface
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('increment_id', $incrementId)
+            ->create();
+
+        /** @var OrderRepositoryInterface $repository */
+        $repository = $this->objectManager->get(OrderRepositoryInterface::class);
+        $items = $repository->getList($searchCriteria)
+            ->getItems();
+
+        return array_pop($items);
     }
 }
