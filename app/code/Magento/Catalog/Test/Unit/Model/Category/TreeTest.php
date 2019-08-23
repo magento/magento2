@@ -87,36 +87,6 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             );
     }
 
-    public function testGetNode()
-    {
-        $category = $this->getMockBuilder(
-            \Magento\Catalog\Model\Category::class
-        )->disableOriginalConstructor()->getMock();
-        $category->expects($this->exactly(2))->method('getId')->will($this->returnValue(1));
-
-        $node = $this->getMockBuilder(
-            \Magento\Framework\Data\Tree\Node::class
-        )->disableOriginalConstructor()->getMock();
-
-        $node->expects($this->once())->method('loadChildren');
-        $this->categoryTreeMock->expects($this->once())->method('loadNode')
-            ->with($this->equalTo(1))
-            ->will($this->returnValue($node));
-
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
-        $store->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($store));
-
-        $this->categoryCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setProductStoreId')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setLoadProductCount')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setStoreId')->will($this->returnSelf());
-
-        $this->categoryTreeMock->expects($this->once())->method('addCollectionData')
-            ->with($this->equalTo($this->categoryCollection));
-        $this->tree->getRootNode($category);
-    }
-
     public function testGetRootNode()
     {
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();

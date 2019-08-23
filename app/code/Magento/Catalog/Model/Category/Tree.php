@@ -90,6 +90,8 @@ class Tree
      * @return Node
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
+     * @deprecated since getNode is longer used by getRootNode.
      */
     protected function getNode(\Magento\Catalog\Model\Category $category)
     {
