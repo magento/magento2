@@ -165,7 +165,10 @@ class Preprocessor implements PreprocessorInterface
                 $this->customerSession->getCustomerGroupId()
             );
         } elseif ($filter->getField() === 'category_ids') {
-            return 'category_ids_index.category_id = ' . (int) $filter->getValue();
+            return $this->connection->quoteInto(
+                'category_ids_index.category_id in (?)',
+                $filter->getValue()
+            );
         } elseif ($attribute->isStatic()) {
             $alias = $this->aliasResolver->getAlias($filter);
             $resultQuery = str_replace(
