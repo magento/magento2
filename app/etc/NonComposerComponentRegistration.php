@@ -15,7 +15,7 @@ use RuntimeException;
  * @throws RuntimeException
  * @return void
  */
-function main()
+$main = function ()
 {
     $globPatterns = require __DIR__ . '/registration_globlist.php';
     $baseDir = dirname(dirname(__DIR__)) . '/';
@@ -28,6 +28,6 @@ function main()
         }
         array_map(function ($file) { require_once $file; }, $files);
     }
-}
+};
 
-main();
+$main();
