@@ -36,8 +36,6 @@ define([
             }
 
             return shippingMethod ? shippingMethod['carrier_title'] + shippingMethodTitle : shippingMethod['carrier_title'];
-
-            //return shippingMethod ? shippingMethod['carrier_title'] + ' - ' + shippingMethod['method_title'] : '';
         },
 
         /**
