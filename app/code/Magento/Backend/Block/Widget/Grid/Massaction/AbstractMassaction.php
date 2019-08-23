@@ -292,7 +292,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
             $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
             $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
             $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
-            $idsSelect->columns($this->getMassactionIdField(), 'main_table');
+            $idsSelect->columns($this->getMassactionIdField());
             $idList = $collection->getConnection()->fetchCol($idsSelect);
         } else {
             $idList = $collection->setPageSize(0)->getColumnValues($this->getMassactionIdField());
