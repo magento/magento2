@@ -262,7 +262,7 @@ define([
                     productIds: [productData['product_id']]
                 });
                 if (window.location.href === this.shoppingCartUrl) {
-                    location.reload();
+                    window.location.reload();
                 }
             }
         },
