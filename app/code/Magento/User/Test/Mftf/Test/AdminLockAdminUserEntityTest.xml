@@ -19,9 +19,13 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set admin/captcha/enable 0" stepKey="disableAdminCaptcha"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
             <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
         </before>
         <after>
+            <magentoCLI command="config:set admin/captcha/enable 1" stepKey="enableAdminCaptcha"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
             <actionGroup ref="logout" stepKey="logOut"/>
         </after>
 
@@ -36,7 +40,7 @@
         <actionGroup ref="AdminOpenConfigAdminPageActionGroup" stepKey="goToConfigAdminSectionPage"/>
         <actionGroup ref="AdminExpandSecurityTabActionGroup" stepKey="openSecurityTab"/>
         <actionGroup ref="AdminSetMaximumLoginFailuresToLockoutAccountActionGroup" stepKey="setMaximumLoginFailures">
-        <argument name="qty"  value="2"/>
+            <argument name="qty" value="2"/>
         </actionGroup>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveChanges"/>
 
