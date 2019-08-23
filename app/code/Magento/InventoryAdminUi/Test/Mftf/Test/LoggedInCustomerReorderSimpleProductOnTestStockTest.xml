@@ -26,6 +26,7 @@
                 <requiredEntity createDataKey="additionalStock"/>
                 <requiredEntity createDataKey="additionalSource"/>
             </createData>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
         </before>
         <after>
             <!--Assign Default Stock to Main Website.-->

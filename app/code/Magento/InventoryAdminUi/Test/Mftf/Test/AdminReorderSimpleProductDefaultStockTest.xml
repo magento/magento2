@@ -22,6 +22,11 @@
         <before>
             <remove keyForRemoval="createStock"/>
             <remove keyForRemoval="linkSourceStock"/>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="loginAsAdmin">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
         </before>
 
         <remove keyForRemoval="AdminOnProductEditPageAssignSourceToProduct1"/>
