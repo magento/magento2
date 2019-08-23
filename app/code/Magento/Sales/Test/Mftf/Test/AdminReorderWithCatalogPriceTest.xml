@@ -18,6 +18,9 @@
             <useCaseId value="MAGETWO-99691"/>
             <group value="sales"/>
             <group value="catalogRule"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <!--Create the catalog price rule -->
@@ -58,6 +61,9 @@
         </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
+        <!--Verify order item row-->
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" stepKey="waitOrderItemPriceToBeVisible"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" userInput="${{AdminOrderSimpleProductWithCatalogRule.subtotal}}" stepKey="seeOrderItemPrice"/>
         <!--Verify totals on Order page-->
         <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" stepKey="waitOrderSubtotalToBeVisible"/>

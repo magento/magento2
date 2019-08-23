@@ -263,7 +263,7 @@ define([
             data = data.toObject();
 
             if (type === 'billing' && this.shippingAsBilling) {
-                this.syncAddressField(this.shippingAddressContainer, field.name, field.value);
+                this.syncAddressField(this.shippingAddressContainer, field.name, field);
                 resetShipping = true;
             }
 
@@ -316,7 +316,11 @@ define([
 
             $(container).select('[name="' + syncName + '"]').each(function (element) {
                 if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
-                    element.value = fieldValue;
+                    if (element.type === "checkbox") {
+                        element.checked = fieldValue.checked;
+                    } else {
+                        element.value = fieldValue.value;
+                    }
                 }
             });
         },
@@ -569,6 +573,9 @@ define([
         applyCoupon : function(code){
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
             this.orderItemChanged = false;
+            jQuery('html, body').animate({
+                scrollTop: 0
+            });
         },
 
         addProduct : function(id){
