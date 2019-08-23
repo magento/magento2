@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * Config secure and unsecure baseurl
+ */
 namespace Magento\Config\Model\Config\Backend;
 
-use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\Url as UrlValidator;
 
 /**
  * @api
@@ -57,7 +61,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         $value = $this->getValue();
-        $value = $value{strlen($value) - 1} === '/' ? $value : $value . '/';
         try {
             if (!$this->_validateUnsecure($value) && !$this->_validateSecure($value)) {
                 $this->_validateFullyQualifiedUrl($value);
@@ -206,7 +209,8 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      */
     private function _isFullyQualifiedUrl($value)
     {
-        return preg_match('/\/$/', $value) && $this->getUrlValidator()->isValid($value, ['http', 'https']);
+        $value = strlen($value) > 0 && !preg_match('/\/$/', $value) ? $value . '/' : $value;
+        return $this->getUrlValidator()->isValid($value, ['http', 'https']);
     }
 
     /**
