@@ -19,7 +19,7 @@ $productList = $block->getProductListHtml();
         </div>
     </div>
     <?php endif; ?>
-    <?= $productList ?>
+    <?= /* @noEscape */ $productList ?>
 </div>
 <?php else : ?>
 
