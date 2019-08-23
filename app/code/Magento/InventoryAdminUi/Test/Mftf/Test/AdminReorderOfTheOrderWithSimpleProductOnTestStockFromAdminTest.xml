@@ -13,7 +13,7 @@
             <stories value="Reorder of the Order with Simple product on Test stock from Admin"/>
             <title value="Reorder of the Order with Simple product on Test stock from Admin"/>
             <description value="/scenarios/1482457"/>
-            <testCaseId value="MSI-2192"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735202/scenarios/1482457"/>
             <severity value="BLOCKER"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -116,7 +116,7 @@
         <!--Admin Area Check source quantity and salable quantity-->
         <comment userInput="Admin - Check Source quantity and salable quantity after order placed" stepKey="AdminCheckQuantityAfterOrderPlaced"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
-        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterPlaceOrder">
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProductBySkuToCheckQtyAfterPlaceOrder">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$simpleProduct.sku$$"/>
         </actionGroup>
