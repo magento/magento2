@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CheckDefaultValueOfPayPalCustomizeButtonTest">
+    <test name="AdminCheckDefaultValueOfPayPalCustomizeButtonTest">
         <annotations>
-            <features value="PayPal"/>
+            <features value="Paypal"/>
             <stories value="Button Configuration"/>
-            <title value="Check Default Value Of PayPal Customize Button"/>
-            <description value="Default value of PayPal Customize Button should be NO"/>
+            <title value="Check Default Value Of Paypal Customize Button"/>
+            <description value="Default value of Paypal Customize Button should be NO"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-10904"/>
             <skip>

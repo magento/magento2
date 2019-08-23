@@ -8,9 +8,9 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CheckCreditButtonConfiguration">
+    <test name="StorefrontCheckCreditButtonConfigurationTest">
         <annotations>
-            <features value="PayPal"/>
+            <features value="Paypal"/>
             <stories value="Button Configuration"/>
             <title value="Check Credit Button Configuration"/>
             <description value="Admin is able to customize Credit button"/>
@@ -48,8 +48,8 @@
         <!--Verify Credit Button value-->
         <comment userInput="Verify Credit Button value" stepKey="commentVerifyDefaultValue2"/>
         <selectOption selector="{{ButtonCustomization.label}}" userInput="{{PayPalLabel.credit}}" stepKey="selectCreditAsLabel"/>
-        <seeElement selector="{{ButtonCustomization.size}}" stepKey="seeSize2"/>
-        <seeElement selector="{{ButtonCustomization.shape}}" stepKey="seeShape2"/>
+        <seeElement selector="{{ButtonCustomization.size}}" stepKey="seeSize"/>
+        <seeElement selector="{{ButtonCustomization.shape}}" stepKey="seeShape"/>
         <dontSeeElement selector="{{ButtonCustomization.layout}}" stepKey="dontSeeLayout"/>
         <dontSeeElement selector="{{ButtonCustomization.color}}" stepKey="dontSeeColor"/>
         <!--Customize Credit Button-->

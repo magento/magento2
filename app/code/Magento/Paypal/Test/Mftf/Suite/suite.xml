@@ -8,9 +8,9 @@
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
     <suite name="PaypalTestSuite">
         <include>
-            <test name="CheckDefaultValueOfPayPalCustomizeButtonTest"/>
-            <test name="PayPalSmartButtonInCheckoutPage"/>
-            <test name="CheckCreditButtonConfiguration"/>
+            <test name="AdminCheckDefaultValueOfPayPalCustomizeButtonTest"/>
+            <test name="StorefrontPayPalSmartButtonInCheckoutPageTest"/>
+            <test name="StorefrontCheckCreditButtonConfigurationTest"/>
         </include>
     </suite>
 </suites>

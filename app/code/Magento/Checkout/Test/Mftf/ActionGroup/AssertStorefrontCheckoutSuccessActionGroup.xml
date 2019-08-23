@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="VerifyCheckoutSuccessActionGroup">
+    <actionGroup name="AssertStorefrontCheckoutSuccessActionGroup">
         <annotations>
             <description>Verifies if the order is placed successfully on the 'one page checkout' page.</description>
         </annotations>

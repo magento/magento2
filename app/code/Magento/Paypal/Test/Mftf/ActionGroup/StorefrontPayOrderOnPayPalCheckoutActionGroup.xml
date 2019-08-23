@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="PayOrderOnPayPalCheckoutActionGroup">
+    <actionGroup name="StorefrontPayOrderOnPayPalCheckoutActionGroup">
         <annotations>
             <description>Verifies product name on Paypal cart and clicks 'Pay Now' on PayPal payment checkout page.</description>
         </annotations>

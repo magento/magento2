@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="PayPalSmartButtonInCheckoutPage">
+    <test name="StorefrontPaypalSmartButtonInCheckoutPageTest">
         <annotations>
-            <features value="PayPal"/>
+            <features value="Paypal"/>
             <stories value="Generic checkout skeleton flow"/>
-            <title value="Mainflow of PayPal Smart Button"/>
-            <description value="Users are able to place order using PayPal Smart Button"/>
+            <title value="Mainflow of Paypal Smart Button"/>
+            <description value="Users are able to place order using Paypal Smart Button"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13690"/>
             <skip>
@@ -32,10 +32,10 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <!-- Set Paypal express config -->
-            <magentoCLI command="config:set payment/paypal_express/active 1" stepKey="enablePaypal"/>
-            <magentoCLI command="config:set payment/paypal_express/in_context 1" stepKey="enableInContextPayPal"/>
-            <magentoCLI command="config:set payment/paypal_express/skip_order_review_step 1" stepKey="enableSkipOrderReview"/>
-            <magentoCLI command="config:set payment/paypal_express/merchant_id {{_CREDS.magento/paypal_express_checkout_us_merchant_id}}" stepKey="setMerchantId"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableConfigData.path}} {{StorefrontPaypalEnableConfigData.value}}" stepKey="enablePaypal"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableInContextCheckoutConfigData.path}} {{StorefrontPaypalEnableInContextCheckoutConfigData.value}}" stepKey="enableInContextPayPal"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
+            <magentoCLI command="config:set {{StorefrontPaypalMerchantAccountIdConfigData.path}} {{_CREDS.magento/paypal_express_checkout_us_merchant_id}}" stepKey="setMerchantId"/>
             <createData entity="PaypalConfig" stepKey="createPaypalExpressConfig"/>
 
             <!-- Login -->
@@ -43,10 +43,10 @@
         </before>
         <after>
             <!-- Cleanup Paypal configurations -->
-            <magentoCLI command="config:set payment/paypal_express/merchant_id ''" stepKey="deleteMerchantId"/>
-            <magentoCLI command="config:set payment/paypal_express/skip_order_review_step 0" stepKey="disableSkipOrderReview"/>
-            <magentoCLI command="config:set payment/paypal_express/in_context 0" stepKey="disableInContextPayPal"/>
-            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePaypal"/>
+            <magentoCLI command="config:set {{StorefrontPaypalMerchantAccountIdConfigData.path}} {{StorefrontPaypalMerchantAccountIdConfigData.value}}" stepKey="deleteMerchantId"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableInContextCheckoutConfigData.path}} {{StorefrontPaypalDisableInContextCheckoutConfigData.value}}" stepKey="disableInContextPayPal"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableConfigData.path}} {{StorefrontPaypalDisableConfigData.value}}" stepKey="disablePaypal"/>
             <createData entity="SamplePaypalConfig" stepKey="setDefaultPaypalConfig"/>
 
             <!-- Delete product -->
@@ -68,15 +68,15 @@
         <!-- Place an order using PayPal payment method -->
         <actionGroup ref="CreatePayPalOrderWithSelectedPaymentMethodActionGroup" stepKey="createPayPalOrder">
             <argument name="Category" value="$$createCategory$$"/>
-            <argument name="payerName" value="Alex"/>
+            <argument name="payerName" value="{{Payer.firstName}}"/>
         </actionGroup>
 
         <!-- PayPal checkout -->
-        <actionGroup ref="PayOrderOnPayPalCheckoutActionGroup" stepKey="payOrderOnPayPalCheckout">
+        <actionGroup ref="StorefrontPayOrderOnPayPalCheckoutActionGroup" stepKey="payOrderOnPayPalCheckout">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
 
         <!-- I see order successful Page instead of Order Review Page -->
-        <actionGroup ref="VerifyCheckoutSuccessActionGroup" stepKey="verifyCheckoutSuccess"/>
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
     </test>
 </tests>
