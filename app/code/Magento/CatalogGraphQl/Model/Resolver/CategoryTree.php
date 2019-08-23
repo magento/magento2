@@ -10,11 +10,10 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogGraphQl\Model\Resolver\Category\CheckCategoryIsActive;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * Category tree field resolver, used for GraphQL request processing.
@@ -40,33 +39,27 @@ class CategoryTree implements ResolverInterface
      * @var CheckCategoryIsActive
      */
     private $checkCategoryIsActive;
-
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\CatalogGraphQl\Model\Category\GetRootCategoryId
      */
-    private $storeManager;
+    private $getRootCategoryId;
 
     /**
-     * @var int
-     */
-    private $rootCategoryId = null;
-
-    /**
-     * @param \Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree $categoryTree
+     * @param Products\DataProvider\CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CheckCategoryIsActive $checkCategoryIsActive
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\CatalogGraphQl\Model\Category\GetRootCategoryId $getRootCategoryId
      */
     public function __construct(
         Products\DataProvider\CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
         CheckCategoryIsActive $checkCategoryIsActive,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\CatalogGraphQl\Model\Category\GetRootCategoryId $getRootCategoryId
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->checkCategoryIsActive = $checkCategoryIsActive;
-        $this->storeManager = $storeManager;
+        $this->getRootCategoryId = $getRootCategoryId;
     }
 
     /**
@@ -78,7 +71,7 @@ class CategoryTree implements ResolverInterface
      */
     private function getCategoryId(array $args) : int
     {
-        return isset($args['id']) ? (int)$args['id'] : $this->getRootCategoryId();
+        return isset($args['id']) ? (int)$args['id'] : $this->getRootCategoryId->execute();
     }
 
     /**
@@ -91,7 +84,7 @@ class CategoryTree implements ResolverInterface
         }
 
         $rootCategoryId = $this->getCategoryId($args);
-        if ($rootCategoryId !== $this->getRootCategoryId() && $rootCategoryId > 0) {
+        if ($rootCategoryId !== $this->getRootCategoryId->execute() && $rootCategoryId > 0) {
             $this->checkCategoryIsActive->execute($rootCategoryId);
         }
         $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
@@ -102,19 +95,5 @@ class CategoryTree implements ResolverInterface
 
         $result = $this->extractDataFromCategoryTree->execute($categoriesTree);
         return current($result);
-    }
-
-    /**
-     * Get Root Category Id
-     * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function getRootCategoryId()
-    {
-        if ($this->rootCategoryId == null) {
-            $this->rootCategoryId = (int)$this->storeManager->getStore()->getRootCategoryId();
-        }
-
-        return $this->rootCategoryId;
     }
 }
