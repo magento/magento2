@@ -385,7 +385,8 @@ define([
             var $widget = this,
                 container = this.element,
                 classes = this.options.classes,
-                chooseText = this.options.jsonConfig.chooseText;
+                chooseText = this.options.jsonConfig.chooseText,
+                showTooltip = this.options.showTooltip;
 
             $widget.optionsMap = {};
 
@@ -452,10 +453,12 @@ define([
                 });
             });
 
-            // Connect Tooltip
-            container
-                .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
-                .SwatchRendererTooltip();
+            if (showTooltip === 1) {
+                // Connect Tooltip
+                container
+                    .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
+                    .SwatchRendererTooltip();
+            }
 
             // Hide all elements below more button
             $('.' + classes.moreButton).nextAll().hide();
