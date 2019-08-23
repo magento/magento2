@@ -451,8 +451,8 @@ define([
                         allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
                         optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
                         optionPriceDiff = optionFinalPrice - finalPrice;
-
                         options[i].label = options[i].label_initial;
+
                         if (optionPriceDiff !== 0) {
                             options[i].label += ' ' + priceUtils.formatPrice(
                                 optionPriceDiff,
