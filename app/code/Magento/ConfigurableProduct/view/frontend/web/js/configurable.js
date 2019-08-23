@@ -167,7 +167,7 @@ define([
         _setInitialOptionsLabels: function () {
             $.each(this.options.spConfig.attributes, $.proxy(function (index, element) {
                 $.each(element.options, $.proxy(function (optIndex, optElement) {
-                    this.options.spConfig.attributes[index].options[optIndex].label_initial = optElement.label;
+                    this.options.spConfig.attributes[index].options[optIndex].initialLabel = optElement.label;
                 }, this));
             }, this));
         },
@@ -451,7 +451,7 @@ define([
                         allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
                         optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
                         optionPriceDiff = optionFinalPrice - finalPrice;
-                        options[i].label = options[i].label_initial;
+                        options[i].label = options[i].initialLabel;
 
                         if (optionPriceDiff !== 0) {
                             options[i].label += ' ' + priceUtils.formatPrice(
