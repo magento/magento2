@@ -48,7 +48,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @var bool
      */
-    protected $_isLoading = false;
+    private $isLoading = false;
 
     /**
      * Loaded order instance
@@ -219,10 +219,10 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_eventManager->dispatch('custom_quote_process', ['checkout_session' => $this]);
 
         if ($this->_quote === null) {
-            if ($this->_isLoading) {
+            if ($this->isLoading) {
                 throw new \LogicException("Infinite loop detected, review the trace for the looping path");
             }
-            $this->_isLoading = true;
+            $this->isLoading = true;
             $quote = $this->quoteFactory->create();
             if ($this->getQuoteId()) {
                 try {
@@ -275,7 +275,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
             $quote->setStore($this->_storeManager->getStore());
             $this->_quote = $quote;
-            $this->_isLoading = false;
+            $this->isLoading = false;
         }
 
         if (!$this->isQuoteMasked() && !$this->_customerSession->isLoggedIn() && $this->getQuoteId()) {
