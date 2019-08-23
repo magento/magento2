@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
 
 /**
@@ -53,7 +55,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'crypt_key',
             'text',
-            ['name' => 'crypt_key', 'label' => __('New Key'), 'style' => 'width:32em;', 'maxlength' => 32]
+            [
+                'name' => 'crypt_key',
+                'label' => __('New Key'),
+                'style' => 'width:32em;',
+                'maxlength' => 32,
+                'required' => true,
+                'class' => 'required-entry'
+            ]
         );
         $form->setUseContainer(true);
         if ($data = $this->getFormData()) {

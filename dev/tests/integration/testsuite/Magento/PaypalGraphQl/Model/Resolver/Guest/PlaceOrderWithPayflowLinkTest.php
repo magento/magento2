@@ -119,9 +119,9 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
           code: "$paymentMethod"
             payflow_link: 
             {
-           cancel_url:"http://mage.test/paypal/payflow/cancel"
-           return_url:"http://mage.test/paypal/payflow/return"
-           error_url:"http://mage.test/paypal/payflow/error"
+           cancel_url:"paypal/payflow/cancel"
+           return_url:"paypal/payflow/return"
+           error_url:"paypal/payflow/error"
           }
       }
   }) {    
@@ -221,9 +221,9 @@ QUERY;
           code: "$paymentMethod"
             payflow_link: 
             {
-           cancel_url:"http://mage.test/paypal/payflow/cancelPayment"
-           return_url:"http://mage.test/paypal/payflow/returnUrl"
-           error_url:"http://mage.test/paypal/payflow/returnUrl"
+           cancel_url:"paypal/payflow/cancelPayment"
+           return_url:"paypal/payflow/returnUrl"
+           error_url:"paypal/payflow/returnUrl"
           }
       }
   }) {    
