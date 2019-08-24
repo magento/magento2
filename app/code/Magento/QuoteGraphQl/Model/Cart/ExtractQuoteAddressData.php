@@ -61,8 +61,14 @@ class ExtractQuoteAddressData
 
         $addressItemsData = [];
         foreach ($address->getAllItems() as $addressItem) {
+            if ($addressItem instanceof \Magento\Quote\Model\Quote\Item) {
+                $itemId = $addressItem->getItemId();
+            } else {
+                $itemId = $addressItem->getQuoteItemId();
+            }
+
             $addressItemsData[] = [
-                'cart_item_id' => $addressItem->getQuoteItemId(),
+                'cart_item_id' => $itemId,
                 'quantity' => $addressItem->getQty()
             ];
         }

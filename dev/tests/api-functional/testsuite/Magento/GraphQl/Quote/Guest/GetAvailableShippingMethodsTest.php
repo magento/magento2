@@ -139,29 +139,33 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
 query {
   cart (cart_id: "{$maskedQuoteId}") {
     shipping_addresses {
-        available_shipping_methods {
-          amount {
-            value
-            currency
-          }
-          base_amount {
-            value
-            currency
-          }
-          carrier_code
-          carrier_title
-          error_message
-          method_code
-          method_title
-          price_excl_tax {
-            value
-            currency
-          }
-          price_incl_tax {
-            value
-            currency
-          }
+      cart_items {
+        cart_item_id
+        quantity
+      }
+      available_shipping_methods {
+        amount {
+          value
+          currency
         }
+        base_amount {
+          value
+          currency
+        }
+        carrier_code
+        carrier_title
+        error_message
+        method_code
+        method_title
+        price_excl_tax {
+          value
+          currency
+        }
+        price_incl_tax {
+          value
+          currency
+        }
+      }
     }
   }
 }
