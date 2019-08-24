@@ -94,11 +94,10 @@ class Context
         }
         try {
             $currentStore = $this->storeManager->getStore($storeCode);
+            $this->updateContext($currentStore);
         } catch (NoSuchEntityException $exception) {
             $this->processInvalidStoreRequested($exception);
         }
-
-        $this->updateContext($currentStore);
     }
 
     /**
