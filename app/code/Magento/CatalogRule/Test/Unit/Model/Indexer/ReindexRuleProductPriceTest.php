@@ -6,65 +6,62 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
-use Magento\CatalogRule\Model\Indexer\IndexBuilder;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Model\Indexer\ProductPriceCalculator;
+use Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice;
+use Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor;
+use Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ReindexRuleProductPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice
+     * @var ReindexRuleProductPrice
      */
     private $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleProductsSelectBuilder|MockObject
      */
     private $ruleProductsSelectBuilderMock;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductPriceCalculator|MockObject
      */
     private $productPriceCalculatorMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
-    private $dateTimeMock;
+    private $localeDate;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleProductPricesPersistor|MockObject
      */
     private $pricesPersistorMock;
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->ruleProductsSelectBuilderMock =
-            $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productPriceCalculatorMock =
-            $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\ProductPriceCalculator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pricesPersistorMock =
-            $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->model = new \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice(
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->ruleProductsSelectBuilderMock = $this->createMock(RuleProductsSelectBuilder::class);
+        $this->productPriceCalculatorMock = $this->createMock(ProductPriceCalculator::class);
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->pricesPersistorMock = $this->createMock(RuleProductPricesPersistor::class);
+
+        $this->model = new ReindexRuleProductPrice(
             $this->storeManagerMock,
             $this->ruleProductsSelectBuilderMock,
             $this->productPriceCalculatorMock,
-            $this->dateTimeMock,
+            $this->localeDate,
             $this->pricesPersistorMock
         );
     }
@@ -72,19 +69,32 @@ class ReindexRuleProductPriceTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $websiteId = 234;
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $defaultGroupId = 11;
+        $defaultStoreId = 22;
 
-        $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $websiteMock->expects($this->once())->method('getId')->willReturn($websiteId);
-        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willReturn([$websiteMock]);
+        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($websiteId);
+        $websiteMock->expects($this->once())
+            ->method('getDefaultGroupId')
+            ->willReturn($defaultGroupId);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn([$websiteMock]);
+        $groupMock = $this->createMock(GroupInterface::class);
+        $groupMock->method('getId')
+            ->willReturn($defaultStoreId);
+        $groupMock->expects($this->once())
+            ->method('getDefaultStoreId')
+            ->willReturn($defaultStoreId);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getGroup')
+            ->with($defaultGroupId)
+            ->willReturn($groupMock);
 
-        $statementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
+        $statementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
         $this->ruleProductsSelectBuilderMock->expects($this->once())
             ->method('build')
             ->with($websiteId, $productMock, true)
@@ -99,29 +109,22 @@ class ReindexRuleProductPriceTest extends \PHPUnit\Framework\TestCase
             'action_stop' => true
         ];
 
-        $this->dateTimeMock->expects($this->at(0))
-            ->method('date')
-            ->with('Y-m-d 00:00:00', $ruleData['from_time'])
-            ->willReturn($ruleData['from_time']);
-        $this->dateTimeMock->expects($this->at(1))
-            ->method('timestamp')
-            ->with($ruleData['from_time'])
-            ->willReturn($ruleData['from_time']);
+        $this->localeDate->expects($this->once())
+            ->method('scopeDate')
+            ->with($defaultStoreId, null, true)
+            ->willReturn(new \DateTime());
 
-        $this->dateTimeMock->expects($this->at(2))
-            ->method('date')
-            ->with('Y-m-d 00:00:00', $ruleData['to_time'])
-            ->willReturn($ruleData['to_time']);
-        $this->dateTimeMock->expects($this->at(3))
-            ->method('timestamp')
-            ->with($ruleData['to_time'])
-            ->willReturn($ruleData['to_time']);
+        $statementMock->expects($this->at(0))
+            ->method('fetch')
+            ->willReturn($ruleData);
+        $statementMock->expects($this->at(1))
+            ->method('fetch')
+            ->willReturn(false);
 
-        $statementMock->expects($this->at(0))->method('fetch')->willReturn($ruleData);
-        $statementMock->expects($this->at(1))->method('fetch')->willReturn(false);
-
-        $this->productPriceCalculatorMock->expects($this->atLeastOnce())->method('calculate');
-        $this->pricesPersistorMock->expects($this->once())->method('execute');
+        $this->productPriceCalculatorMock->expects($this->atLeastOnce())
+            ->method('calculate');
+        $this->pricesPersistorMock->expects($this->once())
+            ->method('execute');
 
         $this->assertTrue($this->model->execute(1, $productMock, true));
     }
