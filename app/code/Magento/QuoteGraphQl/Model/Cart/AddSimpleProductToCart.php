@@ -55,7 +55,7 @@ class AddSimpleProductToCart
         $sku = $this->extractSku($cartItemData);
 
         try {
-            $product = $this->productRepository->get($sku);
+            $product = clone $this->productRepository->get($sku);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
