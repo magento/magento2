@@ -20,8 +20,8 @@ class ScalarTypes
      */
     public function isScalarType(string $typeName) : bool
     {
-        $internalTypes = \GraphQL\Type\Definition\Type::getStandardTypes();
-        return isset($internalTypes[$typeName]) ? true : false;
+        $standardTypes = \GraphQL\Type\Definition\Type::getStandardTypes();
+        return isset($standardTypes[$typeName]) ? true : false;
     }
 
     /**
@@ -33,9 +33,9 @@ class ScalarTypes
      */
     public function getScalarTypeInstance(string $typeName) : \GraphQL\Type\Definition\Type
     {
-        $internalTypes = \GraphQL\Type\Definition\Type::getStandardTypes();
+        $standardTypes = \GraphQL\Type\Definition\Type::getStandardTypes();
         if ($this->isScalarType($typeName)) {
-            return $internalTypes[$typeName];
+            return $standardTypes[$typeName];
         } else {
             throw new \LogicException(sprintf('Scalar type %s doesn\'t exist', $typeName));
         }
