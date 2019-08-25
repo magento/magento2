@@ -17,7 +17,8 @@ use Psr\Log\LoggerInterface;
  */
 class StatPlugin
 {
-    const TIMER_NAME_CRON_PREFIX = 'job';
+    private const TIMER_NAME_CRON_PREFIX = 'job';
+
     /**
      * @var Config
      */

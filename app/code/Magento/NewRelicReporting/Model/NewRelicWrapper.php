@@ -13,6 +13,12 @@ namespace Magento\NewRelicReporting\Model;
 class NewRelicWrapper
 {
     /**
+     * @TODO Remove this in 2.4-dev branch
+     * @var bool
+     */
+    private $transactionOpen = false;
+
+    /**
      * Wrapper for 'newrelic_add_custom_parameter' function
      *
      * @param string $param
@@ -49,8 +55,15 @@ class NewRelicWrapper
      */
     public function setAppName(string $appName)
     {
+        if ($this->transactionOpen === true) {
+            $this->endTransaction();
+        }
+
         if ($this->isExtensionInstalled()) {
             newrelic_set_appname($appName);
+
+            // Remove following line in 2.4-dev branch
+            $this->transactionOpen = true;
         }
     }
 
@@ -69,14 +82,20 @@ class NewRelicWrapper
 
     /**
      * Wrapper for 'newrelic_end_transaction'
+     * Cannot be public in 2.3-dev due to Backward Compatibility
+     * @see https://devdocs.magento.com/guides/v2.3/contributor-guide/backward-compatible-development/
+     * @TODO Make it public in 2.4-dev branch.
      *
      * @param bool $ignore
      * @return void
      */
-    public function endTransaction($ignore = false)
+    private function endTransaction($ignore = false)
     {
         if ($this->isExtensionInstalled()) {
             newrelic_end_transaction($ignore);
+
+            // @TODO Remove following line in 2.4-dev branch
+            $this->transactionOpen = false;
         }
     }
 

@@ -74,7 +74,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * Cron Job name pattern for Profiling
      */
-    const CRON_TIMERID = 'job %s';
+    private const CRON_TIMERID = 'job %s';
 
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
@@ -369,7 +369,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $jobName
      * @return void
      */
-    private function startProfiling(string $jobName = '')
+    private function startProfiling(string $jobName)
     {
         $this->statProfiler->clear();
         $this->statProfiler->start(
@@ -386,7 +386,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $jobName
      * @return void
      */
-    private function stopProfiling(string $jobName = '')
+    private function stopProfiling(string $jobName)
     {
         $this->statProfiler->stop(
             sprintf(self::CRON_TIMERID, $jobName),
