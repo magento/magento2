@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Checkout\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -291,8 +293,8 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get product object based on requested product information
      *
-     * @param   Product|int|string $productInfo
-     * @return  Product
+     * @param Product|int|string $productInfo
+     * @return Product
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getProduct($productInfo)
@@ -332,8 +334,8 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get request for product add to cart procedure
      *
-     * @param   \Magento\Framework\DataObject|int|array $requestInfo
-     * @return  \Magento\Framework\DataObject
+     * @param \Magento\Framework\DataObject|int|array $requestInfo
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getProductRequest($requestInfo)
@@ -376,6 +378,7 @@ class Cart extends DataObject implements CartInterface
                     ['info' => $requestInfo, 'product' => $product]
                 );
                 $result = $this->getQuote()->addProduct($product, $request);
+                // phpcs:ignore Magento2.Exceptions.ThrowCatch
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_checkoutSession->setUseNotice(false);
                 $result = $e->getMessage();
@@ -723,6 +726,7 @@ class Cart extends DataObject implements CartInterface
                 ['quote_item' => $result, 'product' => $product]
             );
             $this->_checkoutSession->setLastAddedProductId($productId);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_checkoutSession->setUseNotice(false);
             $result = $e->getMessage();
