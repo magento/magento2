@@ -717,6 +717,12 @@ class Cart extends DataObject implements CartInterface
             }
 
             $result = $this->getQuote()->updateItem($itemId, $request, $updatingParams);
+
+            $this->_eventManager->dispatch(
+                'checkout_cart_product_update_after',
+                ['quote_item' => $result, 'product' => $product]
+            );
+            $this->_checkoutSession->setLastAddedProductId($productId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_checkoutSession->setUseNotice(false);
             $result = $e->getMessage();
@@ -732,11 +738,6 @@ class Cart extends DataObject implements CartInterface
             throw new \Magento\Framework\Exception\LocalizedException(__($result));
         }
 
-        $this->_eventManager->dispatch(
-            'checkout_cart_product_update_after',
-            ['quote_item' => $result, 'product' => $product]
-        );
-        $this->_checkoutSession->setLastAddedProductId($productId);
         return $result;
     }
 
