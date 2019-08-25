@@ -255,12 +255,10 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap(
-                [
-                    ['id', false, $customerId],
-                    ['key', false, $key],
-                ]
-            );
+            ->willReturnMap([
+                ['id', false, $customerId],
+                ['key', false, $key],
+            ]);
 
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
@@ -283,7 +281,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->with($this->stringContains($successMessage))
             ->willReturnSelf();
 
@@ -374,13 +372,11 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap(
-                [
-                    ['id', false, $customerId],
-                    ['key', false, $key],
-                    ['back_url', false, $backUrl],
-                ]
-            );
+            ->willReturnMap([
+                ['id', false, $customerId],
+                ['key', false, $key],
+                ['back_url', false, $backUrl],
+            ]);
 
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
@@ -403,7 +399,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->with($this->stringContains($successMessage))
             ->willReturnSelf();
 

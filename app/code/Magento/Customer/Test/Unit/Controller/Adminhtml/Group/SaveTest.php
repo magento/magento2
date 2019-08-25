@@ -167,7 +167,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->group);
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessage')
+            ->method('addSuccess')
             ->with(__('You saved the customer group.'));
         $exception = new \Exception('Exception');
         $this->resultRedirect->expects($this->at(0))

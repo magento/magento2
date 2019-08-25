@@ -26,7 +26,6 @@ use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
 
 /**
- * Class LoginPost
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
@@ -218,17 +217,17 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                     $message = $e->getMessage();
                 } catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
-                    $this->messageManager->addErrorMessage(
+                    $this->messageManager->addError(
                         __('An unspecified error occurred. Please contact us for assistance.')
                     );
                 } finally {
                     if (isset($message)) {
-                        $this->messageManager->addErrorMessage($message);
+                        $this->messageManager->addError($message);
                         $this->session->setUsername($login['username']);
                     }
                 }
             } else {
-                $this->messageManager->addErrorMessage(__('A login and a password are required.'));
+                $this->messageManager->addError(__('A login and a password are required.'));
             }
         }
 

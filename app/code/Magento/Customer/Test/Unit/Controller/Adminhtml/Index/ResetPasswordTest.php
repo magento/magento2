@@ -141,7 +141,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager = $this->getMockBuilder(
             \Magento\Framework\Message\Manager::class
         )->disableOriginalConstructor()->setMethods(
-            ['addSuccessMessage', 'addMessage', 'addExceptionMessage', 'addErrorMessage']
+            ['addSuccess', 'addMessage', 'addException', 'addErrorMessage']
         )->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
@@ -442,7 +442,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects(
             $this->once()
         )->method(
-            'addExceptionMessage'
+            'addException'
         )->with(
             $this->equalTo($exception),
             $this->equalTo('Something went wrong while resetting customer password.')
@@ -502,7 +502,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects(
             $this->once()
         )->method(
-            'addSuccessMessage'
+            'addSuccess'
         )->with(
             $this->equalTo('The customer will receive an email with a link to reset password.')
         );

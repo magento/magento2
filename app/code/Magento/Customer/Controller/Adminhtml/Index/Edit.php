@@ -9,9 +9,6 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class Edit
- */
 class Edit extends \Magento\Customer\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
     /**
@@ -36,14 +33,17 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index implements HttpG
                 $customer = $this->_customerRepository->getById($customerId);
                 $customerData['account'] = $this->customerMapper->toFlatArray($customer);
                 $customerData['account'][CustomerInterface::ID] = $customerId;
-
-                $addresses = $customer->getAddresses();
-                foreach ($addresses as $address) {
-                    $customerData['address'][$address->getId()] = $this->addressMapper->toFlatArray($address);
-                    $customerData['address'][$address->getId()]['id'] = $address->getId();
+                try {
+                    $addresses = $customer->getAddresses();
+                    foreach ($addresses as $address) {
+                        $customerData['address'][$address->getId()] = $this->addressMapper->toFlatArray($address);
+                        $customerData['address'][$address->getId()]['id'] = $address->getId();
+                    }
+                } catch (NoSuchEntityException $e) {
+                    //do nothing
                 }
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while editing the customer.'));
+                $this->messageManager->addException($e, __('Something went wrong while editing the customer.'));
                 $resultRedirect = $this->resultRedirectFactory->create();
                 $resultRedirect->setPath('customer/*/index');
                 return $resultRedirect;

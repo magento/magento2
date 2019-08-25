@@ -311,7 +311,7 @@ abstract class Index extends \Magento\Backend\App\Action
     protected function actUponMultipleCustomers(callable $singleAction, $customerIds)
     {
         if (!is_array($customerIds)) {
-            $this->messageManager->addErrorMessage(__('Please select customer(s).'));
+            $this->messageManager->addError(__('Please select customer(s).'));
             return 0;
         }
         $customersUpdated = 0;
@@ -320,7 +320,7 @@ abstract class Index extends \Magento\Backend\App\Action
                 $singleAction($customerId);
                 $customersUpdated++;
             } catch (\Exception $exception) {
-                $this->messageManager->addErrorMessage($exception->getMessage());
+                $this->messageManager->addError($exception->getMessage());
             }
         }
         return $customersUpdated;

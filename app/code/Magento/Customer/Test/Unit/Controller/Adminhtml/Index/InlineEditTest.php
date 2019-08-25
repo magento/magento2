@@ -291,12 +291,10 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Error text');
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with(
-                [
-                    'messages' => ['Error text'],
-                    'error' => true,
-                ]
-            )
+            ->with([
+                'messages' => ['Error text'],
+                'error' => true,
+            ])
             ->willReturnSelf();
     }
 
@@ -342,12 +340,10 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->resultJson
             ->expects($this->once())
             ->method('setData')
-            ->with(
-                [
-                    'messages' => [__('Please correct the data sent.')],
-                    'error' => true,
-                ]
-            )
+            ->with([
+                'messages' => [__('Please correct the data sent.')],
+                'error' => true,
+            ])
             ->willReturnSelf();
         $this->assertSame($this->resultJson, $this->controller->execute());
     }
@@ -370,7 +366,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->with($this->customerData)
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addErrorMessage')
+            ->method('addError')
             ->with('[Customer ID: 12] Exception message');
         $this->logger->expects($this->once())
             ->method('critical')
@@ -398,7 +394,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->with($this->customerData)
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addErrorMessage')
+            ->method('addError')
             ->with('[Customer ID: 12] We can\'t save the customer.');
         $this->logger->expects($this->once())
             ->method('critical')

@@ -128,12 +128,10 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
 
         $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
-            return $resultJson->setData(
-                [
-                    'messages' => [__('Please correct the data sent.')],
-                    'error' => true,
-                ]
-            );
+            return $resultJson->setData([
+                'messages' => [__('Please correct the data sent.')],
+                'error' => true,
+            ]);
         }
 
         foreach (array_keys($postItems) as $customerId) {
@@ -149,12 +147,10 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             $this->getEmailNotification()->credentialsChanged($this->getCustomer(), $currentCustomer->getEmail());
         }
 
-        return $resultJson->setData(
-            [
-                'messages' => $this->getErrorMessages(),
-                'error' => $this->isErrorExists()
-            ]
-        );
+        return $resultJson->setData([
+            'messages' => $this->getErrorMessages(),
+            'error' => $this->isErrorExists()
+        ]);
     }
 
     /**
@@ -238,13 +234,13 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             $this->disableAddressValidation($customer);
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
-            $this->getMessageManager()->addErrorMessage($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
             $this->logger->critical($e);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getMessageManager()->addErrorMessage($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
             $this->logger->critical($e);
         } catch (\Exception $e) {
-            $this->getMessageManager()->addErrorMessage($this->getErrorWithCustomerId('We can\'t save the customer.'));
+            $this->getMessageManager()->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
             $this->logger->critical($e);
         }
     }

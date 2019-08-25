@@ -24,9 +24,7 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Confirm
-    extends \Magento\Customer\Controller\AbstractAccount
-    implements \Magento\Framework\App\Action\Action\ActionInterface
+class Confirm extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -153,9 +151,7 @@ class Confirm
             $customerId = $this->getRequest()->getParam('id', false);
             $key = $this->getRequest()->getParam('key', false);
             if (empty($customerId) || empty($key)) {
-                $this->messageManager->addErrorMessage(__('Bad request.'));
-                $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
-                return $resultRedirect->setUrl($this->_redirect->error($url));
+                throw new \Exception(__('Bad request.'));
             }
 
             // log in and send greeting email
@@ -167,13 +163,13 @@ class Confirm
                 $metadata->setPath('/');
                 $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
             }
-            $this->messageManager->addSuccessMessage($this->getSuccessMessage());
+            $this->messageManager->addSuccess($this->getSuccessMessage());
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
         } catch (StateException $e) {
-            $this->messageManager->addExceptionMessage($e, __('This confirmation key is invalid or has expired.'));
+            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('There was an error confirming the account'));
+            $this->messageManager->addException($e, __('There was an error confirming the account'));
         }
 
         $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);

@@ -44,9 +44,7 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index impleme
                 \Magento\Customer\Model\AccountManagement::EMAIL_REMINDER,
                 $customer->getWebsiteId()
             );
-            $this->messageManager->addSuccessMessage(
-                __('The customer will receive an email with a link to reset password.')
-            );
+            $this->messageManager->addSuccess(__('The customer will receive an email with a link to reset password.'));
         } catch (NoSuchEntityException $exception) {
             $resultRedirect->setPath('customer/index');
             return $resultRedirect;
@@ -59,7 +57,7 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index impleme
         } catch (SecurityViolationException $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Exception $exception) {
-            $this->messageManager->addExceptionMessage(
+            $this->messageManager->addException(
                 $exception,
                 __('Something went wrong while resetting customer password.')
             );

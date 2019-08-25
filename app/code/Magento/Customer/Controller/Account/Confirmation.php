@@ -1,5 +1,6 @@
 <?php
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,9 +15,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
-/**
- * Class Confirmation
- */
 class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
@@ -93,11 +91,11 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
                     $email,
                     $this->storeManager->getStore()->getWebsiteId()
                 );
-                $this->messageManager->addSuccessMessage(__('Please check your email for confirmation key.'));
+                $this->messageManager->addSuccess(__('Please check your email for confirmation key.'));
             } catch (InvalidTransitionException $e) {
-                $this->messageManager->addSuccessMessage(__('This email does not require confirmation.'));
+                $this->messageManager->addSuccess(__('This email does not require confirmation.'));
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Wrong email.'));
+                $this->messageManager->addException($e, __('Wrong email.'));
                 $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
                 return $resultRedirect;
             }

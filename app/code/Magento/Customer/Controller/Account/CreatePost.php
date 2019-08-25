@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
@@ -349,33 +351,34 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
             $confirmation = $this->getRequest()->getParam('password_confirmation');
             $redirectUrl = $this->session->getBeforeAuthUrl();
             $this->checkPasswordConfirmation($password, $confirmation);
+
+            $extensionAttributes = $customer->getExtensionAttributes();
+            $extensionAttributes->setIsSubscribed($this->getRequest()->getParam('is_subscribed', false));
+            $customer->setExtensionAttributes($extensionAttributes);
+
             $customer = $this->accountManagement
                 ->createAccount($customer, $password, $redirectUrl);
 
-            if ($this->getRequest()->getParam('is_subscribed', false)) {
-                $extensionAttributes = $customer->getExtensionAttributes();
-                $extensionAttributes->setIsSubscribed(true);
-                $customer->setExtensionAttributes($extensionAttributes);
-                $this->customerRepository->save($customer);
-            }
             $this->_eventManager->dispatch(
                 'customer_register_success',
                 ['account_controller' => $this, 'customer' => $customer]
             );
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
             if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
-                $this->messageManager->addComplexSuccessMessage(
-                    'confirmAccountSuccessMessage',
-                    [
-                        'url' => $this->customerUrl->getEmailConfirmationUrl($customer->getEmail()),
-                    ]
+                $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
+                // @codingStandardsIgnoreStart
+                $this->messageManager->addSuccess(
+                    __(
+                        'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
+                        $email
+                    )
                 );
-
+                // @codingStandardsIgnoreEnd
                 $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
                 $resultRedirect->setUrl($this->_redirect->success($url));
             } else {
                 $this->session->setCustomerDataAsLoggedIn($customer);
-                $this->messageManager->addSuccessMessage($this->getSuccessMessage());
+                $this->messageManager->addSuccess($this->getSuccessMessage());
                 $requestedRedirect = $this->accountRedirect->getRedirectCookie();
                 if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $requestedRedirect) {
                     $resultRedirect->setUrl($this->_redirect->success($requestedRedirect));
@@ -392,21 +395,23 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
 
             return $resultRedirect;
         } catch (StateException $e) {
-            $this->messageManager->addComplexErrorMessage(
-                'customerAlreadyExistsErrorMessage',
-                [
-                    'url' => $this->urlModel->getUrl('customer/account/forgotpassword'),
-                ]
+            $url = $this->urlModel->getUrl('customer/account/forgotpassword');
+            // @codingStandardsIgnoreStart
+            $message = __(
+                'There is already an account with this email address. If you are sure that it is your email address, <a href="%1">click here</a> to get your password and access your account.',
+                $url
             );
+            // @codingStandardsIgnoreEnd
+            $this->messageManager->addError($message);
         } catch (InputException $e) {
-            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             foreach ($e->getErrors() as $error) {
-                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($error->getMessage()));
+                $this->messageManager->addError($this->escaper->escapeHtml($error->getMessage()));
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('We can\'t save the customer.'));
+            $this->messageManager->addException($e, __('We can\'t save the customer.'));
         }
 
         $this->session->setCustomerFormData($this->getRequest()->getPostValue());
