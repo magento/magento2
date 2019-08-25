@@ -169,6 +169,11 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
         $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
 
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->requestSafety->isSafeMethod()) {
+            return $this;
+        }
+        
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
