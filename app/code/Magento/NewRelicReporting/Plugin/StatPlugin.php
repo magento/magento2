@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\NewRelicReporting\Plugin;
 
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
@@ -35,18 +36,26 @@ class StatPlugin
     private $logger;
 
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
      * @param LoggerInterface $logger
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Config $config,
         NewRelicWrapper $newRelicWrapper,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ManagerInterface $eventManager
     ) {
         $this->config = $config;
         $this->newRelicWrapper = $newRelicWrapper;
         $this->logger = $logger;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -75,6 +84,8 @@ class StatPlugin
     /**
      * Before stopping original profiler, close NewRelic transaction
      *
+     * @TODO Replace with direct call to newRelicWrapper->endTransaction() in 2.4-dev branch
+     *
      * @param Stat $schedule
      * @param array $args
      * @return array
@@ -83,7 +94,7 @@ class StatPlugin
      */
     public function beforeStop(Stat $schedule, ...$args): array
     {
-        $this->newRelicWrapper->endTransaction();
+        $this->eventManager->dispatch('newrelic_end_transaction');
 
         return $args;
     }

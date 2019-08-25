@@ -83,6 +83,7 @@ class NewRelicWrapper
     /**
      * Wrapper for 'newrelic_end_transaction'
      * Cannot be public in 2.3-dev due to Backward Compatibility
+     *
      * @see https://devdocs.magento.com/guides/v2.3/contributor-guide/backward-compatible-development/
      * @TODO Make it public in 2.4-dev branch.
      *
