@@ -474,7 +474,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      * @return MessageInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getMessageManagerSuccessMessage(): MessageInterface
+    private function getMessageManagerSuccessMessage(): MessageInterface
     {
         if ($this->addressHelper->isVatValidationEnabled()) {
             if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
