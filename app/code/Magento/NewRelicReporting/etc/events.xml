@@ -10,4 +10,7 @@
         <observer name="newrelicreporting_observer_report_sales_order_place" instance="Magento\NewRelicReporting\Model\Observer\ReportOrderPlaced" />
         <observer name="newrelicreporting_newrelic_report_sales_order_place" instance="Magento\NewRelicReporting\Model\Observer\ReportOrderPlacedToNewRelic" />
     </event>
+    <event name="newrelic_end_transaction">
+        <observer name="newrelicreporting_observer_newrelic_end_transaction" instance="Magento\NewRelicReporting\Observer\NewrelicEndTransactionObserver" />
+    </event>
 </config>
