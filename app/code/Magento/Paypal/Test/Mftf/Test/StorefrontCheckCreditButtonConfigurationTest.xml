@@ -16,6 +16,7 @@
             <description value="Admin is able to customize Credit button"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-10900"/>
+            <group value="paypal"/>
             <skip>
                 <issueId value="DEVOPS-3311"/>
             </skip>

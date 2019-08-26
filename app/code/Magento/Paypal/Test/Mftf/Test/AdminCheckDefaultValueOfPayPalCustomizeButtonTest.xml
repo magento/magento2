@@ -16,6 +16,7 @@
             <description value="Default value of Paypal Customize Button should be NO"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-10904"/>
+            <group value="paypal"/>
             <skip>
                 <issueId value="DEVOPS-3311"/>
             </skip>
