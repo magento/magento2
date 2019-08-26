@@ -90,7 +90,9 @@ class RefundTransactionStrategyCommand implements CommandInterface
     {
         if ($details['transaction']['transactionStatus'] === 'capturedPendingSettlement') {
             if ((float) $details['transaction']['authAmount'] !== (float) $commandSubject['amount']) {
-                throw new CommandException(__('Transaction has not been settled yet, partial void is not available.'));
+                throw new CommandException(
+                    __('The transaction has not been settled, a partial refund is not yet available.')
+                );
             }
 
             return true;

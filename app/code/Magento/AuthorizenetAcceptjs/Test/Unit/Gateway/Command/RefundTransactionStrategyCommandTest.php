@@ -100,7 +100,7 @@ class RefundTransactionStrategyCommandTest extends TestCase
 
     /**
      * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage Transaction has not been settled yet, partial void is not available.
+     * @expectedExceptionMessage The transaction has not been settled, a partial refund is not yet available.
      */
     public function testCommandWillThrowExceptionWhenVoidTransactionIsPartial()
     {
