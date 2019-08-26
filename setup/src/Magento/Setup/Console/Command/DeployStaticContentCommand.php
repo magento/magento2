@@ -5,21 +5,21 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Deploy\Console\InputValidator;
 use Magento\Deploy\Console\ConsoleLoggerFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
+use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Service\DeployStaticContent;
+use Magento\Framework\App\Cache;
+use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\Cache;
-use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Deploy\Service\DeployStaticContent;
 
 /**
  * Deploy static content command
@@ -99,7 +99,8 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * Configuration for static content deploy
+     *
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -113,7 +114,7 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \InvalidArgumentException
      * @throws LocalizedException
      */
@@ -121,7 +122,9 @@ class DeployStaticContentCommand extends Command
     {
         $time = microtime(true);
 
-        if (!$input->getOption(Options::FORCE_RUN) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
+        if (!$input->getOption(Options::FORCE_RUN)
+            && $this->getAppState()->getMode() !== State::MODE_PRODUCTION
+        ) {
             throw new LocalizedException(
                 __(
                     'NOTE: Manual static content deployment is not required in "default" and "developer" modes.'
@@ -150,10 +153,10 @@ class DeployStaticContentCommand extends Command
         $this->mockCache();
 
         /** @var DeployStaticContent $deployService */
-        $deployService = $this->objectManager->create(DeployStaticContent::class, [
-            'logger' => $logger
-        ]);
-
+        $deployService = $this->objectManager->create(
+            DeployStaticContent::class,
+            ['logger' => $logger]
+        );
 
         if ($this->isDeletePreviousDeploy($options)) {
             $logger->warning("Erasing previous static files...");
@@ -176,14 +179,18 @@ class DeployStaticContentCommand extends Command
      */
     private function mockCache()
     {
-        $this->objectManager->configure([
-            'preferences' => [
-                Cache::class => DummyCache::class
+        $this->objectManager->configure(
+            [
+                'preferences' => [
+                    Cache::class => DummyCache::class
+                ]
             ]
-        ]);
+        );
     }
 
     /**
+     * Gets App State
+     *
      * @return State
      */
     private function getAppState()

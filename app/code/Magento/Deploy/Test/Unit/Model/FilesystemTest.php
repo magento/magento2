@@ -76,6 +76,13 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
+        $localeList = [
+            'fr_FR' => 'France',
+            'de_DE' => 'Germany',
+            'nl_NL' => 'Netherlands',
+            'en_US' => 'USA',
+        ];
+
         $this->storeView = $this->getMockBuilder(StoreView::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -104,13 +111,8 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $lists->method('getLocaleList')
-            ->willReturn([
-                'fr_FR' => 'France',
-                'de_DE' => 'Germany',
-                'nl_NL' => 'Netherlands',
-                'en_US' => 'USA',
-            ]);
+        $lists->method('getLocaleList')->willReturn($localeList);
+
         $locale = $objectManager->getObject(Locale::class, ['lists' => $lists]);
 
         $this->deployFilesystem = $objectManager->getObject(
