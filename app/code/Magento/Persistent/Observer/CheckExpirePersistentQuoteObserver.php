@@ -9,6 +9,9 @@ declare(strict_types=1);
 namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -78,6 +81,11 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private $quote;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
@@ -85,6 +93,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\RequestInterface $request
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -93,7 +102,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request,
+        CartRepositoryInterface $quoteRepository
     ) {
         $this->_persistentSession = $persistentSession;
         $this->quoteManager = $quoteManager;
@@ -102,6 +112,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         $this->_eventManager = $eventManager;
         $this->_persistentData = $persistentData;
         $this->request = $request;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -146,7 +157,9 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private function isPersistentQuoteOutdated(): bool
     {
         if (!$this->_persistentData->isEnabled() && !$this->_customerSession->isLoggedIn()
-            && $this->_checkoutSession->getQuoteId()) {
+            && $this->_checkoutSession->getQuoteId()
+            && $this->isActiveQuote()
+        ) {
             return (bool)$this->getQuote()->getIsPersistent();
         }
         return false;
@@ -173,6 +186,21 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->quote = $this->_checkoutSession->getQuote();
         }
         return $this->quote;
+    }
+
+    /**
+     * Check if quote is active.
+     *
+     * @return bool
+     */
+    private function isActiveQuote(): bool
+    {
+        try {
+            $this->quoteRepository->getActive($this->_checkoutSession->getQuoteId());
+            return true;
+        } catch (NoSuchEntityException $e) {
+            return false;
+        }
     }
 
     /**
