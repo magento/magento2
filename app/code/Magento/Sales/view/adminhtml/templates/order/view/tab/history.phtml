@@ -4,25 +4,24 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var \Magento\Sales\Block\Adminhtml\Order\View\Tab\History $block */
 ?>
 <section class="admin__page-section edit-order-comments">
     <ul class="note-list">
-    <?php foreach ($block->getFullHistory() as $_item): ?>
+    <?php foreach ($block->getFullHistory() as $_item) : ?>
         <li class="note-list-item">
-            <span class="note-list-date"><?= /* @escapeNotVerified */ $block->getItemCreatedAt($_item) ?></span>
-            <span class="note-list-time"><?= /* @escapeNotVerified */ $block->getItemCreatedAt($_item, 'time') ?></span>
-            <span class="note-list-status"><?= /* @escapeNotVerified */ $block->getItemTitle($_item) ?></span>
-            <?php if ($block->isItemNotified($_item, false)): ?>
+            <span class="note-list-date"><?= /* @noEscape */ $block->getItemCreatedAt($_item) ?></span>
+            <span class="note-list-time"><?= /* @noEscape */ $block->getItemCreatedAt($_item, 'time') ?></span>
+            <span class="note-list-status"><?= /* @noEscape */ $block->getItemTitle($_item) ?></span>
+            <?php if ($block->isItemNotified($_item, false)) : ?>
                 <span class="note-list-customer">
-                    <?= /* @escapeNotVerified */ __('Customer') ?>
-                    <?php if ($block->isCustomerNotificationNotApplicable($_item)): ?>
-                        <span class="note-list-customer-notapplicable"><?= /* @escapeNotVerified */ __('Notification Not Applicable') ?></span>
-                    <?php elseif ($block->isItemNotified($_item)): ?>
-                        <span class="note-list-customer-notified"><?= /* @escapeNotVerified */ __('Notified') ?></span>
-                    <?php else: ?>
-                        <span class="note-list-customer-not-notified"><?= /* @escapeNotVerified */ __('Not Notified') ?></span>
+                    <?= $block->escapeHtml(__('Customer')) ?>
+                    <?php if ($block->isCustomerNotificationNotApplicable($_item)) : ?>
+                        <span class="note-list-customer-notapplicable"><?= $block->escapeHtml(__('Notification Not Applicable')) ?></span>
+                    <?php elseif ($block->isItemNotified($_item)) : ?>
+                        <span class="note-list-customer-notified"><?= $block->escapeHtml(__('Notified')) ?></span>
+                    <?php else : ?>
+                        <span class="note-list-customer-not-notified"><?= $block->escapeHtml(__('Not Notified')) ?></span>
                     <?php endif; ?>
                 </span>
             <?php endif; ?>
@@ -31,18 +30,18 @@
     </ul>
     <div class="edit-order-comments-block">
         <div class="edit-order-comments-block-title">
-            <?= /* @escapeNotVerified */ __('Notes for this Order') ?>
+            <?= $block->escapeHtml(__('Notes for this Order')) ?>
         </div>
-        <?php foreach ($block->getFullHistory() as $_item): ?>
-            <?php if ($_comment = $block->getItemComment($_item)): ?>
+        <?php foreach ($block->getFullHistory() as $_item) : ?>
+            <?php if ($_comment = $block->getItemComment($_item)) : ?>
                 <div class="comments-block-item">
                     <div class="comments-block-item-comment">
-                        <?= /* @escapeNotVerified */ $_comment ?>
+                        <?= /* @noEscape */ $_comment ?>
                     </div>
                     <span class="comments-block-item-date-time">
-                        <?= /* @escapeNotVerified */ __('Comment added') ?>
-                        <?= /* @escapeNotVerified */ $block->getItemCreatedAt($_item) ?>
-                        <?= /* @escapeNotVerified */ $block->getItemCreatedAt($_item, 'time') ?>
+                        <?= $block->escapeHtml(__('Comment added')) ?>
+                        <?= /* @noEscape */ $block->getItemCreatedAt($_item) ?>
+                        <?= /* @noEscape */ $block->getItemCreatedAt($_item, 'time') ?>
                     </span>
                 </div>
             <?php endif; ?>

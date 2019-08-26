@@ -26,7 +26,7 @@
                        data-toggle="trigger"
                        href="#<?= $block->escapeUrl($alias) ?>"
                        id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title">
-                        <?= $block->escapeHtml($label) ?>
+                        <?= /* @noEscape */ $label ?>
                     </a>
                 </div>
                 <div class="data item content"

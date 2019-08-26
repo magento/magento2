@@ -182,10 +182,6 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
                 </field>
-                <field id="move_inline_to_bottom" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Move JS code to the bottom of the page</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>CSS Settings</label>
@@ -540,7 +536,7 @@
                     <label>Enable HTTP Strict Transport Security (HSTS)</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
-                    <comment><![CDATA[See <a href="https://www.owasp.org/index.php/HTTP_Strict_Transport_Security" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
+                    <comment><![CDATA[See <a href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
                     <depends>
                         <field id="use_in_frontend">1</field>
                         <field id="use_in_adminhtml">1</field>

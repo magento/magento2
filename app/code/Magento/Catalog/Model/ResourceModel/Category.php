@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Catalog\Setup\CategorySetup;
@@ -105,6 +106,7 @@ class Category extends AbstractResource
      * @param Processor $indexerProcessor
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -128,7 +130,7 @@ class Category extends AbstractResource
         $this->_eventManager = $eventManager;
         $this->connectionName  = 'catalog';
         $this->indexerProcessor = $indexerProcessor;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
@@ -1029,7 +1031,7 @@ class Category extends AbstractResource
         if ($afterCategoryId) {
             $select = $connection->select()->from($table, 'position')->where('entity_id = :entity_id');
             $position = $connection->fetchOne($select, ['entity_id' => $afterCategoryId]);
-            $position += 1;
+            $position++;
         } else {
             $position = 1;
         }

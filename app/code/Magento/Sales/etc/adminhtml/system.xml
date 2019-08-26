@@ -92,6 +92,7 @@
                 </field>
                 <field id="amount" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Amount</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
                     <comment>Subtotal after discount</comment>
                 </field>
                 <field id="include_discount_amount" translate="label" sortOrder="12" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
@@ -135,6 +136,7 @@
                 <label>Orders Cron Settings</label>
                 <field id="delete_pending_after" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Pending Payment Order Lifetime (minutes)</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
                 </field>
             </group>
         </section>
@@ -181,6 +183,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Order Email Copy Method</label>
@@ -210,6 +213,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Comment Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Order Comments Email Copy Method</label>
@@ -239,6 +243,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Invoice Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Invoice Email Copy Method</label>
@@ -268,6 +273,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Invoice Comment Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Invoice Comments Email Copy Method</label>
@@ -297,6 +303,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Shipment Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Shipment Email Copy Method</label>
@@ -326,6 +333,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Shipment Comment Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Shipment Comments Email Copy Method</label>
@@ -355,6 +363,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Credit Memo Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Credit Memo Email Copy Method</label>
@@ -384,6 +393,7 @@
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Credit Memo Comment Email Copy To</label>
                     <comment>Comma-separated</comment>
+                    <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Credit Memo Comments Email Copy Method</label>

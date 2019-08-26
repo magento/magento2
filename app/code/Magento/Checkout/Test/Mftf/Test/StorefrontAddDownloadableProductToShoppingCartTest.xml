@@ -19,6 +19,7 @@
 
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
             <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createDownloadableProduct"/>

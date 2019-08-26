@@ -17,5 +17,6 @@
         <element name="productGridNameProduct" type="text" selector="//table[@id='catalog_category_products_table']//td[contains(., '{{productName}}')]" parameterized="true"/>
         <element name="productVisibility" type="select" selector="//*[@name='product[visibility]']"/>
         <element name="productSelectAll" type="checkbox" selector="input.admin__control-checkbox"/>
+        <element name="productsGridEmpty" type="text" selector="#catalog_category_products_table .data-grid-tr-no-data .empty-text"/>
     </section>
 </sections>
