@@ -301,7 +301,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 //Removing html
                 $contentsWithoutHtml = '';
                 preg_replace_callback(
-                    '~(<\?php\s+.*\?>)~sU',
+                    '~(<\?(php|=)\s+.*\?>)~sU',
                     function ($matches) use ($contents, &$contentsWithoutHtml) {
                         $contentsWithoutHtml .= $matches[1];
                         return $contents;
