@@ -117,12 +117,14 @@ class FieldMetaReader
     /**
      * Get the argumentMetaType result array
      *
-     * @param  array $typeMeta
-     * @param  array $argumentMeta
+     * @param array $typeMeta
+     * @param array $argumentMeta
      * @return array
      */
-    private function argumentMetaType($typeMeta, $argumentMeta)
-    {
+    private function argumentMetaType(
+        \GraphQL\Type\Definition\InputType $typeMeta,
+        \GraphQL\Type\Definition\FieldArgument $argumentMeta
+    ) {
         $argumentName = $argumentMeta->name;
         $result['arguments'][$argumentName] = [
             'name' => $argumentName,
