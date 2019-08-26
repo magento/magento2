@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Framework\Api\CustomAttributesDataInterface;
@@ -21,6 +22,19 @@ class LayoutUpdate extends AbstractSource implements SpecificSourceInterface
      * @var string[]
      */
     private $optionsText;
+
+    /**
+     * @var LayoutUpdateManager
+     */
+    private $manager;
+
+    /**
+     * @param LayoutUpdateManager $manager
+     */
+    public function __construct(LayoutUpdateManager $manager)
+    {
+        $this->manager = $manager;
+    }
 
     /**
      * @inheritDoc
@@ -52,6 +66,16 @@ class LayoutUpdate extends AbstractSource implements SpecificSourceInterface
     public function getOptionsFor(CustomAttributesDataInterface $entity): array
     {
         $options = $this->getAllOptions();
+        if ($entity->getCustomAttribute('custom_layout_update')) {
+            $existingValue = '__existing__';
+            $existingLabel = 'Use existing';
+            $options[] = ['label' => $existingLabel, 'value' => $existingValue];
+            $this->optionsText[$existingValue] = $existingLabel;
+        }
+        foreach ($this->manager->fetchAvailableFiles($entity) as $handle) {
+            $options[] = ['label' => $handle, 'value' => $handle];
+            $this->optionsText[$handle] = $handle;
+        }
 
         return $options;
     }
