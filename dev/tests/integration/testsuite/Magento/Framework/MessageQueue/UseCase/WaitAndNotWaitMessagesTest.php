@@ -67,8 +67,8 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     {
         $this->assertArraySubset(['queue' => ['consumers_wait_for_messages' => 1]], $this->config);
 
-        foreach ($this->messages as $msg) {
-            $this->publishMessage($msg);
+        foreach ($this->messages as $message) {
+            $this->publishMessage($message);
         }
 
         $this->waitForAsynchronousResult(count($this->messages), $this->logFilePath);
@@ -94,8 +94,8 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         $this->writeConfig($config);
 
         $this->assertArraySubset(['queue' => ['consumers_wait_for_messages' => 0]], $this->loadConfig());
-        foreach ($this->messages as $msg) {
-            $this->publishMessage($msg);
+        foreach ($this->messages as $message) {
+            $this->publishMessage($message);
         }
 
         $this->publisherConsumerController->startConsumers();
@@ -113,11 +113,11 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     }
 
     /**
-     * @param string $msg
+     * @param string $message
      */
-    private function publishMessage(string $msg): void
+    private function publishMessage(string $message): void
     {
-        $this->msgObject->setValue($msg);
+        $this->msgObject->setValue($message);
         $this->msgObject->setTextFilePath($this->logFilePath);
         $this->publisher->publish('multi.topic.queue.topic.c', $this->msgObject);
     }
