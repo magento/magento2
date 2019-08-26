@@ -64,7 +64,7 @@
     * [magento/magento2#22559](https://github.com/magento/magento2/pull/22559) -- Fix MySQL syntax error on indexation with certain attribute codes (by @Beagon)
     * [magento/magento2#21748](https://github.com/magento/magento2/pull/21748) -- [Backport] Custom option type select - Allow modify list of single selection option types (by @ihor-sviziev)
     * [magento/magento2#22799](https://github.com/magento/magento2/pull/22799) -- Disable Travis builds - 2.2-develop (by @okorshenko)
-    * [magento/magento2#22801](https://github.com/magento/magento2/pull/22801) -- [Backport] #21473: Form element validation is not triggered when validation rules (by @amol2jcommerce)
+    * [magento/magento2#22801](https://github.com/magento/magento2/pull/22801) -- [Backport] #21473: Form element validation is not triggered when validation rules  (by @amol2jcommerce)
     * [magento/magento2#22836](https://github.com/magento/magento2/pull/22836) -- [Backport] Fixed:#22395 (by @shikhamis11)
     * [magento/magento2#22557](https://github.com/magento/magento2/pull/22557) -- [Backport] Fix the invalid currency error in credit card payment of PayPal Payflow Pro or Payments Pro (by @niravkrish)
     * [magento/magento2#22907](https://github.com/magento/magento2/pull/22907) -- [Backport] 404 not found form validation url when updating quantity in cart page (by @maheshWebkul721)
