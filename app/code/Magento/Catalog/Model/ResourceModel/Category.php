@@ -278,7 +278,7 @@ class Category extends AbstractResource
             if ($object->getPosition() === null) {
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             }
-            $path = explode('/', $object->getPath());
+            $path = explode('/', (string)$object->getPath());
             $level = count($path)  - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
@@ -317,7 +317,7 @@ class Category extends AbstractResource
         /**
          * Add identifier for new category
          */
-        if (substr($object->getPath(), -1) == '/') {
+        if (substr((string)$object->getPath(), -1) == '/') {
             $object->setPath($object->getPath() . $object->getId());
             $this->_savePath($object);
         }
