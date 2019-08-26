@@ -95,7 +95,7 @@ QUERY;
     }
 
     /**
-     * Advanced Search which uses product attribute to filter out the results
+     * Filter products using custom attribute of input type select(dropdown) and filterTypeInput eq
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -105,7 +105,42 @@ QUERY;
         CacheCleaner::cleanAll();
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
-        $query = $this->getQueryProductsWithCustomAttribute($attributeCode, $optionValue);
+        $query = <<<QUERY
+{
+  products(filter:{                   
+                   $attributeCode: {eq: "{$optionValue}"}
+                   }
+                   pageSize: 3
+                   currentPage: 1
+       )
+  {
+  total_count
+    items 
+     {
+      name
+      sku
+      }
+    page_info{
+      current_page
+      page_size
+      total_pages
+    }
+    filters{
+      name
+      request_var
+      filter_items_count 
+      filter_items{
+        label
+        items_count
+        value_string
+        __typename
+      }
+       
+    }    
+      
+    } 
+}
+QUERY;
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -150,6 +185,67 @@ QUERY;
                  ],
             ]
         );
+    }
+    /**
+     * Filter products using custom attribute of input type select(dropdown) and filterTypeInput eq
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_with_multiselect_attribute.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testFilterProductsByMultiSelectCustomAttribute()
+    {
+        CacheCleaner::cleanAll();
+        $attributeCode = 'multiselect_attribute';
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
+        /** @var AttributeOptionInterface[] $options */
+        $options = $attribute->getOptions();
+        array_shift($options);
+        $optionValues = array();
+        for ($i = 0; $i < count($options); $i++) {
+            $optionValues[] = $options[$i]->getValue();
+        }
+        $query = <<<QUERY
+{
+  products(filter:{                   
+                   $attributeCode: {in:["{$optionValues[0]}", "{$optionValues[1]}", "{$optionValues[2]}"]} 
+                   }
+                   pageSize: 3
+                   currentPage: 1
+       )
+  {
+  total_count
+    items 
+     {
+      name
+      sku
+      }
+    page_info{
+      current_page
+      page_size
+      total_pages
+    }
+    filters{
+      name
+      request_var
+      filter_items_count 
+      filter_items{
+        label
+        items_count
+        value_string
+        __typename
+      }
+       
+    }    
+      
+    } 
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(3, $response['products']['total_count']);
+        $this->assertNotEmpty($response['products']['filters']);
     }
 
     /**
@@ -462,7 +558,7 @@ QUERY;
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = Bootstrap::getObjectManager()->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $outOfStockChildProduct = $productRepository->get('simple_30');
-        // Set another child product from 2nd Configurable product with  attribute option1 to OOS
+        // All child variations with this attribute are now set to Out of Stock
         $outOfStockChildProduct->setStockData(
             ['use_config_manage_stock' => 1,
                 'qty' => 0,
@@ -784,18 +880,17 @@ QUERY;
     products(
         filter:
         {
-            price:{gt: "5", lt: "50"}
-            or:
-            {
-              sku:{like:"simple%"}
-              name:{like:"simple%"}
-             }
+            price:{to :"50"}            
+            sku:{like:"simple%"}
+            name:{like:"simple%"}
+             
         }
          pageSize:4
          currentPage:1
          sort:
          {
           price:ASC
+          name:ASC
          }
     )
     {
@@ -1062,7 +1157,7 @@ QUERY;
   products(
         filter:
         {
-           sku:{like:"%simple%"}
+           sku:{like:"simple%"}
         }
          sort:
          {
@@ -1109,7 +1204,6 @@ QUERY;
         $this->assertEquals(20, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
     }
-
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
