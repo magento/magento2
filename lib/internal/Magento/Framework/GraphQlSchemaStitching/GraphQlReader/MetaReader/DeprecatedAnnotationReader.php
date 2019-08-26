@@ -20,16 +20,16 @@ class DeprecatedAnnotationReader
      */
     public function read(\GraphQL\Language\AST\NodeList $directives) : array
     {
-        $argMap = [];
+        $argumentsMap = [];
         foreach ($directives as $directive) {
             if ($directive->name->value == 'deprecated') {
                 foreach ($directive->arguments as $directiveArgument) {
                     if ($directiveArgument->name->value == 'reason') {
-                        $argMap = ["reason" => $directiveArgument->value->value];
+                        $argumentsMap = ["reason" => $directiveArgument->value->value];
                     }
                 }
             }
         }
-        return $argMap;
+        return $argumentsMap;
     }
 }

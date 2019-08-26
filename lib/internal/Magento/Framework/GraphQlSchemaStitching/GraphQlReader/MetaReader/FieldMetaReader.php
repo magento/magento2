@@ -99,12 +99,7 @@ class FieldMetaReader
                 $result['arguments'][$argumentName]['defaultValue'] = $argumentMeta->defaultValue;
             }
             $typeMeta = $argumentMeta->getType();
-
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-            $result['arguments'][$argumentName]  = array_merge(
-                $result['arguments'][$argumentName],
-                $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
-            );
+            $result['arguments'][$argumentName] = $this->argumentMetaType($typeMeta, $argumentMeta);
 
             if ($this->docReader->read($argumentMeta->astNode->directives)) {
                 $result['arguments'][$argumentName]['description'] =
@@ -117,6 +112,27 @@ class FieldMetaReader
             }
         }
         return $result;
+    }
+
+    /**
+     * Get the argumentMetaType result array
+     *
+     * @param  array $typeMeta
+     * @param  array $argumentMeta
+     * @return array
+     */
+    private function argumentMetaType($typeMeta, $argumentMeta)
+    {
+        $argumentName = $argumentMeta->name;
+        $result['arguments'][$argumentName] = [
+            'name' => $argumentName,
+        ];
+        $result['arguments'][$argumentName]  = array_merge(
+            $result['arguments'][$argumentName],
+            $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
+        );
+
+        return $result['arguments'][$argumentName];
     }
 
     /**
