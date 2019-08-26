@@ -37,6 +37,7 @@ class GetRootCategoryId
 
     /**
      * Get Root Category Id
+     *
      * @return int
      * @throws LocalizedException
      */
@@ -53,4 +54,3 @@ class GetRootCategoryId
         return $this->rootCategoryId;
     }
 }
-
