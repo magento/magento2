@@ -15,20 +15,15 @@ use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
-use Magento\Framework\View\File;
-use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\View\Result\Page as PageLayout;
+use Magento\Framework\View\Model\Layout\Merge as LayoutProcessor;
+use Magento\Framework\View\Model\Layout\MergeFactory as LayoutProcessorFactory;
 
 /**
  * @inheritDoc
  */
 class CustomLayoutManager implements CustomLayoutManagerInterface
 {
-    /**
-     * @var CollectorInterface
-     */
-    private $fileCollector;
-
     /**
      * @var FlyweightFactory
      */
@@ -45,21 +40,31 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
     private $pageRepository;
 
     /**
-     * @param CollectorInterface $fileCollector
+     * @var LayoutProcessorFactory
+     */
+    private $layoutProcessorFactory;
+
+    /**
+     * @var LayoutProcessor|null
+     */
+    private $layoutProcessor;
+
+    /**
      * @param FlyweightFactory $themeFactory
      * @param DesignInterface $design
      * @param PageRepositoryInterface $pageRepository
+     * @param LayoutProcessorFactory $layoutProcessorFactory
      */
     public function __construct(
-        CollectorInterface $fileCollector,
         FlyweightFactory $themeFactory,
         DesignInterface $design,
-        PageRepositoryInterface $pageRepository
+        PageRepositoryInterface $pageRepository,
+        LayoutProcessorFactory $layoutProcessorFactory
     ) {
-        $this->fileCollector = $fileCollector;
         $this->themeFactory = $themeFactory;
         $this->design = $design;
         $this->pageRepository = $pageRepository;
+        $this->layoutProcessorFactory = $layoutProcessorFactory;
     }
 
     /**
@@ -74,22 +79,41 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
     }
 
     /**
+     * Get the processor instance.
+     *
+     * @return LayoutProcessor
+     */
+    private function getLayoutProcessor(): LayoutProcessor
+    {
+        if (!$this->layoutProcessor) {
+            $this->layoutProcessor = $this->layoutProcessorFactory->create(
+                [
+                    'theme' => $this->themeFactory->create(
+                        $this->design->getConfigurationDesignTheme(Area::AREA_FRONTEND)
+                    )
+                ]
+            );
+            $this->themeFactory = null;
+            $this->design = null;
+        }
+
+        return $this->layoutProcessor;
+    }
+
+    /**
      * @inheritDoc
      */
     public function fetchAvailableFiles(PageInterface $page): array
     {
         $identifier = $this->sanitizeIdentifier($page);
-        $layoutFiles = $this->fileCollector->getFiles(
-            $this->themeFactory->create($this->design->getConfigurationDesignTheme(Area::AREA_FRONTEND)),
-            'cms_page_view_selectable_' .$identifier .'_*.xml'
-        );
+        $handles = $this->getLayoutProcessor()->getAvailableHandles();
 
         return array_filter(
             array_map(
-                function (File $file) use ($identifier) : ?string {
+                function (string $handle) use ($identifier) : ?string {
                     preg_match(
-                        '/selectable\_' .preg_quote($identifier) .'\_([a-z0-9]+)/i',
-                        $file->getName(),
+                        '/^cms\_page\_view\_selectable\_' .preg_quote($identifier) .'\_([a-z0-9]+)/i',
+                        $handle,
                         $selectable
                     );
                     if (!empty($selectable[1])) {
@@ -98,7 +122,7 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
 
                     return null;
                 },
-                $layoutFiles
+                $handles
             )
         );
     }

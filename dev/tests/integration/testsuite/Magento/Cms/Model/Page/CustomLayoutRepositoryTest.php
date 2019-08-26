@@ -12,10 +12,10 @@ use Magento\Cms\Model\Page;
 use Magento\Cms\Model\PageFactory;
 use Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelected;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\View\Model\Layout\MergeFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\File\CollectorInterface;
-use Magento\Framework\View\File;
 
 /**
  * Test the repository.
@@ -38,20 +38,22 @@ class CustomLayoutRepositoryTest extends TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        //Mocking available list of files for the page.
-        $files = [
-            new File('cms_page_view_selectable_page100_select1.xml', 'test'),
-            new File('cms_page_view_selectable_page100_select2.xml', 'test')
-        ];
-        $fileCollector = $this->getMockForAbstractClass(CollectorInterface::class);
-        $fileCollector->method('getFiles')
-            ->willReturn($files);
 
+        //Mocking available list of files for the page.
+        $handles = [
+            'cms_page_view_selectable_page100_select1',
+            'cms_page_view_selectable_page100_select2'
+        ];
+        $processor = $this->getMockBuilder(Merge::class)->disableOriginalConstructor()->getMock();
+        $processor->method('getAvailableHandles')->willReturn($handles);
+        $processorFactory = $this->getMockBuilder(MergeFactory::class)->disableOriginalConstructor()->getMock();
+        $processorFactory->method('create')->willReturn($processor);
         $manager = $objectManager->create(
             CustomLayoutManagerInterface::class,
-            ['fileCollector' => $fileCollector]
+            ['layoutProcessorFactory' => $processorFactory]
         );
         $this->repo = $objectManager->create(CustomLayoutRepositoryInterface::class, ['manager' => $manager]);
+
         $this->pageFactory = $objectManager->get(PageFactory::class);
     }
 
