@@ -38,8 +38,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $jsonResponse = json_decode($responseBody, true);
-        $this->assertEmpty($jsonResponse['options']);
+        $this->assertContains('{"options":[],"total":0}', $responseBody);
     }
 
     /**
@@ -58,24 +57,6 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $jsonResponse = json_decode($responseBody, true);
-        $this->assertEquals(1, $jsonResponse['total']);
-        $this->assertCount(1, $jsonResponse['options']);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/multiple_mixed_products.php
-     */
-    public function testExecuteEnabledAndDisabledProducts() : void
-    {
-        $this->getRequest()
-            ->setPostValue('searchKey', 'simple')
-            ->setPostValue('page', 1)
-            ->setPostValue('limit', 50);
-        $this->dispatch('backend/catalog/product/search');
-        $responseBody = $this->getResponse()->getBody();
-        $jsonResponse = json_decode($responseBody, true);
-        $this->assertEquals(7, $jsonResponse['total']);
-        $this->assertCount(7, $jsonResponse['options']);
+        $this->assertContains('{"options":[],"total":0}', $responseBody);
     }
 }
