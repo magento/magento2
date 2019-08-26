@@ -9,11 +9,14 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Catalog\Setup\CategorySetup;
 
 /**
  * Resource model for category entity
@@ -1131,5 +1134,42 @@ class Category extends AbstractResource
                 ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
         }
         return $this->aggregateCount;
+    }
+
+    /**
+     * Get category with children.
+     *
+     * @param int $categoryId
+     * @return array
+     */
+    public function getCategoryWithChildren(int $categoryId): array
+    {
+        $connection = $this->getConnection();
+
+        $select = $connection->select()
+            ->from(
+                ['eav_attribute' => $this->getTable('eav_attribute')],
+                ['attribute_id']
+            )->where('entity_type_id = ?', CategorySetup::CATEGORY_ENTITY_TYPE_ID)
+            ->where('attribute_code = ?', 'is_anchor')
+            ->limit(1);
+        $attributeId = $connection->fetchRow($select);
+
+        $select = $connection->select()
+            ->from(
+                ['cce' => $this->getTable('catalog_category_entity')],
+                ['entity_id', 'parent_id', 'path']
+            )->join(
+                ['cce_int' => $this->getTable('catalog_category_entity_int')],
+                'cce.entity_id = cce_int.entity_id',
+                ['is_anchor' => 'cce_int.value']
+            )->where(
+                'cce_int.attribute_id = ?',
+                $attributeId['attribute_id']
+            )->where(
+                "cce.path LIKE '%/{$categoryId}' OR cce.path LIKE '%/{$categoryId}/%'"
+            )->order('path');
+
+        return $connection->fetchAll($select);
     }
 }

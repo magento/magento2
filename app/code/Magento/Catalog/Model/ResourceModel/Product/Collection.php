@@ -23,7 +23,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category;
 
 /**
  * Product collection
@@ -305,9 +305,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $urlFinder;
 
     /**
-     * @var CollectionFactory
+     * @var Category
      */
-    private $categoryCollectionFactory;
+    private $categoryResourceModel;
 
     /**
      * Collection constructor
@@ -337,7 +337,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
-     * @param CollectionFactory|null $categoryCollectionFactory
+     * @param Category|null $categoryResourceModel
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -367,7 +367,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
         DimensionFactory $dimensionFactory = null,
-        CollectionFactory $categoryCollectionFactory = null
+        Category $categoryResourceModel = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -401,8 +401,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
-        $this->categoryCollectionFactory = $categoryCollectionFactory ?: ObjectManager::getInstance()
-            ->get(CollectionFactory::class);
+        $this->categoryResourceModel = $categoryResourceModel ?: ObjectManager::getInstance()
+            ->get(Category::class);
     }
 
     /**
@@ -2104,18 +2104,23 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private function getChildrenCategories(int $categoryId): array
     {
         $categoryIds[] = $categoryId;
+        $anchorCategory = [];
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
-        $categoryCollection = $this->categoryCollectionFactory->create();
-        $categories = $categoryCollection
-            ->addAttributeToFilter(
-                ['is_anchor', 'path'],
-                [1, ['like' => $categoryId . '/%']]
-            )->getItems();
-        foreach ($categories as $category) {
-            $categoryChildren = $category->getChildren();
-            $categoryIds = array_merge($categoryIds, explode(',', $categoryChildren));
+        $categories = $this->categoryResourceModel->getCategoryWithChildren($categoryId);
+        $firstCategory = array_shift($categories);
+        if ($firstCategory['is_anchor'] == 1) {
+            $anchorCategory[] = (int)$firstCategory['entity_id'];
+            foreach ($categories as $category) {
+                if (in_array($category['parent_id'], $categoryIds)
+                    && in_array($category['parent_id'], $anchorCategory)) {
+                    $categoryIds[] = (int)$category['entity_id'];
+                    if ($category['is_anchor'] == 1) {
+                        $anchorCategory[] = (int)$category['entity_id'];
+                    }
+                }
+            }
         }
+
         return $categoryIds;
     }
 
