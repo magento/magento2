@@ -7,14 +7,14 @@
 namespace Magento\User\Model;
 
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\User\Api\Data\UserInterface;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
 use Magento\User\Model\Spi\NotificatorInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Admin user model
