@@ -184,6 +184,9 @@ class Creditmemo extends AbstractPdf
             }
             /* Add totals */
             $this->insertTotals($page, $creditmemo);
+            if ($creditmemo->getStoreId()) {
+                $this->_localeResolver->revert();
+            }
         }
         $this->_afterGetPdf();
         return $pdf;
