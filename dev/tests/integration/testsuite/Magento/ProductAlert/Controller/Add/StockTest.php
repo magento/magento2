@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Controller\Add;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Action\Action;
@@ -20,6 +21,7 @@ use Magento\TestFramework\TestCase\AbstractController;
  * Test for Magento\ProductAlert\Controller\Add\Stock class.
  *
  * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class StockTest extends AbstractController
 {
@@ -50,6 +52,11 @@ class StockTest extends AbstractController
      */
     protected $connectionMock;
 
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
     protected function setUp()
     {
         parent::setUp();
@@ -60,6 +67,7 @@ class StockTest extends AbstractController
 
         $this->resource = $this->objectManager->get(ResourceConnection::class);
         $this->connectionMock = $this->resource->getConnection();
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
     }
 
     /**
@@ -67,9 +75,9 @@ class StockTest extends AbstractController
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    public function testSubscribe()
+    public function testSubscribeStockNotification()
     {
-        $productId = 1;
+        $productId = $this->productRepository->get('simple-out-of-stock')->getId();
         $customerId = 1;
 
         $this->customerSession->setCustomerId($customerId);
@@ -81,17 +89,17 @@ class StockTest extends AbstractController
         $this->dispatch('productalert/add/stock');
 
         $select = $this->connectionMock->select()->from($this->resource->getTableName('product_alert_stock'))
-                                       ->where('`customer_id` LIKE ?', '1');
+                                       ->where('`product_id` LIKE ?', $productId);
         $result = $this->connectionMock->fetchAll($select);
         $this->assertCount(1, $result);
     }
 
     /**
-     * @param int $productId
+     * @param $productId
      *
      * @return string
      */
-    private function getUrlEncodedParameter(int $productId):string
+    private function getUrlEncodedParameter($productId):string
     {
         $baseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl();
         $encodedParameterValue = urlencode(

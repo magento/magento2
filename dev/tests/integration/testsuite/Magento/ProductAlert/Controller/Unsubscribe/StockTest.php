@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Url\Helper\Data;
 use Magento\Customer\Model\Session;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
@@ -18,6 +19,7 @@ use Magento\TestFramework\TestCase\AbstractController;
  * Test for Magento\ProductAlert\Controller\Unsubscribe\Stock class.
  *
  * @magentoAppIsolation enabled
+ * @magentoDbIsolation  enabled
  */
 class StockTest extends AbstractController
 {
@@ -39,9 +41,14 @@ class StockTest extends AbstractController
     /**
      * Connection adapter
      *
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $connectionMock;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
 
     protected function setUp()
     {
@@ -50,6 +57,7 @@ class StockTest extends AbstractController
         $this->customerSession = $this->objectManager->get(Session::class);
         $this->resource = $this->objectManager->get(ResourceConnection::class);
         $this->connectionMock = $this->resource->getConnection();
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
     }
 
     /**
@@ -58,18 +66,18 @@ class StockTest extends AbstractController
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/ProductAlert/_files/customer_unsubscribe_stock.php
      */
-    public function testSubscribe()
+    public function testUnsubscribeStockNotification()
     {
-        $productId = 1;
         $customerId = 1;
+        $productId = $this->productRepository->get('simple-out-of-stock')->getId();
 
         $this->customerSession->setCustomerId($customerId);
-        $select = $this->connectionMock->select()->from($this->resource->getTableName('product_alert_stock'))
-                                       ->where('`customer_id` LIKE ?', $customerId);
 
         $this->getRequest()->setPostValue('product', $productId)->setMethod('POST');
         $this->dispatch('productalert/unsubscribe/stock');
 
+        $select = $this->connectionMock->select()->from($this->resource->getTableName('product_alert_stock'))
+                                       ->where('`product_id` LIKE ?', $productId);
         $result = $this->connectionMock->fetchAll($select);
         $this->assertCount(0, $result);
     }
