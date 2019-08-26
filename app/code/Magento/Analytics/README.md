@@ -4,10 +4,10 @@ The Magento_Analytics module integrates your Magento instance with the [Magento 
 
 The module implements the following functionality:
 
-- Enabling subscription to the MBI and automatic re-subscription
+- Enabling subscription to Magento Business Intelligence (MBI) and automatic re-subscription
 - Changing the base URL with the same MBI account remained
 - Declaring the configuration schemas for report data collection
-- Collecting the Magento instance data as reports for the MBI
+- Collecting the Magento instance data as reports for MBI
 - Introducing API that provides the collected data
 - Extending Magento configuration with the module parameters:
     - Subscription status (enabled/disabled)
