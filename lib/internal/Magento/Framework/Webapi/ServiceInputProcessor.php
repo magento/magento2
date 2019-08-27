@@ -243,27 +243,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             $className = substr($className, 0, -strlen('Interface'));
         }
 
-        $typeName = $this->typeProcessor->register($className);
-        $typeData = $this->typeProcessor->getTypeData($typeName);
-        $requiredFields = array_keys(
-            array_filter(
-                $typeData['parameters'],
-                function (array $fieldData) {
-                    return $fieldData['required'];
-                }
-            )
-        );
-        $camelCaseData = array_map(
-            function (string $value) {
-                return SimpleDataObjectConverter::snakeCaseToCamelCase($value);
-            },
-            array_keys($data)
-        );
-        $missedRequiredFields = array_diff($requiredFields, $camelCaseData);
-        if (!empty($missedRequiredFields)) {
-            $this->processInputError($missedRequiredFields);
-        }
-
         // Primary method: assign to constructor parameters
         $constructorArgs = $this->getConstructorData($className, $data);
         $object = $this->objectManager->create($className, $constructorArgs);
