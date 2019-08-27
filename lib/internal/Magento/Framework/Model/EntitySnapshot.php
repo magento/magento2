@@ -45,6 +45,8 @@ class EntitySnapshot
     }
 
     /**
+     * Register snapshot of entity data.
+     *
      * @param string $entityType
      * @param object $entity
      * @return void
