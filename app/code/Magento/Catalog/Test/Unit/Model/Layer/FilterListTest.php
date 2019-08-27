@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\Layer;
 
 use \Magento\Catalog\Model\Layer\FilterList;
-use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 
 class FilterListTest extends \PHPUnit\Framework\TestCase
 {
@@ -97,8 +96,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'method' => 'getBackendModel',
-                'value' => Price::class,
+                'method' => 'getFrontendInput',
+                'value' => 'price',
                 'expectedClass' => 'PriceFilterClass',
             ],
             [
@@ -107,8 +106,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
                 'expectedClass' => 'DecimalFilterClass',
             ],
             [
-                'method' => 'getBackendModel',
-                'value' => null,
+                'method' => 'getFrontendInput',
+                'value' => 'text',
                 'expectedClass' => 'AttributeFilterClass',
             ]
         ];

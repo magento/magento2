@@ -8,20 +8,24 @@ declare(strict_types=1);
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\RequestGenerator;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\Price;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Test catalog search range request generator.
  */
-class DecimalTest extends \PHPUnit\Framework\TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  Decimal */
-    private $decimal;
+    /** @var  Price */
+    private $price;
 
     /** @var  Attribute|\PHPUnit_Framework_MockObject_MockObject */
     private $attribute;
+
+    /** @var  \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $scopeConfigMock;
 
     protected function setUp()
     {
@@ -29,8 +33,14 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode'])
             ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->decimal = $objectManager->getObject(Decimal::class);
+        $this->price = $objectManager->getObject(
+            Price::class,
+            ['scopeConfig' => $this->scopeConfigMock]
+        );
     }
 
     public function testGetFilterData()
@@ -47,7 +57,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->attribute->expects($this->atLeastOnce())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
-        $actual = $this->decimal->getFilterData($this->attribute, $filterName);
+        $actual = $this->price->getFilterData($this->attribute, $filterName);
         $this->assertEquals($expected, $actual);
     }
 
@@ -55,17 +65,18 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
     {
         $bucketName = 'test_bucket_name';
         $attributeCode = 'test_attribute_code';
+        $method = 'price_dynamic_algorithm';
         $expected = [
             'type' => BucketInterface::TYPE_DYNAMIC,
             'name' => $bucketName,
             'field' => $attributeCode,
-            'method' => 'manual',
+            'method' => '$'. $method . '$',
             'metric' => [['type' => 'count']],
         ];
         $this->attribute->expects($this->atLeastOnce())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
-        $actual = $this->decimal->getAggregationData($this->attribute, $bucketName);
+        $actual = $this->price->getAggregationData($this->attribute, $bucketName);
         $this->assertEquals($expected, $actual);
     }
 }

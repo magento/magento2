@@ -72,11 +72,17 @@ class Decimal extends AbstractFilter
 
         list($from, $to) = explode('-', $filter);
 
+        // When the range is 10-20 we only need to get products that are in the 10-19.99 range.
+        $toValue = $to;
+        if (!empty($toValue) && $from !== $toValue) {
+            $toValue -= 0.001;
+        }
+
         $this->getLayer()
             ->getProductCollection()
             ->addFieldToFilter(
                 $this->getAttributeModel()->getAttributeCode(),
-                ['from' => $from, 'to' =>  $this->getToRangeValue($from, $to)]
+                ['from' => $from, 'to' => $toValue]
             );
 
         $this->getLayer()->getState()->addFilter(
@@ -148,24 +154,5 @@ class Decimal extends AbstractFilter
             }
             return __('%1 - %2', $formattedFromPrice, $this->priceCurrency->format($toPrice));
         }
-    }
-
-    /**
-     * Get the to range value
-     *
-     * When the range is 10-20 we only need to get products that are in the 10-19.99 range.
-     * 20 should be in the next range group.
-     *
-     * @param float|string $from
-     * @param float|string $to
-     * @return float|string
-     */
-    private function getToRangeValue($from, $to)
-    {
-        if (!empty($to) && $from !== $to) {
-            $to -= 0.001;
-        }
-
-        return $to;
     }
 }
