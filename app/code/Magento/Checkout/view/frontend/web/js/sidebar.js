@@ -261,7 +261,7 @@ define([
                 $(document).trigger('ajax:removeFromCart', {
                     productIds: [productData['product_id']]
                 });
-                if (window.location.href === this.shoppingCartUrl) {
+                if (window.location.href.indexOf(this.shoppingCartUrl) === 0) {
                     window.location.reload();
                 }
             }
