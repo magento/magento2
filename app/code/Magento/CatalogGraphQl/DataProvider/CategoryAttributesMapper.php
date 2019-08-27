@@ -65,12 +65,15 @@ class CategoryAttributesMapper
         $arrayTypeAttributes = $this->getFieldsOfArrayType();
 
         return $arrayTypeAttributes
-            ? array_map(function ($data) use ($arrayTypeAttributes) {
-                foreach ($arrayTypeAttributes as $attributeCode) {
-                    $data[$attributeCode] = $this->valueToArray($data[$attributeCode] ?? null);
-                }
-                return $data;
-            }, $attributes)
+            ? array_map(
+                function ($data) use ($arrayTypeAttributes) {
+                    foreach ($arrayTypeAttributes as $attributeCode) {
+                        $data[$attributeCode] = $this->valueToArray($data[$attributeCode] ?? null);
+                    }
+                    return $data;
+                },
+                $attributes
+            )
             : $attributes;
     }
 

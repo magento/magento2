@@ -15,6 +15,7 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Formatter\LayerFormatter;
 
 /**
  * @inheritdoc
@@ -57,21 +58,29 @@ class Category implements LayerBuilderInterface
     private $rootCategoryProvider;
 
     /**
+     * @var LayerFormatter
+     */
+    private $layerFormatter;
+
+    /**
      * @param CategoryAttributeQuery $categoryAttributeQuery
      * @param CategoryAttributesMapper $attributesMapper
      * @param RootCategoryProvider $rootCategoryProvider
      * @param ResourceConnection $resourceConnection
+     * @param LayerFormatter $layerFormatter
      */
     public function __construct(
         CategoryAttributeQuery $categoryAttributeQuery,
         CategoryAttributesMapper $attributesMapper,
         RootCategoryProvider $rootCategoryProvider,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        LayerFormatter $layerFormatter
     ) {
         $this->categoryAttributeQuery = $categoryAttributeQuery;
         $this->attributesMapper = $attributesMapper;
         $this->resourceConnection = $resourceConnection;
         $this->rootCategoryProvider = $rootCategoryProvider;
+        $this->layerFormatter = $layerFormatter;
     }
 
     /**
@@ -105,7 +114,7 @@ class Category implements LayerBuilderInterface
             return [];
         }
 
-        $result = $this->buildLayer(
+        $result = $this->layerFormatter->buildLayer(
             self::$bucketMap[self::CATEGORY_BUCKET]['label'],
             \count($categoryIds),
             self::$bucketMap[self::CATEGORY_BUCKET]['request_name']
@@ -116,7 +125,7 @@ class Category implements LayerBuilderInterface
             if (!\in_array($categoryId, $categoryIds, true)) {
                 continue ;
             }
-            $result['filter_items'][] = $this->buildItem(
+            $result['options'][] = $this->layerFormatter->buildItem(
                 $categoryLabels[$categoryId] ?? $categoryId,
                 $categoryId,
                 $value->getMetrics()['count']
@@ -124,40 +133,6 @@ class Category implements LayerBuilderInterface
         }
 
         return [$result];
-    }
-
-    /**
-     * Format layer data
-     *
-     * @param string $layerName
-     * @param string $itemsCount
-     * @param string $requestName
-     * @return array
-     */
-    private function buildLayer($layerName, $itemsCount, $requestName): array
-    {
-        return [
-            'name' => $layerName,
-            'filter_items_count' => $itemsCount,
-            'request_var' => $requestName
-        ];
-    }
-    
-    /**
-     * Format layer item data
-     *
-     * @param string $label
-     * @param string|int $value
-     * @param string|int $count
-     * @return array
-     */
-    private function buildItem($label, $value, $count): array
-    {
-        return [
-            'label' => $label,
-            'value_string' => $value,
-            'items_count' => $count,
-        ];
     }
 
     /**

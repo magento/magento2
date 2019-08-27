@@ -49,9 +49,11 @@ class CategoryAttributeQuery
     {
         $categoryAttributes = \array_merge($categoryAttributes, self::$requiredAttributes);
 
-        $attributeQuery = $this->attributeQueryFactory->create([
+        $attributeQuery = $this->attributeQueryFactory->create(
+            [
             'entityType' => CategoryInterface::class
-        ]);
+            ]
+        );
 
         return $attributeQuery->getQuery($categoryIds, $categoryAttributes, $storeId);
     }
