@@ -33,7 +33,40 @@
                 <primaryFieldName>file_name</primaryFieldName>
             </settings>
         </dataProvider>
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\ImportExport\Ui\DataProvider\ExportFileDataProvider</argument>
+            <argument name="name" xsi:type="string">export_grid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">file_name</argument>
+            <argument name="requestFieldName" xsi:type="string">file_name</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">file_name</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
     </dataSource>
+    <listingToolbar name="listing_top">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sticky" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <paging name="listing_paging">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">export_grid.export_grid_data_source.export_grid_columns.file_name</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">export_grid.export_grid_data_source.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.paging</item>
+                    </item>
+                </item>
+            </argument>
+        </paging>
+    </listingToolbar>
     <columns name="export_grid_columns">
         <column name="file_name">
             <settings>

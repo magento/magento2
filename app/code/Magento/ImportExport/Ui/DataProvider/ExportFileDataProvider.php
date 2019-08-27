@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Ui\DataProvider;
@@ -56,6 +58,7 @@ class ExportFileDataProvider extends DataProvider
     ) {
         $this->file = $file;
         $this->fileSystem = $filesystem;
+        $this->request = $request;
         parent::__construct(
             $name,
             $primaryFieldName,
@@ -92,7 +95,12 @@ class ExportFileDataProvider extends DataProvider
             $result['items'][]['file_name'] = basename($file);
         }
 
+        $pagesize = intval($this->request->getParam('paging')['pageSize']);
+        $pageCurrent = intval($this->request->getParam('paging')['current']);
+        $pageoffset = ($pageCurrent - 1) * $pagesize;
+
         $result['totalRecords'] = count($result['items']);
+        $result['items'] = array_slice($result['items'], $pageoffset, $pageoffset + $pagesize);
 
         return $result;
     }
