@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree as CategoryTreeDataProvider;
 
 /**
  * Category tree field resolver, used for GraphQL request processing.
@@ -25,7 +26,7 @@ class CategoryTree implements ResolverInterface
     const CATEGORY_INTERFACE = 'CategoryInterface';
 
     /**
-     * @var Products\DataProvider\CategoryTree
+     * @var CategoryTreeDataProvider
      */
     private $categoryTree;
 
@@ -40,12 +41,12 @@ class CategoryTree implements ResolverInterface
     private $checkCategoryIsActive;
 
     /**
-     * @param Products\DataProvider\CategoryTree $categoryTree
+     * @param CategoryTreeDataProvider $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CheckCategoryIsActive $checkCategoryIsActive
      */
     public function __construct(
-        Products\DataProvider\CategoryTree $categoryTree,
+        CategoryTreeDataProvider $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
         CheckCategoryIsActive $checkCategoryIsActive
     ) {

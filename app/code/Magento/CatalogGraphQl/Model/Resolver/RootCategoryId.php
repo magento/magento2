@@ -21,6 +21,6 @@ class RootCategoryId implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        return $context->getExtensionAttributes()->getStore()->getRootCategoryId();
+        return (int)$context->getExtensionAttributes()->getStore()->getRootCategoryId();
     }
 }
