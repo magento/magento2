@@ -13,7 +13,6 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Category tree field resolver, used for GraphQL request processing.
@@ -64,7 +63,7 @@ class CategoryTree implements ResolverInterface
             return $value[$field->getName()];
         }
 
-        $rootCategoryId = isset($args['id']) ? (int)$args['id'] :
+        $rootCategoryId = !empty($args['id']) ? (int)$args['id'] :
             (int)$context->getExtensionAttributes()->getStore()->getRootCategoryId();
         $this->checkCategoryIsActive->execute($rootCategoryId);
 
