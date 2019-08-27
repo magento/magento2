@@ -375,6 +375,7 @@ input ProductSortInput @deprecated(reason: "Attributes used in this input are ha
 input ProductAttributeSortInput @doc(description: "ProductAttributeSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order. It's possible to sort products using searchable attributes with enabled 'Use in Filter Options' option")
 {
     position: SortEnum @doc(description: "The position of products")
+    relevance: SortEnum @doc(description: "The search relevance score (default)")
 }
 
 type MediaGalleryEntry @doc(description: "MediaGalleryEntry defines characteristics about images and videos associated with a specific product.") {
