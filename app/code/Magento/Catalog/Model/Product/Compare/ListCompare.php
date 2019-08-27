@@ -60,7 +60,7 @@ class ListCompare extends \Magento\Framework\DataObject
     private $productRepository;
     
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder 
      */
     private $searchCriteriaBuilder;
 
