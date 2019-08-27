@@ -26,4 +26,4 @@ This module observes the following events:
 
 - `payment_method_assign_data_authorizenet_acceptjs` event in the `Magento\AuthorizenetAcceptjs\Observer\DataAssignObserver` file.
 
-For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.3/extension-dev-guide/events-and-observers.html#events).
+For information about an event in Magento 2, see [Events and observers](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/events-and-observers.html#events).
