@@ -29,6 +29,6 @@ class CartTotalQuantity implements ResolverInterface
         /** @var Quote $cart */
         $cart = $value['model'];
 
-        return $cart->getItemsSummaryQty();
+        return (float)$cart->getItemsSummaryQty();
     }
 }
