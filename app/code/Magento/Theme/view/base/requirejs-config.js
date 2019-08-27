@@ -32,7 +32,8 @@ var config = {
         },
         'jquery/jquery-storageapi': {
             'deps': ['jquery/jquery.cookie']
-        }
+        },
+        'magnifier/magnifier': ['jquery']
     },
     'paths': {
         'jquery/validate': 'jquery/jquery.validate',
