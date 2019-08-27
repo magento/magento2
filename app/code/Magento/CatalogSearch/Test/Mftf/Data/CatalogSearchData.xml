@@ -23,5 +23,10 @@
     <entity name="SetMinQueryLengthToOne" type="number">
         <data key="value">1</data>
     </entity>
-
+    <entity name="SetCatalogSearchEngineToDefault" type="catalog_search_engine_default">
+        <requiredEntity type="enable">DefaultCatalogSearchEngine</requiredEntity>
+    </entity>
+    <entity name="DefaultCatalogSearchEngine" type="enable">
+        <data key="inherit">true</data>
+    </entity>
 </entities>

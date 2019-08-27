@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminElasticConnectionTestActionGroup">
+        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="openAdminCatalogSearchConfigPage"/>
+        <waitForPageLoad stepKey="waitPageToLoad"/>
+        <conditionalClick selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" dependentSelector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" visible="false" stepKey="expandCatalogSearchTab"/>
+        <waitForElementVisible selector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" stepKey="waitForConnectionButton"/>
+        <click selector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" stepKey="clickOnTestConnectionButton"/>
+        <waitForPageLoad stepKey="waitForConnectionEstablishment"/>
+        <see selector="{{AdminCatalogSearchConfigurationSection.connectionStatus}}" userInput="Successful! Test again?" stepKey="checkThatConnectionExists"/>
+        <scrollTo selector="{{AdminConfigCatalogCategoryPermissionsSection.catalogPermissionsTab}}" stepKey="scrollToCatalogPermissionsTab"/>
+        <click selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="closeCatalogSearchTab"/>
+    </actionGroup>
+</actionGroups>
