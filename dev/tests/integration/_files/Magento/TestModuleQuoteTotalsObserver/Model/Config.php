@@ -26,4 +26,3 @@ class Config
         return $this->active;
     }
 }
-

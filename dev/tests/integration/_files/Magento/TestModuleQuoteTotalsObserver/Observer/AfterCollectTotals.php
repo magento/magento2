@@ -27,8 +27,10 @@ class AfterCollectTotals implements ObserverInterface
      * @param \Magento\Checkout\Model\Session $messageManager
      * @param \Magento\TestModuleQuoteTotalsObserver\Model\Config $config
      */
-    public function __construct(\Magento\Checkout\Model\Session $messageManager, \Magento\TestModuleQuoteTotalsObserver\Model\Config $config)
-    {
+    public function __construct(
+        \Magento\Checkout\Model\Session $messageManager,
+        \Magento\TestModuleQuoteTotalsObserver\Model\Config $config
+    ) {
         $this->config = $config;
         $this->session = $messageManager;
     }
@@ -45,4 +47,3 @@ class AfterCollectTotals implements ObserverInterface
         }
     }
 }
-

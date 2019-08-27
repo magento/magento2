@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
