@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Go to Address Book -->
     <actionGroup name="StorefrontCustomerAddressBookContains">
+        <annotations>
+            <description>Validate that the provided Address appears in the Storefront Customer Address list.</description>
+        </annotations>
         <arguments>
             <argument name="text" type="string"/>
         </arguments>
+
         <see userInput="{{text}}" selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="containsText"/>
     </actionGroup>
 </actionGroups>

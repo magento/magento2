@@ -7,14 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Observer;
 
-use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Customer\Model\Session as CustomerModelSession;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Observer for applying catalog rules on product for admin area
@@ -44,30 +39,21 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     protected $rulePricesStorage;
 
     /**
-     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
-     */
-    private $ruleDateFormatter;
-
-    /**
      * @param RulePricesStorage $rulePricesStorage
      * @param Registry $coreRegistry
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param TimezoneInterface $localeDate
-     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
         Registry $coreRegistry,
         \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory,
-        TimezoneInterface $localeDate,
-        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
+        TimezoneInterface $localeDate
     ) {
         $this->rulePricesStorage = $rulePricesStorage;
         $this->coreRegistry = $coreRegistry;
         $this->resourceRuleFactory = $resourceRuleFactory;
         $this->localeDate = $localeDate;
-        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -80,7 +66,7 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     {
         $product = $observer->getEvent()->getProduct();
         $storeId = $product->getStoreId();
-        $date = $this->ruleDateFormatter->getDate($storeId);
+        $date = $this->localeDate->scopeDate($storeId);
         $key = false;
 
         $ruleData = $this->coreRegistry->registry('rule_data');
