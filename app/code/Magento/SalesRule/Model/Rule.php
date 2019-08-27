@@ -160,7 +160,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory
      */
-    protected $_condProdCombineFactory;
+    protected $_condProdCombineF;
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection
@@ -202,7 +202,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory,
         \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory,
-        \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineFactory,
+        \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
         \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -215,7 +215,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
         $this->_condCombineFactory = $condCombineFactory;
-        $this->_condProdCombineFactory = $condProdCombineFactory;
+        $this->_condProdCombineF = $condProdCombineF;
         $this->_couponCollection = $couponCollection;
         $this->_storeManager = $storeManager;
         parent::__construct(
@@ -296,8 +296,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 $this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null
             )->setUsagePerCustomer(
                 $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
-            )->setExpirationDate(
-                $this->getToDate()
             )->save();
         } else {
             $this->getPrimaryCoupon()->delete();
@@ -308,8 +306,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * Initialize rule model data from array.
-     * Set store labels if applicable.
+     * Initialize rule model data from array. Set store labels if applicable.
      *
      * @param array $data
      * @return $this
@@ -342,7 +339,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     public function getActionsInstance()
     {
-        return $this->_condProdCombineFactory->create();
+        return $this->_condProdCombineF->create();
     }
 
     /**
@@ -499,8 +496,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null
         )->setUsagePerCustomer(
             $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
-        )->setExpirationDate(
-            $this->getToDate()
+        )->setType(
+            \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
         );
 
         $couponCode = self::getCouponCodeGenerator()->generateCode();
@@ -521,7 +518,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                         $coupon->setCode(
                             $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf(
                                 '%04u',
-                                rand(0, 9999)
+                                random_int(0, 9999)
                             )
                         );
                         continue;
@@ -539,6 +536,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get from date.
+     *
      * @return string
      * @since 100.1.0
      */
@@ -548,6 +547,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get to date.
+     *
      * @return string
      * @since 100.1.0
      */
@@ -610,6 +611,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get conditions field set id.
+     *
      * @param string $formName
      * @return string
      * @since 100.1.0
@@ -620,6 +623,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get actions field set id.
+     *
      * @param string $formName
      * @return string
      * @since 100.1.0
