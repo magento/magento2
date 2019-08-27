@@ -104,7 +104,11 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
                     ["{$page}_page_button_color", null, $color],
                     ["{$page}_page_button_shape", null, $shape],
                     ["{$page}_page_button_label", null, $label],
-                    [$page . '_page_button_' . $installmentPeriodLocale . '_installment_period', null, $installmentPeriodLabel]
+                    [
+                        $page . '_page_button_' . $installmentPeriodLocale . '_installment_period',
+                        null,
+                        $installmentPeriodLabel
+                    ]
                 ]
             )
         );
