@@ -116,7 +116,8 @@ QUERY;
         $query = $this->getQueryProductsWithCustomAttribute($attributeCode, $firstOption);
         $response = $this->graphQlQuery($query);
 
-        // 1 product is returned since only one child product with attribute option1 from 1st Configurable product is OOS
+        // 1 product is returned since only one child product with
+        // attribute option1 from 1st Configurable product is OOS
         $this->assertEquals(1, $response['products']['total_count']);
 
         // Custom attribute filter layer data
@@ -269,8 +270,9 @@ QUERY;
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
         array_shift($options);
-        $optionValues = array();
-        for ($i = 0; $i < count($options); $i++) {
+        $optionValues = [];
+        $count = count($options);
+        for ($i = 0; $i < $count; $i++) {
             $optionValues[] = $options[$i]->getValue();
         }
         $query = <<<QUERY
@@ -411,7 +413,7 @@ QUERY;
                 $layers[$layerIndex][0]['request_var'],
                 $response['products']['filters'][$layerIndex]['request_var'],
                 'request_var does not match'
-            ) ;
+            );
         }
 
        // Validate the price filter layer data from the response
@@ -490,7 +492,7 @@ QUERY;
         $this->assertEquals(2, $response['products']['total_count']);
         $actualCategoryFilterItems = $response['products']['filters'][1]['filter_items'];
         //Validate the number of categories/sub-categories that contain the products with the custom attribute
-        $this->assertCount(6,$actualCategoryFilterItems);
+        $this->assertCount(6, $actualCategoryFilterItems);
 
         $expectedCategoryFilterItems =
             [
@@ -527,7 +529,7 @@ QUERY;
                 $categoryFilterItems[$index][0]['items_count'],
                 $actualCategoryFilterItems[$index]['items_count'],
                 'Products count in the category is incorrect'
-            ) ;
+            );
         }
     }
     /**
