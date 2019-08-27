@@ -60,7 +60,6 @@ class Search
     ): \Magento\Catalog\Model\ResourceModel\Product\Collection {
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->addAttributeToSelect(ProductInterface::NAME);
-        $productCollection->setVisibility($this->catalogVisibility->getVisibleInCatalogIds());
         $productCollection->setPage($pageNum, $limit);
         $this->filter->addFilter($productCollection, 'fulltext', ['fulltext' => $searchKey]);
         $productCollection->setPage($pageNum, $limit);
