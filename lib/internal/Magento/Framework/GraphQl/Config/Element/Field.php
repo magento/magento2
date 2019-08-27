@@ -165,16 +165,17 @@ class Field implements OutputFieldInterface
     }
 
     /**
-     * Return the cache
+     * Return the cache tag for the field.
      *
-     * @return array
+     * @return array|null
      */
     public function getCache() : array
     {
         return $this->cache;
     }
+
     /**
-     * Return the deprecated
+     * Return the deprecated annotation for the field
      *
      * @return array
      */

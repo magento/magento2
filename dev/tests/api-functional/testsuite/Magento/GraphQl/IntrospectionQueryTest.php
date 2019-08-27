@@ -53,7 +53,6 @@ fragment InputValue on __InputValue {
   defaultValue
 }
 QUERY;
-
         $this->assertArrayHasKey('__schema', $this->graphQlQuery($query));
     }
 
@@ -92,62 +91,56 @@ QUERY;
   }
   
 QUERY;
-
-        $this->assertArrayHasKey('__schema', $this->graphQlQuery($query));
         $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('__schema', $response);
         $schemaResponseFields = $response['__schema']['types'];
         $enumValueReasonArray = $this->getEnumValueDeprecatedReason($schemaResponseFields);
         $fieldsValueReasonArray = $this->getFieldsValueDeprecatedReason($schemaResponseFields);
         $expectedOutput = require __DIR__ . '/_files/schema_response_sdl_deprecated_annotation.php';
 
         // checking field values deprecated reason
-        if (!empty($fieldsValueReasonArray)) {
-            $fieldDeprecatedReason = [];
-            $fieldsArray = $expectedOutput[0]['fields'];
-            foreach ($fieldsArray as $field) {
-                if ($field['isDeprecated'] === true) {
-                    $fieldDeprecatedReason [] = $field['deprecationReason'];
-                }
+        $fieldDeprecatedReason = [];
+        $fieldsArray = $expectedOutput[0]['fields'];
+        foreach ($fieldsArray as $field) {
+            if ($field['isDeprecated'] === true) {
+                $fieldDeprecatedReason [] = $field['deprecationReason'];
             }
-            $this->assertNotEmpty($fieldDeprecatedReason);
-            $this->assertContains(
-                'Symbol was missed. Use `default_display_currency_code`.',
-                $fieldDeprecatedReason
-            );
-
-            $this->assertContains(
-                'Symbol was missed. Use `default_display_currency_code`.',
-                $fieldsValueReasonArray
-            );
-
-            $this->assertNotEmpty(
-                array_intersect($fieldDeprecatedReason, $fieldsValueReasonArray)
-            );
-
         }
+        $this->assertNotEmpty($fieldDeprecatedReason);
+        $this->assertContains(
+            'Symbol was missed. Use `default_display_currency_code`.',
+            $fieldDeprecatedReason
+        );
+
+        $this->assertContains(
+            'Symbol was missed. Use `default_display_currency_code`.',
+            $fieldsValueReasonArray
+        );
+
+        $this->assertNotEmpty(
+            array_intersect($fieldDeprecatedReason, $fieldsValueReasonArray)
+        );
 
         // checking enum values deprecated reason
-        if (!empty($enumValueReasonArray)) {
-            $enumValueDeprecatedReason = [];
-            $enumValuesArray = $expectedOutput[1]['enumValues'];
-            foreach ($enumValuesArray as $enumValue) {
-                if ($enumValue['isDeprecated'] === true) {
-                    $enumValueDeprecatedReason [] = $enumValue['deprecationReason'];
-                }
+        $enumValueDeprecatedReason = [];
+        $enumValuesArray = $expectedOutput[1]['enumValues'];
+        foreach ($enumValuesArray as $enumValue) {
+            if ($enumValue['isDeprecated'] === true) {
+                $enumValueDeprecatedReason [] = $enumValue['deprecationReason'];
             }
-            $this->assertNotEmpty($enumValueDeprecatedReason);
-            $this->assertContains(
-                '`sample_url` serves to get the downloadable sample',
-                $enumValueDeprecatedReason
-            );
-            $this->assertContains(
-                '`sample_url` serves to get the downloadable sample',
-                $enumValueReasonArray
-            );
-            $this->assertNotEmpty(
-                array_intersect($enumValueDeprecatedReason, $enumValueReasonArray)
-            );
         }
+        $this->assertNotEmpty($enumValueDeprecatedReason);
+        $this->assertContains(
+            '`sample_url` serves to get the downloadable sample',
+            $enumValueDeprecatedReason
+        );
+        $this->assertContains(
+            '`sample_url` serves to get the downloadable sample',
+            $enumValueReasonArray
+        );
+        $this->assertNotEmpty(
+            array_intersect($enumValueDeprecatedReason, $enumValueReasonArray)
+        );
     }
 
     /**

@@ -81,7 +81,7 @@ class Input implements TypeInterface
     }
 
     /**
-     * Return the deprecated
+     * Return the deprecated annotation for the input
      *
      * @return array
      */
