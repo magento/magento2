@@ -76,6 +76,7 @@
                         <field id="use_proxy">1</field>
                     </depends>
                     <attribute type="shared">1</attribute>
+                    <validate>validate-digits validate-zero-or-greater</validate>
                 </field>
                 <field id="payflow_advanced_info" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Advanced</frontend_model>
