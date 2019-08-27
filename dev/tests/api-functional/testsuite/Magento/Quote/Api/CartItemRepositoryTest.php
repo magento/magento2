@@ -6,6 +6,7 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Quote\Model\Quote;
@@ -83,9 +84,10 @@ class CartItemRepositoryTest extends WebapiAbstract
      */
     public function testAddItem()
     {
-        /** @var  \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load(2);
-        $productSku = $product->getSku();
+        $productSku = 'custom-design-simple-product';
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku);
+
         /** @var Quote  $quote */
         $quote = $this->objectManager->create(Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
@@ -110,8 +112,54 @@ class CartItemRepositoryTest extends WebapiAbstract
             ],
         ];
         $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertTrue($quote->hasProductId(2));
+        $this->assertTrue($quote->hasProductId($product->getId()));
         $this->assertEquals(7, $quote->getItemByProduct($product)->getQty());
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionCode 400
+     * @dataProvider failedAddItemDataProvider
+     * @param array|null $cartItem
+     */
+    public function testFailedAddItem(?array $cartItem)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . 'mine/items',
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = [
+            'cartItem' => $cartItem,
+        ];
+        $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * @return array
+     */
+    public function failedAddItemDataProvider(): array
+    {
+        return [
+            'absent cart item' => [
+                null,
+            ],
+            'empty cart item' => [
+                [],
+            ],
+            'absent cart id' => [
+                [
+                    'sku' => 'custom-design-simple-product',
+                    'qty' => 7,
+                ],
+            ],
+        ];
     }
 
     /**
