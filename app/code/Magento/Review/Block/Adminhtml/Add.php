@@ -30,6 +30,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'id', 'save_button');
 
         $this->buttonList->update('reset', 'id', 'reset_button');
+        $this->buttonList->update('reset', 'onclick', 'window.review.formReset()');
 
         $this->_formScripts[] = '
             require(["prototype"], function(){
@@ -44,6 +45,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             require(["jquery","prototype"], function(jQuery){
             window.review = function() {
                 return {
+                    reviewFormEditSelector: "#edit_form",
                     productInfoUrl : null,
                     formHidden : true,
                     gridRowClick : function(data, click) {
@@ -71,6 +73,9 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         toggleVis("productGrid");
                         toggleVis("save_button");
                         toggleVis("reset_button");
+                    },
+                    formReset: function() {
+                        jQuery(review.reviewFormEditSelector).trigger(\'reset\');
                     },
                     updateRating: function() {
                         elements = [$("select_stores"), $("rating_detail").getElementsBySelector("input[type=\'radio\']")].flatten();
