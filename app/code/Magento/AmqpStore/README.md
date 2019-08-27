@@ -1,6 +1,6 @@
 # Magento_AmqpStore module
 
-Magento_AmqpStore provides ability to specify store before publish messages with with the Advanced Message Queuing Protocol (AMQP).
+The Magento_AmqpStore module provides the ability to specify a store before publishing messages with the Advanced Message Queuing Protocol (AMQP).
 
 ## Extensibility
 
