@@ -176,6 +176,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @param DateTime $dateTime
      * @param ProductRepositoryInterface $productRepository
      * @param StockItemRepository $stockItemRepository
+     * @param ScopeConfigInterface|null $scopeConfig
      * @param bool $useCurrentWebsite
      * @param array $data
      * @param Json|null $serializer
@@ -400,7 +401,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Adding item to wishlist
      *
      * @param Item $item
-     * @return  $this
+     * @return $this
      * @throws Exception
      */
     public function addItem(Item $item)
@@ -424,7 +425,8 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @return Item|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     *@throws LocalizedException
+     * @throws LocalizedException
+     * @throws InvalidArgumentException
      */
     public function addNewItem($product, $buyRequest = null, $forciblySetQty = false)
     {
@@ -452,7 +454,8 @@ class Wishlist extends AbstractModel implements IdentityInterface
             throw new LocalizedException(__('Cannot specify product.'));
         }
 
-        $stockItem = $this->stockItemRepository->get($product->getId());
+        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem */
+        $stockItem = $this->stockItemRepository->get($productId);
         $showOutOfStock = $this->scopeConfig->isSetFlag(
             Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
             ScopeInterface::SCOPE_STORE
@@ -470,7 +473,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
                 if (!is_array($buyRequestData)) {
                     $isInvalidItemConfiguration = true;
                 }
-            } catch (InvalidArgumentException $exception) {
+            } catch (Exception $exception) {
                 $isInvalidItemConfiguration = true;
             }
             if ($isInvalidItemConfiguration) {
