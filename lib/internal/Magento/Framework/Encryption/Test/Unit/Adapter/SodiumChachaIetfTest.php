@@ -11,13 +11,17 @@ declare(strict_types=1);
  */
 namespace Magento\Framework\Encryption\Test\Unit\Adapter;
 
-class SodiumChachaIetfTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
+use PHPUnit\Framework\TestCase;
+
+class SodiumChachaIetfTest extends TestCase
 {
+    /**
+     * @return array
+     */
     public function getCryptData(): array
     {
-        $fixturesFilename = __DIR__ . '/../Crypt/_files/_sodium_chachaieft_fixtures.php';
-
-        $result = include $fixturesFilename;
+        $result = include __DIR__ . '/../Crypt/_files/_sodium_chachaieft_fixtures.php';
         /* Restore encoded string back to binary */
         foreach ($result as &$cryptParams) {
             $cryptParams['encrypted'] = base64_decode($cryptParams['encrypted']);
@@ -29,10 +33,15 @@ class SodiumChachaIetfTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getCryptData
+     *
+     * @param string $key
+     * @param string $encrypted
+     * @param string $decrypted
+     * @throws \SodiumException
      */
-    public function testEncrypt(string $key, string $encrypted, string $decrypted)
+    public function testEncrypt(string $key, string $encrypted, string $decrypted): void
     {
-        $crypt = new \Magento\Framework\Encryption\Adapter\SodiumChachaIetf($key);
+        $crypt = new SodiumChachaIetf($key);
         $result = $crypt->encrypt($decrypted);
 
         $this->assertNotEquals($encrypted, $result);
@@ -40,10 +49,14 @@ class SodiumChachaIetfTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getCryptData
+     *
+     * @param string $key
+     * @param string $encrypted
+     * @param string $decrypted
      */
-    public function testDecrypt(string $key, string $encrypted, string $decrypted)
+    public function testDecrypt(string $key, string $encrypted, string $decrypted): void
     {
-        $crypt = new \Magento\Framework\Encryption\Adapter\SodiumChachaIetf($key);
+        $crypt = new SodiumChachaIetf($key);
         $result = $crypt->decrypt($encrypted);
 
         $this->assertEquals($decrypted, $result);

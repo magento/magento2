@@ -225,6 +225,7 @@ define([
 
             categoryLoader.on('beforeload', function (treeLoader, node) {
                 treeLoader.baseParams.id = node.attributes.id;
+                treeLoader.baseParams.selected = options.jsFormObject.updateElement.value;
             });
 
             categoryLoader.on('load', function () {

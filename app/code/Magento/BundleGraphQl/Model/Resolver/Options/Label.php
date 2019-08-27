@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\BundleGraphQl\Model\Resolver\Options;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -50,7 +50,7 @@ class Label implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['sku'])) {
-            throw new GraphQlInputException(__('"sku" value should be specified'));
+            throw new LocalizedException(__('"sku" value should be specified'));
         }
 
         $this->product->addProductSku($value['sku']);

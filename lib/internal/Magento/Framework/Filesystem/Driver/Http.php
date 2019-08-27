@@ -12,7 +12,6 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Http
- *
  */
 class Http extends File
 {
@@ -28,21 +27,18 @@ class Http extends File
      *
      * @param string $path
      * @return bool
-     * @throws FileSystemException
      */
     public function isExists($path)
     {
         $headers = array_change_key_case(get_headers($this->getScheme() . $path, 1), CASE_LOWER);
-
         $status = $headers[0];
 
-        if (strpos($status, '200 OK') === false) {
-            $result = false;
-        } else {
-            $result = true;
+        /* Handling 301 or 302 redirection */
+        if (isset($headers[1]) && preg_match('/30[12]/', $status)) {
+            $status = $headers[1];
         }
 
-        return $result;
+        return !(strpos($status, '200 OK') === false);
     }
 
     /**

@@ -6,6 +6,10 @@
 
 namespace Magento\PageCache\Model\System\Config\Backend;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Backend model for processing Public content cache lifetime settings
  *
@@ -13,6 +17,36 @@ namespace Magento\PageCache\Model\System\Config\Backend;
  */
 class Ttl extends \Magento\Framework\App\Config\Value
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * Ttl constructor.
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     * @param Escaper|null $escaper
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        ?Escaper $escaper = null
+    ) {
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->create(Escaper::class);
+    }
+
     /**
      * Throw exception if Ttl data is invalid or empty
      *
@@ -24,7 +58,10 @@ class Ttl extends \Magento\Framework\App\Config\Value
         $value = $this->getValue();
         if ($value < 0 || !preg_match('/^[0-9]+$/', $value)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Ttl value "%1" is not valid. Please use only numbers equal or greater than zero.', $value)
+                __(
+                    'Ttl value "%1" is not valid. Please use only numbers equal or greater than zero.',
+                    $this->escaper->escapeHtml($value)
+                )
             );
         }
         return $this;

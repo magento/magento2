@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckOutOfStockProductIsNotVisibleInCategoryTest">
+        <annotations>
+            <stories value="Manage products"/>
+            <title value="Out of Stock Product is Not Visible in Category"/>
+            <description value="Login as admin and check out of stock product is not visible in category"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11064"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <!--Create Category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!--Create Simple Product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete created entity -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Open Product Index Page and filter the product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <!-- Update product Advanced Inventory Setting -->
+        <click stepKey="openSelectedProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink"/>
+        <waitForPageLoad stepKey="waitForAdvancedInventoryPageToLoad"/>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="uncheckConfigSetting"/>
+        <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}"  userInput="Yes" stepKey="clickOnManageStock"/>
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryQty}}" userInput="5" stepKey="fillProductQty"/>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.miniQtyConfigSetting}}" stepKey="uncheckMiniQtyCheckBox"/>
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.miniQtyAllowedInCart}}" userInput="1" stepKey="fillMiniAllowedQty"/>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.maxiQtyConfigSetting}}" stepKey="uncheckMaxQtyCheckBox"/>
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCart}}" userInput="10000" stepKey="fillMaxAllowedQty"/>
+        <selectOption selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" userInput="Yes" stepKey="selectQuatityUsesDecimal"/>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQtyConfigSetting}}" stepKey="uncheckNotifyBelowQtyheckBox"/>
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQty}}" userInput="1" stepKey="fillNotifyBelowQty"/>
+        <selectOption selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryStockStatus}}" userInput="Out of Stock" stepKey="selectOutOfStock"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}"  stepKey="clickOnDoneButton"/>
+        <waitForPageLoad stepKey="waitForProductPageToSave"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <!--Verify product is not visible in category store front page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryInFrontPage"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
+        <dontSee selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="dontSeeProductInCategoryPage"/>
+        <!--Verify Product In Store Front-->
+        <amOnPage url="$$createSimpleProduct.name$$.html" stepKey="goToProductStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForProductPageTobeLoaded"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInStoreFront"/>
+        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="Out of stock" stepKey="seeProductStatusIsOutOfStock"/>
+    </test>
+</tests>

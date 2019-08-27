@@ -174,7 +174,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->statFactory = $this->getMockBuilder(StatFactory::class)
             ->setMethods(['create'])
-            ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->stat = $this->getMockBuilder(\Magento\Framework\Profiler\Driver\Standard\Stat::class)
             ->disableOriginalConstructor()
@@ -354,7 +355,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testDispatchExceptionNoCallback()
     {
-        $exceptionMessage = 'No callbacks found';
+        $jobName = 'test_job1';
+        $exceptionMessage = 'No callbacks found for cron job ' . $jobName;
         $exception = new \Exception(__($exceptionMessage));
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
@@ -383,7 +385,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
-        $jobConfig = ['test_group' => ['test_job1' => ['instance' => 'Some_Class']]];
+        $jobConfig = ['test_group' => [$jobName => ['instance' => 'Some_Class']]];
 
         $this->_config->expects($this->exactly(2))->method('getJobs')->will($this->returnValue($jobConfig));
 

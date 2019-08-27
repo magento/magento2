@@ -15,6 +15,7 @@ use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 
 /**
+ * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Builder implements BuilderInterface
@@ -58,7 +59,7 @@ class Builder implements BuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(RequestFilterInterface $filter, $conditionType)
     {
@@ -66,6 +67,8 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Process filter.
+     *
      * @param RequestFilterInterface $filter
      * @param bool $isNegation
      * @return string
@@ -87,6 +90,8 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Process boolean filter.
+     *
      * @param RequestFilterInterface|\Magento\Framework\Search\Request\Filter\Bool $filter
      * @param bool $isNegation
      * @return string
@@ -111,6 +116,8 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Build filters.
+     *
      * @param \Magento\Framework\Search\Request\FilterInterface[] $filters
      * @param string $unionOperator
      * @param bool $isNegation
@@ -127,6 +134,8 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Check if condition type is 'negative'.
+     *
      * @param string $conditionType
      * @return bool
      */

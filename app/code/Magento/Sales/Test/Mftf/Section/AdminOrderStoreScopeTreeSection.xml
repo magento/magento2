@@ -11,5 +11,6 @@
     <section name="AdminOrderStoreScopeTreeSection">
         <element name="storeTree" type="text" selector="div.tree-store-scope"/>
         <element name="storeOption" type="radio" selector="//div[contains(@class, 'tree-store-scope')]//label[contains(text(), '{{name}}')]/preceding-sibling::input" parameterized="true" timeout="30"/>
+        <element name="storeForOrder" type="radio" selector="//div[contains(@class, 'tree-store-scope')]//label[contains(text(), '{{arg}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

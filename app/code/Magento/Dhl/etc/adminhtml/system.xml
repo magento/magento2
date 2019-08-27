@@ -14,9 +14,6 @@
                     <label>Enabled for Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="gateway_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Gateway URL</label>
-                </field>
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
@@ -31,8 +28,9 @@
                 <field id="account" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Account Number</label>
                 </field>
-                <field id="content_type" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Content Type</label>
+                <field id="content_type" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Content Type (Non Domestic)</label>
+                    <comment>Whether to use Documents or NonDocuments service for non domestic shipments. (Shipments within the EU are classed as domestic)</comment>
                     <source_model>Magento\Dhl\Model\Source\Contenttype</source_model>
                 </field>
                 <field id="handling_type" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
@@ -81,18 +79,12 @@
                     </depends>
                 </field>
                 <field id="doc_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Allowed Methods</label>
+                    <label>Documents Allowed Methods</label>
                     <source_model>Magento\Dhl\Model\Source\Method\Doc</source_model>
-                    <depends>
-                        <field id="content_type">D</field>
-                    </depends>
                 </field>
                 <field id="nondoc_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Allowed Methods</label>
+                    <label>Non Documents Allowed Methods</label>
                     <source_model>Magento\Dhl\Model\Source\Method\Nondoc</source_model>
-                    <depends>
-                        <field id="content_type">N</field>
-                    </depends>
                 </field>
                 <field id="ready_time" translate="label comment" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Ready time</label>
@@ -148,6 +140,10 @@
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="1950" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sandbox_mode" translate="label" type="select" sortOrder="1960" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sandbox Mode</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>

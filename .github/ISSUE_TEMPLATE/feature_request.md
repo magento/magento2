@@ -5,13 +5,13 @@ about: Please consider reporting directly to https://github.com/magento/communit
 ---
 
 <!---
-Important: This repository is intended only for Magento 2 Technical Issues. Enter Feature Requests at https://github.com/magento/community-features. Project stakeholders monitor and manage requests. Feature requests entered using this form may be moved to the forum.
+Important: This repository is intended only for Magento 2 Technical Issues. Enter Feature Requests at https://github.com/magento/community-features. Project stakeholders monitor and manage requests. Feature requests entered using this form may be moved to the forum. Fields marked with (*) are required. Please don't remove the template.
 -->
 
-### Description
+### Description (*)
 <!--- Describe the feature you would like to add. -->
 
-### Expected behavior
+### Expected behavior (*)
 <!--- What is the expected behavior of this feature? How is it going to work? -->
 
 ### Benefits

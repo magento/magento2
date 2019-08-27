@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCartPriceRuleForMatchingSubtotalAndVerifyRuleConditionIsAppliedTest">
+        <annotations>
+            <stories value="Create Sales Rule"/>
+            <title value="Create Cart Price Rule For Matching Subtotal And Verify Rule Condition Is Applied"/>
+            <description value="Test log in to Cart Price Rules and Create Cart Price Rule For Matching Subtotal And Verify Rule Condition Is Applied"/>
+            <testCaseId value="MC-15605"/>
+            <severity value="CRITICAL"/>
+            <group value="SalesRule"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="initialSimpleProduct"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
+                <argument name="ruleName" value="{{CartPriceRuleConditionAppliedForSubtotal.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.name}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{CartPriceRuleConditionAppliedForSubtotal.customerGroups}}]" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.coupon_type}}" stepKey="selectCouponType"/>
+
+        <!-- Expand the conditions section -->
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToConditionsHeader"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Subtotal" stepKey="selectCondition1"/>
+        <waitForPageLoad stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.subtotal}}" stepKey="fillSubtotalParameter"/>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+            <argument name="rule" value="CartPriceRuleConditionAppliedForSubtotal"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
+            <argument name="freeShippingOption" value="{{CartPriceRuleConditionAppliedForSubtotal.simple_free_shipping}}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" stepKey="scrollToLabelsHeader"/>
+        <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
+            <argument name="rule" value="CartPriceRuleConditionAppliedForSubtotal"/>
+        </actionGroup>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
+
+        <!--Search created cart price rule in grid-->
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="searchCreatedCartPriceRuleInGrid">
+            <argument name="ruleName" value="CartPriceRuleConditionAppliedForSubtotal.name"/>
+        </actionGroup>
+
+        <!--Go to cart price rule form page and verify AssertCartPriceRuleForm-->
+        <waitForPageLoad stepKey="waitForAdminCartPriceRuleEditPageLoad"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.name}}" stepKey="seeRuleName"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.description}}" stepKey="seeDescription"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.websites}}" stepKey="seeWebsites"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.customerGroups}}" stepKey="seeCustomerGroup"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.coupon_type}}" stepKey="seeCouponType"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions2"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.subtotal}}" stepKey="seeSubtotalParameter"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickExpandActions"/>
+        <see selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.simple_action}}" stepKey="seeActionApplyType"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.discount_amount}}" stepKey="seeDiscountAmount"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.simple_free_shipping}}" stepKey="seeFreeShipping"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" stepKey="scrollToTheLabelsHeader"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.labelsHeader}}" visible="true" stepKey="clickToExpandLabels"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.defaultRuleLabelAllStoreViews}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.defaultRuleLabelAllStoreViews}}" stepKey="seeDefaultRuleLabelAllStoreViews"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.defaultStoreView}}" stepKey="seeDefaultStoreView"/>
+
+        <!--Go to storefront page and verify created product-->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
+        </actionGroup>
+        <!--Click on Add To Cart button-->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+
+        <!--Open mini cart and verify Shopping cart subtotal equals to grand total-->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyCartSubtotalEqualsGrandTotal">
+            <argument name="productName" value="$$initialSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$560.00"/>
+            <argument name="cartSubtotal" value="$560.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" visible="true" stepKey="clickEstimateShippingAndTaxToOpen"/>
+        <waitForPageLoad stepKey="waitForEstimateShippingAndTaxToOpen"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country_id}}" stepKey="selectUnitedStatesCountry"/>
+        <waitForPageLoad stepKey="waitToSelectCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="selectCaliforniaRegion"/>
+        <waitForPageLoad stepKey="waitToSelectState"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{US_Address_CA.postcode}}" stepKey="inputPostCode"/>
+        <!--After selecting country, province and postcode, verify AssertCartPriceRuleConditionIsApplied if Subtotal condition is True-->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">
+            <argument name="subtotal" value="$560.00"/>
+            <argument name="shipping" value="$5.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="$285.00"/>
+        </actionGroup>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$280.00" stepKey="seeAssertDiscountAmountAppliedForSubtotalConditionIsTrue"/>
+    </test>
+</tests>

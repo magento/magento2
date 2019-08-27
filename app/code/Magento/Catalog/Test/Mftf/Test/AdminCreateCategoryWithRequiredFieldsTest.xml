@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryWithRequiredFieldsTest">
+        <annotations>
+            <stories value="Create categories"/>
+            <title value="Create Category from Category page with Required Fields Only"/>
+            <description value="Login as an admin and create a category with required fields."/>
+            <testCaseId value="MC-5265"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Create subcategory with required fields -->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <!-- Verify success message -->
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <!-- Verify subcategory created with required fields -->
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <seeElement selector="{{AdminCategoryContentSection.activeCategoryInTree(_defaultCategory.name)}}" stepKey="seeCategoryInTree"  />
+        <!--Verify Category is listed in store front page menu/>-->
+        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle"/>
+    </test>
+</tests>

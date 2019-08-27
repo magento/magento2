@@ -5,5 +5,5 @@
  */
 ?>
 <span>
-    <?= /* @escapeNotVerified */ $block->getData('label') ?>
+    <?= $block->escapeHtml($block->getData('label')) ?>
 </span>

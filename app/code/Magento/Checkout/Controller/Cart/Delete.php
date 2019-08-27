@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,6 +7,11 @@ namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 
+/**
+ * Action Delete.
+ *
+ * Deletes item from cart.
+ */
 class Delete extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
@@ -24,7 +28,12 @@ class Delete extends \Magento\Checkout\Controller\Cart implements HttpPostAction
         $id = (int)$this->getRequest()->getParam('id');
         if ($id) {
             try {
-                $this->cart->removeItem($id)->save();
+                $this->cart->removeItem($id);
+                // We should set Totals to be recollected once more because of Cart model as usually is loading
+                // before action executing and in case when triggerRecollect setted as true recollecting will
+                // executed and the flag will be true already.
+                $this->cart->getQuote()->setTotalsCollectedFlag(false);
+                $this->cart->save();
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage(__('We can\'t remove the item.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

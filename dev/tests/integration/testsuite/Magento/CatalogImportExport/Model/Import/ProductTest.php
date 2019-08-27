@@ -20,20 +20,25 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
+use Magento\ImportExport\Model\Import\Source\Csv;
 
 /**
  * Class ProductTest
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
+ * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * phpcs:disable Generic.PHP.NoSilencedErrors, Generic.Metrics.NestingLevel, Magento2.Functions.StaticFunction
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -77,8 +82,32 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['logger' => $this->logger]
         );
+        $this->importedProducts = [];
+
         parent::setUp();
     }
+
+    protected function tearDown()
+    {
+        /* We rollback here the products created during the Import because they were
+           created during test execution and we do not have the rollback for them */
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        foreach ($this->importedProducts as $productSku) {
+            try {
+                $product = $productRepository->get($productSku, false, null, true);
+                $productRepository->delete($product);
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            } catch (NoSuchEntityException $e) {
+                // nothing to delete
+            }
+        }
+    }
+
+    /**
+     * @var array
+     */
+    private $importedProducts;
 
     /**
      * Options for assertion
@@ -278,7 +307,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @param string $importFile
      * @param string $sku
      * @param int $expectedOptionsQty
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppIsolation enabled
+
      *
      * @return void
      */
@@ -431,7 +463,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'Append behavior with new product' => [
                 'importFile' => 'product_with_custom_options_new.csv',
                 'sku' => 'simple_new',
-                'expectedOptionsQty' => 4,
+                'expectedOptionsQty' => 5,
             ],
         ];
     }
@@ -567,6 +599,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected function getExpectedOptionsData(string $pathToFile, string $storeCode = ''): array
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $productData = $this->csvToArray(file_get_contents($pathToFile));
         $expectedOptionId = 0;
         $expectedOptions = [];
@@ -593,6 +626,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                         explode(',', $optionData)
                     )
                 );
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $option = array_merge(...$option);
 
                 if (!empty($option['type']) && !empty($option['name'])) {
@@ -659,12 +693,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 }
             } else {
                 $existingOptionId = array_search($optionKey, $expectedOptions);
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $expectedData[$existingOptionId] = array_merge(
                     $this->getOptionData($option),
                     $expectedData[$existingOptionId]
                 );
                 if ($optionValues) {
                     foreach ($optionValues as $optionKey => $optionValue) {
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                         $expectedValues[$existingOptionId][$optionKey] = array_merge(
                             $optionValue,
                             $expectedValues[$existingOptionId][$optionKey]
@@ -762,7 +798,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that product import with images works properly
      *
-     * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -811,9 +846,60 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that new images should be added after the existing ones.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testNewImagesShouldBeAddedAfterExistingOnes()
+    {
+        $this->importDataForMediaTest('import_media.csv');
+
+        $product = $this->getProductBySku('simple_new');
+
+        $items = array_values($product->getMediaGalleryImages()->getItems());
+
+        $images = [
+            ['file' => '/m/a/magento_image.jpg', 'label' => 'Image Label'],
+            ['file' => '/m/a/magento_small_image.jpg', 'label' => 'Small Image Label'],
+            ['file' => '/m/a/magento_thumbnail.jpg', 'label' => 'Thumbnail Label'],
+            ['file' => '/m/a/magento_additional_image_one.jpg', 'label' => 'Additional Image Label One'],
+            ['file' => '/m/a/magento_additional_image_two.jpg', 'label' => 'Additional Image Label Two'],
+        ];
+
+        $this->assertCount(5, $items);
+        $this->assertEquals(
+            $images,
+            array_map(
+                function (\Magento\Framework\DataObject $item) {
+                    return $item->toArray(['file', 'label']);
+                },
+                $items
+            )
+        );
+
+        $this->importDataForMediaTest('import_media_additional_images.csv');
+        $product->cleanModelCache();
+        $product = $this->getProductBySku('simple_new');
+        $items = array_values($product->getMediaGalleryImages()->getItems());
+        $images[] = ['file' => '/m/a/magento_additional_image_three.jpg', 'label' => ''];
+        $images[] = ['file' => '/m/a/magento_additional_image_four.jpg', 'label' => ''];
+        $this->assertCount(7, $items);
+        $this->assertEquals(
+            $images,
+            array_map(
+                function (\Magento\Framework\DataObject $item) {
+                    return $item->toArray(['file', 'label']);
+                },
+                $items
+            )
+        );
+    }
+
+    /**
      * Test that errors occurred during importing images are logged.
      *
-     * @magentoDataIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture mediaImportImageFixtureError
@@ -860,6 +946,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_two.jpg',
                 'dest' => $dirPath . '/magento_additional_image_two.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_three.jpg',
+                'dest' => $dirPath . '/magento_additional_image_three.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_four.jpg',
+                'dest' => $dirPath . '/magento_additional_image_four.jpg',
             ],
         ];
 
@@ -958,6 +1052,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $errors = $this->_model->setParameters(
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                Import::FIELD_NAME_VALIDATION_STRATEGY => null,
                 'entity' => 'catalog_product'
             ]
         )->setSource(
@@ -1068,6 +1163,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test url keys properly generated in multistores environment.
      *
+     * @magentoConfigFixture current_store catalog/seo/product_use_categories 1
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
      * @magentoDbIsolation enabled
@@ -1292,12 +1388,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
+     * @magentoDataFixture Magento/CatalogImportExport/_files/update_category_duplicates.php
      */
     public function testProductDuplicateCategories()
     {
-        $this->markTestSkipped('Due to MAGETWO-48956');
-
         $csvFixture = 'products_duplicate_category.csv';
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $csvFixture;
@@ -1321,19 +1415,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() === 0);
-
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class
-        );
-
-        $category->load(444);
-
-        $this->assertTrue($category !== null);
-
-        $category->setName(
-            'Category 2-updated'
-        )->save();
 
         $this->_model->importData();
 
@@ -1373,6 +1454,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $expectedErrors array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateUrlKeys($importFile, $expectedErrors)
     {
@@ -1574,9 +1656,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function testAddUpdateProductWithInvalidUrlKeys() : void
     {
         $products = [
-            'simple1' => 'cuvee-merlot-cabernet-igp-pays-d-oc-frankrijk',
+            'simple1' => 'cuvée merlot-cabernet igp pays d\'oc frankrijk',
             'simple2' => 'normal-url',
-            'simple3' => 'some-wrong-url'
+            'simple3' => 'some!wrong\'url'
         ];
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Filesystem::class);
@@ -1607,6 +1689,57 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Make sure the non existing image in the csv file won't erase the qty key of the existing products.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithNonExistingImage()
+    {
+        $products = [
+            'simple_new' => 100,
+        ];
+
+        $this->importFile('products_to_import_with_non_existing_image.csv');
+
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        foreach ($products as $productSku => $productQty) {
+            $product = $productRepository->get($productSku);
+            $stockItem = $product->getExtensionAttributes()->getStockItem();
+            $this->assertEquals($productQty, $stockItem->getQty());
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithoutChangingUrlKeys()
+    {
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_without_url_key_column.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->assertEquals('url-key', $productRepository->get('simple1')->getUrlKey());
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
@@ -1624,6 +1757,91 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_import_without_url_keys.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        foreach ($products as $productSku => $productUrlKey) {
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_non_latin_url_key.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testImportWithNonLatinUrlKeys()
+    {
+        $productsCreatedByFixture = [
+            'ukrainian-with-url-key' => 'nove-im-ja-pislja-importu-scho-stane-url-key',
+            'ukrainian-without-url-key' => 'новий url key після імпорту',
+        ];
+        $productsImportedByCsv = [
+            'imported-ukrainian-with-url-key' => 'імпортований продукт',
+            'imported-ukrainian-without-url-key' => 'importovanij-produkt-bez-url-key',
+        ];
+        $productSkuMap = array_merge($productsCreatedByFixture, $productsImportedByCsv);
+        $this->importedProducts = array_keys($productsImportedByCsv);
+
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_non_latin_url_keys.csv',
+                'directory' => $directory,
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertEquals($errors->getErrorsCount(), 0);
+        $this->_model->importData();
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        foreach ($productSkuMap as $productSku => $productUrlKey) {
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+        }
+    }
+
+    /**
+     * Make sure the absence of a url_key column in the csv file won't erase the url key of the existing products.
+     * To reach the goal we need to not send the name column, as the url key is generated from it.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithoutUrlKeysAndName()
+    {
+        $products = [
+            'simple1' => 'url-key',
+            'simple2' => 'url-key2',
+        ];
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_without_url_keys_and_name.csv',
                 'directory' => $directory
             ]
         );
@@ -1758,6 +1976,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 if ($product->getId()) {
                     $productRepository->delete($product);
                 }
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 //Product already removed
             }
@@ -1867,7 +2086,17 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
-        $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == $expectedErrors);
+        $this->assertEquals(
+            $expectedErrors,
+            $this->_model->getErrorAggregator()->getErrorsCount(),
+            array_reduce(
+                $this->_model->getErrorAggregator()->getAllErrors(),
+                function ($output, $error) {
+                    return "$output\n{$error->getErrorMessage()}";
+                },
+                ''
+            )
+        );
     }
 
     /**
@@ -2045,7 +2274,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     *
      */
     public function testImportDataChangeAttributeSet()
     {
@@ -2063,7 +2291,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
         $errors = $this->_model->setParameters(
             [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => \Magento\Catalog\Model\Product::ENTITY
             ]
         )->setSource(
@@ -2187,7 +2415,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that product import with images for non-default store works properly.
      *
-     * @magentoDataIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
      */
@@ -2246,6 +2473,20 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function testImportWithBackordersEnabled(): void
     {
         $this->importFile('products_to_import_with_backorders_enabled_and_0_qty.csv');
+        $product = $this->getProductBySku('simple_new');
+        $this->assertFalse($product->getDataByKey('quantity_and_stock_status')['is_in_stock']);
+    }
+
+    /**
+     * Test that imported product stock status with stock quantity > 0 and backorders functionality disabled
+     * can be set to 'out of stock'.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithBackordersDisabled(): void
+    {
+        $this->importFile('products_to_import_with_backorders_disabled_and_not_0_qty.csv');
         $product = $this->getProductBySku('simple_new');
         $this->assertFalse($product->getDataByKey('quantity_and_stock_status')['is_in_stock']);
     }

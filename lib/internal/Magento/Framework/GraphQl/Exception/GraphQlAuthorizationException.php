@@ -11,7 +11,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Exception\AuthorizationException;
 
 /**
- * Class GraphQlAuthorizationException
+ * Exception for GraphQL to be thrown when authorization fails
  */
 class GraphQlAuthorizationException extends AuthorizationException implements \GraphQL\Error\ClientAware
 {
@@ -37,7 +37,7 @@ class GraphQlAuthorizationException extends AuthorizationException implements \G
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function isClientSafe() : bool
     {
@@ -45,7 +45,7 @@ class GraphQlAuthorizationException extends AuthorizationException implements \G
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getCategory() : string
     {

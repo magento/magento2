@@ -7,12 +7,20 @@ namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 
 /**
  * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class CollectionTest extends BaseCollection
 {
@@ -77,6 +85,42 @@ class CollectionTest extends BaseCollection
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
 
+        $searchCriteriaResolver = $this->getMockBuilder(SearchCriteriaResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMockForAbstractClass();
+        $searchCriteriaResolverFactory = $this->getMockBuilder(SearchCriteriaResolverFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $searchCriteriaResolverFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($searchCriteriaResolver);
+
+        $searchResultApplier = $this->getMockBuilder(SearchResultApplierInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['apply'])
+            ->getMockForAbstractClass();
+        $searchResultApplierFactory = $this->getMockBuilder(SearchResultApplierFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $searchResultApplierFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($searchResultApplier);
+
+        $totalRecordsResolver = $this->getMockBuilder(TotalRecordsResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMockForAbstractClass();
+        $totalRecordsResolverFactory = $this->getMockBuilder(TotalRecordsResolverFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $totalRecordsResolverFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($totalRecordsResolver);
+
         $this->advancedCollection = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
             [
@@ -88,6 +132,10 @@ class CollectionTest extends BaseCollection
                 'temporaryStorageFactory' => $this->temporaryStorageFactory,
                 'search' => $this->search,
                 'productLimitationFactory' => $productLimitationFactoryMock,
+                'collectionProvider' => null,
+                'searchCriteriaResolverFactory' => $searchCriteriaResolverFactory,
+                'searchResultApplierFactory' => $searchResultApplierFactory,
+                'totalRecordsResolverFactory' => $totalRecordsResolverFactory
             ]
         );
     }
@@ -115,18 +163,8 @@ class CollectionTest extends BaseCollection
             ->willReturn($this->filterBuilder);
 
         $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
-        $this->filterBuilder->expects($this->once())->method('create')->willReturn($filter);
+        $this->filterBuilder->expects($this->any())->method('create')->willReturn($filter);
 
-        $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
-        $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
-        $criteria->expects($this->once())
-            ->method('setRequestName')
-            ->with('advanced_search_container');
-
-        $tempTable = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);
-        $temporaryStorage = $this->createMock(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class);
-        $temporaryStorage->expects($this->once())->method('storeApiDocuments')->willReturn($tempTable);
-        $this->temporaryStorageFactory->expects($this->once())->method('create')->willReturn($temporaryStorage);
         $searchResult = $this->createMock(\Magento\Framework\Api\Search\SearchResultInterface::class);
         $this->search->expects($this->once())->method('search')->willReturn($searchResult);
 

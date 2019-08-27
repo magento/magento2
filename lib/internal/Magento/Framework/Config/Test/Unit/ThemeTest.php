@@ -7,10 +7,10 @@ namespace Magento\Framework\Config\Test\Unit;
 
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolverMock;
 
     protected function setUp()

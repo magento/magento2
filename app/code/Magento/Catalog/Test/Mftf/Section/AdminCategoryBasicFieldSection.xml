@@ -22,6 +22,7 @@
         <element name="ContentTab" type="input" selector="input[name='name']"/>
         <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
         <element name="panelFieldControl" type="input" selector='//aside//div[@data-index="{{arg1}}"]/descendant::*[@name="{{arg2}}"]' parameterized="true"/>
+        <element name="productsInCategory" type="input" selector="div[data-index='assign_products']" timeout="30"/>
     </section>
     <section name="CategoryContentSection">
         <element name="SelectFromGalleryBtn" type="button" selector="//label[text()='Select from Gallery']"/>
@@ -32,9 +33,23 @@
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
         <element name="LayoutDropdown" type="select" selector="select[name='page_layout']"/>
     </section>
+    <section name="CategoryDisplaySettingsSection">
+        <element name="DisplaySettingTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Display Settings']"/>
+        <element name="layeredNavigationPriceInput" type="input" selector="input[name='filter_price_range']"/>
+        <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
+        <element name="filterPriceRangeUseConfig" type="checkbox" selector="input[name='use_config[filter_price_range]']"/>
+        <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index={{arg1}}]&gt;.admin__field-label span'), ':after').getPropertyValue('content');" parameterized="true"/>
+        <element name="displayMode" type="button" selector="select[name='display_mode']"/>
+        <element name="anchor" type="checkbox" selector="input[name='is_anchor']"/>
+        <element name="productListCheckBox" type="checkbox" selector="input[name='use_config[available_sort_by]']" />
+        <element name="productList" type="text" selector="select[name='available_sort_by']"/>
+        <element name="defaultProductLisCheckBox" type="checkbox" selector="input[name='use_config[default_sort_by]']"/>
+        <element name="defaultProductList" type="text" selector="select[name='default_sort_by']"/>
+        <element name="layeredNavigationPriceCheckBox" type="checkbox" selector="input[name='use_config[filter_price_range]']"/>
+    </section>
     <section name="CatalogWYSIWYGSection">
         <element name="ShowHideBtn" type="button" selector="#togglecategory_form_description"/>
-        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by"/>
+        <element name="TinyMCE4" type="text" selector=".mce-branding"/>
         <element name="Style" type="button" selector=".mce-txt" />
         <element name="Bold" type="button" selector=".mce-i-bold" />
         <element name="Italic" type="button" selector=".mce-i-italic" />

@@ -42,7 +42,8 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      *
-     * @throws \InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

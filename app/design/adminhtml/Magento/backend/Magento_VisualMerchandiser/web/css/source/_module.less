@@ -68,18 +68,27 @@
 
             a {
                 color: @color-gray85;
+                cursor: move;
                 display: block;
                 float: left;
                 text-decoration: none;
             }
 
             a:last-child {
+                cursor: pointer;
                 float: right;
             }
         }
 
         .info-block {
             height: 100px;
+            > span {
+                display: inline-block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: 100%;
+            }
         }
 
         .controlbar-bottom {

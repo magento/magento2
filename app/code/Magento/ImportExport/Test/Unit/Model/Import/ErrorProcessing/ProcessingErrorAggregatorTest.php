@@ -191,7 +191,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for method initValidationStrategy. Expected exeption due null incoming parameter
+     * Test for method initValidationStrategy. Expected exception due null incoming parameter
      */
     public function testInitValidationStrategyException()
     {
@@ -216,6 +216,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsErrorLimitExceededFalse()
     {
+        $this->model->initValidationStrategy('validation-stop-on-errors', 5);
         $this->model->addError('systemException');
         $this->model->addError('systemException', 'critical', 7, 'Some column name', 'Message', 'Description');
         $this->model->addError('systemException', 'critical', 4, 'Some column name', 'Message', 'Description');
@@ -316,7 +317,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for method getErrorsByCode. Expects receive errors with code, which present in incomming parameter.
+     * Test for method getErrorsByCode. Expects receive errors with code, which present in incoming parameter.
      */
     public function testGetErrorsByCodeInArray()
     {
@@ -328,7 +329,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for method getErrorsByCode. Unexpects receive errors with code, which present in incomming parameter.
+     * Test for method getErrorsByCode. Unexpects receive errors with code, which present in incoming parameter.
      */
     public function testGetErrorsByCodeNotInArray()
     {

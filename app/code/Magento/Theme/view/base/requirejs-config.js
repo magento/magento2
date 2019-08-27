@@ -43,7 +43,8 @@ var config = {
         'text': 'mage/requirejs/text',
         'domReady': 'requirejs/domReady',
         'spectrum': 'jquery/spectrum/spectrum',
-        'tinycolor': 'jquery/spectrum/tinycolor'
+        'tinycolor': 'jquery/spectrum/tinycolor',
+        'jquery-ui-modules': 'jquery/ui-modules'
     },
     'deps': [
         'jquery/jquery-migrate'
@@ -64,3 +65,9 @@ var config = {
         }
     }
 };
+
+require(['jquery'], function ($) {
+    'use strict';
+
+    $.noConflict();
+});
