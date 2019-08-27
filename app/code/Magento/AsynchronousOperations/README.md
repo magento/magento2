@@ -1,6 +1,6 @@
 # Magento_AsynchronousOperations module
 
-This component is designed  to provide response for client who launched the bulk operation as soon as possible and postpone handling of operations moving them to background handler.
+This component is designed to provide a response for a client that launched the bulk operation as soon as possible and postpone handling of operations moving them to the background handler.
 
 ## Installation details
 
@@ -34,7 +34,7 @@ For more information about layouts in Magento 2, see the [Layout documentation](
 
 ### UI components
 
-You can extend Magento_AsynchronousOperations module using the following configuration files in `view/adminhtml/ui_component/` directory:
+You can extend Magento_AsynchronousOperations module using the following configuration files in the `view/adminhtml/ui_component/` directory:
 
 - `bulk_details_form`
 - `bulk_details_form_modal`
