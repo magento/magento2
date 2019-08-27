@@ -31,6 +31,7 @@
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteSalesRule">
                 <argument name="ruleName" value="{{ApiSalesRule.name}}"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCartPriceRulesGridFilter"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
