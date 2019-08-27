@@ -10,12 +10,12 @@
 /lib/internal/Magento/Framework/Notification/ @buskamuza
 /lib/internal/Magento/Framework/Session/ @buskamuza
 /lib/internal/Magento/Framework/Url/ @buskamuza
-/app/code/Magento/Cms/ @Melnykov
-/app/code/Magento/CmsUrlRewrite/ @Melnykov
-/app/code/Magento/Contact/ @Melnykov
-/app/code/Magento/Email/ @Melnykov
-/app/code/Magento/Variable/ @Melnykov
-/app/code/Magento/Widget/ @Melnykov
+/app/code/Magento/Cms/ @melnikovi
+/app/code/Magento/CmsUrlRewrite/ @melnikovi
+/app/code/Magento/Contact/ @melnikovi
+/app/code/Magento/Email/ @melnikovi
+/app/code/Magento/Variable/ @melnikovi
+/app/code/Magento/Widget/ @melnikovi
 /lib/internal/Magento/Framework/Cache/ @kokoc
 /app/code/Magento/CacheInvalidate/ @kokoc
 /app/code/Magento/CatalogInventory/ @tariqjawed83 @maghamed
@@ -92,22 +92,22 @@
 /lib/internal/Magento/Framework/Css/ @DrewML
 /lib/internal/Magento/Framework/Option/ @DrewML
 /lib/internal/Magento/Framework/RequireJs/ @DrewML
-/lib/internal/Magento/Framework/View/ @Melnykov
+/lib/internal/Magento/Framework/View/ @melnikovi
 /dev/tests/js/ @DrewML
 /app/code/Magento/RequireJs/ @DrewML
-/app/code/Magento/Theme/ @Melnykov
-/app/code/Magento/Ui/ @Melnykov
-/lib/internal/Magento/Framework/Intl/ @Melnykov
-/lib/internal/Magento/Framework/Locale/ @Melnykov
-/lib/internal/Magento/Framework/Phrase/ @Melnykov
-/lib/internal/Magento/Framework/Translate/ @Melnykov
-/app/code/Magento/Translation/ @Melnykov
+/app/code/Magento/Theme/ @melnikovi
+/app/code/Magento/Ui/ @melnikovi
+/lib/internal/Magento/Framework/Intl/ @melnikovi
+/lib/internal/Magento/Framework/Locale/ @melnikovi
+/lib/internal/Magento/Framework/Phrase/ @melnikovi
+/lib/internal/Magento/Framework/Translate/ @melnikovi
+/app/code/Magento/Translation/ @melnikovi
 /app/code/Magento/ImportExport/ @akaplya
-/app/code/Magento/GoogleAdwords/ @buskamuza @Melnykov
-/app/code/Magento/Newsletter/ @buskamuza @Melnykov
-/app/code/Magento/ProductAlert/ @buskamuza @Melnykov
-/app/code/Magento/Rss/ @buskamuza @Melnykov
-/app/code/Magento/SendFriend/ @buskamuza @Melnykov
+/app/code/Magento/GoogleAdwords/ @buskamuza @melnikovi
+/app/code/Magento/Newsletter/ @buskamuza @melnikovi
+/app/code/Magento/ProductAlert/ @buskamuza @melnikovi
+/app/code/Magento/Rss/ @buskamuza @melnikovi
+/app/code/Magento/SendFriend/ @buskamuza @melnikovi
 /app/code/Magento/Marketplace/ @buskamuza
 /app/code/Magento/MediaStorage/ @buskamuza
 /lib/internal/Magento/Framework/Amqp/ @tariqjawed83 @paliarush
@@ -186,10 +186,10 @@
 /dev/tests/api-functional/ @paliarush
 /app/code/Magento/UrlRewrite/ @kokoc
 /lib/internal/Magento/Framework/Image/ @buskamuza
-/lib/internal/Magento/Framework/Mail/ @Melnykov
-/lib/internal/Magento/Framework/Filter/ @Melnykov
-/lib/internal/Magento/Framework/Validation/ @Melnykov
-/lib/internal/Magento/Framework/Validator/ @Melnykov
+/lib/internal/Magento/Framework/Mail/ @melnikovi
+/lib/internal/Magento/Framework/Filter/ @melnikovi
+/lib/internal/Magento/Framework/Validation/ @melnikovi
+/lib/internal/Magento/Framework/Validator/ @melnikovi
 /lib/internal/Magento/Framework/Api/ @paliarush
 /lib/internal/Magento/Framework/GraphQL/ @paliarush
 /lib/internal/Magento/Framework/Oauth/ @paliarush
