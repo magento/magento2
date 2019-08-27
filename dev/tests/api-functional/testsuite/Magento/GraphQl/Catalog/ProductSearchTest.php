@@ -746,7 +746,7 @@ QUERY;
      search : "simple"
         filter:
         {
-          price:{from:"60"}
+          price:{from:"5.59"}
         }
         pageSize:2
         currentPage:2
