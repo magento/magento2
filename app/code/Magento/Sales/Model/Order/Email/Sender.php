@@ -12,8 +12,9 @@ use Magento\Sales\Model\Order\Address\Renderer;
 
 /**
  * Class Sender
- * @api
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @since 100.0.2
  */
 abstract class Sender
