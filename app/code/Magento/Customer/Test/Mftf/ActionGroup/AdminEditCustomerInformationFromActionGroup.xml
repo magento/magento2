@@ -30,4 +30,11 @@
         <waitForPageLoad stepKey="wait"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
     </actionGroup>
+    <actionGroup name="AdminAssociateCustomerToCustomWebsiteActionGroup">
+        <arguments>
+            <argument name="websiteName" type="string" defaultValue="secondWebsite"/>
+        </arguments>
+        <conditionalClick selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" dependentSelector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" visible="false" stepKey="goToAccountInformation"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{websiteName}}" stepKey="selectWebSite"/>
+    </actionGroup>
 </actionGroups>
