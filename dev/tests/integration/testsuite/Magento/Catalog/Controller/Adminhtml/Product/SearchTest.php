@@ -75,7 +75,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
         $jsonResponse = json_decode($responseBody, true);
-        $this->assertEquals(7, $jsonResponse['total']);
-        $this->assertCount(7, $jsonResponse['options']);
+        $this->assertEquals(6, $jsonResponse['total']);
+        $this->assertCount(6, $jsonResponse['options']);
     }
 }
