@@ -83,6 +83,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Payment Failed Email Copy To</label>
+                    <validate>validate-emails</validate>
                     <comment>Separate by ",".</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
