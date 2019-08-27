@@ -143,7 +143,7 @@ class CurrencyConverterApiTest extends TestCase
         $responseBody = '';
         $expectedCurrencyRateList = ['USD' => ['EUR' => null, 'UAH' => null]];
         $cantRetrieveCurrencyMessage = "We can't retrieve a rate from "
-            . "https://free.currconv.com/api/v7/convert?apiKey=api_key&q=USD_EUR,USD_UAH&compact=ultra for %s.";
+            . "https://free.currconv.com for %s.";
         $this->prepareFetchRatesTest($responseBody);
 
         self::assertEquals($expectedCurrencyRateList, $this->model->fetchRates());

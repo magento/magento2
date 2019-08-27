@@ -40,6 +40,11 @@ class CurrencyConverterApi extends AbstractImport
     private $scopeConfig;
 
     /**
+     * @var string
+     */
+    private $currencyConverterServiceHost = '';
+
+    /**
      * @param CurrencyFactory $currencyFactory
      * @param ScopeConfig $scopeConfig
      * @param ZendClientFactory $httpClientFactory
@@ -106,7 +111,8 @@ class CurrencyConverterApi extends AbstractImport
                 $data[$currencyFrom][$to] = $this->_numberFormat(1);
             } else {
                 if (!isset($response[$currencyFrom . '_' . $to])) {
-                    $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $to);
+                    $serviceHost =  $this->getServiceHost($url);
+                    $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $serviceHost, $to);
                     $data[$currencyFrom][$to] = null;
                 } else {
                     $data[$currencyFrom][$to] = $this->_numberFormat(
@@ -117,6 +123,21 @@ class CurrencyConverterApi extends AbstractImport
         }
 
         return $data;
+    }
+
+    /**
+     * Get currency converter service host.
+     *
+     * @param string $url
+     * @return string
+     */
+    private function getServiceHost(string $url): string
+    {
+        if (!$this->currencyConverterServiceHost) {
+            $this->currencyConverterServiceHost = parse_url($url, PHP_URL_SCHEME) . '://'
+                . parse_url($url, PHP_URL_HOST);
+        }
+        return $this->currencyConverterServiceHost;
     }
 
     /**
