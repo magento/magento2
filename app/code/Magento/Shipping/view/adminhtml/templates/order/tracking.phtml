@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /** @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking */?>
 <script>
@@ -68,8 +65,8 @@ require(['prototype'], function(){
                     id="trackingC<%- data.index %>"
                     class="select admin__control-select carrier"
                     disabled="disabled">
-                <?php foreach ($block->getCarriers() as $_code => $_name): ?>
-                    <option value="<?= /* @escapeNotVerified */ $_code ?>"><?= $block->escapeHtml($_name) ?></option>
+                <?php foreach ($block->getCarriers() as $_code => $_name) : ?>
+                    <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
                 <?php endforeach; ?>
             </select>
         </td>
@@ -94,7 +91,7 @@ require(['prototype'], function(){
                 type="button"
                 class="action-default action-delete"
                 onclick="trackingControl.deleteRow(event);return false">
-                <span><?= /* @escapeNotVerified */ __('Delete') ?></span>
+                <span><?= $block->escapeHtml(__('Delete')) ?></span>
             </button>
         </td>
     </tr>
@@ -104,10 +101,10 @@ require(['prototype'], function(){
     <table class="data-table admin__control-table" id="tracking_numbers_table">
         <thead>
         <tr class="headings">
-            <th class="col-carrier"><?= /* @escapeNotVerified */ __('Carrier') ?></th>
-            <th class="col-title"><?= /* @escapeNotVerified */ __('Title') ?></th>
-            <th class="col-number"><?= /* @escapeNotVerified */ __('Number') ?></th>
-            <th class="col-delete"><?= /* @escapeNotVerified */ __('Action') ?></th>
+            <th class="col-carrier"><?= $block->escapeHtml(__('Carrier')) ?></th>
+            <th class="col-title"><?= $block->escapeHtml(__('Title')) ?></th>
+            <th class="col-number"><?= $block->escapeHtml(__('Number')) ?></th>
+            <th class="col-delete"><?= $block->escapeHtml(__('Action')) ?></th>
         </tr>
         </thead>
         <tfoot>

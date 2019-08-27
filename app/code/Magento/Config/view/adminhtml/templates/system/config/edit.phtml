@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -22,7 +19,8 @@
         background-color: #DFF7FF!important;
     }
 </style>
-<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form"
+      enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="accordion">
         <?= $block->getChildHtml('form') ?>
@@ -60,10 +58,16 @@ require([
 
                 var parentSection = groupElement.parents('.section-config');
                 parentSection.addClass('highlighted');
+                parentSection.addClass('active');
                 setTimeout(function() {
                     parentSection.removeClass('highlighted', 2000, "easeInBack");
                 }, 3000);
                 if (!parentSection.hasClass('active')) {
+                    if(section == 'payment') {
+                        var openSection = jQuery('.open').first().attr('id');
+                        var splitIdArray = openSection.split('_');
+                        section = section + '_' + splitIdArray[1];
+                    }
                     Fieldset.toggleCollapse(section + '_' + group);
                 }
             }
@@ -161,7 +165,9 @@ require([
                         var elId = $el.id;
                         $el.replace($el.outerHTML);
                         events.each(function(event) {
-                            Event.observe(Element.extend(document.getElementById(elId)), event.eventName, event.handler);
+                            Event.observe(
+                                Element.extend(document.getElementById(elId)), event.eventName, event.handler
+                            );
                         });
                     } else {
                         el.stopObserving('change', adminSystemConfig.onchangeSharedElement);
@@ -298,7 +304,9 @@ require([
                 if (!scopeElement || !scopeElement.checked) {
                     eventObj.element.enable();
                     eventObj.requires.each(function(required) {
-                        adminSystemConfig.checkRequired.call(Element.extend(required), eventObj.element, eventObj.callback);
+                        adminSystemConfig.checkRequired.call(
+                            Element.extend(required), eventObj.element, eventObj.callback
+                        );
                     }.bind(this));
                 }
             },
@@ -385,7 +393,6 @@ require([
 
     registry.set('adminSystemConfig', adminSystemConfig);
 
-    adminSystemConfig.navigateToElement(<?php echo /* @noEscape */ $block->getConfigSearchParamsJson(); ?>);
-
+    adminSystemConfig.navigateToElement(<?= /* @noEscape */ $block->getConfigSearchParamsJson(); ?>);
 });
 </script>
