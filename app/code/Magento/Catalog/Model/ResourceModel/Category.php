@@ -355,7 +355,7 @@ class Category extends AbstractResource
     {
         $connection = $this->getConnection();
         $positionField = $connection->quoteIdentifier('position');
-        $level = count(explode('/', $path));
+        $level = count(explode('/', (string)$path));
         $bind = ['c_level' => $level, 'c_path' => $path . '/%'];
         $select = $connection->select()->from(
             $this->getTable('catalog_category_entity'),
@@ -720,7 +720,7 @@ class Category extends AbstractResource
      */
     public function getParentCategories($category)
     {
-        $pathIds = array_reverse(explode(',', $category->getPathInStore()));
+        $pathIds = array_reverse(explode(',', (string)$category->getPathInStore()));
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categories */
         $categories = $this->_categoryCollectionFactory->create();
         return $categories->setStore(
