@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\Category;
 use Magento\CatalogGraphQl\Model\Resolver\Category\CheckCategoryIsActive;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -40,45 +38,20 @@ class CategoryTree implements ResolverInterface
      * @var CheckCategoryIsActive
      */
     private $checkCategoryIsActive;
-    /**
-     * @var \Magento\CatalogGraphQl\Model\Category\GetRootCategoryId
-     */
-    private $getRootCategoryId;
 
     /**
      * @param Products\DataProvider\CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CheckCategoryIsActive $checkCategoryIsActive
-     * @param \Magento\CatalogGraphQl\Model\Category\GetRootCategoryId $getRootCategoryId
      */
     public function __construct(
         Products\DataProvider\CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
-        CheckCategoryIsActive $checkCategoryIsActive,
-        \Magento\CatalogGraphQl\Model\Category\GetRootCategoryId $getRootCategoryId
+        CheckCategoryIsActive $checkCategoryIsActive
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->checkCategoryIsActive = $checkCategoryIsActive;
-        $this->getRootCategoryId = $getRootCategoryId;
-    }
-
-    /**
-     * Get category id
-     *
-     * @param array $args
-     * @return int
-     * @throws GraphQlNoSuchEntityException
-     */
-    private function getCategoryId(array $args) : int
-    {
-        $rootCategoryId = 0;
-        try {
-            $rootCategoryId = isset($args['id']) ? (int)$args['id'] : $this->getRootCategoryId->execute();
-        } catch (LocalizedException $exception) {
-            throw new GraphQlNoSuchEntityException(__('Store doesn\'t exist'));
-        }
-        return $rootCategoryId;
     }
 
     /**
@@ -90,10 +63,10 @@ class CategoryTree implements ResolverInterface
             return $value[$field->getName()];
         }
 
-        $rootCategoryId = $this->getCategoryId($args);
-        if ($rootCategoryId !== $this->getRootCategoryId->execute() && $rootCategoryId > 0) {
-            $this->checkCategoryIsActive->execute($rootCategoryId);
-        }
+        $rootCategoryId = isset($args['id']) ? (int)$args['id'] :
+            $context->getExtensionAttributes()->getStore()->getRootCategoryId();
+        $this->checkCategoryIsActive->execute($rootCategoryId);
+
         $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
 
         if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
