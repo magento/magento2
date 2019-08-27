@@ -99,7 +99,7 @@ class FieldMetaReader
                 $result['arguments'][$argumentName]['defaultValue'] = $argumentMeta->defaultValue;
             }
             $typeMeta = $argumentMeta->getType();
-            $result['arguments'][$argumentName] = $this->argumentMetaType($typeMeta, $argumentMeta);
+            $result['arguments'][$argumentName] = $this->argumentMetaType($typeMeta, $argumentMeta, $result);
 
             if ($this->docReader->read($argumentMeta->astNode->directives)) {
                 $result['arguments'][$argumentName]['description'] =
@@ -117,18 +117,17 @@ class FieldMetaReader
     /**
      * Get the argumentMetaType result array
      *
-     * @param array $typeMeta
-     * @param array $argumentMeta
+     * @param \GraphQL\Type\Definition\InputType $typeMeta
+     * @param \GraphQL\Type\Definition\FieldArgument $argumentMeta
+     * @param array $result
      * @return array
      */
     private function argumentMetaType(
         \GraphQL\Type\Definition\InputType $typeMeta,
-        \GraphQL\Type\Definition\FieldArgument $argumentMeta
-    ) {
+        \GraphQL\Type\Definition\FieldArgument $argumentMeta,
+        $result
+    ) : array {
         $argumentName = $argumentMeta->name;
-        $result['arguments'][$argumentName] = [
-            'name' => $argumentName,
-        ];
         $result['arguments'][$argumentName]  = array_merge(
             $result['arguments'][$argumentName],
             $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
