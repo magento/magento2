@@ -6,8 +6,7 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-store": "*",
-        "magento/module-inventory-sales-api": "*",
-        "magento/module-inventory-configuration-api": "*"
+        "magento/module-inventory-sales-api": "*"
     },
     "suggest": {
         "magento/module-advanced-checkout": "*"
