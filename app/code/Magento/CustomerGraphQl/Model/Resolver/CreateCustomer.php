@@ -45,7 +45,7 @@ class CreateCustomer implements ResolverInterface
     public function __construct(
         ExtractCustomerData $extractCustomerData,
         CreateCustomerAccount $createCustomerAccount,
-        Config $config
+        Config $newsletterConfig
     ) {
         $this->config = $config;
         $this->extractCustomerData = $extractCustomerData;
