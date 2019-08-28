@@ -348,6 +348,7 @@
                 <depends>
                     <field id="payment_action">Order</field>
                 </depends>
+                <validate>validate-zero-or-greater validate-digits</validate>
             </field>
             <field id="order_valid_period" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1">
                 <label>Order Valid Period (days)</label>
@@ -357,6 +358,7 @@
                 <depends>
                     <field id="payment_action">Order</field>
                 </depends>
+                <validate>validate-zero-or-greater validate-digits</validate>
             </field>
             <field id="child_authorization_number" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1">
                 <label>Number of Child Authorizations</label>
