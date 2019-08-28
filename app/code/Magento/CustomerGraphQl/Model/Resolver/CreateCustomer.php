@@ -33,7 +33,7 @@ class CreateCustomer implements ResolverInterface
     /**
      * @var Config
      */
-    private $config;
+    private $newsletterConfig;
 
     /**
      * CreateCustomer constructor.
