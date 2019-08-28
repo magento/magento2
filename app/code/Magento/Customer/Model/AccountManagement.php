@@ -1136,7 +1136,7 @@ class AccountManagement implements AccountManagementInterface
      */
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
-        if ($customerId !== null && $customerId <= 0) {
+        if ($customerId !== null && $customerId < 0) {
             throw new InputException(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -1145,7 +1145,7 @@ class AccountManagement implements AccountManagementInterface
             );
         }
 
-        if ($customerId === null) {
+        if ($customerId === 0) {
             //Looking for the customer.
             $customerId = $this->getByToken
                 ->execute($resetPasswordLinkToken)
