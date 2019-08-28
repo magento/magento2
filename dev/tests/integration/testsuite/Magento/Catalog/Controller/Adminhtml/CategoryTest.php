@@ -5,10 +5,14 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Catalog\Model\CategoryFactory as CategoryModelFactory;
 
 /**
  * @magentoAppArea adminhtml
@@ -19,6 +23,15 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $productResource;
+    /**
+     * @var Builder
+     */
+    private $aclBuilder;
+
+    /**
+     * @var CategoryModelFactory
+     */
+    private $categoryFactory;
 
     /**
      * @inheritDoc
@@ -33,6 +46,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->productResource = Bootstrap::getObjectManager()->get(
             Product::class
         );
+        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryModelFactory::class);
     }
 
     /**
@@ -61,7 +76,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         if ($isSuccess) {
             $this->assertSessionMessages(
                 $this->equalTo(['You saved the category.']),
-                \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+                MessageInterface::TYPE_SUCCESS
             );
         }
 
@@ -553,6 +568,80 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
         return count(
             $this->productResource->getConnection()->fetchAll($oldCategoryProducts)
+        );
+    }
+
+    /**
+     * Check whether additional authorization is required for the design fields.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveDesign(): void
+    {
+        /** @var $store \Magento\Store\Model\Store */
+        $store = Bootstrap::getObjectManager()->create(Store::class);
+        $store->load('fixturestore', 'code');
+        $storeId = $store->getId();
+        $requestData = [
+            'id' => '2',
+            'entity_id' => '2',
+            'path' => '1/2',
+            'name' => 'Custom Name',
+            'is_active' => '0',
+            'description' => 'Custom Description',
+            'meta_title' => 'Custom Title',
+            'meta_keywords' => 'Custom keywords',
+            'meta_description' => 'Custom meta description',
+            'include_in_menu' => '0',
+            'url_key' => 'default-test-category',
+            'display_mode' => 'PRODUCTS',
+            'landing_page' => '1',
+            'is_anchor' => true,
+            'store_id' => $storeId,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1,
+                'filter_price_range' => 1,
+            ],
+        ];
+        $uri = 'backend/catalog/category/save';
+
+        //Trying to update the category's design settings without proper permissions.
+        //Expected list of sessions messages collected throughout the controller calls.
+        $sessionMessages = ['Not allowed to edit the category\'s design attributes'];
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
+        $requestData['custom_layout_update_file'] = 'test-file';
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
+        );
+
+        //Trying again with the permissions.
+        $requestData['custom_layout_update_file'] = null;
+        $requestData['custom_design'] = 'test-theme';
+        $this->aclBuilder->getAcl()->allow(null, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+        $this->assertNotEmpty($category->getCustomDesign());
+        $this->assertEquals('test-theme', $category->getCustomDesign());
+        //No new error messages
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
         );
     }
 }

@@ -6,10 +6,15 @@
  */
 namespace Magento\Catalog\Api;
 
+use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\Rules;
+use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\RulesFactory;
 
 class CategoryRepositoryTest extends WebapiAbstract
 {
@@ -17,6 +22,33 @@ class CategoryRepositoryTest extends WebapiAbstract
     const SERVICE_NAME = 'catalogCategoryRepositoryV1';
 
     private $modelId = 333;
+
+    /**
+     * @var RoleFactory
+     */
+    private $roleFactory;
+
+    /**
+     * @var RulesFactory
+     */
+    private $rulesFactory;
+
+    /**
+     * @var AdminTokenServiceInterface
+     */
+    private $adminTokens;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
+        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
+        $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category_backend.php
@@ -57,8 +89,10 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Load category data.
+     *
      * @param int $id
-     * @return string
+     * @return array
      */
     protected function getInfoCategory($id)
     {
@@ -209,10 +243,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     /**
      * Create category process
      *
-     * @param  $category
-     * @return int
+     * @param array $category
+     * @param string|null $token
+     * @return array
      */
-    protected function createCategory($category)
+    protected function createCategory(array $category, ?string $token = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -225,6 +260,9 @@ class CategoryRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
         $requestData = ['category' => $category];
         return $this->_webApiCall($serviceInfo, $requestData);
     }
@@ -251,7 +289,15 @@ class CategoryRepositoryTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, ['categoryId' => $id]);
     }
 
-    protected function updateCategory($id, $data)
+    /**
+     * Update given category via web API.
+     *
+     * @param int $id
+     * @param array $data
+     * @param string|null $token
+     * @return array
+     */
+    protected function updateCategory($id, $data, ?string $token = null)
     {
         $serviceInfo =
             [
@@ -265,6 +311,7 @@ class CategoryRepositoryTest extends WebapiAbstract
                     'operation' => self::SERVICE_NAME . 'Save',
                 ],
             ];
+        $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $data['id'] = $id;
@@ -272,7 +319,110 @@ class CategoryRepositoryTest extends WebapiAbstract
         } else {
             $data['id'] = $id;
             return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-            return $this->_webApiCall($serviceInfo, ['category' => $data]);
         }
+    }
+
+    /**
+     * Test design settings authorization
+     *
+     * @magentoApiDataFixture Magento/User/_files/user_with_custom_role.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveDesign(): void
+    {
+        //Updating our admin user's role to allow saving categories but not their design settings.
+        /** @var Role $role */
+        $role = $this->roleFactory->create();
+        $role->load('test_custom_role', 'role_name');
+        /** @var Rules $rules */
+        $rules = $this->rulesFactory->create();
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::categories']);
+        $rules->saveRel();
+        //Using the admin user with custom role.
+        $token = $this->adminTokens->createAdminAccessToken(
+            'customRoleUser',
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+
+        $categoryData = $this->getSimpleCategoryData();
+        $categoryData['custom_attributes'][] = ['attribute_code' => 'custom_layout_update_file', 'value' => 'test'];
+
+        //Creating new category with design settings.
+        $exceptionMessage = null;
+        try {
+            $this->createCategory($categoryData, $token);
+        } catch (\Throwable $exception) {
+            if ($restResponse = json_decode($exception->getMessage(), true)) {
+                //REST
+                $exceptionMessage = $restResponse['message'];
+            } else {
+                //SOAP
+                $exceptionMessage = $exception->getMessage();
+            }
+        }
+        //We don't have the permissions.
+        $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
+
+        //Updating the user role to allow access to design properties.
+        /** @var Rules $rules */
+        $rules = Bootstrap::getObjectManager()->create(Rules::class);
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
+        $rules->saveRel();
+        //Making the same request with design settings.
+        $categoryData = $this->getSimpleCategoryData();
+        foreach ($categoryData['custom_attributes'] as &$attribute) {
+            if ($attribute['attribute_code'] === 'custom_design') {
+                $attribute['value'] = 'test';
+                break;
+            }
+        }
+        $result = $this->createCategory($categoryData, $token);
+        $this->assertArrayHasKey('id', $result);
+        //Category must be saved.
+        $categorySaved = $this->getInfoCategory($result['id']);
+        $savedCustomDesign = null;
+        foreach ($categorySaved['custom_attributes'] as $customAttribute) {
+            if ($customAttribute['attribute_code'] === 'custom_design') {
+                $savedCustomDesign = $customAttribute['value'];
+                break;
+            }
+        }
+        $this->assertEquals('test', $savedCustomDesign);
+        $categoryData = $categorySaved;
+
+        //Updating our role to remove design properties access.
+        /** @var Rules $rules */
+        $rules = Bootstrap::getObjectManager()->create(Rules::class);
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::categories']);
+        $rules->saveRel();
+        //Updating the category but with the same design properties values.
+        $result = $this->updateCategory($categoryData['id'], $categoryData, $token);
+        //We haven't changed the design so operation is successful.
+        $this->assertArrayHasKey('id', $result);
+
+        //Changing a design property.
+        foreach ($categoryData['custom_attributes'] as &$customAttribute) {
+            if ($customAttribute['attribute_code'] === 'custom_design') {
+                $customAttribute['value'] = 'test2';
+            }
+        }
+        $exceptionMessage = null;
+        try {
+            $this->updateCategory($categoryData['id'], $categoryData, $token);
+        } catch (\Throwable $exception) {
+            if ($restResponse = json_decode($exception->getMessage(), true)) {
+                //REST
+                $exceptionMessage = $restResponse['message'];
+            } else {
+                //SOAP
+                $exceptionMessage = $exception->getMessage();
+            }
+        }
+        //We don't have permissions to do that.
+        $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
     }
 }

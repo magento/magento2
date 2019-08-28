@@ -66,7 +66,7 @@ class Authorization
                 /** @var Product $savedProduct */
                 $savedProduct = $this->productFactory->create();
                 $savedProduct->load($product->getId());
-                if ($savedProduct->getSku()) {
+                if (!$savedProduct->getSku()) {
                     throw NoSuchEntityException::singleField('id', $product->getId());
                 }
                 if ($product->getData('custom_design') != $savedProduct->getData('custom_design')

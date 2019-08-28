@@ -749,7 +749,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve design attributes array
      *
-     * @return array
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
      */
     public function getDesignAttributes()
     {

@@ -11,6 +11,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -52,8 +53,14 @@ class Authorization
     {
         if (!$this->authorization->isAllowed('Magento_Catalog::edit_category_design')) {
             $notAllowed = false;
+            $designAttributeCodes = array_map(
+                function (AttributeInterface $attribute) {
+                    return $attribute->getAttributeCode();
+                },
+                $category->getDesignAttributes()
+            );
             if (!$category->getId()) {
-                foreach (array_keys($category->getDesignAttributes()) as $attribute) {
+                foreach ($designAttributeCodes as $attribute) {
                     if ($category->getData($attribute)) {
                         $notAllowed = true;
                         break;
@@ -63,10 +70,10 @@ class Authorization
                 /** @var Category $savedCategory */
                 $savedCategory = $this->categoryFactory->create();
                 $savedCategory->load($category->getId());
-                if ($savedCategory->getName()) {
+                if (!$savedCategory->getName()) {
                     throw NoSuchEntityException::singleField('id', $category->getId());
                 }
-                foreach (array_keys($category->getDesignAttributes()) as $attribute) {
+                foreach ($designAttributeCodes as $attribute) {
                     if ($category->getData($attribute) != $savedCategory->getData($attribute)) {
                         $notAllowed = true;
                         break;

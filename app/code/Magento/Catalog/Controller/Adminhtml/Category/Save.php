@@ -175,11 +175,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
             }
 
             try {
-                $this->_eventManager->dispatch(
-                    'catalog_category_prepare_save',
-                    ['category' => $category, 'request' => $this->getRequest()]
-                );
-
                 /**
                  * Check "Use Default Value" checkboxes values
                  */
@@ -190,6 +185,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
                         }
                     }
                 }
+
+                $this->_eventManager->dispatch(
+                    'catalog_category_prepare_save',
+                    ['category' => $category, 'request' => $this->getRequest()]
+                );
 
                 /**
                  * Proceed with $_POST['use_config']

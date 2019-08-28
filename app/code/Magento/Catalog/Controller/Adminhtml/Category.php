@@ -71,8 +71,12 @@ abstract class Category extends \Magento\Backend\App\Action
             }
         }
 
-        $this->_objectManager->get(\Magento\Framework\Registry::class)->register('category', $category);
-        $this->_objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->_objectManager->get(\Magento\Framework\Registry::class);
+        $registry->unregister('category');
+        $registry->unregister('current_category');
+        $registry->register('category', $category);
+        $registry->register('current_category', $category);
         $this->_objectManager->get(\Magento\Cms\Model\Wysiwyg\Config::class)
             ->setStoreId($storeId);
         return $category;
