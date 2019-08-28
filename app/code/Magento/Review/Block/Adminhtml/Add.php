@@ -21,17 +21,13 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
     protected function _construct()
     {
         parent::_construct();
-
         $this->_blockGroup = 'Magento_Review';
         $this->_controller = 'adminhtml';
         $this->_mode = 'add';
-
         $this->buttonList->update('save', 'label', __('Save Review'));
         $this->buttonList->update('save', 'id', 'save_button');
-
         $this->buttonList->update('reset', 'id', 'reset_button');
         $this->buttonList->update('reset', 'onclick', 'window.review.formReset()');
-
         $this->_formScripts[] = '
             require(["prototype"], function(){
                 toggleParentVis("add_review_form");
@@ -39,7 +35,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                 toggleVis("reset_button");
             });
         ';
-
         // @codingStandardsIgnoreStart
         $this->_formInitScripts[] = '
             require(["jquery","prototype"], function(jQuery){
