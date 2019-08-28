@@ -4,6 +4,30 @@
  * See COPYING.txt for license details.
  */
 
+$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+$category->isObjectNew(true);
+$category->setId(
+    100
+)->setCreatedAt(
+    '2014-06-23 09:50:07'
+)->setName(
+    'Category 100'
+)->setParentId(
+    2
+)->setPath(
+    '1/2/100'
+)->setLevel(
+    2
+)->setAvailableSortBy(
+    ['position', 'name']
+)->setDefaultSortBy(
+    'name'
+)->setIsActive(
+    true
+)->setPosition(
+    1
+)->save();
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
@@ -25,7 +49,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
-    ->setCategoryIds([2])
+    ->setCategoryIds([100])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setSpecialPrice('10')
     ->save();
@@ -50,7 +74,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
-    ->setCategoryIds([2])
+    ->setCategoryIds([100])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 50, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setSpecialPrice('20')
     ->save();
@@ -70,7 +94,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
-    ->setCategoryIds([2])
+    ->setCategoryIds([100])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 140, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setSpecialPrice('30')
     ->save();

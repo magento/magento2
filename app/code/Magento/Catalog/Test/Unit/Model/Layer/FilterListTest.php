@@ -73,9 +73,13 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
-            ->with($expectedClass, [
-                'data' => ['attribute_model' => $this->attributeMock],
-                'layer' => $this->layerMock])
+            ->with(
+                $expectedClass,
+                [
+                    'data' => ['attribute_model' => $this->attributeMock],
+                    'layer' => $this->layerMock
+                ]
+            )
             ->will($this->returnValue('filter'));
 
         $this->attributeMock->expects($this->once())

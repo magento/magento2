@@ -14,7 +14,7 @@
             <title value="Layer Navigation of Catalog Search Should Equalize Price Range As Default Configuration"/>
             <description value="Make sure filter of custom attribute with type of price displays on storefront Catalog page and price range should respect the configuration in Admin site"/>
             <testCaseId value="MC-16979"/>
-            <issueId value="MC-16650"/>
+            <useCaseId value="MC-16650"/>
             <severity value="MAJOR"/>
             <group value="CatalogSearch"/>
         </annotations>

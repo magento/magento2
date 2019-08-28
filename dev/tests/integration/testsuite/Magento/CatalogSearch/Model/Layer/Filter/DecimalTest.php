@@ -61,7 +61,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
-        $category->load(2);
+        $category->load(100);
         $this->_model->getLayer()->setCurrentCategory($category);
 
         /** @var $attribute \Magento\Catalog\Model\Entity\Attribute */
