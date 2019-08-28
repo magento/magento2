@@ -93,6 +93,53 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a product with SKU "configurable_no_exist"
+     */
+    public function testAddNonExistentConfigurableProductParentToCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = 'configurable_no_exist';
+        $sku = 'simple_20';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            2000
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not add the product with SKU configurable to the shopping cart: Could not find specified product.
+     */
+    public function testAddNonExistentConfigurableProductVariationToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
+        $product = current($searchResponse['products']['items']);
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+        $sku = 'simple_no_exist';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            2000
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $parentSku
      * @param string $sku
