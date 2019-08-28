@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMoveFixedBundleProductFromShoppingCartToWishlistTest">
+        <annotations>
+            <stories value="Wishlist"/>
+            <title value="Move Fixed Bundle Product from Shopping Cart to Wishlist"/>
+            <description value="Move Fixed Bundle Product from Shopping Cart to Wishlist"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-29545"/>
+            <group value="wishlist"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create Data -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <!-- Create bundle product -->
+            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink">
+                <field key="price_type">0</field>
+                <field key="price">100</field>
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct2">
+                <field key="price_type">0</field>
+                <field key="price">100</field>
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- 1. Login as a customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Open Product page -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeButton"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$createBundleOption1_1.title$$)}}" userInput="$$simpleProduct1.sku$$ +$100.00" stepKey="selectOption0Product0"/>
+        <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity($$createBundleOption1_1.title$$)}}" userInput="1" stepKey="fillQuantity00"/>
+
+        <!-- Add product to the cart and Assert add product to cart success message-->
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Select Mini Cart and select 'View And Edit Cart' -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+
+        <!-- Assert move product to wishlist success message -->
+        <click selector="{{CheckoutCartProductSection.moveToWishlistByProductName($$createBundleProduct.name$$)}}" stepKey="moveToWishlist"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="$$createBundleProduct.name$$ has been moved to your wish list." selector="{{CheckoutCartMessageSection.successMessage}}" stepKey="assertMoveProductToWishlistSuccessMessage"/>
+
+        <!-- Assert product is present in wishlist -->
+        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishlistPage"/>
+        <waitForPageLoad stepKey="waitForWishlistPage"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName($$createBundleProduct.name$$)}}" time="30" stepKey="assertWishlistProductName"/>
+        <see userInput="$101.23" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName($$createBundleProduct.name$$)}}" stepKey="AssertWishlistProductPrice"/>
+
+        <!-- Assert product details in Wishlist -->
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName($$createBundleProduct.name$$)}}" stepKey="wishlistMoveMouseOverProduct"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName($$createBundleProduct.name$$)}}" stepKey="AssertWishlistAddToCart"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName($$createBundleProduct.name$$)}}" stepKey="AssertWishlistProductImage"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsByName($$createBundleProduct.name$$)}}" stepKey="seeDetailsMoveMouseOverProduct"/>
+        <see userInput="$$createBundleOption1_1.title$$" selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsLabelByName($$createBundleProduct.name$$)}}" stepKey="seeBundleOption"/>
+        <see userInput="$$simpleProduct1.sku$$ $100.00" selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsValueByName($$createBundleProduct.name$$)}}" stepKey="seeProduct"/>
+
+        <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="assertCartIsEmpty"/>
+    </test>
+</tests>
