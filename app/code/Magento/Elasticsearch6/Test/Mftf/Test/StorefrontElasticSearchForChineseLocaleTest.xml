@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontElasticSearchForChineseLocaleTest">
+        <annotations>
+            <features value="Elasticsearch"/>
+            <stories value="Elasticsearch for Chinese produce error"/>
+            <title value="Elastic search for Chinese locale"/>
+            <description value="Elastic search for Chinese locale"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6310"/>
+            <useCaseId value="MAGETWO-91625"/>
+            <group value="elasticsearch"/>
+        </annotations>
+        <before>
+            <!-- Set search engine to Elastic 6, set Locale to China, create category and product, then go to Storefront -->
+            <comment userInput="Set search engine to Elastic 6, set Locale to China, create category and product, then go to Storefront" stepKey="doInitialSetups"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCLI command="config:set --scope=websites --scope-code=base general/locale/code zh_Hans_CN" stepKey="setLocaleToChina"/>
+            <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="setSearchEngineToElastic6"/>
+            <actionGroup ref="AdminElasticConnectionTestActionGroup" stepKey="checkConnection"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+        </before>
+        <after>
+            <!-- Delete created data and reset initial configuration -->
+            <comment userInput="Delete created data and reset initial configuration" stepKey="deleteCreatedDataAndResetConfig"/>
+            <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToConfigurationGeneralPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsiteActionGroup">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
+            <checkOption selector="{{LocaleOptionsSection.defaultLocale}}" stepKey="setDefaultLocaleValue"/>
+            <click selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="closeTab"/>
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
+            <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+            <createData entity="SetCatalogSearchEngineToDefault" stepKey="setSearchEngineToDefault"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!-- Search for product by name -->
+        <comment userInput="Search for product by name" stepKey="searchForProduct"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
+            <argument name="phrase" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!-- Check if searched product is displayed -->
+        <comment userInput="Check if searched product is displayed" stepKey="checkThatProductIsDisplayed"/>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInCategoryPage"/>
+    </test>
+</tests>

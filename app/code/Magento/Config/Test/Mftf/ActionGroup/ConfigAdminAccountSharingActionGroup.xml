@@ -9,20 +9,33 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ConfigAdminAccountSharingActionGroup">
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/system_config/edit/section/admin/" stepKey="navigateToConfigurationPage" />
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Admin'. Enables 'Admin Account Sharing'. Clicks on the Save button.</description>
+        </annotations>
+
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/system_config/edit/section/admin/" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="wait1"/>
-        <conditionalClick stepKey="expandSecurityTab" selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{AdminSection.AdminAccountSharing}}" stepKey="waitForAdminAccountSharingDrpDown" />
+        <conditionalClick stepKey="expandSecurityTab" selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{AdminSection.AdminAccountSharing}}" stepKey="waitForAdminAccountSharingDrpDown"/>
         <uncheckOption selector="{{AdminSection.EnableSystemValue}}" stepKey="uncheckUseSystemValue"/>
         <selectOption selector="{{AdminSection.AdminAccountSharing}}" userInput="Yes" stepKey="selectYes"/>
-        <click selector="{{AdminSection.SecurityTab}}" stepKey="clollapseSecurityTab" />
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+        <click selector="{{AdminSection.SecurityTab}}" stepKey="clollapseSecurityTab"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
     </actionGroup>
+
     <actionGroup name="EnableAdminAccountSharingActionGroup">
+        <annotations>
+            <description>Enabled 'Admin Account Sharing' via the API.</description>
+        </annotations>
+
         <createData stepKey="setConfig" entity="EnableAdminAccountSharing"/>
     </actionGroup>
+
     <actionGroup name="DisableAdminAccountSharingActionGroup">
+        <annotations>
+            <description>Disables 'Admin Account Sharing' via the API.</description>
+        </annotations>
+
         <createData stepKey="setConfig" entity="DisableAdminAccountSharing"/>
     </actionGroup>
 </actionGroups>
-
