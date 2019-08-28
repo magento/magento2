@@ -795,6 +795,7 @@ QUERY;
                 ];
                 $this->assertResponseFields($value, $assertionMapValues);
             } else {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $assertionMap = array_merge(
                     $assertionMap,
                     [
@@ -823,7 +824,7 @@ QUERY;
                     $valueKeyName = 'date_option';
                     $valueAssertionMap = [];
                 }
-
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $valueAssertionMap = array_merge(
                     $valueAssertionMap,
                     [

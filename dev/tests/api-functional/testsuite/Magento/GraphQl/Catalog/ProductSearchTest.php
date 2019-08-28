@@ -116,7 +116,7 @@ QUERY;
         $query = $this->getQueryProductsWithCustomAttribute($attributeCode, $firstOption);
         $response = $this->graphQlQuery($query);
 
-        // 1 product is returned since only one child product with attribute option1 from 1st Configurable product is OOS
+        // Out of two children, only one child product of 1st Configurable product with option1 is OOS
         $this->assertEquals(1, $response['products']['total_count']);
 
         // Custom attribute filter layer data
@@ -269,7 +269,8 @@ QUERY;
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
         array_shift($options);
-        $optionValues = array();
+        $optionValues = [];
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($i = 0; $i < count($options); $i++) {
             $optionValues[] = $options[$i]->getValue();
         }
@@ -411,7 +412,7 @@ QUERY;
                 $layers[$layerIndex][0]['request_var'],
                 $response['products']['filters'][$layerIndex]['request_var'],
                 'request_var does not match'
-            ) ;
+            );
         }
 
        // Validate the price filter layer data from the response
@@ -490,7 +491,7 @@ QUERY;
         $this->assertEquals(2, $response['products']['total_count']);
         $actualCategoryFilterItems = $response['products']['filters'][1]['filter_items'];
         //Validate the number of categories/sub-categories that contain the products with the custom attribute
-        $this->assertCount(6,$actualCategoryFilterItems);
+        $this->assertCount(6, $actualCategoryFilterItems);
 
         $expectedCategoryFilterItems =
             [
@@ -527,7 +528,7 @@ QUERY;
                 $categoryFilterItems[$index][0]['items_count'],
                 $actualCategoryFilterItems[$index]['items_count'],
                 'Products count in the category is incorrect'
-            ) ;
+            );
         }
     }
     /**
@@ -972,7 +973,7 @@ QUERY;
     }
 
     /**
-     * Filter products by category only
+     * Filter products by single category
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      * @return void
@@ -1057,6 +1058,58 @@ QUERY;
     }
 
     /**
+     * Sorting the search results by relevance (DESC => most relevant)
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
+     * @return void
+     */
+    public function testFilterProductsAndSortByRelevance()
+    {
+        $search_term ="red white blue grey socks";
+        $query
+            = <<<QUERY
+{
+  products(
+        search:"{$search_term}"
+        
+        sort:{relevance:DESC}
+        pageSize: 5
+        currentPage: 1
+       )
+  {
+    total_count
+    items 
+     {
+      name
+      sku
+      }
+    page_info{
+      current_page
+      page_size
+      total_pages
+    }
+    filters{
+      name
+      request_var
+      filter_items_count 
+      filter_items{
+        label
+        items_count
+        value_string
+        __typename
+      }
+       
+    }    
+      
+    }
+ 
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+    }
+
+    /**
      * Sorting by price in the DESC order from the filtered items with default pageSize
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
@@ -1064,7 +1117,6 @@ QUERY;
      */
     public function testQuerySortByPriceDESCWithDefaultPageSize()
     {
-
         $query
             = <<<QUERY
 {
@@ -1182,13 +1234,30 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
     public function testFilterProductsWithinASpecificPriceRangeSortedByPriceDESC()
     {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('simple2');
+        $prod2 = $productRepository->get('simple1');
+        $filteredProducts = [$prod1, $prod2];
+        /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
+        $categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+        foreach ($filteredProducts as $product) {
+            $categoryLinkManagement->assignProductToCategories(
+                $product->getSku(),
+                [333]
+            );
+        }
+
         $query
             =<<<QUERY
-            {
+{
     products(
         filter:
         {
@@ -1234,6 +1303,12 @@ QUERY;
          type_id
        }
         total_count
+        filters
+        {
+            request_var
+            name
+            filter_items_count
+        }
         page_info
         {
           page_size
@@ -1242,15 +1317,16 @@ QUERY;
     }
 }
 QUERY;
+
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
-        $prod1 = $productRepository->get('simple2');
-        $prod2 = $productRepository->get('simple1');
-        $filteredProducts = [$prod1, $prod2];
         $this->assertProductItemsWithPriceCheck($filteredProducts, $response);
+        //verify that by default Price and category are the only layers available
+        $filterNames = ['Price', 'Category'];
+        $this->assertCount(2, $response['products']['filters'], 'Filter count does not match');
+        for ($i = 0; $i < count($response['products']['filters']); $i++) {
+            $this->assertEquals($filterNames[$i], $response['products']['filters'][$i]['name']);
+        }
     }
 
     /**

@@ -115,7 +115,8 @@ if (!$attribute1->getId()) {
         'catalog_product',
         $attributeSet->getId(),
         $attributeSet->getDefaultGroupId(),
-        $attribute1->getId());
+        $attribute1->getId()
+    );
 }
 
 $eavConfig->clear();
