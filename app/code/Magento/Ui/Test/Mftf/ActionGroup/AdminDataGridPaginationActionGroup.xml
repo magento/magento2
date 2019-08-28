@@ -18,7 +18,7 @@
 
         <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown"/>
         <click selector="{{AdminDataGridPaginationSection.perPageOption(perPage)}}" stepKey="selectCustomPerPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
     </actionGroup>
 
     <actionGroup name="adminDataGridSelectCustomPerPage">
