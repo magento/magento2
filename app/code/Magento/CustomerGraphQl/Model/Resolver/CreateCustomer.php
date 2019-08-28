@@ -47,7 +47,7 @@ class CreateCustomer implements ResolverInterface
         CreateCustomerAccount $createCustomerAccount,
         Config $newsletterConfig
     ) {
-        $this->config = $config;
+        $this->newsLetterConfig = $newsLetterConfig;
         $this->extractCustomerData = $extractCustomerData;
         $this->createCustomerAccount = $createCustomerAccount;
     }
