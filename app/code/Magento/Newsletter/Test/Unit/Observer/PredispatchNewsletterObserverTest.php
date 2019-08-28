@@ -93,7 +93,6 @@ class PredispatchNewsletterObserverTest extends TestCase
             ->method('isActive')
             ->with(ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-
         $observerMock->expects($this->never())
             ->method('getData')
             ->with('controller_action')
