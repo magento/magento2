@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSaveConfProductWithCustomProductAttributeTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with custom product images as swatches attribute"/>
+            <title value="Saving configurable product with custom product attribute (images as swatches)"/>
+            <description value="Saving configurable product with custom product attribute (images as swatches)"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13641"/>
+            <useCaseId value="MC-10968"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create configurable product-->
+            <comment userInput="Create configurable product" stepKey="commentCreateConfProduct"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
+            <deleteData createDataKey="createConfigProduct"  stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory"  stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="VisualSwatchProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Create Visual swatch with preview image-->
+        <comment userInput="Create Visual swatch with preview image" stepKey="commentCreateAttribute"/>
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillProductAttributeProperties">
+            <argument name="attributeName" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            <argument name="attributeType" value="{{VisualSwatchProductAttribute.frontend_input}}"/>
+        </actionGroup>
+        <!--Add first option-->
+        <comment userInput="Add first option" stepKey="commentAddFirstOption"/>
+        <actionGroup ref="AdminAddSwatchOptionAndFillFieldsActionGroup" stepKey="addFirstSwatchOptionAndFillFields">
+            <argument name="swatchOption" value="visualSwatchOption1"/>
+        </actionGroup>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSFirstSwatch">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddPreviewImageSwatchOption" stepKey="addFirstOptionImage">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <!--Add second option-->
+        <comment userInput="Add second option" stepKey="commentAddSecondOption"/>
+        <actionGroup ref="AdminAddSwatchOptionAndFillFieldsActionGroup" stepKey="addSecondSwatchOptionAndFillFields">
+            <argument name="swatchOption" value="visualSwatchOption2"/>
+        </actionGroup>
+        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSecondSwatch">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddPreviewImageSwatchOption" stepKey="addSecondOptionImage">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchScopeForProductAttributeActionGroup" stepKey="switchScopeForProductAttribute"/>
+        <actionGroup ref="ClickSaveButtonActionGroup" stepKey="clickSaveAttribute">
+            <argument name="message" value="You saved the product attribute."/>
+        </actionGroup>
+        <!--Create configurations for product-->
+        <comment userInput="Create configurations for product" stepKey="commentCreateConfigsForProduct"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="StartCreateConfigurationsForAttribute" stepKey="createConfigurations">
+            <argument name="attributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionOne">
+            <argument name="image" value="TestImageAdobe"/>
+            <argument name="frontend_label" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            <argument name="label" value="{{visualSwatchOption1.default_label}}"/>
+        </actionGroup>
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionTwo">
+            <argument name="image" value="ImageUpload3"/>
+            <argument name="frontend_label" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            <argument name="label" value="{{visualSwatchOption2.default_label}}"/>
+        </actionGroup>
+        <actionGroup ref="GenerateAndSaveConfiguredProductAfterSettingOptions" stepKey="saveProductForm"/>
+    </test>
+</tests>
