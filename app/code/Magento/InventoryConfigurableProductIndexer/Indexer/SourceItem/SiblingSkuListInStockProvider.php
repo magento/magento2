@@ -32,10 +32,6 @@ class SiblingSkuListInStockProvider
     private $skuListInStockFactory;
 
     /**
-     * @var int
-     */
-    private $groupConcatMaxLen;
-    /**
      * @var MetadataPool
      */
     private $metadataPool;
@@ -56,7 +52,6 @@ class SiblingSkuListInStockProvider
      * @param ResourceConnection $resourceConnection
      * @param SkuListInStockFactory $skuListInStockFactory
      * @param MetadataPool $metadataPool
-     * @param int $groupConcatMaxLen
      * @param string $tableNameSourceItem
      * @param string $tableNameStockSourceLink
      */
@@ -64,13 +59,11 @@ class SiblingSkuListInStockProvider
         ResourceConnection $resourceConnection,
         SkuListInStockFactory $skuListInStockFactory,
         MetadataPool $metadataPool,
-        int $groupConcatMaxLen,
         $tableNameSourceItem,
         $tableNameStockSourceLink
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->skuListInStockFactory = $skuListInStockFactory;
-        $this->groupConcatMaxLen = $groupConcatMaxLen;
         $this->metadataPool = $metadataPool;
         $this->tableNameSourceItem = $tableNameSourceItem;
         $this->tableNameStockSourceLink = $tableNameStockSourceLink;
@@ -91,15 +84,13 @@ class SiblingSkuListInStockProvider
 
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $linkField = $metadata->getIdentifierField();
+        $items = [];
 
         $select = $connection
             ->select()
             ->from(
                 ['source_item' => $sourceItemTable],
-                [
-                    SourceItemInterface::SKU =>
-                        "GROUP_CONCAT(DISTINCT sibling_product_entity." . SourceItemInterface::SKU . " SEPARATOR ',')"
-                ]
+                [SourceItemInterface::SKU => 'sibling_product_entity.' . SourceItemInterface::SKU]
             )->joinInner(
                 ['stock_source_link' => $sourceStockLinkTable],
                 sprintf(
@@ -124,11 +115,17 @@ class SiblingSkuListInStockProvider
                 ['sibling_product_entity' => $this->resourceConnection->getTableName('catalog_product_entity')],
                 'sibling_product_entity.' . $linkField . ' = sibling_link.product_id',
                 []
-            )->where('source_item.source_item_id IN (?)', $sourceItemIds)
-            ->group(['stock_source_link.' . StockSourceLinkInterface::STOCK_ID]);
+            )->where(
+                'source_item.source_item_id IN (?)',
+                $sourceItemIds
+            );
 
-        $connection->query('SET group_concat_max_len = ' . $this->groupConcatMaxLen);
-        $items = $connection->fetchAll($select);
+        $dbStatement = $connection->query($select);
+        while ($item = $dbStatement->fetch()) {
+            $items[$item[StockSourceLinkInterface::STOCK_ID]][$item[SourceItemInterface::SKU]] =
+                $item[SourceItemInterface::SKU];
+        }
+
         return $this->getStockIdToSkuList($items);
     }
 
@@ -141,11 +138,11 @@ class SiblingSkuListInStockProvider
     private function getStockIdToSkuList(array $items): array
     {
         $skuListInStockList = [];
-        foreach ($items as $item) {
+        foreach ($items as $stockId => $skuList) {
             /** @var SkuListInStock $skuListInStock */
             $skuListInStock = $this->skuListInStockFactory->create();
-            $skuListInStock->setStockId((int)$item[StockSourceLinkInterface::STOCK_ID]);
-            $skuListInStock->setSkuList(explode(',', $item[SourceItemInterface::SKU]));
+            $skuListInStock->setStockId((int)$stockId);
+            $skuListInStock->setSkuList($skuList);
             $skuListInStockList[] = $skuListInStock;
         }
         return $skuListInStockList;

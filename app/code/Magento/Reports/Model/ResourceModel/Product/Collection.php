@@ -66,6 +66,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * Collection constructor.
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -91,7 +92,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
+     * @param \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer|null $tableMaintainer
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver|null $priceTableResolver
+     * @param \Magento\Framework\Indexer\DimensionFactory|null $dimensionFactory
      *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -119,7 +125,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null
+        ProductLimitationFactory $productLimitationFactory = null,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
+        \Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver $priceTableResolver = null,
+        \Magento\Framework\Indexer\DimensionFactory $dimensionFactory = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
         $this->setProductEntityTableName($product->getEntityTable());
@@ -145,7 +155,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $dateTime,
             $groupManagement,
             $connection,
-            $productLimitationFactory
+            $productLimitationFactory,
+            $metadataPool,
+            $tableMaintainer,
+            $priceTableResolver,
+            $dimensionFactory
         );
         $this->_eventTypeFactory = $eventTypeFactory;
         $this->_productType = $productType;

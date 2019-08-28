@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAssignSourceToProductTest">
+        <annotations>
+            <stories value="Product Source Grid."/>
+            <title value="Product Source Grid Verification."/>
+            <description value="Verify admin user able to assign source to product on product edit page."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3333579"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create source, category and simple product.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Assign source to product and set source quantity.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProduct">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductQuantity"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <waitForPageLoad stepKey="waitForProductSave"/>
+        <!--Verify assigned sources.-->
+        <see selector="{{AdminProductSourcesGrid.rowName('0')}}" userInput="{{_defaultSource.name}}" stepKey="verifyDefaultSourceAssignedToProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="1000" stepKey="verifyDefaultSourceHasCorrectQty"/>
+        <see selector="{{AdminProductSourcesGrid.rowName('1')}}" userInput="$$additionalSource.source[name]$$" stepKey="verifyAdditionalSourceAssignedToProduct"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="verifyAdditionalSourceHasCorrectQty"/>
+    </test>
+</tests>

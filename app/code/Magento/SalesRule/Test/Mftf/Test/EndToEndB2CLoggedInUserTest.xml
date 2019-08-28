@@ -9,11 +9,6 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CLoggedInUserTest">
-        <annotations>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
-        </annotations>
         <before>
             <createData entity="ApiSalesRule" stepKey="createSalesRule"/>
             <createData entity="ApiSalesRuleCoupon" stepKey="createSalesRuleCoupon">

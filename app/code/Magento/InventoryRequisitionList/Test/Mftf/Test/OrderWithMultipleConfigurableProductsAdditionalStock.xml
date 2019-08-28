@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OrderWithMultipleConfigurableProductsAdditionalStock" extends="StorefrontAddProductWithFileToTheCartFromRequisitionListTest">
+        <annotations>
+            <stories value="Requisition List Additional Stock."/>
+            <title value="Order configurable product from requisition list on additional stock."/>
+            <description value="Verify customer able to create order from requisition list on additional stock with configurable product."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/987821/scenarios/3371089"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="createSimpleUSCustomer"/>
+            <remove keyForRemoval="adminProductIndexPageAdd"/>
+            <remove keyForRemoval="goToCreateProductPage"/>
+            <remove keyForRemoval="fillProductForm"/>
+            <remove keyForRemoval="addCustomOptionToProduct"/>
+            <remove keyForRemoval="saveProduct"/>
+            <remove keyForRemoval="seeSuccessMessage"/>
+            <!--Add store code to url.-->
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable" after="enableRequisitionListFunctionality"/>
+            <!--Create additional stock ans source.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" after="addStoreCodeToUrlEnable"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock" after="additionalSource"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create configurable product 1.-->
+            <createData entity="ApiConfigurableProduct" stepKey="configurableProduct" after="stockSourceLink">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="configurableProductAttribute" after="configurableProduct"/>
+            <createData entity="productAttributeOption1" stepKey="configurableProductAttributeOptionOne" after="configurableProductAttribute">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="configurableProductAttributeOptionTwo" after="configurableProductAttributeOptionOne">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet" after="configurableProductAttributeOptionTwo">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOptionOne" after="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOptionTwo" after="getConfigAttributeOptionOne">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProductOne" after="getConfigAttributeOptionTwo">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOptionOne"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProductTwo" after="createConfigChildProductOne">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOptionTwo"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configurableProductOption" after="createConfigChildProductTwo">
+                <requiredEntity createDataKey="configurableProduct"/>
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOptionOne"/>
+                <requiredEntity createDataKey="getConfigAttributeOptionTwo"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configurableProductAddChildOne" after="configurableProductOption">
+                <requiredEntity createDataKey="configurableProduct"/>
+                <requiredEntity createDataKey="createConfigChildProductOne"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configurableProductAddChildTwo" after="configurableProductAddChildOne">
+                <requiredEntity createDataKey="configurableProduct"/>
+                <requiredEntity createDataKey="createConfigChildProductTwo"/>
+            </createData>
+
+            <!--Create website, store and store view.-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite" after="loginAsAdmin">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!--Assign Stock to Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignStockToAdditionalWebsite">
+                <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign configurable to additional website.-->
+            <amOnPage url="{{AdminProductEditPage.url($$configurableProduct.id$$)}}" stepKey="openConfigurableProductEditPage"/>
+            <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignConfigurableProductToAdditionalWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign product variation one to additional stock and set qty.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProductOne.id$$)}}" stepKey="openProductVariationOneEditPageToSetQty"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProductVariationOne">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductVariationOneQuantity"/>
+            <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignConfigurableProductVariation1ToAdditionalWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign product variation two to additional stock and set qty.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProductTwo.id$$)}}" stepKey="openProductVariationTwoEditPageToSetQty"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProductVariationTwo">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductVariationTwoQuantity"/>
+            <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignConfigurableProductVariation2ToAdditionalWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <remove keyForRemoval="deleteCreatedSimpleUSCustomer"/>
+            <remove keyForRemoval="deleteProduct"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="deleteWebsite">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <!--Delete created website.-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite" before="logout">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Delete configurable product data.-->
+            <deleteData createDataKey="createConfigChildProductOne" stepKey="deleteConfigChildProductOne" after="logout"/>
+            <deleteData createDataKey="createConfigChildProductTwo" stepKey="deleteConfigChildProductTwo"/>
+            <deleteData createDataKey="configurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="configurableProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+            <!--Revert "Add Store Code To URL" configuration.-->
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+        </after>
+
+        <remove keyForRemoval="customerLogin1"/>
+        <remove keyForRemoval="goToDetailProductPageOnStorefront"/>
+        <remove keyForRemoval="attachValidFile"/>
+        <!--Register customer.-->
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}" stepKey="amOnStorefrontPage" after="waitForProductPageLoad"/>
+        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickOnCreateAccountLink" after="amOnStorefrontPage"/>
+        <fillField userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="fillFirstName" after="clickOnCreateAccountLink"/>
+        <fillField userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" stepKey="fillLastName" after="fillFirstName"/>
+        <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}" stepKey="fillEmail" after="fillLastName"/>
+        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}" stepKey="fillPassword"  after="fillEmail"/>
+        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" stepKey="fillConfirmPassword" after="fillPassword"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton" after="fillConfirmPassword"/>
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$configurableProduct.sku$$.html" stepKey="goToDetailProductPageOnStorefront" after="clickCreateAccountButton"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="option1" stepKey="selectOption" after="goToDetailProductPageOnStorefront"/>
+        <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="Product $$configurableProduct.name$$ has been added to the requisition list RL {{SimpleProduct.name}}." stepKey="seeSuccessMessage" after="clickSaveButton"/>
+        <!--Add product from requisition list to cart.-->
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/requisition_list/requisition/index" stepKey="navigateToCustomerRequisitionLists" after="seeSuccessMessage"/>
+        <click selector="{{StorefrontRequisitionListGridSection.requesitionListViewLink(SimpleProduct.name)}}" stepKey="clickViewButton" after="navigateToCustomerRequisitionLists"/>
+        <checkOption selector="{{StorefrontRequisitionListViewSection.itemCheckbox($$configurableProduct.name$$)}}"  stepKey="selectProduct" after="clickViewButton"/>
+        <click selector="{{StorefrontRequisitionListViewSection.addToCartButton}}" stepKey="addProductsToCart" after="selectProduct"/>
+        <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="You added 1 item(s) to your shopping cart." stepKey="verifyProductsHaveBeenAddedToCart" after="addProductsToCart"/>
+        <!--Place order from storefront.-->
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart" after="addProductsToCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <!-- Fill customer new shipping address -->
+        <actionGroup ref="CustomerCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--Verify first product variation quantity-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProduct1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct1">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createConfigChildProductOne.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource.source[name]$$)}}" userInput="100" stepKey="checkProduct1Source1QtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}" userInput="99" stepKey="checkProduct1SalableQtyAfterPlaceOrder"/>
+        <!--Verify second product variation quantity-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProduct2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct2">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createConfigChildProductTwo.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource.source[name]$$)}}" userInput="100" stepKey="checkProduct2Source1QtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}" userInput="100" stepKey="checkProduct2SalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>

@@ -264,9 +264,6 @@
                 <filter>text</filter>
                 <editor>
                     <editorType>text</editorType>
-                    <validation>
-                        <rule name="validate-fax" xsi:type="boolean">true</rule>
-                    </validation>
                 </editor>
                 <label translate="true">Fax</label>
                 <visible>false</visible>
