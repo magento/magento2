@@ -12,7 +12,7 @@ use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilderIn
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Formatter\LayerFormatter;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
 
 /**
  * @inheritdoc
