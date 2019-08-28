@@ -89,7 +89,7 @@ require([
             form.action   = oldAction;
         } else {
             alert({
-                content: 'Invalid data'
+                content: '<?= $block->escapeHtml(__('Invalid data')); ?>'
             });
         }
     };
