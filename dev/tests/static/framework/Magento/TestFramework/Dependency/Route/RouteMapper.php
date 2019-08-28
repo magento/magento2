@@ -243,6 +243,15 @@ class RouteMapper
                 if (!in_array($module, $this->routers[$routerId][$routeId])) {
                     $this->routers[$routerId][$routeId][] = $module;
                 }
+                if(isset($route['frontName'])) {
+                    $frontName = (string)$route['frontName'];
+                    if (!isset($this->routers[$routerId][$frontName])) {
+                        $this->routers[$routerId][$frontName] = [];
+                    }
+                    if (!in_array($module, $this->routers[$routerId][$frontName])) {
+                        $this->routers[$routerId][$frontName][] = $module;
+                    }
+                }
             }
         }
     }

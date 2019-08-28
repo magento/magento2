@@ -288,8 +288,8 @@ class PhpRule implements RuleInterface
      */
     protected function _caseGetUrl(string $currentModule, string &$contents): array
     {
-        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<route_id>[a-z0-9\-_]{3,})'
-            .'(/(?<controller_name>[a-z0-9\-_]+))?(/(?<action_name>[a-z0-9\-_]+))?\3)#i';
+        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<route_id>[a-z0-9\-_]{3,}|\*)'
+            .'(/(?<controller_name>[a-z0-9\-_]+|\*))?(/(?<action_name>[a-z0-9\-_]+))?\3|\*)#i';
 
         $dependencies = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
@@ -298,10 +298,27 @@ class PhpRule implements RuleInterface
 
         try {
             foreach ($matches as $item) {
+                $routeId = $item['route_id'];
+                $controllerName = $item['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
+                $actionName = $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
+                if (
+                    in_array(
+                        implode('/', [$routeId, $controllerName, $actionName]),
+                        $this->getRoutesWhitelist())) {
+                    continue;
+                }
+                // skip rest
+                if($routeId == "rest") { //MC-17627
+                    continue;
+                }
+                // skip wildcards
+                if($routeId == "*" || $controllerName == "*" || $actionName == "*" ) {  //MC-17627
+                    continue;
+                }
                 $modules = $this->routeMapper->getDependencyByRoutePath(
-                    $item['route_id'],
-                    $item['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME,
-                    $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME
+                    $routeId,
+                    $controllerName,
+                    $actionName
                 );
                 if (!in_array($currentModule, $modules)) {
                     if (count($modules) === 1) {
@@ -315,9 +332,7 @@ class PhpRule implements RuleInterface
                 }
             }
         } catch (NoSuchActionException $e) {
-            if (array_search($e->getMessage(), $this->getRoutesWhitelist()) === false) {
-                throw new LocalizedException(__('Invalid URL path: %1', $e->getMessage()), $e);
-            }
+            throw new LocalizedException(__('Invalid URL path: %1', $e->getMessage()), $e);
         }
 
         return $dependencies;

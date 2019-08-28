@@ -284,21 +284,20 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getCleanedFileContents($fileType, $file)
     {
-        $contents = (string)file_get_contents($file);
         switch ($fileType) {
             case 'php':
-                //Removing php comments
-                $contents = preg_replace('~/\*.*?\*/~m', '', $contents);
-                $contents = preg_replace('~^\s*/\*.*?\*/~sm', '', $contents);
-                $contents = preg_replace('~^\s*//.*$~m', '', $contents);
-                break;
+                return php_strip_whitespace($file);
             case 'layout':
             case 'config':
                 //Removing xml comments
-                $contents = preg_replace('~\<!\-\-/.*?\-\-\>~s', '', $contents);
+                return preg_replace(
+                    '~\<!\-\-/.*?\-\-\>~s',
+                    '',
+                    (string)file_get_contents($file)
+                );
                 break;
             case 'template':
-                //Removing html
+                $contents = php_strip_whitespace($file);
                 $contentsWithoutHtml = '';
                 preg_replace_callback(
                     '~(<\?(php|=)\s+.*\?>)~sU',
@@ -308,14 +307,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                     },
                     $contents
                 );
-                $contents = $contentsWithoutHtml;
-                //Removing php comments
-                $contents = preg_replace('~/\*.*?\*/~s', '', $contents);
-                $contents = preg_replace('~^\s*//.*$~s', '', $contents);
-                break;
         }
-        return $contents;
+
+        return (string)file_get_contents($file);
     }
+
+
 
     /**
      * @inheritdoc
@@ -395,7 +392,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
             $dependencies = array_merge($dependencies, $newDependencies);
         }
-
         foreach ($dependencies as $key => $dependency) {
             foreach (self::$whiteList as $namespace) {
                 if (strpos($dependency['source'], $namespace) !== false) {
