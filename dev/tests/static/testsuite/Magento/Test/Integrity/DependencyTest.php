@@ -307,8 +307,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                     },
                     $contents
                 );
+                return $contentsWithoutHtml;
         }
-
         return (string)file_get_contents($file);
     }
 
