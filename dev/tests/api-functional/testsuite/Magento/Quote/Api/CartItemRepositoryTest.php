@@ -138,6 +138,9 @@ class CartItemRepositoryTest extends WebapiAbstract
         $requestData = [
             'cartItem' => $cartItem,
         ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionCode(TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP ? 0 : 400);
         $this->_webApiCall($serviceInfo, $requestData);
     }
 
