@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Category\Attribute\Source;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Framework\Api\CustomAttributesDataInterface;
@@ -18,20 +20,65 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 class LayoutUpdate extends AbstractSource implements SpecificSourceInterface
 {
     /**
-     * @inheritDoc
+     * @var string[]
      */
-    public function getAllOptions()
-    {
-        $options = [['label' => 'No update', 'value' => '']];
+    private $optionsText;
 
-        return $options;
+    /**
+     * @var LayoutUpdateManager
+     */
+    private $manager;
+
+    /**
+     * @param LayoutUpdateManager $manager
+     */
+    public function __construct(LayoutUpdateManager $manager)
+    {
+        $this->manager = $manager;
     }
 
     /**
      * @inheritDoc
      */
+    public function getAllOptions()
+    {
+        $default = '';
+        $defaultText = 'No update';
+        $this->optionsText[$default] = $defaultText;
+
+        return [['label' => $defaultText, 'value' => $default]];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOptionText($value)
+    {
+        if (is_scalar($value) && array_key_exists($value, $this->optionsText)) {
+            return $this->optionsText[$value];
+        }
+
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     * @param CategoryInterface $entity
+     */
     public function getOptionsFor(CustomAttributesDataInterface $entity): array
     {
-        return $this->getAllOptions();
+        $options = $this->getAllOptions();
+        if ($entity->getCustomAttribute('custom_layout_update')) {
+            $existingValue = '__existing__';
+            $existingLabel = 'Use existing';
+            $options[] = ['label' => $existingLabel, 'value' => $existingValue];
+            $this->optionsText[$existingValue] = $existingLabel;
+        }
+        foreach ($this->manager->fetchAvailableFiles($entity) as $handle) {
+            $options[] = ['label' => $handle, 'value' => $handle];
+            $this->optionsText[$handle] = $handle;
+        }
+
+        return $options;
     }
 }

@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager as CategoryLayoutManager;
+use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager as ProductLayoutManager;
+use Magento\Framework\App\ObjectManager;
 use \Magento\Framework\TranslateInterface;
 
 /**
@@ -39,6 +42,16 @@ class Design extends \Magento\Framework\Model\AbstractModel
     private $translator;
 
     /**
+     * @var CategoryLayoutManager
+     */
+    private $categoryLayoutUpdates;
+
+    /**
+     * @var ProductLayoutManager
+     */
+    private $productLayoutUpdates;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -47,6 +60,8 @@ class Design extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param TranslateInterface|null $translator
+     * @param CategoryLayoutManager|null $categoryLayoutManager
+     * @param ProductLayoutManager|null $productLayoutManager
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -56,12 +71,17 @@ class Design extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        TranslateInterface $translator = null
+        TranslateInterface $translator = null,
+        ?CategoryLayoutManager $categoryLayoutManager = null,
+        ?ProductLayoutManager $productLayoutManager = null
     ) {
         $this->_localeDate = $localeDate;
         $this->_design = $design;
-        $this->translator = $translator ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(TranslateInterface::class);
+        $this->translator = $translator ?? ObjectManager::getInstance()->get(TranslateInterface::class);
+        $this->categoryLayoutUpdates = $categoryLayoutManager
+            ?? ObjectManager::getInstance()->get(CategoryLayoutManager::class);
+        $this->productLayoutUpdates = $productLayoutManager
+            ?? ObjectManager::getInstance()->get(ProductLayoutManager::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -81,12 +101,12 @@ class Design extends \Magento\Framework\Model\AbstractModel
     /**
      * Get custom layout settings
      *
-     * @param \Magento\Catalog\Model\Category|\Magento\Catalog\Model\Product $object
+     * @param Category|Product $object
      * @return \Magento\Framework\DataObject
      */
     public function getDesignSettings($object)
     {
-        if ($object instanceof \Magento\Catalog\Model\Product) {
+        if ($object instanceof Product) {
             $currentCategory = $object->getCategory();
         } else {
             $currentCategory = $object;
@@ -97,7 +117,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
             $category = $currentCategory->getParentDesignCategory($currentCategory);
         }
 
-        if ($object instanceof \Magento\Catalog\Model\Product) {
+        if ($object instanceof Product) {
             if ($category && $category->getCustomApplyToProducts()) {
                 return $this->_mergeSettings($this->_extractSettings($category), $this->_extractSettings($object));
             } else {
@@ -111,7 +131,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
     /**
      * Extract custom layout settings from category or product object
      *
-     * @param \Magento\Catalog\Model\Category|\Magento\Catalog\Model\Product $object
+     * @param Category|Product $object
      * @return \Magento\Framework\DataObject
      */
     protected function _extractSettings($object)
@@ -140,6 +160,11 @@ class Design extends \Magento\Framework\Model\AbstractModel
             )->setLayoutUpdates(
                 (array)$object->getCustomLayoutUpdate()
             );
+            if ($object instanceof Category) {
+                $this->categoryLayoutUpdates->extractCustomSettings($object, $settings);
+            } elseif ($object instanceof Product) {
+                $this->productLayoutUpdates->extractCustomSettings($object, $settings);
+            }
         }
         return $settings;
     }

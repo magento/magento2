@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\Category\Attribute;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\App\Area;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Model\Layout\Merge as LayoutProcessor;
@@ -109,20 +110,23 @@ class LayoutUpdateManager
     }
 
     /**
-     * Apply selected custom layout updates.
+     * Extract selected custom layout settings.
      *
      * If no update is selected none will apply.
      *
-     * @param PageLayout $layout
      * @param CategoryInterface $category
+     * @param DataObject $intoSettings
      * @return void
      */
-    public function applyUpdate(PageLayout $layout, CategoryInterface $category): void
+    public function extractCustomSettings(CategoryInterface $category, DataObject $intoSettings): void
     {
         if ($attribute = $category->getCustomAttribute('custom_layout_update_file')) {
-            $layout->addPageLayoutHandles(
+            $handles = $intoSettings->getPageLayoutHandles() ?? [];
+            $handles = array_merge_recursive(
+                $handles,
                 ['selectable' => $category->getId() . '_' . $attribute->getValue()]
             );
+            $intoSettings->setPageLayoutHandles($handles);
         }
     }
 }

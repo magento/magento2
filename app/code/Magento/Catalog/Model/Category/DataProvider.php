@@ -15,6 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -363,7 +364,16 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                         : $value;
                 }
                 if ($attribute->usesSource()) {
-                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                    $source = $attribute->getSource();
+                    if ($source instanceof SpecificSourceInterface) {
+                        $options = $source->getOptionsFor($this->getCurrentCategory());
+                    } else {
+                        $options = $attribute->getSource()->getAllOptions();
+                    }
+                    foreach ($options as &$option) {
+                        $option['__disableTmpl'] = true;
+                    }
+                    $meta[$code]['options'] = $options;
                 }
             }
 
@@ -609,6 +619,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                     'custom_design',
                     'page_layout',
                     'custom_layout_update',
+                    'custom_layout_update_file'
                 ],
             'schedule_design_update' => [
                     'custom_design_from',

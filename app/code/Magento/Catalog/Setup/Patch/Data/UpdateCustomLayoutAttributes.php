@@ -103,5 +103,19 @@ class UpdateCustomLayoutAttributes implements DataPatchInterface
                 'is_filterable_in_grid' => false
             ]
         );
+
+        $eavSetup->updateAttribute(
+            Product::ENTITY,
+            'custom_layout_update',
+            'visible',
+            false
+        );
+
+        $eavSetup->updateAttribute(
+            Category::ENTITY,
+            'custom_layout_update',
+            'visible',
+            false
+        );
     }
 }

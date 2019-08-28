@@ -28,6 +28,7 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 
 /**
  * View a category on storefront. Needs to be accessible by POST because of the store switching.
@@ -95,6 +96,11 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     private $toolbarMemorizer;
 
     /**
+     * @var LayoutUpdateManager
+     */
+    private $customLayoutManager;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -108,6 +114,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param ToolbarMemorizer|null $toolbarMemorizer
+     * @param LayoutUpdateManager|null $layoutUpdateManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -121,7 +128,8 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         ForwardFactory $resultForwardFactory,
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
-        ToolbarMemorizer $toolbarMemorizer = null
+        ToolbarMemorizer $toolbarMemorizer = null,
+        ?LayoutUpdateManager $layoutUpdateManager = null
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
@@ -134,6 +142,8 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->layerResolver = $layerResolver;
         $this->categoryRepository = $categoryRepository;
         $this->toolbarMemorizer = $toolbarMemorizer ?: $context->getObjectManager()->get(ToolbarMemorizer::class);
+        $this->customLayoutManager = $layoutUpdateManager
+            ?? $context->getObjectManager()->get(LayoutUpdateManager::class);
     }
 
     /**
@@ -257,6 +267,11 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 $page->addUpdate($layoutUpdate);
                 $page->addPageLayoutHandles(['layout_update' => sha1($layoutUpdate)], null, false);
             }
+        }
+
+        //Selected files
+        if ($settings->getPageLayoutHandles()) {
+            $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
     }
 }

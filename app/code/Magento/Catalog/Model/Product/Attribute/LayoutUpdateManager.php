@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Area;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Model\Layout\Merge as LayoutProcessor;
@@ -121,20 +123,23 @@ class LayoutUpdateManager
     }
 
     /**
-     * Apply selected custom layout updates.
+     * Extract selected custom layout settings.
      *
      * If no update is selected none will apply.
      *
-     * @param PageLayout $layout
      * @param ProductInterface $product
+     * @param DataObject $intoSettings
      * @return void
      */
-    public function applyUpdate(PageLayout $layout, ProductInterface $product): void
+    public function extractCustomSettings(ProductInterface $product, DataObject $intoSettings): void
     {
         if ($attribute = $product->getCustomAttribute('custom_layout_update_file')) {
-            $layout->addPageLayoutHandles(
+            $handles = $intoSettings->getPageLayoutHandles() ?? [];
+            $handles = array_merge_recursive(
+                $handles,
                 ['selectable' => $this->sanitizeSku($product) . '_' . $attribute->getValue()]
             );
+            $intoSettings->setPageLayoutHandles($handles);
         }
     }
 }

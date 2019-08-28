@@ -213,9 +213,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                 }
             }
         }
-
-        //Apply selected layout update
-        $this->layoutUpdateManager->applyUpdate($resultPage, $product);
+        if ($settings->getPageLayoutHandles()) {
+            $resultPage->addPageLayoutHandles($settings->getPageLayoutHandles());
+        }
 
         $currentCategory = $this->_coreRegistry->registry('current_category');
         $controllerClass = $this->_request->getFullActionName();
