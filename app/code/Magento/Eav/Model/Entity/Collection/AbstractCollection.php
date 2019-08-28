@@ -1511,6 +1511,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 $field = $this->_joinAttributes[$attribute]['condition_alias'];
             } else {
                 $field = $this->_getAttributeTableAlias($attribute) . '.value';
+                $field = $this->getConnection()->quoteColumnAs($field, null);
             }
             $conditionSql = $this->_getConditionSql($field, $condition);
         }
