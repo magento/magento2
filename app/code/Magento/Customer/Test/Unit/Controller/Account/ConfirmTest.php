@@ -203,7 +203,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('key'), false)
             ->will($this->returnValue($key));
 
-        $this->messageManager->expects($this->once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
             ->with(__('Bad request.'));
 
