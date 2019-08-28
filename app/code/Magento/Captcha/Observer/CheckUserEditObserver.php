@@ -11,7 +11,9 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class CheckUserEditObserver
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CheckUserEditObserver implements ObserverInterface
 {
@@ -96,7 +98,8 @@ class CheckUserEditObserver implements ObserverInterface
      * Check Captcha On Forgot Password Page
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
+     * @return $this|void
+     * @throws \Magento\Framework\Exception\SessionException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -119,9 +122,9 @@ class CheckUserEditObserver implements ObserverInterface
                         'The account is locked. Please wait and try again or contact %1.',
                         $this->scopeConfig->getValue('contact/email/recipient_email')
                     );
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                 }
-                $this->messageManager->addError(__('Incorrect CAPTCHA'));
+                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
                 $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->redirect->redirect($controller->getResponse(), '*/*/edit');
             }
