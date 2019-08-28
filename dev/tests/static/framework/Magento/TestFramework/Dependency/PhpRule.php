@@ -285,6 +285,7 @@ class PhpRule implements RuleInterface
      * @return array
      * @throws LocalizedException
      * @throws \Exception
+     * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
     protected function _caseGetUrl(string $currentModule, string &$contents): array
     {
@@ -301,18 +302,18 @@ class PhpRule implements RuleInterface
                 $routeId = $item['route_id'];
                 $controllerName = $item['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
                 $actionName = $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
-                if (
-                    in_array(
-                        implode('/', [$routeId, $controllerName, $actionName]),
-                        $this->getRoutesWhitelist())) {
+                if (in_array(
+                    implode('/', [$routeId, $controllerName, $actionName]),
+                    $this->getRoutesWhitelist()
+                )) {
                     continue;
                 }
                 // skip rest
-                if($routeId == "rest") { //MC-17627
+                if ($routeId == "rest") { //MC-17627
                     continue;
                 }
                 // skip wildcards
-                if($routeId == "*" || $controllerName == "*" || $actionName == "*" ) {  //MC-17627
+                if ($routeId == "*" || $controllerName == "*" || $actionName == "*") {  //MC-17627
                     continue;
                 }
                 $modules = $this->routeMapper->getDependencyByRoutePath(

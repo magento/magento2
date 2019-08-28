@@ -174,7 +174,7 @@ class RouteMapper
         $dependencies = [];
         foreach ($this->getRouterTypes() as $routerId) {
             if (isset($this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName])) {
-                $dependencies = array_merge(
+                $dependencies = array_merge( //phpcs:ignore
                     $dependencies,
                     $this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName]
                 );
@@ -243,7 +243,7 @@ class RouteMapper
                 if (!in_array($module, $this->routers[$routerId][$routeId])) {
                     $this->routers[$routerId][$routeId][] = $module;
                 }
-                if(isset($route['frontName'])) {
+                if (isset($route['frontName'])) {
                     $frontName = (string)$route['frontName'];
                     if (!isset($this->routers[$routerId][$frontName])) {
                         $this->routers[$routerId][$frontName] = [];
