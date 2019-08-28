@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Formatter;
+namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter;
 
 /**
  * Format Layered Navigation Items

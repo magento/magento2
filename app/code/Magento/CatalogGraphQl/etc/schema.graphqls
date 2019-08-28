@@ -391,10 +391,10 @@ type MediaGalleryEntry @doc(description: "MediaGalleryEntry defines characterist
 }
 
 type LayerFilter {
-    name: String @doc(description: "Layered navigation filter name.")
-    request_var: String @doc(description: "Request variable name for filter query.")
-    filter_items_count: Int @doc(description: "Count of filter items in filter group.")
-    filter_items: [LayerFilterItemInterface] @doc(description: "Array of filter items.")
+    name: String @doc(description: "Layered navigation filter name.") @deprecated(reason: "Use Aggregation.label instead")
+    request_var: String @doc(description: "Request variable name for filter query.") @deprecated(reason: "Use Aggregation.attribute_code instead")
+    filter_items_count: Int @doc(description: "Count of filter items in filter group.") @deprecated(reason: "Use Aggregation.count instead")
+    filter_items: [LayerFilterItemInterface] @doc(description: "Array of filter items.") @deprecated(reason: "Use Aggregation.options instead")
 }
 
 interface LayerFilterItemInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\LayerFilterItemTypeResolverComposite") {
