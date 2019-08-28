@@ -95,7 +95,7 @@ class Repository implements CartItemRepositoryInterface
         $cartId = $cartItem->getQuoteId();
         if (!$cartId) {
             throw new InputException(
-                __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'cartId'])
+                __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'quoteId'])
             );
         }
 
