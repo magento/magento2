@@ -9,7 +9,8 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
-use Magento\Framework\App\ActionInterface as HttpGetPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPosttActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\State\InvalidTransitionException;
@@ -19,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class Confirmation. Send confirmation link to specified email
  */
-class Confirmation extends AbstractAccount implements HttpGetPostActionInterface
+class Confirmation extends AbstractAccount implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
