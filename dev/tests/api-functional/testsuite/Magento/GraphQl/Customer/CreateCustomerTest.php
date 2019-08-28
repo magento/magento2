@@ -277,7 +277,6 @@ QUERY;
  
     /**
      * @magentoConfigFixture default_store newsletter/general/active 0
-     * @throws \Exception
      */
     public function testCreateCustomerSubscribed()
     {
