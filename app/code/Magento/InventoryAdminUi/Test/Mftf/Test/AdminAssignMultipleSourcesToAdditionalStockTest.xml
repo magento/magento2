@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAssignMultipleSourcesToAdditionalStockTest">
+        <annotations>
+            <stories value="Assign Multiple Sources to Stock."/>
+            <title value="Assign Multiple Sources to Stock."/>
+            <description value="Verify, admin should be able to assign multiple sources to stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910527/scenarios/3333059"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <!--Create additional stock with source.-->
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="additionalSource1"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource1"/>
+            </createData>
+            <!--Create another one sources for assignment.-->
+            <createData entity="FullSource2" stepKey="additionalSource2"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Disable created sources.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource1">
+                <argument name="sourceCode" value="$$additionalSource1.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource2">
+                <argument name="sourceCode" value="$$additionalSource2.source[source_code]$$"/>
+            </actionGroup>
+            <!--Delete created additional stock.-->
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+
+        <!--Assign another one source to stock.-->
+        <actionGroup ref="AssignSourceToStockActionGroup" stepKey="assignSourceToStock1">
+            <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
+            <argument name="sourceName" value="$$additionalSource2.source[name]$$"/>
+        </actionGroup>
+        <!--Verify source has been assigned to stock.-->
+        <see userInput="$$additionalSource1.source[name]$$" stepKey="verifyFirstSourceIsAssignedToStock"/>
+        <see userInput="$$additionalSource2.source[name]$$" stepKey="verifySecondSourceIsAssignedToStock"/>
+    </test>
+</tests>

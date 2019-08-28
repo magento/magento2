@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateOrderWithConfigurableProductCustomStockCustomWebsiteBySkuFromCustomerAccountTest" extends="AddConfigurableProductBySkuFromCustomerAccountTest">
+        <annotations>
+            <description value="Add configurable product by sku from customer account, Additional Stock, Additional Website."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/987821/scenarios/3371234"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="createCustomer"/>
+            <!--Add store code to url.-->
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable" before="additionalSource"/>
+            <!--Create additional stock ans source.-->
+            <createData entity="_minimalSource" stepKey="additionalSource" before="additionalStock"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock" before="stockSourceLink"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" before="createConfigChildProductOne">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel" after="createConfigProductAddChildTwo"/>
+            <!--Create website, store and store view.-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!--Assign Stock to Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignStockToAdditionalWebsite">
+                <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign configurable to additional website.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="openConfigurableProductEditPage"/>
+            <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignConfigurableProductToAdditionalWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign product variation one to additional stock and set qty.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProductOne.id$$)}}" stepKey="openProductVariationOneEditPageToSetQty"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProductVariationOne">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductVariationOneQuantity"/>
+            <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignConfigurableProductVariation1ToAdditionalWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign product variation two to additional stock and set qty.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProductTwo.id$$)}}" stepKey="openProductVariationTwoEditPageToSetQty"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProductVariationTwo">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProductVariationTwoQuantity"/>
+            <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignConfigurableProductVariation2ToAdditionalWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <remove keyForRemoval="deleteCustomer"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" before="deleteWebsite">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <!--Delete created website.-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite" before="logout">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout" before="deleteStock"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" before="deleteConfigChildProductOne"/>
+            <!--Revert "Add Store Code To URL" configuration.-->
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable" after="deleteStock"/>
+        </after>
+
+        <remove keyForRemoval="loginAsCustomer"/>
+        <remove keyForRemoval="goToMyAccountPage"/>
+        <!--Register customer.-->
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}" stepKey="amOnStorefrontPage" after="waitForPageLoad"/>
+        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickOnCreateAccountLink" after="amOnStorefrontPage"/>
+        <fillField userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="fillFirstName" after="clickOnCreateAccountLink"/>
+        <fillField userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" stepKey="fillLastName" after="fillFirstName"/>
+        <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}" stepKey="fillEmail" after="fillLastName"/>
+        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}" stepKey="fillPassword"  after="fillEmail"/>
+        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" stepKey="fillConfirmPassword" after="fillPassword"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton" after="fillConfirmPassword"/>
+        <!--Place order from storefront.-->
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart" after="clickUpdateCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <!-- Fill customer new shipping address -->
+        <actionGroup ref="CustomerCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--Verify first product variation quantity-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProduct1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct1">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createConfigChildProductOne.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource.source[name]$$)}}" userInput="100" stepKey="checkProduct1Source1QtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}" userInput="99" stepKey="checkProduct1SalableQtyAfterPlaceOrder"/>
+        <!--Verify second product variation quantity-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProduct2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct2">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$createConfigChildProductTwo.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource.source[name]$$)}}" userInput="100" stepKey="checkProduct2Source1QtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}" userInput="100" stepKey="checkProduct2SalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>

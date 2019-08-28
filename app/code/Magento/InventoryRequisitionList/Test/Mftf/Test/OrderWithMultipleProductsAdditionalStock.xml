@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OrderWithMultipleProductsAdditionalStock" extends="StorefrontAddProductWithFileToTheCartFromRequisitionListTest">
+        <annotations>
+            <stories value="Requisition List Additional Stock."/>
+            <title value="Order from requisition list on additional stock."/>
+            <description value="Verify customer able to create order from requisition list on additional stock with multiple simple products."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/987821/scenarios/3358515"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <!--Create additional stock and couple sources.-->
+            <createData entity="_minimalSource" stepKey="additionalSource1" after="createSimpleUSCustomer"/>
+            <createData entity="_minimalSource" stepKey="additionalSource2" after="additionalSource1"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="additionalSource2"/>
+            <!--Link additional sources with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink1" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource1"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink2" after="stockSourceLink1">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource2"/>
+            </createData>
+            <remove keyForRemoval="adminProductIndexPageAdd"/>
+            <remove keyForRemoval="goToCreateProductPage"/>
+            <remove keyForRemoval="fillProductForm"/>
+            <remove keyForRemoval="addCustomOptionToProduct"/>
+            <remove keyForRemoval="saveProduct"/>
+            <!--Create two products.-->
+            <createData entity="SimpleProduct" stepKey="product1" after="createCategory">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="product2" after="product1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Assign created product1 to additional stock and set qty.-->
+            <amOnPage url="{{AdminProductEditPage.url($$product1.id$$)}}" stepKey="openProduct1EditPageToAssignSources" after="loginAsAdmin"/>
+            <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct1" after="openProduct1EditPageToAssignSources">
+                <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSource1ToCreatedProduct1" after="unassignDefaultSourceFromProduct1">
+                <argument name="sourceCode" value="$$additionalSource1.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSource2ToCreatedProduct1" after="assignSource1ToCreatedProduct1">
+                <argument name="sourceCode" value="$$additionalSource2.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setProduct1Source1Quantity" after="assignSource2ToCreatedProduct1"/>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProduct1Source2Quantity" after="setProduct1Source1Quantity"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="saveProduct1" after="setProduct1Source2Quantity"/>
+            <!--Assign created product2 to additional stock and set qty.-->
+            <amOnPage url="{{AdminProductEditPage.url($$product2.id$$)}}" stepKey="openProduct2EditPageToAssignSources" after="saveProduct1"/>
+            <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct2" after="openProduct2EditPageToAssignSources">
+                <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSource1ToCreatedProduct2" after="unassignDefaultSourceFromProduct2">
+                <argument name="sourceCode" value="$$additionalSource1.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSource2ToCreatedProduct2" after="assignSource1ToCreatedProduct2">
+                <argument name="sourceCode" value="$$additionalSource2.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setProduct2Source1Quantity" after="assignSource2ToCreatedProduct2"/>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProduct2Source2Quantity" after="setProduct2Source1Quantity"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="saveProduct2" after="setProduct2Source2Quantity"/>
+        </before>
+        <after>
+            <remove keyForRemoval="deleteProduct"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedSource1">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional sources.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource1" before="disableCreatedSource2">
+                <argument name="sourceCode" value="$$additionalSource1.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource2" before="logout">
+                <argument name="sourceCode" value="$$additionalSource2.source[source_code]$$"/>
+            </actionGroup>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="logout"/>
+            <deleteData  createDataKey="product1" stepKey="deleteProduct1" after="deleteStock"/>
+            <deleteData  createDataKey="product2" stepKey="deleteProduct2" after="deleteProduct1"/>
+        </after>
+
+        <!--Add first product to requisition list.-->
+        <remove keyForRemoval="goToDetailProductPageOnStorefront"/>
+        <remove keyForRemoval="attachValidFile"/>
+        <remove keyForRemoval="fillRequisitionListNameField"/>
+        <remove keyForRemoval="seeSuccessMessage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$product1.name$$)}}" stepKey="goToDetailProduct1PageOnStorefront" after="customerLogin1"/>
+        <fillField selector="{{StorefrontProductPageSection.requisitionListName}}" userInput="RL $$product1.name$$" stepKey="fillRequisitionListProduct1NameField" after="waitForNameInputElementVisible"/>
+        <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="Product $$product1.name$$ has been added to the requisition list RL $$product1.name$$." stepKey="seeSuccessMessageForProduct1" after="clickSaveButton"/>
+        <!--Add second product to requisition list.-->
+        <amOnPage url="{{StorefrontProductPage.url($$product2.name$$)}}" stepKey="goToDetailProduct2PageOnStorefront" after="seeSuccessMessageForProduct1"/>
+        <click selector="{{StorefrontProductPageSection.addToRequisitionListButton}}" stepKey="clickAddToRequisitionListProduct2"/>
+        <click selector="{{StorefrontProductPageSection.selectRequisitionListName($$product1.name$$)}}" stepKey="addSecondProductToRequisitionList"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" stepKey="waitForProductAddedToList"/>
+        <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="Product $$product2.name$$ has been added to the requisition list RL $$product1.name$$." stepKey="seeSuccessMessageForProduct2"/>
+        <!--Add product from requisition list to cart.-->
+        <amOnPage url="{{StorefrontRequisitionListIndexPage.url}}" stepKey="navigateToCustomerRequisitionLists"/>
+        <click selector="{{StorefrontRequisitionListGridSection.requesitionListViewLink($$product1.name$$)}}" stepKey="clickViewButton"/>
+        <checkOption selector="{{StorefrontRequisitionListViewSection.itemCheckbox($$product1.name$$)}}"  stepKey="selectFirstProduct"/>
+        <checkOption selector="{{StorefrontRequisitionListViewSection.itemCheckbox($$product2.name$$)}}"  stepKey="selectSecondProduct"/>
+        <click selector="{{StorefrontRequisitionListViewSection.addToCartButton}}" stepKey="addProductsToCart"/>
+        <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="You added 2 item(s) to your shopping cart." stepKey="verifyProductsHaveBeenAddedToCart"/>
+        <!--Place order from storefront.-->
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad"/>
+        <click selector=".continue" stepKey="clickOnNextPaymentPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadCheckoutSelectPayment"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--Verify first product quantity-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProduct1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct1">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product1.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource1.source[name]$$)}}" userInput="100" stepKey="checkProduct1Source1QtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource2.source[name]$$)}}" userInput="100" stepKey="checkProduct1Source2QtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}" userInput="199" stepKey="checkProduct1SalableQtyAfterPlaceOrder"/>
+        <!--Verify second product quantity-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProduct2"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct2">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product1.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource1.source[name]$$)}}" userInput="100" stepKey="checkProduct2Source1QtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource2.source[name]$$)}}" userInput="100" stepKey="checkProduct2Source2QtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}" userInput="199" stepKey="checkProduct2SalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>
