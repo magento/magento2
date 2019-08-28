@@ -17,4 +17,11 @@
         <uncheckOption selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" stepKey="uncheckUseSystemValue"/>
         <selectOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" userInput="{{status}}" stepKey="changeTableRatesMethodStatus"/>
     </actionGroup>
+    <actionGroup name="AdminImportFileTableRatesShippingMethodActionGroup">
+        <arguments>
+            <argument name="file" type="string" defaultValue="test_tablerates.csv"/>
+        </arguments>
+        <conditionalClick selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTab}}" dependentSelector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" visible="false" stepKey="expandTab"/>
+        <attachFile selector="{{AdminShippingMethodTableRatesSection.importFile}}" userInput="{{file}}" stepKey="attachFileForImport"/>
+    </actionGroup>
 </actionGroups>

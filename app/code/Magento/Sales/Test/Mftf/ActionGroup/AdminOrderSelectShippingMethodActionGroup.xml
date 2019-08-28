@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderSelectShippingMethodActionGroup">
+        <arguments>
+            <argument name="methodTitle" type="string" defaultValue="Flat Rate"/>
+            <argument name="methodName" type="string" defaultValue="Fixed"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminInvoicePaymentShippingSection.getShippingMethod}}" stepKey="waitForShippingMethodsOpen"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethod}}" stepKey="openShippingMethod"/>
+        <conditionalClick selector="{{AdminInvoicePaymentShippingSection.getShippingMethod}}" dependentSelector="{{AdminInvoicePaymentShippingSection.fixedPriceShippingMethod(methodTitle, methodName)}}" visible="false" stepKey="openShippingMethodSecondTime"/>
+        <waitForElementVisible selector="{{AdminInvoicePaymentShippingSection.fixedPriceShippingMethod(methodTitle, methodName)}}" stepKey="waitForShippingMethod"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.fixedPriceShippingMethod(methodTitle, methodName)}}" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+    </actionGroup>
+</actionGroups>
