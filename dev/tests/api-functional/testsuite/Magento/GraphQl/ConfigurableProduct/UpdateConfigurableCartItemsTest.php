@@ -49,7 +49,8 @@ class UpdateConfigurableCartItemsTest extends GraphQlAbstract
     public function testUpdateConfigurableCartItemQuantity()
     {
         $reservedOrderId = 'test_cart_with_configurable';
-        $maskedQuoteId = $this->getMaskedQuoteId($reservedOrderId);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
         $productSku = 'simple_10';
         $newQuantity = 123;
         $quoteItem = $this->getQuoteItemBySku($productSku, $reservedOrderId);
@@ -124,21 +125,5 @@ QUERY;
         }
 
         return $item;
-    }
-
-    /**
-     * @param $reservedOrderId
-     * @return string
-     * @throws NoSuchEntityException
-     */
-    private function getMaskedQuoteId(string $reservedOrderId): string
-    {
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
-        $quoteIdMask = $this->quoteIdMaskFactory->create();
-        $quoteIdMask->setQuoteId($quote->getId())
-            ->save();
-
-        return $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
     }
 }
