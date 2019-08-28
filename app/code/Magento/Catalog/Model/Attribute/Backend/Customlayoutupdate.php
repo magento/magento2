@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\Attribute\Backend;
 
+use Magento\Catalog\Model\AbstractModel;
+use Magento\Catalog\Model\Category;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 use Magento\Eav\Model\Entity\Attribute\Exception;
 
@@ -62,5 +65,22 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
             throw $eavExc;
         }
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     * @param AbstractModel $object
+     * @throws LocalizedException
+     */
+    public function beforeSave($object)
+    {
+        $attributeName = $this->getAttribute()->getName();
+        if ($object->getData($attributeName)
+            && $object->getOrigData($attributeName) !== $object->getData($attributeName)
+        ) {
+            throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
+        }
+
+        return parent::beforeSave($object);
     }
 }

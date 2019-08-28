@@ -42,7 +42,7 @@ class LayoutUpdate extends AbstractSource implements SpecificSourceInterface
     public function getAllOptions()
     {
         $default = '';
-        $defaultText = 'Use default';
+        $defaultText = 'No update';
         $this->optionsText[$default] = $defaultText;
 
         return [['label' => $defaultText, 'value' => $default]];

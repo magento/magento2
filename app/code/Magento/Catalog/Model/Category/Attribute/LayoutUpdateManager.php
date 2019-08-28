@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\Product\Attribute;
+namespace Magento\Catalog\Model\Category\Attribute;
 
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
@@ -17,7 +17,7 @@ use Magento\Framework\View\Model\Layout\MergeFactory as LayoutProcessorFactory;
 use Magento\Framework\View\Result\Page as PageLayout;
 
 /**
- * Manage available layout updates for products.
+ * Manage available layout updates for categories.
  */
 class LayoutUpdateManager
 {
@@ -58,17 +58,6 @@ class LayoutUpdateManager
     }
 
     /**
-     * Adopt product's SKU to be used as layout handle.
-     *
-     * @param ProductInterface $product
-     * @return string
-     */
-    private function sanitizeSku(ProductInterface $product): string
-    {
-        return rawurlencode($product->getSku());
-    }
-
-    /**
      * Get the processor instance.
      *
      * @return LayoutProcessor
@@ -91,21 +80,20 @@ class LayoutUpdateManager
     }
 
     /**
-     * Fetch list of available files/handles for the product.
+     * Fetch list of available files/handles for the category.
      *
-     * @param ProductInterface $product
+     * @param CategoryInterface $category
      * @return string[]
      */
-    public function fetchAvailableFiles(ProductInterface $product): array
+    public function fetchAvailableFiles(CategoryInterface $category): array
     {
-        $identifier = $this->sanitizeSku($product);
         $handles = $this->getLayoutProcessor()->getAvailableHandles();
 
         return array_filter(
             array_map(
-                function (string $handle) use ($identifier) : ?string {
+                function (string $handle) use ($category) : ?string {
                     preg_match(
-                        '/^catalog\_product\_view\_selectable\_' .preg_quote($identifier) .'\_([a-z0-9]+)/i',
+                        '/^catalog\_category\_view\_selectable\_' .$category->getId() .'\_([a-z0-9]+)/i',
                         $handle,
                         $selectable
                     );
@@ -126,14 +114,14 @@ class LayoutUpdateManager
      * If no update is selected none will apply.
      *
      * @param PageLayout $layout
-     * @param ProductInterface $product
+     * @param CategoryInterface $category
      * @return void
      */
-    public function applyUpdate(PageLayout $layout, ProductInterface $product): void
+    public function applyUpdate(PageLayout $layout, CategoryInterface $category): void
     {
-        if ($attribute = $product->getCustomAttribute('custom_layout_update_file')) {
+        if ($attribute = $category->getCustomAttribute('custom_layout_update_file')) {
             $layout->addPageLayoutHandles(
-                ['selectable' => $this->sanitizeSku($product) . '_' . $attribute->getValue()]
+                ['selectable' => $category->getId() . '_' . $attribute->getValue()]
             );
         }
     }

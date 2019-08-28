@@ -535,6 +535,11 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                     $categoryData[$attributeCode][0]['type'] = $mime;
                 }
             }
+            if ($attributeCode === 'custom_layout_update_file') {
+                if (!empty($categoryData['custom_layout_update'])) {
+                    $categoryData['custom_layout_update_file'] = '__existing__';
+                }
+            }
         }
 
         return $categoryData;
