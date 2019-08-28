@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilderInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\BucketInterface;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Formatter\LayerFormatter;
 
 /**
  * @inheritdoc
@@ -22,6 +23,11 @@ class Price implements LayerBuilderInterface
     private const PRICE_BUCKET = 'price_bucket';
 
     /**
+     * @var LayerFormatter
+     */
+    private $layerFormatter;
+
+    /**
      * @var array
      */
     private static $bucketMap = [
@@ -30,6 +36,15 @@ class Price implements LayerBuilderInterface
             'label' => 'Price'
         ],
     ];
+
+    /**
+     * @param LayerFormatter $layerFormatter
+     */
+    public function __construct(
+        LayerFormatter $layerFormatter
+    ) {
+        $this->layerFormatter = $layerFormatter;
+    }
 
     /**
      * @inheritdoc
@@ -42,7 +57,7 @@ class Price implements LayerBuilderInterface
             return [];
         }
 
-        $result = $this->buildLayer(
+        $result = $this->layerFormatter->buildLayer(
             self::$bucketMap[self::PRICE_BUCKET]['label'],
             \count($bucket->getValues()),
             self::$bucketMap[self::PRICE_BUCKET]['request_name']
@@ -50,7 +65,7 @@ class Price implements LayerBuilderInterface
 
         foreach ($bucket->getValues() as $value) {
             $metrics = $value->getMetrics();
-            $result['filter_items'][] = $this->buildItem(
+            $result['options'][] = $this->layerFormatter->buildItem(
                 \str_replace('_', '-', $metrics['value']),
                 $metrics['value'],
                 $metrics['count']
@@ -58,40 +73,6 @@ class Price implements LayerBuilderInterface
         }
 
         return [$result];
-    }
-
-    /**
-     * Format layer data
-     *
-     * @param string $layerName
-     * @param string $itemsCount
-     * @param string $requestName
-     * @return array
-     */
-    private function buildLayer($layerName, $itemsCount, $requestName): array
-    {
-        return [
-            'name' => $layerName,
-            'filter_items_count' => $itemsCount,
-            'request_var' => $requestName
-        ];
-    }
-
-    /**
-     * Format layer item data
-     *
-     * @param string $label
-     * @param string|int $value
-     * @param string|int $count
-     * @return array
-     */
-    private function buildItem($label, $value, $count): array
-    {
-        return [
-            'label' => $label,
-            'value_string' => $value,
-            'items_count' => $count,
-        ];
     }
 
     /**

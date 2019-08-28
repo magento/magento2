@@ -270,7 +270,8 @@ type Products @doc(description: "The Products object is the top-level object ret
     items: [ProductInterface] @doc(description: "An array of products that match the specified search criteria.")
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
     total_count: Int @doc(description: "The number of products returned.")
-    filters: [LayerFilter] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\LayerFilters") @doc(description: "Layered navigation filters array.")
+    filters: [LayerFilter] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\LayerFilters") @doc(description: "Layered navigation filters array.") @deprecated(reason: "Use aggregations instead")
+    aggregations: [Aggregation] @doc(description: "Layered navigation aggregations.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
 }
 
@@ -400,6 +401,19 @@ interface LayerFilterItemInterface @typeResolver(class: "Magento\\CatalogGraphQl
     label: String @doc(description: "Filter label.")
     value_string: String @doc(description: "Value for filter request variable to be used in query.")
     items_count: Int @doc(description: "Count of items by filter.")
+}
+
+type Aggregation {
+    count: Int @doc(description: "Count of filter items in filter group.")
+    label: String @doc(description: "Layered navigation filter name.")
+    attribute_code: String! @doc(description: "Attribute code of the filter item.")
+    options: [AggregationOption] @doc(description: "Array of aggregation options.")
+}
+
+type AggregationOption {
+    count: Int @doc(description: "Count of items by filter.")
+    label: String! @doc(description: "Filter label.")
+    value: String! @doc(description: "Value for filter request variable to be used in query.")
 }
 
 type LayerFilterItem implements LayerFilterItemInterface {

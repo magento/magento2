@@ -1060,7 +1060,7 @@ QUERY;
     /**
      * Sorting the search results by relevance (DESC => most relevant)
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_relevance_sorting.php
      * @return void
      */
     public function testFilterProductsAndSortByRelevance()

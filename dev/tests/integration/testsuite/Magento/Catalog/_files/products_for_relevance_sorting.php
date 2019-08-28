@@ -13,7 +13,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(
-    333
+    330
 )->setCreatedAt(
     '2019-08-27 11:05:07'
 )->setName(

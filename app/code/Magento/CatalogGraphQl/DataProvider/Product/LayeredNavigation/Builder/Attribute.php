@@ -12,6 +12,7 @@ use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilderIn
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Formatter\LayerFormatter;
 
 /**
  * @inheritdoc
@@ -36,6 +37,11 @@ class Attribute implements LayerBuilderInterface
     private $attributeOptionProvider;
 
     /**
+     * @var LayerFormatter
+     */
+    private $layerFormatter;
+
+    /**
      * @var array
      */
     private $bucketNameFilter = [
@@ -45,13 +51,16 @@ class Attribute implements LayerBuilderInterface
 
     /**
      * @param AttributeOptionProvider $attributeOptionProvider
-     * @param array $bucketNameFilter List with buckets name to be removed from filter
+     * @param LayerFormatter $layerFormatter
+     * @param array $bucketNameFilter
      */
     public function __construct(
         AttributeOptionProvider $attributeOptionProvider,
+        LayerFormatter $layerFormatter,
         $bucketNameFilter = []
     ) {
         $this->attributeOptionProvider = $attributeOptionProvider;
+        $this->layerFormatter = $layerFormatter;
         $this->bucketNameFilter = \array_merge($this->bucketNameFilter, $bucketNameFilter);
     }
 
@@ -71,7 +80,7 @@ class Attribute implements LayerBuilderInterface
             $attributeCode = \preg_replace('~_bucket$~', '', $bucketName);
             $attribute = $attributeOptions[$attributeCode] ?? [];
 
-            $result[$bucketName] = $this->buildLayer(
+            $result[$bucketName] = $this->layerFormatter->buildLayer(
                 $attribute['attribute_label'] ?? $bucketName,
                 \count($bucket->getValues()),
                 $attribute['attribute_code'] ?? $bucketName
@@ -79,7 +88,7 @@ class Attribute implements LayerBuilderInterface
 
             foreach ($bucket->getValues() as $value) {
                 $metrics = $value->getMetrics();
-                $result[$bucketName]['filter_items'][] = $this->buildItem(
+                $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
                     $attribute['options'][$metrics['value']] ?? $metrics['value'],
                     $metrics['value'],
                     $metrics['count']
@@ -110,40 +119,6 @@ class Attribute implements LayerBuilderInterface
     }
 
     /**
-     * Format layer data
-     *
-     * @param string $layerName
-     * @param string $itemsCount
-     * @param string $requestName
-     * @return array
-     */
-    private function buildLayer($layerName, $itemsCount, $requestName): array
-    {
-        return [
-            'name' => $layerName,
-            'filter_items_count' => $itemsCount,
-            'request_var' => $requestName
-        ];
-    }
-
-    /**
-     * Format layer item data
-     *
-     * @param string $label
-     * @param string|int $value
-     * @param string|int $count
-     * @return array
-     */
-    private function buildItem($label, $value, $count): array
-    {
-        return [
-            'label' => $label,
-            'value_string' => $value,
-            'items_count' => $count,
-        ];
-    }
-
-    /**
      * Check that bucket contains data
      *
      * @param BucketInterface|null $bucket
@@ -165,9 +140,12 @@ class Attribute implements LayerBuilderInterface
     {
         $attributeOptionIds = [];
         foreach ($this->getAttributeBuckets($aggregation) as $bucket) {
-            $attributeOptionIds[] = \array_map(function (AggregationValueInterface $value) {
-                return $value->getValue();
-            }, $bucket->getValues());
+            $attributeOptionIds[] = \array_map(
+                function (AggregationValueInterface $value) {
+                    return $value->getValue();
+                },
+                $bucket->getValues()
+            );
         }
 
         if (!$attributeOptionIds) {
