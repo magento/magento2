@@ -75,9 +75,8 @@ input FilterRangeTypeInput @doc(description: "Specifies which action will be per
     to: String
 }
 
-input FilterLikeTypeInput @doc(description: "Specifies which action will be performed in a query ") {
-    like: String
-    eq: String
+input FilterMatchTypeInput @doc(description: "Specifies which action will be performed in a query ") {
+    match: String
 }
 
 type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {

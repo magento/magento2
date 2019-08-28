@@ -11,6 +11,7 @@ use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 /**
  * Adds custom/eav attributes to product filter type in the GraphQL config.
@@ -32,7 +33,7 @@ class FilterAttributeReader implements ReaderInterface
      */
     private const FILTER_EQUAL_TYPE = 'FilterEqualTypeInput';
     private const FILTER_RANGE_TYPE = 'FilterRangeTypeInput';
-    private const FILTER_LIKE_TYPE = 'FilterLikeTypeInput';
+    private const FILTER_MATCH_TYPE = 'FilterMatchTypeInput';
 
     /**
      * @var MapperInterface
@@ -74,7 +75,7 @@ class FilterAttributeReader implements ReaderInterface
             foreach ($typeNames as $typeName) {
                 $config[$typeName]['fields'][$attributeCode] = [
                     'name' => $attributeCode,
-                    'type' => $this->getFilterType($attribute->getFrontendInput()),
+                    'type' => $this->getFilterType($attribute),
                     'arguments' => [],
                     'required' => false,
                     'description' => sprintf('Attribute label: %s', $attribute->getDefaultFrontendLabel())
@@ -88,22 +89,26 @@ class FilterAttributeReader implements ReaderInterface
     /**
      * Map attribute type to filter type
      *
-     * @param string $attributeType
+     * @param Attribute $attribute
      * @return string
      */
-    private function getFilterType($attributeType): string
+    private function getFilterType(Attribute $attribute): string
     {
+        if ($attribute->getAttributeCode() === 'sku') {
+            return self::FILTER_EQUAL_TYPE;
+        }
+
         $filterTypeMap = [
             'price' => self::FILTER_RANGE_TYPE,
             'date' => self::FILTER_RANGE_TYPE,
             'select' => self::FILTER_EQUAL_TYPE,
             'multiselect' => self::FILTER_EQUAL_TYPE,
             'boolean' => self::FILTER_EQUAL_TYPE,
-            'text' => self::FILTER_LIKE_TYPE,
-            'textarea' => self::FILTER_LIKE_TYPE,
+            'text' => self::FILTER_MATCH_TYPE,
+            'textarea' => self::FILTER_MATCH_TYPE,
         ];
 
-        return $filterTypeMap[$attributeType] ?? self::FILTER_LIKE_TYPE;
+        return $filterTypeMap[$attribute->getFrontendInput()] ?? self::FILTER_MATCH_TYPE;
     }
 
     /**

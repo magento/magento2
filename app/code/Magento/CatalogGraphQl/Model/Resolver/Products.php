@@ -97,8 +97,8 @@ class Products implements ResolverInterface
 
         //get product children fields queried
         $productFields = (array)$info->getFieldSelection(1);
-
-        $searchCriteria = $this->searchApiCriteriaBuilder->build($args, isset($productFields['filters']));
+        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
+        $searchCriteria = $this->searchApiCriteriaBuilder->build($args, $includeAggregations);
         $searchResult = $this->searchQuery->getResult($searchCriteria, $info, $args);
 
         if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {
