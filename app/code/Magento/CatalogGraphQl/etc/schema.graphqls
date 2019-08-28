@@ -404,14 +404,14 @@ interface LayerFilterItemInterface @typeResolver(class: "Magento\\CatalogGraphQl
 }
 
 type Aggregation {
-    count: Int @doc(description: "Count of filter items in filter group.")
-    label: String @doc(description: "Layered navigation filter name.")
+    count: Int @doc(description: "The number of filter items in the filter group.")
+    label: String @doc(description: "The filter named displayed in layered navigation.")
     attribute_code: String! @doc(description: "Attribute code of the filter item.")
-    options: [AggregationOption] @doc(description: "Array of aggregation options.")
+    options: [AggregationOption] @doc(description: "Describes each aggregated filter option.")
 }
 
 type AggregationOption {
-    count: Int @doc(description: "Count of items by filter.")
+    count: Int @doc(description: "The number of items returned by the filter.")
     label: String! @doc(description: "Filter label.")
     value: String! @doc(description: "Value for filter request variable to be used in query.")
 }
