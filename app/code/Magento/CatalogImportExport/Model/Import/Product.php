@@ -2761,6 +2761,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $resource = $this->getResource();
         foreach ($this->urlKeys as $storeId => $urlKeys) {
+            $urlKeysAsStrings = array_map('strval', array_keys($urlKeys));
             $urlKeyDuplicates = $this->_connection->fetchAssoc(
                 $this->_connection->select()->from(
                     ['url_rewrite' => $resource->getTable('url_rewrite')],
@@ -2768,7 +2769,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 )->joinLeft(
                     ['cpe' => $resource->getTable('catalog_product_entity')],
                     "cpe.entity_id = url_rewrite.entity_id"
-                )->where('request_path IN (?)', array_keys($urlKeys))
+                )->where('request_path IN (?)', $urlKeysAsStrings)
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
