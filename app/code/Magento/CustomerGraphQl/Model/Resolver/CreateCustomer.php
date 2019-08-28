@@ -66,7 +66,7 @@ class CreateCustomer implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
-        if (!$this->config->isActive()) {
+        if (!$this->newsLetterConfig->isActive()) {
             $args['input']['is_subscribed'] = false;
         }
       
