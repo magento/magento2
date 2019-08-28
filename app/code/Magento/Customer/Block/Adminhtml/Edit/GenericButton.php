@@ -39,6 +39,7 @@ class GenericButton
     ) {
         $this->urlBuilder = $context->getUrlBuilder();
         $this->registry = $registry;
+        $this->context = $context;
     }
 
     /**
