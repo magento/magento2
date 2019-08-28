@@ -1,6 +1,7 @@
 # Magento_Authorizenet module
 
-The Magento_Authorizenet module is a part of the staging functionality in Magento Commerce. The module adds the “Configurations” tab and the configuration wizard to the Schedule Update form of a product. You can change the Configurable Product attributes in campaigns. These updates are shown on the campaign dashboard.
+The Magento_Authorizenet module implements the integration with the Authorize.Net payment gateway and makes the latter available as a payment method in Magento.
+
 ## Extensibility
 
 Extension developers can interact with the Magento_Authorizenet module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/plugins.html).
