@@ -178,7 +178,7 @@ define([
             var confirmData = action.confirm,
                 data = this.getSelections(),
                 total = data.total ? data.total : 0,
-                confirmMessage = confirmData.message + ' (' + total + ' record' + (total > 1 ? 's' : '') + ')';
+                confirmMessage = confirmData.message + ' (' + $t('Records selected: %1').replace('%1', total) + ')';
 
             confirm({
                 title: confirmData.title,
