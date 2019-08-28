@@ -1,10 +1,6 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
-type Query {
-    customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Customer\\DownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products") @cache(cacheable: false)
-}
-
 type Mutation {
     addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
 }
@@ -32,18 +28,6 @@ type DownloadableCartItem implements CartItemInterface @doc(description: "Downlo
     customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
     links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Links") @doc(description: "An array containing information about the links for the added to cart downloadable product")
     samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Samples") @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product")
-}
-
-type CustomerDownloadableProducts {
-    items: [CustomerDownloadableProduct] @doc(description: "List of purchased downloadable items")
-}
-
-type CustomerDownloadableProduct {
-    order_increment_id: String
-    date: String
-    status: String
-    download_url: String
-    remaining_downloads: String
 }
 
 type DownloadableProduct implements ProductInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the customer downloads") {
