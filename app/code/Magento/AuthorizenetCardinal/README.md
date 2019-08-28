@@ -1,6 +1,6 @@
 # Magento_AuthorizenetCardinal module
 
-The Magento_AuthorizenetCardinal module provides a possibility to enable 3D Secure 2.0 support for AuthorizenetAcceptjs payment integration.
+Use the Magento_AuthorizenetCardinal module to enable 3D Secure 2.0 support for AuthorizenetAcceptjs payment integrations.
 
 ## Structure
 
