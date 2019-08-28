@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Catalog image helper
@@ -14,7 +15,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
-class Image extends AbstractHelper
+class Image extends AbstractHelper implements ArgumentInterface
 {
     /**
      * Media config node
@@ -764,7 +765,7 @@ class Image extends AbstractHelper
     protected function parseSize($string)
     {
         $size = explode('x', strtolower($string));
-        if (sizeof($size) == 2) {
+        if (count($size) == 2) {
             return ['width' => $size[0] > 0 ? $size[0] : null, 'height' => $size[1] > 0 ? $size[1] : null];
         }
         return false;

@@ -21,6 +21,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
         </variation>
         <variation name="CatalogRule_Create_Inactive_AdminOnly">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
             <data name="catalogPriceRule/data/description" xsi:type="string">Catalog Price Rule Description</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Inactive</data>
@@ -29,6 +30,7 @@
             <data name="catalogPriceRule/data/condition" xsi:type="string">-</data>
             <data name="catalogPriceRule/data/simple_action" xsi:type="string">Apply as fixed amount</data>
             <data name="catalogPriceRule/data/discount_amount" xsi:type="string">10</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNoticeMessage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm" />

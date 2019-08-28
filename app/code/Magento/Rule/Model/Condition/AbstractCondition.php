@@ -106,8 +106,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'string' => ['==', '!=', '>=', '>', '<=', '<', '{}', '!{}', '()', '!()'],
                 'numeric' => ['==', '!=', '>=', '>', '<=', '<', '()', '!()'],
                 'date' => ['==', '>=', '<='],
-                'select' => ['==', '!='],
-                'boolean' => ['==', '!='],
+                'select' => ['==', '!=', '<=>'],
+                'boolean' => ['==', '!=', '<=>'],
                 'multiselect' => ['{}', '!{}', '()', '!()'],
                 'grid' => ['()', '!()'],
             ];
@@ -137,6 +137,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 '!{}' => __('does not contain'),
                 '()' => __('is one of'),
                 '!()' => __('is not one of'),
+                '<=>' => __('is undefined'),
             ];
         }
         return $this->_defaultOperatorOptions;

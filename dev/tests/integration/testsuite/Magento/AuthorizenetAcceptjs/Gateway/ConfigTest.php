@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AuthorizenetAcceptjs\Gateway;
 
+use Magento\Framework\Config\Data;
 use Magento\Payment\Model\Method\Adapter;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -40,5 +41,11 @@ class ConfigTest extends TestCase
         $this->assertTrue($paymentAdapter->canUseInternal());
         $this->assertTrue($paymentAdapter->canEdit());
         $this->assertTrue($paymentAdapter->canFetchTransactionInfo());
+
+        /** @var Data $configReader */
+        $configReader = $this->objectManager->get('Magento\Payment\Model\Config\Data');
+        $value = $configReader->get('methods/authorizenet_acceptjs/allow_multiple_address');
+
+        $this->assertSame('0', $value);
     }
 }

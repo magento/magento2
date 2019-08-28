@@ -345,6 +345,22 @@
 
             .data.table {
                 &:extend(.abs-checkout-order-review all);
+                &.table-order-review {
+                    > tbody {
+                        > tr {
+                            > td {
+                                &.col {
+                                    &.subtotal {
+                                        border-bottom: none;
+                                    }
+                                    &.qty {
+                                        text-align: center;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 

@@ -1193,7 +1193,7 @@ tinymce.create('tinymce.util.Dispatcher', {
 
 		parse: function(s) {
 			try {
-				return eval('(' + s + ')');
+				return JSON.parse(s);
 			} catch (ex) {
 				// Ignore
 			}
@@ -15796,7 +15796,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 					node.appendChild(dom.doc.createTextNode(invisibleChar));
 					node = node.firstChild;
 
-					// Insert caret container after the formated node
+					// Insert caret container after the formatted node
 					dom.insertAfter(caretContainer, formatNode);
 
 					// Move selection to text node

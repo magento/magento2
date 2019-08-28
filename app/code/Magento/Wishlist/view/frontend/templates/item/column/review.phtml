@@ -1,0 +1,10 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column $block */
+$product = $block->getItem()->getProduct();
+?>
+<?= $block->getReviewsSummaryHtml($product, 'short') ?>

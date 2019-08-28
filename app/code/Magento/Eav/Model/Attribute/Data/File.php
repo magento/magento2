@@ -146,7 +146,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return $this->_fileValidator->getMessages();
         }
 
-        if (empty($value['tmp_name'])) {
+        if (!empty($value['tmp_name']) && !file_exists($value['tmp_name'])) {
             return [__('"%1" is not a valid file.', $label)];
         }
 

@@ -167,6 +167,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
             'context_group',
             1,
             5,
+            10,
             'some_serialized_conditions',
             json_encode('request_params'),
             'test_template',

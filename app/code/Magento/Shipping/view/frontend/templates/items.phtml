@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+//phpcs:disable Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace
+//phpcs:disable Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore
+//phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+//phpcs:disable Magento2.Files.LineLength.MaxExceeded
 ?>
 <?php /** @var  $block \Magento\Shipping\Block\Items */ ?>
 <?php  $_order = $block->getOrder() ?>
@@ -13,67 +14,71 @@
     <?php if ($_order->getTracksCollection()->count()) : ?>
         <?= $block->getChildHtml('track-all-link') ?>
     <?php endif; ?>
-    <a href="<?= /* @escapeNotVerified */ $block->getPrintAllShipmentsUrl($_order) ?>"
+    <a href="<?= $block->escapeUrl($block->getPrintAllShipmentsUrl($_order)) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?= /* @escapeNotVerified */ __('Print All Shipments') ?></span>
+        <span><?= $block->escapeHtml(__('Print All Shipments')) ?></span>
     </a>
 </div>
-<?php foreach ($_order->getShipmentsCollection() as $_shipment): ?>
-<div class="order-title">
-    <strong><?= /* @escapeNotVerified */ __('Shipment #') ?><?= /* @escapeNotVerified */ $_shipment->getIncrementId() ?></strong>
-    <a href="<?= /* @escapeNotVerified */ $block->getPrintShipmentUrl($_shipment) ?>"
-       onclick="this.target='_blank'"
-       class="action print">
-        <span><?= /* @escapeNotVerified */ __('Print Shipment') ?></span>
-    </a>
-    <a href="#"
-       data-mage-init='{"popupWindow": {"windowURL":"<?= /* @escapeNotVerified */ $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_shipment) ?>","windowName":"trackshipment","width":800,"height":600,"top":0,"left":0,"resizable":1,"scrollbars":1}}'
-       title="<?= /* @escapeNotVerified */ __('Track this shipment') ?>"
-       class="action track">
-        <span><?= /* @escapeNotVerified */ __('Track this shipment') ?></span>
-    </a>
-</div>
-<?php $tracks = $_shipment->getTracksCollection(); ?>
-<?php  if ($tracks->count()): ?>
-    <dl class="order-tracking" id="my-tracking-table-<?= /* @escapeNotVerified */ $_shipment->getId() ?>">
-        <dt class="tracking-title">
-            <?= /* @escapeNotVerified */ __('Tracking Number(s):') ?>
-        </dt>
-        <dd class="tracking-content">
-            <?php
-            $i = 1;
-            $_size = $tracks->count();
-            foreach ($tracks as $track): ?>
-                <?php if ($track->isCustom()): ?><?= $block->escapeHtml($track->getNumber()) ?><?php else: ?><a
-                    href="#"
-                    data-mage-init='{"popupWindow": {"windowURL":"<?= /* @escapeNotVerified */ $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'
-                    class="action track"><span><?= $block->escapeHtml($track->getNumber()) ?></span>
-                    </a><?php endif; ?><?php if ($i != $_size): ?>, <?php endif; ?>
-                <?php $i++;
-            endforeach; ?>
-        </dd>
-    </dl>
-<?php  endif; ?>
-<div class="table-wrapper order-items-shipment">
-    <table class="data table table-order-items shipment" id="my-shipment-table-<?= /* @escapeNotVerified */ $_shipment->getId() ?>">
-        <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items Shipped') ?></caption>
-        <thead>
-            <tr>
-                <th class="col name"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
-                <th class="col sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
-                <th class="col qty"><?= /* @escapeNotVerified */ __('Qty Shipped') ?></th>
-            </tr>
-        </thead>
-        <?php $_items = $_shipment->getAllItems(); ?>
-        <?php foreach ($_items as $_item): ?>
-            <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
-                <tbody>
-                    <?= $block->getItemHtml($_item) ?>
-                </tbody>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </table>
-</div>
-<?= $block->getCommentsHtml($_shipment) ?>
+<?php foreach ($_order->getShipmentsCollection() as $_shipment) : ?>
+    <div class="order-title">
+        <strong><?= $block->escapeHtml(__('Shipment #')) ?><?= $block->escapeHtml($_shipment->getIncrementId()) ?></strong>
+        <a href="<?= $block->escapeUrl($block->getPrintShipmentUrl($_shipment)) ?>"
+           onclick="this.target='_blank'"
+           class="action print">
+            <span><?= $block->escapeHtml(__('Print Shipment')) ?></span>
+        </a>
+        <a href="#"
+           data-mage-init='{"popupWindow": {"windowURL":"<?= $block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($_shipment)) ?>","windowName":"trackshipment","width":800,"height":600,"top":0,"left":0,"resizable":1,"scrollbars":1}}'
+           title="<?= $block->escapeHtml(__('Track this shipment')) ?>"
+           class="action track">
+            <span><?= $block->escapeHtml(__('Track this shipment')) ?></span>
+        </a>
+    </div>
+    <?php $tracks = $_shipment->getTracksCollection(); ?>
+    <?php  if ($tracks->count()) : ?>
+        <dl class="order-tracking" id="my-tracking-table-<?= (int) $_shipment->getId() ?>">
+            <dt class="tracking-title">
+                <?= $block->escapeHtml(__('Tracking Number(s):')) ?>
+            </dt>
+            <dd class="tracking-content">
+                <?php
+                $i = 1;
+                $_size = $tracks->count();
+                foreach ($tracks as $track) : ?>
+                    <?php if ($track->isCustom()) : ?>
+                        <?= $block->escapeHtml($track->getNumber()) ?>
+                    <?php else : ?>
+                        <a href="#"
+                            data-mage-init='{"popupWindow": {"windowURL":"<?= $block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($track)) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'
+                            class="action track"><span><?= $block->escapeHtml($track->getNumber()) ?></span>
+                            </a>
+                    <?php endif; ?>
+                    <?php if ($i != $_size) : ?>, <?php endif; ?>
+                    <?php $i++;
+                endforeach; ?>
+            </dd>
+        </dl>
+    <?php  endif; ?>
+    <div class="table-wrapper order-items-shipment">
+        <table class="data table table-order-items shipment" id="my-shipment-table-<?= (int) $_shipment->getId() ?>">
+            <caption class="table-caption"><?= $block->escapeHtml(__('Items Shipped')) ?></caption>
+            <thead>
+                <tr>
+                    <th class="col name"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                    <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+                    <th class="col qty"><?= $block->escapeHtml(__('Qty Shipped')) ?></th>
+                </tr>
+            </thead>
+            <?php $_items = $_shipment->getAllItems(); ?>
+            <?php foreach ($_items as $_item) : ?>
+                <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+                    <tbody>
+                        <?= $block->getItemHtml($_item) ?>
+                    </tbody>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    <?= $block->getCommentsHtml($_shipment) ?>
 <?php endforeach; ?>

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
@@ -502,10 +504,10 @@ class Price
     /**
      * Get formatted by currency tier price
      *
-     * @param   float $qty
-     * @param   Product $product
+     * @param float $qty
+     * @param Product $product
      *
-     * @return  array|float
+     * @return array|float
      *
      * @deprecated
      * @see getFormattedTierPrice()
@@ -529,8 +531,8 @@ class Price
     /**
      * Get formatted by currency product price
      *
-     * @param   Product $product
-     * @return  array || float
+     * @param Product $product
+     * @return array || float
      *
      * @deprecated
      * @see getFormattedPrice()

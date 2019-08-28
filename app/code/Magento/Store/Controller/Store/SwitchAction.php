@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Controller\Store;
 
@@ -18,13 +19,15 @@ use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher;
 use Magento\Store\Model\StoreSwitcherInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Handles store switching url and makes redirect.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SwitchAction extends Action
+class SwitchAction extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var StoreCookieManagerInterface
@@ -89,10 +92,12 @@ class SwitchAction extends Action
     public function execute()
     {
         $targetStoreCode = $this->_request->getParam(
-            \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
+            \Magento\Store\Model\StoreManagerInterface::PARAM_NAME
+        );
+        $fromStoreCode = $this->_request->getParam(
+            '___from_store',
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
-        $fromStoreCode = $this->_request->getParam('___from_store');
 
         $requestedUrlToRedirect = $this->_redirect->getRedirectUrl();
         $redirectUrl = $requestedUrlToRedirect;

@@ -55,6 +55,8 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
     }
 
     /**
+     * Sleep magic method.
+     *
      * @return array
      */
     public function __sleep()
@@ -120,7 +122,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
     /**
      * Replace translation templates with HTML fragments
      *
-     * @param array|string &$body
+     * @param array|string $body
      * @param bool $isJson
      * @return $this
      */

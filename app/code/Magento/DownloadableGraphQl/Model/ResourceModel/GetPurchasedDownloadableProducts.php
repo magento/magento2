@@ -11,8 +11,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Downloadable\Model\Link\Purchased\Item;
 
 /**
- * Class GetPurchasedDownloadableProducts
- *
  * The model returns all purchased products for the specified customer
  */
 class GetPurchasedDownloadableProducts
