@@ -39,6 +39,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
         </variation>
         <variation name="DeleteProductsFromWishlistOnFrontendTestVariation4">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <data name="removedProductsIndex" xsi:type="array">
                 <item name="0" xsi:type="string">1</item>
@@ -46,6 +47,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
         </variation>
         <variation name="DeleteProductsFromWishlistOnFrontendTestVariation5">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="removedProductsIndex" xsi:type="array">
                 <item name="0" xsi:type="string">1</item>
@@ -53,6 +55,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
         </variation>
         <variation name="DeleteProductsFromWishlistOnFrontendTestVariation6">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="products/0" xsi:type="string">configurableProduct::default</data>
             <data name="removedProductsIndex" xsi:type="array">
                 <item name="0" xsi:type="string">1</item>
