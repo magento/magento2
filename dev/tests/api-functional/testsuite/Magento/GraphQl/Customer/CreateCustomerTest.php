@@ -276,7 +276,7 @@ QUERY;
     }
  
     /**
-     * @magentoConfigFixture default_store newsletter/general/active 0
+     * @magentoApiDataFixture Magento/Customer/_files/customer_subscribe.php
      */
     public function testCreateCustomerSubscribed()
     {
