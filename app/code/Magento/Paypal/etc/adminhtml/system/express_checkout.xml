@@ -124,6 +124,7 @@
                     <depends>
                         <field id="use_proxy">1</field>
                     </depends>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
                 </field>
             </group>
             <field id="enable_express_checkout" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">
