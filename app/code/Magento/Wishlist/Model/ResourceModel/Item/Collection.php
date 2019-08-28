@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Sales\Model\ConfigInterface;
+use Magento\Sales\Model\Config;
 
 /**
  * Wishlist item collection
@@ -154,7 +154,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     private $tableMaintainer;
 
     /**
-     * @var ConfigInterface
+     * @var Config
      */
     private $salesConfig;
 
@@ -178,7 +178,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param TableMaintainer|null $tableMaintainer
-     * @param  ConfigInterface|null $salesConfig
+     * @param  Config|null $salesConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -202,7 +202,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\App\State $appState,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         TableMaintainer $tableMaintainer = null,
-        ConfigInterface $salesConfig = null
+        Config $salesConfig = null
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->_adminhtmlSales = $adminhtmlSales;
@@ -218,7 +218,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->_appState = $appState;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
-        $this->salesConfig = $salesConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->salesConfig = $salesConfig ?: ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
