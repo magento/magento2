@@ -25,4 +25,7 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="product_authorization" type="Magento\Catalog\Plugin\ProductAuthorization" />
     </type>
+    <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
+        <plugin name="category_authorization" type="Magento\Catalog\Plugin\CategoryAuthorization" />
+    </type>
 </config>
