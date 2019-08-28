@@ -49,7 +49,7 @@
         </before>
         <after>
             <!--Test will fail until MSI-1041 is merged-->
-            <actionGroup ref="ChangeAllSourcesStatusActionGroup" stepKey="disableAllSources"/>
+            <actionGroup ref="disableAllSourcesActionGroup" stepKey="disableAllSources"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
