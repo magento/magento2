@@ -29,25 +29,15 @@ class GetSkuListInStock
     private $skuListInStockFactory;
 
     /**
-     * @var int
-     */
-    private $groupConcatMaxLen;
-
-    /**
-     * GetSkuListInStock constructor.
-     *
      * @param ResourceConnection $resourceConnection
      * @param SkuListInStockFactory $skuListInStockFactory
-     * @param int $groupConcatMaxLen
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        SkuListInStockFactory $skuListInStockFactory,
-        int $groupConcatMaxLen
+        SkuListInStockFactory $skuListInStockFactory
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->skuListInStockFactory = $skuListInStockFactory;
-        $this->groupConcatMaxLen = $groupConcatMaxLen;
     }
 
     /**
@@ -65,15 +55,13 @@ class GetSkuListInStock
         $sourceItemTable = $this->resourceConnection->getTableName(
             SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM
         );
+        $items = [];
 
         $select = $connection
             ->select()
             ->from(
                 ['source_item' => $sourceItemTable],
-                [
-                    SourceItemInterface::SKU =>
-                        sprintf("GROUP_CONCAT(DISTINCT %s SEPARATOR ',')", 'source_item.' . SourceItemInterface::SKU)
-                ]
+                [SourceItemInterface::SKU => 'source_item.' . SourceItemInterface::SKU]
             )->joinInner(
                 ['stock_source_link' => $sourceStockLinkTable],
                 sprintf(
@@ -82,11 +70,16 @@ class GetSkuListInStock
                     StockSourceLink::SOURCE_CODE
                 ),
                 [StockSourceLink::STOCK_ID]
-            )->where('source_item.source_item_id IN (?)', $sourceItemIds)
-            ->group(['stock_source_link.' . StockSourceLink::STOCK_ID]);
+            )->where(
+                'source_item.source_item_id IN (?)',
+                $sourceItemIds
+            );
 
-        $connection->query('SET group_concat_max_len = ' . $this->groupConcatMaxLen);
-        $items = $connection->fetchAll($select);
+        $dbStatement = $connection->query($select);
+        while ($item = $dbStatement->fetch()) {
+            $items[$item[StockSourceLink::STOCK_ID]][$item[SourceItemInterface::SKU]] = $item[SourceItemInterface::SKU];
+        }
+
         return $this->getStockIdToSkuList($items);
     }
 
@@ -99,11 +92,11 @@ class GetSkuListInStock
     private function getStockIdToSkuList(array $items): array
     {
         $skuListInStockList = [];
-        foreach ($items as $item) {
+        foreach ($items as $stockId => $skuList) {
             /** @var SkuListInStock $skuListInStock */
             $skuListInStock = $this->skuListInStockFactory->create();
-            $skuListInStock->setStockId((int)$item[StockSourceLink::STOCK_ID]);
-            $skuListInStock->setSkuList(explode(',', $item[SourceItemInterface::SKU]));
+            $skuListInStock->setStockId((int)$stockId);
+            $skuListInStock->setSkuList($skuList);
             $skuListInStockList[] = $skuListInStock;
         }
         return $skuListInStockList;

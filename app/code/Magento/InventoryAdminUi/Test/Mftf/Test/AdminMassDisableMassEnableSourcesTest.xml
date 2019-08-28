@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassDisableMassEnableSourcesTest">
+        <annotations>
+            <stories value="Mass enable and disable sources."/>
+            <title value="Mass enable and disable sources on source grid."/>
+            <description value="Verify, admin should be able to disable and enable sources via mass action."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/910317/scenarios/3331619"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        
+        <before>
+            <!--Create additional sources.-->
+            <createData entity="FullSource1" stepKey="additionalSource1"/>
+            <createData entity="FullSource2" stepKey="additionalSource2"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Disable created sources.-->
+            <actionGroup ref="DisableAllSourcesActionGroup" stepKey="disableAllSources"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+
+        <!--Disable created sources.-->
+        <actionGroup ref="DisableAllSourcesActionGroup" stepKey="disableAllSources"/>
+        <!--Verify, sources have been disabled.-->
+        <actionGroup ref="VerifySourceStatusActionGroup" stepKey="verifyFirstSourceDisabled">
+            <argument name="sourceName" value="$$additionalSource1.source[name]$$"/>
+            <argument name="sourceStatus" value="Disabled"/>
+        </actionGroup>
+        <actionGroup ref="VerifySourceStatusActionGroup" stepKey="verifySecondSourceDisabled">
+            <argument name="sourceName" value="$$additionalSource2.source[name]$$"/>
+            <argument name="sourceStatus" value="Disabled"/>
+        </actionGroup>
+        <!--Enable created sources.-->
+        <actionGroup ref="EnableAllSourcesActionGroup" stepKey="enableAllSources"/>
+        <!--Verify, sources have been enabled.-->
+        <actionGroup ref="VerifySourceStatusActionGroup" stepKey="verifyFirstSourceEnabled">
+            <argument name="sourceName" value="$$additionalSource1.source[name]$$"/>
+            <argument name="sourceStatus" value="Enabled"/>
+        </actionGroup>
+        <actionGroup ref="VerifySourceStatusActionGroup" stepKey="verifySecondSourceEnabled">
+            <argument name="sourceName" value="$$additionalSource2.source[name]$$"/>
+            <argument name="sourceStatus" value="Enabled"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -27,7 +27,6 @@
     </type>
     <type name="Magento\InventoryConfigurableProductIndexer\Indexer\SourceItem\SiblingSkuListInStockProvider">
         <arguments>
-            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
             <argument name="tableNameSourceItem" xsi:type="const">Magento\Inventory\Model\ResourceModel\SourceItem::TABLE_NAME_SOURCE_ITEM</argument>
             <argument name="tableNameStockSourceLink" xsi:type="const">Magento\Inventory\Model\ResourceModel\StockSourceLink::TABLE_NAME_STOCK_SOURCE_LINK</argument>
         </arguments>
