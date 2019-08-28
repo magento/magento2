@@ -245,7 +245,7 @@ class Element extends \SimpleXMLElement
         $attributes = $this->attributes();
         if ($attributes) {
             foreach ($attributes as $key => $value) {
-                $out .= ' ' . $key . '="' . str_replace('"', '\"', (string)$value) . '"';
+                $out .= ' ' . $key . '="' . str_replace('"', '\"', $this->xmlentities($value)) . '"';
             }
         }
 
