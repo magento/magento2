@@ -70,8 +70,9 @@
                     </depends>
                     <attribute type="shared">1</attribute>
                 </field>
-                <field id="proxy_port" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1">
+                <field id="proxy_port" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1">
                     <label>Proxy Port</label>
+                    <comment>Please enter at least 0 and at most 65535</comment>
                     <config_path>payment/payflow_link/proxy_port</config_path>
                     <depends>
                         <field id="use_proxy">1</field>
