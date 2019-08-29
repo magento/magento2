@@ -80,7 +80,7 @@ class MediaGalleryProcessor
         $entriesById = [];
         if (!empty($existingMediaGallery)) {
             foreach ($mediaGalleryEntries as $entry) {
-                if (isset($entry['value_id'])) {
+                if (isset($entry['value_id']) && $entry['value_id'] != '') {
                     $entriesById[$entry['value_id']] = $entry;
                 } else {
                     $newEntries[] = $entry;
