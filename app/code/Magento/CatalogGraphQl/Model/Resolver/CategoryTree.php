@@ -64,7 +64,7 @@ class CategoryTree implements ResolverInterface
             return $value[$field->getName()];
         }
 
-        $rootCategoryId = !empty($args['id']) ? (int)$args['id'] :
+        $rootCategoryId = isset($args['id']) ? (int)$args['id'] :
             (int)$context->getExtensionAttributes()->getStore()->getRootCategoryId();
         $this->checkCategoryIsActive->execute($rootCategoryId);
 

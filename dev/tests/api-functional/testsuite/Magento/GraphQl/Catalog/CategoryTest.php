@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * Test loading of category tree
@@ -261,6 +261,25 @@ QUERY;
         $this->graphQlQuery($query);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Category doesn't exist
+     */
+    public function testGetCategoryIdZero()
+    {
+        $categoryId = 0;
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+      id
+      name
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
     public function testNonExistentCategoryWithProductCount()
     {
         $query = <<<QUERY
@@ -493,8 +512,7 @@ QUERY;
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'price', 'expected_value' =>
-                [
+            ['response_field' => 'price', 'expected_value' => [
                     'minimalPrice' => [
                         'amount' => [
                             'value' => $product->getPrice(),
