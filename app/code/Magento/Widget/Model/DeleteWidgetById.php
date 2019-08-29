@@ -68,7 +68,12 @@ class DeleteWidgetById
         $this->resourceModel->load($widgetInstance, $instanceId);
 
         if (!$widgetInstance->getId()) {
-            throw NoSuchEntityException::singleField('instance_id', $instanceId);
+            throw new NoSuchEntityException(
+                __(
+                    'No such entity with instance_id = %instance_id',
+                    ['instance_id' => $instanceId]
+                )
+            );
         }
 
         return $widgetInstance;
