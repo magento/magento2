@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -241,7 +242,7 @@ class Shipping implements RateCollectorInterface
     }
 
     /**
-     * Collect rates of given carrier
+     * Prepare carrier to find rates.
      *
      * @param string $carrierCode
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
@@ -251,7 +252,9 @@ class Shipping implements RateCollectorInterface
      */
     public function collectCarrierRates($carrierCode, $request)
     {
-        $carrier = $this->_carrierFactory->create($carrierCode, $request->getQuoteStoreId());
+        $carrier = $this->isShippingCarrierAvailable($carrierCode)
+            ? $this->_carrierFactory->create($carrierCode, $request->getStoreId())
+            : null;
         if (!$carrier) {
             return $this;
         }
@@ -321,6 +324,7 @@ class Shipping implements RateCollectorInterface
 
     /**
      * Compose Packages For Carrier.
+     *
      * Divides order into items and items into parts if it's necessary
      *
      * @param \Magento\Shipping\Model\Carrier\AbstractCarrier $carrier
@@ -333,6 +337,7 @@ class Shipping implements RateCollectorInterface
     {
         $allItems = $request->getAllItems();
         $fullItems = [];
+        $weightItems = [];
 
         $maxWeight = (double)$carrier->getConfigData('max_package_weight');
 
@@ -403,22 +408,21 @@ class Shipping implements RateCollectorInterface
 
             if (!empty($decimalItems)) {
                 foreach ($decimalItems as $decimalItem) {
-                    $fullItems = array_merge(
-                        $fullItems,
-                        array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight'])
-                    );
+                    $weightItems[] = array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight']);
                 }
             } else {
-                $fullItems = array_merge($fullItems, array_fill(0, $qty, $itemWeight));
+                $weightItems[] = array_fill(0, $qty, $itemWeight);
             }
         }
+        $fullItems = array_merge($fullItems, ...$weightItems);
         sort($fullItems);
 
         return $this->_makePieces($fullItems, $maxWeight);
     }
 
     /**
-     * Make pieces
+     * Make pieces.
+     *
      * Compose packages list based on given items, so that each package is as heavy as possible
      *
      * @param array $items
@@ -508,5 +512,19 @@ class Shipping implements RateCollectorInterface
     {
         $this->_availabilityConfigField = $code;
         return $this;
+    }
+
+    /**
+     * Checks availability of carrier.
+     *
+     * @param string $carrierCode
+     * @return bool
+     */
+    private function isShippingCarrierAvailable(string $carrierCode): bool
+    {
+        return $this->_scopeConfig->isSetFlag(
+            'carriers/' . $carrierCode . '/' . $this->_availabilityConfigField,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }
