@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\CatalogImportExport\Model\Import\Product
  *
  * The "CouplingBetweenObjects" warning is caused by tremendous complexity of the original class
- *
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
@@ -20,6 +20,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
@@ -844,6 +845,37 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $additionalImageTwoItem);
         $this->assertEquals('/m/a/magento_additional_image_two.jpg', $additionalImageTwoItem->getFile());
         $this->assertEquals('Additional Image Label Two', $additionalImageTwoItem->getLabel());
+    }
+
+    /**
+     * Test that after product import images from "hide_from_product_page" attribute hidden properly.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     */
+    public function testSaveHiddenImages()
+    {
+        $this->importDataForMediaTest('import_media_hidden_images.csv');
+        $product = $this->getProductBySku('simple_new');
+        $images = $product->getMediaGalleryEntries();
+
+        $hiddenImages = array_filter(
+            $images,
+            static function (DataObject $image) {
+                return $image->getDisabled() == 1;
+            }
+        );
+
+        $this->assertCount(3, $hiddenImages);
+
+        $imageItem = array_shift($hiddenImages);
+        $this->assertEquals('/m/a/magento_image.jpg', $imageItem->getFile());
+
+        $imageItem = array_shift($hiddenImages);
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $imageItem->getFile());
+
+        $imageItem = array_shift($hiddenImages);
+        $this->assertEquals('/m/a/magento_additional_image_two.jpg', $imageItem->getFile());
     }
 
     /**
