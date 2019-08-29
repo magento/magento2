@@ -21,8 +21,8 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class CronInstallCommand extends Command
 {
-    const COMMAND_OPTION_FORCE = 'force';
-    const COMMAND_OPTION_NON_OPTIONAL = 'non-optional';
+    private const COMMAND_OPTION_FORCE = 'force';
+    private const COMMAND_OPTION_NON_OPTIONAL = 'non-optional';
 
     /**
      * @var CrontabManagerInterface
