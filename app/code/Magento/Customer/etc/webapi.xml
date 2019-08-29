@@ -188,6 +188,12 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/customers/password/resetLinkToken/:resetPasswordLinkToken" method="GET">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="validateResetPasswordLinkTokenWithoutCustomerId"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
     <route url="/V1/customers/password" method="PUT">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="initiatePasswordReset"/>
         <resources>

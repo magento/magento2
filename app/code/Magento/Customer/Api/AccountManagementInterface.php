@@ -160,8 +160,7 @@ interface AccountManagementInterface
     /**
      * Check if password reset token is valid.
      *
-     * @param int $customerId If 0 is given then a customer
-     * will be matched by the RP token.
+     * @param int $customerId
      * @param string $resetPasswordLinkToken
      *
      * @return bool True if the token is valid
@@ -172,6 +171,19 @@ interface AccountManagementInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
+
+    /**
+     * Check if password reset token is valid.
+     *
+     * @param string $resetPasswordLinkToken
+     *
+     * @return bool True if the token is valid
+     * @throws \Magento\Framework\Exception\State\InputMismatchException If token is mismatched
+     * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function validateResetPasswordLinkTokenWithoutCustomerId($resetPasswordLinkToken);
 
     /**
      * Gets the account confirmation status.

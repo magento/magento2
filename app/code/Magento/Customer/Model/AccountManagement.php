@@ -610,6 +610,15 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @inheritdoc
      */
+    public function validateResetPasswordLinkTokenWithoutCustomerId($resetPasswordLinkToken)
+    {
+        $this->validateResetPasswordTokenWithoutCustomerId($resetPasswordLinkToken);
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function initiatePasswordReset($email, $template, $websiteId = null)
     {
         if ($websiteId === null) {
@@ -1127,16 +1136,15 @@ class AccountManagement implements AccountManagementInterface
      * @param string $resetPasswordLinkToken
      *
      * @return bool
-     * @throws ExpiredException If token is expired
      * @throws InputException If token or customer id is invalid
+     * @throws ExpiredException If token is expired
      * @throws InputMismatchException If token is mismatched
      * @throws LocalizedException
-     * @throws NoSuchEntityException If customer doesn't exist
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
-        if ($customerId !== null && $customerId < 0) {
+        if ($customerId !== null && $customerId <= 0) {
             throw new InputException(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -1145,25 +1153,69 @@ class AccountManagement implements AccountManagementInterface
             );
         }
 
-        if ($customerId === 0) {
-            //Looking for the customer.
-            $customerId = $this->getByToken
-                ->execute($resetPasswordLinkToken)
-                ->getId();
+        try {
+            $this->validateToken($customerId, $resetPasswordLinkToken);
+        } catch (\Exception $exception) {
+            throw $exception;
         }
-        if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
+
+        return true;
+    }
+
+    /**
+     * Validate the Reset Password Token for a customer.
+     *
+     * @param string $resetPasswordLinkToken
+     *
+     * @return bool
+     * @throws ExpiredException If token is expired
+     * @throws InputMismatchException If token is mismatched
+     * @throws LocalizedException
+     * @throws NoSuchEntityException If customer doesn't exist
+     * @SuppressWarnings(PHPMD.LongVariable)
+     */
+    private function validateResetPasswordTokenWithoutCustomerId($resetPasswordLinkToken)
+    {
+        //Looking for the customer.
+        $customerId = $this->getByToken
+            ->execute($resetPasswordLinkToken)
+            ->getId();
+
+        try {
+            $this->validateToken($customerId, $resetPasswordLinkToken);
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate the Reset Password Token for a customer.
+     *
+     * @param int $customerId
+     * @param string $token
+     *
+     * @throws ExpiredException If token is expired
+     * @throws InputMismatchException If token is mismatched
+     * @throws LocalizedException
+     * @throws NoSuchEntityException If customer doesn't exist
+     * @SuppressWarnings(PHPMD.LongVariable)
+     */
+    private function validateToken($customerId, $token)
+    {
+        if (!is_string($token) || empty($token)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
             throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         }
         $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
         $rpToken = $customerSecureData->getRpToken();
         $rpTokenCreatedAt = $customerSecureData->getRpTokenCreatedAt();
-        if (!Security::compareStrings($rpToken, $resetPasswordLinkToken)) {
+        if (!Security::compareStrings($rpToken, $token)) {
             throw new InputMismatchException(__('The password token is mismatched. Reset and try again.'));
         } elseif ($this->isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)) {
             throw new ExpiredException(__('The password token is expired. Reset and try again.'));
         }
-        return true;
     }
 
     /**
