@@ -211,9 +211,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $collection,
             $attribute,
             $valueExpr
-        );
-
-        $this->_attrOptionFactory->create()->addOptionToCollection(
+        )->addOptionToCollection(
             $collection,
             $attribute,
             $valueExpr
