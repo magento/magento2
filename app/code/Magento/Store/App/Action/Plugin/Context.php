@@ -11,6 +11,7 @@ use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -23,17 +24,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class Context
 {
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface
+     * @var SessionManagerInterface
      */
     protected $session;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var HttpContext
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -43,15 +44,15 @@ class Context
     protected $storeCookieManager;
 
     /**
-     * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param SessionManagerInterface $session
+     * @param HttpContext $httpContext
+     * @param StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
      */
     public function __construct(
-        \Magento\Framework\Session\SessionManagerInterface $session,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        SessionManagerInterface $session,
+        HttpContext $httpContext,
+        StoreManagerInterface $storeManager,
         StoreCookieManagerInterface $storeCookieManager
     ) {
         $this->session      = $session;
@@ -80,7 +81,7 @@ class Context
 
         /** @var string|array|null $storeCode */
         $storeCode = $request->getParam(
-            \Magento\Store\Model\StoreManagerInterface::PARAM_NAME,
+            StoreManagerInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
         if (is_array($storeCode)) {
@@ -106,13 +107,13 @@ class Context
      * Take action in case of invalid store requested.
      *
      * @param RequestInterface $request
-     * @param \Throwable|null $previousException
+     * @param NoSuchEntityException|null $previousException
      * @return void
      * @throws NotFoundException
      */
     private function processInvalidStoreRequested(
         RequestInterface $request,
-        \Throwable $previousException = null
+        NoSuchEntityException $previousException = null
     ) {
         $store = $this->storeManager->getStore();
         $this->updateContext($request, $store);
@@ -137,27 +138,25 @@ class Context
     {
         switch (true) {
             case $store->isUseStoreInUrl():
-                $defaultStoreCode = $store->getCode();
+                $defaultStore = $store;
                 break;
             case ScopeInterface::SCOPE_STORE == $request->getServerValue(StoreManager::PARAM_RUN_TYPE):
                 $defaultStoreCode = $request->getServerValue(StoreManager::PARAM_RUN_CODE);
+                $defaultStore = $this->storeManager->getStore($defaultStoreCode);
                 break;
             default:
                 $defaultStoreCode = $this->storeManager->getDefaultStoreView()->getCode();
+                $defaultStore = $this->storeManager->getStore($defaultStoreCode);
                 break;
         }
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
             $store->getCode(),
-            $defaultStoreCode
+            $defaultStore->getCode()
         );
-
-        /** @var StoreInterface $defaultStore */
-        $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
         $this->httpContext->setValue(
             HttpContext::CONTEXT_CURRENCY,
-            $this->session->getCurrencyCode()
-                ?: $store->getDefaultCurrencyCode(),
+            $this->session->getCurrencyCode() ?: $store->getDefaultCurrencyCode(),
             $defaultStore->getDefaultCurrencyCode()
         );
     }

@@ -93,7 +93,10 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\Website::class,
             ['getDefaultStore', '__wakeup']
         );
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getServerValue'])
+            ->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

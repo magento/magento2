@@ -53,7 +53,10 @@ class ContextNonDefaultStoreDirectLinkTest extends TestCase
         $storeCookieManager = $this->createMock(StoreCookieManagerInterface::class);
         $storeMock = $this->createMock(Store::class);
         $currentStoreMock = $this->createMock(Store::class);
-        $requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getServerValue'])
+            ->getMockForAbstractClass();
         $subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
