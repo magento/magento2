@@ -123,7 +123,7 @@
                         $rows = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('table.data-grid tbody tr[data-role=row]:not(.data-grid-tr-no-data):nth-of-type(1)'));
                     }
                 }"
-                stepKey="deleteAllCartPriceRulesOneByOne"/>
+                stepKey="deleteAllCatalogPriceRulesOneByOne"/>
         <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
     </actionGroup>
