@@ -9,11 +9,15 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCaptchaVisibleOnAdminLoginFormActionGroup">
+        <annotations>
+            <description>Validate that the Captcha IS present on the Backend Admin Login page.</description>
+        </annotations>
+
         <waitForElementVisible selector="{{AdminLoginFormSection.captchaField}}" stepKey="seeCaptchaField"/>
         <waitForElementVisible selector="{{AdminLoginFormSection.captchaImg}}" stepKey="seeCaptchaImage"/>
         <waitForElementVisible selector="{{AdminLoginFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
         <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageReloaded" />
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
         <waitForElementVisible selector="{{AdminLoginFormSection.captchaField}}" stepKey="seeCaptchaFieldAfterPageReload"/>
         <waitForElementVisible selector="{{AdminLoginFormSection.captchaImg}}" stepKey="seeCaptchaImageAfterPageReload"/>
         <waitForElementVisible selector="{{AdminLoginFormSection.captchaReload}}" stepKey="seeCaptchaReloadButtonAfterPageReload"/>

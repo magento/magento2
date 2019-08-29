@@ -22,6 +22,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct0"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct5"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct6"/>
         </before>
         <after>
             <!-- Delete simple product -->
@@ -31,6 +36,11 @@
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct0" stepKey="deleteSimpleProduct0"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="simpleProduct5" stepKey="deleteSimpleProduct5"/>
+            <deleteData createDataKey="simpleProduct6" stepKey="deleteSimpleProduct6"/>
         </after>
 
         <!--Create product-->
@@ -68,6 +78,28 @@
         <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProduct"/>
+
+        <!--See more related products in admin-->
+        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct2">
+            <argument name="sku" value="$$simpleProduct2.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct3">
+            <argument name="sku" value="$$simpleProduct3.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct4">
+            <argument name="sku" value="$$simpleProduct4.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct5">
+            <argument name="sku" value="$$simpleProduct5.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct6">
+            <argument name="sku" value="$$simpleProduct6.sku$$"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo2"/>
+        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee2"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.sku$$" stepKey="seeSixthRelatedProduct"/>
+        <selectOption selector=".admin__collapsible-block-wrapper[data-index='related'] .admin__control-select" userInput="5" stepKey="selectFivePerPage"/>
+        <dontSee selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.sku$$" stepKey="dontSeeSixthRelatedProduct"/>
 
         <!--See related product in storefront-->
         <amOnPage url="{{SimpleProduct3.sku}}.html" stepKey="goToStorefront"/>
