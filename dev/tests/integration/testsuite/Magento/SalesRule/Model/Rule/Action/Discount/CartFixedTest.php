@@ -27,6 +27,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
  *
  * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartFixedTest extends \PHPUnit\Framework\TestCase
 {
