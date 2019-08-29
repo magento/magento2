@@ -408,10 +408,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     protected function setUpDesignParams()
     {
         $themeCode = 'Vendor_EmailTest/custom_theme';
-        $this->model->setDesignParams([
-            'area' => Area::AREA_FRONTEND,
-            'theme' => $themeCode,
-            'locale' => Locale::DEFAULT_SYSTEM_LOCALE,
-        ]);
+        $this->model->setDesignParams(
+            [
+                'area' => Area::AREA_FRONTEND,
+                'theme' => $themeCode,
+                'locale' => Locale::DEFAULT_SYSTEM_LOCALE,
+            ]
+        );
     }
 }

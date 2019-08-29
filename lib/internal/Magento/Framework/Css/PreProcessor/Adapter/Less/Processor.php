@@ -61,7 +61,6 @@ class Processor implements ContentProcessorInterface
 
     /**
      * @inheritdoc
-     * @throws ContentProcessorException
      */
     public function processContent(File $asset)
     {
@@ -77,7 +76,9 @@ class Processor implements ContentProcessorInterface
             $content = $this->assetSource->getContent($asset);
 
             if (trim($content) === '') {
-                throw new ContentProcessorException(new Phrase(ContentProcessorInterface::ERROR_MESSAGE_PREFIX . 'LESS file is empty: ' . $path));
+                throw new ContentProcessorException(
+                    new Phrase('Compilation from source: LESS file is empty: ' . $path)
+                );
             }
 
             $tmpFilePath = $this->temporaryFile->createFile($path, $content);
@@ -88,7 +89,9 @@ class Processor implements ContentProcessorInterface
             gc_enable();
 
             if (trim($content) === '') {
-                throw new ContentProcessorException(new Phrase(ContentProcessorInterface::ERROR_MESSAGE_PREFIX . 'LESS file is empty: ' . $path));
+                throw new ContentProcessorException(
+                    new Phrase('Compilation from source: LESS file is empty: ' . $path)
+                );
             } else {
                 return $content;
             }
