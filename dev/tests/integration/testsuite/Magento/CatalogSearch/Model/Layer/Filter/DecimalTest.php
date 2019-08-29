@@ -48,41 +48,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\CatalogSearch\Model\Layer\Filter\Decimal::class, ['layer' => $layer]);
         $this->_model->setAttributeModel($attribute);
     }
-
-    /**
-     * Test the product collection returns the correct number of items after the filter is applied.
-     *
-     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_special_price_filterable.php
-     * @magentoDataFixture Magento/Catalog/_files/multiple_visible_products.php
-     * @magentoDbIsolation disabled
-     */
-    public function testApplyProductCollection()
-    {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
-        $category->load(100);
-        $this->_model->getLayer()->setCurrentCategory($category);
-
-        /** @var $attribute \Magento\Catalog\Model\Entity\Attribute */
-        $attribute = $objectManager->create(\Magento\Catalog\Model\Entity\Attribute::class);
-        $attribute->loadByCode('catalog_product', 'special_price');
-        $this->_model->setAttributeModel($attribute);
-
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get(\Magento\TestFramework\Request::class);
-        $request->setParam('special_price', '10-20');
-        $result = $this->_model->apply($request);
-        $collection = $this->_model->getLayer()->getProductCollection();
-        $size = $collection->getSize();
-        $this->assertEquals(
-            1,
-            $size
-        );
-    }
-
+    
     /**
      * Test the filter label is correct
      */
