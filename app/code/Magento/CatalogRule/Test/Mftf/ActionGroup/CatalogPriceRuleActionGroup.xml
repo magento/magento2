@@ -15,17 +15,18 @@
         </arguments>
         <!-- Go to the admin Catalog rule grid and add a new one -->
         <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad time="30" stepKey="waitForPageFullyLoaded"/>
         <click selector="{{AdminMainActionsSection.add}}" stepKey="addNewRule"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
 
         <!-- Fill the form according the attributes of the entity -->
+        <waitForElementVisible selector="{{AdminCatalogPriceRuleSection.ruleName}}" stepKey="waitRuleNameFieldAppears"/>
         <fillField selector="{{AdminCatalogPriceRuleSection.ruleName}}" userInput="{{catalogRule.name}}" stepKey="fillName"/>
         <fillField selector="{{AdminCatalogPriceRuleSection.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription"/>
         <selectOption selector="{{AdminCatalogPriceRuleSection.websites}}" parameterArray="{{catalogRule.websites}}" stepKey="selectWebsites"/>
         <selectOption selector="{{AdminCatalogPriceRuleSection.customerGroups}}" parameterArray="{{catalogRule.groups}}" stepKey="selectCustomerGroups"/>
 
-        <click selector="{{AdminCatalogPriceRuleSection.actionsTab}}" stepKey="openActionDropdown"/>
+        <scrollTo selector="{{AdminCatalogPriceRuleSection.actionsTabTitle}}" stepKey="scrollToActionsSection"/>
+        <conditionalClick selector="{{AdminCatalogPriceRuleSection.actionsTabTitle}}" dependentSelector="{{AdminCatalogPriceRuleSection.actionsTabBody}}" visible="false" stepKey="openActionsTabIfCollapsed"/>
         <selectOption selector="{{AdminCatalogPriceRuleActionsSection.apply}}" userInput="{{catalogRule.simple_action}}" stepKey="discountType"/>
         <fillField selector="{{AdminCatalogPriceRuleActionsSection.discountAmount}}" userInput="{{catalogRule.discount_amount}}" stepKey="fillDiscountValue"/>
         <selectOption selector="{{AdminCatalogPriceRuleActionsSection.disregardRules}}" userInput="Yes" stepKey="discardSubsequentRules"/>
@@ -33,8 +34,8 @@
         <!-- Scroll to top and either save or save and apply after the action group -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForRuleSaved"/>
-        <see userInput="You saved the rule." stepKey="verifyRuleSaved"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the rule." stepKey="checkSuccessMessage"/>
     </actionGroup>
 
     <actionGroup name="RemoveCatalogPriceRule">
@@ -48,13 +49,12 @@
         <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
         <click selector="{{AdminGridTableSection.row('1')}}" stepKey="clickEdit"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
-
+        <waitForPageLoad stepKey="waitForEditRuleFormLoad"/>
+        <waitForElementVisible selector="{{AdminMainActionsSection.delete}}" stepKey="waitDeleteButtonAppears"/>
         <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickToDelete"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForElementVisible"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickToConfirm"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessageAppears"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="checkSuccessMessage"/>
     </actionGroup>
