@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="TaxConfig" type="tax_config_state">
       <!-- Calculation settings -->
       <requiredEntity type="algorithm">TaxCalculationMethodBasedOn</requiredEntity>
@@ -153,6 +153,19 @@
         <data key="value">0</data>
     </entity>
     <entity name="ShippingTaxClassTaxableGoods" type="shipping_tax_class">
+        <data key="value">2</data>
+    </entity>
+
+    <entity name="ShippingTaxClassNone">
+        <data key="path">tax/classes/shipping_tax_class</data>
+        <data key="scope_id">0</data>
+        <data key="label">None</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="ShippingTaxClassTaxableGoods">
+        <data key="path">tax/classes/shipping_tax_class</data>
+        <data key="scope_id">0</data>
+        <data key="label">Taxable Goods</data>
         <data key="value">2</data>
     </entity>
 </entities>
