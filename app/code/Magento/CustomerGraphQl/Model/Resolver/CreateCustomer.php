@@ -33,19 +33,19 @@ class CreateCustomer implements ResolverInterface
     /**
      * @var Config
      */
-    private $newsletterConfig;
+    private $newsLetterConfig;
 
     /**
      * CreateCustomer constructor.
      *
      * @param ExtractCustomerData $extractCustomerData
      * @param CreateCustomerAccount $createCustomerAccount
-     * @param Config $config
+     * @param Config $newsLetterConfig
      */
     public function __construct(
         ExtractCustomerData $extractCustomerData,
         CreateCustomerAccount $createCustomerAccount,
-        Config $newsletterConfig
+        Config $newsLetterConfig
     ) {
         $this->newsLetterConfig = $newsLetterConfig;
         $this->extractCustomerData = $extractCustomerData;
