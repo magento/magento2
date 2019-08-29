@@ -1,6 +1,6 @@
 <?php
 /**
- * Oder statuses grid collection
+ * order status grid collection
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
