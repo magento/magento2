@@ -14,7 +14,7 @@
             <skip>
                 <issueId value="https://github.com/magento/inventory/issues/1487"/>
             </skip>
-            <group value="msi"/>
+            <group value="msi_ee"/>
             <group value="multi_mode"/>
         </annotations>
         <before>

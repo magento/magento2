@@ -11,7 +11,7 @@
     <test name="StoreFrontQTYChangeCustomStockProductVariationOfConfigurableProductTest" extends="StoreFrontQTYChangeProductVariationOfConfigurableProductTest">
         <annotations>
             <description value="Check QTY change only for variation product of configurable product on additional stock."/>
-            <group value="msi"/>
+            <group value="msi_b2b"/>
             <group value="multi_mode"/>
         </annotations>
 

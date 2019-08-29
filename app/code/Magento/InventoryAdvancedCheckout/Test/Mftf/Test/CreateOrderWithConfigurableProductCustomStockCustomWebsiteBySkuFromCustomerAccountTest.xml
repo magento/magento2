@@ -12,7 +12,7 @@
         <annotations>
             <description value="Add configurable product by sku from customer account, Additional Stock, Additional Website."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/987821/scenarios/3371234"/>
-            <group value="msi"/>
+            <group value="msi_ee"/>
             <group value="multi_mode"/>
         </annotations>
 
@@ -105,8 +105,7 @@
         <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" stepKey="fillConfirmPassword" after="fillPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton" after="fillConfirmPassword"/>
         <!--Place order from storefront.-->
-        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart" after="clickUpdateCart"/>
-        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout" after="clickUpdateCart"/>
         <!-- Fill customer new shipping address -->
         <actionGroup ref="CustomerCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
             <argument name="address" value="US_Address_TX"/>
