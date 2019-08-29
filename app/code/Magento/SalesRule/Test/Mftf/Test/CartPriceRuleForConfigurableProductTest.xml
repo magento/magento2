@@ -69,6 +69,11 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
+            <!--Login to Admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="deleteAllCartPriceRule" stepKey="deleteAllCartPriceRules"/>
+
             <!--Create cart price rule-->
             <createData entity="SaleRule50PercentDiscountNoCoupon" stepKey="createCartPriceRule">
                 <field key="discount_amount">70</field>
@@ -77,9 +82,6 @@
             <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
                 <requiredEntity createDataKey="createCartPriceRule"/>
             </createData>
-
-            <!--Login to Admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!--Set attribute sku property Use for Promo Rule Conditions = Yes and save attribute-->
             <actionGroup ref="navigateToProductAttribute" stepKey="goToProductAttributeSkuPage">
