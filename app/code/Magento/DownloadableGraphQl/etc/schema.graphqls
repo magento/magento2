@@ -54,8 +54,8 @@ type DownloadableProduct implements ProductInterface, CustomizableProductInterfa
 }
 
 enum DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample") {
-    FILE
-    URL
+    FILE @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    URL @deprecated(reason: "`sample_url` serves to get the downloadable sample")
 }
 
 type DownloadableProductLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
