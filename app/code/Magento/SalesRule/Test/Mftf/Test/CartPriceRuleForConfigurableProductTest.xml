@@ -119,6 +119,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
+        <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="customerLogout"/>
         <!--Go to product page-->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
 
