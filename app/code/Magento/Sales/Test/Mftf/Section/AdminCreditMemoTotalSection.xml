@@ -14,5 +14,8 @@
         <element name="updateTotals" type="button" selector="button[class~='update-totals-button']:not([class~='disabled'])" timeout="30"/>
         <element name="submitRefundOffline" type="button" selector=".order-totals-actions button[title='Refund Offline']:not([class~='disabled'])" timeout="30"/>
         <element name="adjustmentRefund" type="input" selector=".order-subtotal-table tbody input[name='creditmemo[adjustment_positive]']"/>
+        <element name="subTotal" type="text" selector=".order-subtotal-table tbody tr.col-0>td span.price"/>
+        <element name="grandTotal" type="text" selector=".order-subtotal-table tfoot tr.col-0>td span.price"/>
+        <element name="discount" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Discount']/following-sibling::td//span[@class='price']"/>
     </section>
 </sections>
