@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateBundleProductDefaultStockAdditionalWebsiteTest" extends="AdminCreateBundleProductAdditionalStockAdditionalWebsiteTest">
+        <annotations>
+            <stories value="Bundle product default stock."/>
+            <title value="Create Bundle Product on Default Stock and Additional Website"/>
+            <description value="Verify, admin should be able to create bundle product on default stock and additional website."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457016/scenarios/1820455"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="logoutOfAdmin">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </after>
+
+        <remove keyForRemoval="assignStockToAdditionalWebsite"/>
+        <!--Assign Default Stock to Additional Website.-->
+        <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="openProductEditPageToAssignSource">
+            <argument name="stockName" value="{{_defaultStock.name}}"/>
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <!--Assign simple product to additional website and set qty.-->
+        <remove keyForRemoval="assignTestSourceToCreatedProduct"/>
+        <remove keyForRemoval="setProductQuantity"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setProductDefaultSourceQuantity" before="assignProductToAdditionalWebsite"/>
+    </test>
+</tests>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableQtyIncrementsOnProductEditPageActionGroup">
+        <arguments>
+            <argument name="qtyIncrements" type="string" defaultValue="0"/>
+        </arguments>
+        <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="clickOnAdvancedInventoryToSetManageStock"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="scrollToEnableQtyIncrements"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsUseConfigSettings}}" stepKey="clickOnEnableQtyIncrementsUseConfigSettingsCheckbox"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="clickOnEnableQtyIncrements"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsOptions(('1'))}}" stepKey="chooseYesOnEnableQtyIncrements"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyIncrementsUseConfigSettings}}" stepKey="scrollToQtyIncrementsUseConfigSettings"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.qtyIncrementsUseConfigSettings}}" stepKey="clickOnQtyIncrementsUseConfigSettings"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" stepKey="scrollToQtyIncrements"/>
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" userInput="{{qtyIncrements}}" stepKey="fillQtyIncrements"/>
+        <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="closeAdvanceInventoryModal"/>
+    </actionGroup>
+</actionGroups>

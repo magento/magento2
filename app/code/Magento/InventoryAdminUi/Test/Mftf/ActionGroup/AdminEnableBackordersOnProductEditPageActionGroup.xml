@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableBackordersOnProductEditPageActionGroup">
+        <arguments>
+            <argument name="backOrders" type="string" defaultValue="Allow Qty Below 0"/>
+        </arguments>
+        <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="goToAdvancedInventory"/>
+        <waitForPageLoad time="30" stepKey="waitAdvancedInventoryLoaded"/>
+        <uncheckOption selector="{{AdminAdvancedInventorySection.backordersUseDefault}}" stepKey="clickOnUseDefaultBackorders"/>
+        <selectOption selector="{{AdminAdvancedInventorySection.backorders}}" userInput="Allow Qty Below 0" stepKey="selectBackordersType"/>
+        <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="clickOnDone"/>
+    </actionGroup>
+</actionGroups>

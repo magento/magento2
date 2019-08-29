@@ -121,6 +121,6 @@
         <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$category.name$$.html" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see userInput="{{BundleProduct.name}}" stepKey="assertProductPresent"/>
-        <see userInput="{{BundleProduct.price}}" stepKey="assertProductPricePresent"/>
+        <see userInput="$615.00" stepKey="assertProductPricePresent"/>
     </test>
 </tests>

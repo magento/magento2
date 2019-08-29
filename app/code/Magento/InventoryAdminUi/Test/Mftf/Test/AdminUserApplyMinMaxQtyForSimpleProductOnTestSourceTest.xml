@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserApplyMinMaxQtyForSimpleProductOnTestSourceTest">
+        <annotations>
+            <stories value="Simple Product Custom Stock."/>
+            <title value="Min and Max allowed quantity in cart with simple product on custom stock."/>
+            <description value="Min and Max Qty allowed in shopping cart applied to Simple product on product page and checked on frontend."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/481999/scenarios/1652313"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Crate additional source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create category and product.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <field key="price">10.00</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+
+        <!--Assign create product to additional stock and set product qty.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToSetQty"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUSSource1ToCreatedProduct">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setProduct1Quantity"/>
+        <!--Set Min and Max qty for simple product.-->
+        <actionGroup ref="AdminApplyMinAndMaxQtyOnProductEditPageActionGroup" stepKey="setMaxMinQty">
+            <argument name="minQty" value="5"/>
+            <argument name="maxQty" value="5"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <!--Try to add product to cart with lower qty than allowed.-->
+        <amOnPage url="{{StorefrontProductPage.url($$product.name$$)}}" stepKey="navigateToPDP"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillProductQtyLowerThanAllowed"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartLowerThenAllowedQty"/>
+        <waitForElementVisible selector="#qty-error" time="30" stepKey="witForLowQtyAdded"/>
+        <see selector="#qty-error" userInput="The fewest you may purchase is 5." stepKey="seeLowQtyErrorMessage"/>
+        <!--Try to add product ot cart with greater qty than allowed.-->
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="6" stepKey="fillProductQtyGreaterThanAllowed"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartGreaterThenAllowedQty"/>
+        <waitForElementVisible selector="#qty-error" time="30" stepKey="witForHighQtyAdded"/>
+        <see selector="#qty-error" userInput="The maximum you may purchase is 5." stepKey="seeHighQtyErrorMessage"/>
+        <!--Try to add product with proper qty to cart.-->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addProductToCartWithProperQty">
+            <argument name="product" value="$$product$$"/>
+            <argument name="quantity" value="5"/>
+        </actionGroup>
+    </test>
+</tests>
