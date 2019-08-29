@@ -175,11 +175,11 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @param Random $mathRandom
      * @param DateTime $dateTime
      * @param ProductRepositoryInterface $productRepository
-     * @param StockItemRepository $stockItemRepository
-     * @param ScopeConfigInterface|null $scopeConfig
      * @param bool $useCurrentWebsite
      * @param array $data
      * @param Json|null $serializer
+     * @param StockItemRepository|null $stockItemRepository
+     * @param ScopeConfigInterface|null $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -197,11 +197,11 @@ class Wishlist extends AbstractModel implements IdentityInterface
         Random $mathRandom,
         DateTime $dateTime,
         ProductRepositoryInterface $productRepository,
-        StockItemRepository $stockItemRepository,
-        ScopeConfigInterface $scopeConfig = null,
         $useCurrentWebsite = true,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        StockItemRepository $stockItemRepository = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;
         $this->_catalogProduct = $catalogProduct;
@@ -216,7 +216,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
-        $this->stockItemRepository = $stockItemRepository;
+        $this->stockItemRepository = $stockItemRepository ?: ObjectManager::getInstance()->get(
+            StockItemRepository::class
+        );
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
