@@ -7,7 +7,7 @@ type Query {
         filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
-        sort: ProductAttributeSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
+        sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ): Products
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
     category (
@@ -221,7 +221,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     products(
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
-        sort: ProductAttributeSortInput @doc(description: "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.")
+        sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ): CategoryProducts @doc(description: "The list of products assigned to the category.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Products")
     breadcrumbs: [Breadcrumb] @doc(description: "Breadcrumbs, parent categories info.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\Breadcrumbs")
 }
@@ -338,7 +338,7 @@ type ProductMediaGalleryEntriesVideoContent @doc(description: "ProductMediaGalle
     video_metadata: String @doc(description: "Optional data about the video.")
 }
 
-input ProductSortInput @deprecated(reason: "Attributes used in this input are hardcoded and some of them are not searcheable. Use @ProductAttributeSortInput instead") @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
+input ProductSortInput @deprecated(reason: "The attributes used in this input are hard-coded, and some of them are not sortable. Use @ProductAttributeSortInput instead") @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
     name: SortEnum @doc(description: "The product name. Customers use this name to identify the product.")
     sku: SortEnum @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
     description: SortEnum @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
