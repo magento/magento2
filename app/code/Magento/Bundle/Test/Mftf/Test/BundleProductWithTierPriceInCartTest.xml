@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="BundleProductWithTierPriceInCartTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Check that price of cart is correct when the bundle product added to the cart twice"/>
+            <title value="Customer should get the right subtotal in cart when the bundle product added to the cart twice"/>
+            <description value="Customer should be able to add one more bundle product to the cart and get the right price"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-19727"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+        </before>
+        <after>
+            <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
+            <waitForPageLoad stepKey="waitForClearFilter"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+        </after>
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainFieldsForBundle"/>
+        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption1">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option1"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption2">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option2"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct1">
+            <argument name="group" value="General"/>
+            <argument name="quantity" value="1"/>
+            <argument name="price" value="Discount"/>
+            <argument name="amount" value="50"/>
+        </actionGroup>
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickOnCustomizeAndAddtoCartButton"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCartAgain">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <click stepKey="openMiniCart" selector="{{StorefrontMinicartSection.showCart}}"/>
+        <waitForPageLoad stepKey="waitForMiniCart"/>
+        <see stepKey="seeCartSubtotal" userInput="$246.00"/>
+    </test>
+</tests>
