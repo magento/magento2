@@ -10,7 +10,7 @@
     <section name="StorefrontDiscountSection">
         <element name="discountTab" type="button" selector="#block-discount-heading"/>
         <element name="couponInput" type="input" selector="#coupon_code"/>
-        <element name="applyCodeBtn" type="button" selector="button[value='Apply Discount']"/>
+        <element name="applyCodeBtn" type="button" selector="button[value='Apply Discount']" timeout="30"/>
         <element name="cancelCoupon" type="button" selector="button[value='Cancel Coupon']"/>
         <element name="discountInput" type="input" selector="#discount-code"/>
         <element name="discountBlockActive" type="text" selector=".block.discount.active"/>

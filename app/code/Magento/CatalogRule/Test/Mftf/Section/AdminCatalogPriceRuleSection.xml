@@ -27,5 +27,7 @@
         <element name="priority" type="input" selector="[name='sort_order']"/>
         <element name="conditionsTab" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions']"/>
         <element name="actionsTab" type="block" selector="[data-index='actions']"/>
+        <element name="actionsTabTitle" type="block" selector="[data-index='actions'] .fieldset-wrapper-title"/>
+        <element name="actionsTabBody" type="block" selector="[data-index='actions'] .admin__fieldset-wrapper-content"/>
     </section>
 </sections>
