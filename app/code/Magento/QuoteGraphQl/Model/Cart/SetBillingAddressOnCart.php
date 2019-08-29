@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\QuoteGraphQl\Model\Cart\Address\SaveQuoteAddressToCustomerAddressBook;
 
 /**
  * Set billing address for a specified shopping cart
@@ -30,15 +31,23 @@ class SetBillingAddressOnCart
     private $assignBillingAddressToCart;
 
     /**
+     * @var SaveQuoteAddressToCustomerAddressBook
+     */
+    private $saveQuoteAddressToCustomerAddressBook;
+
+    /**
      * @param QuoteAddressFactory $quoteAddressFactory
      * @param AssignBillingAddressToCart $assignBillingAddressToCart
+     * @param SaveQuoteAddressToCustomerAddressBook $saveQuoteAddressToCustomerAddressBook
      */
     public function __construct(
         QuoteAddressFactory $quoteAddressFactory,
-        AssignBillingAddressToCart $assignBillingAddressToCart
+        AssignBillingAddressToCart $assignBillingAddressToCart,
+        SaveQuoteAddressToCustomerAddressBook $saveQuoteAddressToCustomerAddressBook
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->assignBillingAddressToCart = $assignBillingAddressToCart;
+        $this->saveQuoteAddressToCustomerAddressBook = $saveQuoteAddressToCustomerAddressBook;
     }
 
     /**
@@ -101,6 +110,12 @@ class SetBillingAddressOnCart
     ): Address {
         if (null === $customerAddressId) {
             $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
+
+            $customerId = $context->getUserId();
+            // need to save address only for registered user and if save_in_address_book = true
+            if (0 !== $customerId && !empty($addressInput['save_in_address_book'])) {
+                $this->saveQuoteAddressToCustomerAddressBook->execute($billingAddress, $customerId);
+            }
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {
                 throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
@@ -111,6 +126,7 @@ class SetBillingAddressOnCart
                 (int)$context->getUserId()
             );
         }
+
         return $billingAddress;
     }
 }

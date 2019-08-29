@@ -11,6 +11,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\QuoteGraphQl\Model\Cart\Address\SaveQuoteAddressToCustomerAddressBook;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -28,15 +29,23 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     private $assignShippingAddressToCart;
 
     /**
+     * @var SaveQuoteAddressToCustomerAddressBook
+     */
+    private $saveQuoteAddressToCustomerAddressBook;
+
+    /**
      * @param QuoteAddressFactory $quoteAddressFactory
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
+     * @param SaveQuoteAddressToCustomerAddressBook $saveQuoteAddressToCustomerAddressBook
      */
     public function __construct(
         QuoteAddressFactory $quoteAddressFactory,
-        AssignShippingAddressToCart $assignShippingAddressToCart
+        AssignShippingAddressToCart $assignShippingAddressToCart,
+        SaveQuoteAddressToCustomerAddressBook $saveQuoteAddressToCustomerAddressBook
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
+        $this->saveQuoteAddressToCustomerAddressBook = $saveQuoteAddressToCustomerAddressBook;
     }
 
     /**
@@ -65,8 +74,15 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
 
+        $customerId = $context->getUserId();
+
         if (null === $customerAddressId) {
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
+
+            // need to save address only for registered user and if save_in_address_book = true
+            if (0 !== $customerId && !empty($addressInput['save_in_address_book'])) {
+                $this->saveQuoteAddressToCustomerAddressBook->execute($shippingAddress, $customerId);
+            }
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {
                 throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
@@ -74,7 +90,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
 
             $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
                 (int)$customerAddressId,
-                $context->getUserId()
+                $customerId
             );
         }
 

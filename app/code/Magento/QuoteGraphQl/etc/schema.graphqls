@@ -108,7 +108,7 @@ input CartAddressInput {
     postcode: String
     country_code: String!
     telephone: String!
-    save_in_address_book: Boolean!
+    save_in_address_book: Boolean
 }
 
 input SetShippingMethodsOnCartInput {
