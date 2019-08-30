@@ -351,9 +351,14 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
         $order->method('getBaseTotalPaid')
             ->willReturn($baseTotalPaid);
         $baseAvailableRefund = $baseTotalPaid - $baseTotalRefunded;
-        $order->method('formatPriceTxt')
+        $baseCurrency = $this->createMock(\Magento\Directory\Model\Currency::class);
+        $baseCurrency->expects($this->once())
+            ->method('formatTxt')
             ->with($baseAvailableRefund)
             ->willReturn($baseAvailableRefund);
+        $order->expects($this->once())
+            ->method('getBaseCurrency')
+            ->willReturn($baseCurrency);
         $this->creditmemoService->refund($creditMemo, true);
     }
 
@@ -368,5 +373,57 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(444);
         $this->creditmemoService->refund($creditMemoMock, true);
+    }
+
+    /**
+     * @expectedExceptionMessage The most money available to refund is $1.00.
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testMultiCurrencyRefundExpectsMoneyAvailableToReturn()
+    {
+        $baseGrandTotal = 10.00;
+        $baseTotalRefunded = 9.00;
+        $baseTotalPaid = 10;
+        $grandTotal = 8.81;
+        $totalRefunded = 7.929;
+        $totalPaid = 8.81;
+
+        /** @var CreditmemoInterface|MockObject $creditMemo */
+        $creditMemo = $this->getMockBuilder(CreditmemoInterface::class)
+            ->setMethods(['getId', 'getOrder'])
+            ->getMockForAbstractClass();
+        $creditMemo->method('getId')
+            ->willReturn(null);
+        /** @var Order|MockObject $order */
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $creditMemo->method('getOrder')
+            ->willReturn($order);
+        $creditMemo->method('getBaseGrandTotal')
+            ->willReturn($baseGrandTotal);
+        $creditMemo->method('getGrandTotal')
+            ->willReturn($grandTotal);
+        $order->method('getBaseTotalRefunded')
+            ->willReturn($baseTotalRefunded);
+        $order->method('getTotalRefunded')
+            ->willReturn($totalRefunded);
+        $this->priceCurrency->method('round')
+            ->withConsecutive([$baseTotalRefunded + $baseGrandTotal], [$baseTotalPaid])
+            ->willReturnOnConsecutiveCalls($baseTotalRefunded + $baseGrandTotal, $baseTotalPaid);
+        $order->method('getBaseTotalPaid')
+            ->willReturn($baseTotalPaid);
+        $order->method('getTotalPaid')
+            ->willReturn($totalPaid);
+        $baseAvailableRefund = $baseTotalPaid - $baseTotalRefunded;
+        $baseCurrency = $this->createMock(\Magento\Directory\Model\Currency::class);
+        $baseCurrency->expects($this->once())
+            ->method('formatTxt')
+            ->with($baseAvailableRefund)
+            ->willReturn(sprintf('$%.2f', $baseAvailableRefund));
+        $order->expects($this->once())
+            ->method('getBaseCurrency')
+            ->willReturn($baseCurrency);
+        $this->creditmemoService->refund($creditMemo, true);
     }
 }

@@ -4,34 +4,32 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
- /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config */
+/** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config */
 ?>
-<div class="entry-edit form-inline" id="<?= /* @escapeNotVerified */ $block->getId() ?>" data-panel="product-variations">
+<div class="entry-edit form-inline" id="<?= $block->escapeHtmlAttr($block->getId()) ?>" data-panel="product-variations">
     <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
         <div class="product-create-configuration-info">
             <div class="note" data-role="product-create-configuration-info">
-                <?= /* @escapeNotVerified */  __('Configurable products allow customers to choose options (Ex: shirt color).
-            You need to create a simple product for each configuration (Ex: a product for each color).');?>
+                <?= $block->escapeHtml(__('Configurable products allow customers to choose options (Ex: shirt color).
+            You need to create a simple product for each configuration (Ex: a product for each color).'));?>
             </div>
         </div>
         <div class="product-create-configuration-actions" data-action="product-create-configuration-buttons">
             <div class="product-create-configuration-action">
                 <button type="button" data-action="open-steps-wizard" title="Create Product Configurations"
                         class="action-secondary" data-bind="click: open">
-                <span data-role="button-label" data-edit-label="<?= /* @escapeNotVerified */  __('Edit Configurations') ?>">
-                    <?= /* @escapeNotVerified */  $block->isHasVariations()
+                <span data-role="button-label" data-edit-label="<?= $block->escapeHtmlAttr(__('Edit Configurations')) ?>">
+                    <?= $block->escapeHtml($block->isHasVariations()
                         ? __('Edit Configurations')
-                        : __('Create Configurations')
-                    ?>
+                        : __('Create Configurations'))
+?>
                 </span>
                 </button>
             </div>
             <div class="product-create-configuration-action" data-bind="scope: 'configurableProductGrid'">
                 <button class="action-tertiary action-menu-item" type="button" data-action="choose"
                         data-bind="click: showManuallyGrid, visible: button">
-                    <?= /* @noEscape */ __('Add Products Manually') ?>
+                    <?= $block->escapeHtml(__('Add Products Manually')) ?>
                 </button>
             </div>
         </div>

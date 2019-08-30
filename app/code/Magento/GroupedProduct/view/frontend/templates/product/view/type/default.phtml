@@ -3,23 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /* @var $block \Magento\Catalog\Block\Product\View\AbstractView */?>
 <?php $_product = $block->getProduct() ?>
 
 <?php $_associatedProducts = $block->getAssociatedProducts(); ?>
 <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
-<?php if ($block->displayProductStockStatus()): ?>
-    <?php if ($_product->isAvailable() && $_hasAssociatedProducts): ?>
-        <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-            <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
+<?php if ($block->displayProductStockStatus()) : ?>
+    <?php if ($_product->isAvailable() && $_hasAssociatedProducts) : ?>
+        <div class="stock available" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+            <span><?= $block->escapeHtml(__('In stock')) ?></span>
         </div>
-    <?php else: ?>
-        <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
-            <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+    <?php else : ?>
+        <div class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+            <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
         </div>
     <?php endif; ?>
 <?php endif; ?>

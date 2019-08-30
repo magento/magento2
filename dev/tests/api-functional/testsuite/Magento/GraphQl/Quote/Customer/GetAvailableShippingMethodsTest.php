@@ -134,7 +134,9 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_offline_shipping_methods.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 0
+     * @magentoConfigFixture default_store carriers/tablerate/active 0
+     * @magentoConfigFixture default_store carriers/freeshipping/active 0
      */
     public function testGetAvailableShippingMethodsIfShippingMethodsAreNotPresent()
     {

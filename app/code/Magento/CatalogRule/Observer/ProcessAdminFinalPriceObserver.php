@@ -3,20 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Catalog Price rules observer model
- */
 namespace Magento\CatalogRule\Observer;
 
-use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Customer\Model\Session as CustomerModelSession;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Observer for applying catalog rules on product for admin area
+ */
 class ProcessAdminFinalPriceObserver implements ObserverInterface
 {
     /**

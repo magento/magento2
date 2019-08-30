@@ -6,12 +6,18 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Psr\Log\LoggerInterface;
 
 /**
+ * Represents the session data for the checkout process
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -40,6 +46,15 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @var bool
      */
     protected $_loadInactive = false;
+
+    /**
+     * A flag to track when the quote is being loaded and attached to the session object.
+     *
+     * Used in trigger_recollect infinite loop detection.
+     *
+     * @var bool
+     */
+    private $isLoading = false;
 
     /**
      * Loaded order instance
@@ -99,6 +114,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $quoteFactory;
 
     /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -117,6 +137,8 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
+     * @param LoggerInterface|null $logger
+     * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -137,7 +159,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
+        LoggerInterface $logger = null
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;
@@ -159,6 +182,8 @@ class Session extends \Magento\Framework\Session\SessionManager
             $cookieMetadataFactory,
             $appState
         );
+        $this->logger = $logger ?: ObjectManager::getInstance()
+            ->get(LoggerInterface::class);
     }
 
     /**
@@ -202,6 +227,8 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Get checkout quote instance by current session
      *
      * @return Quote
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -210,6 +237,10 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_eventManager->dispatch('custom_quote_process', ['checkout_session' => $this]);
 
         if ($this->_quote === null) {
+            if ($this->isLoading) {
+                throw new \LogicException("Infinite loop detected, review the trace for the looping path");
+            }
+            $this->isLoading = true;
             $quote = $this->quoteFactory->create();
             if ($this->getQuoteId()) {
                 try {
@@ -217,6 +248,15 @@ class Session extends \Magento\Framework\Session\SessionManager
                         $quote = $this->quoteRepository->get($this->getQuoteId());
                     } else {
                         $quote = $this->quoteRepository->getActive($this->getQuoteId());
+                    }
+
+                    $customerId = $this->_customer
+                        ? $this->_customer->getId()
+                        : $this->_customerSession->getCustomerId();
+
+                    if ($quote->getData('customer_id') && (int)$quote->getData('customer_id') !== (int)$customerId) {
+                        $quote = $this->quoteFactory->create();
+                        $this->setQuoteId(null);
                     }
 
                     /**
@@ -247,6 +287,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                         $quote = $this->quoteRepository->getActiveForCustomer($customerId);
                         $this->setQuoteId($quote->getId());
                     } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                        $this->logger->critical($e);
                     }
                 } else {
                     $quote->setIsCheckoutCart(true);
@@ -262,6 +303,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
             $quote->setStore($this->_storeManager->getStore());
             $this->_quote = $quote;
+            $this->isLoading = false;
         }
 
         if (!$this->isQuoteMasked() && !$this->_customerSession->isLoggedIn() && $this->getQuoteId()) {
@@ -285,6 +327,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Return the quote's key
+     *
      * @return string
      * @codeCoverageIgnore
      */
@@ -294,6 +338,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Set the current session's quote id
+     *
      * @param int $quoteId
      * @return void
      * @codeCoverageIgnore
@@ -304,6 +350,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Return the current quote's ID
+     *
      * @return int
      * @codeCoverageIgnore
      */
@@ -337,6 +385,11 @@ class Session extends \Magento\Framework\Session\SessionManager
                 $this->quoteRepository->save(
                     $customerQuote->merge($this->getQuote())->collectTotals()
                 );
+                $newQuote = $this->quoteRepository->get($customerQuote->getId());
+                $this->quoteRepository->save(
+                    $newQuote->collectTotals()
+                );
+                $customerQuote = $newQuote;
             }
 
             $this->setQuoteId($customerQuote->getId());
@@ -357,6 +410,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Associate data to a specified step of the checkout process
+     *
      * @param string $step
      * @param array|string $data
      * @param bool|string|null $value
@@ -383,6 +438,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Return the data associated to a specified step
+     *
      * @param string|null $step
      * @param string|null $data
      * @return array|string|bool
@@ -406,8 +463,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * Destroy/end a session
-     * Unset all data associated with object
+     * Destroy/end a session and unset all data associated with it
      *
      * @return $this
      */
@@ -443,6 +499,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Revert the state of the checkout to the beginning
+     *
      * @return $this
      * @codeCoverageIgnore
      */
@@ -453,6 +511,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Replace the quote in the session with a specified object
+     *
      * @param Quote $quote
      * @return $this
      */
@@ -499,13 +559,17 @@ class Session extends \Magento\Framework\Session\SessionManager
                 $this->_eventManager->dispatch('restore_quote', ['order' => $order, 'quote' => $quote]);
                 return true;
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->logger->critical($e);
             }
         }
+
         return false;
     }
 
     /**
-     * @param $isQuoteMasked bool
+     * Flag whether or not the quote uses a masked quote id
+     *
+     * @param bool $isQuoteMasked
      * @return void
      * @codeCoverageIgnore
      */
@@ -515,6 +579,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * Return if the quote has a masked quote id
+     *
      * @return bool|null
      * @codeCoverageIgnore
      */

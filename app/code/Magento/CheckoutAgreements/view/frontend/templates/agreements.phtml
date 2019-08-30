@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Files.LineLength
 
 ?>
 <?php
@@ -17,30 +17,42 @@
 } ?>
 <ol id="checkout-agreements" class="agreements checkout items">
     <?php /** @var \Magento\CheckoutAgreements\Api\Data\AgreementInterface $agreement */ ?>
-    <?php foreach ($block->getAgreements() as $agreement): ?>
+    <?php foreach ($block->getAgreements() as $agreement) :?>
         <li class="item">
-            <div class="checkout-agreement-item-content"<?= ($agreement->getContentHeight() ? ' style="height:' . $agreement->getContentHeight() . '"' : '') ?>>
-                <?php if ($agreement->getIsHtml()):?>
-                    <?= /* @escapeNotVerified */ $agreement->getContent() ?>
-                <?php else:?>
-                    <?= nl2br($block->escapeHtml($agreement->getContent())) ?>
+            <div class="checkout-agreement-item-content"<?= $block->escapeHtmlAttr($agreement->getContentHeight() ? ' style="height:' . $agreement->getContentHeight() . '"' : '') ?>>
+                <?php if ($agreement->getIsHtml()) :?>
+                    <?= /* @noEscape */ $agreement->getContent() ?>
+                <?php else :?>
+                    <?= $block->escapeHtml(nl2br($agreement->getContent())) ?>
                 <?php endif; ?>
             </div>
-            <form id="checkout-agreements-form-<?= /* @escapeNotVerified */ $agreement->getAgreementId() ?>" class="field choice agree required">
-                <?php if($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_MANUAL): ?>
+            <form id="checkout-agreements-form-<?= (int) $agreement->getAgreementId() ?>" class="field choice agree required">
+                <?php if ($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_MANUAL) :?>
                 <input type="checkbox"
-                       id="agreement-<?= /* @escapeNotVerified */ $agreement->getAgreementId() ?>"
-                       name="agreement[<?= /* @escapeNotVerified */ $agreement->getAgreementId() ?>]"
+                       id="agreement-<?= (int) $agreement->getAgreementId() ?>"
+                       name="agreement[<?= (int) $agreement->getAgreementId() ?>]"
                        value="1"
                        title="<?= $block->escapeHtml($agreement->getCheckboxText()) ?>"
                        class="checkbox"
                        data-validate="{required:true}"/>
-                <label class="label" for="agreement-<?= /* @escapeNotVerified */ $agreement->getAgreementId() ?>">
-                    <span><?= $agreement->getIsHtml() ? $agreement->getCheckboxText() : $block->escapeHtml($agreement->getCheckboxText()) ?></span>
+                <label class="label" for="agreement-<?= (int) $agreement->getAgreementId() ?>">
+                    <span>
+                        <?php if ($agreement->getIsHtml()) :?>
+                            <?= /* @noEscape */ $agreement->getCheckboxText() ?>
+                        <?php else :?>
+                            <?= $block->escapeHtml($agreement->getCheckboxText()) ?>
+                        <?php endif; ?>
+                    </span>
                 </label>
-                <?php elseif($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO): ?>
-                <div id="checkout-agreements-form-<?= /* @escapeNotVerified */ $agreement->getAgreementId() ?>" class="field choice agree">
-                    <span><?= $agreement->getIsHtml() ? $agreement->getCheckboxText() : $block->escapeHtml($agreement->getCheckboxText()) ?></span>
+                <?php elseif ($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO) :?>
+                <div id="checkout-agreements-form-<?= (int) $agreement->getAgreementId() ?>" class="field choice agree">
+                    <span>
+                        <?php if ($agreement->getIsHtml()) :?>
+                            <?= /* @noEscape */ $agreement->getCheckboxText() ?>
+                        <?php else :?>
+                            <?= $block->escapeHtml($agreement->getCheckboxText()) ?>
+                        <?php endif; ?>
+                    </span>
                 </div>
                 <?php endif; ?>
             </form>

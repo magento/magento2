@@ -87,7 +87,6 @@
         </actionGroup>
 
         <!-- On order's page click 'Refund offline' button -->
-        <scrollTo selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="scrollTOButton"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
         <waitForPageLoad stepKey="waitForResultPage"/>
 
