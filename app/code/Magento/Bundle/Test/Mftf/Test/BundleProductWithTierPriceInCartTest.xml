@@ -15,21 +15,21 @@
             <description value="Customer should be able to add one more bundle product to the cart and get the right price"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-19727"/>
-            <group value="Bundle"/>
+            <group value="bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
-            <waitForPageLoad stepKey="waitForClearFilter"/>
-            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersAfter"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
@@ -50,27 +50,27 @@
             <argument name="optionTitle" value="Option2"/>
             <argument name="inputType" value="checkbox"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
         <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct1">
-            <argument name="group" value="General"/>
+            <argument name="group" value="ALL GROUPS"/>
             <argument name="quantity" value="1"/>
             <argument name="price" value="Discount"/>
             <argument name="amount" value="50"/>
         </actionGroup>
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
-        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url(BundleProduct.urlKey)}}" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
-        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickOnCustomizeAndAddtoCartButton"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickOnCustomizeAndAddToCartButton"/>
         <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
             <argument name="quantity" value="1"/>
         </actionGroup>
         <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCartAgain">
             <argument name="quantity" value="1"/>
         </actionGroup>
-        <click stepKey="openMiniCart" selector="{{StorefrontMinicartSection.showCart}}"/>
-        <waitForPageLoad stepKey="waitForMiniCart"/>
-        <see stepKey="seeCartSubtotal" userInput="$246.00"/>
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$246.00"/>
+        </actionGroup>
     </test>
 </tests>
