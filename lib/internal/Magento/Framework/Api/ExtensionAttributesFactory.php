@@ -47,15 +47,14 @@ class ExtensionAttributesFactory
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param TypeProcessor|null $typeProcessor
+     * @param TypeProcessor $typeProcessor
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        TypeProcessor $typeProcessor = null
+        TypeProcessor $typeProcessor
     ) {
         $this->objectManager = $objectManager;
-        $this->typeProcessor = $typeProcessor ?: ObjectManager::getInstance()
-            ->get(TypeProcessor::class);
+        $this->typeProcessor = $typeProcessor;
     }
 
     /**
