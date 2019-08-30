@@ -96,11 +96,9 @@ class SearchCriteriaBuilder
 
         if (!empty($args['search'])) {
             $this->addFilter($searchCriteria, 'search_term', $args['search']);
-            if (!$searchCriteria->getSortOrders()) {
-                $this->addDefaultSortOrder($searchCriteria);
-            }
         }
 
+        $this->addDefaultSortOrder($searchCriteria);
         $this->addVisibilityFilter($searchCriteria, !empty($args['search']), !empty($args['filter']));
 
         $searchCriteria->setCurrentPage($args['currentPage']);
@@ -166,17 +164,27 @@ class SearchCriteriaBuilder
     }
 
     /**
-     * Sort by _score DESC if no sort order is set
+     * Sort by relevance DESC by default
      *
      * @param SearchCriteriaInterface $searchCriteria
      */
     private function addDefaultSortOrder(SearchCriteriaInterface $searchCriteria): void
     {
-        $sortOrder = $this->sortOrderBuilder
-            ->setField('_score')
+        $sortOrders = $searchCriteria->getSortOrders() ?? [];
+        foreach ($sortOrders as $sortOrder) {
+            // Relevance order is already specified
+            if ($sortOrder->getField() === 'relevance') {
+                return;
+            }
+        }
+        $defaultSortOrder = $this->sortOrderBuilder
+            ->setField('relevance')
             ->setDirection(SortOrder::SORT_DESC)
             ->create();
-        $searchCriteria->setSortOrders([$sortOrder]);
+
+        $sortOrders[] = $defaultSortOrder;
+
+        $searchCriteria->setSortOrders($sortOrders);
     }
 
     /**
