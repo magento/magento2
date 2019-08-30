@@ -9,9 +9,7 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 
 /**
  * Extension attributes injectors processor interface
- *
- * @api
- */
+  */
 interface InjectorProcessorInterface
 {
     /**
