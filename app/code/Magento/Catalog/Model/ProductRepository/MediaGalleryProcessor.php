@@ -92,7 +92,7 @@ class MediaGalleryProcessor
                     if ($updatedEntry['file'] === null) {
                         unset($updatedEntry['file']);
                     }
-                    $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
+                    $existingMediaGallery[$key] += $updatedEntry;
                 } else {
                     //set the removed flag
                     $existingEntry['removed'] = true;
