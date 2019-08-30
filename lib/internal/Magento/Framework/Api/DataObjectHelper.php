@@ -9,9 +9,9 @@ namespace Magento\Framework\Api;
 
 use LogicException;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\Dto\DtoProcessor;
+use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
@@ -60,7 +60,7 @@ class DataObjectHelper
     private $dtoProcessor;
 
     /**
-     * @var DtoConfig|null
+     * @var DtoConfig
      */
     private $dtoConfig;
 
@@ -81,8 +81,8 @@ class DataObjectHelper
         ExtensionAttributesFactory $extensionFactory,
         JoinProcessorInterface $joinProcessor,
         MethodsMap $methodsMapProcessor,
-        DtoProcessor $dtoProcessor = null,
-        DtoConfig $dtoConfig = null
+        DtoProcessor $dtoProcessor,
+        DtoConfig $dtoConfig
     ) {
         $this->objectFactory = $objectFactory;
         $this->objectProcessor = $objectProcessor;
@@ -90,10 +90,8 @@ class DataObjectHelper
         $this->extensionFactory = $extensionFactory;
         $this->joinProcessor = $joinProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
-        $this->dtoProcessor = $dtoProcessor ?:
-            ObjectManager::getInstance()->get(DtoProcessor::class);
-        $this->dtoConfig = $dtoConfig ?:
-            ObjectManager::getInstance()->get(DtoConfig::class);
+        $this->dtoProcessor = $dtoProcessor;
+        $this->dtoConfig = $dtoConfig;
     }
 
     /**
@@ -122,6 +120,7 @@ class DataObjectHelper
      * @param string $type
      * @return mixed
      * @throws ReflectionException
+     * @throws SerializationException
      */
     public function createFromArray(array $data, string $type)
     {
@@ -240,7 +239,7 @@ class DataObjectHelper
                     : $methodReturnType;
                 if ($this->typeProcessor->isTypeSimple($extensionAttributeType)) {
                     $value[$extensionAttributeKey] = $extensionAttributeValue;
-                } else if ($this->typeProcessor->isArrayType($methodReturnType)) {
+                } elseif ($this->typeProcessor->isArrayType($methodReturnType)) {
                     foreach ($extensionAttributeValue as $key => $extensionAttributeArrayValue) {
                         $extensionAttribute = $this->objectFactory->create($extensionAttributeType, []);
                         $this->populateWithArray(
