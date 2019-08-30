@@ -16,6 +16,9 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
+/**
+ * Get the mutator source code
+ */
 class GetMutatorSourceCode
 {
     /**
@@ -33,6 +36,8 @@ class GetMutatorSourceCode
     }
 
     /**
+     * Fix code style
+     *
      * @param string $sourceCode
      * @return string
      */
@@ -44,6 +49,8 @@ class GetMutatorSourceCode
     }
 
     /**
+     * Returns the generated code
+     *
      * @param string $sourceClassName
      * @param string $resultClassName
      * @return string
@@ -62,6 +69,8 @@ class GetMutatorSourceCode
     }
 
     /**
+     * Returns class properties for code generation
+     *
      * @return array
      */
     private function getClassProperties(): array
@@ -99,6 +108,8 @@ class GetMutatorSourceCode
     }
 
     /**
+     * Get the constructor for code generation
+     *
      * @return array
      */
     private function getConstructor(): array
@@ -125,7 +136,7 @@ class GetMutatorSourceCode
     }
 
     /**
-     * Get mutate method
+     * Get mutate method for code generation
      *
      * @param string $sourceClassName
      * @return array
@@ -157,6 +168,8 @@ class GetMutatorSourceCode
     }
 
     /**
+     * Create PSR-7 like with methods
+     *
      * @param string $resultClassName
      * @param string $propertyCamelCase
      * @param ReflectionMethod $method
@@ -198,6 +211,8 @@ class GetMutatorSourceCode
     }
 
     /**
+     * Get the whole methods list for code generation
+     *
      * @param string $sourceClassName
      * @param string $resultClassName
      * @return array

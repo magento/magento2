@@ -22,6 +22,9 @@ use ReflectionClass;
 use ReflectionException;
 use Zend\Code\Reflection\ClassReflection;
 
+/**
+ * Reflection methods for DTO classes
+ */
 class DtoReflection
 {
     /**
