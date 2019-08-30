@@ -45,12 +45,12 @@
             <argument name="categoryName" value="admin"/>
             <argument name="categoryUrlKey" value=""/>
         </actionGroup>
-        <see userInput='URL key "admin" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeAdminFirstErrorMessage"/>
+    <see userInput='URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.' stepKey="seeAdminFirstErrorMessage"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillAdminSecondCategoryForm">
             <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
             <argument name="categoryUrlKey" value="admin"/>
         </actionGroup>
-        <see userInput='URL key "admin" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeAdminSecondErrorMessage"/>
+        <see userInput='URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.' stepKey="seeAdminSecondErrorMessage"/>
         <!--Create category with 'admin' name-->
         <comment userInput="Create category with 'admin' name" stepKey="commentAdminCategoryCreation"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillAdminThirdCategoryForm">
@@ -66,12 +66,12 @@
             <argument name="categoryName" value="soap"/>
             <argument name="categoryUrlKey" value=""/>
         </actionGroup>
-        <see userInput='URL key "soap" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeSoapFirstErrorMessage"/>
+        <see userInput='URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.' stepKey="seeSoapFirstErrorMessage"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillSoapSecondCategoryForm">
             <argument name="categoryName" value="{{ApiCategory.name}}"/>
             <argument name="categoryUrlKey" value="soap"/>
         </actionGroup>
-        <see userInput='URL key "soap" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeSoapSecondErrorMessage"/>
+        <see userInput='URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.' stepKey="seeSoapSecondErrorMessage"/>
         <!--Create category with 'soap' name-->
         <comment userInput="Create category with 'soap' name" stepKey="commentSoapCategoryCreation"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillSoapThirdCategoryForm">
@@ -87,12 +87,12 @@
             <argument name="categoryName" value="rest"/>
             <argument name="categoryUrlKey" value=""/>
         </actionGroup>
-        <see userInput='URL key "rest" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeRestFirstErrorMessage"/>
+        <see userInput='URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.' stepKey="seeRestFirstErrorMessage"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillRestSecondCategoryForm">
             <argument name="categoryName" value="{{SubCategoryWithParent.name}}"/>
             <argument name="categoryUrlKey" value="rest"/>
         </actionGroup>
-        <see userInput='URL key "rest" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeRestSecondErrorMessage"/>
+        <see userInput='URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.' stepKey="seeRestSecondErrorMessage"/>
         <!--Create category with 'rest' name-->
         <comment userInput="Create category with 'rest' name" stepKey="commentRestCategoryCreation"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillRestThirdCategoryForm">
@@ -108,12 +108,12 @@
             <argument name="categoryName" value="graphql"/>
             <argument name="categoryUrlKey" value=""/>
         </actionGroup>
-        <see userInput='URL key "graphql" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeGraphQlFirstErrorMessage"/>
+        <see userInput='URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.' stepKey="seeGraphQlFirstErrorMessage"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillGraphQlSecondCategoryForm">
             <argument name="categoryName" value="{{NewSubCategoryWithParent.name}}"/>
             <argument name="categoryUrlKey" value="graphql"/>
         </actionGroup>
-        <see userInput='URL key "graphql" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeGraphQlSecondErrorMessage"/>
+        <see userInput='URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.URL key "graphql" conflicts with reserved endpoint names: admin, soap, rest, graphql. Try another url key.' stepKey="seeGraphQlSecondErrorMessage"/>
         <!--Create category with 'graphql' name-->
         <comment userInput="Create category with 'graphql' name" stepKey="commentGraphQlCategoryCreation"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSave" stepKey="fillGraphQlThirdCategoryForm">

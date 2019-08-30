@@ -24,9 +24,9 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     /**
      * Reserved endpoint names.
      *
-     * @var array
+     * @var string[]
      */
-    private $invalidValues = ['admin', 'soap', 'rest', 'graphql'];
+    private $invalidValues = [];
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
@@ -59,13 +59,15 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver
+     * @param string[] $invalidValues
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider,
         StoreViewService $storeViewService,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver = null
+        \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver = null,
+        array $invalidValues = []
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
@@ -73,6 +75,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         $this->categoryRepository = $categoryRepository;
         $this->frontNameResolver = $frontNameResolver ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Backend\App\Area\FrontNameResolver::class);
+        $this->invalidValues = $invalidValues;
     }
 
     /**
@@ -116,7 +119,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         if (in_array($urlKey, $this->getInvalidValues())) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'URL key "%1" conflicts with reserved endpoint names: %2. Try another url key.',
+                    'URL key "%1" matches a reserved endpoint name (%2). Use another URL key.',
                     $urlKey,
                     implode(', ', $this->getInvalidValues())
                 )

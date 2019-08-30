@@ -592,8 +592,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->assertSessionMessages(
             $this->equalTo(
                 [
-                    'URL key "backend" conflicts with reserved endpoint names: '
-                    . 'admin, soap, rest, graphql, backend. Try another url key.'
+                    'URL key "backend" matches a reserved endpoint name '
+                    . '(admin, soap, rest, graphql, standard, backend). Use another URL key.'
                 ]
             ),
             MessageInterface::TYPE_ERROR
