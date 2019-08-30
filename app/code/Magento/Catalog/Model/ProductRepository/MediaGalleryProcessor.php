@@ -86,16 +86,16 @@ class MediaGalleryProcessor
                     $newEntries[] = $entry;
                 }
             }
-            foreach ($existingMediaGallery as $key => &$existingEntry) {
+            foreach ($existingMediaGallery as $key => $existingEntry) {
                 if (isset($entriesById[$existingEntry['value_id']])) {
                     $updatedEntry = $entriesById[$existingEntry['value_id']];
                     if ($updatedEntry['file'] === null) {
                         unset($updatedEntry['file']);
                     }
-                    $existingMediaGallery[$key] += $updatedEntry;
+                    $existingMediaGallery[$key] = ($updatedEntry + $existingEntry);
                 } else {
                     //set the removed flag
-                    $existingEntry['removed'] = true;
+                    $existingMediaGallery[$key]['removed'] = true;
                 }
             }
             $product->setData('media_gallery', ["images" => $existingMediaGallery]);
