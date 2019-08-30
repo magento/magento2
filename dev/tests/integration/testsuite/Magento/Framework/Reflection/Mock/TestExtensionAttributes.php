@@ -10,7 +10,7 @@ namespace Magento\Framework\Reflection\Mock;
 use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 
-class TestExtensionAttributes  extends AbstractSimpleObject implements ExtensionAttributesInterface
+class TestExtensionAttributes extends AbstractSimpleObject implements ExtensionAttributesInterface
 {
     /**
      * @param string $value
