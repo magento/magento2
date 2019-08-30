@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Config secure and unsecure baseurl
- */
 namespace Magento\Config\Model\Config\Backend;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validator\Url as UrlValidator;
 
 /**
+ * Config secure and unsecure baseurl
+ *
  * @api
  * @since 100.0.2
  */
