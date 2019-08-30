@@ -23,7 +23,7 @@ class Mutator extends EntityAbstract
     /**
      * Entity type
      */
-    const ENTITY_TYPE = 'mutator';
+    public const ENTITY_TYPE = 'mutator';
 
     /**
      * @var GetMutatorSourceCode|null
