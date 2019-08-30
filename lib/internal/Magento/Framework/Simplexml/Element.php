@@ -458,6 +458,7 @@ class Element extends \SimpleXMLElement
 
     /**
      * Unset self from the XML-node tree
+     *
      * Note: trying to refer this object as a variable after "unsetting" like this will result in E_WARNING
      *
      * @return void
