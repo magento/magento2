@@ -14,8 +14,8 @@ use Magento\Framework\Dto\Code\GetDtoSourceCode;
 use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 class DtoGeneratorTest extends TestCase
 {
@@ -25,7 +25,7 @@ class DtoGeneratorTest extends TestCase
     private $getDtoSourceCode;
 
     /**
-     * @var DtoConfig|PHPUnit_Framework_MockObject_MockObject
+     * @var DtoConfig|MockObject
      */
     private $dtoConfig;
 

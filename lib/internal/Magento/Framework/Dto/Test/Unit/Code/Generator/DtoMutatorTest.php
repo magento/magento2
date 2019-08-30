@@ -13,6 +13,7 @@ use Magento\Framework\Dto\Code\GetMutatorSourceCode;
 use Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDto;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 
 class DtoMutatorTest extends TestCase
 {
@@ -36,7 +37,7 @@ class DtoMutatorTest extends TestCase
 
     /**
      * @return void
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testShouldGenerateDtoMutator(): void
     {
