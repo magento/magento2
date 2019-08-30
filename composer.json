@@ -147,6 +147,7 @@
         "magento/module-currency-symbol": "*",
         "magento/module-customer": "*",
         "magento/module-customer-analytics": "*",
+        "magento/module-customer-downloadable-graph-ql": "*",
         "magento/module-customer-import-export": "*",
         "magento/module-deploy": "*",
         "magento/module-developer": "*",
