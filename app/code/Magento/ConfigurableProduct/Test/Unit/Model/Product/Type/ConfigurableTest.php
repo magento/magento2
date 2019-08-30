@@ -266,10 +266,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->with('_cache_instance_used_product_attribute_ids')
             ->willReturn(true);
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods([
-                'getConfigurableProductOptions',
-                'getConfigurableProductLinks'
-            ])
+            ->setMethods(
+                [
+                    'getConfigurableProductOptions',
+                    'getConfigurableProductLinks'
+                ]
+            )
             ->getMockForAbstractClass();
         $this->entityMetadata->expects($this->any())
             ->method('getLinkField')
@@ -344,25 +346,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUsedProducts()
     {
-        $productCollectionItemData = ['array'];
+        $productCollectionItem = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $attributeCollection = $this->createMock(Collection::class);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productCollection = $this->createMock(ProductCollection::class);
 
-        $productCollectionItem = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productCollection = $this->getMockBuilder(ProductCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $productCollectionItem->expects($this->once())->method('getData')->willReturn($productCollectionItemData);
         $attributeCollection->expects($this->any())->method('setProductFilter')->willReturnSelf();
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn(5);
-        $product->expects($this->once())->method('getIdentities')->willReturn(['123']);
 
         $product->expects($this->exactly(2))
             ->method('hasData')
@@ -388,57 +378,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $productCollection->expects($this->once())->method('setStoreId')->with(5)->willReturn([]);
         $productCollection->expects($this->once())->method('getItems')->willReturn([$productCollectionItem]);
 
-        $this->serializer->expects($this->once())
-            ->method('serialize')
-            ->with([$productCollectionItemData])
-            ->willReturn('result');
-
         $this->productCollectionFactory->expects($this->any())->method('create')->willReturn($productCollection);
         $this->model->getUsedProducts($product);
-    }
-
-    public function testGetUsedProductsWithDataInCache()
-    {
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $childProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $dataKey = '_cache_instance_products';
-        $usedProductsData = [['first']];
-        $usedProducts = [$childProduct];
-
-        $product->expects($this->once())
-            ->method('hasData')
-            ->with($dataKey)
-            ->willReturn(false);
-        $product->expects($this->once())
-            ->method('setData')
-            ->with($dataKey, $usedProducts);
-        $product->expects($this->any())
-            ->method('getData')
-            ->willReturnOnConsecutiveCalls(1, $usedProducts);
-
-        $childProduct->expects($this->once())
-            ->method('setData')
-            ->with($usedProductsData[0]);
-
-        $this->productFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($childProduct);
-
-        $this->cache->expects($this->once())
-            ->method('load')
-            ->willReturn($usedProductsData);
-
-        $this->serializer->expects($this->once())
-            ->method('unserialize')
-            ->with($usedProductsData)
-            ->willReturn($usedProductsData);
-
-        $this->assertEquals($usedProducts, $this->model->getUsedProducts($product));
     }
 
     /**
@@ -878,12 +819,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->method('getLinkField')
             ->willReturn('link');
         $productMock->expects($this->any())->method('hasData')
-            ->withConsecutive(['store_id'], ['_cache_instance_products'])
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->withConsecutive(['_cache_instance_products'])
+            ->willReturnOnConsecutiveCalls(true);
 
         $productMock->expects($this->any())->method('getData')
-            ->withConsecutive(['image'], ['image'], ['link'], ['store_id'], ['_cache_instance_products'])
-            ->willReturnOnConsecutiveCalls('no_selection', 'no_selection', 1, 1, [$childProductMock]);
+            ->withConsecutive(['image'], ['image'], ['_cache_instance_products'])
+            ->willReturnOnConsecutiveCalls('no_selection', 'no_selection', [$childProductMock]);
 
         $childProductMock->expects($this->any())->method('getData')->with('image')->willReturn('image_data');
         $productMock->expects($this->once())->method('setImage')->with('image_data')->willReturnSelf();
