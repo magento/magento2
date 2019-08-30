@@ -4,10 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Newsletter\Block\Subscribe $block */
-
 ?>
 <div class="block newsletter">
     <div class="title"><strong><?= $block->escapeHtml(__('Newsletter')) ?></strong></div>
@@ -33,7 +30,7 @@
                 </div>
             </div>
             <div class="actions">
-                <button class="action subscribe primary sr-only"
+                <button class="action subscribe primary"
                         title="<?= $block->escapeHtmlAttr(__('Subscribe')) ?>"
                         type="submit"
                         aria-label="Subscribe">

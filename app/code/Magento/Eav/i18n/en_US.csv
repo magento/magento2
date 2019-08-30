@@ -143,3 +143,4 @@ hello,hello
 "The value of attribute not valid","The value of attribute not valid"
 "EAV types and attributes","EAV types and attributes"
 "Entity types declaration cache","Entity types declaration cache"
+"Admin store attribute option label ""%1"" is already exists.","Admin store attribute option label ""%1"" is already exists."

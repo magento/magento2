@@ -40,7 +40,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     /**
      * Core data
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -73,7 +73,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param string|null $connectionName
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param PriceModifierInterface[] $priceModifiers
@@ -83,7 +83,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
         array $priceModifiers = []
@@ -259,7 +259,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $tableName = $this->_getDefaultFinalPriceTable();
         $this->getConnection()->delete($tableName);
 
-        $finalPriceTable = $this->indexTableStructureFactory->create([
+        $finalPriceTable = $this->indexTableStructureFactory->create(
+            [
             'tableName' => $tableName,
             'entityField' => 'entity_id',
             'customerGroupField' => 'customer_group_id',
@@ -270,7 +271,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'minPriceField' => 'min_price',
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
-        ]);
+            ]
+        );
 
         return $finalPriceTable;
     }
@@ -465,11 +467,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         );
         $tierPrice = $this->getTotalTierPriceExpression($price);
         $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
-        $finalPrice = $connection->getLeastSql([
+        $finalPrice = $connection->getLeastSql(
+            [
             $price,
             $specialPriceExpr,
             $tierPriceExpr,
-        ]);
+            ]
+        );
 
         $select->columns(
             [
@@ -848,7 +852,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 ]
             ),
             'NULL',
-            $this->getConnection()->getLeastSql([
+            $this->getConnection()->getLeastSql(
+                [
                 $this->getConnection()->getIfNullSql(
                     $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
                     $maxUnsignedBigint
@@ -865,7 +870,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                     $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
                     $maxUnsignedBigint
                 ),
-            ])
+                ]
+            )
         );
     }
 

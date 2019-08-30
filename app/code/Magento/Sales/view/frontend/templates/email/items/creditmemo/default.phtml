@@ -4,21 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrder(); ?>
 <tr>
-    <td class="item-info<?php if ($block->getItemOptions()): ?> has-extra<?php endif; ?>">
+    <td class="item-info<?= ($block->getItemOptions() ? ' has-extra' : '') ?>">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-        <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
-        <?php if ($block->getItemOptions()): ?>
+        <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <?php if ($block->getItemOptions()) : ?>
             <dl>
-                <?php foreach ($block->getItemOptions() as $option): ?>
-                    <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+                <?php foreach ($block->getItemOptions() as $option) : ?>
+                    <dt><strong><em><?= $block->escapeHtml($option['label']) ?></em></strong></dt>
                     <dd>
-                        <?= /* @escapeNotVerified */  nl2br($option['value']) ?>
+                        <?= /* @noEscape */  nl2br($block->escapeHtml($option['value'])) ?>
                     </dd>
                 <?php endforeach; ?>
             </dl>
@@ -29,8 +27,8 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQty() * 1 ?></td>
+    <td class="item-qty"><?= (float) $_item->getQty() ?></td>
     <td class="item-price">
-        <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
+        <?= /* @noEscape */  $block->getItemPrice($_item) ?>
     </td>
 </tr>
