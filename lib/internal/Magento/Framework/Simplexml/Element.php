@@ -25,6 +25,19 @@ class Element extends \SimpleXMLElement
     protected $_parent = null;
 
     /**
+     * For future use
+     *
+     * @param \Magento\Framework\Simplexml\Element $element
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+     */
+    public function setParent($element)
+    {
+    }
+    // phpcs:enable
+
+    /**
      * Returns parent node for the element
      *
      * Currently using xpath
