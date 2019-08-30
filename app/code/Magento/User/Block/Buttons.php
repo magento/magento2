@@ -68,7 +68,7 @@ class Buttons extends \Magento\Backend\Block\Template
                     ) . '\', \'' . $this->getUrl(
                         '*/*/delete',
                         ['rid' => $this->getRequest()->getParam('rid')]
-                    ) . '\')',
+                    ) . '\', {data: {}})',
                     'class' => 'delete'
                 ]
             );

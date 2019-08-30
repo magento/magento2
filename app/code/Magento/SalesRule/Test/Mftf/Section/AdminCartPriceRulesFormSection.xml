@@ -33,7 +33,9 @@
 
         <!-- Conditions sub-form -->
         <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
+        <element name="conditionsHeaderNew" type="button" selector="div[data-index='block_promo_catalog_edit_tab_conditions'] " timeout="30"/>
         <element name="conditionsHeaderOpen" type="button" selector="div[data-index='conditions'] div[data-state-collapsible='open']" timeout="30"/>
+        <element name="conditionsHeaderOpenNew" type="button" selector="div[data-index='block_promo_catalog_edit_tab_conditions'] div[data-state-collapsible='open']" timeout="30"/>
         <element name="conditionsValue" type="input" selector=".rule-param-edit input"/>
         <element name="conditionsOperator" type="select" selector=".rule-param-edit select"/>
         <element name="addCondition" type="button" selector="//*[@id='conditions__{{arg}}__children']//span" parameterized="true"/>

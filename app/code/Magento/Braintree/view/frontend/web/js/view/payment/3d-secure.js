@@ -41,6 +41,7 @@ define([
             braintreeAdapter.getApiClient()
                 .then(function (clientInstance) {
                     return braintree3DSecure.create({
+                        version: 2, // Will use 3DS 2 whenever possible
                         client: clientInstance
                     });
                 })
@@ -49,6 +50,7 @@ define([
                     promise.resolve(self.threeDSecureInstance);
                 })
                 .catch(function (err) {
+                    fullScreenLoader.stopLoader();
                     promise.reject(err);
                 });
 
@@ -84,30 +86,55 @@ define([
             var self = this,
                 totalAmount = quote.totals()['base_grand_total'],
                 billingAddress = quote.billingAddress(),
+                shippingAddress = quote.shippingAddress(),
                 options = {
                     amount: totalAmount,
                     nonce: context.paymentPayload.nonce,
-
-                    /**
-                     * Adds iframe to page
-                     * @param {Object} err
-                     * @param {Object} iframe
-                     */
-                    addFrame: function (err, iframe) {
-                        self.createModal($(iframe));
-                        fullScreenLoader.stopLoader();
-                        self.modal.openModal();
+                    billingAddress: {
+                        givenName: billingAddress.firstname,
+                        surname: billingAddress.lastname,
+                        phoneNumber: billingAddress.telephone,
+                        streetAddress: billingAddress.street[0],
+                        extendedAddress: billingAddress.street[1],
+                        locality: billingAddress.city,
+                        region: billingAddress.regionCode,
+                        postalCode: billingAddress.postcode,
+                        countryCodeAlpha2: billingAddress.countryId
                     },
 
                     /**
-                     * Removes iframe from page
+                     * Will be called after receiving ThreeDSecure response, before completing the flow.
+                     *
+                     * @param {Object} data - ThreeDSecure data to consume before continuing
+                     * @param {Function} next - callback to continue flow
                      */
-                    removeFrame: function () {
-                        self.modal.closeModal();
+                    onLookupComplete: function (data, next) {
+                        next();
                     }
                 };
 
+            if (context.paymentPayload.details) {
+                options.bin = context.paymentPayload.details.bin;
+            }
+
+            if (shippingAddress) {
+                options.additionalInformation = {
+                    shippingGivenName: shippingAddress.firstname,
+                    shippingSurname: shippingAddress.lastname,
+                    shippingPhone: shippingAddress.telephone,
+                    shippingAddress: {
+                        streetAddress: shippingAddress.street[0],
+                        extendedAddress: shippingAddress.street[1],
+                        locality: shippingAddress.city,
+                        region: shippingAddress.regionCode,
+                        postalCode: shippingAddress.postcode,
+                        countryCodeAlpha2: shippingAddress.countryId
+                    }
+                };
+            }
+
             if (!this.isAmountAvailable(totalAmount) || !this.isCountryAvailable(billingAddress.countryId)) {
+                self.state = $.Deferred();
                 self.state.resolve();
 
                 return self.state.promise();
@@ -118,6 +145,7 @@ define([
                 .then(function () {
                     self.threeDSecureInstance.verifyCard(options, function (err, payload) {
                         if (err) {
+                            fullScreenLoader.stopLoader();
                             self.state.reject(err.message);
 
                             return;
@@ -129,6 +157,7 @@ define([
                             context.paymentPayload.nonce = payload.nonce;
                             self.state.resolve();
                         } else {
+                            fullScreenLoader.stopLoader();
                             self.state.reject($t('Please try again with another form of payment.'));
                         }
                     });
@@ -139,42 +168,6 @@ define([
                 });
 
             return self.state.promise();
-        },
-
-        /**
-         * Creates modal window
-         *
-         * @param {Object} $context
-         * @private
-         */
-        createModal: function ($context) {
-            var self = this,
-                options = {
-                    clickableOverlay: false,
-                    buttons: [],
-                    modalCloseBtnHandler: self.cancelFlow.bind(self),
-                    keyEventHandlers: {
-                        escapeKey: self.cancelFlow.bind(self)
-                    }
-                };
-
-            // adjust iframe styles
-            $context.attr('width', '100%');
-            self.modal = Modal(options, $context);
-        },
-
-        /**
-         * Cancels 3D Secure flow
-         *
-         * @private
-         */
-        cancelFlow: function () {
-            var self = this;
-
-            self.threeDSecureInstance.cancelVerifyCard(function () {
-                self.modal.closeModal();
-                self.state.reject();
-            });
         },
 
         /**

@@ -11,7 +11,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
 /**
- * Delete action.
+ * Delete review action.
  */
 class Delete extends ProductController implements HttpPostActionInterface
 {

@@ -13,7 +13,8 @@ use Magento\Framework\Exception\StateException;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
- * Category repository
+ * Repository for categories.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface
@@ -209,7 +210,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * Get extensible data object converter
+     * Lazy loader for the converter.
      *
      * @return \Magento\Framework\Api\ExtensibleDataObjectConverter
      *
@@ -225,7 +226,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * Get metadata pool
+     * Lazy loader for the metadata pool.
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
