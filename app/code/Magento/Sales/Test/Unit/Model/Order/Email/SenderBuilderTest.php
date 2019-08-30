@@ -48,11 +48,14 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ['getTemplateVars', 'getTemplateOptions', 'getTemplateId']
         );
 
-        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, [
-            'getStoreId',
-            '__wakeup',
-            'getId',
-        ]);
+        $this->storeMock = $this->createPartialMock(
+            \Magento\Store\Model\Store::class,
+            [
+                'getStoreId',
+                '__wakeup',
+                'getId',
+            ]
+        );
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class,
@@ -165,9 +168,6 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $transportMock = $this->createMock(
             \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
-        $this->identityContainerMock->expects($this->once())
-            ->method('getCopyMethod')
-            ->will($this->returnValue('copy'));
         $this->identityContainerMock->expects($this->never())
             ->method('getCustomerEmail');
         $this->identityContainerMock->expects($this->never())
