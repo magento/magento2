@@ -51,7 +51,7 @@
             <argument name="inputType" value="checkbox"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
-        <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct1">
+        <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct">
             <argument name="group" value="ALL GROUPS"/>
             <argument name="quantity" value="1"/>
             <argument name="price" value="Discount"/>
