@@ -20,7 +20,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
 {
     const KEY_CURRENCY_TO = 'currency_to';
     const KEY_RATE = 'rate';
-    const KEY_EXCHANGE_RATES = 'exchange_rates';
+    private const KEY_EXCHANGE_RATES = 'exchange_rates';
 
     /**
      * @inheritDoc
