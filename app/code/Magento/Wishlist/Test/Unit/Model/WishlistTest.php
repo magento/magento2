@@ -206,11 +206,11 @@ class WishlistTest extends TestCase
             $this->mathRandom,
             $this->dateTime,
             $this->productRepository,
-            $this->stockItemRepository,
-            $this->scopeConfig,
             false,
             [],
-            $this->serializer
+            $this->serializer,
+            $this->stockItemRepository,
+            $this->scopeConfig
         );
     }
 
