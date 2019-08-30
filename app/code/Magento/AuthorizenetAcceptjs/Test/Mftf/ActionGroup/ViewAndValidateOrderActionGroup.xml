@@ -5,15 +5,20 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ViewAndValidateOrderActionGroup">
+        <annotations>
+            <description>Validate the Order is Correct. Then Submit the Invoice.</description>
+        </annotations>
         <arguments>
             <argument name="amount" type="string"/>
             <argument name="status" type="string"/>
             <argument name="captureStatus" type="string"/>
             <argument name="closedStatus" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
         <click selector="{{AdminMenuSection.sales}}" stepKey="clickSales"/>
         <waitForPageLoad stepKey="waitForSalesSubsection"/>
@@ -39,13 +44,18 @@
         <see userInput="{{closedStatus}}" selector="{{ViewOrderSection.confirmClosed}}" stepKey="seeClosed"/>
         -->
     </actionGroup>
+
     <actionGroup name="ViewAndValidateOrderActionGroupNoSubmit">
+        <annotations>
+            <description>Validate the Order is Correct. Do Not Submit the Invoice.</description>
+        </annotations>
         <arguments>
             <argument name="amount" type="string"/>
             <argument name="status" type="string"/>
             <argument name="captureStatus" type="string"/>
             <argument name="closedStatus" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
         <click selector="{{AdminMenuSection.sales}}" stepKey="clickSales"/>
         <waitForPageLoad stepKey="waitForSalesSubsection"/>

@@ -28,6 +28,8 @@ class CreateEntityRow
     }
 
     /**
+     * Prepare data.
+     *
      * @param EntityMetadata $metadata
      * @param array $data
      * @return array
@@ -36,7 +38,7 @@ class CreateEntityRow
     {
         $output = [];
         foreach ($metadata->getEntityConnection()->describeTable($metadata->getEntityTable()) as $column) {
-            if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP' /*|| $column['IDENTITY']*/) {
+            if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP') {
                 continue;
             }
             if (isset($data[strtolower($column['COLUMN_NAME'])])) {
@@ -52,6 +54,8 @@ class CreateEntityRow
     }
 
     /**
+     * Create entity row.
+     *
      * @param string $entityType
      * @param array $data
      * @return array

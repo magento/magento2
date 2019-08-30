@@ -341,10 +341,14 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
             return;
         }
 
-        $likeExpression = $this->_resourceHelper->addLikeEscape($folderName . '/', ['position' => 'start']);
         $this->getConnection()->delete(
             $this->getMainTable(),
-            new \Zend_Db_Expr('filename LIKE ' . $likeExpression)
+            new \Zend_Db_Expr(
+                'directory LIKE ' .
+                $this->_resourceHelper->addLikeEscape($folderName . '/', ['position' => 'start'])
+                . ' ' . \Magento\Framework\DB\Select::SQL_OR . ' ' .
+                $this->getConnection()->prepareSqlCondition('directory', ['seq' => $folderName])
+            )
         );
     }
 
