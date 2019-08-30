@@ -2,7 +2,7 @@
     "name": "magento/module-tax-import-export",
     "description": "N/A",
     "require": {
-        "php": "~7.1.0|~7.2.0",
+        "php": "~7.1.0||~7.2.0",
         "magento/module-tax": "100.2.*",
         "magento/module-backend": "100.2.*",
         "magento/module-directory": "100.2.*",

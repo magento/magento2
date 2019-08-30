@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.1.0|~7.2.0",
+        "php": "~7.1.0||~7.2.0",
         "magento/framework": "101.0.*",
         "magento/module-payment": "100.2.*",
         "magento/module-sales": "101.0.*",
