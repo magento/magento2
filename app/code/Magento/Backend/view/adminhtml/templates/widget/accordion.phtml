@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -13,9 +10,9 @@
  */
 $items = $block->getItems();
 ?>
-<?php if (!empty($items)): ?>
+<?php if (!empty($items)) : ?>
     <dl id="tab_content_<?= $block->getHtmlId() ?>" name="tab_content_<?= $block->getHtmlId() ?>" class="accordion">
-    <?php foreach ($items as $_item): ?>
+    <?php foreach ($items as $_item) : ?>
         <?= $block->getChildHtml($_item->getId()) ?>
     <?php endforeach ?>
     </dl>
@@ -23,7 +20,7 @@ $items = $block->getItems();
         require([
             'mage/adminhtml/accordion'
         ], function(){
-        	tab_content_<?= $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?= $block->getHtmlId() ?>', '<?= /* @escapeNotVerified */ $block->getShowOnlyOne() ?>');
-    	});
+            tab_content_<?= $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?= $block->getHtmlId() ?>', '<?= $block->escapeJs($block->getShowOnlyOne()) ?>');
+        });
     </script>
 <?php endif; ?>

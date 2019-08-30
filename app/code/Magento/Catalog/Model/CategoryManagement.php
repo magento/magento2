@@ -1,14 +1,14 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-
+/**
+ * Handles the category tree.
+ */
 class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInterface
 {
     /**
@@ -30,7 +30,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     private $categoriesFactory;
-    
+
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param Category\Tree $categoryTree
@@ -47,7 +47,14 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param int $rootCategoryId
+     * @param int $depth
+     * @return \Magento\Catalog\Api\Data\CategoryTreeInterface
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getTree($rootCategoryId = null, $depth = null)
     {
@@ -99,7 +106,15 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param int $categoryId
+     * @param int $parentId
+     * @param int $afterId
+     * @return bool
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function move($categoryId, $parentId, $afterId = null)
     {
@@ -112,8 +127,9 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
             $lastId = array_pop($categoryIds);
             $afterId = ($afterId === null || $afterId > $lastId) ? $lastId : $afterId;
         }
-
-        if (strpos($parentCategory->getPath(), $model->getPath()) === 0) {
+        $parentPath = $parentCategory->getPath();
+        $path = $model->getPath();
+        if ($path && strpos($parentPath, $path) === 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Operation do not allow to move a parent category to any of children category')
             );
@@ -127,7 +143,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCount()
     {

@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-93767"/>
             <group value="braintree"/>
+            <skip>
+                <issueId value="MQE-1576"/>
+            </skip>
         </annotations>
 
         <before>

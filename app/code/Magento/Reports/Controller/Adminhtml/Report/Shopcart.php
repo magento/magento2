@@ -9,14 +9,23 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
 /**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
 abstract class Shopcart extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization of a shop cart report
+     */
+    const ADMIN_RESOURCE = 'Magento_Reports::shopcart';
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
@@ -45,28 +54,5 @@ abstract class Shopcart extends \Magento\Backend\App\Action
         $this->_addBreadcrumb(__('Reports'), __('Reports'));
         $this->_addBreadcrumb(__('Shopping Cart'), __('Shopping Cart'));
         return $this;
-    }
-
-    /**
-     * Determine if action is allowed for reports module
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        switch ($this->getRequest()->getActionName()) {
-            case 'customer':
-                return $this->_authorization->isAllowed(null);
-                break;
-            case 'product':
-                return $this->_authorization->isAllowed('Magento_Reports::product');
-                break;
-            case 'abandoned':
-                return $this->_authorization->isAllowed('Magento_Reports::abandoned');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Reports::shopcart');
-                break;
-        }
     }
 }
