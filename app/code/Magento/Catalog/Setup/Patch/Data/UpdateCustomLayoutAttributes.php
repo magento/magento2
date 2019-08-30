@@ -107,14 +107,14 @@ class UpdateCustomLayoutAttributes implements DataPatchInterface
         $eavSetup->updateAttribute(
             Product::ENTITY,
             'custom_layout_update',
-            'visible',
+            'is_visible',
             false
         );
 
         $eavSetup->updateAttribute(
             Category::ENTITY,
             'custom_layout_update',
-            'visible',
+            'is_visible',
             false
         );
     }

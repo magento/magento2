@@ -100,6 +100,10 @@ class LayoutUpdateManager
      */
     public function fetchAvailableFiles(ProductInterface $product): array
     {
+        if (!$product->getSku()) {
+            return [];
+        }
+
         $identifier = $this->sanitizeSku($product);
         $handles = $this->getLayoutProcessor()->getAvailableHandles();
 
@@ -133,7 +137,7 @@ class LayoutUpdateManager
      */
     public function extractCustomSettings(ProductInterface $product, DataObject $intoSettings): void
     {
-        if ($attribute = $product->getCustomAttribute('custom_layout_update_file')) {
+        if ($product->getSku() && $attribute = $product->getCustomAttribute('custom_layout_update_file')) {
             $handles = $intoSettings->getPageLayoutHandles() ?? [];
             $handles = array_merge_recursive(
                 $handles,

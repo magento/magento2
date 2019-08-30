@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Controller;
 
+use Magento\Catalog\Model\Category;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Test class for \Magento\Catalog\Controller\Category.
  *
@@ -102,5 +106,35 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('catalog/category/view/id/8');
 
         $this->assert404NotFound();
+    }
+
+    /**
+     * Check that custom layout update files is employed.
+     *
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
+     * @return void
+     */
+    public function testViewWithCustomUpdate(): void
+    {
+        //Setting a fake file for the category.
+        $file = 'test-file';
+        $categoryId = 5;
+        /** @var CategoryLayoutUpdateManager $layoutManager */
+        $layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
+        $layoutManager->setCategoryFakeFiles($categoryId, [$file]);
+        /** @var Category $category */
+        $category = Bootstrap::getObjectManager()->create(Category::class);
+        $category->load($categoryId);
+        //Updating the custom attribute.
+        $category->setData('custom_layout_update_file', $file);
+        $category->save();
+
+        //Viewing the category
+        $this->dispatch("catalog/category/view/id/$categoryId");
+        //Layout handles must contain the file.
+        $handles = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class)
+            ->getUpdate()
+            ->getHandles();
+        $this->assertContains("catalog_category_view_selectable_{$categoryId}_{$file}", $handles);
     }
 }

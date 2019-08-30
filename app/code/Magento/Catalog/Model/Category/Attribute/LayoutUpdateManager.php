@@ -88,6 +88,10 @@ class LayoutUpdateManager
      */
     public function fetchAvailableFiles(CategoryInterface $category): array
     {
+        if (!$category->getId()) {
+            return [];
+        }
+
         $handles = $this->getLayoutProcessor()->getAvailableHandles();
 
         return array_filter(
@@ -120,7 +124,9 @@ class LayoutUpdateManager
      */
     public function extractCustomSettings(CategoryInterface $category, DataObject $intoSettings): void
     {
-        if ($attribute = $category->getCustomAttribute('custom_layout_update_file')) {
+        if ($category->getId()
+            && $attribute = $category->getCustomAttribute('custom_layout_update_file')
+        ) {
             $handles = $intoSettings->getPageLayoutHandles() ?? [];
             $handles = array_merge_recursive(
                 $handles,

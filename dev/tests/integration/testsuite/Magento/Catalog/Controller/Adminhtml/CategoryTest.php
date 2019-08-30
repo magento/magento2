@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Product;
@@ -222,7 +223,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                         'custom_design_from' => 1,
                         'custom_design_to' => 1,
                         'page_layout' => 1,
-                        'custom_layout_update' => 1,
+                        'custom_layout_update' => null,
                     ],
                 ],
                 [
@@ -268,7 +269,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'custom_design_from' => '5/21/2015',
                     'custom_design_to' => '5/29/2015',
                     'page_layout' => '',
-                    'custom_layout_update' => '',
                     'use_config' => [
                         'available_sort_by' => 1,
                         'default_sort_by' => 1,
@@ -290,7 +290,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'description' => true,
                     'meta_keywords' => true,
                     'meta_description' => true,
-                    'custom_layout_update' => true,
                     'custom_design_from' => true,
                     'custom_design_to' => true,
                     'filter_price_range' => false
@@ -310,7 +309,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'description' => 'Custom Description',
                     'meta_keywords' => 'Custom keywords',
                     'meta_description' => 'Custom meta description',
-                    'custom_layout_update' => null,
                     'custom_design_from' => '2015-05-21 00:00:00',
                     'custom_design_to' => '2015-05-29 00:00:00',
                     'filter_price_range' => null
@@ -643,5 +641,77 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             self::equalTo($sessionMessages),
             MessageInterface::TYPE_ERROR
         );
+    }
+    /**
+     * Test custom update files functionality.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveCustomLayout(): void
+    {
+        $file = 'test_file';
+        /** @var $store \Magento\Store\Model\Store */
+        $store = Bootstrap::getObjectManager()->create(Store::class);
+        /** @var CategoryLayoutUpdateManager $layoutManager */
+        $layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
+        $layoutManager->setCategoryFakeFiles(2, [$file]);
+        $store->load('fixturestore', 'code');
+        $storeId = $store->getId();
+        $requestData = [
+            'id' => '2',
+            'entity_id' => '2',
+            'path' => '1/2',
+            'name' => 'Custom Name',
+            'is_active' => '0',
+            'description' => 'Custom Description',
+            'meta_title' => 'Custom Title',
+            'meta_keywords' => 'Custom keywords',
+            'meta_description' => 'Custom meta description',
+            'include_in_menu' => '0',
+            'url_key' => 'default-test-category',
+            'display_mode' => 'PRODUCTS',
+            'landing_page' => '1',
+            'is_anchor' => true,
+            'store_id' => $storeId,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1,
+                'filter_price_range' => 1,
+            ],
+        ];
+        $uri = 'backend/catalog/category/save';
+
+        //Saving a wrong file
+        $requestData['custom_layout_update_file'] = $file . 'INVALID';
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+
+        //Checking that the value is not saved
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load($requestData['entity_id']);
+        $this->assertEmpty($category->getData('custom_layout_update_file'));
+
+        //Saving the correct file
+        $requestData['custom_layout_update_file'] = $file;
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+
+        //Checking that the value is saved
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load($requestData['entity_id']);
+        $this->assertEquals($file, $category->getData('custom_layout_update_file'));
     }
 }
