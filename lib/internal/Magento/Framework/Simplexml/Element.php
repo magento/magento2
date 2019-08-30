@@ -25,18 +25,6 @@ class Element extends \SimpleXMLElement
     protected $_parent = null;
 
     /**
-     * For future use
-     *
-     * @param \Magento\Framework\Simplexml\Element $element
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function setParent($element)
-    {
-        //$this->_parent = $element;
-    }
-
-    /**
      * Returns parent node for the element
      *
      * Currently using xpath
@@ -179,7 +167,8 @@ class Element extends \SimpleXMLElement
     }
 
     /**
-     * asArray() analog, but without attributes
+     * The asArray() analog, but without attributes
+     *
      * @return array|string
      */
     public function asCanonicalArray()
@@ -469,8 +458,8 @@ class Element extends \SimpleXMLElement
 
     /**
      * Unset self from the XML-node tree
-     *
      * Note: trying to refer this object as a variable after "unsetting" like this will result in E_WARNING
+     *
      * @return void
      */
     public function unsetSelf()
