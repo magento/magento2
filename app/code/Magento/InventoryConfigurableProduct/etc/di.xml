@@ -18,4 +18,9 @@
         <plugin name="get_configurable_option_sku_from_order"
                 type="Magento\InventoryConfigurableProduct\Plugin\Sales\GetSkuFromOrderItem"/>
     </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder">
+        <arguments>
+            <argument name="baseSelectProcessor" xsi:type="object">Magento\InventoryConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider\StockStatusBaseSelectProcessor</argument>
+        </arguments>
+    </type>
 </config>
