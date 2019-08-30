@@ -756,9 +756,10 @@ class Installer
         SchemaSetupInterface $setup,
         AdapterInterface $connection
     ) {
-        if (!$connection->isTableExists($setup->getTable('flag'))) {
+        $tableName = $setup->getTable('flag');
+        if (!$connection->isTableExists($tableName)) {
             $table = $connection->newTable(
-                $setup->getTable('flag')
+                $tableName
             )->addColumn(
                 'flag_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -797,7 +798,7 @@ class Installer
             );
             $connection->createTable($table);
         } else {
-            $this->updateColumnType($connection, 'flag', 'flag_data', 'mediumtext');
+            $this->updateColumnType($connection, $tableName, 'flag_data', 'mediumtext');
         }
     }
 
