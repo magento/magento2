@@ -177,6 +177,19 @@ class AttributeAdapter
     }
 
     /**
+     * Check if product should always be filterable
+     *
+     * @return bool
+     */
+    public function isAlwaysFilterable(): bool
+    {
+        // List of attributes which are required to be filterable
+        $alwaysFilterableAttributes = ['sku'];
+
+        return in_array($this->getAttributeCode(), $alwaysFilterableAttributes, true);
+    }
+
+    /**
      * Get product attribute instance.
      *
      * @return CustomAttributesDataInterface|\Magento\Eav\Api\Data\AttributeInterface
