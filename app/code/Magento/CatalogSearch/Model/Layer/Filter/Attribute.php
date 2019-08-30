@@ -154,7 +154,7 @@ class Attribute extends AbstractFilter
      */
     private function getOptionCount($value, $optionsFacetedData)
     {
-        return isset($optionsFacetedData[$value]['count'])
+        return !is_array($value) && isset($optionsFacetedData[$value]['count'])
             ? (int)$optionsFacetedData[$value]['count']
             : 0;
     }
