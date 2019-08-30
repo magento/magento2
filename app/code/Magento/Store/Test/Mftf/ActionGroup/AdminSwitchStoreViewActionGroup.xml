@@ -5,13 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
-<!-- Test XML Example -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSwitchStoreViewActionGroup">
+        <annotations>
+            <description>Selects the provided Website from the 'Store View' dropdown menu on the Admin Grid pages.</description>
+        </annotations>
         <arguments>
             <argument name="storeView" defaultValue="customStore.name"/>
         </arguments>
+        
         <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickStoreViewSwitchDropdown"/>
         <waitForElementVisible selector="{{AdminMainActionsSection.storeViewByName('Default Store View')}}" stepKey="waitForStoreViewsAreVisible"/>
         <click selector="{{AdminMainActionsSection.storeViewByName(storeView)}}" stepKey="clickStoreViewByName"/>
@@ -21,7 +25,12 @@
         <scrollToTopOfPage stepKey="scrollToStoreSwitcher"/>
         <see userInput="{{storeView}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
     </actionGroup>
+    
     <actionGroup name="AdminSwitchToAllStoreViewActionGroup" extends="AdminSwitchStoreViewActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminSwitchStoreViewActionGroup. Clicks on the 'All Store Views' drop down menu. Validates that the 'All Store Views' options is present and correct.</description>
+        </annotations>
+        
         <click selector="{{AdminMainActionsSection.allStoreViews}}" stepKey="clickStoreViewByName" after="waitForStoreViewsAreVisible"/>
         <see selector="{{AdminMainActionsSection.storeSwitcher}}" userInput="All Store Views" stepKey="seeNewStoreViewName" after="waitForStoreViewSwitched"/>
     </actionGroup>

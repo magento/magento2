@@ -5,15 +5,19 @@
   * See COPYING.txt for license details.
   */
 -->
-<!-- Test XML Example -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteStoreViewActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Deletes the provided Store without creating a Backup. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="customStore" defaultValue="customStore"/>
         </arguments>
+
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
-        <waitForPageLoad stepKey="waitStoreIndexPageLoad" />
+        <waitForPageLoad stepKey="waitStoreIndexPageLoad"/>
         <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
         <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewInGrid"/>
@@ -26,10 +30,15 @@
         <waitForPageLoad stepKey="waitForSuccessMessage"/>
         <see userInput="You deleted the store view." stepKey="seeDeleteMessage"/>
     </actionGroup>
+
     <actionGroup name="DeleteCustomStoreViewBackupEnabledYesActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Deleted the provided Store while creating a Backup. Validates that the Success Messages (Delete/Backup) are present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="storeViewName" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
         <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
@@ -45,10 +54,15 @@
         <see selector="{{AdminStoresGridSection.successMessage}}" userInput="The database was backed up." stepKey="seeAssertDatabaseBackedUpMessage"/>
         <see selector="{{AdminStoresGridSection.successMessage}}" userInput="You deleted the store view." stepKey="seeAssertSuccessDeleteStoreViewMessage"/>
     </actionGroup>
+
     <actionGroup name="AssertStoreViewNotInGrid">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Store View name. Validates that it does NOT appear in the grid.</description>
+        </annotations>
         <arguments>
             <argument name="storeViewName" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
