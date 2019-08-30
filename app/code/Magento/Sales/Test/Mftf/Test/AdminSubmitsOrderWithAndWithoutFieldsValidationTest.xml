@@ -13,6 +13,7 @@
             <stories value="Create orders"/>
             <title value="Fields validation is required to create an order from Admin Panel"/>
             <description value="Admin should not be able to submit orders without invalid address fields"/>
+            <severity value="AVERAGE"/>
             <group value="sales"/>
         </annotations>
         <before>

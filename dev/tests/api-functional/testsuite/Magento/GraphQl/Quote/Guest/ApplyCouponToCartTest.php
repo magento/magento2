@@ -129,25 +129,6 @@ class ApplyCouponToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_coupon_expired.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
-     */
-    public function testApplyExpiredCoupon()
-    {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/574');
-        $couponCode = '2?ds5!2d';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId, $couponCode);
-
-        $this->graphQlMutation($query);
-    }
-
-    /**
      * Products in cart don't fit to the coupon
      *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
@@ -204,7 +185,7 @@ QUERY;
                 'Required parameter "cart_id" is missing'
             ],
             'missed_coupon_code' => [
-                'cart_id: "test"',
+                'cart_id: "test_quote"',
                 'Required parameter "coupon_code" is missing'
             ],
         ];

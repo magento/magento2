@@ -9,9 +9,10 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AllowedCountriesRestrictionApplyOnBackendTest">
         <annotations>
+            <features value="Customer"/>
+            <stories value="Country filter"/>
             <title value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
             <description value="Country filter on Customers page when allowed countries restriction for a default website is applied"/>
-            <features value="Customer"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-6441"/>
             <useCaseId value="MAGETWO-91523"/>
@@ -113,6 +114,6 @@
         <waitForPageLoad stepKey="waitForCustomersGrid"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomersGrid"/>
         <executeJS function="var len = document.querySelectorAll('{{AdminCustomerFiltersSection.countryOptions}}').length; return len-1;" stepKey="countriesAmount2"/>
-        <assertEquals expected='($countriesAmount)' expectedType="integer" actual="($countriesAmount2)" stepKey="assertCountryAmounts"/>
+        <assertEquals expected="($countriesAmount)" actual="($countriesAmount2)" stepKey="assertCountryAmounts"/>
     </test>
 </tests>

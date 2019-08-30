@@ -12,6 +12,7 @@ use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -156,6 +157,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     private $searchCriteriaBuilderMock;
 
     /**
+     * @var AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -193,6 +199,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->extensibleDataObjectConverter = $this->createMock(
             \Magento\Framework\Api\ExtensibleDataObjectConverter::class
         );
+        $this->allowedCountriesReader = $this->createMock(AllowedCountries::class);
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -256,6 +263,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'visitorCollectionFactory' => $this->visitorCollectionFactory,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'addressRegistry' => $this->addressRegistryMock,
+                'allowedCountriesReader' => $this->allowedCountriesReader,
             ]
         );
         $this->objectManagerHelper->setBackwardCompatibleProperty(
@@ -551,7 +559,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('delete')
             ->with($customer);
-
+        $this->allowedCountriesReader
+            ->expects($this->atLeastOnce())
+            ->method('getAllowedCountries')
+            ->willReturn(['US' => 'US']);
+        $address
+            ->expects($this->atLeastOnce())
+            ->method('getCountryId')
+            ->willReturn('US');
         $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
     }
 
@@ -725,6 +740,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->emailNotificationMock->expects($this->once())
             ->method('newAccount')
             ->willReturnSelf();
+        $this->allowedCountriesReader
+            ->expects($this->atLeastOnce())
+            ->method('getAllowedCountries')
+            ->willReturn(['US' => 'US']);
+        $address
+            ->expects($this->atLeastOnce())
+            ->method('getCountryId')
+            ->willReturn('US');
 
         $this->accountManagement->createAccount($customer);
     }
@@ -793,14 +816,18 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         if ($testNumber == 1) {
             $this->expectException(\Magento\Framework\Exception\InputException::class);
-            $this->expectExceptionMessage('The password needs at least ' . $minPasswordLength . ' characters. '
-                . 'Create a new password and try again.');
+            $this->expectExceptionMessage(
+                'The password needs at least ' . $minPasswordLength . ' characters. '
+                . 'Create a new password and try again.'
+            );
         }
 
         if ($testNumber == 2) {
             $this->expectException(\Magento\Framework\Exception\InputException::class);
-            $this->expectExceptionMessage('Minimum of different classes of characters in password is ' .
-                $minCharacterSetsNum . '. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.');
+            $this->expectExceptionMessage(
+                'Minimum of different classes of characters in password is ' .
+                $minCharacterSetsNum . '. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.'
+            );
         }
 
         $customer = $this->getMockBuilder(Customer::class)->disableOriginalConstructor()->getMock();
@@ -970,6 +997,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->emailNotificationMock->expects($this->once())
             ->method('newAccount')
             ->willReturnSelf();
+        $this->allowedCountriesReader
+            ->expects($this->atLeastOnce())
+            ->method('getAllowedCountries')
+            ->willReturn(['US' => 'US']);
+        $address
+            ->expects($this->atLeastOnce())
+            ->method('getCountryId')
+            ->willReturn('US');
 
         $this->accountManagement->createAccount($customer, $password);
     }
@@ -1238,7 +1273,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         $storeId = 1;
 
-        $hash = hash('sha256', microtime() . random_int(PHP_INT_MIN, PHP_INT_MAX));
+        $hash = hash("sha256", uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
 
         $this->emailNotificationMock->expects($this->once())
             ->method('passwordReminder')
@@ -1262,7 +1297,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        $hash = hash('sha256', microtime() . random_int(PHP_INT_MIN, PHP_INT_MAX));
+        $hash = hash("sha256", uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
 
         $this->emailNotificationMock->expects($this->once())
             ->method('passwordResetConfirmation')
@@ -1286,7 +1321,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        $hash = hash('sha256', microtime() . random_int(PHP_INT_MIN, PHP_INT_MAX));
+        $hash = hash("sha256", uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
 
@@ -1951,6 +1986,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getWebsite')
             ->with($websiteId)
             ->willReturn($website);
+        $this->allowedCountriesReader
+            ->expects($this->atLeastOnce())
+            ->method('getAllowedCountries')
+            ->willReturn(['US' => 'US']);
+        $existingAddress
+            ->expects($this->atLeastOnce())
+            ->method('getCountryId')
+            ->willReturn('US');
 
         $this->assertSame($customer, $this->accountManagement->createAccountWithPasswordHash($customer, $hash));
     }
@@ -2078,7 +2121,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('newAccount')
             ->willThrowException($exception);
         $this->logger->expects($this->once())->method('error')->with($exception);
-
+        $this->allowedCountriesReader->expects($this->atLeastOnce())
+            ->method('getAllowedCountries')->willReturn(['US' => 'US']);
+        $address->expects($this->atLeastOnce())->method('getCountryId')->willReturn('US');
         $this->accountManagement->createAccount($customer);
     }
 

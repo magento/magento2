@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @doc(description: "The wishlist query returns the contents of a customer's wish list")
+    wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @doc(description: "The wishlist query returns the contents of a customer's wish list") @cache(cacheable: false)
 }
 
 type WishlistOutput {

@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=2.3-develop)](https://travis-ci.org/magento/magento2)
 [![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg)](https://crowdin.com/project/magento-2)
@@ -21,10 +20,10 @@ To learn about issues, click [here][2]. To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
 
-[1]: <https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html>
-[2]: <https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#report>
-[3]: <https://github.com/magento/magento2/issues>
-[4]: <https://devdocs.magento.com>
+[1]: https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html
+[2]: https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#report
+[3]: https://github.com/magento/magento2/issues
+[4]: https://devdocs.magento.com
 
 <h3>Community Maintainers</h3>
 The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.

@@ -123,11 +123,24 @@ sub vcl_hash {
         hash_data(server.ip);
     }
 
+    if (req.url ~ "/graphql") {
+        call process_graphql_headers;
+    }
+
     # To make sure http users don't see ssl warning
     if (req.http./* {{ ssl_offloaded_header }} */) {
         hash_data(req.http./* {{ ssl_offloaded_header }} */);
     }
     /* {{ design_exceptions_code }} */
+}
+
+sub process_graphql_headers {
+    if (req.http.Store) {
+        hash_data(req.http.Store);
+    }
+    if (req.http.Content-Currency) {
+        hash_data(req.http.Content-Currency);
+    }
 }
 
 sub vcl_backend_response {

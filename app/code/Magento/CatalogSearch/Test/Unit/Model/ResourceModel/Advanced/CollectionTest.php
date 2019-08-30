@@ -67,7 +67,7 @@ class CollectionTest extends BaseCollection
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
         $storeManager = $this->getStoreManager();
-        $resourceModelPool = $this->getResourceModelPool();
+        $universalFactory = $this->getUniversalFactory();
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         $this->temporaryStorageFactory = $this->createMock(
@@ -126,7 +126,7 @@ class CollectionTest extends BaseCollection
             [
                 'eavConfig' => $this->eavConfig,
                 'storeManager' => $storeManager,
-                'resourceModelPool' => $resourceModelPool,
+                'universalFactory' => $universalFactory,
                 'searchCriteriaBuilder' => $this->criteriaBuilder,
                 'filterBuilder' => $this->filterBuilder,
                 'temporaryStorageFactory' => $this->temporaryStorageFactory,

@@ -5,13 +5,6 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
 
-use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
-use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Indexer\DimensionFactory;
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-
 /**
  * Catalog Product Compare Items Resource Collection
  *
@@ -19,6 +12,7 @@ use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -70,7 +64,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -82,12 +76,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param ProductLimitationFactory|null $productLimitationFactory
-     * @param MetadataPool|null $metadataPool
-     * @param TableMaintainer|null $tableMaintainer
-     * @param PriceTableResolver|null $priceTableResolver
-     * @param DimensionFactory|null $dimensionFactory
-     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -101,7 +89,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -112,13 +100,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
-        TableMaintainer $tableMaintainer = null,
-        PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null,
-        ResourceModelPoolInterface $resourceModelPool = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_catalogProductCompare = $catalogProductCompare;
@@ -142,13 +124,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $connection,
-            $productLimitationFactory,
-            $metadataPool,
-            $tableMaintainer,
-            $priceTableResolver,
-            $dimensionFactory,
-            $resourceModelPool
+            $connection
         );
     }
 

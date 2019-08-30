@@ -59,6 +59,7 @@ class Block
         $renderedContent = $this->widgetFilter->filter($block->getContent());
 
         $blockData = [
+            BlockInterface::BLOCK_ID => $block->getId(),
             BlockInterface::IDENTIFIER => $block->getIdentifier(),
             BlockInterface::TITLE => $block->getTitle(),
             BlockInterface::CONTENT => $renderedContent,

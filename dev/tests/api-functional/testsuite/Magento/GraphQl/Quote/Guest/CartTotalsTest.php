@@ -45,6 +45,11 @@ class CartTotalsTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(21.5, $cartItem['prices']['row_total_including_tax']['value']);
+
         self::assertArrayHasKey('prices', $response['cart']);
         $pricesResponse = $response['cart']['prices'];
         self::assertEquals(21.5, $pricesResponse['grand_total']['value']);
@@ -60,6 +65,32 @@ class CartTotalsTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/apply_tax_for_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     */
+    public function testGetCartTotalsWithEmptyCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('prices', $response['cart']);
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(0, $pricesResponse['grand_total']['value']);
+        self::assertEquals(0, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(0, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(0, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+
+        $appliedTaxesResponse = $pricesResponse['applied_taxes'];
+
+        self::assertCount(0, $appliedTaxesResponse);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -71,6 +102,11 @@ class CartTotalsTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
+
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
 
         $pricesResponse = $response['cart']['prices'];
         self::assertEquals(20, $pricesResponse['grand_total']['value']);
@@ -87,13 +123,17 @@ class CartTotalsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @group recent
      */
     public function testGetCartTotalsWithNoAddressSet()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
+
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
 
         $pricesResponse = $response['cart']['prices'];
         self::assertEquals(20, $pricesResponse['grand_total']['value']);
@@ -136,9 +176,25 @@ class CartTotalsTest extends GraphQlAbstract
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
+    items {
+      prices {
+        price {
+          value
+          currency
+        }
+        row_total {
+          value
+          currency
+        }
+        row_total_including_tax {
+          value
+          currency
+        }
+      }
+    }
     prices {
       grand_total {
-        value,
+        value
         currency
       }
       subtotal_including_tax {

@@ -41,7 +41,7 @@
                         </requires>
                     </field>
                     <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
+                        <comment>https://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
                     </group>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
@@ -94,14 +94,6 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <comment>Be sure to Enable Advanced Fraud Protection in Your Braintree Account in Settings/Processing Section</comment>
                             <config_path>payment/braintree/fraudprotection</config_path>
-                        </field>
-                        <field id="kount_id" translate="label comment" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Kount Merchant ID</label>
-                            <comment><![CDATA[Used for direct fraud tool integration. Make sure you also contact <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.]]></comment>
-                            <depends>
-                                <field id="fraudprotection">1</field>
-                            </depends>
-                            <config_path>payment/braintree/kount_id</config_path>
                         </field>
                         <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Debug</label>

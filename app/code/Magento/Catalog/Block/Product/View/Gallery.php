@@ -137,16 +137,18 @@ class Gallery extends AbstractView
         $imagesItems = [];
         /** @var DataObject $image */
         foreach ($this->getGalleryImages() as $image) {
-            $imageItem = new DataObject([
-                'thumb' => $image->getData('small_image_url'),
-                'img' => $image->getData('medium_image_url'),
-                'full' => $image->getData('large_image_url'),
-                'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
-                'position' => $image->getData('position'),
-                'isMain'   => $this->isMainImage($image),
-                'type' => str_replace('external-', '', $image->getMediaType()),
-                'videoUrl' => $image->getVideoUrl(),
-            ]);
+            $imageItem = new DataObject(
+                [
+                    'thumb' => $image->getData('small_image_url'),
+                    'img' => $image->getData('medium_image_url'),
+                    'full' => $image->getData('large_image_url'),
+                    'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
+                    'position' => $image->getData('position'),
+                    'isMain'   => $this->isMainImage($image),
+                    'type' => str_replace('external-', '', $image->getMediaType()),
+                    'videoUrl' => $image->getVideoUrl(),
+                ]
+            );
             foreach ($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
                 $imageItem->setData(
                     $imageConfig->getData('json_object_key'),

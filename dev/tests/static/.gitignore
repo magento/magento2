@@ -1,4 +1,6 @@
 /*.xml
-framework/tests/unit/*.xml
-report/
-tmp/
+/framework/tests/unit/*.xml
+/framework/tests/unit/var/allure-results/
+/report/
+/tmp/
+/var/allure-results/

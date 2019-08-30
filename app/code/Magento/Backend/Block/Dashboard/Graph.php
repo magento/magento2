@@ -114,8 +114,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         \Magento\Backend\Helper\Dashboard\Data $dashboardData,
         array $data = []
     ) {
-        $this->_dashboardData = $dashboardData;
         parent::__construct($context, $collectionFactory, $data);
+        $this->_dashboardData = $dashboardData;
     }
 
     /**
@@ -131,7 +131,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * Set data rows
      *
-     * @param array $rows
+     * @param string $rows
      * @return void
      */
     public function setDataRows($rows)
@@ -155,15 +155,14 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Get series
      *
      * @param string $seriesId
-     * @return array|false
+     * @return array|bool
      */
     public function getSeries($seriesId)
     {
         if (isset($this->_allSeries[$seriesId])) {
             return $this->_allSeries[$seriesId];
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -308,7 +307,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         if ($minvalue >= 0 && $maxvalue >= 0) {
             if ($maxvalue > 10) {
-                $p = pow(10, $this->_getPow($maxvalue));
+                $p = pow(10, $this->_getPow((int) $maxvalue));
                 $maxy = ceil($maxvalue / $p) * $p;
                 $yLabels = range($miny, $maxy, $p);
             } else {
@@ -349,7 +348,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $indexid = 0;
             foreach ($this->_axisLabels as $idx => $labels) {
                 if ($idx == 'x') {
-                    $this->formatAxisLabelDate($idx, $timezoneLocal);
+                    $this->formatAxisLabelDate((string) $idx, (string) $timezoneLocal);
                     $tmpstring = implode('|', $this->_axisLabels[$idx]);
                     $valueBuffer[] = $indexid . ":|" . $tmpstring;
                 } elseif ($idx == 'y') {
@@ -369,13 +368,12 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             foreach ($params as $name => $value) {
                 $p[] = $name . '=' . urlencode($value);
             }
-            return self::API_URL . '?' . implode('&', $p);
-        } else {
-            $gaData = urlencode(base64_encode(json_encode($params)));
-            $gaHash = $this->_dashboardData->getChartDataHash($gaData);
-            $params = ['ga' => $gaData, 'h' => $gaHash];
-            return $this->getUrl('adminhtml/*/tunnel', ['_query' => $params]);
+            return (string) self::API_URL . '?' . implode('&', $p);
         }
+        $gaData = urlencode(base64_encode(json_encode($params)));
+        $gaHash = $this->_dashboardData->getChartDataHash($gaData);
+        $params = ['ga' => $gaData, 'h' => $gaHash];
+        return $this->getUrl('adminhtml/*/tunnel', ['_query' => $params]);
     }
 
     /**
@@ -394,7 +392,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                 switch ($this->getDataHelper()->getParam('period')) {
                     case '24h':
                         $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
-                            $period->setTime($period->format('H'), 0, 0),
+                            $period->setTime((int) $period->format('H'), 0, 0),
                             \IntlDateFormatter::NONE,
                             \IntlDateFormatter::SHORT
                         );

@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Block\Checkout;
 
+use Magento\Sales\Model\ConfigInterface;
+
 /**
  * Subtotal Total Row Renderer
  */
@@ -26,7 +28,7 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param ConfigInterface $salesConfig
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $layoutProcessors
      * @param array $data
@@ -35,7 +37,7 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\Config $salesConfig,
+        ConfigInterface $salesConfig,
         \Magento\Tax\Model\Config $taxConfig,
         array $layoutProcessors = [],
         array $data = []
@@ -46,6 +48,8 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
     }
 
     /**
+     * Get display including and excluding tax config
+     *
      * @return bool
      */
     public function displayBoth()
