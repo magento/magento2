@@ -52,7 +52,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -110,7 +109,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
          }
          use_for_shipping: true
       }
@@ -186,7 +184,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -263,7 +260,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -391,7 +387,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
         use_for_shipping: true
       }
@@ -437,7 +432,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -480,7 +474,6 @@ mutation {
           postcode: "887766"
           country_code: "us"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }

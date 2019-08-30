@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\QuoteFactory;
@@ -45,6 +48,21 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
+    /**
+     * @var AddressRepositoryInterface
+     */
+    private $customerAddressRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -53,6 +71,9 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->customerAddressRepository = $objectManager->get(AddressRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        $this->customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -82,7 +103,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -146,7 +166,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -274,7 +293,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -456,7 +474,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         },
         {
@@ -470,7 +487,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -514,7 +530,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -653,6 +668,144 @@ QUERY;
 
         $this->assertEquals('US', $address['country']['code']);
         $this->assertEquals('CA', $address['region']['code']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetNewShippingAddressWithSaveInAddressBook()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "test region"
+            postcode: "887766"
+            country_code: "US"
+            telephone: "88776655"
+            save_in_address_book: true
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
+        self::assertCount(1, $addresses);
+        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewShippingAddressFields($shippingAddressResponse);
+
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetNewShippingAddressWithNotSaveInAddressBook()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "test region"
+            postcode: "887766"
+            country_code: "US"
+            telephone: "88776655"
+            save_in_address_book: false
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
+        self::assertCount(0, $addresses);
+        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewShippingAddressFields($shippingAddressResponse);
+
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
     }
 
     /**
