@@ -27,4 +27,7 @@
         <element name="country" type="select" selector="#country"/>
         <element name="saveAddress" type="button" selector="[data-action='save-address']" timeout="30"/>
     </section>
+    <section name="StorefrontCustomerRecentOrdersSection">
+        <element name="orderTotal" type="text" selector=".total .price"/>
+    </section>
 </sections>

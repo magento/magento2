@@ -98,17 +98,26 @@
     <!--Add a simple product to order-->
     <actionGroup name="addSimpleProductToOrder">
         <arguments>
-            <argument name="product" defaultValue="_defaultProduct"/>
+            <argument name="product" defaultValue="_defaultProduct" type="entity"/>
+            <argument name="productQty" defaultValue="1" type="string"/>
         </arguments>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilter"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
-        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="1" stepKey="fillProductQty"/>
+        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
         <wait time="5" stepKey="waitForOptionsToLoad"/>
+    </actionGroup>
+
+    <actionGroup name="AddSimpleProductWithQtyToOrderActionGroup" extends="addSimpleProductToOrder">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct" type="entity"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminOrderFormItemsSection.rowQty('1')}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
     </actionGroup>
 
     <!--Add configurable product to order -->
@@ -130,6 +139,12 @@
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+    </actionGroup>
+
+    <actionGroup name="newAddConfigurableProductToOrder" extends="addConfigurableProductToOrder">
+        <remove keyForRemoval="waitForConfigurablePopover"/>
+        <remove keyForRemoval="selectionConfigurableOption"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.selectOption}}" userInput="{{option.value}}" stepKey="selectOption" after="waitForOptionsToLoad"/>
     </actionGroup>
 
     <!--Add configurable product to order -->
@@ -368,6 +383,28 @@
         <conditionalClick selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
     </actionGroup>
 
+    <!--Select Bank Transfer payment method-->
+    <actionGroup name="SelectBankTransferPaymentMethodActionGroup" extends="SelectCheckMoneyPaymentMethod">
+        <remove keyForRemoval="checkCheckMoneyOption"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkBankTransfer}}" dependentSelector="{{AdminOrderFormPaymentSection.checkBankTransfer}}" visible="true" stepKey="checkBankTransferOption" after="waitForPaymentOptions"/>
+    </actionGroup>
+
+    <!--Select Cash on Delivery payment method-->
+    <actionGroup name="SelectCashOnDeliveryPaymentMethodActionGroup" extends="SelectCheckMoneyPaymentMethod">
+        <remove keyForRemoval="checkCheckMoneyOption"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkCashOnDelivery}}" dependentSelector="{{AdminOrderFormPaymentSection.checkCashOnDelivery}}" visible="true" stepKey="checkCashOnDeliveryOption" after="waitForPaymentOptions"/>
+    </actionGroup>
+
+    <!--Select Purchase Order payment method-->
+    <actionGroup name="SelectPurchaseOrderPaymentMethodActionGroup" extends="SelectCheckMoneyPaymentMethod">
+        <arguments>
+            <argument name="purchaseOrderNumber" type="string"/>
+        </arguments>
+        <remove keyForRemoval="checkCheckMoneyOption"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.checkPurchaseOrder}}" dependentSelector="{{AdminOrderFormPaymentSection.checkPurchaseOrder}}" visible="true" stepKey="checkPurchaseOrderOption" after="waitForPaymentOptions"/>
+        <fillField selector="{{AdminOrderFormPaymentSection.fieldPurchaseOrderNumber}}" userInput="{{purchaseOrderNumber}}" stepKey="fillPurchaseOrderNumber"/>
+    </actionGroup>
+
     <!-- Create Order -->
     <actionGroup name="CreateOrderActionGroup">
         <arguments>
@@ -375,6 +412,7 @@
             <argument name="customer"/>
         </arguments>
         <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
+        <waitForPageLoad stepKey="waitForNewOrderPageOpened"/>
         <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
         <waitForPageLoad stepKey="waitForStoresPageOpened"/>
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>

@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Observer;
 
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Collection as PurchasedCollection;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
@@ -16,65 +20,65 @@ class UpdateLinkPurchasedObserver implements ObserverInterface
 {
     /**
      * Core store config
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     *
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory
+     * Purchased links collection factory
+     *
+     * @var CollectionFactory
      */
-    private $purchasedFactory;
+    private $purchasedCollectionFactory;
 
     /**
-     * @var \Magento\Framework\DataObject\Copy
-     */
-    private $objectCopyService;
-
-    /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory $purchasedFactory
-     * @param \Magento\Framework\DataObject\Copy $objectCopyService
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CollectionFactory $purchasedCollectionFactory
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory $purchasedFactory,
-        \Magento\Framework\DataObject\Copy $objectCopyService
+        ScopeConfigInterface $scopeConfig,
+        CollectionFactory $purchasedCollectionFactory
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->purchasedFactory = $purchasedFactory;
-        $this->objectCopyService = $objectCopyService;
+        $this->purchasedCollectionFactory = $purchasedCollectionFactory;
     }
 
     /**
-     * Re-save order data after order update.
+     * Link customer_id to downloadable link purchased after update order
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $order = $observer->getEvent()->getOrder();
-
-        if (!$order->getId()) {
-            //order not saved in the database
+        $orderId = $order->getId();
+        $customerId = $order->getCustomerId();
+        if (!$orderId || !$customerId) {
             return $this;
         }
-
-        $purchasedLinks = $this->purchasedFactory->create()->addFieldToFilter(
-            'order_id',
-            ['eq' => $order->getId()]
-        );
-
-        foreach ($purchasedLinks as $linkPurchased) {
-            $this->objectCopyService->copyFieldsetToTarget(
-                \downloadable_sales_copy_order::class,
-                'to_downloadable',
-                $order,
-                $linkPurchased
-            );
-            $linkPurchased->save();
+        $purchasedLinksCollection = $this->getPurchasedCollection((int)$orderId);
+        foreach ($purchasedLinksCollection as $linkPurchased) {
+            $linkPurchased->setCustomerId($customerId)->save();
         }
 
         return $this;
+    }
+
+    /**
+     * Get purchased collection by order id
+     *
+     * @param int $orderId
+     * @return PurchasedCollection
+     */
+    private function getPurchasedCollection(int $orderId): PurchasedCollection
+    {
+        $purchasedCollection = $this->purchasedCollectionFactory->create()->addFieldToFilter(
+            'order_id',
+            ['eq' => $orderId]
+        );
+
+        return $purchasedCollection;
     }
 }

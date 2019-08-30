@@ -64,12 +64,13 @@ class FulltextFilter implements FilterApplierInterface
 
     /**
      * Escape against value
+     *
      * @param string $value
      * @return string
      */
     private function escapeAgainstValue(string $value): string
     {
-        return preg_replace('/([+\-><\(\)~*\"@]+)/', ' ', $value);
+        return preg_replace('/([+\-><\(\)~*@]+)/', ' ', $value);
     }
 
     /**

@@ -4,19 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/**
+ * @var \Magento\Framework\View\Element\AbstractBlock $block
+ */
 ?>
 
 <form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
     <fieldset class="admin__fieldset">
         <legend class="admin__legend">
-            <span><?= /* @escapeNotVerified */ __('Welcome, please sign in') ?></span>
+            <span><?= $block->escapeHtml(__('Welcome, please sign in')) ?></span>
         </legend><br/>
-        <input name="form_key" type="hidden" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
+        <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
         <div class="admin__field _required field-username">
             <label for="username" class="admin__field-label">
-                <span><?= /* @escapeNotVerified */ __('Username') ?></span>
+                <span><?= $block->escapeHtml(__('Username')) ?></span>
             </label>
             <div class="admin__field-control">
                 <input id="username"
@@ -26,14 +27,14 @@
                        autofocus
                        value=""
                        data-validate="{required:true}"
-                       placeholder="<?= /* @escapeNotVerified */ __('user name') ?>"
+                       placeholder="<?= $block->escapeHtmlAttr(__('user name')) ?>"
                        autocomplete="off"
                     />
             </div>
         </div>
         <div class="admin__field _required field-password">
             <label for="login" class="admin__field-label">
-                <span><?= /* @escapeNotVerified */ __('Password') ?></span>
+                <span><?= $block->escapeHtml(__('Password')) ?></span>
             </label>
             <div class="admin__field-control">
                 <input id="login"
@@ -42,7 +43,7 @@
                        name="login[password]"
                        data-validate="{required:true}"
                        value=""
-                       placeholder="<?= /* @escapeNotVerified */ __('password') ?>"
+                       placeholder="<?= $block->escapeHtmlAttr(__('password')) ?>"
                        autocomplete="off"
                     />
             </div>

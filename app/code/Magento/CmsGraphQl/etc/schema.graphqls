@@ -12,7 +12,8 @@ type StoreConfig @doc(description: "The type contains information about a store 
 
 type Query {
     cmsPage (
-        id: Int @doc(description: "Id of the CMS page")
+        id: Int @doc(description: "Id of the CMS page") @deprecated(reason: "The `id` is deprecated. Use `identifier` instead.") @doc(description: "The CMS page query returns information about a CMS page")
+        identifier: String @doc(description: "Identifier of the CMS page")
     ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Page") @doc(description: "The CMS page query returns information about a CMS page") @cache(cacheTag: "cms_p", cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Page\\Identity")
     cmsBlocks (
         identifiers: [String] @doc(description: "Identifiers of the CMS blocks")
@@ -20,6 +21,7 @@ type Query {
 }
 
 type CmsPage @doc(description: "CMS page defines all CMS page information") {
+    identifier: String @doc(description: "Identifier of the CMS page")
     url_key: String @doc(description: "URL key of CMS page")
     title: String @doc(description: "CMS page title")
     content: String @doc(description: "CMS page content")

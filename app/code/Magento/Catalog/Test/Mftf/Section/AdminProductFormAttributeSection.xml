@@ -25,6 +25,7 @@
     <section name="AdminProductFormNewAttributeAdvancedSection">
         <element name="sectionHeader" type="button" selector="div[data-index='advanced_fieldset']"/>
         <element name="defaultValue" type="textarea" selector="input[name='default_value_text']"/>
+        <element name="scope" type="select" selector="//div[@data-index='advanced_fieldset']//select[@name='is_global']"/>
     </section>
     <section name="AdminProductFormNewAttributeStorefrontSection">
         <element name="sectionHeader" type="button" selector="div[data-index='front_fieldset']"/>

@@ -15,7 +15,8 @@
         <element name="editAddressButton" type="button" selector=".action-edit-address" timeout="30"/>
         <element name="addressDropdown" type="select" selector="[name=billing_address_id]"/>
         <element name="newAddressButton" type="button" selector=".action-show-popup" timeout="30"/>
-        <element name="email" type="input" selector="#checkout-customer-email"/>
+        <element name="email" type="input" selector="input[id*=customer-email]"/>
+        <element name="password" type="input" selector="#customer-password"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
         <element name="lastName" type="input" selector="input[name=lastname]"/>
         <element name="company" type="input" selector="input[name=company]"/>
@@ -36,5 +37,9 @@
         <element name="stateInput" type="input" selector="input[name=region]"/>
         <element name="regionOptions" type="select" selector="select[name=region_id] option"/>
         <element name="editActiveAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
+        <element name="loginButton" type="button" selector=".action.login" timeout="30"/>
+        <element name="shipHereButton" type="button" selector="//div[text()='{{street}}']/button[@class='action action-select-shipping-item']" parameterized="true" timeout="30"/>
+        <element name="textFieldAttrRequireMessage" type="text" selector="//input[@name='custom_attributes[{{attribute}}]']/ancestor::div[contains(@class, 'control')]/div/span" parameterized="true" timeout="30"/>
+        <element name="textFieldAttribute" type="input" selector="[name*='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
     </section>
 </sections>

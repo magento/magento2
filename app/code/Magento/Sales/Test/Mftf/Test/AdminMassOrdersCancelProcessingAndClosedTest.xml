@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassOrdersCancelProcessingAndClosedTest">
+        <annotations>
+            <stories value="Mass Update Orders"/>
+            <title value="Mass cancel orders in status  Processing, Closed"/>
+            <description value="Try to cancel orders in status Processing, Closed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-16184"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17274"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+
+            <!-- Create Data -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create first order -->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createFirstOrder">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getFirstOrderId"/>
+        <assertNotEmpty actual="$getFirstOrderId" stepKey="assertOrderIdIsNotEmpty" after="getFirstOrderId"/>
+
+        <!-- Create Invoice for first Order -->
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
+
+        <!-- Create second order -->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createSecondOrder">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getSecondOrderId"/>
+        <assertNotEmpty actual="$getSecondOrderId" stepKey="assertSecondOrderIdIsNotEmpty" after="getSecondOrderId"/>
+
+        <!-- Create CreditMemo for second Order -->
+        <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/>
+
+        <!-- Navigate to backend: Go to Sales > Orders -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrderPage"/>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+
+        <!-- Select Mass Action according to dataset: Cancel -->
+        <actionGroup ref="AdminTwoOrderActionOnGridActionGroup" stepKey="massActionCancel">
+            <argument name="action" value="Cancel"/>
+            <argument name="orderId" value="{$getFirstOrderId}"/>
+            <argument name="secondOrderId" value="{$getSecondOrderId}"/>
+        </actionGroup>
+        <see userInput="You cannot cancel the order(s)." stepKey="assertOrderCancelMassActionFailMessage"/>
+
+        <!--Assert first order in orders grid -->
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
+            <argument name="orderId" value="{$getFirstOrderId}"/>
+            <argument name="orderStatus" value="Processing"/>
+        </actionGroup>
+        <see userInput="{$getFirstOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
+        <see userInput="Processing" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertFirstOrderStatus"/>
+
+        <!--Assert second order in orders grid -->
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeSecondOrder">
+            <argument name="orderId" value="{$getSecondOrderId}"/>
+            <argument name="orderStatus" value="Closed"/>
+        </actionGroup>
+        <see userInput="{$getSecondOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
+        <see userInput="Closed" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertSecondStatus"/>
+    </test>
+</tests>

@@ -233,5 +233,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="cms" type="Magento\Cms\Model\Plugin\Product" sortOrder="100"/>
+    </type>
 </config>
-

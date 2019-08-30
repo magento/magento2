@@ -18,6 +18,9 @@
             <testCaseId value="MC-14007"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-15934"/>
+            </skip>
         </annotations>
         <before>
             <!-- Create simple product with custom attribute set -->
@@ -28,24 +31,24 @@
                 <requiredEntity createDataKey="createAttributeSet"/>
             </createData>
 
-            <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
             <!-- Run cron twice -->
             <magentoCLI command="cron:run" stepKey="runCron1"/>
             <magentoCLI command="cron:run" stepKey="runCron2"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
         </before>
         <after>
-            <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
-                <argument name="rowIndex" value="0"/>
-            </actionGroup>
-
             <!-- Delete product creations -->
             <deleteData createDataKey="createSimpleProductWithCustomAttributeSet" stepKey="deleteSimpleProductWithCustomAttributeSet"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
+            <!-- Delete exported file -->
+            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
+                <argument name="rowIndex" value="0"/>
+            </actionGroup>
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -59,6 +62,7 @@
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
