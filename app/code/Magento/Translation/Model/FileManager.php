@@ -8,6 +8,8 @@ namespace Magento\Translation\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Translation\Model\Inline\File as TranslationFile;
+use Magento\Framework\View\Asset\File\FallbackContext as FileFallbackContext;
+use Magento\Framework\View\Asset\File;
 
 /**
  * A service for handling Translation config files
@@ -40,6 +42,11 @@ class FileManager
     private $translationFile;
 
     /**
+     * @var FileFallbackContext
+     */
+    private $staticContext;
+
+    /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
      * @param \Magento\Framework\Filesystem\Driver\File $driverFile
@@ -55,6 +62,7 @@ class FileManager
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
         $this->translationFile = $translationFile ?: ObjectManager::getInstance()->get(TranslationFile::class);
+        $this->staticContext = $assetRepo->getStaticViewFileContext();
     }
 
     /**
@@ -136,5 +144,17 @@ class FileManager
         }
 
         return sha1($translationFileHash . $this->getTranslationFilePath());
+    }
+
+    /**
+     * Create a view asset for translate dictionary config.
+     *
+     * @param string $fileName
+     * @return File
+     */
+    public function createTranslateDictionaryConfigAsset(string $fileName): File
+    {
+        $relPath = $this->staticContext->getConfigPath() . '/' . $fileName;
+        return $this->assetRepo->createArbitrary($relPath, '');
     }
 }
