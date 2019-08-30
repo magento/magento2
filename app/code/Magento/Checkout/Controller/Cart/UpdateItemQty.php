@@ -115,6 +115,8 @@ class UpdateItemQty extends \Magento\Framework\App\Action\Action
      */
     private function updateItemQuantity(Item $item, float $qty)
     {
+        $item->clearMessage();
+
         if ($qty > 0) {
             $item->setQty($qty);
 
