@@ -19,6 +19,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Cache of used products for configurable product
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class UsedProductsCache
 {
@@ -76,6 +78,7 @@ class UsedProductsCache
      * @param Product $product
      * @param array|null $requiredAttributeIds
      * @return ProductInterface[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetUsedProducts(
         Configurable $subject,
@@ -163,19 +166,21 @@ class UsedProductsCache
     private function saveUsedProductsCacheData(Product $product, array $subProducts, string $cacheKey): bool
     {
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $data = $this->serializer->serialize(array_map(
-            function ($item) {
-                return $item->getData();
-            },
-            $subProducts
-        ));
+        $data = $this->serializer->serialize(
+            array_map(
+                function ($item) {
+                    return $item->getData();
+                },
+                $subProducts
+            )
+        );
         $tags = array_merge(
             $product->getIdentities(),
             [
                 Category::CACHE_TAG,
                 Product::CACHE_TAG,
                 'price',
-                Configurable::TYPE_CODE . '_' . $product->getData($metadata->getLinkField())
+                Configurable::TYPE_CODE . '_' . $product->getData($metadata->getLinkField()),
             ]
         );
         $result = $this->cache->save($data, $cacheKey, $tags);
