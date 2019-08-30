@@ -1233,28 +1233,22 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Returns array of sub-products for specified configurable product
      *
      * $requiredAttributeIds - one dimensional array, if provided
-     *
      * Result array contains all children for specified configurable product
      *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @param  array $requiredAttributeIds
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $requiredAttributeIds
      * @return ProductInterface[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getUsedProducts($product, $requiredAttributeIds = null)
     {
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-        $keyParts = [
-            __METHOD__,
-            $product->getData($metadata->getLinkField()),
-            $product->getStoreId(),
-            $this->getCustomerSession()->getCustomerGroupId()
-        ];
-        if ($requiredAttributeIds !== null) {
-            sort($requiredAttributeIds);
-            $keyParts[] = implode('', $requiredAttributeIds);
+        if (!$product->hasData($this->_usedProducts)) {
+            $collection = $this->getConfiguredUsedProductCollection($product, false);
+            $usedProducts = array_values($collection->getItems());
+            $product->setData($this->_usedProducts, $usedProducts);
         }
-        $cacheKey = $this->getUsedProductsCacheKey($keyParts);
-        return $this->loadUsedProducts($product, $cacheKey);
+
+        return $product->getData($this->_usedProducts);
     }
 
     /**
@@ -1304,11 +1298,15 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         $dataFieldName = $salableOnly ? $this->usedSalableProducts : $this->_usedProducts;
         if (!$product->hasData($dataFieldName)) {
-            $collection = $this->getConfiguredUsedProductCollection($product, false);
-            if ($salableOnly) {
-                $collection = $this->salableProcessor->process($collection);
+            $usedProducts = $this->readUsedProductsCacheData($cacheKey);
+            if ($usedProducts === null) {
+                $collection = $this->getConfiguredUsedProductCollection($product, false);
+                if ($salableOnly) {
+                    $collection = $this->salableProcessor->process($collection);
+                }
+                $usedProducts = array_values($collection->getItems());
+                $this->saveUsedProductsCacheData($product, $usedProducts, $cacheKey);
             }
-            $usedProducts = array_values($collection->getItems());
             $product->setData($dataFieldName, $usedProducts);
         }
 
