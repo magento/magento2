@@ -68,15 +68,6 @@ interface MessageInterface
     public function setFrom($fromAddress);
 
     /**
-     * Set from message
-     *
-     * @param string $fromAddress
-     * @param string|null $fromName
-     * @return $this
-     */
-    public function setFromAddress($fromAddress, $fromName = null);
-
-    /**
      * Add to address
      *
      * @param string|array $toAddress
