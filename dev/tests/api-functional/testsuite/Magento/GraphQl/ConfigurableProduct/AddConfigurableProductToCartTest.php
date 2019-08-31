@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -68,10 +69,12 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * TODO: Verify whether exception should be thrown in this scenario
+     *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testAddVariationFromAnotherConfigurableProductToCart()
+    public function testAddVariationFromAnotherConfigurableProductWithTheSameSuperAttributeToCart()
     {
         $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
         $product = current($searchResponse['products']['items']);
@@ -107,6 +110,38 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         self::assertEquals($optionId, $option['value_id']);
         self::assertArrayHasKey('option_label', $option);
         self::assertArrayHasKey('value_label', $option);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_different_super_attribute.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage You need to choose options for your item.
+     */
+    public function testAddVariationFromAnotherConfigurableProductWithDifferentSuperAttributeToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+
+        //'configurable' -> ['simple_10', 'simple_20']
+        //'configurable_12345' -> ['simple_30', 'simple_40']
+        //'simple_20' hasn't any common configurable option with 'configurable_12345' children
+        //therefore exception is thrown
+        $sku = 'simple_20';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+
+       $this->graphQlMutation($query);
     }
 
     /**
