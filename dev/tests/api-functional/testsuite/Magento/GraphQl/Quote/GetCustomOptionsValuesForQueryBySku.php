@@ -10,8 +10,7 @@ namespace Magento\GraphQl\Quote;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 
 /**
- * Generate an array with test values for customizable options
- * based on the option type
+ * Generate an array with test values for customizable options based on the option type
  */
 class GetCustomOptionsValuesForQueryBySku
 {

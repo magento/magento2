@@ -81,7 +81,8 @@ $options = [
 $customOptions = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-$customOptionFactory = Bootstrap::getObjectManager()->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
+$customOptionFactory = Bootstrap::getObjectManager()
+    ->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
 
 foreach ($options as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $customOption */
@@ -94,5 +95,6 @@ foreach ($options as $option) {
 $product->setOptions($customOptions);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
-$productRepositoryFactory =  Bootstrap::getObjectManager()->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepositoryFactory =  Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $productRepositoryFactory->save($product);

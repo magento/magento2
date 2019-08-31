@@ -39,7 +39,8 @@ class AddDownloadableProductWithCustomOptionsToCartTest extends GraphQlAbstract
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->getCustomOptionsValuesForQueryBySku = $this->objectManager->get(GetCustomOptionsValuesForQueryBySku::class);
+        $this->getCustomOptionsValuesForQueryBySku =
+            $this->objectManager->get(GetCustomOptionsValuesForQueryBySku::class);
     }
 
     /**
@@ -65,7 +66,8 @@ class AddDownloadableProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('items', $response['addDownloadableProductsToCart']['cart']);
         self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
-        $customizableOptionsOutput = $response['addDownloadableProductsToCart']['cart']['items'][0]['customizable_options'];
+        $customizableOptionsOutput =
+            $response['addDownloadableProductsToCart']['cart']['items'][0]['customizable_options'];
         $assignedOptionsCount = count($customOptionsValues);
         for ($counter = 0; $counter < $assignedOptionsCount; $counter++) {
             $expectedValues = $this->buildExpectedValuesArray($customOptionsValues[$counter]['value_string']);
@@ -79,9 +81,6 @@ class AddDownloadableProductWithCustomOptionsToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_custom_options.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product's required option(s) weren't entered. Make sure the options are entered and try again.
      */
     public function testAddDownloadableProductWithMissedRequiredOptionsSet()
     {
@@ -94,6 +93,11 @@ class AddDownloadableProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $customizableOptions = '';
 
         $query = $this->getQuery($maskedQuoteId, $qty, $sku, $customizableOptions, $linkId);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'The product\'s required option(s) weren\'t entered. Make sure the options are entered and try again.'
+        );
 
         $this->graphQlMutation($query);
     }
@@ -148,8 +152,13 @@ class AddDownloadableProductWithCustomOptionsToCartTest extends GraphQlAbstract
      * @param $linkId
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, int $qty, string $sku, string $customizableOptions, $linkId): string
-    {
+    private function getQuery(
+        string $maskedQuoteId,
+        int $qty,
+        string $sku,
+        string $customizableOptions,
+        $linkId
+    ): string {
         $query = <<<MUTATION
 mutation {
     addDownloadableProductsToCart(
