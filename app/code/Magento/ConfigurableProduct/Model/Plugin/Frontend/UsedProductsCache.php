@@ -130,7 +130,7 @@ class UsedProductsCache
      * @param string $cacheKey
      * @return ProductInterface[]|null
      */
-    private function readUsedProductsCacheData(string $cacheKey): ?array
+    private function readUsedProductsCacheData(string $cacheKey)
     {
         $data = $this->cache->load($cacheKey);
         if (!$data) {
