@@ -117,8 +117,6 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not add the product with SKU configurable to the shopping cart: Could not find specified product.
      */
     public function testAddNonExistentConfigurableProductVariationToCart()
     {
@@ -134,6 +132,11 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
             $parentSku,
             $sku,
             2000
+        );
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
         );
 
         $this->graphQlMutation($query);
