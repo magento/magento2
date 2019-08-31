@@ -14,7 +14,7 @@
         <table class="data table">
             <thead>
             <tr>
-                <?php if (!$_order->getIsVirtual()): ?>
+                <?php if (!$_order->getIsVirtual()) : ?>
                     <th>
                         <span><?= $block->escapeHtml(__('Shipping Address')) ?></span>
                     </th>
