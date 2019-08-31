@@ -4,8 +4,7 @@
  */
 define([
     'jquery',
-    'Magento_ConfigurableProduct/js/options-updater',
-    'jquery/ui'
+    'Magento_ConfigurableProduct/js/options-updater'
 ], function ($, Updater) {
     'use strict';
 
