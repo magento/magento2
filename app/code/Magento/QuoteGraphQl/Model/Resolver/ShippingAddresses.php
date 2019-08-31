@@ -44,6 +44,10 @@ class ShippingAddresses implements ResolverInterface
         $cart = $value['model'];
 
         $addressesData = [];
+        if (!$cart->getExtensionAttributes()->getShippingAssignments()) {
+            return $addressesData;
+        }
+
         $shippingAddresses = $cart->getAllShippingAddresses();
 
         if (count($shippingAddresses)) {
