@@ -412,7 +412,7 @@ define([
          */
         setShippingAsBilling: function (flag) {
             var data,
-                areasToLoad = ['billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
+                areasToLoad = ['billing_method', 'shipping_method', 'totals', 'giftmessage'];
 
             this.disableShippingAddress(flag);
             data = this.serializeData(flag ? this.billingAddressContainer : this.shippingAddressContainer);
