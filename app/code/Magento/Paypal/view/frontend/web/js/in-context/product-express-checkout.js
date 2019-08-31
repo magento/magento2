@@ -21,15 +21,22 @@ define([
         /** @inheritdoc */
         initialize: function (config, element) {
             var cart = customerData.get('cart'),
-                customer = customerData.get('customer');
+                customer = customerData.get('customer'),
+                isGuestCheckoutAllowed;
 
             this._super();
+
+            isGuestCheckoutAllowed = cart().isGuestCheckoutAllowed;
+
+            if (typeof isGuestCheckoutAllowed === 'undefined') {
+                isGuestCheckoutAllowed = config.clientConfig.isGuestCheckoutAllowed;
+            }
 
             if (config.clientConfig.isVisibleOnProductPage) {
                 this.renderPayPalButtons(element);
             }
 
-            this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+            this.declinePayment = !customer().firstname && !isGuestCheckoutAllowed;
 
             return this;
         },

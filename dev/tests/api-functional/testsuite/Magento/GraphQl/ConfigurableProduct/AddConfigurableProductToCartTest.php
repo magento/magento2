@@ -69,6 +69,78 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddMultipleConfigurableProductToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantityOne = 1;
+        $quantityTwo = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+        $skuOne = 'simple_10';
+        $skuTwo = 'simple_20';
+        $valueIdOne = $product['configurable_options'][0]['values'][0]['value_index'];
+
+        $query = <<<QUERY
+mutation {
+  addConfigurableProductsToCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    cart_items:[
+      {
+        parent_sku:"{$parentSku}"
+        data:{
+          sku:"{$skuOne}"
+          quantity:{$quantityOne}
+        }
+      }
+      {
+        parent_sku:"{$parentSku}"
+        data:{
+          sku:"{$skuTwo}"
+          quantity:{$quantityTwo}
+        }
+      }
+    ]
+  }) {
+    cart {
+      items {
+        id
+        quantity
+        product {
+          sku
+        }
+        ... on ConfigurableCartItem {
+          configurable_options {
+            option_label
+            value_label
+            value_id
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($query);
+
+        $cartItems = $response['addConfigurableProductsToCart']['cart']['items'];
+        self::assertCount(2, $cartItems);
+
+        foreach ($cartItems as $cartItem) {
+            if ($cartItem['configurable_options'][0]['value_id'] === $valueIdOne) {
+                self::assertEquals($quantityOne, $cartItem['quantity']);
+            } else {
+                self::assertEquals($quantityTwo, $cartItem['quantity']);
+            }
+        }
+    }
+
+    /**
      * TODO: Verify whether exception should be thrown in this scenario
      *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
@@ -141,7 +213,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
             $quantity
         );
 
-       $this->graphQlMutation($query);
+        $this->graphQlMutation($query);
     }
 
     /**
