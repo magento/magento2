@@ -166,7 +166,6 @@
                 <label translate="true">Price</label>
             </settings>
         </column>
-        
         <column name="visibility" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
             <settings>
                 <addField>true</addField>
