@@ -32,18 +32,18 @@
             </thead>
             <tbody class="block-content">
                 <tr>
-                    <?php if (!$_order->getIsVirtual()): ?>
+                    <?php if (!$_order->getIsVirtual()) : ?>
                         <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>">
                             <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getShippingAddress()) ?></address>
                         </td>
                         <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>">
-                            <?php if ($_order->getShippingDescription()): ?>
+                            <?php if ($_order->getShippingDescription()) : ?>
                                 <?= $block->escapeHtml($_order->getShippingDescription()) ?>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <?= $block->escapeHtml(__('No shipping information available')) ?>
-                            <?php endif; ?>
+                            <?php endif ?>
                         </td>
-                    <?php endif; ?>
+                    <?php endif ?>
                     <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>">
                         <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getBillingAddress()) ?></address>
                     </td>
