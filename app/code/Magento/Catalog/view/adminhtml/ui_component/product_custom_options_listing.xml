@@ -112,27 +112,6 @@
                 <label translate="true">Price</label>
             </settings>
         </column>
-        <column name="special_price" class="Magento\Catalog\Ui\Component\Listing\Columns\SpecialPrice" sortOrder="70">
-            <settings>
-                <addField>true</addField>
-                <filter>textRange</filter>
-                <label translate="true">Special Price</label>
-            </settings>
-        </column>
-        <column name="cost" class="Magento\Catalog\Ui\Component\Listing\Columns\Cost" sortOrder="70">
-            <settings>
-                <addField>true</addField>
-                <filter>textRange</filter>
-                <label translate="true">Cost</label>
-            </settings>
-        </column>
-        <column name="msrp" class="Magento\Catalog\Ui\Component\Listing\Columns\MSRP" sortOrder="70">
-            <settings>
-                <addField>true</addField>
-                <filter>textRange</filter>
-                <label translate="true">MSRP</label>
-            </settings>
-        </column>
         <column name="qty" sortOrder="80">
             <settings>
                 <addField>true</addField>
@@ -155,6 +134,27 @@
                 <options class="Magento\Store\Model\ResourceModel\Website\Collection"/>
                 <dataType>select</dataType>
                 <label translate="true">Websites</label>
+            </settings>
+        </column>
+        <column name="special_price" class="Magento\Catalog\Ui\Component\Listing\Columns\SpecialPrice" sortOrder="110">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true">Special Price</label>
+            </settings>
+        </column>
+        <column name="cost" class="Magento\Catalog\Ui\Component\Listing\Columns\Cost" sortOrder="120">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true">Cost</label>
+            </settings>
+        </column>
+        <column name="msrp" class="Magento\Catalog\Ui\Component\Listing\Columns\MSRP" sortOrder="130">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true">MSRP</label>
             </settings>
         </column>
         <actionsColumn name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions" sortOrder="200">
