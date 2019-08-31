@@ -35,7 +35,7 @@
             <waitForPageLoad stepKey="waitToClickSave"/>
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
             <!-- Logout -->
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!-- Go to the edit page for the "color" attribute -->

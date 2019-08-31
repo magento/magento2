@@ -148,7 +148,7 @@
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="multiple_address_customer" stepKey="deleteCustomer"/>

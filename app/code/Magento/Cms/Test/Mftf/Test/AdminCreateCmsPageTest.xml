@@ -23,7 +23,7 @@
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>

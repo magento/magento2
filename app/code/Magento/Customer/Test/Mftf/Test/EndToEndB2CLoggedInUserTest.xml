@@ -25,7 +25,7 @@
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
         <!-- Step 0: User signs up an account -->
         <comment userInput="Start of signing up user account" stepKey="startOfSigningUpUserAccount" />
