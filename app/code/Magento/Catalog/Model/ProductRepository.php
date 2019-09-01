@@ -304,6 +304,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('_edit_mode', true);
             }
             $product->load($productId);
+            if (!$product->getId()) {
+                throw new NoSuchEntityException(
+                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                );
+            }
             $productWebsites = $product->getExtensionAttributes()->getWebsiteIds();
             if ($storeId !== null) {
                 if (in_array($storeId, $productWebsites) || $storeId == $defaultAdminStoreId) {
@@ -316,11 +321,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                         )
                     );
                 }
-            }
-            if (!$product->getId()) {
-                throw new NoSuchEntityException(
-                    __("The product that was requested doesn't exist. Verify the product and try again.")
-                );
             }
             $this->cacheProduct($cacheKey, $product);
         }
