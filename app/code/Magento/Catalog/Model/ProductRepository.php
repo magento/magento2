@@ -297,15 +297,26 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
+        $defaultAdminStoreId = 0;
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
             if ($editMode) {
                 $product->setData('_edit_mode', true);
             }
-            if ($storeId !== null) {
-                $product->setData('store_id', $storeId);
-            }
             $product->load($productId);
+            $productWebsites = $product->getExtensionAttributes()->getWebsiteIds();
+            if ($storeId !== null) {
+                if (in_array($storeId, $productWebsites) || $storeId == $defaultAdminStoreId) {
+                    $product->setData('store_id', $storeId);
+                } else {
+                    throw new NoSuchEntityException(
+                        __(
+                            "The product that was requested doesn't exist(assigned) for requested website. 
+                        Verify the product and try again."
+                        )
+                    );
+                }
+            }
             if (!$product->getId()) {
                 throw new NoSuchEntityException(
                     __("The product that was requested doesn't exist. Verify the product and try again.")
@@ -387,8 +398,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Assign product to websites.
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
+     *
      * @return void
+     * @throws NoSuchEntityException
      */
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
