@@ -120,13 +120,11 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
      */
     public function save(ShipmentTrackInterface $entity)
     {
-        $shipments = $this->shipmentCollection->create()->addFieldToFilter('order_id', $entity['order_id']);
-        $shipmentId = [];
-        foreach ($shipments->getItems() as $shipment) {
-            $shipmentId[] = $shipment->getId();
-        }
+        $shipments = $this->shipmentCollection->create()
+            ->addFieldToFilter('entity_id', $entity['parent_id'])
+            ->toArray();
 
-        if (array_search($entity['parent_id'], $shipmentId) === false) {
+        if (empty($shipments['items'])) {
             $this->logger->error('The shipment doesn\'t belong to the order.');
             throw new CouldNotSaveException(__('Could not save the shipment tracking.'));
         }
