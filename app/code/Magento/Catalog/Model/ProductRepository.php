@@ -309,9 +309,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     __("The product that was requested doesn't exist. Verify the product and try again.")
                 );
             }
-            $productWebsites = $product->getExtensionAttributes()->getWebsiteIds();
+            $productStoreIds = $this->getProductStoreIds($product);
             if ($storeId !== null) {
-                if (in_array($storeId, $productWebsites) || $storeId == $defaultAdminStoreId) {
+                if (in_array($storeId, $productStoreIds) || $storeId == $defaultAdminStoreId) {
                     $product->setData('store_id', $storeId);
                 } else {
                     throw new NoSuchEntityException(
@@ -865,5 +865,25 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $e
             );
         }
+    }
+
+    /**
+     * Getting store ids of a product
+     *
+     * @param Product $product
+     *
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getProductStoreIds($product): array
+    {
+        $productStoreIds = [];
+
+        $productWebsites = $product->getExtensionAttributes()->getWebsiteIds();
+        foreach ($productWebsites as $key => $value) {
+            $websiteStoreIds = $this->storeManager->getWebsite($value)->getStoreIds();
+            $productStoreIds += $websiteStoreIds;
+        }
+        return $productStoreIds;
     }
 }
