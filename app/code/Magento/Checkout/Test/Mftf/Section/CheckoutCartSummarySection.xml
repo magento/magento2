@@ -33,5 +33,7 @@
         <element name="methodName" type="text" selector="#co-shipping-method-form label"/>
         <element name="shippingPrice" type="text" selector="#co-shipping-method-form span .price"/>
         <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true"/>
+        <element name="orderTotal" type="input" selector=".grand.totals .amount .price"/>
+        <element name="subTotal" type="input" selector="span[data-th='Subtotal']"/>
     </section>
 </sections>
