@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Cms\Model\Page;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Store\Api\Data\StoreInterface;
@@ -104,15 +103,12 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing store switching using cms pages with the same url_key but with different page_id
      *
-     * @magentoDataFixture Magento/Cms/_files/pages.php
-     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/Cms/_files/two_cms_page_with_same_url_for_different_stores.php
      * @magentoDbIsolation disabled
      * @return void
      */
     public function testSwitchCmsPageToAnotherStore(): void
     {
-        $storeId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
-        $this->createCmsPage($storeId);
         $fromStore = $this->getStoreByCode('default');
         $toStore = $this->getStoreByCode('fixture_second_store');
         $redirectUrl = "http://localhost/index.php/page100/";
@@ -151,26 +147,7 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      */
     private function getStoreByCode(string $storeCode): StoreInterface
     {
-        /** @var StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
-        return $storeRepository->get($storeCode);
-    }
-
-    /**
-     * Create cms page for store with store id from parameters
-     *
-     * @param int $storeId
-     * @return void
-     */
-    private function createCmsPage(int $storeId): void
-    {
-        /** @var $page \Magento\Cms\Model\Page */
-        $page = $this->objectManager->create(Page::class);
-        $page->setTitle('Test cms page')
-            ->setIdentifier('page100')
-            ->setStores([$storeId])
-            ->setIsActive(1)
-            ->setPageLayout('1column')
-            ->save();
+        /** @var StoreRepositoryInterface */
+        return $this->storeManager->getStore($storeCode);
     }
 }
