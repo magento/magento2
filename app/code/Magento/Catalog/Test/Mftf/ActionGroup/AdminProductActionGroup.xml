@@ -152,6 +152,7 @@
             <description>EXTENDS: saveProductForm. Removes 'seeSaveConfirmation'.</description>
         </annotations>
         
+        <remove keyForRemoval="waitProductSaveSuccessMessage"/>
         <remove keyForRemoval="seeSaveConfirmation"/>
     </actionGroup>
 
