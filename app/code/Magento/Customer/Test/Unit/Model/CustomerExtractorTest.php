@@ -144,16 +144,6 @@ class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-//        $this->customerGroupManagement->expects($this->once())
-//            ->method('getDefaultGroup')
-//            ->with(1)
-//            ->willReturn($this->customerGroup);
-//        $this->customerGroup->expects($this->once())
-//            ->method('getId')
-//            ->willReturn(1);
-//        $this->customerData->expects($this->once())
-//            ->method('setGroupId')
-//            ->with(1);
         $this->store->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn(1);
