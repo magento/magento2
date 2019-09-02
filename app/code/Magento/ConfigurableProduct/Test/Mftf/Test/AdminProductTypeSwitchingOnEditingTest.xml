@@ -10,8 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminSimpleProductTypeSwitchingToConfigurableProductTest">
         <annotations>
-            <features value="Catalog"/>
-            <stories value="Switch product type"/>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
             <title value="Simple product type switching on editing to configurable product"/>
             <description value="Simple product type switching on editing to configurable product"/>
             <testCaseId value="MAGETWO-29633"/>
@@ -75,8 +75,8 @@
     </test>
     <test name="AdminConfigurableProductTypeSwitchingToVirtualProductTest" extends="AdminSimpleProductTypeSwitchingToConfigurableProductTest">
         <annotations>
-            <features value="Catalog"/>
-            <stories value="Switch product type"/>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
             <title value="Configurable product type switching on editing to virtual product"/>
             <description value="Configurable product type switching on editing to virtual product"/>
             <testCaseId value="MC-17952"/>
@@ -114,8 +114,8 @@
     </test>
     <test name="AdminVirtualProductTypeSwitchingToConfigurableProductTest">
         <annotations>
-            <features value="Catalog"/>
-            <stories value="Switch product type"/>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
             <title value="Virtual product type switching on editing to configurable product"/>
             <description value="Virtual product type switching on editing to configurable product"/>
             <testCaseId value="MC-17953"/>

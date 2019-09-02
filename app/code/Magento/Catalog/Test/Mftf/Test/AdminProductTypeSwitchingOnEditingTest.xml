@@ -11,7 +11,7 @@
     <test name="AdminVirtualProductTypeSwitchingToDownloadableProductTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Switch product type"/>
+            <stories value="Product type switching"/>
             <title value="Virtual product type switching on editing to Downloadable product"/>
             <description value="Virtual product type switching on editing to Downloadable product"/>
             <testCaseId value="MC-17954"/>
@@ -62,7 +62,7 @@
     <test name="AdminDownloadableProductTypeSwitchingToSimpleProductTest" extends="AdminVirtualProductTypeSwitchingToDownloadableProductTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Switch product type"/>
+            <stories value="Product type switching"/>
             <title value="Downloadable product type switching on editing to Simple product"/>
             <description value="Downloadable product type switching on editing to Simple product"/>
             <testCaseId value="MC-17955"/>
