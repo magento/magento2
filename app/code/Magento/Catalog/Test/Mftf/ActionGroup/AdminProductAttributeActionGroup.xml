@@ -320,10 +320,10 @@
         <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" stepKey="checkRequired" userInput="{{attribute.is_required_admin}}"/>
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
     </actionGroup>
-    <actionGroup name="CreateSearchableProductAttribute" extends="createProductAttribute" insertAfter="checkRequired">
+    <actionGroup name="StorefrontCreateSearchableProductAttribute" extends="createProductAttribute" insertAfter="checkRequired">
         <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab"/>
         <waitForElementVisible selector="{{StorefrontPropertiesSection.PageTitle}}" stepKey="waitTabLoad"/>
-        <selectOption selector="{{StorefrontPropertiesSection.isSearchable}}" userInput="Yes" stepKey="setSearchable"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="setSearchable"/>
     </actionGroup>
 
     <!-- Inputs text default value and attribute code-->

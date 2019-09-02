@@ -11,6 +11,7 @@
     <test name="StrorefrontElasticsearchSearchInvalidValueTest">
         <annotations>
             <features value="Search"/>
+            <stories value="Searches That Contain Question Mark Followed by Semicolon Will Result In Error Page"/>
             <title value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
             <description value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
             <severity value="MAJOR"/>
@@ -49,7 +50,7 @@
         <!--Create new searchable product attribute-->
         <comment userInput="Create new searchable product attribute" stepKey="commentCreateAttribute"/>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-        <actionGroup ref="CreateSearchableProductAttribute" stepKey="createAttribute">
+        <actionGroup ref="StorefrontCreateSearchableProductAttribute" stepKey="createAttribute">
             <argument name="attribute" value="textProductAttribute"/>
         </actionGroup>
         <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
