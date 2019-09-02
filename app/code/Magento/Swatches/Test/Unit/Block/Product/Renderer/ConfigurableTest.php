@@ -5,6 +5,7 @@
  */
 namespace Magento\Swatches\Test\Unit\Block\Product\Renderer;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\Swatches\Model\Swatch;
 
@@ -150,11 +151,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private function prepareGetJsonSwatchConfig()
     {
         $product1 = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product1->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
+        $product1->expects($this->any())->method('isSaleable')->willReturn(true);
+        $product1->expects($this->atLeastOnce())->method('getStatus')->willReturn(Status::STATUS_ENABLED);
         $product1->expects($this->atLeastOnce())->method('getData')->with('code')->willReturn(1);
 
         $product2 = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product2->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
+        $product2->expects($this->any())->method('isSaleable')->willReturn(true);
+        $product2->expects($this->atLeastOnce())->method('getStatus')->willReturn(Status::STATUS_ENABLED);
         $product2->expects($this->atLeastOnce())->method('getData')->with('code')->willReturn(3);
 
         $simpleProducts = [$product1, $product2];
