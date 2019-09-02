@@ -20,6 +20,7 @@ use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * Test store switching
  */
 class RewriteUrlTest extends \PHPUnit\Framework\TestCase
