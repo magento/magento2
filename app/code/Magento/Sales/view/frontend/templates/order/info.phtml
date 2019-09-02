@@ -33,7 +33,7 @@
             <tbody class="block-content">
                 <tr>
                     <?php if (!$_order->getIsVirtual()) : ?>
-                        <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>">
+                        <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>" class="order-shipping-address">
                             <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getShippingAddress()) ?></address>
                         </td>
                         <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>">
@@ -44,7 +44,7 @@
                             <?php endif ?>
                         </td>
                     <?php endif ?>
-                    <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>">
+                    <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>" class="order-billing-address">
                         <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getBillingAddress()) ?></address>
                     </td>
                     <td class="box-content" data-th="<?= $block->escapeHtml(__('Payment Method')) ?>">
