@@ -120,6 +120,8 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Skip page by page type
+     *
      * @param string $pageType
      * @return bool
      */
