@@ -54,7 +54,7 @@ class Actions extends AbstractRenderer
 
         $markAsReadHtml = !$row->getData('is_read') ? '<a class="action-mark" href="' . $this->getUrl(
             '*/*/markAsRead/',
-            ['_current' => true, 'id' => $row->getData('id')]
+            ['_current' => true, 'id' => $row->getData('notification_id')]
         ) . '">' . __(
             'Mark as Read'
         ) . '</a>' : '';
@@ -68,7 +68,7 @@ class Actions extends AbstractRenderer
                 '*/*/remove/',
                 [
                     '_current' => true,
-                    'id' => $row->getData('id'),
+                    'id' => $row->getData('notification_id'),
                     ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
                 ]
             ),
