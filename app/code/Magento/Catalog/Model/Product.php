@@ -472,6 +472,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->mediaGalleryEntryConverterPool = $mediaGalleryEntryConverterPool;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
+        $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
+        $this->filterCustomAttribute = $filterCustomAttribute
+            ?? ObjectManager::getInstance()->get(FilterProductCustomAttribute::class);
         parent::__construct(
             $context,
             $registry,
@@ -482,9 +485,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $resourceCollection,
             $data
         );
-        $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
-        $this->filterCustomAttribute = $filterCustomAttribute
-            ?? ObjectManager::getInstance()->get(FilterProductCustomAttribute::class);
     }
 
     /**
@@ -835,10 +835,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 if ($this->_storeManager->isSingleStoreMode()) {
                     $websiteIds = array_keys($websiteIds);
                 }
-                foreach ($websiteIds as $websiteId) {
-                    $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
-                    $storeIds = array_merge($storeIds, $websiteStores);
-                }
+                $websiteStoreIds = array_map(function (int $websiteId): array {
+                    return $this->_storeManager->getWebsite($websiteId)->getStoreIds();
+                }, $websiteIds);
+                $storeIds = array_merge($storeIds, ...$websiteStoreIds);
             }
             $this->setStoreIds($storeIds);
         }

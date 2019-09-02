@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\TestFramework\ObjectManager;
 
 /**
  * Tests product model:
@@ -49,8 +51,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\FileSystemException
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public static function tearDownAfterClass()
     {
@@ -307,9 +309,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->_model = $this->productRepository->get('simple');
 
         // fixture
-        $this->assertTrue((bool)$this->_model->isSalable());
-        $this->assertTrue((bool)$this->_model->isSaleable());
-        $this->assertTrue((bool)$this->_model->isAvailable());
+        $this->assertTrue((bool) $this->_model->isSalable());
+        $this->assertTrue((bool) $this->_model->isSaleable());
+        $this->assertTrue((bool) $this->_model->isAvailable());
         $this->assertTrue($this->_model->isInStock());
     }
 
@@ -324,9 +326,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->_model = $this->productRepository->get('simple');
 
         $this->_model->setStatus(0);
-        $this->assertFalse((bool)$this->_model->isSalable());
-        $this->assertFalse((bool)$this->_model->isSaleable());
-        $this->assertFalse((bool)$this->_model->isAvailable());
+        $this->assertFalse((bool) $this->_model->isSalable());
+        $this->assertFalse((bool) $this->_model->isSaleable());
+        $this->assertFalse((bool) $this->_model->isAvailable());
         $this->assertFalse($this->_model->isInStock());
     }
 
@@ -585,7 +587,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 continue;
             }
             foreach ($option->getValues() as $value) {
-                $this->assertEquals($expectedValue[$value->getSku()], (float)$value->getPrice());
+                $this->assertEquals($expectedValue[$value->getSku()], (float) $value->getPrice());
             }
         }
     }
@@ -631,5 +633,41 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             [-1, 1, true],
             [1, 1, true],
         ];
+    }
+
+    public function testConstructionWithCustomAttributesMapInData()
+    {
+        $data = [
+            'custom_attributes' => [
+                'tax_class_id' => '3',
+                'category_ids' => '1,2'
+            ],
+        ];
+
+        /** @var Product $product */
+        $product = ObjectManager::getInstance()->create(Product::class, ['data' => $data]);
+        $this->assertSame($product->getCustomAttribute('tax_class_id')->getValue(), '3');
+        $this->assertSame($product->getCustomAttribute('category_ids')->getValue(), '1,2');
+    }
+
+    public function testConstructionWithCustomAttributesArrayInData()
+    {
+        $data = [
+            'custom_attributes' => [
+                [
+                    'attribute_code' => 'tax_class_id',
+                    'value' => '3'
+                ],
+                [
+                    'attribute_code' => 'category_ids',
+                    'value' => '1,2'
+                ]
+            ],
+        ];
+
+        /** @var Product $product */
+        $product = ObjectManager::getInstance()->create(Product::class, ['data' => $data]);
+        $this->assertSame($product->getCustomAttribute('tax_class_id')->getValue(), '3');
+        $this->assertSame($product->getCustomAttribute('category_ids')->getValue(), '1,2');
     }
 }
