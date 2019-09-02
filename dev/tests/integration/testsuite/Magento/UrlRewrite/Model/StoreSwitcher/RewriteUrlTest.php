@@ -8,14 +8,20 @@ declare(strict_types=1);
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Cms\Model\Page;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Test store switching
+ */
 class RewriteUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -34,6 +40,11 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Class dependencies initialization
      *
      * @return void
@@ -43,9 +54,12 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeSwitcher = $this->objectManager->get(StoreSwitcher::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->storeManager = $this->objectManager->create(StoreManagerInterface::class);
     }
 
     /**
+     * Test switching stores with non-existent cms pages and then redirecting to the homepage
+     *
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @return void
@@ -54,15 +68,8 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testSwitchToNonExistingPage(): void
     {
-        $fromStoreCode = 'default';
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $fromStore = $storeRepository->get($fromStoreCode);
-
-        $toStoreCode = 'fixture_second_store';
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $toStore = $storeRepository->get($toStoreCode);
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
 
         $this->setBaseUrl($toStore);
 
@@ -75,6 +82,8 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Testing store switching with existing cms pages
+     *
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
@@ -82,19 +91,31 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testSwitchToExistingPage(): void
     {
-        $fromStoreCode = 'default';
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $fromStore = $storeRepository->get($fromStoreCode);
-
-        $toStoreCode = 'fixture_second_store';
-        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
-        $toStore = $storeRepository->get($toStoreCode);
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
 
         $redirectUrl = "http://localhost/index.php/page-c/";
         $expectedUrl = "http://localhost/index.php/page-c-on-2nd-store";
 
+        $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+    }
+
+    /**
+     * Testing store switching using cms pages with the same url_key but with different page_id
+     *
+     * @magentoDataFixture Magento/Cms/_files/pages.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDbIsolation disabled
+     * @return void
+     */
+    public function testSwitchCmsPageToAnotherStore(): void
+    {
+        $storeId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
+        $this->createCmsPage($storeId);
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
+        $redirectUrl = "http://localhost/index.php/page100/";
+        $expectedUrl = "http://localhost/index.php/page100/";
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
     }
 
@@ -119,5 +140,36 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
 
         $reinitibleConfig = $this->objectManager->create(ReinitableConfigInterface::class);
         $reinitibleConfig->reinit();
+    }
+
+    /**
+     * Get store object by storeCode
+     *
+     * @param string $storeCode
+     * @return StoreInterface
+     */
+    private function getStoreByCode(string $storeCode): StoreInterface
+    {
+        /** @var StoreRepositoryInterface $storeRepository */
+        $storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
+        return $storeRepository->get($storeCode);
+    }
+
+    /**
+     * Create cms page for store with store id from parameters
+     *
+     * @param int $storeId
+     * @return void
+     */
+    private function createCmsPage(int $storeId): void
+    {
+        /** @var $page \Magento\Cms\Model\Page */
+        $page = $this->objectManager->create(Page::class);
+        $page->setTitle('Test cms page')
+            ->setIdentifier('page100')
+            ->setStores([$storeId])
+            ->setIsActive(1)
+            ->setPageLayout('1column')
+            ->save();
     }
 }
