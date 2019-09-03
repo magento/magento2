@@ -279,7 +279,7 @@ define([
             if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
                 setTimeout(function() {
                     invalidField.focused(true);
-                }, 30);
+                }, 100);
             }
 
             return this;
