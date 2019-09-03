@@ -18,7 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class LayoutUpdate extends AbstractBackend
 {
-    private const VALUE_USE_UPDATE_XML = '__existing__';
+    public const VALUE_USE_UPDATE_XML = '__existing__';
 
     /**
      * @var LayoutUpdateManager
@@ -91,10 +91,7 @@ class LayoutUpdate extends AbstractBackend
     public function beforeSave($object)
     {
         $value = $this->extractValue($object);
-        if ($value !== self::VALUE_USE_UPDATE_XML) {
-            $object->setCustomAttribute('custom_layout_update', null);
-            $object->setData('custom_layout_update', null);
-        } else {
+        if ($value === self::VALUE_USE_UPDATE_XML) {
             $value = null;
         }
         $this->setValue($value, $object);
