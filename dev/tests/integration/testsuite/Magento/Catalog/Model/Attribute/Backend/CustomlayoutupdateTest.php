@@ -104,7 +104,10 @@ class CustomlayoutupdateTest extends TestCase
         //Existing update chosen
         $this->category->setCustomAttribute('custom_layout_update', 'test');
         $this->category->setOrigData('custom_layout_update', 'test');
-        $this->category->setCustomAttribute('custom_layout_update_file', '__existing__');
+        $this->category->setCustomAttribute(
+            'custom_layout_update_file',
+            \Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML
+        );
         $this->attribute->beforeSave($this->category);
         $this->assertEquals('test', $this->category->getCustomAttribute('custom_layout_update')->getValue());
         /** @var AbstractBackend $fileAttribute */

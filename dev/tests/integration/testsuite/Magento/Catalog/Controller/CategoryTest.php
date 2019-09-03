@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Controller;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -122,12 +123,12 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var CategoryLayoutUpdateManager $layoutManager */
         $layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
         $layoutManager->setCategoryFakeFiles($categoryId, [$file]);
-        /** @var Category $category */
-        $category = Bootstrap::getObjectManager()->create(Category::class);
-        $category->load($categoryId);
+        /** @var CategoryRepositoryInterface $categoryRepo */
+        $categoryRepo = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
+        $category = $categoryRepo->get($categoryId);
         //Updating the custom attribute.
-        $category->setData('custom_layout_update_file', $file);
-        $category->save();
+        $category->setCustomAttribute('custom_layout_update_file', $file);
+        $categoryRepo->save($category);
 
         //Viewing the category
         $this->dispatch("catalog/category/view/id/$categoryId");

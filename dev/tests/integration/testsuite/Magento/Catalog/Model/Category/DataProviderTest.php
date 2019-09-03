@@ -5,11 +5,14 @@
  */
 namespace Magento\Catalog\Model\Category;
 
-use Magento\Catalog\Model\Category\DataProvider;
-use Magento\Eav\Model\Config as EavConfig;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Registry;
+use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
 
-class DataProviderTest extends \PHPUnit\Framework\TestCase
+class DataProviderTest extends TestCase
 {
     /**
      * @var DataProvider
@@ -17,9 +20,31 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $dataProvider;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Type
+     * @var Registry
      */
-    private $entityType;
+    private $registry;
+
+    /**
+     * @var CategoryFactory
+     */
+    private $categoryFactory;
+
+    /**
+     * Create subject instance.
+     *
+     * @return DataProvider
+     */
+    private function createDataProvider(): DataProvider
+    {
+        return Bootstrap::getObjectManager()->create(
+            DataProvider::class,
+            [
+                'name' => 'category_form_data_source',
+                'primaryFieldName' => 'entity_id',
+                'requestFieldName' => 'id'
+            ]
+        );
+    }
 
     /**
      * {@inheritDoc}
@@ -28,16 +53,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
-        $this->dataProvider = $objectManager->create(
-            DataProvider::class,
-            [
-                'name' => 'category_form_data_source',
-                'primaryFieldName' => 'entity_id',
-                'requestFieldName' => 'id'
-            ]
-        );
-
-        $this->entityType = $objectManager->create(EavConfig::class)->getEntityType('catalog_category');
+        $this->dataProvider = $this->createDataProvider();
+        $this->registry = $objectManager->get(Registry::class);
+        $this->categoryFactory = $objectManager->get(CategoryFactory::class);
     }
 
     /**
@@ -58,5 +76,31 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 $this->assertTrue($data['arguments']['data']['config']['validation']['required-entry']);
             }
         }
+    }
+
+    /**
+     * Check that custom layout update file attribute is processed correctly.
+     *
+     * @return void
+     */
+    public function testCustomLayoutFileAttribute(): void
+    {
+        //File has value
+        /** @var Category $category */
+        $category = $this->categoryFactory->create();
+        $category->load($id = 2);
+        $category->setData('custom_layout_update', null);
+        $category->setData('custom_layout_update_file', $file = 'test-file');
+        $this->registry->register('category', $category);
+        $data = $this->dataProvider->getData();
+        $this->assertEquals($file, $data[$id]['custom_layout_update_file']);
+
+        //File has no value, the deprecated attribute does.
+        $this->dataProvider = $this->createDataProvider();
+        $category->setData('custom_layout_update', $deprecated = 'test-deprecated');
+        $category->setData('custom_layout_update_file', null);
+        $data = $this->dataProvider->getData();
+        $this->assertEquals($deprecated, $data[$id]['custom_layout_update']);
+        $this->assertEquals(LayoutUpdate::VALUE_USE_UPDATE_XML, $data[$id]['custom_layout_update_file']);
     }
 }

@@ -39,7 +39,7 @@ class LayoutUpdate implements ModifierInterface
         if ($oldLayout = $product->getCustomAttribute('custom_layout_update')) {
             if ($oldLayout->getValue()) {
                 $data[$product->getId()][AbstractModifier::DATA_SOURCE_DEFAULT]['custom_layout_update_file']
-                    = '__existing__';
+                    = \Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
             }
         }
 

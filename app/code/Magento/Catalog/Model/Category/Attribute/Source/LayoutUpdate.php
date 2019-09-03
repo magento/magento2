@@ -69,7 +69,7 @@ class LayoutUpdate extends AbstractSource implements SpecificSourceInterface
     {
         $options = $this->getAllOptions();
         if ($entity->getCustomAttribute('custom_layout_update')) {
-            $existingValue = '__existing__';
+            $existingValue = \Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
             $existingLabel = 'Use existing';
             $options[] = ['label' => $existingLabel, 'value' => $existingValue];
             $this->optionsText[$existingValue] = $existingLabel;

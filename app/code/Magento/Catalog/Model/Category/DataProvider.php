@@ -365,8 +365,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                 }
                 if ($attribute->usesSource()) {
                     $source = $attribute->getSource();
-                    if ($source instanceof SpecificSourceInterface) {
-                        $options = $source->getOptionsFor($this->getCurrentCategory());
+                    $currentCategory = $this->getCurrentCategory();
+                    if ($source instanceof SpecificSourceInterface && $currentCategory) {
+                        $options = $source->getOptionsFor($currentCategory);
                     } else {
                         $options = $attribute->getSource()->getAllOptions();
                     }
@@ -518,6 +519,12 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private function convertValues($category, $categoryData)
     {
         foreach ($category->getAttributes() as $attributeCode => $attribute) {
+            if ($attributeCode === 'custom_layout_update_file') {
+                if (!empty($categoryData['custom_layout_update'])) {
+                    $categoryData['custom_layout_update_file']
+                        = \Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
+                }
+            }
             if (!isset($categoryData[$attributeCode])) {
                 continue;
             }
@@ -543,11 +550,6 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
                     $categoryData[$attributeCode][0]['size'] = isset($stat) ? $stat['size'] : 0;
                     $categoryData[$attributeCode][0]['type'] = $mime;
-                }
-            }
-            if ($attributeCode === 'custom_layout_update_file') {
-                if (!empty($categoryData['custom_layout_update'])) {
-                    $categoryData['custom_layout_update_file'] = '__existing__';
                 }
             }
         }
