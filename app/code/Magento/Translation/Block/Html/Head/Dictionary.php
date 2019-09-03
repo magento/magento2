@@ -27,20 +27,28 @@ class Dictionary extends Template
     protected $pageConfig;
 
     /**
+     * @var JsConfig
+     */
+    private $config;
+
+    /**
      * @param Template\Context $context
      * @param PageConfig $pageConfig
      * @param FileManager $fileManager
+     * @param JsConfig $config
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PageConfig $pageConfig,
         FileManager $fileManager,
+        JsConfig $config,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->pageConfig = $pageConfig;
         $this->fileManager = $fileManager;
+        $this->config = $config;
     }
 
     /**
@@ -54,5 +62,15 @@ class Dictionary extends Template
         $translateDictionaryConfigRelPath = $translateDictionaryConfig->getFilePath();
 
         return $this->_assetRepo->getUrl($translateDictionaryConfigRelPath);
+    }
+
+    /**
+     * Is js translation set to dictionary mode
+     *
+     * @return bool
+     */
+    public function dictionaryEnabled(): bool
+    {
+        return $this->config->dictionaryEnabled();
     }
 }
