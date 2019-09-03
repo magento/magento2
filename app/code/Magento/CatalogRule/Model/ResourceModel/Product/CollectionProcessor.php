@@ -10,7 +10,6 @@ namespace Magento\CatalogRule\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Add catalog rule prices to collection
@@ -45,33 +44,24 @@ class CollectionProcessor
     private $localeDate;
 
     /**
-     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
-     */
-    private $ruleDateFormatter;
-
-    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;
         $this->customerSession = $customerSession;
         $this->dateTime = $dateTime;
         $this->localeDate = $localeDate;
-        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -100,7 +90,7 @@ class CollectionProcessor
                             ),
                             $connection->quoteInto(
                                 'catalog_rule.rule_date = ?',
-                                $this->dateTime->formatDate($this->ruleDateFormatter->getDate($store->getId()), false)
+                                $this->dateTime->formatDate($this->localeDate->scopeDate($store->getId()), false)
                             ),
                         ]
                     ),

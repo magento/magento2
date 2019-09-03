@@ -41,15 +41,15 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
 
         $quantity = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
-        $sku = $product['sku'];
+        $parentSku = $product['sku'];
+        $sku = 'simple_20';
         $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
         $optionId = $product['configurable_options'][0]['values'][1]['value_index'];
 
         $query = $this->getQuery(
             $maskedQuoteId,
+            $parentSku,
             $sku,
-            $attributeId,
-            $optionId,
             $quantity
         );
 
@@ -57,7 +57,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
 
         $cartItem = current($response['addConfigurableProductsToCart']['cart']['items']);
         self::assertEquals($quantity, $cartItem['quantity']);
-        self::assertEquals($sku, $cartItem['product']['sku']);
+        self::assertEquals($parentSku, $cartItem['product']['sku']);
         self::assertArrayHasKey('configurable_options', $cartItem);
 
         $option = current($cartItem['configurable_options']);
@@ -70,27 +70,73 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage You need to choose options for your item
      */
-    public function testAddProductWithInvalidOptions()
+    public function testAddMultipleConfigurableProductToCart()
     {
         $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
         $product = current($searchResponse['products']['items']);
 
+        $quantityOne = 1;
+        $quantityTwo = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
-        $sku = $product['sku'];
-        $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
+        $parentSku = $product['sku'];
+        $skuOne = 'simple_10';
+        $skuTwo = 'simple_20';
+        $valueIdOne = $product['configurable_options'][0]['values'][0]['value_index'];
 
-        $query = $this->getQuery(
-            $maskedQuoteId,
-            $sku,
-            $attributeId,
-            9999,
-            1
-        );
+        $query = <<<QUERY
+mutation {
+  addConfigurableProductsToCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    cart_items:[
+      {
+        parent_sku:"{$parentSku}"
+        data:{
+          sku:"{$skuOne}"
+          quantity:{$quantityOne}
+        }
+      }
+      {
+        parent_sku:"{$parentSku}"
+        data:{
+          sku:"{$skuTwo}"
+          quantity:{$quantityTwo}
+        }
+      }
+    ]
+  }) {
+    cart {
+      items {
+        id
+        quantity
+        product {
+          sku
+        }
+        ... on ConfigurableCartItem {
+          configurable_options {
+            option_label
+            value_label
+            value_id
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
 
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+
+        $cartItems = $response['addConfigurableProductsToCart']['cart']['items'];
+        self::assertCount(2, $cartItems);
+
+        foreach ($cartItems as $cartItem) {
+            if ($cartItem['configurable_options'][0]['value_id'] === $valueIdOne) {
+                self::assertEquals($quantityOne, $cartItem['quantity']);
+            } else {
+                self::assertEquals($quantityTwo, $cartItem['quantity']);
+            }
+        }
     }
 
     /**
@@ -105,15 +151,13 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         $product = current($searchResponse['products']['items']);
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
-        $sku = $product['sku'];
-        $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
-        $optionId = $product['configurable_options'][0]['values'][1]['value_index'];
+        $parentSku = $product['sku'];
+        $sku = 'simple_20';
 
         $query = $this->getQuery(
             $maskedQuoteId,
+            $parentSku,
             $sku,
-            $attributeId,
-            $optionId,
             2000
         );
 
@@ -122,13 +166,12 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
 
     /**
      * @param string $maskedQuoteId
+     * @param string $parentSku
      * @param string $sku
-     * @param int $optionId
-     * @param int $value
      * @param int $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, string $sku, int $optionId, int $value, int $quantity): string
+    private function getQuery(string $maskedQuoteId, string $parentSku, string $sku, int $quantity): string
     {
         return <<<QUERY
 mutation {
@@ -136,11 +179,7 @@ mutation {
     input:{
       cart_id:"{$maskedQuoteId}"
       cart_items:{
-        configurable_attributes:[{
-            id:{$optionId}
-            value:{$value}
-          }
-        ]
+        parent_sku: "{$parentSku}"
         data:{
           sku:"{$sku}"
           quantity:{$quantity}

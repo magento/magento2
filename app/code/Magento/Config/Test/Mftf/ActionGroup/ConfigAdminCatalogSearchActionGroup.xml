@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ChooseElasticSearchAsSearchEngine">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Catalog'. Sets the 'Search Engine' to 'elasticsearch5'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+        
         <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="configureSearchEngine"/>
         <waitForPageLoad stepKey="waitForConfigPage"/>
         <scrollTo selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="scrollToCatalogSearchTab"/>
@@ -21,7 +25,12 @@
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
     </actionGroup>
+    
     <actionGroup name="ResetSearchEngineConfiguration">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Catalog'. Sets the 'Search Engine' to 'mysql'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+        
         <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="resetSearchEngine"/>
         <waitForPageLoad stepKey="waitForConfigPage2"/>
         <scrollTo selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="scrollToCatalogSearchTab2"/>
@@ -32,5 +41,4 @@
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration2"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage2"/>
     </actionGroup>
-
 </actionGroups>
