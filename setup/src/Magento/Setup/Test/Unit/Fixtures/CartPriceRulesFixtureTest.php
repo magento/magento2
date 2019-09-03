@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\CartPriceRulesFixture;
+use Magento\Setup\Fixtures\CartPriceRulesFixture;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -154,17 +154,17 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
         $result = $this->model->generateAdvancedCondition($ruleId, $categoriesArray);
         if ($ruleId < ($ruleCount - 200)) {
             $firstCondition = [
-                'type'      => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                 'attribute' => 'category_ids',
-                'operator'  => '==',
-                'value'     => null,
+                'operator' => '==',
+                'value' => null,
             ];
 
             $secondCondition = [
-                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'base_subtotal',
-                'operator'  => '>=',
-                'value'     => 5,
+                'operator' => '>=',
+                'value' => 5,
             ];
             $expected = [
                 'conditions' => [
@@ -174,7 +174,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
                         'value' => '1',
                         'new_child' => '',
                     ],
-                    '1--1'=> [
+                    '1--1' => [
                         'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                         'aggregator' => 'all',
                         'value' => '1',
@@ -195,25 +195,25 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
         } else {
             // Shipping Region
             $regions = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
-                        'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois',
-                        'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
-                        'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
-                        'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-                        'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
-                        'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
-                        'Wisconsin', 'Wyoming'];
+                'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois',
+                'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
+                'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+                'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+                'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                'Wisconsin', 'Wyoming'];
             $firstCondition = [
-                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'region',
-                'operator'  => '==',
-                'value'     => $regions[($ruleId / 4) % 50],
+                'operator' => '==',
+                'value' => $regions[($ruleId / 4) % 50],
             ];
 
             $secondCondition = [
-                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'base_subtotal',
-                'operator'  => '>=',
-                'value'     => 5,
+                'operator' => '>=',
+                'value' => 5,
             ];
             $expected = [
                 'conditions' => [
@@ -257,8 +257,11 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
 
     public function testIntroduceParamLabels()
     {
-        $this->assertSame([
-            'cart_price_rules' => 'Cart Price Rules'
-        ], $this->model->introduceParamLabels());
+        $this->assertSame(
+            [
+                'cart_price_rules' => 'Cart Price Rules'
+            ],
+            $this->model->introduceParamLabels()
+        );
     }
 }
