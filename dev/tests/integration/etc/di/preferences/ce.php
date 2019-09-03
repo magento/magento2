@@ -32,5 +32,7 @@ return [
     \Magento\Framework\Session\SessionStartChecker::class => \Magento\TestFramework\Session\SessionStartChecker::class,
     \Magento\Framework\HTTP\AsyncClientInterface::class => \Magento\TestFramework\HTTP\AsyncClientInterfaceMock::class,
     \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class =>
-        \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class
+        \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class,
+    \Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager::class =>
+        \Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager::class
 ];

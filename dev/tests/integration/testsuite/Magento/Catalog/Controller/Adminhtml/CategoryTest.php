@@ -642,6 +642,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             MessageInterface::TYPE_ERROR
         );
     }
+
     /**
      * Test custom update files functionality.
      *

@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Message\Manager;
@@ -12,6 +13,8 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ProductRepositoryFactory;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -441,5 +444,60 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             self::equalTo($sessionMessages),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * Test custom update files functionality.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveCustomLayout(): void
+    {
+        $file = 'test_file';
+        /** @var ProductRepository $repo */
+        $repo = $this->repositoryFactory->create();
+        $product = $repo->get('simple');
+        /** @var ProductLayoutUpdateManager $layoutManager */
+        $layoutManager = Bootstrap::getObjectManager()->get(ProductLayoutUpdateManager::class);
+        $layoutManager->setFakeFiles((int)$product->getId(), [$file]);
+        $requestData = [
+            'product' => $product->getData()
+        ];
+        $uri = 'backend/catalog/product/save';
+
+        //Saving a wrong file
+        $requestData['product']['custom_layout_update_file'] = $file . 'INVALID';
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('id', $product->getId());
+        $this->dispatch($uri);
+        $this->assertSessionMessages(
+            self::equalTo(['tst']),
+            MessageInterface::TYPE_ERROR
+        );
+
+        //Checking that the value is not saved
+        /** @var ProductRepository $repo */
+        $repo = $this->repositoryFactory->create();
+        $product = $repo->get('simple');
+        $this->assertEmpty($product->getData('custom_layout_update_file'));
+
+        //Saving the correct file
+        $requestData['product']['custom_layout_update_file'] = $file;
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('id', $product->getId());
+        $this->dispatch($uri);
+
+        //Checking that the value is saved
+        /** @var ProductRepository $repo */
+        $repo = $this->repositoryFactory->create();
+        $product = $repo->get('simple');
+        $this->assertEquals($file, $product->getData('custom_layout_update_file'));
     }
 }
