@@ -39,6 +39,8 @@ class Discount extends \Magento\Checkout\Block\Total\DefaultTotal
     }
 
     /**
+     * Get display including and excluding tax config
+     *
      * @return bool
      */
     public function displayBoth()
