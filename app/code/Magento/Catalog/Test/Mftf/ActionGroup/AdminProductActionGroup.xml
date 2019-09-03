@@ -149,7 +149,7 @@
     <!-- Save product but do not expect a success message -->
     <actionGroup name="SaveProductFormNoSuccessCheck" extends="saveProductForm">
         <annotations>
-            <description>EXTENDS: saveProductForm. Removes 'seeSaveConfirmation'.</description>
+            <description>EXTENDS: saveProductForm. Removes 'waitProductSaveSuccessMessage' and 'seeSaveConfirmation'.</description>
         </annotations>
         
         <remove keyForRemoval="waitProductSaveSuccessMessage"/>

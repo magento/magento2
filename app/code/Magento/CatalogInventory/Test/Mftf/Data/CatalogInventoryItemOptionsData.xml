@@ -8,13 +8,6 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="ZeroValueForMaxSaleQty" type="cataloginventory_item_options">
-        <requiredEntity type="max_sale_qty">MaxSaleQtyZeroValue</requiredEntity>
-    </entity>
-    <entity name="MaxSaleQtyZeroValue" type="max_sale_qty">
-        <data key="value">0</data>
-    </entity>
-
     <entity name="DefaultValueForMaxSaleQty" type="cataloginventory_item_options">
         <requiredEntity type="max_sale_qty">MaxSaleQtyDefaultValue</requiredEntity>
     </entity>

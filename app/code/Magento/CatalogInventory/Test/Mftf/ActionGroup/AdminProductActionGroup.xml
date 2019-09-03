@@ -18,4 +18,14 @@
         <fillField selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCart}}" userInput="{{qty}}" stepKey="fillMaxAllowedQty"/>
         <click selector="{{AdminSlideOutDialogSection.doneButton}}" stepKey="clickDone"/>
     </actionGroup>
+
+    <actionGroup name="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" extends="AdminProductSetMaxQtyAllowedInShoppingCart">
+        <arguments>
+            <argument name="qty" type="string"/>
+            <argument name="errorMessage" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" after="clickDone" stepKey="waitProductValidationErrorMessageAppears"/>
+        <see selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" userInput="{{errorMessage}}" after="waitProductValidationErrorMessageAppears" stepKey="checkProductValidationErrorMessage"/>
+    </actionGroup>
 </actionGroups>

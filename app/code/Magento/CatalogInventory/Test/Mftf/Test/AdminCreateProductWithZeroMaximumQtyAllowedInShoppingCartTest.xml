@@ -31,23 +31,24 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
+        <!-- Go to Inventory configuration page -->
         <amOnPage url="{{AdminInventoryProductStockOptionsConfigPage.url}}" stepKey="openInventoryConfigPage"/>
         <uncheckOption selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyInherit}}" stepKey="uncheckUseDefaultValueForMaxSaleQty"/>
         <!-- Validate zero value -->
-        <fillField selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQty}}" userInput="0" stepKey="setMaxSaleQtyValueToZero"/>
-        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
-        <waitForElementVisible selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyError}}" stepKey="waitValidationErrorMessageAppearsZero"/>
-        <see selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyError}}" userInput="Please enter a number greater than 0 in this field." stepKey="checkValidationErrorMessageZero"/>
+        <actionGroup ref="AdminCatalogInventoryConfigurationMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="validateZeroValue">
+            <argument name="qty" value="0"/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+        </actionGroup>
         <!-- Validate negative value -->
-        <fillField selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQty}}" userInput="-1" stepKey="setMaxSaleQtyValueToNegative"/>
-        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButtonNegative"/>
-        <waitForElementVisible selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyError}}" stepKey="waitValidationErrorMessageAppearsNegative"/>
-        <see selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyError}}" userInput="Please enter a number greater than 0 in this field." stepKey="checkValidationErrorMessageNegative"/>
+        <actionGroup ref="AdminCatalogInventoryConfigurationMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="validateNegativeValue">
+            <argument name="qty" value="-1"/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+        </actionGroup>
         <!-- Validate alphabetical value -->
-        <fillField selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQty}}" userInput="abc" stepKey="setMaxSaleQtyValueToAlphabetical"/>
-        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButtonAlphabetical"/>
-        <waitForElementVisible selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyError}}" stepKey="waitValidationErrorMessageAppearsAlphabetical"/>
-        <see selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyError}}" userInput="Please enter a valid number in this field." stepKey="checkValidationErrorMessageAlphabetical"/>
+        <actionGroup ref="AdminCatalogInventoryConfigurationMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="validateAlphabeticalValue">
+            <argument name="qty" value="abc"/>
+            <argument name="errorMessage" value="Please enter a valid number in this field."/>
+        </actionGroup>
         <!-- Fill correct value -->
         <fillField selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQty}}" userInput="100" stepKey="setMaxSaleQtyValueToCorrectNumber"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigWithCorrectNumber"/>
@@ -55,24 +56,20 @@
         <!-- Go to product page -->
         <amOnPage url="{{AdminProductEditPage.url($$createdProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
         <!-- Validate zero value -->
-        <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCart" stepKey="setProductMaxQtyAllowedInShoppingCartToZero">
+        <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateZeroValue">
             <argument name="qty" value="0"/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
         </actionGroup>
-        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" stepKey="waitProductValidationErrorMessageAppearsZero"/>
-        <see selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" userInput="Please enter a number greater than 0 in this field." stepKey="checkProductValidationErrorMessageZero"/>
         <!-- Validate negative value -->
-        <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCart" stepKey="setProductMaxQtyAllowedInShoppingCartToNegative">
+        <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateNegativeValue">
             <argument name="qty" value="-1"/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
         </actionGroup>
-        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" stepKey="waitProductValidationErrorMessageAppearsNegative"/>
-        <see selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" userInput="Please enter a number greater than 0 in this field." stepKey="checkProductValidationErrorMessageNegative"/>
         <!-- Validate alphabetical value -->
-        <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCart" stepKey="setProductMaxQtyAllowedInShoppingCartToAlphabetical">
+        <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateAlphabeticalValue">
             <argument name="qty" value="abc"/>
+            <argument name="errorMessage" value="Please enter a valid number in this field."/>
         </actionGroup>
-        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" stepKey="waitProductValidationErrorMessageAppearsAlphabetical"/>
-        <see selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" userInput="Please enter a valid number in this field." stepKey="checkProductValidationErrorMessageAlphabetical"/>
-
         <!-- Fill correct value -->
         <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCart" stepKey="setProductMaxQtyAllowedInShoppingCartToCorrectNumber">
             <argument name="qty" value="50"/>
