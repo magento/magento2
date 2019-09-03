@@ -8,15 +8,23 @@ declare(strict_types=1);
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Psr\Log\LoggerInterface;
 
-class UpdateItemQty extends \Magento\Framework\App\Action\Action
+/**
+ * Class UpdateItemQty
+ *
+ * @package Magento\Checkout\Controller\Cart
+ */
+class UpdateItemQty extends Action implements HttpPostActionInterface
 {
     /**
      * @var RequestQuantityProcessor
@@ -44,13 +52,16 @@ class UpdateItemQty extends \Magento\Framework\App\Action\Action
     private $logger;
 
     /**
-     * @param Context $context,
-     * @param RequestQuantityProcessor $quantityProcessor
-     * @param FormKeyValidator $formKeyValidator
-     * @param CheckoutSession $checkoutSession
-     * @param Json $json
-     * @param LoggerInterface $logger
+     * UpdateItemQty constructor
+     *
+     * @param Context                  $context           Parent dependency
+     * @param RequestQuantityProcessor $quantityProcessor Request quantity
+     * @param FormKeyValidator         $formKeyValidator  Form validator
+     * @param CheckoutSession          $checkoutSession   Session
+     * @param Json                     $json              Json serializer
+     * @param LoggerInterface          $logger            Logger
      */
+
     public function __construct(
         Context $context,
         RequestQuantityProcessor $quantityProcessor,
@@ -60,31 +71,29 @@ class UpdateItemQty extends \Magento\Framework\App\Action\Action
         LoggerInterface $logger
     ) {
         $this->quantityProcessor = $quantityProcessor;
-        $this->formKeyValidator = $formKeyValidator;
-        $this->checkoutSession = $checkoutSession;
-        $this->json = $json;
-        $this->logger = $logger;
+        $this->formKeyValidator  = $formKeyValidator;
+        $this->checkoutSession   = $checkoutSession;
+        $this->json              = $json;
+        $this->logger            = $logger;
         parent::__construct($context);
+
     }
 
+
     /**
+     * Controller execute method
+     *
      * @return void
      */
     public function execute()
     {
         try {
-            if (!$this->formKeyValidator->validate($this->getRequest())) {
-                throw new LocalizedException(
-                    __('Something went wrong while saving the page. Please refresh the page and try again.')
-                );
-            }
+            $this->validateRequest();
+            $this->validateFormKey();
 
             $cartData = $this->getRequest()->getParam('cart');
-            if (!is_array($cartData)) {
-                throw new LocalizedException(
-                    __('Something went wrong while saving the page. Please refresh the page and try again.')
-                );
-            }
+
+            $this->validateCartData($cartData);
 
             $cartData = $this->quantityProcessor->process($cartData);
             $quote = $this->checkoutSession->getQuote();
@@ -109,15 +118,17 @@ class UpdateItemQty extends \Magento\Framework\App\Action\Action
     /**
      * Updates quote item quantity.
      *
-     * @param Item $item
+     * @param Item  $item
      * @param float $qty
+     *
      * @throws LocalizedException
+     *
+     * @return void
      */
     private function updateItemQuantity(Item $item, float $qty)
     {
-        $item->clearMessage();
-
         if ($qty > 0) {
+            $item->clearMessage();
             $item->setQty($qty);
 
             if ($item->getHasError()) {
@@ -130,6 +141,7 @@ class UpdateItemQty extends \Magento\Framework\App\Action\Action
      * JSON response builder.
      *
      * @param string $error
+     *
      * @return void
      */
     private function jsonResponse(string $error = '')
@@ -143,6 +155,7 @@ class UpdateItemQty extends \Magento\Framework\App\Action\Action
      * Returns response data.
      *
      * @param string $error
+     *
      * @return array
      */
     private function getResponseData(string $error = ''): array
@@ -159,5 +172,58 @@ class UpdateItemQty extends \Magento\Framework\App\Action\Action
         }
 
         return $response;
+    }
+
+    /**
+     * Validates the Request HTTP method
+     *
+     * @throws NotFoundException
+     *
+     * @return void
+     */
+    private function validateRequest()
+    {
+        if ($this->getRequest()->isPost() === false) {
+            throw new NotFoundException(
+                __('Page Not Found')
+            );
+        }
+
+    }
+
+    /**
+     * Validates form key
+     *
+     * @throws LocalizedException
+     *
+     * @return void
+     */
+    private function validateFormKey()
+    {
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            throw new LocalizedException(
+                __('Something went wrong while saving the page. Please refresh the page and try again.')
+            );
+        }
+
+    }
+
+    /**
+     * Validates cart data
+     *
+     * @param array|null $cartData
+     *
+     * @throws LocalizedException
+     *
+     * @return void
+     */
+    private function validateCartData($cartData = null)
+    {
+        if (!is_array($cartData)) {
+            throw new LocalizedException(
+                __('Something went wrong while saving the page. Please refresh the page and try again.')
+            );
+        }
+
     }
 }
