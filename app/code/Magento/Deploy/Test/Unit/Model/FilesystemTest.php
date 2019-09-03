@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 namespace Magento\Deploy\Test\Unit\Model;
 
 use Magento\Deploy\Model\Filesystem as DeployFilesystem;
@@ -200,7 +201,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->method('writeln')
             ->with('Deployment of static content complete');
 
-        $this->deployFilesystem->regenerateStatic($this->output, true);
+        $this->deployFilesystem->regenerateStaticFiles($this->output, true);
     }
 
     /**

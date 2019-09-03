@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 namespace Magento\Deploy\Model;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\Locale;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate static files, compile
@@ -149,15 +150,30 @@ class Filesystem
      * Regenerate static
      *
      * @param OutputInterface $output
+     * @return void
+     * @throws LocalizedException
+     * @throws \Exception
+     * @deprecated
+     * @see regenerateStaticFiles
+     */
+    public function regenerateStatic(OutputInterface $output)
+    {
+        $this->regenerateStaticFiles($output, false);
+    }
+
+    /**
+     * Regenerate static
+     *
+     * @param OutputInterface $output
      * @param bool $resetStaticVersion
      * @return void
      * @throws LocalizedException
      * @throws \Exception
      */
-    public function regenerateStatic(OutputInterface $output, $resetStaticVersion = false)
+    public function regenerateStaticFiles(OutputInterface $output, $resetStaticVersion = false)
     {
         // Clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
-        $this->cleanupFilesystem(
+        $this->cleanupFilesystemDirectories(
             [
                 DirectoryList::CACHE,
                 DirectoryList::GENERATED_CODE,
@@ -277,11 +293,25 @@ class Filesystem
      * Deletes specified directories by code
      *
      * @param array $directoryCodeList
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @deprecated
+     * @see cleanupFilesystemDirectories
+     */
+    public function cleanupFilesystem($directoryCodeList)
+    {
+        $this->cleanupFilesystemDirectories($directoryCodeList, false);
+    }
+
+    /**
+     * Deletes specified directories by code
+     *
+     * @param array $directoryCodeList
      * @param bool $resetStaticVersion
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function cleanupFilesystem($directoryCodeList, $resetStaticVersion = false)
+    public function cleanupFilesystemDirectories($directoryCodeList, $resetStaticVersion = false)
     {
         $excludePatterns = ['#.htaccess#'];
 

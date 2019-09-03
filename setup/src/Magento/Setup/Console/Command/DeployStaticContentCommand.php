@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 namespace Magento\Setup\Console\Command;
 
+use InvalidArgumentException;
 use Magento\Deploy\Console\ConsoleLoggerFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Deploy\Console\InputValidator;
@@ -12,10 +14,14 @@ use Magento\Deploy\Service\DeployStaticContent;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Exception;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,7 +63,7 @@ class DeployStaticContentCommand extends Command
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     private $appState;
     /**
@@ -78,15 +84,15 @@ class DeployStaticContentCommand extends Command
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DirectoryList $directoryList
      * @param File $driverFile
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     public function __construct(
         InputValidator $inputValidator,
         ConsoleLoggerFactory $consoleLoggerFactory,
         Options $options,
         ObjectManagerProvider $objectManagerProvider,
-        DirectoryList $directoryList,
-        File $driverFile
+        DirectoryList $directoryList = null,
+        File $driverFile = null
     ) {
         $this->inputValidator = $inputValidator;
         $this->consoleLoggerFactory = $consoleLoggerFactory;
@@ -94,14 +100,16 @@ class DeployStaticContentCommand extends Command
         $this->objectManager = $objectManagerProvider->get();
 
         parent::__construct();
-        $this->directoryList = $directoryList;
-        $this->driverFile = $driverFile;
+        $this->directoryList = $directoryList ?: ObjectManager::getInstance()
+            ->get(DirectoryList::class);
+        $this->driverFile = $driverFile ?: ObjectManager::getInstance()
+            ->get(File::class);
     }
 
     /**
      * Configuration for static content deploy
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function configure()
@@ -115,7 +123,7 @@ class DeployStaticContentCommand extends Command
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws LocalizedException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -169,7 +177,7 @@ class DeployStaticContentCommand extends Command
             $logger->notice(PHP_EOL . "Execution time: " . (microtime(true) - $time));
         }
 
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -216,7 +224,7 @@ class DeployStaticContentCommand extends Command
     /**
      * Cleanup directory with static view files.
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     private function cleanupStaticDirectory(): void
     {

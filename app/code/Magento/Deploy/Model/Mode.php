@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+declare(strict_types=1);
 namespace Magento\Deploy\Model;
 
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
@@ -137,7 +137,7 @@ class Mode
                     // We have to turn on production mode before generation.
                     // We need this to enable generation of the "min" files.
                     $this->setStoreMode(State::MODE_PRODUCTION);
-                    $this->filesystem->regenerateStatic($this->output, true);
+                    $this->filesystem->regenerateStaticFiles($this->output, true);
                 } catch (LocalizedException $e) {
                     // We have to return store mode to previous state in case of error.
                     $this->setStoreMode($previousMode);
