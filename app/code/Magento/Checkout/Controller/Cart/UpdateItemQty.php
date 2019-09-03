@@ -20,7 +20,7 @@ use Magento\Quote\Model\Quote\Item;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class UpdateItemQty
+ * UpdateItemQty ajax request
  *
  * @package Magento\Checkout\Controller\Cart
  */
@@ -55,12 +55,12 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
     /**
      * UpdateItemQty constructor
      *
-     * @param Context                  $context           Parent dependency
+     * @param Context $context
      * @param RequestQuantityProcessor $quantityProcessor Request quantity
-     * @param FormKeyValidator         $formKeyValidator  Form validator
-     * @param CheckoutSession          $checkoutSession   Session
-     * @param Json                     $json              Json serializer
-     * @param LoggerInterface          $logger            Logger
+     * @param FormKeyValidator $formKeyValidator  Form validator
+     * @param CheckoutSession $checkoutSession   Session
+     * @param Json $json              Json serializer
+     * @param LoggerInterface $logger            Logger
      */
 
     public function __construct(
@@ -72,12 +72,12 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
         LoggerInterface $logger
     ) {
         $this->quantityProcessor = $quantityProcessor;
-        $this->formKeyValidator  = $formKeyValidator;
-        $this->checkoutSession   = $checkoutSession;
-        $this->json              = $json;
-        $this->logger            = $logger;
+        $this->formKeyValidator = $formKeyValidator;
+        $this->checkoutSession = $checkoutSession;
+        $this->json = $json;
+        $this->logger = $logger;
         parent::__construct($context);
-    }//end __construct()
+    }
 
     /**
      * Controller execute method
@@ -95,11 +95,11 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
             $this->validateCartData($cartData);
 
             $cartData = $this->quantityProcessor->process($cartData);
-            $quote    = $this->checkoutSession->getQuote();
+            $quote = $this->checkoutSession->getQuote();
 
             foreach ($cartData as $itemId => $itemInfo) {
                 $item = $quote->getItemById($itemId);
-                $qty  = isset($itemInfo['qty']) ? (double) $itemInfo['qty'] : 0;
+                $qty = isset($itemInfo['qty']) ? (double) $itemInfo['qty'] : 0;
                 if ($item) {
                     $this->updateItemQuantity($item, $qty);
                 }
@@ -111,18 +111,16 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
             $this->jsonResponse('Something went wrong while saving the page. Please refresh the page and try again.');
-        }//end try
-    }//end execute()
+        }
+    }
 
     /**
      * Updates quote item quantity.
      *
-     * @param Item  $item
+     * @param Item $item
      * @param float $qty
-     *
-     * @throws LocalizedException
-     *
      * @return void
+     * @throws LocalizedException
      */
     private function updateItemQuantity(Item $item, float $qty)
     {
@@ -134,13 +132,12 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
                 throw new LocalizedException(__($item->getMessage()));
             }
         }
-    }//end updateItemQuantity()
+    }
 
     /**
      * JSON response builder.
      *
      * @param string $error
-     *
      * @return void
      */
     private function jsonResponse(string $error = '')
@@ -148,13 +145,12 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
         $this->getResponse()->representJson(
             $this->json->serialize($this->getResponseData($error))
         );
-    }//end jsonResponse()
+    }
 
     /**
      * Returns response data.
      *
      * @param string $error
-     *
      * @return array
      */
     private function getResponseData(string $error = ''): array
@@ -163,34 +159,32 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
 
         if (!empty($error)) {
             $response = [
-                'success'       => false,
+                'success' => false,
                 'error_message' => $error,
             ];
         }
 
         return $response;
-    }//end getResponseData()
+    }
 
     /**
      * Validates the Request HTTP method
      *
-     * @throws NotFoundException
-     *
      * @return void
+     * @throws NotFoundException
      */
     private function validateRequest()
     {
         if ($this->getRequest()->isPost() === false) {
             throw new NotFoundException(__('Page Not Found'));
         }
-    }//end validateRequest()
+    }
 
     /**
      * Validates form key
      *
-     * @throws LocalizedException
-     *
      * @return void
+     * @throws LocalizedException
      */
     private function validateFormKey()
     {
@@ -199,16 +193,14 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
                 __('Something went wrong while saving the page. Please refresh the page and try again.')
             );
         }
-    }//end validateFormKey()
+    }
 
     /**
      * Validates cart data
      *
      * @param array|null $cartData
-     *
-     * @throws LocalizedException
-     *
      * @return void
+     * @throws LocalizedException
      */
     private function validateCartData($cartData = null)
     {
@@ -217,5 +209,5 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
                 __('Something went wrong while saving the page. Please refresh the page and try again.')
             );
         }
-    }//end validateCartData()
-}//end class
+    }
+}
