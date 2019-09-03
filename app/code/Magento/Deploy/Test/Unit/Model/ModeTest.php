@@ -170,7 +170,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 return $dataStorage[ConfigFilePool::APP_ENV];
             });
         $this->filesystemMock->expects($this->once())
-            ->method("regenerateStatic")
+            ->method("regenerateStaticFiles")
             ->willReturnCallback(function () use (&$modeModel, &$mode) {
                 $mode = $modeModel->getMode();
             });
@@ -213,7 +213,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 return $dataStorage[ConfigFilePool::APP_ENV];
             });
         $this->filesystemMock->expects($this->once())
-            ->method("regenerateStatic")
+            ->method("regenerateStaticFiles")
             ->willThrowException(new LocalizedException(__('Exception')));
         $this->model->enableProductionMode();
         $this->assertEquals(State::MODE_PRODUCTION, $mode);
