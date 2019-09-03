@@ -66,12 +66,15 @@
             <argument name="tasks" xsi:type="array">
                 <item name="cronMagento" xsi:type="array">
                     <item name="command" xsi:type="string">{magentoRoot}bin/magento cron:run | grep -v "Ran jobs by schedule" >> {magentoLog}magento.cron.log</item>
+                    <item name="optional" xsi:type="boolean">false</item>
                 </item>
                 <item name="cronUpdate" xsi:type="array">
                     <item name="command" xsi:type="string">{magentoRoot}update/cron.php >> {magentoLog}update.cron.log</item>
+                    <item name="optional" xsi:type="boolean">true</item>
                 </item>
                 <item name="cronSetup" xsi:type="array">
                     <item name="command" xsi:type="string">{magentoRoot}bin/magento setup:cron:run >> {magentoLog}setup.cron.log</item>
+                    <item name="optional" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </arguments>
