@@ -43,7 +43,8 @@ class LayoutUpdate extends AbstractBackend
     private function extractValue(Category $category): ?string
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = $category->getData($attrCode);
+        $attrValue = $category->getCustomAttribute($attrCode);
+        $value = $category->getData($attrCode) ?? ($attrValue ? $attrValue->getValue() : null);
         if ($value
             && $value !== self::VALUE_USE_UPDATE_XML
             && !in_array($value, $this->manager->fetchAvailableFiles($category), true)
@@ -66,6 +67,7 @@ class LayoutUpdate extends AbstractBackend
     private function setValue(?string $value, Category $object): void
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
+        $object->setCustomAttribute($attrCode, $value);
         $object->setData($attrCode, $value);
     }
 

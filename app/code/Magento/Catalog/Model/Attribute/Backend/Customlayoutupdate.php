@@ -80,7 +80,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
         $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
         $attribute = $object->getCustomAttribute($attributeCode);
 
-        return $object->getData($attributeCode) ?? $attribute ? $attribute->getValue() : null;
+        return $object->getData($attributeCode) ?? ($attribute ? $attribute->getValue() : null);
     }
 
     /**

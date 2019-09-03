@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 
 /**
  * Test 'custom layout' attribute.
@@ -88,14 +89,27 @@ class CustomlayoutupdateTest extends TestCase
      * Check that custom layout update file's values erase the old attribute's value.
      *
      * @return void
+     * @throws \Throwable
      */
     public function testDependsOnNewUpdate(): void
     {
+        //New selected file value is set
         $this->category->setCustomAttribute('custom_layout_update', 'test');
         $this->category->setOrigData('custom_layout_update', 'test');
         $this->category->setCustomAttribute('custom_layout_update_file', 'new');
         $this->attribute->beforeSave($this->category);
         $this->assertEmpty($this->category->getCustomAttribute('custom_layout_update')->getValue());
         $this->assertEquals('new', $this->category->getCustomAttribute('custom_layout_update_file')->getValue());
+
+        //Existing update chosen
+        $this->category->setCustomAttribute('custom_layout_update', 'test');
+        $this->category->setOrigData('custom_layout_update', 'test');
+        $this->category->setCustomAttribute('custom_layout_update_file', '__existing__');
+        $this->attribute->beforeSave($this->category);
+        $this->assertEquals('test', $this->category->getCustomAttribute('custom_layout_update')->getValue());
+        /** @var AbstractBackend $fileAttribute */
+        $fileAttribute = $this->category->getAttributes()['custom_layout_update_file']->getBackend();
+        $fileAttribute->beforeSave($this->category);
+        $this->assertEquals(null, $this->category->getCustomAttribute('custom_layout_update_file')->getValue());
     }
 }
