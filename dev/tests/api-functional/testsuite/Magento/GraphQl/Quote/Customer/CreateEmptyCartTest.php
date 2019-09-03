@@ -74,6 +74,25 @@ class CreateEmptyCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCreateEmptyMultipleRequestsCart()
+    {
+        $query = $this->getQuery();
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+
+        self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertNotEmpty($response['createEmptyCart']);
+        $maskedCartId = $response['createEmptyCart'];
+
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+        self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertNotEmpty($response['createEmptyCart']);
+
+        self::assertEquals($maskedCartId, $response['createEmptyCart']);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */

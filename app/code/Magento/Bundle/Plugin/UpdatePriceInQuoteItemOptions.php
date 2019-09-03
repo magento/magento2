@@ -42,7 +42,7 @@ class UpdatePriceInQuoteItemOptions
     {
         $bundleAttributes = $result->getProduct()->getCustomOption('bundle_selection_attributes');
         if ($bundleAttributes !== null) {
-            $actualPrice = $result->getPrice();
+            $actualPrice = (float)$result->getPrice();
             $parsedValue = $this->serializer->unserialize($bundleAttributes->getValue());
             if (is_array($parsedValue) && array_key_exists('price', $parsedValue)) {
                 $parsedValue['price'] = $actualPrice;
