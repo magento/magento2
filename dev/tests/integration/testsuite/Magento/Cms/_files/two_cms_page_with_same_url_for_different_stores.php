@@ -19,8 +19,6 @@ $page->setTitle('First test page')
     ->setPageLayout('1column')
     ->save();
 
-$storeManager = $objectManager->create(\Magento\Store\Model\StoreManagerInterface::class);
-$store = $storeManager->getStore('fixture_second_store');
 /** @var $page \Magento\Cms\Model\Page */
 $page = $objectManager->create(\Magento\Cms\Model\Page::class);
 $page->setTitle('Second test page')
