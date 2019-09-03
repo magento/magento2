@@ -832,7 +832,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
-                if ($this->_storeManager->isSingleStoreMode()) {
+                if ($this->_storeManager->isSingleStoreMode() && !$this->isObjectNew()) {
                     $websiteIds = array_keys($websiteIds);
                 }
                 foreach ($websiteIds as $websiteId) {
