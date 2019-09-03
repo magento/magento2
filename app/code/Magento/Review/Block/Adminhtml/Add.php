@@ -37,10 +37,11 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         ';
         // @codingStandardsIgnoreStart
         $this->_formInitScripts[] = '
-            require(["jquery","prototype"], function(jQuery){
+            require(["jquery","Magento_Review/js/rating","prototype"], function(jQuery, rating){
             window.review = function() {
                 return {
                     reviewFormEditSelector: "#edit_form",
+                    ratingSelector: "[data-widget=ratingControl]",
                     productInfoUrl : null,
                     formHidden : true,
                     gridRowClick : function(data, click) {
@@ -71,6 +72,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                     },
                     formReset: function() {
                         jQuery(review.reviewFormEditSelector).trigger(\'reset\');
+                        jQuery(review.ratingSelector).ratingControl(\'removeRating\');
                     },
                     updateRating: function() {
                         elements = [$("select_stores"), $("rating_detail").getElementsBySelector("input[type=\'radio\']")].flatten();
