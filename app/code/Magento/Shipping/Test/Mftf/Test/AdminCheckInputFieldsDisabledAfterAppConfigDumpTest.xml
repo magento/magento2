@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckInputFieldsDisabledAfterAppConfigDumpTest">
+        <annotations>
+            <features value="Config"/>
+            <stories value="App:config:dump doesn't lock all the settings in Magento backend"/>
+            <title value="Check that all input fields disabled after executing CLI app:config:dump"/>
+            <description value="Check that all input fields disabled after executing CLI app:config:dump"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-11158"/>
+            <useCaseId value="MAGETWO-96428"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Assert configuration are disabled in Flat Rate section-->
+        <comment userInput="Assert configuration are disabled in Flat Rate section" stepKey="commentSeeDisabledFlatRateConfigs"/>
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandFlatRateTab"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersEnableFlatRateActive}}" userInput="disabled" stepKey="grabFlatRateActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFlatRateActiveDisabled" stepKey="assertFlatRateActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitle}}" userInput="disabled" stepKey="grabFlatRateTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFlatRateTitleDisabled" stepKey="assertFlatRateTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateName}}" userInput="disabled" stepKey="grabFlatRateNameDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFlatRateNameDisabled" stepKey="assertFlatRateNameDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateSpecificErrMsg}}" userInput="disabled" stepKey="grabFlatRateSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFlatRateSpecificErrMsgDisabled" stepKey="assertFlatRateSpecificErrMsgDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateAllowSpecific}}" userInput="disabled" stepKey="grabFlatRateAllowSpecificDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFlatRateAllowSpecificDisabled" stepKey="assertFlatRateAllowSpecificDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateSpecificCountry}}" userInput="disabled" stepKey="grabFlatRateSpecificCountryDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFlatRateSpecificCountryDisabled" stepKey="assertFlatRateSpecificCountryDisabled"/>
+        <!--Assert configuration are disabled in Free Shipping section-->
+        <comment userInput="Assert configuration are disabled in Free Shipping section" stepKey="commentSeeDisabledFreeShippingConfigs"/>
+        <conditionalClick selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHead}}" dependentSelector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" visible="false" stepKey="expandFreeShippingTab"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" userInput="disabled" stepKey="grabFreeShippingActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFreeShippingActiveDisabled" stepKey="assertFreeShippingActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingTitle}}" userInput="disabled" stepKey="grabFreeShippingTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFreeShippingTitleDisabled" stepKey="assertFreeShippingTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingName}}" userInput="disabled" stepKey="grabFreeShippingNameDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFreeShippingNameDisabled" stepKey="assertFreeShippingNameDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSpecificErrMsg}}" userInput="disabled" stepKey="grabFreeShippingSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFreeShippingSpecificErrMsgDisabled" stepKey="assertFreeShippingSpecificErrMsgDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingAllowSpecific}}" userInput="disabled" stepKey="grabFreeShippingAllowSpecificDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFreeShippingAllowSpecificDisabled" stepKey="assertFreeShippingAllowSpecificDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSpecificCountry}}" userInput="disabled" stepKey="grabFreeShippingSpecificCountryDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFreeShippingSpecificCountryDisabled" stepKey="assertFreeShippingSpecificCountryDisabled"/>
+        <!--Assert configuration are disabled in Table Rates section-->
+        <comment userInput="Assert configuration are disabled in Table Rates section" stepKey="commentSeeDisabledTableRatesConfigs"/>
+        <conditionalClick selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTab}}" dependentSelector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" visible="false" stepKey="expandTableRateTab"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" userInput="disabled" stepKey="grabTableRateActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateActiveDisabled" stepKey="assertTableRateActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTitle}}" userInput="disabled" stepKey="grabTableRateTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateTitleDisabled" stepKey="assertTableRateTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateName}}" userInput="disabled" stepKey="grabTableRateNameDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateNameDisabled" stepKey="assertTableRateNameDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateConditionName}}" userInput="disabled" stepKey="grabTableRateConditionNameDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateConditionNameDisabled" stepKey="assertTableRateConditionNameDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateIncludeVirtualPrice}}" userInput="disabled" stepKey="grabTableRateIncludeVirtualPriceDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateIncludeVirtualPriceDisabled" stepKey="assertTableRateIncludeVirtualPriceDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateHandlingType}}" userInput="disabled" stepKey="grabTableRateHandlingTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateHandlingTypeDisabled" stepKey="assertTableRateHandlingTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateSpecificErrMsg}}" userInput="disabled" stepKey="grabTableRateSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateSpecificErrMsgDisabled" stepKey="assertTableRateSpecificErrMsgDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateAllowSpecific}}" userInput="disabled" stepKey="grabTableRateAllowSpecificDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateAllowSpecificDisabled" stepKey="assertTableRateAllowSpecificDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateSpecificCountry}}" userInput="disabled" stepKey="grabTableRateSpecificCountryDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabTableRateSpecificCountryDisabled" stepKey="assertTableRateSpecificCountryDisabled"/>
+        <!--Assert configuration are disabled in UPS section-->
+        <comment userInput="Assert configuration are disabled in UPS section" stepKey="commentSeeDisabledUPSConfigs"/>
+        <conditionalClick selector="{{AdminShippingMethodUPSSection.carriersUPSTab}}" dependentSelector="{{AdminShippingMethodUPSSection.carriersUPSActive}}" visible="false" stepKey="expandUPSTab"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSActive}}" userInput="disabled" stepKey="grabUPSActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSActiveDisabled" stepKey="assertUPSActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSActiveRMA}}" userInput="disabled" stepKey="grabUPSActiveRMADisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSActiveRMADisabled" stepKey="assertUPSActiveRMADisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSType}}" userInput="disabled" stepKey="grabUPSTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSTypeDisabled" stepKey="assertUPSTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSAccountLive}}" userInput="disabled" stepKey="grabUPSAccountLiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSAccountLiveDisabled" stepKey="assertUPSAccountLiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSGatewayXMLUrl}}" userInput="disabled" stepKey="grabUPSGatewayXMLUrlDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSGatewayXMLUrlDisabled" stepKey="assertUPSGatewayXMLUrlDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSModeXML}}" userInput="disabled" stepKey="grabUPSModeXMLDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSModeXMLDisabled" stepKey="assertUPSModeXMLDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSOriginShipment}}" userInput="disabled" stepKey="grabUPSOriginShipmentDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSOriginShipmentDisabled" stepKey="assertUPSOriginShipmentDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSTitle}}" userInput="disabled" stepKey="grabUPSTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSTitleDisabled" stepKey="assertUPSTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSNegotiatedActive}}" userInput="disabled" stepKey="grabUPSNegotiatedActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSNegotiatedActiveDisabled" stepKey="assertUPSNegotiatedActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSIncludeTaxes}}" userInput="disabled" stepKey="grabUPSIncludeTaxesDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSIncludeTaxesDisabled" stepKey="assertUPSIncludeTaxesDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSShipmentRequestType}}" userInput="disabled" stepKey="grabUPSShipmentRequestTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSShipmentRequestTypeDisabled" stepKey="assertUPSShipmentRequestTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSContainer}}" userInput="disabled" stepKey="grabUPSContainerDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSContainerDisabled" stepKey="assertUPSContainerDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSDestType}}" userInput="disabled" stepKey="grabUPSDestTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSDestTypeDisabled" stepKey="assertUPSDestTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSTrackingXmlUrl}}" userInput="disabled" stepKey="grabUPSTrackingXmlUrlDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSTrackingXmlUrlDisabled" stepKey="assertUPSTrackingXmlUrlDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSUnitOfMeasure}}" userInput="disabled" stepKey="grabUPSUnitOfMeasureDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSUnitOfMeasureDisabled" stepKey="assertUPSUnitOfMeasureDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSMaxPackageWeight}}" userInput="disabled" stepKey="grabUPSMaxPackageWeightDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSMaxPackageWeightDisabled" stepKey="assertUPSMaxPackageWeightDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSPickup}}" userInput="disabled" stepKey="grabUPSPickupDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSPickupDisabled" stepKey="assertUPSPickupDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSMinPackageWeight}}" userInput="disabled" stepKey="grabUPSMinPackageWeightDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSMinPackageWeightDisabled" stepKey="assertUPSMinPackageWeightDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSHandlingType}}" userInput="disabled" stepKey="grabUPSHandlingTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSHandlingTypeDisabled" stepKey="assertUPSHandlingTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSHandlingAction}}" userInput="disabled" stepKey="grabUPSHandlingActionDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSHandlingActionDisabled" stepKey="assertUPSHandlingActionDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSAllowedMethods}}" userInput="disabled" stepKey="grabUPSAllowedMethodsDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSAllowedMethodsDisabled" stepKey="assertUPSAllowedMethodsDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSFreeMethod}}" userInput="disabled" stepKey="grabUPSFreeMethodDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSFreeMethodDisabled" stepKey="assertUPSFreeMethodDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSSpecificErrMsg}}" userInput="disabled" stepKey="grabUPSSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSSpecificErrMsgDisabled" stepKey="assertUPSSpecificErrMsgDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSAllowSpecific}}" userInput="disabled" stepKey="grabUPSAllowSpecificDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSAllowSpecificDisabled" stepKey="assertUPSAllowSpecificDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUPSSection.carriersUPSSpecificCountry}}" userInput="disabled" stepKey="grabUPSSpecificCountryDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUPSSpecificCountryDisabled" stepKey="assertUPSSpecificCountryDisabled"/>
+        <!--Assert configuration are disabled in USPS section-->
+        <comment userInput="Assert configuration are disabled in USPS section" stepKey="commentSeeDisabledUSPSConfigs"/>
+        <conditionalClick selector="{{AdminShippingMethodUSPSSection.carriersUSPSTab}}" dependentSelector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" visible="false" stepKey="expandUSPSTab"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" userInput="disabled" stepKey="grabUSPSActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSActiveDisabled" stepKey="assertUSPSActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSGatewayXMLUrl}}" userInput="disabled" stepKey="grabUSPSGatewayXMLUrlDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSGatewayXMLUrlDisabled" stepKey="assertUSPSGatewayXMLUrlDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSGatewaySecureUrl}}" userInput="disabled" stepKey="grabUSPSGatewaySecureUrlDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSGatewaySecureUrlDisabled" stepKey="assertUSPSGatewaySecureUrlDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSTitle}}" userInput="disabled" stepKey="grabUSPSTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSTitleDisabled" stepKey="assertUSPSTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSUserId}}" userInput="disabled" stepKey="grabUSPSUserIdDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSUserIdDisabled" stepKey="assertUSPSUserIdDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSPassword}}" userInput="disabled" stepKey="grabUSPSPasswordDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSPasswordDisabled" stepKey="assertUSPSPasswordDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSShipmentRequestType}}" userInput="disabled" stepKey="grabUSPSShipmentRequestTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSShipmentRequestTypeDisabled" stepKey="assertUSPSShipmentRequestTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSContainer}}" userInput="disabled" stepKey="grabUSPSContainerDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSContainerDisabled" stepKey="assertUSPSContainerDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSSize}}" userInput="disabled" stepKey="grabUSPSSizeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSSizeDisabled" stepKey="assertUSPSSizeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSDestType}}" userInput="disabled" stepKey="grabUSPSDestTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSDestTypeDisabled" stepKey="assertUSPSDestTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSMachinable}}" userInput="disabled" stepKey="grabUSPSMachinableDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSMachinableDisabled" stepKey="assertUSPSMachinableDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSMaxPackageWeight}}" userInput="disabled" stepKey="grabUSPSMaxPackageWeightDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSMaxPackageWeightDisabled" stepKey="assertUSPSMaxPackageWeightDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSHandlingType}}" userInput="disabled" stepKey="grabUSPSHandlingTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSHandlingTypeDisabled" stepKey="assertUSPSHandlingTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSHandlingAction}}" userInput="disabled" stepKey="grabUSPSHandlingActionDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSHandlingActionDisabled" stepKey="assertUSPSHandlingActionDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSAllowedMethods}}" userInput="disabled" stepKey="grabUSPSAllowedMethodsDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSAllowedMethodsDisabled" stepKey="assertUSPSAllowedMethodsDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSFreeMethod}}" userInput="disabled" stepKey="grabUSPSFreeMethodDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSFreeMethodDisabled" stepKey="assertUSPSFreeMethodDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSSpecificErrMsg}}" userInput="disabled" stepKey="grabUSPSSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSSpecificErrMsgDisabled" stepKey="assertUSPSSpecificErrMsgDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSAllowSpecific}}" userInput="disabled" stepKey="grabUSPSAllowSpecificDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSAllowSpecificDisabled" stepKey="assertUSPSAllowSpecificDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSSpecificCountry}}" userInput="disabled" stepKey="grabUSPSSpecificCountryDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabUSPSSpecificCountryDisabled" stepKey="assertUSPSSpecificCountryDisabled"/>
+        <!--Assert configuration are disabled in FedEx section-->
+        <comment userInput="Assert configuration are disabled in FedEx section" stepKey="commentSeeDisabledFedExConfigs"/>
+        <conditionalClick selector="{{AdminShippingMethodFedExSection.carriersFedExTab}}" dependentSelector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" visible="false" stepKey="expandFedExTab"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" userInput="disabled" stepKey="grabFedExActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExActiveDisabled" stepKey="assertFedExActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExActiveRMA}}" userInput="disabled" stepKey="grabFedExActiveRMADisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExActiveRMADisabled" stepKey="assertFedExActiveRMADisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExTitle}}" userInput="disabled" stepKey="grabFedExTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExTitleDisabled" stepKey="assertFedExTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExAccountId}}" userInput="disabled" stepKey="grabFedExAccountIdDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExAccountIdDisabled" stepKey="assertFedExAccountIdDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExMeterNumber}}" userInput="disabled" stepKey="grabFedExMeterNumberDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExMeterNumberDisabled" stepKey="assertFedExMeterNumberDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExKey}}" userInput="disabled" stepKey="grabFedExKeyDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExKeyDisabled" stepKey="assertFedExKeyDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExPassword}}" userInput="disabled" stepKey="grabFedExPasswordDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExPasswordDisabled" stepKey="assertFedExPasswordDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExSandboxMode}}" userInput="disabled" stepKey="grabFedExSandboxDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExSandboxDisabled" stepKey="assertFedExSandboxDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExShipmentRequestType}}" userInput="disabled" stepKey="grabFedExShipmentRequestTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExShipmentRequestTypeDisabled" stepKey="assertFedExShipmentRequestTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExPackaging}}" userInput="disabled" stepKey="grabFedExPackagingDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExPackagingDisabled" stepKey="assertFedExPackagingDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExDropoff}}" userInput="disabled" stepKey="grabFedExDropoffDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExDropoffDisabled" stepKey="assertFedExDropoffDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExUnitOfMeasure}}" userInput="disabled" stepKey="grabFedExUnitOfMeasureDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExUnitOfMeasureDisabled" stepKey="assertFedExUnitOfMeasureDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExMaxPackageWeight}}" userInput="disabled" stepKey="grabFedExMaxPackageWeightDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExMaxPackageWeightDisabled" stepKey="assertFedExMaxPackageWeightDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExHandlingType}}" userInput="disabled" stepKey="grabFedExHandlingTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExHandlingTypeDisabled" stepKey="assertFedExHandlingTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExHandlingAction}}" userInput="disabled" stepKey="grabFedExHandlingActionDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExHandlingActionDisabled" stepKey="assertFedExHandlingActionDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExSpecificErrMsg}}" userInput="disabled" stepKey="grabFedExSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExSpecificErrMsgDisabled" stepKey="assertFedExSpecificErrMsgDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExAllowSpecific}}" userInput="disabled" stepKey="grabFedExAllowSpecificDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExAllowSpecificDisabled" stepKey="assertFedExAllowSpecificDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExSpecificCountry}}" userInput="disabled" stepKey="grabFedExSpecificCountryDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabFedExSpecificCountryDisabled" stepKey="assertFedExSpecificCountryDisabled"/>
+        <!--Assert configuration are disabled in DHL section-->
+        <comment userInput="Assert configuration are disabled in DHL section" stepKey="commentSeeDisabledDHLConfigs"/>
+        <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" visible="false" stepKey="expandDHLTab"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" userInput="disabled" stepKey="grabDHLActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLActiveDisabled" stepKey="assertDHLActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActiveRMA}}" userInput="disabled" stepKey="grabDHLActiveRMADisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLActiveRMADisabled" stepKey="assertDHLActiveRMADisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLTitle}}" userInput="disabled" stepKey="grabDHLTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLTitleDisabled" stepKey="assertDHLTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" userInput="disabled" stepKey="grabDHLAccessIdDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLAccessIdDisabled" stepKey="assertDHLAccessIdDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLPassword}}" userInput="disabled" stepKey="grabDHLPasswordDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLPasswordDisabled" stepKey="assertDHLPasswordDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccount}}" userInput="disabled" stepKey="grabDHLAccountDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLAccountDisabled" stepKey="assertDHLAccountDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLContentType}}" userInput="disabled" stepKey="grabDHLContentTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLContentTypeDisabled" stepKey="assertDHLContentTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLHandlingType}}" userInput="disabled" stepKey="grabDHLHandlingTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLHandlingTypeDisabled" stepKey="assertDHLHandlingTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLHandlingAction}}" userInput="disabled" stepKey="grabDHLHandlingDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLHandlingDisabled" stepKey="assertDHLHandlingDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLDivideOrderWeight}}" userInput="disabled" stepKey="grabDHLDivideOrderWeightDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLDivideOrderWeightDisabled" stepKey="assertDHLDivideOrderWeightDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLUnitOfMeasure}}" userInput="disabled" stepKey="grabDHLUnitOfMeasureDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLUnitOfMeasureDisabled" stepKey="assertDHLUnitOfMeasureDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSize}}" userInput="disabled" stepKey="grabDHLSizeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLSizeDisabled" stepKey="assertDHLSizeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLNonDocAllowedMethod}}" userInput="disabled" stepKey="grabDHLNonDocAllowedMethodDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLNonDocAllowedMethodDisabled" stepKey="assertDHLNonDocAllowedMethodDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSmartPostHubId}}" userInput="disabled" stepKey="grabDHLSmartPostHubIdDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLSmartPostHubIdDisabled" stepKey="assertDHLSmartPostHubIdDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSpecificErrMsg}}" userInput="disabled" stepKey="grabDHLSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLSpecificErrMsgDisabled" stepKey="assertDHLSpecificErrMsgDisabled"/>
+    </test>
+</tests>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingMethodFreeShippingSection">
+        <element name="carriersFreeShippingSectionHead" type="button" selector="#carriers_freeshipping-head"/>
+        <element name="carriersFreeShippingActive" type="input" selector="#carriers_freeshipping_active_inherit"/>
+        <element name="carriersFreeShippingTitle" type="input" selector="#carriers_freeshipping_title_inherit"/>
+        <element name="carriersFreeShippingName" type="input" selector="#carriers_freeshipping_name_inherit"/>
+        <element name="carriersFreeShippingSpecificErrMsg" type="input" selector="#carriers_freeshipping_specificerrmsg_inherit"/>
+        <element name="carriersFreeShippingAllowSpecific" type="input" selector="#carriers_freeshipping_sallowspecific_inherit"/>
+        <element name="carriersFreeShippingSpecificCountry" type="input" selector="#carriers_freeshipping_specificcountry"/>
+    </section>
+</sections>
