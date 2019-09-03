@@ -15,6 +15,14 @@
         </arguments>
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(optionName)}}" stepKey="clickSwatchOption"/>
     </actionGroup>
+    <actionGroup name="StorefrontAssertSwatchOptionPrice">
+        <arguments>
+            <argument name="optionName" type="string"/>
+            <argument name="optionPrice" type="string"/>
+        </arguments>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(optionName)}}" stepKey="clickOnOption"/>
+        <see userInput="{{optionPrice}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeOptionPrice"/>
+    </actionGroup>
 
     <!--Click a swatch option on product page and check active image-->
     <actionGroup name="StorefrontSelectSwatchOptionOnProductPageAndCheckImage" extends="StorefrontSelectSwatchOptionOnProductPage">
