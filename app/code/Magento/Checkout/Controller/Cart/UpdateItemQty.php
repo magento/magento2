@@ -56,11 +56,11 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
      * UpdateItemQty constructor
      *
      * @param Context $context
-     * @param RequestQuantityProcessor $quantityProcessor Request quantity
-     * @param FormKeyValidator $formKeyValidator  Form validator
-     * @param CheckoutSession $checkoutSession   Session
-     * @param Json $json              Json serializer
-     * @param LoggerInterface $logger            Logger
+     * @param RequestQuantityProcessor $quantityProcessor
+     * @param FormKeyValidator $formKeyValidator
+     * @param CheckoutSession $checkoutSession
+     * @param Json $json
+     * @param LoggerInterface $logger
      */
 
     public function __construct(
