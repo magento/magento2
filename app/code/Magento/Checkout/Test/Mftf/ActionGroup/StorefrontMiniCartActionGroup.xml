@@ -12,6 +12,7 @@
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="viewAndEditCart"/>
         <seeInCurrentUrl url="checkout/cart" stepKey="seeInCurrentUrl"/>
+        <waitForPageLoad time="30" stepKey="waitForCartPageIsLoaded"/>
     </actionGroup>
     <actionGroup name="assertOneProductNameInMiniCart">
         <arguments>
