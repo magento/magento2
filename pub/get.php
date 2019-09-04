@@ -7,6 +7,7 @@
  */
 
 use Magento\Framework\App\Cache\Frontend\Factory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Stdlib\Cookie\PhpCookieReader;
@@ -32,6 +33,10 @@ $request = new \Magento\MediaStorage\Model\File\Storage\Request(
         new Magento\Framework\Stdlib\StringUtils()
     )
 );
+
+if(stripos($relativePath,DirectoryList::MEDIA . '/') === 0){
+    $relativePath = substr($relativePath,strlen(DirectoryList::MEDIA )+1);
+}
 $relativePath = $request->getPathInfo();
 if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
     $config = json_decode(file_get_contents($configCacheFile), true);

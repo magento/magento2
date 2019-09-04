@@ -117,7 +117,7 @@ class Media implements AppInterface
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory = trim($mediaDirectory);
         if (!empty($mediaDirectory)) {
             $this->mediaDirectoryPath = str_replace('\\', '/', realpath($mediaDirectory));
