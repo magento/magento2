@@ -57,7 +57,8 @@ class AddExpectedReservations
     }
 
     /**
-     * Add expected reservations by current incomplete orders
+     * Add expected reservations by current incomplete orders.
+     *
      * @param Collector $collector
      * @throws ValidationException
      */
@@ -68,6 +69,9 @@ class AddExpectedReservations
             $stockId = (int)$this->stockByWebsiteIdResolver->execute((int)$websiteId)->getStockId();
 
             foreach ($order->getItems() as $item) {
+                if ($item->getHasChildren()) {
+                    continue;
+                }
                 $reservation = $this->reservationBuilder
                     ->setSku($item->getSku())
                     ->setQuantity((float)$item->getQtyOrdered())
