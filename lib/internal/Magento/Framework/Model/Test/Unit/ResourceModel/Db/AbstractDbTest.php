@@ -489,7 +489,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
             ->with(
                 'tableName',
                 $newData,
-                'idFieldName'
+                'idFieldName=0'
             );
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
