@@ -54,9 +54,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @deprecated
      * @see VALIDATOR_TIER_PRICE
      */
-    const VALIDATOR_TEAR_PRICE = 'validator_tier_price';
+    private const VALIDATOR_TEAR_PRICE = 'validator_tier_price';
 
-    const VALIDATOR_TIER_PRICE = 'validator_tier_price';
+    private const VALIDATOR_TIER_PRICE = 'validator_tier_price';
 
     /**
      * Validation failure message template definitions.
