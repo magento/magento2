@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LowStockNotificationSimpleProductOutOfStockCustomStockTest" extends="LowStockNotificationSimpleProductAdditionalStockTest">
+        <annotations>
+            <stories value="Simple Product On Custom Stock"/>
+            <title value="Low Stock Notification for Simple Product with 'Out of Stock' Status On Additional Stock."/>
+            <description value="Verify low stock notifications working correctly for simple product with 'Out of Stock' status in multi stock environment on additional stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/446482/scenarios/1646837"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setProductToOutOfStock" after="setProductQty"/>
+        <remove keyForRemoval="verifyProductReport"/>
+        <see userInput="We couldn't find any records." stepKey="verifyRowsStillEmpty" after="verifyLowStockReportContainsProduct"/>
+    </test>
+</tests>
