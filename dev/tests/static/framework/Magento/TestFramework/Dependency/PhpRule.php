@@ -285,12 +285,11 @@ class PhpRule implements RuleInterface
      * @return array
      * @throws LocalizedException
      * @throws \Exception
-     * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
     protected function _caseGetUrl(string $currentModule, string &$contents): array
     {
         $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<route_id>[a-z0-9\-_]{3,}|\*)'
-            .'(/(?<controller_name>[a-z0-9\-_]+|\*))?(/(?<action_name>[a-z0-9\-_]+))?\3|\*)#i';
+            .'(\/(?<controller_name>[a-z0-9\-_]+|\*))?(\/(?<action_name>[a-z0-9\-_]+|\*))?\3)#i';
 
         $dependencies = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
@@ -302,18 +301,13 @@ class PhpRule implements RuleInterface
                 $routeId = $item['route_id'];
                 $controllerName = $item['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
                 $actionName = $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
-                if (in_array(
-                    implode('/', [$routeId, $controllerName, $actionName]),
-                    $this->getRoutesWhitelist()
-                )) {
-                    continue;
-                }
+
                 // skip rest
-                if ($routeId == "rest") { //MC-17627
+                if ($routeId === "rest") { //MC-17627
                     continue;
                 }
                 // skip wildcards
-                if ($routeId == "*" || $controllerName == "*" || $actionName == "*") {  //MC-17627
+                if ($routeId === "*" || $controllerName === "*" || $actionName === "*") {  //MC-17627
                     continue;
                 }
                 $modules = $this->routeMapper->getDependencyByRoutePath(
@@ -333,7 +327,9 @@ class PhpRule implements RuleInterface
                 }
             }
         } catch (NoSuchActionException $e) {
-            throw new LocalizedException(__('Invalid URL path: %1', $e->getMessage()), $e);
+            if (array_search($e->getMessage(), $this->getRoutesWhitelist()) === false) {
+                throw new LocalizedException(__('Invalid URL path: %1', $e->getMessage()), $e);
+            }
         }
 
         return $dependencies;

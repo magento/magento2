@@ -234,7 +234,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             . '/_files/dependency_test/tables_*.php';
         $dbRuleTables = [];
         foreach (glob($replaceFilePattern) as $fileName) {
-            $dbRuleTables = array_merge($dbRuleTables, @include $fileName); //phpcs:ignore
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = [
             new PhpRule(
@@ -264,14 +265,14 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         if (is_null(self::$routesWhitelist)) {
             $routesWhitelistFilePattern = realpath(__DIR__) . '/_files/dependency_test/whitelist/routes_*.php';
-            self::$routesWhitelist = array_merge(
-                ...array_map(
-                    function ($fileName) {
-                        return include $fileName;
-                    },
-                    glob($routesWhitelistFilePattern)
-                )
-            );
+            self::$routesWhitelist = [];
+            foreach (glob($routesWhitelistFilePattern) as $fileName) {
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                self::$routesWhitelist = array_merge(
+                    self::$routesWhitelist,
+                    include $fileName
+                );
+            }
         }
         return self::$routesWhitelist;
     }
@@ -294,7 +295,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 return preg_replace(
                     '~\<!\-\-/.*?\-\-\>~s',
                     '',
-                    (string)file_get_contents($file)
+                    file_get_contents($file)
                 );
             case 'template':
                 $contents = php_strip_whitespace($file);
@@ -310,7 +311,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 );
                 return $contentsWithoutHtml;
         }
-        return (string)file_get_contents($file);
+        return file_get_contents($file);
     }
 
     /**
@@ -389,7 +390,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         foreach (self::$_rulesInstances as $rule) {
             /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
             $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
-            $dependencies = array_merge($dependencies, $newDependencies); //phpcs:ignore
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $dependencies = array_merge($dependencies, $newDependencies);
         }
         foreach ($dependencies as $key => $dependency) {
             foreach (self::$whiteList as $namespace) {
@@ -504,7 +506,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
-            //phpcs:ignore
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $found = array_merge(
                 $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND),
                 $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND),
