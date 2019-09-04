@@ -2,7 +2,7 @@
     "name": "magento/module-sample-data",
     "description": "Sample Data fixtures",
     "require": {
-        "php": "~7.1.0|~7.2.0",
+        "php": "~7.1.0||~7.2.0",
         "magento/framework": "101.0.*"
     },
     "suggest": {

@@ -2,7 +2,7 @@
     "name": "magento/module-currency-symbol",
     "description": "N/A",
     "require": {
-        "php": "~7.1.0|~7.2.0",
+        "php": "~7.1.0||~7.2.0",
         "magento/module-config": "101.0.*",
         "magento/module-store": "100.2.*",
         "magento/module-page-cache": "100.2.*",
