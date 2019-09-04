@@ -17,12 +17,12 @@ class AddPaypalShortcuts implements ObserverInterface
     /**
      * Alias for mini-cart block.
      */
-    private const PAYPAL_MINICART_ALIAS = 'mini_cart';
+    private static $paypalMinicartAlias = 'mini_cart';
 
     /**
      * Alias for shopping cart page.
      */
-    private const PAYPAL_SHOPPINGCART_ALIAS = 'shopping_cart';
+    private static $paypalShoppingcartAlias = 'shopping_cart';
 
     /**
      * @var string[]
@@ -55,10 +55,10 @@ class AddPaypalShortcuts implements ObserverInterface
 
         if ($observer->getData('is_shopping_cart')) {
             $shortcut = $shortcutButtons->getLayout()
-                ->createBlock($this->buttonBlocks[self::PAYPAL_SHOPPINGCART_ALIAS]);
+                ->createBlock($this->buttonBlocks[self::$paypalShoppingcartAlias]);
         } else {
             $shortcut = $shortcutButtons->getLayout()
-                ->createBlock($this->buttonBlocks[self::PAYPAL_MINICART_ALIAS]);
+                ->createBlock($this->buttonBlocks[self::$paypalMinicartAlias]);
         }
 
         $shortcutButtons->addShortcut($shortcut);
