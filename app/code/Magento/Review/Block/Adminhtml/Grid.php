@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Review\Block\Adminhtml;
 
@@ -15,8 +16,6 @@ namespace Magento\Review\Block\Adminhtml;
  * @method \Magento\Review\Block\Adminhtml\Grid setCustomerId() setCustomerId(int $customerId)
  * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue()
  * setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -239,7 +238,13 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         if (!$this->_storeManager->isSingleStoreMode()) {
             $this->addColumn(
                 'visible_in',
-                ['header' => __('Visibility'), 'index' => 'stores', 'type' => 'store', 'store_view' => true]
+                [
+                    'header' => __('Visibility'),
+                    'index' => 'stores',
+                    'type' => 'store',
+                    'store_view' => true,
+                    'sortable' => false
+                ]
             );
         }
 
@@ -347,6 +352,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 ]
             ]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareMassactionColumn()
+    {
+        parent::_prepareMassactionColumn();
+        /** needs for correct work of mass action select functionality */
+        $this->setMassactionIdField('rt.review_id');
+
+        return $this;
     }
 
     /**
