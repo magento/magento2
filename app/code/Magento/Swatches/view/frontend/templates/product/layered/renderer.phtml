@@ -44,7 +44,7 @@
                                  data-option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
                                  data-option-tooltip-value=""
                                  style="background: url(<?= $block->escapeUrl($swatchImagePath) ?>) no-repeat center; background-size: initial;"></div>
-                            <?php    break;
+                            <?php break;
                         case '1':
                             ?>
                             <div class="swatch-option color <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
@@ -55,19 +55,19 @@
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value="<?= $block->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?>"
                                  style="background: <?= $block->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?> no-repeat center; background-size: initial;"></div>
-                            <?php    break;
+                            <?php break;
                         case '0':
                         default:
                             ?>
-                                <div class="swatch-option text <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
-                                     tabindex="-1"
-                                     data-option-type="0"
-                                     data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
-                                     data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
-                                     data-option-tooltip-thumb=""
-                                     data-option-tooltip-value=""
-                                    ><?= $block->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?></div>
-                            <?php    break;
+                            <div class="swatch-option text <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                                 tabindex="-1"
+                                 data-option-type="0"
+                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-tooltip-thumb=""
+                                 data-option-tooltip-value=""
+                                ><?= $block->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?></div>
+                        <?php break;
                     } ?>
                 <?php endif; ?>
             </a>
