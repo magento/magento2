@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
-use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\App\Mode\ConfigProvider;
 use Magento\Deploy\Model\Filesystem;
@@ -17,11 +17,11 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
@@ -161,19 +161,25 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
         $this->writerMock->expects($this->once())
             ->method("saveConfig")
-            ->willReturnCallback(function ($data) use (&$dataStorage) {
-                $dataStorage = $data;
-            });
+            ->willReturnCallback(
+                function ($data) use (&$dataStorage) {
+                    $dataStorage = $data;
+                }
+            );
         $this->readerMock->expects($this->any())
             ->method('load')
-            ->willReturnCallback(function () use (&$dataStorage) {
-                return $dataStorage[ConfigFilePool::APP_ENV];
-            });
+            ->willReturnCallback(
+                function () use (&$dataStorage) {
+                    return $dataStorage[ConfigFilePool::APP_ENV];
+                }
+            );
         $this->filesystemMock->expects($this->once())
             ->method("regenerateStaticFiles")
-            ->willReturnCallback(function () use (&$modeModel, &$mode) {
-                $mode = $modeModel->getMode();
-            });
+            ->willReturnCallback(
+                function () use (&$modeModel, &$mode) {
+                    $mode = $modeModel->getMode();
+                }
+            );
         $this->model->enableProductionMode();
         $this->assertEquals(State::MODE_PRODUCTION, $mode);
     }
@@ -204,14 +210,18 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_PRODUCTION]])],
                 [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_DEVELOPER]])]
             )
-            ->willReturnCallback(function ($data) use (&$dataStorage) {
-                $dataStorage = $data;
-            });
+            ->willReturnCallback(
+                function ($data) use (&$dataStorage) {
+                    $dataStorage = $data;
+                }
+            );
         $this->readerMock->expects($this->any())
             ->method('load')
-            ->willReturnCallback(function () use (&$dataStorage) {
-                return $dataStorage[ConfigFilePool::APP_ENV];
-            });
+            ->willReturnCallback(
+                function () use (&$dataStorage) {
+                    return $dataStorage[ConfigFilePool::APP_ENV];
+                }
+            );
         $this->filesystemMock->expects($this->once())
             ->method("regenerateStaticFiles")
             ->willThrowException(new LocalizedException(__('Exception')));
@@ -227,14 +237,16 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         $this->configProvider->expects($this->once())
             ->method('getConfigs')
             ->with('developer', 'production')
-            ->willReturn([
-                'dev/debug/debug_logging' => 0,
-            ]);
+            ->willReturn(
+                ['dev/debug/debug_logging' => 0]
+            );
         $this->emulatedAreaProcessor->expects($this->once())
             ->method('process')
-            ->willReturnCallback(function (\Closure $closure) {
-                return $closure->call($this->model);
-            });
+            ->willReturnCallback(
+                function (\Closure $closure) {
+                    return $closure->call($this->model);
+                }
+            );
 
         $this->processorFacadeFactory->expects($this->once())
             ->method('create')
