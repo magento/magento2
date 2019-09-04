@@ -167,7 +167,7 @@ class Media implements AppInterface
             /** @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync */
             $sync = $this->syncFactory->create(['directory' => $this->directory]);
             $sync->synchronize($this->relativeFileName);
-            if(stripos($this->relativeFileName,$this->productMediaConfig->getBaseMediaPathAddition()) === 0){
+            if (stripos($this->relativeFileName,$this->productMediaConfig->getBaseMediaPathAddition()) === 0) {
                 $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
             }
             if ($this->directory->isReadable($this->relativeFileName)) {
