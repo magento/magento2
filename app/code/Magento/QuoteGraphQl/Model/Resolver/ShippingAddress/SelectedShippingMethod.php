@@ -31,8 +31,8 @@ class SelectedShippingMethod implements ResolverInterface
         /** @var Address $address */
         $address = $value['model'];
         $rates = $address->getAllShippingRates();
-        $carrierTitle = null;
-        $methodTitle = null;
+        $carrierTitle = '';
+        $methodTitle = '';
 
         if (count($rates) > 0 && !empty($address->getShippingMethod())) {
             list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
@@ -65,12 +65,18 @@ class SelectedShippingMethod implements ResolverInterface
             ];
         } else {
             $data = [
-                'carrier_code' => null,
-                'method_code' => null,
+                'carrier_code' => '',
+                'method_code' => '',
                 'carrier_title' => $carrierTitle,
                 'method_title' => $methodTitle,
-                'amount' => null,
-                'base_amount' => null,
+                'amount' => [
+                    'value' => null,
+                    'currency' => null,
+                ],
+                'base_amount' => [
+                    'value' => null,
+                    'currency' => null,
+                ],
             ];
         }
         return $data;

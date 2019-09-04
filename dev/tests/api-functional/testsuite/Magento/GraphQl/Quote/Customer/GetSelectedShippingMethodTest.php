@@ -110,16 +110,16 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
         self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
 
         self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
-        self::assertNull($shippingAddress['selected_shipping_method']['carrier_code']);
+        self::assertEmpty($shippingAddress['selected_shipping_method']['carrier_code']);
 
         self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
-        self::assertNull($shippingAddress['selected_shipping_method']['method_code']);
+        self::assertEmpty($shippingAddress['selected_shipping_method']['method_code']);
 
         self::assertArrayHasKey('carrier_title', $shippingAddress['selected_shipping_method']);
-        self::assertNull($shippingAddress['selected_shipping_method']['carrier_title']);
+        self::assertEmpty($shippingAddress['selected_shipping_method']['carrier_title']);
 
         self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
-        self::assertNull($shippingAddress['selected_shipping_method']['method_title']);
+        self::assertEmpty($shippingAddress['selected_shipping_method']['method_title']);
     }
 
     /**
@@ -183,12 +183,18 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
         $shippingAddress = current($response['cart']['shipping_addresses']);
         self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
 
-        self::assertNull($shippingAddress['selected_shipping_method']['carrier_code']);
-        self::assertNull($shippingAddress['selected_shipping_method']['method_code']);
-        self::assertNull($shippingAddress['selected_shipping_method']['carrier_title']);
-        self::assertNull($shippingAddress['selected_shipping_method']['method_title']);
-        self::assertNull($shippingAddress['selected_shipping_method']['amount']);
-        self::assertNull($shippingAddress['selected_shipping_method']['base_amount']);
+        self::assertEmpty($shippingAddress['selected_shipping_method']['carrier_code']);
+        self::assertEmpty($shippingAddress['selected_shipping_method']['method_code']);
+        self::assertEmpty($shippingAddress['selected_shipping_method']['carrier_title']);
+        self::assertEmpty($shippingAddress['selected_shipping_method']['method_title']);
+
+        self::assertArrayHasKey('amount', $shippingAddress['selected_shipping_method']);
+        self::assertNull($shippingAddress['selected_shipping_method']['amount']['value']);
+        self::assertNull($shippingAddress['selected_shipping_method']['amount']['currency']);
+
+        self::assertArrayHasKey('base_amount', $shippingAddress['selected_shipping_method']);
+        self::assertNull($shippingAddress['selected_shipping_method']['base_amount']['value']);
+        self::assertNull($shippingAddress['selected_shipping_method']['base_amount']['currency']);
     }
 
     /**
