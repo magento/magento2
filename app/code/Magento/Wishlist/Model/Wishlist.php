@@ -370,7 +370,8 @@ class Wishlist extends AbstractModel implements IdentityInterface
     /**
      * Retrieve wishlist item collection
      *
-     * @return ResourceModel\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @throws NoSuchEntityException
      */
     public function getItemCollection()
     {
@@ -606,7 +607,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
     /**
      * Retrieve wishlist store object
      *
-     * @return Store
+     * @return \Magento\Store\Model\Store
      * @throws NoSuchEntityException
      */
     public function getStore()
