@@ -19,6 +19,7 @@ use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\Framework\App\Area;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Service\ImageResize;
+use Magento\Catalog\Model\Product\Media\Config as ProductMediaConfig;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -69,6 +70,11 @@ class Media implements AppInterface
     private $configFactory;
 
     /**
+     * @var ProductMediaConfig
+     */
+    private $productMediaConfig;
+
+    /**
      * @var SynchronizationFactory
      */
     private $syncFactory;
@@ -100,6 +106,7 @@ class Media implements AppInterface
      * @param PlaceholderFactory $placeholderFactory
      * @param State $state
      * @param ImageResize $imageResize
+     * @param ProductMediaConfig $productMediaConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,7 +120,8 @@ class Media implements AppInterface
         Filesystem $filesystem,
         PlaceholderFactory $placeholderFactory,
         State $state,
-        ImageResize $imageResize
+        ImageResize $imageResize,
+        ProductMediaConfig $productMediaConfig
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;
@@ -129,6 +137,7 @@ class Media implements AppInterface
         $this->placeholderFactory = $placeholderFactory;
         $this->appState = $state;
         $this->imageResize = $imageResize;
+        $this->productMediaConfig = $productMediaConfig;
     }
 
     /**
@@ -141,7 +150,7 @@ class Media implements AppInterface
     {
         $this->appState->setAreaCode(Area::AREA_GLOBAL);
 
-        if ($this->mediaDirectoryPath !== $this->directory->getAbsolutePath()) {
+        if (trim($this->mediaDirectoryPath,'/') !== trim($this->directory->getAbsolutePath(),'/')) {
             // Path to media directory changed or absent - update the config
             /** @var Config $config */
             $config = $this->configFactory->create(['cacheFile' => $this->configCacheFile]);
@@ -158,7 +167,9 @@ class Media implements AppInterface
             /** @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync */
             $sync = $this->syncFactory->create(['directory' => $this->directory]);
             $sync->synchronize($this->relativeFileName);
-            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+            if(stripos($this->relativeFileName,$this->productMediaConfig->getBaseMediaPathAddition()) === 0){
+                $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+            }
             if ($this->directory->isReadable($this->relativeFileName)) {
                 $this->response->setFilePath($this->directory->getAbsolutePath($this->relativeFileName));
             } else {
