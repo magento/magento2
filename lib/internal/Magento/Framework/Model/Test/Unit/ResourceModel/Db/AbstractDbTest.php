@@ -429,12 +429,10 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Model\Context::class
         );
         $registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $resourceMock = $this->createPartialMock(AbstractDb::class, [
-                '_construct',
-                'getConnection',
-                '__wakeup',
-                'getIdFieldName'
-            ]);
+        $resourceMock = $this->createPartialMock(
+            AbstractDb::class,
+            ['_construct', 'getConnection', '__wakeup', 'getIdFieldName']
+        );
         $connectionInterfaceMock = $this->createMock(AdapterInterface::class);
         $resourceMock->expects($this->any())
             ->method('getConnection')
