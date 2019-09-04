@@ -12,6 +12,8 @@ use InvalidArgumentException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -153,6 +155,11 @@ class Wishlist extends AbstractModel implements IdentityInterface
     private $scopeConfig;
 
     /**
+     * @var StockRegistryInterface|null
+     */
+    private $stockRegistry;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -172,6 +179,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @param bool $useCurrentWebsite
      * @param array $data
      * @param Json|null $serializer
+     * @param StockRegistryInterface|null $stockRegistry
      * @param ScopeConfigInterface|null $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -193,6 +201,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
         $useCurrentWebsite = true,
         array $data = [],
         Json $serializer = null,
+        StockRegistryInterface $stockRegistry = null,
         ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;
@@ -209,6 +218,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()->get(StockRegistryInterface::class);
     }
 
     /**
@@ -447,7 +457,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
             throw new LocalizedException(__('Cannot specify product.'));
         }
 
-        if ($this->isInStock($product)) {
+        if ($this->isInStock($productId)) {
             throw new LocalizedException(__('Cannot add product without stock to wishlist.'));
         }
 
@@ -642,13 +652,13 @@ class Wishlist extends AbstractModel implements IdentityInterface
     /**
      * Retrieve if product has stock or config is set for showing out of stock products
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param int $productId
      * @return bool
      */
-    public function isInStock(\Magento\Catalog\Api\Data\ProductInterface $product)
+    private function isInStock($productId)
     {
-        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem */
-        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        /** @var StockItemInterface $stockItem */
+        $stockItem = $this->stockRegistry->getStockItem($productId);
         $showOutOfStock = $this->scopeConfig->isSetFlag(
             Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
             ScopeInterface::SCOPE_STORE

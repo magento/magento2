@@ -11,6 +11,7 @@ use Magento\Catalog\Helper\Product as HelperProduct;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -123,12 +124,12 @@ class WishlistTest extends TestCase
     /**
      * @var StockItemRepository|PHPUnit_Framework_MockObject_MockObject
      */
-    private $stockItemRepository;
+    private $scopeConfig;
 
     /**
-     * @var StockItemRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    private $scopeConfig;
+    private $stockRegistry;
 
     protected function setUp()
     {
@@ -177,7 +178,7 @@ class WishlistTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
-        $this->stockItemRepository = $this->createMock(StockItemRepository::class);
+        $this->stockRegistry = $this->createMock(StockRegistryInterface::class);
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
@@ -209,7 +210,7 @@ class WishlistTest extends TestCase
             false,
             [],
             $this->serializer,
-            $this->stockItemRepository,
+            $this->stockRegistry,
             $this->scopeConfig
         );
     }
@@ -280,7 +281,9 @@ class WishlistTest extends TestCase
 
         $stockItem = $this->getMockBuilder(StockItem::class)->disableOriginalConstructor()->getMock();
         $stockItem->expects($this->any())->method('getIsInStock')->will($this->returnValue(true));
-        $this->stockItemRepository->expects($this->any())->method('get')->will($this->returnValue($stockItem));
+        $this->stockRegistry->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($stockItem));
 
         $instanceType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
@@ -289,9 +292,7 @@ class WishlistTest extends TestCase
             ->method('processConfiguration')
             ->will(
                 $this->returnValue(
-                    $this->getMockBuilder(
-                        Product::class
-                    )->disableOriginalConstructor()->getMock()
+                    $this->getMockBuilder(Product::class)->disableOriginalConstructor()->getMock()
                 )
             );
 
@@ -413,7 +414,10 @@ class WishlistTest extends TestCase
             StockItem::class
         )->disableOriginalConstructor()->getMock();
         $stockItem->expects($this->any())->method('getIsInStock')->will($this->returnValue(true));
-        $this->stockItemRepository->expects($this->any())->method('get')->will($this->returnValue($stockItem));
+
+        $this->stockRegistry->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($stockItem));
 
         $this->assertEquals($result, $this->wishlist->addNewItem($productMock, $buyRequest));
     }
