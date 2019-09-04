@@ -58,10 +58,8 @@ class SelectedShippingMethod implements ResolverInterface
                     'value' => $address->getShippingAmount(),
                     'currency' => $address->getQuote()->getQuoteCurrencyCode(),
                 ],
-                'base_amount' => [
-                    'value' => $address->getBaseShippingAmount(),
-                    'currency' => $currency->getCode(),
-                ],
+                /** @deprecated The field should not be used on the storefront */
+                'base_amount' => null,
             ];
         } else {
             $data = [
@@ -70,6 +68,7 @@ class SelectedShippingMethod implements ResolverInterface
                 'carrier_title' => $carrierTitle,
                 'method_title' => $methodTitle,
                 'amount' => null,
+                /** @deprecated The field should not be used on the storefront */
                 'base_amount' => null,
             ];
         }

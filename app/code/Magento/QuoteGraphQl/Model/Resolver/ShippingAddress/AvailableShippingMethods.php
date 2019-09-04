@@ -98,11 +98,8 @@ class AvailableShippingMethods implements ResolverInterface
             $data['amount'] = ['value' => $data['amount'], 'currency' => $quoteCurrencyCode];
         }
 
-        if (isset($data['base_amount'])) {
-            /** @var Currency $currency */
-            $currency = $store->getBaseCurrency();
-            $data['base_amount'] = ['value' => $data['base_amount'], 'currency' => $currency->getCode()];
-        }
+        /** @deprecated The field should not be used on the storefront */
+        $data['base_amount'] = null;
 
         if (isset($data['price_excl_tax'])) {
             $data['price_excl_tax'] = ['value' => $data['price_excl_tax'], 'currency' => $quoteCurrencyCode];
