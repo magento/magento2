@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\ConfigurableProduct\Model\Plugin\Frontend;
+namespace Magento\ConfigurableProduct\Model\Plugin;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -24,6 +25,11 @@ use Magento\Framework\Serialize\SerializerInterface;
  */
 class UsedProductsCache
 {
+    /**
+     * @var AppState
+     */
+    private $appState;
+
     /**
      * @var MetadataPool
      */
@@ -50,6 +56,7 @@ class UsedProductsCache
     private $customerSession;
 
     /**
+     * @param AppState $appState
      * @param MetadataPool $metadataPool
      * @param FrontendInterface $cache
      * @param SerializerInterface $serializer
@@ -57,12 +64,14 @@ class UsedProductsCache
      * @param Session $customerSession
      */
     public function __construct(
+        AppState $appState,
         MetadataPool $metadataPool,
         FrontendInterface $cache,
         SerializerInterface $serializer,
         ProductInterfaceFactory $productFactory,
         Session $customerSession
     ) {
+        $this->appState = $appState;
         $this->metadataPool = $metadataPool;
         $this->cache = $cache;
         $this->serializer = $serializer;
@@ -111,6 +120,7 @@ class UsedProductsCache
             $product->getData($metadata->getLinkField()),
             $product->getStoreId(),
             $this->customerSession->getCustomerGroupId(),
+            $this->appState->getAreaCode(),
         ];
         if ($requiredAttributeIds !== null) {
             sort($requiredAttributeIds);
