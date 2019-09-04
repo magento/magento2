@@ -41,15 +41,11 @@
             </item>
         </argument>
         <paging name="listing_paging">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">export_grid.export_grid_data_source.export_grid_columns.file_name</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">export_grid.export_grid_data_source.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.paging</item>
-                    </item>
-                </item>
-            </argument>
+            <settings>
+                <sticky>false</sticky>
+            </settings>
+            <bookmark name="bookmarks"/>
+            <paging name="listing_paging"/>
         </paging>
     </listingToolbar>
     <columns name="export_grid_columns">
