@@ -201,15 +201,15 @@ type Cart {
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
-    firstname: String
-    lastname: String
+    firstname: String!
+    lastname: String!
     company: String
-    street: [String]
-    city: String
+    street: [String!]!
+    city: String!
     region: CartAddressRegion
     postcode: String
-    country: CartAddressCountry
-    telephone: String
+    country: CartAddressCountry!
+    telephone: String!
     customer_notes: String
 }
 
@@ -229,13 +229,13 @@ type CartItemQuantity {
 }
 
 type CartAddressRegion {
-    code: String
-    label: String
+    code: String!
+    label: String!
 }
 
 type CartAddressCountry {
-    code: String
-    label: String
+    code: String!
+    label: String!
 }
 
 type SelectedShippingMethod {
