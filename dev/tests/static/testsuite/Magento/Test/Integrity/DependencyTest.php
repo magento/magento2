@@ -286,17 +286,20 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getCleanedFileContents($fileType, $file)
     {
+        $contents = null;
         switch ($fileType) {
             case 'php':
-                return php_strip_whitespace($file);
+                $contents = php_strip_whitespace($file);
+                break;
             case 'layout':
             case 'config':
                 //Removing xml comments
-                return preg_replace(
+                $contents = preg_replace(
                     '~\<!\-\-/.*?\-\-\>~s',
                     '',
                     file_get_contents($file)
                 );
+                break;
             case 'template':
                 $contents = php_strip_whitespace($file);
                 //Removing html
@@ -309,9 +312,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                     },
                     $contents
                 );
-                return $contentsWithoutHtml;
+                $contents = $contentsWithoutHtml;
+                break;
+            default:
+                $contents = file_get_contents($file);
         }
-        return file_get_contents($file);
+        return $contents;
     }
 
     /**
