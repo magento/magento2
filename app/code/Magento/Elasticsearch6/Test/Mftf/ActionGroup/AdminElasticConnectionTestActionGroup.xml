@@ -15,7 +15,8 @@
         <waitForElementVisible selector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" stepKey="waitForConnectionButton"/>
         <click selector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" stepKey="clickOnTestConnectionButton"/>
         <waitForPageLoad stepKey="waitForConnectionEstablishment"/>
-        <see selector="{{AdminCatalogSearchConfigurationSection.connectionStatus}}" userInput="Successful! Test again?" stepKey="checkThatConnectionExists"/>
+        <grabTextFrom selector="{{AdminCatalogSearchConfigurationSection.connectionStatus}}" stepKey="grabConnectionStatus"/>
+        <assertEquals expected="Successful! Test again?" expectedType="string" actual="$grabConnectionStatus"  stepKey="assertThatConnectionSuccessful"/>
         <scrollTo selector="{{AdminConfigCatalogCategoryPermissionsSection.catalogPermissionsTab}}" stepKey="scrollToCatalogPermissionsTab"/>
         <click selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="closeCatalogSearchTab"/>
     </actionGroup>
