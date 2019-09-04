@@ -34,7 +34,7 @@ $request = new \Magento\MediaStorage\Model\File\Storage\Request(
     )
 );
 
-if(stripos($relativePath,DirectoryList::MEDIA . '/') === 0){
+if (stripos($relativePath,DirectoryList::MEDIA . '/') === 0) {
     $relativePath = substr($relativePath,strlen(DirectoryList::MEDIA )+1);
 }
 $relativePath = $request->getPathInfo();
