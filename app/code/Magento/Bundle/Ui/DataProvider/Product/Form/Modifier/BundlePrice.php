@@ -64,7 +64,7 @@ class BundlePrice extends AbstractModifier
             $this->arrayManager->findPath(
                 ProductAttributeInterface::CODE_PRICE,
                 $meta,
-                self::DEFAULT_GENERAL_PANEL.'/children',
+                self::DEFAULT_GENERAL_PANEL . '/children',
                 'children'
             ) . static::META_CONFIG_PATH,
             $meta,
