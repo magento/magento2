@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderSimpleProductDefaultStockTest" extends="ReorderOfTheOrderWithSimpleProductOnTestStockFromAdmin">
+        <annotations>
+            <stories value="Simple Product Multi Stock."/>
+            <title value="Reorder Simple product on default stock from admin area."/>
+            <description value="Verify, admin able to reorder simple product on default stock from admin area."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735202/scenarios/2591613"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="createStock"/>
+            <remove keyForRemoval="linkSourceStock"/>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="loginAsAdmin">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </before>
+
+        <remove keyForRemoval="AdminOnProductEditPageAssignSourceToProduct1"/>
+        <remove keyForRemoval="fillSourceQuantityField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="fillSourceQuantityField" after="goToProductGridFilterResultsByInputEditProduct1"/>
+        <remove keyForRemoval="checkProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder" after="findProductBySkuToCheckQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="90" stepKey="checkSalableQtyAfterPlaceOrder" after="checkProductSourceQtyAfterPlaceOrder"/>
+    </test>
+</tests>
