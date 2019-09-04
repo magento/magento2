@@ -6,11 +6,13 @@
 
 namespace Magento\Paypal\Model\Api;
 
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\Cart;
 use Magento\Payment\Model\Method\Logger;
 
 /**
  * NVP API wrappers model
+ *
  * @TODO: move some parts to abstract, don't hesitate to throw exceptions on api calls
  *
  * @method string getToken()
@@ -1085,11 +1087,11 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Import callback request array into $this public data
      *
      * @param array $request
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function prepareShippingOptionsCallbackAddress(array $request)
     {
-        $address = new \Magento\Framework\DataObject();
+        $address = new DataObject();
         \Magento\Framework\DataObject\Mapper::accumulateByMap($request, $address, $this->_callbackRequestMap);
         $address->setExportedKeys(array_values($this->_callbackRequestMap));
         $this->_applyStreetAndRegionWorkarounds($address);
@@ -1125,8 +1127,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
-     * Additional response processing.
-     * Hack to cut off length from API type response params.
+     * Additional response processing. Hack to cut off length from API type response params.
      *
      * @param array $response
      * @return array
@@ -1414,6 +1415,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Parse an NVP response string into an associative array
+     *
      * @param string $nvpstr
      * @return array
      */
@@ -1477,7 +1479,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      */
     protected function _exportAddresses($data)
     {
-        $address = new \Magento\Framework\DataObject();
+        $address = new DataObject();
         \Magento\Framework\DataObject\Mapper::accumulateByMap($data, $address, $this->_billingAddressMap);
         $address->setExportedKeys(array_values($this->_billingAddressMap));
         $this->_applyStreetAndRegionWorkarounds($address);
@@ -1488,7 +1490,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             \Magento\Framework\DataObject\Mapper::accumulateByMap($data, $shippingAddress, $this->_shippingAddressMap);
             $this->_applyStreetAndRegionWorkarounds($shippingAddress);
             // PayPal doesn't provide detailed shipping name fields, so the name will be overwritten
-            $shippingAddress->addData(['firstname'  => $data['SHIPTONAME']]);
+            $this->updateShippingAddressWithShipToName($shippingAddress, $data);
             $this->setExportedShippingAddress($shippingAddress);
         }
     }
@@ -1496,10 +1498,10 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Adopt specified address object to be compatible with Magento
      *
-     * @param \Magento\Framework\DataObject $address
+     * @param DataObject $address
      * @return void
      */
-    protected function _applyStreetAndRegionWorkarounds(\Magento\Framework\DataObject $address)
+    protected function _applyStreetAndRegionWorkarounds(DataObject $address)
     {
         // merge street addresses into 1
         if ($address->getData('street2') !== null) {
@@ -1754,6 +1756,27 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             $key = array_search('SUBJECT', $requestFields);
             if ($key) {
                 unset($requestFields[$key]);
+            }
+        }
+    }
+
+    /**
+     * Updates shipping address with 'ship to name' data
+     *
+     * @param DataObject $shippingAddress
+     * @param array $data
+     * @return void
+     */
+    private function updateShippingAddressWithShipToName(DataObject $shippingAddress, array $data)
+    {
+        if (isset($data['SHIPTONAME'])) {
+            $nameParts = explode(' ', $data['SHIPTONAME'], 2);
+            $shippingAddress->addData(['firstname' => $nameParts[0]]);
+
+            if (isset($nameParts[1])) {
+                $shippingAddress->addData(['lastname' => $nameParts[1]]);
+            } else {
+                $shippingAddress->addData(['lastname' => null]);
             }
         }
     }

@@ -2,7 +2,7 @@
     "name": "magento/module-authorization",
     "description": "Authorization module provides access to Magento ACL functionality.",
     "require": {
-        "php": "~7.1.0|~7.2.0",
+        "php": "~7.1.0||~7.2.0",
         "magento/module-backend": "100.2.*",
         "magento/framework": "101.0.*"
     },

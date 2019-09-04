@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Review\Block\Adminhtml;
 
 /**
  * Adminhtml reviews grid
@@ -14,10 +15,8 @@
  * @method bool getMassactionIdFieldOnlyIndexValue()
  * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block\Adminhtml;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -349,6 +348,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 ]
             ]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareMassactionColumn()
+    {
+        parent::_prepareMassactionColumn();
+        /** needs for correct work of mass action select functionality */
+        $this->setMassactionIdField('rt.review_id');
+
+        return $this;
     }
 
     /**

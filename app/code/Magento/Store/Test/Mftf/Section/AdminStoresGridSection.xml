@@ -10,5 +10,6 @@
         <element name="websiteInFirstRow" type="text" selector=".data-row[data-repeat-index='0'] td:nth-of-type(1) a"/>
         <element name="storeInFirstRow" type="text" selector=".data-row[data-repeat-index='0'] td:nth-of-type(2) a"/>
         <element name="storeViewInFirstRow" type="text" selector=".data-row[data-repeat-index='0'] td:nth-of-type(3) a"/>
+        <element name="websiteNameInFirstRow" type="text" selector="tr:nth-of-type(1) > .col-website_title > a"/>
     </section>
 </sections>

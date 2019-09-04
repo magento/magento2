@@ -69,11 +69,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
             $this->_imageHelperMock->expects($this->any())
                 ->method('init')
-                ->willReturnMap([
-                    [$data['current_product_mock'], 'product_page_image_large', [], $imageHelper1],
-                    [$data['allowed_products'][0], 'product_page_image_large', [], $imageHelper1],
-                    [$data['allowed_products'][1], 'product_page_image_large', [], $imageHelper2],
-                ]);
+                ->willReturnMap(
+                    [
+                        [$data['current_product_mock'], 'product_page_image_large', [], $imageHelper1],
+                        [$data['allowed_products'][0], 'product_page_image_large', [], $imageHelper1],
+                        [$data['allowed_products'][1], 'product_page_image_large', [], $imageHelper2],
+                    ]
+                );
         }
 
         $this->assertEquals(
@@ -130,7 +132,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->createPartialMock(
                 \Magento\Catalog\Model\Product::class,
-                ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages']
+                ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages', 'isSalable']
             );
             $productMock->expects($this->any())
                 ->method('getData')
@@ -138,6 +140,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $productMock->expects($this->any())
                 ->method('getId')
                 ->will($this->returnValue('product_id_' . $i));
+            $productMock
+                ->expects($this->any())
+                ->method('isSalable')
+                ->will($this->returnValue(true));
             if ($i == 2) {
                 $productMock->expects($this->any())
                     ->method('getImage')
@@ -198,11 +204,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->_imageHelperMock->expects($this->exactly(3))
             ->method('init')
-            ->willReturnMap([
-                [$productMock, 'product_page_image_small', [], $this->_imageHelperMock],
-                [$productMock, 'product_page_image_medium_no_frame', [], $this->_imageHelperMock],
-                [$productMock, 'product_page_image_large_no_frame', [], $this->_imageHelperMock],
-            ])
+            ->willReturnMap(
+                [
+                    [$productMock, 'product_page_image_small', [], $this->_imageHelperMock],
+                    [$productMock, 'product_page_image_medium_no_frame', [], $this->_imageHelperMock],
+                    [$productMock, 'product_page_image_large_no_frame', [], $this->_imageHelperMock],
+                ]
+            )
             ->willReturnSelf();
         $this->_imageHelperMock->expects($this->exactly(3))
             ->method('setImageFile')
@@ -234,9 +242,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $items = [
-            new \Magento\Framework\DataObject([
-                'file' => 'test_file'
-            ]),
+            new \Magento\Framework\DataObject(
+                ['file' => 'test_file']
+            ),
         ];
 
         $collectionMock->expects($this->any())
