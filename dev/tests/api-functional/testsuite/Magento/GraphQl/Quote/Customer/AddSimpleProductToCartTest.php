@@ -55,19 +55,29 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         self::assertArrayHasKey('prices', $response['addSimpleProductsToCart']['cart']['items'][0]);
 
         self::assertArrayHasKey('price', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
-        self::assertArrayHasKey('value', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price']);
-        self::assertEquals(10, $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price']['value']);
-        self::assertEquals('USD', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price']['currency']);
+        $price = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price'];
+        self::assertArrayHasKey('value', $price);
+        self::assertEquals(10, $price['value']);
+        self::assertArrayHasKey('currency', $price);
+        self::assertEquals('USD', $price['currency']);
 
         self::assertArrayHasKey('row_total', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
-        self::assertArrayHasKey('value', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total']);
-        self::assertEquals(20, $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total']['value']);
-        self::assertEquals('USD', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total']['currency']);
+        $rowTotal = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total'];
+        self::assertArrayHasKey('value', $rowTotal);
+        self::assertEquals(20, $rowTotal['value']);
+        self::assertArrayHasKey('currency', $rowTotal);
+        self::assertEquals('USD', $rowTotal['currency']);
 
-        self::assertArrayHasKey('row_total_including_tax', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
-        self::assertArrayHasKey('value', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax']);
-        self::assertEquals(20, $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax']['value']);
-        self::assertEquals('USD', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax']['currency']);
+        self::assertArrayHasKey(
+            'row_total_including_tax',
+            $response['addSimpleProductsToCart']['cart']['items'][0]['prices']
+        );
+        $rowTotalIncludingTax =
+            $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax'];
+        self::assertArrayHasKey('value', $rowTotalIncludingTax);
+        self::assertEquals(20, $rowTotalIncludingTax['value']);
+        self::assertArrayHasKey('currency', $rowTotalIncludingTax);
+        self::assertEquals('USD', $rowTotalIncludingTax['currency']);
     }
 
     /**
