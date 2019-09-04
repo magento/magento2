@@ -69,6 +69,7 @@ define([
          */
         removeRating: function () {
             var checkedInputs = this.element.find('input[type="radio"]');
+
             checkedInputs.nextAll('label').css('color', this.options.colorUnfilled).data('checked', false);
         }
     });

@@ -17,6 +17,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize add review
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _construct()
     {
