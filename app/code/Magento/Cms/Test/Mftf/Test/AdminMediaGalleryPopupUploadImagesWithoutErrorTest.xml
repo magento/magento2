@@ -10,7 +10,7 @@
     <test name="AdminMediaGalleryPopupUploadImagesWithoutErrorTest">
         <annotations>
             <features value="Cms"/>
-            <stories value="WYSIWYG - Spinner is Always Displayed on Media Gallery popup"/>
+            <stories value="Spinner is Always Displayed on Media Gallery popup"/>
             <title value="Media Gallery popup upload images without error"/>
             <description value="Media Gallery popup upload images without error"/>
             <severity value="CRITICAL"/>
@@ -40,7 +40,7 @@
         <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage1">
             <argument name="CMSBlockPage" value="$$createBlock$$"/>
         </actionGroup>
-        <actionGroup ref="AddImageToCMSBlockContent" stepKey="addImage">
+        <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImage">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtnFirstTime"/>
@@ -53,7 +53,7 @@
         <switchToIFrame stepKey="switchBack"/>
         <!--Add image second time and assert-->
         <comment userInput="Add image second time and assert" stepKey="commentAddImageAndAssert"/>
-        <actionGroup ref="AddImageToCMSBlockContent" stepKey="addImageSecondTime">
+        <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImageSecondTime">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <switchToIFrame selector="{{BlockContentSection.contentIframe}}" stepKey="switchToContentFrameSecondTime"/>
