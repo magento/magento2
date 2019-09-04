@@ -285,6 +285,7 @@ class PhpRule implements RuleInterface
      * @return array
      * @throws LocalizedException
      * @throws \Exception
+     * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
     protected function _caseGetUrl(string $currentModule, string &$contents): array
     {
