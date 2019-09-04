@@ -52,6 +52,22 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
         self::assertEquals($quantity, $response['addSimpleProductsToCart']['cart']['items'][0]['quantity']);
         self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
+        self::assertArrayHasKey('prices', $response['addSimpleProductsToCart']['cart']['items'][0]);
+
+        self::assertArrayHasKey('price', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
+        self::assertArrayHasKey('value', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price']);
+        self::assertEquals(10, $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price']['value']);
+        self::assertEquals('USD', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price']['currency']);
+
+        self::assertArrayHasKey('row_total', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
+        self::assertArrayHasKey('value', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total']);
+        self::assertEquals(20, $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total']['value']);
+        self::assertEquals('USD', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total']['currency']);
+
+        self::assertArrayHasKey('row_total_including_tax', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
+        self::assertArrayHasKey('value', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax']);
+        self::assertEquals(20, $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax']['value']);
+        self::assertEquals('USD', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax']['currency']);
     }
 
     /**
@@ -261,6 +277,20 @@ mutation {
         quantity
         product {
           sku
+        }
+        prices {
+          price {
+           value
+           currency
+          }
+          row_total {
+           value
+           currency
+          }
+          row_total_including_tax {
+           value
+           currency
+          }
         }
       }
     }

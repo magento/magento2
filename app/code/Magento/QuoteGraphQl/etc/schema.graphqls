@@ -216,14 +216,14 @@ interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Mo
 type ShippingCartAddress implements CartAddressInterface {
     available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\AvailableShippingMethods")
     selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod")
-    items_weight: Float
-    cart_items: [CartItemQuantity]
+    items_weight: Float @deprecated
+    cart_items: [CartItemInterface]
 }
 
 type BillingCartAddress implements CartAddressInterface {
 }
 
-type CartItemQuantity {
+type CartItemQuantity @deprecated(reason: "Use CartItemInterface instead") {
     cart_item_id: Int!
     quantity: Float!
 }
