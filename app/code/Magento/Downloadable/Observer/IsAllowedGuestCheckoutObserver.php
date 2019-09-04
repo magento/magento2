@@ -16,12 +16,12 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
     /**
      *  Xml path to disable checkout
      */
-    const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
+    private const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
 
     /**
      *  Xml path to get downloadable Shareable setting
      */
-    const XML_PATH_DOWNLOADABLE_SHAREABLE = 'catalog/downloadable/shareable';
+    private const XML_PATH_DOWNLOADABLE_SHAREABLE = 'catalog/downloadable/shareable';
 
     /**
      * Core store config
