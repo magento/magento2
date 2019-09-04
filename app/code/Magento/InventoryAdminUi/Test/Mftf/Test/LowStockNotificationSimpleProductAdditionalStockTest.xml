@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LowStockNotificationSimpleProductAdditionalStockTest">
+        <annotations>
+            <stories value="Simple Product On Custom Stock"/>
+            <title value="Low Stock Notification for Simple Product On Custom Stock."/>
+            <description value="Verify low stock notifications working correctly for simple product in multi stock environment on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/446482/scenarios/1527831"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Crate additional stock and source.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create category and product.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteAdditionalStock"/>
+        </after>
+
+        <!--Assign created product to additional stock.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToSetQty"/>
+        <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
+            <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignAdditionalSourceToCreatedProduct">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <!--Set Low Stock Notification quantity and source quantity for created product.-->
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="uncheckNotifyQtyUseDefault"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="95" stepKey="setLowStockNotification"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setProductQty"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        <!--Verify report is empty.-->
+        <amOnPage url="{{LowStockReportPage.url}}" stepKey="navigateToLowStockReportPageBeforeApplyCustomNotifyQtyForProduct"/>
+        <actionGroup ref="AdminSearchLowStockReportByProductSkuAndSourceCodeActionGroup" stepKey="verifyLowStockReportIsEmpty">
+            <argument name="productSku" value="$$product.sku$$"/>
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <see userInput="We couldn't find any records." stepKey="verifyRowsAreEmpty"/>
+        <!--Set product qty lower than notify quantity.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToChangeQty"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="94" stepKey="setProductQtyLowerThanNotifyQuantity"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProductWithChangedQuantity"/>
+        <!--Verify report contains product.-->
+        <amOnPage url="{{LowStockReportPage.url}}" stepKey="navigateToLowStockReportPageAfterApplyCustomNotifyQtyForProduct"/>
+        <actionGroup ref="AdminSearchLowStockReportByProductSkuAndSourceCodeActionGroup" stepKey="verifyLowStockReportContainsProduct">
+            <argument name="productSku" value="$$product.sku$$"/>
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyLowStockProductReportActionGroup" stepKey="verifyProductReport">
+            <argument name="product" value="$$product$$"/>
+            <argument name="productQty" value="94"/>
+            <argument name="source" value="$$additionalSource$$"/>
+        </actionGroup>
+    </test>
+</tests>

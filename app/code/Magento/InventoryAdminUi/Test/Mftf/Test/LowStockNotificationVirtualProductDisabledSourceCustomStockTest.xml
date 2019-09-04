@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LowStockNotificationVirtualProductDisabledSourceCustomStockTest" extends="LowStockNotificationSimpleProductAdditionalStockTest">
+        <annotations>
+            <stories value="Virtual Product On Custom Stock"/>
+            <title value="Low Stock Notification for Virtual Product with disabled source On Additional Stock."/>
+            <description value="Verify low stock notifications working correctly for virtual product with disabled source in multi stock environment on additional stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/446482/scenarios/2119601"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="product"/>
+            <createData entity="VirtualProduct" stepKey="product" after="category"/>
+        </before>
+        <after>
+            <remove keyForRemoval="disableCreatedSource"/>
+        </after>
+        <!--Disable additional source.-->
+        <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource" after="saveProductWithChangedQuantity">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <remove keyForRemoval="verifyProductReport"/>
+        <remove keyForRemoval="verifyLowStockReportContainsProduct"/>
+        <click selector="{{LowStockReportFilterSection.resetButton}}" stepKey="resetFilterToVerifyProductWithDisabledSource" after="navigateToLowStockReportPageAfterApplyCustomNotifyQtyForProduct"/>
+        <fillField selector="{{LowStockReportFilterSection.productSku}}" userInput="$$product.sku$$" stepKey="fillProductSkuWithDisabledSource" after="resetFilterToVerifyProductWithDisabledSource"/>
+        <click selector="{{LowStockReportFilterSection.searchButton}}" stepKey="applyFilterToFindProductWithDisabledSource" after="fillProductSkuWithDisabledSource"/>
+        <see userInput="We couldn't find any records." stepKey="verifyRowsAreEmptyAfterDisabledSource" after="applyFilterToFindProductWithDisabledSource"/>
+    </test>
+</tests>
