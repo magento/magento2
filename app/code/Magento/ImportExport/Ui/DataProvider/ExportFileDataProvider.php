@@ -33,7 +33,7 @@ class ExportFileDataProvider extends DataProvider
     /**
      * @var File
      */
-    private $fileIO;
+    private $fileio;
     
     /**
      * @param string $name
@@ -109,7 +109,7 @@ class ExportFileDataProvider extends DataProvider
         $pageoffset = ($pageCurrent - 1) * $pagesize;
 
         $result['totalRecords'] = count($result['items']);
-        $result['items'] = array_slice($result['items'],$pageoffset , $pagesize);
+        $result['items'] = array_slice($result['items'],$pageoffset,$pagesize);
 
         return $result;
     }
