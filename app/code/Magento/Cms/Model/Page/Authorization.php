@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Cms\Controller\Page;
+namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
@@ -47,6 +47,8 @@ class Authorization
      * @param PageInterface $page
      * @param PageInterface|null $oldPage
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function hasPageChanged(PageInterface $page, ?PageInterface $oldPage): bool
     {

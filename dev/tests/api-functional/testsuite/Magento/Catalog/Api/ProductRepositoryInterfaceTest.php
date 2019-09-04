@@ -1186,11 +1186,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function saveProduct($product, $storeCode = null, ?string $token = null)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
+            foreach ($product['custom_attributes'] as &$attribute) {
+                if ($attribute['attribute_code'] == 'category_ids'
+                    && !is_array($attribute['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $attribute['value'] = [""];
                 }
             }
         }

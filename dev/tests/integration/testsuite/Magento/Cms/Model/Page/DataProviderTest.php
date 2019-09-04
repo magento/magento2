@@ -8,13 +8,17 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Model\Page;
 
+use Magento\Cms\Api\GetPageByIdentifierInterface;
+use Magento\TestFramework\Cms\Model\CustomLayoutManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Cms\Model\Page as PageModel;
-use Magento\Cms\Model\PageFactory as PageModelFactory;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * Test pages data provider.
+ *
+ * @magentoAppArea adminhtml
  */
 class DataProviderTest extends TestCase
 {
@@ -24,9 +28,19 @@ class DataProviderTest extends TestCase
     private $provider;
 
     /**
-     * @var PageModelFactory
+     * @var GetPageByIdentifierInterface
      */
-    private $pageFactory;
+    private $repo;
+
+    /**
+     * @var CustomLayoutManager
+     */
+    private $filesFaker;
+
+    /**
+     * @var HttpRequest
+     */
+    private $request;
 
     /**
      * @inheritDoc
@@ -34,7 +48,7 @@ class DataProviderTest extends TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->pageFactory = $objectManager->get(PageModelFactory::class);
+        $this->repo = $objectManager->get(GetPageByIdentifierInterface::class);
         $this->provider = $objectManager->create(
             DataProvider::class,
             [
@@ -43,6 +57,8 @@ class DataProviderTest extends TestCase
                 'requestFieldName' => 'page_id'
             ]
         );
+        $this->filesFaker = $objectManager->get(CustomLayoutManager::class);
+        $this->request = $objectManager->get(HttpRequest::class);
     }
 
     /**
@@ -57,16 +73,80 @@ class DataProviderTest extends TestCase
         $data = $this->provider->getData();
         $page1Data = null;
         $page2Data = null;
+        $page3Data = null;
         foreach ($data as $pageData) {
             if ($pageData[PageModel::IDENTIFIER] === 'test_custom_layout_page_1') {
                 $page1Data = $pageData;
             } elseif ($pageData[PageModel::IDENTIFIER] === 'test_custom_layout_page_2') {
                 $page2Data = $pageData;
+            } elseif ($pageData[PageModel::IDENTIFIER] === 'test_custom_layout_page_3') {
+                $page3Data = $pageData;
             }
         }
         $this->assertNotEmpty($page1Data);
         $this->assertNotEmpty($page2Data);
         $this->assertEquals('_existing_', $page1Data['layout_update_selected']);
         $this->assertEquals(null, $page2Data['layout_update_selected']);
+        $this->assertEquals('test_selected', $page3Data['layout_update_selected']);
+    }
+
+    /**
+     * Check that proper meta for custom layout field is returned.
+     *
+     * @return void
+     * @throws \Throwable
+     * @magentoDataFixture Magento/Cms/_files/pages_with_layout_xml.php
+     */
+    public function testCustomLayoutMeta(): void
+    {
+        //Testing a page without layout xml
+        $page = $this->repo->execute('test_custom_layout_page_3', 0);
+        $this->filesFaker->fakeAvailableFiles((int)$page->getId(), ['test1', 'test2']);
+        $this->request->setParam('page_id', $page->getId());
+
+        $meta = $this->provider->getMeta();
+        $this->assertArrayHasKey('design', $meta);
+        $this->assertArrayHasKey('children', $meta['design']);
+        $this->assertArrayHasKey('custom_layout_update_select', $meta['design']['children']);
+        $this->assertArrayHasKey('arguments', $meta['design']['children']['custom_layout_update_select']);
+        $this->assertArrayHasKey('data', $meta['design']['children']['custom_layout_update_select']['arguments']);
+        $this->assertArrayHasKey(
+            'options',
+            $meta['design']['children']['custom_layout_update_select']['arguments']['data']
+        );
+        $expectedList = [
+            ['label' => 'No update', 'value' => ''],
+            ['label' => 'test1', 'value' => 'test1'],
+            ['label' => 'test2', 'value' => 'test2']
+        ];
+        $metaList = $meta['design']['children']['custom_layout_update_select']['arguments']['data']['options'];
+        sort($expectedList);
+        sort($metaList);
+        $this->assertEquals($expectedList, $metaList);
+
+        //Page with old layout xml
+        $page = $this->repo->execute('test_custom_layout_page_1', 0);
+        $this->filesFaker->fakeAvailableFiles((int)$page->getId(), ['test3']);
+        $this->request->setParam('page_id', $page->getId());
+
+        $meta = $this->provider->getMeta();
+        $this->assertArrayHasKey('design', $meta);
+        $this->assertArrayHasKey('children', $meta['design']);
+        $this->assertArrayHasKey('custom_layout_update_select', $meta['design']['children']);
+        $this->assertArrayHasKey('arguments', $meta['design']['children']['custom_layout_update_select']);
+        $this->assertArrayHasKey('data', $meta['design']['children']['custom_layout_update_select']['arguments']);
+        $this->assertArrayHasKey(
+            'options',
+            $meta['design']['children']['custom_layout_update_select']['arguments']['data']
+        );
+        $expectedList = [
+            ['label' => 'No update', 'value' => ''],
+            ['label' => 'Use existing layout update XML', 'value' => '_existing_'],
+            ['label' => 'test1', 'value' => 'test3'],
+        ];
+        $metaList = $meta['design']['children']['custom_layout_update_select']['arguments']['data']['options'];
+        sort($expectedList);
+        sort($metaList);
+        $this->assertEquals($expectedList, $metaList);
     }
 }

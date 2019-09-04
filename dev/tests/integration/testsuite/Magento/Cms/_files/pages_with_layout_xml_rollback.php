@@ -24,3 +24,9 @@ $page2->load('test_custom_layout_page_2', PageModel::IDENTIFIER);
 if ($page2->getId()) {
     $page2->delete();
 }
+/** @var PageModel $page3 */
+$page3 = $pageFactory->create();
+$page3->load('test_custom_layout_page_3', PageModel::IDENTIFIER);
+if ($page3->getId()) {
+    $page3->delete();
+}

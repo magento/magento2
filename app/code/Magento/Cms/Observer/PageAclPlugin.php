@@ -10,7 +10,7 @@ namespace Magento\Cms\Observer;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
-use Magento\Cms\Controller\Page\Authorization;
+use Magento\Cms\Model\Page\Authorization;
 
 /**
  * Perform additional authorization before saving a page.

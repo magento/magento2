@@ -174,11 +174,13 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                 }
             }
             //If custom layout XML is set then displaying this special option.
-            if ($page->getCustomLayoutUpdateXml()) {
-                $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
-            }
-            foreach ($this->customLayoutManager->fetchAvailableFiles($found) as $layoutFile) {
-                $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
+            if ($found) {
+                if ($found->getCustomLayoutUpdateXml()) {
+                    $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
+                }
+                foreach ($this->customLayoutManager->fetchAvailableFiles($found) as $layoutFile) {
+                    $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
+                }
             }
         }
         $customLayoutMeta = [

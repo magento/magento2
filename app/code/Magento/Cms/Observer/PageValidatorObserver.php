@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Cms\Observer;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Controller\Page\Authorization;
+use Magento\Cms\Model\Page\Authorization;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
