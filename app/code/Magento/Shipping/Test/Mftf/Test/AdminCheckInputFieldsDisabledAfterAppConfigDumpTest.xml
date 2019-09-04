@@ -11,7 +11,7 @@
     <test name="AdminCheckInputFieldsDisabledAfterAppConfigDumpTest">
         <annotations>
             <features value="Config"/>
-            <stories value="App:config:dump doesn't lock all the settings in Magento backend"/>
+            <stories value="Disabling all the settings in Magento backend"/>
             <title value="Check that all input fields disabled after executing CLI app:config:dump"/>
             <description value="Check that all input fields disabled after executing CLI app:config:dump"/>
             <severity value="MAJOR"/>
