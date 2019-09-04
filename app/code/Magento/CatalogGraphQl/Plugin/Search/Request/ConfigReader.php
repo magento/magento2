@@ -142,7 +142,7 @@ class ConfigReader
                 case 'static':
                 case 'text':
                 case 'varchar':
-                    if ($attribute->getFrontendInput() === 'multiselect') {
+                    if (in_array($attribute->getFrontendInput(), ['select', 'multiselect'])) {
                         $request['queries'][$queryName] = $this->generateFilterQuery($queryName, $filterName);
                         $request['filters'][$filterName] = $this->generateTermFilter($filterName, $attribute);
                     } elseif ($attribute->getAttributeCode() === 'sku') {

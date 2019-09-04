@@ -66,17 +66,17 @@ input FilterTypeInput @doc(description: "FilterTypeInput specifies which action 
 }
 
 input FilterEqualTypeInput @doc(description: "Specifies which action will be performed in a query ") {
-    in: [String]
-    eq: String
+    in: [String] @doc(description: "In. The value can contain a set of comma-separated values")
+    eq: String @doc(description: "Equals")
 }
 
 input FilterRangeTypeInput @doc(description: "Specifies which action will be performed in a query ") {
-    from: String
-    to: String
+    from: String @doc(description: "From")
+    to: String @doc(description: "To")
 }
 
 input FilterMatchTypeInput @doc(description: "Specifies which action will be performed in a query ") {
-    match: String
+    match: String @doc(description: "Match. Can be used for fuzzy matching.")
 }
 
 type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {

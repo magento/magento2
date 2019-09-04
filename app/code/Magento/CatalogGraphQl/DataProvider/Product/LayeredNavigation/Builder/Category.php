@@ -94,10 +94,13 @@ class Category implements LayerBuilderInterface
         if ($this->isBucketEmpty($bucket)) {
             return [];
         }
-        
-        $categoryIds =  \array_map(function (AggregationValueInterface $value) {
-            return (int)$value->getValue();
-        }, $bucket->getValues());
+
+        $categoryIds = \array_map(
+            function (AggregationValueInterface $value) {
+                return (int)$value->getValue();
+            },
+            $bucket->getValues()
+        );
 
         $categoryIds = \array_diff($categoryIds, [$this->rootCategoryProvider->getRootCategory($storeId)]);
         $categoryLabels = \array_column(

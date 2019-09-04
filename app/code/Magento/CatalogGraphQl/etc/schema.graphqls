@@ -282,7 +282,7 @@ type CategoryProducts @doc(description: "The category products object returned i
 }
 
 input ProductAttributeFilterInput @doc(description: "ProductAttributeFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
-    category_id: FilterEqualTypeInput  @doc(description: "Filter product by category id")
+    category_id: FilterEqualTypeInput @doc(description: "Filter product by category id")
 }
 
 input ProductFilterInput @deprecated(reason: "Attributes used in this input are hardcoded and some of them are not searcheable. Use @ProductAttributeFilterInput instead") @doc(description: "ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
@@ -374,8 +374,8 @@ input ProductSortInput @deprecated(reason: "The attributes used in this input ar
 
 input ProductAttributeSortInput @doc(description: "ProductAttributeSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order. It's possible to sort products using searchable attributes with enabled 'Use in Filter Options' option")
 {
-    position: SortEnum @doc(description: "The position of products")
-    relevance: SortEnum @doc(description: "The search relevance score (default)")
+    relevance: SortEnum @doc(description: "Sort by the search relevance score (default).")
+    position: SortEnum @doc(description: "Sort by the position assigned to each product.")
 }
 
 type MediaGalleryEntry @doc(description: "MediaGalleryEntry defines characteristics about images and videos associated with a specific product.") {
@@ -391,29 +391,29 @@ type MediaGalleryEntry @doc(description: "MediaGalleryEntry defines characterist
 }
 
 type LayerFilter {
-    name: String @doc(description: "Layered navigation filter name.") @deprecated(reason: "Use Aggregation.label instead")
-    request_var: String @doc(description: "Request variable name for filter query.") @deprecated(reason: "Use Aggregation.attribute_code instead")
-    filter_items_count: Int @doc(description: "Count of filter items in filter group.") @deprecated(reason: "Use Aggregation.count instead")
-    filter_items: [LayerFilterItemInterface] @doc(description: "Array of filter items.") @deprecated(reason: "Use Aggregation.options instead")
+    name: String @doc(description: "Layered navigation filter name.") @deprecated(reason: "Use Aggregation.label instead.")
+    request_var: String @doc(description: "Request variable name for filter query.") @deprecated(reason: "Use Aggregation.attribute_code instead.")
+    filter_items_count: Int @doc(description: "Count of filter items in filter group.") @deprecated(reason: "Use Aggregation.count instead.")
+    filter_items: [LayerFilterItemInterface] @doc(description: "Array of filter items.") @deprecated(reason: "Use Aggregation.options instead.")
 }
 
 interface LayerFilterItemInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\LayerFilterItemTypeResolverComposite") {
-    label: String @doc(description: "Filter label.")
-    value_string: String @doc(description: "Value for filter request variable to be used in query.")
-    items_count: Int @doc(description: "Count of items by filter.")
+    label: String @doc(description: "Filter label.") @deprecated(reason: "Use AggregationOption.label instead.")
+    value_string: String @doc(description: "Value for filter request variable to be used in query.") @deprecated(reason: "Use AggregationOption.value instead.")
+    items_count: Int @doc(description: "Count of items by filter.") @deprecated(reason: "Use AggregationOption.count instead.")
 }
 
-type Aggregation {
-    count: Int @doc(description: "The number of filter items in the filter group.")
-    label: String @doc(description: "The filter named displayed in layered navigation.")
-    attribute_code: String! @doc(description: "Attribute code of the filter item.")
-    options: [AggregationOption] @doc(description: "Describes each aggregated filter option.")
+type Aggregation @doc(description: "A bucket that contains information for each filterable option (such as price, category ID, and custom attributes).") {
+    count: Int @doc(description: "The number of options in the aggregation group.")
+    label: String @doc(description: "The aggregation display name.")
+    attribute_code: String! @doc(description: "Attribute code of the aggregation group.")
+    options: [AggregationOption] @doc(description: "Array of options for the aggregation.")
 }
 
 type AggregationOption {
-    count: Int @doc(description: "The number of items returned by the filter.")
-    label: String! @doc(description: "Filter label.")
-    value: String! @doc(description: "Value for filter request variable to be used in query.")
+    count: Int @doc(description: "The number of items that match the aggregation option.")
+    label: String @doc(description: "Aggregation option display label.")
+    value: String! @doc(description: "The internal ID that represents the value of the option.")
 }
 
 type LayerFilterItem implements LayerFilterItemInterface {
