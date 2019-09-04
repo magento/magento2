@@ -11,7 +11,7 @@
     <test name="AdminImportCSVWithSpecialCharactersTest">
         <annotations>
             <features value="Import/Export"/>
-            <stories value="Special characters in CSV return error: General system exception happened"/>
+            <stories value="Import CSV file"/>
             <title value="Import CSV with special characters"/>
             <description value="Import CSV with special characters"/>
             <severity value="MAJOR"/>
@@ -27,7 +27,7 @@
         </after>
         <actionGroup ref="AdminCheckDataForImportProductsActionGroup" stepKey="adminImportProducts">
             <argument name="behavior" value="Add/Update"/>
-            <argument name="importFile" value="import91569.csv"/>
+            <argument name="importFile" value="importSpecChars.csv"/>
             <argument name="importMessage" value='File is valid! To start import process press "Import" button'/>
             <argument name="noteMessage" value="File must be saved in UTF-8 encoding for proper import"/>
         </actionGroup>
