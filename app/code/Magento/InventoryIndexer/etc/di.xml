@@ -25,11 +25,6 @@
             <argument name="indexHandler" xsi:type="object">Magento\InventoryIndexer\Indexer\IndexHandler</argument>
         </arguments>
     </type>
-    <type name="Magento\InventoryIndexer\Indexer\SourceItem\GetSkuListInStock">
-        <arguments>
-            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
-        </arguments>
-    </type>
     <type name="Magento\InventoryIndexer\Model\ResourceModel\GetProductIdsBySourceItemIds">
         <arguments>
             <argument name="productTableName" xsi:type="string">catalog_product_entity</argument>

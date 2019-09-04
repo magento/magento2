@@ -13,7 +13,7 @@
     <preference for="Magento\InventoryReservationsApi\Model\GetReservationsQuantityInterface" type="Magento\InventoryReservations\Model\ResourceModel\GetReservationsQuantity"/>
     <type name="Magento\InventoryReservations\Model\ResourceModel\CleanupReservations">
         <arguments>
-            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+            <argument name="groupConcatMaxLen" xsi:type="number">32768</argument>
         </arguments>
     </type>
 </config>

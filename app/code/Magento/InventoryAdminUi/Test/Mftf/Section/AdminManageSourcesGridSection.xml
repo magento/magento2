@@ -32,13 +32,14 @@
     </section>
     <section name="AdminManageSourcesGridMassAction">
         <element name="actionsButton" type="button" selector="div.admin__data-grid-header-row button.action-select"/>
-        <element name="changeStatusButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>span.action-menu-item"/>
-        <element name="changeStatusEnableButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>ul.action-submenu>li:nth-of-type(1)>span.action-menu-item"/>
-        <element name="changeStatusDisableButton" type="text" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>ul.action-submenu>li:nth-of-type(2)>span.action-menu-item"/>
+        <element name="changeStatusEnableButton" type="button" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(1)>span.action-menu-item"/>
+        <element name="changeStatusDisableButton" type="button" selector="div.action-menu-items>ul.action-menu>li:nth-of-type(2)>span.action-menu-item"/>
+        <element name="modalStatusChangeConfirmation" type="button" selector="button.action-primary.action-accept"/>
     </section>
     <section name="AdminManageSourceGridBody">
         <element name="dataRows" type="input" selector=".data-row"/>
         <element name="sourceSelectedCheckbox" type="checkbox" selector="#idscheck{{code}}" parameterized="true"/>
         <element name="idSelectedCheckbox" type="checkbox" selector="table[data-role='grid'] tr.data-row[data-repeat-index='{{id}}'] input[type='checkbox']" parameterized="true"/>
+        <element name="sourceStatus" type="text" selector="//div[text()='{{sourceName}}']/following::div[@class='data-grid-cell-content']" parameterized="true"/>
     </section>
 </sections>
