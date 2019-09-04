@@ -793,8 +793,8 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        //quoting integer values as strings may decrease query performance on some environments
-        $condition = is_int($object->getId())
+        //quoting numeric values as strings may decrease query performance on some environments
+        $condition = is_numeric($object->getId())
             ? $this->getIdFieldName() . '=' . (int) $object->getId()
             : $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         /**
