@@ -793,7 +793,10 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        //quoting integer values as strings may decrease query performance on some environments
+        $condition = is_int($object->getId())
+            ? $this->getIdFieldName() . '=' . (int) $object->getId()
+            : $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         /**
          * Not auto increment primary key support
          */
