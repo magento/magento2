@@ -151,7 +151,7 @@ class LowestPriceOptionProviderTest extends TestCase
          * As ConfigurableReguralPrice and ConfigurablePriceResolver look for LowestPriceOptionProvider can return
          * array of products "greater than" assertion is used.
          */
-        self::assertGreaterThan(1, count($lowestPriceChildrenProducts));
+        self::assertGreaterThan(0, count($lowestPriceChildrenProducts));
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         self::assertEquals(10, $lowestPriceChildrenProduct->getPrice());
     }

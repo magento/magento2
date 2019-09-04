@@ -40,7 +40,7 @@ $productFactory = $objectManager->get(ProductFactory::class);
 /** @var SourceItemInterfaceFactory $sourceItemFactory */
 $sourceItemFactory = $objectManager->get(SourceItemInterfaceFactory::class);
 /** @var Factory $optionsFactory */
-$optionsFactory = $objectManager->create(Factory::class);
+$optionsFactory = $objectManager->get(Factory::class);
 
 
 
