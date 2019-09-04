@@ -46,9 +46,6 @@ class SelectedShippingMethod implements ResolverInterface
                 }
             }
 
-            /** @var Currency $currency */
-            $currency = $context->getExtensionAttributes()->getStore()->getBaseCurrency();
-
             $data = [
                 'carrier_code' => $carrierCode,
                 'method_code' => $methodCode,
