@@ -41,10 +41,7 @@ class BundlePrice extends AbstractModifier
     }
     
     /**
-     * Modified modify meta for bundle product
-     *
-     * @param array $meta
-     * @return array
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -97,10 +94,7 @@ class BundlePrice extends AbstractModifier
     }
 
     /**
-     * Modify data for bundle product
-     *
-     * @param array $data
-     * @return array
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
