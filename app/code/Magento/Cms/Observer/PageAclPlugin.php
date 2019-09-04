@@ -37,6 +37,7 @@ class PageAclPlugin
      * @param PageInterface $page
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(PageRepositoryInterface $subject, PageInterface $page): array
     {

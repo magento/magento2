@@ -40,6 +40,7 @@ abstract class Category extends \Magento\Backend\App\Action
 
     /**
      * Initialize requested category and put it into registry.
+     *
      * Root category can be returned, if inappropriate store/category is specified
      *
      * @param bool $getRootInstead
@@ -98,6 +99,7 @@ abstract class Category extends \Magento\Backend\App\Action
      * Resolve store id
      *
      * Tries to take store id from store HTTP parameter
+     *
      * @see Store
      *
      * @return int
@@ -142,13 +144,15 @@ abstract class Category extends \Magento\Backend\App\Action
             }
         }
 
-        $eventResponse = new \Magento\Framework\DataObject([
-            'content' => $resultPage->getLayout()->getUiComponent('category_form')->getFormHtml()
-                . $resultPage->getLayout()->getBlock('category.tree')
-                    ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
-            'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
-            'toolbar' => $resultPage->getLayout()->getBlock('page.actions.toolbar')->toHtml()
-        ]);
+        $eventResponse = new \Magento\Framework\DataObject(
+            [
+                'content' => $resultPage->getLayout()->getUiComponent('category_form')->getFormHtml()
+                    . $resultPage->getLayout()->getBlock('category.tree')
+                        ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
+                'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
+                'toolbar' => $resultPage->getLayout()->getBlock('page.actions.toolbar')->toHtml()
+            ]
+        );
         $this->_eventManager->dispatch(
             'category_prepare_ajax_response',
             ['response' => $eventResponse, 'controller' => $this]

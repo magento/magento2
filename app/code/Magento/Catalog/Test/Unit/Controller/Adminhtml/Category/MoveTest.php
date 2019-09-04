@@ -134,7 +134,6 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
             ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
         $categoryMock->expects($this->once())
             ->method('move')
@@ -208,7 +207,6 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
             ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
         $this->messageManager->expects($this->once())
             ->method('addExceptionMessage');
@@ -280,7 +278,6 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
             ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
         $this->messageManager->expects($this->once())
             ->method('getMessages')

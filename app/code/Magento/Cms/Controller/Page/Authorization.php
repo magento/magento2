@@ -42,6 +42,35 @@ class Authorization
     }
 
     /**
+     * Check whether the design fields have been changed.
+     *
+     * @param PageInterface $page
+     * @param PageInterface|null $oldPage
+     * @return bool
+     */
+    private function hasPageChanged(PageInterface $page, ?PageInterface $oldPage): bool
+    {
+        $oldUpdateXml = $oldPage ? $oldPage->getLayoutUpdateXml() : null;
+        $oldPageLayout = $oldPage ? $oldPage->getPageLayout() : null;
+        $oldCustomTheme = $oldPage ? $oldPage->getCustomTheme() : null;
+        $oldLayoutUpdate = $oldPage ? $oldPage->getCustomLayoutUpdateXml() : null;
+        $oldThemeFrom = $oldPage ? $oldPage->getCustomThemeFrom() : null;
+        $oldThemeTo = $oldPage ? $oldPage->getCustomThemeTo() : null;
+
+        if ($page->getLayoutUpdateXml() !== $oldUpdateXml
+            || $page->getPageLayout() !== $oldPageLayout
+            || $page->getCustomTheme() !== $oldCustomTheme
+            || $page->getCustomLayoutUpdateXml() !== $oldLayoutUpdate
+            || $page->getCustomThemeFrom() !== $oldThemeFrom
+            || $page->getCustomThemeTo() !== $oldThemeTo
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Authorize user before updating a page.
      *
      * @param PageInterface $page
@@ -53,33 +82,11 @@ class Authorization
     {
         //Validate design changes.
         if (!$this->authorization->isAllowed('Magento_Cms::save_design')) {
-            $notAllowed = false;
-            if (!$page->getId()) {
-                if ($page->getLayoutUpdateXml()
-                    || $page->getPageLayout()
-                    || $page->getCustomTheme()
-                    || $page->getCustomLayoutUpdateXml()
-                    || $page->getCustomThemeFrom()
-                    || $page->getCustomThemeTo()
-                ) {
-                    //Not allowed to set design properties value for new pages.
-                    $notAllowed = true;
-                }
-            } else {
-                $savedPage = $this->pageRepository->getById($page->getId());
-                if ($page->getLayoutUpdateXml() !== $savedPage->getLayoutUpdateXml()
-                    || $page->getPageLayout() !== $savedPage->getPageLayout()
-                    || $page->getCustomTheme() !== $savedPage->getCustomTheme()
-                    || $page->getCustomThemeTo() !== $savedPage->getCustomThemeTo()
-                    || $page->getCustomThemeFrom() !== $savedPage->getCustomThemeFrom()
-                    || $page->getCustomLayoutUpdateXml() !== $savedPage->getCustomLayoutUpdateXml()
-                ) {
-                    //Not allowed to update design settings.
-                    $notAllowed = true;
-                }
+            $oldPage = null;
+            if ($page->getId()) {
+                $oldPage = $this->pageRepository->getById($page->getId());
             }
-
-            if ($notAllowed) {
+            if ($this->hasPageChanged($page, $oldPage)) {
                 throw new AuthorizationException(
                     __('You are not allowed to change CMS pages design settings')
                 );

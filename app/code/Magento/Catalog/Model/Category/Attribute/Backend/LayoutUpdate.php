@@ -73,6 +73,7 @@ class LayoutUpdate extends AbstractBackend
 
     /**
      * @inheritDoc
+     *
      * @param Category $object
      */
     public function validate($object)

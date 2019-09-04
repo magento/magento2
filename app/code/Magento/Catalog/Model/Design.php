@@ -17,6 +17,7 @@ use \Magento\Framework\TranslateInterface;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Design extends \Magento\Framework\Model\AbstractModel
 {
@@ -62,6 +63,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
      * @param TranslateInterface|null $translator
      * @param CategoryLayoutManager|null $categoryLayoutManager
      * @param ProductLayoutManager|null $productLayoutManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

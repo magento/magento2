@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Observer;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Controller\Adminhtml\Category\Authorization;
+use Magento\Catalog\Model\Category\Authorization;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\AuthorizationException;
@@ -33,6 +33,7 @@ class CategoryDesignAuthorization implements ObserverInterface
 
     /**
      * @inheritDoc
+     *
      * @throws AuthorizationException
      */
     public function execute(Observer $observer)

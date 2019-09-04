@@ -25,7 +25,6 @@ interface CustomLayoutManagerInterface
      */
     public function fetchAvailableFiles(PageInterface $page): array;
 
-
     /**
      * Apply the page's layout settings.
      *

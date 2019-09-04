@@ -103,6 +103,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param CustomLayoutManagerInterface|null $customLayoutManager
+     * @param CustomLayoutRepositoryInterface|null $customLayoutRepo
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -176,7 +177,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $pageHandles = ['id' => str_replace('/', '_', $this->_page->getIdentifier())];
         //Selected custom updates.
         try {
-            $this->customLayoutManager->applyUpdate($resultPage, $this->customLayoutRepo->getFor($this->_page->getId()));
+            $this->customLayoutManager->applyUpdate(
+                $resultPage,
+                $this->customLayoutRepo->getFor($this->_page->getId())
+            );
+            // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (NoSuchEntityException $exception) {
             //No custom layout selected
         }

@@ -16,6 +16,11 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\RulesFactory;
 
+/**
+ * Test repository web API.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoryRepositoryTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/categories';
@@ -323,6 +328,42 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Update admin role resources list.
+     *
+     * @param string $roleName
+     * @param string[] $resources
+     * @return void
+     */
+    private function updateRoleResources(string $roleName, array $resources): void
+    {
+        /** @var Role $role */
+        $role = $this->roleFactory->create();
+        $role->load($roleName, 'role_name');
+        /** @var Rules $rules */
+        $rules = $this->rulesFactory->create();
+        $rules->setRoleId($role->getId());
+        $rules->setResources($resources);
+        $rules->saveRel();
+    }
+
+    /**
+     * Extract error returned by the server.
+     *
+     * @param \Throwable $exception
+     * @return string
+     */
+    private function extractCallExceptionMessage(\Throwable $exception): string
+    {
+        if ($restResponse = json_decode($exception->getMessage(), true)) {
+            //REST
+            return $restResponse['message'];
+        } else {
+            //SOAP
+            return $exception->getMessage();
+        }
+    }
+
+    /**
      * Test design settings authorization
      *
      * @magentoApiDataFixture Magento/User/_files/user_with_custom_role.php
@@ -332,14 +373,8 @@ class CategoryRepositoryTest extends WebapiAbstract
     public function testSaveDesign(): void
     {
         //Updating our admin user's role to allow saving categories but not their design settings.
-        /** @var Role $role */
-        $role = $this->roleFactory->create();
-        $role->load('test_custom_role', 'role_name');
-        /** @var Rules $rules */
-        $rules = $this->rulesFactory->create();
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Catalog::categories']);
-        $rules->saveRel();
+        $roleName = 'test_custom_role';
+        $this->updateRoleResources($roleName, ['Magento_Catalog::categories']);
         //Using the admin user with custom role.
         $token = $this->adminTokens->createAdminAccessToken(
             'customRoleUser',
@@ -354,23 +389,13 @@ class CategoryRepositoryTest extends WebapiAbstract
         try {
             $this->createCategory($categoryData, $token);
         } catch (\Throwable $exception) {
-            if ($restResponse = json_decode($exception->getMessage(), true)) {
-                //REST
-                $exceptionMessage = $restResponse['message'];
-            } else {
-                //SOAP
-                $exceptionMessage = $exception->getMessage();
-            }
+            $exceptionMessage = $this->extractCallExceptionMessage($exception);
         }
         //We don't have the permissions.
         $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
 
         //Updating the user role to allow access to design properties.
-        /** @var Rules $rules */
-        $rules = Bootstrap::getObjectManager()->create(Rules::class);
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
-        $rules->saveRel();
+        $this->updateRoleResources($roleName, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
         //Making the same request with design settings.
         $categoryData = $this->getSimpleCategoryData();
         foreach ($categoryData['custom_attributes'] as &$attribute) {
@@ -394,11 +419,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $categoryData = $categorySaved;
 
         //Updating our role to remove design properties access.
-        /** @var Rules $rules */
-        $rules = Bootstrap::getObjectManager()->create(Rules::class);
-        $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Catalog::categories']);
-        $rules->saveRel();
+        $this->updateRoleResources($roleName, ['Magento_Catalog::categories']);
         //Updating the category but with the same design properties values.
         $result = $this->updateCategory($categoryData['id'], $categoryData, $token);
         //We haven't changed the design so operation is successful.
@@ -414,13 +435,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         try {
             $this->updateCategory($categoryData['id'], $categoryData, $token);
         } catch (\Throwable $exception) {
-            if ($restResponse = json_decode($exception->getMessage(), true)) {
-                //REST
-                $exceptionMessage = $restResponse['message'];
-            } else {
-                //SOAP
-                $exceptionMessage = $exception->getMessage();
-            }
+            $exceptionMessage = $this->extractCallExceptionMessage($exception);
         }
         //We don't have permissions to do that.
         $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);

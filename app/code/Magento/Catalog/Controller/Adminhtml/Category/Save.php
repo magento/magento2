@@ -211,7 +211,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
                                 __('The "%1" attribute is required. Enter and try again.', $attribute)
                             );
                         } else {
-                            throw new \Exception($error);
+                            throw new \RuntimeException($error);
                         }
                     }
                 }
@@ -220,10 +220,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
 
                 $category->save();
                 $this->messageManager->addSuccessMessage(__('You saved the category.'));
+                // phpcs:disable Magento2.Exceptions.ThrowCatch
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e);
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
+                // phpcs:disable Magento2.Exceptions.ThrowCatch
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

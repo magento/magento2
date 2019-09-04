@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\Catalog\Controller\Adminhtml\Product;
+namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
@@ -41,46 +41,54 @@ class Authorization
     }
 
     /**
+     * Check whether the product has changed.
+     *
+     * @param ProductModel $product
+     * @param ProductModel|null $oldProduct
+     * @return bool
+     */
+    private function hasProductChanged(ProductModel $product, ?ProductModel $oldProduct = null): bool
+    {
+        $designAttributes = [
+            'custom_design',
+            'page_layout',
+            'options_container',
+            'custom_layout_update',
+            'custom_design_from',
+            'custom_design_to',
+            'custom_layout_update_file'
+        ];
+        foreach ($designAttributes as $designAttribute) {
+            $oldValue = $oldProduct ? $oldProduct->getData($designAttribute) : null;
+            if ($product->getData($designAttribute) != $oldValue) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Authorize saving of a product.
      *
      * @throws AuthorizationException
      * @throws NoSuchEntityException When product with invalid ID given.
-     * @param ProductInterface|Product $product
+     * @param ProductInterface|ProductModel $product
      * @return void
      */
     public function authorizeSavingOf(ProductInterface $product): void
     {
         if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
-            $notAllowed = false;
-            if (!$product->getId()) {
-                if ($product->getData('custom_design')
-                    || $product->getData('page_layout')
-                    || $product->getData('options_container')
-                    || $product->getData('custom_layout_update')
-                    || $product->getData('custom_design_from')
-                    || $product->getData('custom_design_to')
-                ) {
-                    $notAllowed = true;
-                }
-            } else {
-                /** @var Product $savedProduct */
+            $savedProduct = null;
+            if ($product->getId()) {
+                /** @var ProductModel $savedProduct */
                 $savedProduct = $this->productFactory->create();
                 $savedProduct->load($product->getId());
                 if (!$savedProduct->getSku()) {
                     throw NoSuchEntityException::singleField('id', $product->getId());
                 }
-                if ($product->getData('custom_design') != $savedProduct->getData('custom_design')
-                    || $product->getData('page_layout') != $savedProduct->getData('page_layout')
-                    || $product->getData('options_container') != $savedProduct->getData('options_container')
-                    || $product->getData('custom_layout_update') != $savedProduct->getData('custom_layout_update')
-                    || $product->getData('custom_design_from') != $savedProduct->getData('custom_design_from')
-                    || $product->getData('custom_design_to') != $savedProduct->getData('custom_design_to')
-                ) {
-                    $notAllowed = true;
-                }
             }
-
-            if ($notAllowed) {
+            if ($this->hasProductChanged($product, $savedProduct)) {
                 throw new AuthorizationException(__('Not allowed to edit the product\'s design attributes'));
             }
         }

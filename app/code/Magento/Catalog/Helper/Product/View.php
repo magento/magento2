@@ -86,6 +86,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $messageGroups
      * @param \Magento\Framework\Stdlib\StringUtils|null $string
      * @param LayoutUpdateManager|null $layoutUpdateManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

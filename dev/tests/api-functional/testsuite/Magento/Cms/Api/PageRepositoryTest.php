@@ -20,6 +20,8 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Tests for cms page service.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageRepositoryTest extends WebapiAbstract
 {

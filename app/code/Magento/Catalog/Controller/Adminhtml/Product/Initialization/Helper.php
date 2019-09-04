@@ -17,7 +17,7 @@ use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
-use Magento\Catalog\Controller\Adminhtml\Product\Authorization as ProductAuthorization;
+use Magento\Catalog\Model\Product\Authorization as ProductAuthorization;
 
 /**
  * Product helper
@@ -116,6 +116,7 @@ class Helper
      * @param ProductRepositoryInterface|null $productRepository
      * @param LinkTypeProvider|null $linkTypeProvider
      * @param AttributeFilter|null $attributeFilter
+     * @param ProductAuthorization|null $productAuthorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -459,9 +460,12 @@ class Helper
             }
 
             if (isset($customOptionData['values'])) {
-                $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
-                    return empty($valueData['is_delete']);
-                });
+                $customOptionData['values'] = array_filter(
+                    $customOptionData['values'],
+                    function ($valueData) {
+                        return empty($valueData['is_delete']);
+                    }
+                );
             }
 
             $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);

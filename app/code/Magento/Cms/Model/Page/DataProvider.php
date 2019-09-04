@@ -59,6 +59,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param AuthorizationInterface|null $auth
      * @param RequestInterface|null $request
      * @param CustomLayoutManagerInterface|null $customLayoutManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,

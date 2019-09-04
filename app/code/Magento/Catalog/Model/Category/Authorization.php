@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\Catalog\Controller\Adminhtml\Category;
+namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\AuthorizationInterface;
@@ -46,7 +46,7 @@ class Authorization
      *
      * @throws AuthorizationException
      * @throws NoSuchEntityException When a category with invalid ID given.
-     * @param CategoryInterface|Category $category
+     * @param CategoryInterface|CategoryModel $category
      * @return void
      */
     public function authorizeSavingOf(CategoryInterface $category): void
@@ -67,7 +67,7 @@ class Authorization
                     }
                 }
             } else {
-                /** @var Category $savedCategory */
+                /** @var CategoryModel $savedCategory */
                 $savedCategory = $this->categoryFactory->create();
                 $savedCategory->load($category->getId());
                 if (!$savedCategory->getName()) {

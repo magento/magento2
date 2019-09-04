@@ -16,7 +16,10 @@ use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryFactory as CategoryModelFactory;
 
 /**
+ * Test for admin category functionality.
+ *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -625,7 +628,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         //Trying again with the permissions.
         $requestData['custom_layout_update_file'] = null;
         $requestData['custom_design'] = 'test-theme';
-        $this->aclBuilder->getAcl()->allow(null, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
+        $this->aclBuilder->getAcl()
+            ->allow(null, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
         $this->getRequest()->setDispatched(false);
         $this->getRequest()->setPostValue($requestData);
         $this->getRequest()->setParam('store', $requestData['store_id']);

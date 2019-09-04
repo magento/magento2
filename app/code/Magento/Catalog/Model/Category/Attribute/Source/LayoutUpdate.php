@@ -63,6 +63,7 @@ class LayoutUpdate extends AbstractSource implements SpecificSourceInterface
 
     /**
      * @inheritDoc
+     *
      * @param CategoryInterface $entity
      */
     public function getOptionsFor(CustomAttributesDataInterface $entity): array

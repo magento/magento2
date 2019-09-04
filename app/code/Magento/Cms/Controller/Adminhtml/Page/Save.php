@@ -16,6 +16,8 @@ use Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelected;
 
 /**
  * Save CMS page action.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
@@ -57,6 +59,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * @param DataPersistorInterface $dataPersistor
      * @param \Magento\Cms\Model\PageFactory|null $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface|null $pageRepository
+     * @param CustomLayoutRepositoryInterface|null $customLayoutRepository
      */
     public function __construct(
         Action\Context $context,
@@ -103,7 +106,6 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 $customLayoutFile = null;
             }
 
-
             /** @var \Magento\Cms\Model\Page $model */
             $model = $this->pageFactory->create();
 
@@ -125,21 +127,12 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     ['page' => $model, 'request' => $this->getRequest()]
                 );
 
-                if (!$this->dataProcessor->validate($data)) {
-                    return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
-                }
-
-                $this->pageRepository->save($model);
-                if ($customLayoutFile) {
-                    $this->customLayoutRepository->save(new CustomLayoutSelected($model->getId(), $customLayoutFile));
-                } else {
-                    $this->customLayoutRepository->deleteFor($model->getId());
-                }
+                $this->savePage($model, $customLayoutFile);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 return $this->processResultRedirect($model, $resultRedirect, $data);
             } catch (LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
             }
 
@@ -147,6 +140,27 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Save the page.
+     *
+     * @param Page $page
+     * @param string|null $customLayoutFile
+     * @return void
+     * @throws \Throwable
+     */
+    private function savePage(Page $page, ?string $customLayoutFile): void
+    {
+        if (!$this->dataProcessor->validate($page->getData())) {
+            throw new \InvalidArgumentException('Page is invalid');
+        }
+        $this->pageRepository->save($page);
+        if ($customLayoutFile) {
+            $this->customLayoutRepository->save(new CustomLayoutSelected($page->getId(), $customLayoutFile));
+        } else {
+            $this->customLayoutRepository->deleteFor($page->getId());
+        }
     }
 
     /**

@@ -10,7 +10,7 @@ namespace Magento\Catalog\Plugin;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Authorization;
+use Magento\Catalog\Model\Product\Authorization;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -39,6 +39,7 @@ class ProductAuthorization
      * @param bool $saveOptions
      * @throws LocalizedException
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(ProductRepositoryInterface $subject, ProductInterface $product, $saveOptions): array
     {
