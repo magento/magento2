@@ -28,7 +28,12 @@ class ExportFileDataProvider extends DataProvider
      * @var Filesystem
      */
     private $fileSystem;
-
+    
+    /**
+     * @var File Input Output
+     */
+    private $fileIO;
+    
     /**
      * @param string $name
      * @param string $primaryFieldName
@@ -53,11 +58,13 @@ class ExportFileDataProvider extends DataProvider
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         DriverInterface $file,
         Filesystem $filesystem,
+        \Magento\Framework\Filesystem\Io\File $fileIO,
         array $meta = [],
         array $data = []
     ) {
         $this->file = $file;
         $this->fileSystem = $filesystem;
+        $this->fileIO = $fileIO;
         $this->request = $request;
         parent::__construct(
             $name,
@@ -92,15 +99,15 @@ class ExportFileDataProvider extends DataProvider
         }
         $result = [];
         foreach ($files as $file) {
-            $result['items'][]['file_name'] = basename($file);
+            $result['items'][]['file_name'] = $this->fileIO->getPathInfo($file)['basename'];
         }
 
-        $pagesize = intval($this->request->getParam('paging')['pageSize']);
-        $pageCurrent = intval($this->request->getParam('paging')['current']);
+        $pagesize = (int)($this->request->getParam('paging')['pageSize']);
+        $pageCurrent = (int)($this->request->getParam('paging')['current']);
         $pageoffset = ($pageCurrent - 1) * $pagesize;
 
         $result['totalRecords'] = count($result['items']);
-        $result['items'] = array_slice($result['items'], $pageoffset, $pageoffset + $pagesize);
+        $result['items'] = array_slice($result['items'],$pageoffset , $pagesize);
 
         return $result;
     }
