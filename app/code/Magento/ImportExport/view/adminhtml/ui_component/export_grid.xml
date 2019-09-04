@@ -41,10 +41,6 @@
             </item>
         </argument>
         <paging name="listing_paging">
-            <settings>
-                <sticky>false</sticky>
-            </settings>
-            <bookmark name="bookmarks"/>
             <paging name="listing_paging"/>
         </paging>
     </listingToolbar>
