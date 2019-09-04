@@ -470,9 +470,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->model->isObjectNew($isObjectNew);
 
-        $this->storeManager->expects($this->exactly(
-            (int) !$isObjectNew
-        ))
+        $this->storeManager->expects(
+            $this->exactly(
+                (int) !$isObjectNew
+            )
+        )
             ->method('isSingleStoreMode')
             ->will($this->returnValue(true));
 
