@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Io\File;
 
 /**
  * Data provider for export grid.
@@ -30,7 +31,7 @@ class ExportFileDataProvider extends DataProvider
     private $fileSystem;
     
     /**
-     * @var File Input Output
+     * @var File
      */
     private $fileIO;
     
@@ -44,6 +45,7 @@ class ExportFileDataProvider extends DataProvider
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param DriverInterface $file
      * @param Filesystem $filesystem
+     * @param File $fileIO
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -58,13 +60,13 @@ class ExportFileDataProvider extends DataProvider
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         DriverInterface $file,
         Filesystem $filesystem,
-        \Magento\Framework\Filesystem\Io\File $fileIO,
+        File $fileIO,
         array $meta = [],
         array $data = []
     ) {
         $this->file = $file;
         $this->fileSystem = $filesystem;
-        $this->fileIO = $fileIO;
+        $this->fileio = $fileIO;
         $this->request = $request;
         parent::__construct(
             $name,
@@ -99,7 +101,7 @@ class ExportFileDataProvider extends DataProvider
         }
         $result = [];
         foreach ($files as $file) {
-            $result['items'][]['file_name'] = $this->fileIO->getPathInfo($file)['basename'];
+            $result['items'][]['file_name'] = $this->fileio->getPathInfo($file)['basename'];
         }
 
         $pagesize = (int)($this->request->getParam('paging')['pageSize']);
