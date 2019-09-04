@@ -73,7 +73,7 @@ class General extends AbstractModifier
         $modelId = $this->locator->getProduct()->getId();
 
         $productStatus = $this->locator->getProduct()->getStatus();
-        if ((isset($productStatus) && !empty($productStatus)) && (isset($modelId)) && !empty($modelId)) {
+        if (!empty($productStatus) && !empty($modelId)) {
             $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] = $productStatus;
         } elseif (!isset($data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS])) {
             $attributeStatus = $this->attributeRepository->get(

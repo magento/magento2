@@ -110,33 +110,26 @@ class GeneralTest extends AbstractModifierTest
     /**
      * Verify the product attribute status set owhen editing existing product
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param        array  $data
+     * @param        string $modelId
+     * @param        int    $defaultStatus
+     * @param        int    $statusAttributeValue
+     * @param        array  $expectedResult
+     * @throws       \Magento\Framework\Exception\NoSuchEntityException
+     * @dataProvider modifyDataOfExistingProductDataProvider
      */
-    public function testModifyDataExistingProduct()
-    {
-        $data = [];
-        $modelId = 1;
-        $defaultStatusValue = 1;
-        $expectedResult = [
-            'enabledProductStatus' => [
-                    General::DATA_SOURCE_DEFAULT => [
-                        ProductAttributeInterface::CODE_STATUS => 1,
-                    ],
-            ],
-            'disabledProductStatus' => [
-                    General::DATA_SOURCE_DEFAULT => [
-                        ProductAttributeInterface::CODE_STATUS => 2,
-                    ],
-            ],
-        ];
-        $enabledProductStatus = 1;
-        $disabledProductStatus = 2;
-        $attributeMock = $this->getMockBuilder(AttributeInterface::class)
-            ->getMockForAbstractClass();
-        $attributeMock
+    public function testModifyDataOfExistingProduct(
+        array $data,
+        string $modelId,
+        int $defaultStatus,
+        int $statusAttributeValue,
+        array $expectedResult
+    ) {
+        $attributeMock = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attributeMock->expects($this->any())
             ->method('getDefaultValue')
-            ->willReturn($defaultStatusValue);
-        $this->attributeRepositoryMock
+            ->willReturn($defaultStatus);
+        $this->attributeRepositoryMock->expects($this->any())
             ->method('get')
             ->with(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
@@ -148,9 +141,61 @@ class GeneralTest extends AbstractModifierTest
             ->willReturn($modelId);
         $this->productMock->expects($this->any())
             ->method('getStatus')
-            ->willReturnOnConsecutiveCalls($enabledProductStatus, $disabledProductStatus);
-        $this->assertSame($expectedResult['enabledProductStatus'], current($this->generalModifier->modifyData($data)));
-        $this->assertSame($expectedResult['disabledProductStatus'], current($this->generalModifier->modifyData($data)));
+            ->willReturn($statusAttributeValue);
+        $this->assertSame($expectedResult, current($this->generalModifier->modifyData($data)));
+    }
+
+    /**
+     * @return array
+     */
+    public function modifyDataOfExistingProductDataProvider(): array
+    {
+        return [
+            'With enable status value' => [
+                'data' => [],
+                'modelId' => '1',
+                'defaultStatus' => 1,
+                'statusAttributeValue' => 1,
+                'expectedResult' => [
+                        General::DATA_SOURCE_DEFAULT => [
+                            ProductAttributeInterface::CODE_STATUS => 1,
+                        ],
+                ],
+            ],
+            'Without disable status value' => [
+                'data' => [],
+                'modelId' => '1',
+                'defaultStatus' => 1,
+                'statusAttributeValue' => 2,
+                'expectedResult' => [
+                        General::DATA_SOURCE_DEFAULT => [
+                            ProductAttributeInterface::CODE_STATUS => 2,
+                        ],
+                ],
+            ],
+            'With enable status value with empty modelId' => [
+                'data' => [],
+                'modelId' => '',
+                'defaultStatus' => 1,
+                'statusAttributeValue' => 1,
+                'expectedResult' => [
+                    General::DATA_SOURCE_DEFAULT => [
+                        ProductAttributeInterface::CODE_STATUS => 1,
+                    ],
+                ],
+            ],
+            'Without disable status value with empty modelId' => [
+                'data' => [],
+                'modelId' => '',
+                'defaultStatus' => 2,
+                'statusAttributeValue' => 2,
+                'expectedResult' => [
+                    General::DATA_SOURCE_DEFAULT => [
+                        ProductAttributeInterface::CODE_STATUS => 2,
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
