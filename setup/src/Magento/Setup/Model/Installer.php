@@ -16,6 +16,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
@@ -603,7 +604,7 @@ class Installer
      */
     private function setupCoreTables(SchemaSetupInterface $setup)
     {
-        /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        /* @var $connection AdapterInterface */
         $connection = $setup->getConnection();
         $setup->startSetup();
 
@@ -619,12 +620,12 @@ class Installer
      * Create table 'session'
      *
      * @param SchemaSetupInterface $setup
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return void
      */
     private function setupSessionTable(
         SchemaSetupInterface $setup,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+        AdapterInterface $connection
     ) {
         if (!$connection->isTableExists($setup->getTable('session'))) {
             $table = $connection->newTable(
@@ -658,12 +659,12 @@ class Installer
      * Create table 'cache'
      *
      * @param SchemaSetupInterface $setup
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return void
      */
     private function setupCacheTable(
         SchemaSetupInterface $setup,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+        AdapterInterface $connection
     ) {
         if (!$connection->isTableExists($setup->getTable('cache'))) {
             $table = $connection->newTable(
@@ -712,12 +713,12 @@ class Installer
      * Create table 'cache_tag'
      *
      * @param SchemaSetupInterface $setup
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return void
      */
     private function setupCacheTagTable(
         SchemaSetupInterface $setup,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+        AdapterInterface $connection
     ) {
         if (!$connection->isTableExists($setup->getTable('cache_tag'))) {
             $table = $connection->newTable(
@@ -748,16 +749,17 @@ class Installer
      * Create table 'flag'
      *
      * @param SchemaSetupInterface $setup
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @return void
      */
     private function setupFlagTable(
         SchemaSetupInterface $setup,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+        AdapterInterface $connection
     ) {
-        if (!$connection->isTableExists($setup->getTable('flag'))) {
+        $tableName = $setup->getTable('flag');
+        if (!$connection->isTableExists($tableName)) {
             $table = $connection->newTable(
-                $setup->getTable('flag')
+                $tableName
             )->addColumn(
                 'flag_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -779,7 +781,7 @@ class Installer
             )->addColumn(
                 'flag_data',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                '64k',
+                '16m',
                 [],
                 'Flag Data'
             )->addColumn(
@@ -795,6 +797,8 @@ class Installer
                 'Flag'
             );
             $connection->createTable($table);
+        } else {
+            $this->updateColumnType($connection, $tableName, 'flag_data', 'mediumtext');
         }
     }
 
@@ -1547,5 +1551,29 @@ class Installer
         );
 
         return !empty($adminData);
+    }
+
+    /**
+     * Update flag_data column data type to maintain consistency.
+     *
+     * @param AdapterInterface $connection
+     * @param string $tableName
+     * @param string $columnName
+     * @param string $typeName
+     */
+    private function updateColumnType(
+        AdapterInterface $connection,
+        string $tableName,
+        string $columnName,
+        string $typeName
+    ): void {
+        $tableDescription = $connection->describeTable($tableName);
+        if ($tableDescription[$columnName]['DATA_TYPE'] !== $typeName) {
+            $connection->modifyColumn(
+                $tableName,
+                $columnName,
+                $typeName
+            );
+        }
     }
 }

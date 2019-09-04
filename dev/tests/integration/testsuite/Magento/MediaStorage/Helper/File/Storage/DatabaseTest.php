@@ -50,7 +50,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * test for \Magento\MediaStorage\Model\File\Storage\Database::deleteFolder()
      *
-     * @magentoDataFixture Magento/MediaStorage/_files/database_mode.php
+     * @magentoDataFixtureBeforeTransaction Magento/MediaStorage/_files/database_mode.php
      */
     public function testDeleteFolder()
     {
