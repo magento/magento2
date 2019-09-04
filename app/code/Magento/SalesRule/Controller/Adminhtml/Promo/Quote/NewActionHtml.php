@@ -1,12 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
+
+/**
+ * New action html action
+ */
+class NewActionHtml extends Quote implements HttpPostActionInterface
 {
     /**
      * New action html action
@@ -37,7 +42,6 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 
         if ($model instanceof \Magento\Rule\Model\Condition\AbstractCondition) {
             $model->setJsFormObject($formName);
-            $model->setFormName($formName);
             $html = $model->asHtmlRecursive();
         } else {
             $html = '';
