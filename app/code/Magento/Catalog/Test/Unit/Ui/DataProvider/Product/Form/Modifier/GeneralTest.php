@@ -33,7 +33,7 @@ class GeneralTest extends AbstractModifierTest
         parent::setUp();
 
         $this->attributeRepositoryMock = $this->getMockBuilder(AttributeRepositoryInterface::class)
-        ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $arrayManager = $this->objectManager->getObject(ArrayManager::class);
 
@@ -52,10 +52,13 @@ class GeneralTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(General::class, [
+        return $this->objectManager->getObject(
+            General::class,
+            [
             'locator' => $this->locatorMock,
             'arrayManager' => $this->arrayManagerMock,
-        ]);
+            ]
+        );
     }
 
     public function testModifyMeta()
@@ -63,8 +66,10 @@ class GeneralTest extends AbstractModifierTest
         $this->arrayManagerMock->expects($this->any())
             ->method('merge')
             ->willReturnArgument(2);
-        $this->assertNotEmpty($this->getModel()->modifyMeta([
-            'first_panel_code' => [
+        $this->assertNotEmpty(
+            $this->getModel()->modifyMeta(
+                [
+                'first_panel_code' => [
                 'arguments' => [
                     'data' => [
                         'config' => [
@@ -72,15 +77,17 @@ class GeneralTest extends AbstractModifierTest
                         ]
                     ],
                 ]
-            ]
-        ]));
+                ]
+                ]
+            )
+        );
     }
 
     /**
-     * @param array $data
-     * @param int $defaultStatusValue
-     * @param array $expectedResult
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param        array $data
+     * @param        int   $defaultStatusValue
+     * @param        array $expectedResult
+     * @throws       \Magento\Framework\Exception\NoSuchEntityException
      * @dataProvider modifyDataDataProvider
      */
     public function testModifyDataNewProduct(array $data, int $defaultStatusValue, array $expectedResult)
@@ -98,6 +105,52 @@ class GeneralTest extends AbstractModifierTest
             )
             ->willReturn($attributeMock);
         $this->assertSame($expectedResult, $this->generalModifier->modifyData($data));
+    }
+
+    /**
+     * Verify the product attribute status set owhen editing existing product
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testModifyDataExistingProduct()
+    {
+        $data = [];
+        $modelId = 1;
+        $defaultStatusValue = 1;
+        $expectedResult = [
+            'enabledProductStatus' => [
+                    General::DATA_SOURCE_DEFAULT => [
+                        ProductAttributeInterface::CODE_STATUS => 1,
+                    ],
+            ],
+            'disabledProductStatus' => [
+                    General::DATA_SOURCE_DEFAULT => [
+                        ProductAttributeInterface::CODE_STATUS => 2,
+                    ],
+            ],
+        ];
+        $enabledProductStatus = 1;
+        $disabledProductStatus = 2;
+        $attributeMock = $this->getMockBuilder(AttributeInterface::class)
+            ->getMockForAbstractClass();
+        $attributeMock
+            ->method('getDefaultValue')
+            ->willReturn($defaultStatusValue);
+        $this->attributeRepositoryMock
+            ->method('get')
+            ->with(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                ProductAttributeInterface::CODE_STATUS
+            )
+            ->willReturn($attributeMock);
+        $this->productMock->expects($this->any())
+            ->method('getId')
+            ->willReturn($modelId);
+        $this->productMock->expects($this->any())
+            ->method('getStatus')
+            ->willReturnOnConsecutiveCalls($enabledProductStatus, $disabledProductStatus);
+        $this->assertSame($expectedResult['enabledProductStatus'], current($this->generalModifier->modifyData($data)));
+        $this->assertSame($expectedResult['disabledProductStatus'], current($this->generalModifier->modifyData($data)));
     }
 
     /**
