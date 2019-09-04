@@ -41,8 +41,11 @@ class ProductAuthorization
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSave(ProductRepositoryInterface $subject, ProductInterface $product, $saveOptions): array
-    {
+    public function beforeSave(
+        ProductRepositoryInterface $subject,
+        ProductInterface $product,
+        $saveOptions = false
+    ): array {
         $this->authorization->authorizeSavingOf($product);
 
         return [$product, $saveOptions];
