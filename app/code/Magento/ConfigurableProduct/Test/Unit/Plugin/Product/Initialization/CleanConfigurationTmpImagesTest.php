@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
+namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Product\Initialization;
 
-use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\App\RequestInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper as ProductInitializationHelper;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
+use Magento\ConfigurableProduct\Plugin\Product\Initialization\CleanConfigurationTmpImages;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\MediaStorage\Helper\File\Storage\Database as FileStorage;
 
 /**
- * Class UpdateConfigurationsTest
+ * Class CleanConfigurationTmpImagesTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPCS.Magento2.Files.LineLength.MaxExceeded)
  * @package Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin
  */
-class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
+class CleanConfigurationTmpImagesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var UpdateConfigurations
+     * @var CleanConfigurationTmpImages
      */
-    private $updateConfigurations;
+    private $cleanConfigurationTmpImages;
 
     /**
      * @var ObjectManagerHelper
@@ -36,14 +40,29 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
     private $requestMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileStorage|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $productRepositoryMock;
+    private $fileStorageDb;
 
     /**
-     * @var VariationHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var MediaConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $variationHandlerMock;
+    private $mediaConfig;
+
+    /**
+     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesystem;
+
+    /**
+     * @var Write|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $writeFolder;
+
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $seralizer;
 
     /**
      * @var ProductInitializationHelper|\PHPUnit_Framework_MockObject_MockObject
@@ -54,22 +73,38 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->variationHandlerMock = $this->getMockBuilder(VariationHandler::class)
+        $this->fileStorageDb = $this->getMockBuilder(FileStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mediaConfig = $this->getMockBuilder(MediaConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->writeFolder = $this->getMockBuilder(Write::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->seralizer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->subjectMock = $this->getMockBuilder(ProductInitializationHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->writeFolder);
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->updateConfigurations = $this->objectManagerHelper->getObject(
-            UpdateConfigurations::class,
+        $this->cleanConfigurationTmpImages = $this->objectManagerHelper->getObject(
+            CleanConfigurationTmpImages::class,
             [
                 'request' => $this->requestMock,
-                'productRepository' => $this->productRepositoryMock,
-                'variationHandler' => $this->variationHandlerMock
+                'fileStorageDb' => $this->fileStorageDb,
+                'mediaConfig' => $this->mediaConfig,
+                'filesystem' => $this->filesystem,
+                'seralizer' => $this->seralizer
             ]
         );
     }
@@ -95,7 +130,11 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 'price' => '3.33',
                 'configurable_attribute' => 'simple2_configurable_attribute',
                 'weight' => '5.55',
-                'media_gallery' => 'simple2_media_gallery',
+                'media_gallery' => [
+                    'images' => [
+                        ['file' => 'test']
+                    ],
+                ],
                 'swatch_image' => 'simple2_swatch_image',
                 'small_image' => 'simple2_small_image',
                 'thumbnail' => 'simple2_thumbnail',
@@ -124,31 +163,6 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
     {
         $productMock = $this->getProductMock();
         $configurableMatrix = $this->getConfigurableMatrix();
-        $configurations = [
-            'product2' => [
-                'status' => 'simple2_status',
-                'sku' => 'simple2_sku',
-                'name' => 'simple2_name',
-                'price' => '3.33',
-                'configurable_attribute' => 'simple2_configurable_attribute',
-                'weight' => '5.55',
-                'media_gallery' => 'simple2_media_gallery',
-                'swatch_image' => 'simple2_swatch_image',
-                'small_image' => 'simple2_small_image',
-                'thumbnail' => 'simple2_thumbnail',
-                'image' => 'simple2_image',
-                'product_has_weight' => 1,
-                'type_id' => 'simple'
-            ],
-            'product3' => [
-                'quantity_and_stock_status' => ['qty' => '3']
-            ]
-        ];
-        /** @var Product[]|\PHPUnit_Framework_MockObject_MockObject[] $productMocks */
-        $productMocks = [
-            'product2' => $this->getProductMock($configurations['product2'], true, true),
-            'product3' => $this->getProductMock($configurations['product3'], false, true),
-        ];
 
         $this->requestMock->expects(static::any())
             ->method('getParam')
@@ -158,28 +172,11 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                     ['configurable-matrix-serialized', "[]", json_encode($configurableMatrix)]
                 ]
             );
-        $this->variationHandlerMock->expects(static::once())
-            ->method('duplicateImagesForVariations')
-            ->with($configurations)
-            ->willReturn($configurations);
-        $this->productRepositoryMock->expects(static::any())
-            ->method('getById')
-            ->willReturnMap(
-                [
-                    ['product2', false, 0, false, $productMocks['product2']],
-                    ['product3', false, 0, false, $productMocks['product3']]
-                ]
-            );
-        $this->variationHandlerMock->expects(static::any())
-            ->method('processMediaGallery')
-            ->willReturnMap(
-                [
-                    [$productMocks['product2'], $configurations['product2'], $configurations['product2']],
-                    [$productMocks['product3'], $configurations['product3'], $configurations['product3']]
-                ]
-            );
 
-        $this->assertSame($productMock, $this->updateConfigurations->afterInitialize($this->subjectMock, $productMock));
+        $this->assertSame(
+            $productMock,
+            $this->cleanConfigurationTmpImages->afterInitialize($this->subjectMock, $productMock)
+        );
     }
 
     /**
@@ -230,12 +227,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->variationHandlerMock->expects(static::once())
-            ->method('duplicateImagesForVariations')
-            ->with([])
-            ->willReturn([]);
-
-        $this->updateConfigurations->afterInitialize($this->subjectMock, $productMock);
+        $this->cleanConfigurationTmpImages->afterInitialize($this->subjectMock, $productMock);
 
         $this->assertEmpty($productMock->getData());
     }
