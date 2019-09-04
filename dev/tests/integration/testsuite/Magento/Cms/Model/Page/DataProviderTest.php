@@ -142,7 +142,7 @@ class DataProviderTest extends TestCase
         $expectedList = [
             ['label' => 'No update', 'value' => ''],
             ['label' => 'Use existing layout update XML', 'value' => '_existing_'],
-            ['label' => 'test1', 'value' => 'test3'],
+            ['label' => 'test3', 'value' => 'test3'],
         ];
         $metaList = $meta['design']['children']['custom_layout_update_select']['arguments']['data']['options'];
         sort($expectedList);

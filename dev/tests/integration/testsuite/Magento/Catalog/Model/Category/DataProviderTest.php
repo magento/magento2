@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Category;
 
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Registry;
 use PHPUnit\Framework\TestCase;
@@ -12,6 +13,11 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
 
+/**
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
+ * @magentoAppArea adminhtml
+ */
 class DataProviderTest extends TestCase
 {
     /**
@@ -28,6 +34,11 @@ class DataProviderTest extends TestCase
      * @var CategoryFactory
      */
     private $categoryFactory;
+
+    /**
+     * @var CategoryLayoutUpdateManager
+     */
+    private $fakeFiles;
 
     /**
      * Create subject instance.
@@ -56,6 +67,7 @@ class DataProviderTest extends TestCase
         $this->dataProvider = $this->createDataProvider();
         $this->registry = $objectManager->get(Registry::class);
         $this->categoryFactory = $objectManager->get(CategoryFactory::class);
+        $this->fakeFiles = $objectManager->get(CategoryLayoutUpdateManager::class);
     }
 
     /**
@@ -102,5 +114,76 @@ class DataProviderTest extends TestCase
         $data = $this->dataProvider->getData();
         $this->assertEquals($deprecated, $data[$id]['custom_layout_update']);
         $this->assertEquals(LayoutUpdate::VALUE_USE_UPDATE_XML, $data[$id]['custom_layout_update_file']);
+    }
+
+    /**
+     * Check that proper options are returned for a category.
+     *
+     * @return void
+     */
+    public function testCustomLayoutMeta(): void
+    {
+        //Testing a category without layout xml
+        /** @var Category $category */
+        $category = $this->categoryFactory->create();
+        $category->load($id = 2);
+        $this->fakeFiles->setCategoryFakeFiles((int)$category->getId(), ['test1', 'test2']);
+        $this->registry->register('category', $category);
+
+        $meta = $this->dataProvider->getMeta();
+        $this->assertArrayHasKey('design', $meta);
+        $this->assertArrayHasKey('children', $meta['design']);
+        $this->assertArrayHasKey('custom_layout_update_file', $meta['design']['children']);
+        $this->assertArrayHasKey('arguments', $meta['design']['children']['custom_layout_update_file']);
+        $this->assertArrayHasKey('data', $meta['design']['children']['custom_layout_update_file']['arguments']);
+        $this->assertArrayHasKey(
+            'config',
+            $meta['design']['children']['custom_layout_update_file']['arguments']['data']
+        );
+        $this->assertArrayHasKey(
+            'options',
+            $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']
+        );
+        $expectedList = [
+            ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
+            ['label' => 'test1', 'value' => 'test1', '__disableTmpl' => true],
+            ['label' => 'test2', 'value' => 'test2', '__disableTmpl' => true]
+        ];
+        $list = $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']['options'];
+        sort($expectedList);
+        sort($list);
+        $this->assertEquals($expectedList, $list);
+
+        //Product with old layout xml
+        $category->setCustomAttribute('custom_layout_update', 'test');
+        $this->fakeFiles->setCategoryFakeFiles((int)$category->getId(), ['test3']);
+
+        $meta = $this->dataProvider->getMeta();
+        $this->assertArrayHasKey('design', $meta);
+        $this->assertArrayHasKey('children', $meta['design']);
+        $this->assertArrayHasKey('custom_layout_update_file', $meta['design']['children']);
+        $this->assertArrayHasKey('arguments', $meta['design']['children']['custom_layout_update_file']);
+        $this->assertArrayHasKey('data', $meta['design']['children']['custom_layout_update_file']['arguments']);
+        $this->assertArrayHasKey(
+            'config',
+            $meta['design']['children']['custom_layout_update_file']['arguments']['data']
+        );
+        $this->assertArrayHasKey(
+            'options',
+            $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']
+        );
+        $expectedList = [
+            ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
+            [
+                'label' => 'Use existing',
+                'value' => LayoutUpdate::VALUE_USE_UPDATE_XML,
+                '__disableTmpl' => true
+            ],
+            ['label' => 'test3', 'value' => 'test3', '__disableTmpl' => true],
+        ];
+        $list = $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']['options'];
+        sort($expectedList);
+        sort($list);
+        $this->assertEquals($expectedList, $list);
     }
 }
