@@ -61,7 +61,8 @@
             <description>Clicks on Delete Template. Accepts the Popup. Validates that the Email Template is NOT present in the Email Templates Grid.</description>
         </annotations>
         <click selector="{{AdminEmailTemplateEditSection.deleteTemplateButton}}" after="checkTemplateName" stepKey="deleteTemplate"/>
-        <acceptPopup after="deleteTemplate" stepKey="acceptPopup"/>
+        <waitForElementVisible selector="{{AdminEmailTemplateEditSection.acceptPopupButton}}" after="deleteTemplate" stepKey="waitForConfirmButton"/>
+        <click selector="{{AdminEmailTemplateEditSection.acceptPopupButton}}" after="waitForConfirmButton" stepKey="acceptPopup"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" after="acceptPopup" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the email template." after="waitForSuccessMessage" stepKey="seeSuccessfulMessage"/>
     </actionGroup>
