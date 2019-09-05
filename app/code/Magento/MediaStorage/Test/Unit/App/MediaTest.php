@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class MediaTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MediaTest extends \PHPUnit\Framework\TestCase
@@ -142,21 +143,23 @@ class MediaTest extends \PHPUnit\Framework\TestCase
                 'filesystem' => $this->filesystemMock
             ]
         );
-        $filePath = '/absolute/path/to/test/file.png';
+        $filePath = '../ve/absolute/path/to/test/file.png';
         $this->directoryMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnValueMap(
-                [
+            ->will(
+                $this->returnValueMap(
                     [
-                        null,
-                        self::MEDIA_DIRECTORY
-                    ],
-                    [
-                        self::RELATIVE_FILE_PATH,
-                        $filePath
-                    ],
-                ]
-            ));
+                        [
+                            null,
+                            self::MEDIA_DIRECTORY
+                        ],
+                        [
+                            self::RELATIVE_FILE_PATH,
+                            $filePath
+                        ],
+                    ]
+                )
+            );
         $this->configMock->expects($this->once())->method('save');
         $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
         $this->directoryMock->expects($this->once())
@@ -177,18 +180,20 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
         $this->directoryMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnValueMap(
-                [
+            ->will(
+                $this->returnValueMap(
                     [
-                        null,
-                        self::MEDIA_DIRECTORY
-                    ],
-                    [
-                        self::RELATIVE_FILE_PATH,
-                        $filePath
-                    ],
-                ]
-            ));
+                        [
+                            null,
+                            self::MEDIA_DIRECTORY
+                        ],
+                        [
+                            self::RELATIVE_FILE_PATH,
+                            $filePath
+                        ],
+                    ]
+                )
+            );
         $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
         $this->assertSame($this->responseMock, $this->model->launch());
     }
@@ -209,7 +214,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $isDeveloper
-     * @param int $setBodyCalls
+     * @param int  $setBodyCalls
      *
      * @dataProvider catchExceptionDataProvider
      */

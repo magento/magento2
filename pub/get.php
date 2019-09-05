@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Stdlib\Cookie\PhpCookieReader;
 
-require __DIR__ . '/app/bootstrap.php';
+include __DIR__ . '/app/bootstrap.php';
 
 $mediaDirectory = null;
 $allowedResources = [];
@@ -53,12 +53,12 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
 if ($mediaDirectory) {
     // Serve file if it's materialized
     if (!$isAllowed($relativePath, $allowedResources)) {
-        require __DIR__ . '/pub/errors/404.php';
+        include __DIR__ . '/pub/errors/404.php';
     }else{
         $mediaAbsPath = $mediaDirectory . '/' . $relativePath;
         if (is_readable($mediaAbsPath)) {
             if (is_dir($mediaAbsPath)) {
-                require __DIR__ . '/pub/errors/404.php';
+                include __DIR__ . '/pub/errors/404.php';
             }
             $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
                 new \Magento\Framework\HTTP\PhpEnvironment\Response(),
@@ -75,7 +75,9 @@ if ($mediaDirectory) {
         $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
     }
     $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
-    /** @var \Magento\MediaStorage\App\Media $app */
+    /**
+ * @var \Magento\MediaStorage\App\Media $app 
+*/
     $app = $bootstrap->createApplication(
         \Magento\MediaStorage\App\Media::class,
         [
