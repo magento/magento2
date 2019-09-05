@@ -144,7 +144,7 @@ class RulesApplier
      */
     protected function applyRule($item, $rule, $address, $couponCode)
     {
-        $discountData = $this->getDiscountData($item, $rule);
+        $discountData = $this->getDiscountData($item, $rule, $address);
         $this->setDiscountData($discountData, $item);
 
         $this->maintainAddressCouponCode($address, $rule, $couponCode);
@@ -158,25 +158,47 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
      */
-    protected function getDiscountData($item, $rule)
+    protected function getDiscountData($item, $rule, $address)
     {
         $qty = $this->validatorUtility->getItemQty($item, $rule);
 
         $discountCalculator = $this->calculatorFactory->create($rule->getSimpleAction());
         $qty = $discountCalculator->fixQuantity($qty, $rule);
         $discountData = $discountCalculator->calculate($rule, $item, $qty);
-
+        $this->setDiscountBreakdown($discountData, $item, $rule, $address);
         $this->eventFix($discountData, $item, $rule, $qty);
         $this->validatorUtility->deltaRoundingFix($discountData, $item);
 
         /**
          * We can't use row total here because row total not include tax
          * Discount can be applied on price included tax
+         *
          */
 
         $this->validatorUtility->minFix($discountData, $item, $qty);
 
         return $discountData;
+    }
+
+    /**
+     * Set Discount Breakdown
+     *
+     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param Address $address
+     * @return $this
+     */
+    protected function setDiscountBreakdown($discountData, $item, $rule, $address)
+    {
+        $discount = $discountData->getAmount();
+        $discountBreakdown = $item->getDiscountBreakdown() ?? [];
+        $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore());
+        if ($ruleLabel) {
+            $discountBreakdown[$ruleLabel] = $discount;
+        }
+        $item->setDiscountBreakdown($discountBreakdown);
+        return $this;
     }
 
     /**

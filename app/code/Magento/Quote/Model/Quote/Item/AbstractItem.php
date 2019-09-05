@@ -35,6 +35,8 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice($price)
  * @method int[] getAppliedRuleIds()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setAppliedRuleIds(array $ruleIds)
+ * @method array getDiscountBreakdown()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountBreakdown(array $data)
  * @method float getBaseTaxAmount()
  * @method float getBaseDiscountTaxCompensation()
  * @method float getBaseRowTotal()

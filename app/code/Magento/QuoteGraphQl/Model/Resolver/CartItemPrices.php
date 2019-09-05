@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Directory\Block\Currency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -55,7 +56,6 @@ class CartItemPrices implements ResolverInterface
             // But the totals should be calculated even if no address is set
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
-
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
 
         return [
@@ -71,6 +71,33 @@ class CartItemPrices implements ResolverInterface
                 'currency' => $currencyCode,
                 'value' => $cartItem->getRowTotalInclTax(),
             ],
+            'discount' => [
+                'currency' => $currencyCode,
+                'value' => $cartItem->getDiscountAmount(),
+            ],
+            'discounts' => $this->getDiscountValues($cartItem, $currencyCode)
         ];
+    }
+
+    /**
+     * Get Discount Values
+     *
+     * @param Item $cartItem
+     * @param Currency $currencyCode
+     * @return array
+     */
+    private function getDiscountValues($cartItem, $currencyCode)
+    {
+        $discountValues=[];
+        foreach ($cartItem->getDiscountBreakdown() as $key => $value) {
+            $discount = [];
+            $amount = [];
+            $discount['label'] = $key;
+            $amount['value'] = $value;
+            $amount['currency'] = $currencyCode;
+            $discount['amount'] = $amount;
+            $discountValues[] = $discount;
+        }
+        return $discountValues;
     }
 }
