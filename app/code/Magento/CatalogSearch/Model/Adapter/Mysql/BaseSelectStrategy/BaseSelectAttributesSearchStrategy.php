@@ -13,7 +13,6 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 
 /**
- * Class BaseSelectAttributesSearchStrategy
  * This class represents strategy for building base select query for search request
  *
  * The main idea of this strategy is using eav index table as main table for query

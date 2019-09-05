@@ -99,7 +99,7 @@ class FilterMapper
             $select = $this->visibilityFilter->apply(
                 $select,
                 $selectContainer->getVisibilityFilter(),
-            VisibilityFilter::FILTER_BY_JOIN
+                VisibilityFilter::FILTER_BY_JOIN
             );
             $appliedFilters[$this->aliasResolver->getAlias($selectContainer->getVisibilityFilter())] = true;
         }
