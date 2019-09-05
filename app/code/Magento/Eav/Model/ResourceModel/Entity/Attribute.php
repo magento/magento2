@@ -483,7 +483,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $optionId
      * @return void
      */
-    private function clearSelectedOptionInEntities($object, $optionId)
+    private function clearSelectedOptionInEntities(AbstractModel $object, int $optionId)
     {
         $backendTable = $object->getBackendTable();
         $attributeId = $object->getAttributeId();
@@ -491,20 +491,24 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return;
         }
 
-        $where = 'attribute_id = ' . $attributeId;
+        $connection = $this->getConnection();
+        $where = $connection->quoteInto('attribute_id = ?', $attributeId);
         $update = [];
 
         if ($object->getBackendType() === 'varchar') {
-            $where.= " AND FIND_IN_SET('$optionId',value)";
-            $update['value'] = new \Zend_Db_Expr(
-                "TRIM(BOTH ',' FROM REPLACE(CONCAT(',',value,','),',$optionId,',','))"
+            $where.= ' AND ' . $connection->prepareSqlCondition('value', ['finset' => $optionId]);
+            $concat = $connection->getConcatSql(["','", 'value', "','"]);
+            $expr = $connection->quoteInto(
+                "TRIM(BOTH ',' FROM REPLACE($concat,',?,',','))",
+                $optionId
             );
+            $update['value'] = new \Zend_Db_Expr($expr);
         } else {
-            $where.= ' AND value = ' . $optionId;
+            $where.= $connection->quoteInto(' AND value = ?', $optionId);
             $update['value'] = null;
         }
 
-        $this->getConnection()->update($backendTable, $update, $where);
+        $connection->update($backendTable, $update, $where);
     }
 
     /**
