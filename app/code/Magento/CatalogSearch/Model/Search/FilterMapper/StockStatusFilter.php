@@ -162,7 +162,6 @@ class StockStatusFilter
             ['sub_products_stock_index' => $catalogInventoryTable],
             $this->conditionManager->combineQueries(
                 [
-                    sprintf('sub_products_stock_index.product_id = %s.source_id', $mainTableAlias),
                     $this->conditionManager->generateCondition(
                         'sub_products_stock_index.website_id',
                         '=',

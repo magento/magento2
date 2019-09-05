@@ -68,13 +68,8 @@ class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
 
         $select->distinct()
             ->from(
-                [$mainTableAlias => $this->resource->getTableName('catalog_product_index_eav')],
+                [$mainTableAlias => $this->resource->getTableName('catalog_product_entity')],
                 ['entity_id' => 'entity_id']
-            )->where(
-                $this->resource->getConnection()->quoteInto(
-                    sprintf('%s.store_id = ?', $mainTableAlias),
-                    $this->storeManager->getStore()->getId()
-                )
             );
 
         if ($selectContainer->isFullTextSearchRequired()) {

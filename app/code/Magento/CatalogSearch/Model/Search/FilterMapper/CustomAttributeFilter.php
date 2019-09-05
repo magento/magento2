@@ -113,15 +113,16 @@ class CustomAttributeFilter
             // is required to boost performance in case when we have just one filter by custom attribute
             $attribute = reset($attributes);
             $filter = reset($filters);
+            $filterJoinAlias = $this->aliasResolver->getAlias($filter);
             $select->where(
                 $this->conditionManager->generateCondition(
-                    sprintf('%s.attribute_id', $mainTableAlias),
+                    sprintf('%s.attribute_id', $filterJoinAlias),
                     '=',
                     $attribute
                 )
             )->where(
                 $this->conditionManager->generateCondition(
-                    sprintf('%s.value', $mainTableAlias),
+                    sprintf('%s.value', $filterJoinAlias),
                     is_array($filter->getValue()) ? 'in' : '=',
                     $filter->getValue()
                 )

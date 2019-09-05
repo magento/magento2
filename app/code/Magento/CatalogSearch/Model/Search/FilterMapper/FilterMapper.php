@@ -98,12 +98,8 @@ class FilterMapper
         $appliedFilters = [];
 
         if ($selectContainer->hasVisibilityFilter()) {
-            $filterType = VisibilityFilter::FILTER_BY_WHERE;
-            if ($selectContainer->hasCustomAttributesFilters()) {
-                $filterType = VisibilityFilter::FILTER_BY_JOIN;
-            }
-
-            $select = $this->visibilityFilter->apply($select, $selectContainer->getVisibilityFilter(), $filterType);
+            $select = $this->visibilityFilter->apply($select, $selectContainer->getVisibilityFilter(),
+                VisibilityFilter::FILTER_BY_JOIN);
             $appliedFilters[$this->aliasResolver->getAlias($selectContainer->getVisibilityFilter())] = true;
         }
 
