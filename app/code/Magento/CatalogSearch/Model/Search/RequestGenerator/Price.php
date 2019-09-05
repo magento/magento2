@@ -19,7 +19,7 @@ class Price implements GeneratorInterface
     /**
      * @inheritdoc
      */
-    public function getFilterData(Attribute $attribute, $filterName)
+    public function getFilterData(Attribute $attribute, $filterName): array
     {
         return [
             'type' => FilterInterface::TYPE_RANGE,
@@ -33,7 +33,7 @@ class Price implements GeneratorInterface
     /**
      * @inheritdoc
      */
-    public function getAggregationData(Attribute $attribute, $bucketName)
+    public function getAggregationData(Attribute $attribute, $bucketName): array
     {
         return [
             'type' => BucketInterface::TYPE_DYNAMIC,

@@ -14,6 +14,9 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
  */
 class Decimal extends AbstractFilter
 {
+    /** Decimal delta for filter  */
+    private const DECIMAL_DELTA = 0.001;
+
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
@@ -75,7 +78,7 @@ class Decimal extends AbstractFilter
         // When the range is 10-20 we only need to get products that are in the 10-19.99 range.
         $toValue = $to;
         if (!empty($toValue) && $from !== $toValue) {
-            $toValue -= 0.001;
+            $toValue -= self::DECIMAL_DELTA;
         }
 
         $this->getLayer()
