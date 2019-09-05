@@ -127,6 +127,10 @@ class QuoteAddressValidator
      */
     public function validateForCart(CartInterface $cart, AddressInterface $address): void
     {
-        $this->doValidate($address, $cart->getCustomer()->getId() ? $cart->getCustomer()->getId() : false);
+        $customerId = null;
+        if ($cart->getCustomer()) {
+            $customerId = $cart->getCustomer()->getId();
+        }
+        $this->doValidate($address, $customerId ? $customerId : false);
     }
 }
