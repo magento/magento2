@@ -116,6 +116,18 @@ class AttributeAdapter
     }
 
     /**
+     * Check if attribute is text type
+     *
+     * @return bool
+     */
+    public function isTextType(): bool
+    {
+        return in_array($this->getAttribute()->getBackendType(), ['varchar', 'static'], true)
+            && in_array($this->getFrontendInput(), ['text'], true)
+            && $this->getAttribute()->getIsVisible();
+    }
+
+    /**
      * Check if attribute has boolean type.
      *
      * @return bool
@@ -174,19 +186,6 @@ class AttributeAdapter
     public function getFrontendInput()
     {
         return $this->getAttribute()->getFrontendInput();
-    }
-
-    /**
-     * Check if product should always be filterable
-     *
-     * @return bool
-     */
-    public function isAlwaysFilterable(): bool
-    {
-        // List of attributes which are required to be filterable
-        $alwaysFilterableAttributes = ['sku'];
-
-        return in_array($this->getAttributeCode(), $alwaysFilterableAttributes, true);
     }
 
     /**

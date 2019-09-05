@@ -58,6 +58,14 @@
         </arguments>
     </type>
 
+    <type name="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader">
+        <arguments>
+            <argument name="exactMatchAttributes" xsi:type="array">
+                <item name="sku" xsi:type="string">sku</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
     </type>

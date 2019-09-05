@@ -130,12 +130,9 @@ class StaticField implements FieldProviderInterface
                 ];
             }
 
-            if ($attributeAdapter->isAlwaysFilterable()) {
-                $filterFieldName = 'filter_' . $this->fieldNameResolver->getFieldName(
-                    $attributeAdapter,
-                    ['type' => FieldMapperInterface::TYPE_FILTER]
-                );
-                $allAttributes[$fieldName]['fields'][$filterFieldName] = [
+            if ($attributeAdapter->isTextType()) {
+                $keywordFieldName = FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD;
+                $allAttributes[$fieldName]['fields'][$keywordFieldName] = [
                     'type' => $this->fieldTypeConverter->convert(
                         FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
                     )

@@ -9,7 +9,6 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
@@ -25,6 +24,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
  */
 class ConfigReader
 {
+    /** Bucket name suffix */
+    private const BUCKET_SUFFIX = '_bucket';
+
     /**
      * @var string
      */
@@ -46,26 +48,23 @@ class ConfigReader
     private $productAttributeCollectionFactory;
 
     /**
-     * @var EngineResolverInterface
+     * @var array
      */
-    private $searchEngineResolver;
-
-    /** Bucket name suffix */
-    private const BUCKET_SUFFIX = '_bucket';
+    private $exactMatchAttributes = [];
 
     /**
      * @param GeneratorResolver $generatorResolver
      * @param CollectionFactory $productAttributeCollectionFactory
-     * @param EngineResolverInterface $searchEngineResolver
+     * @param array $exactMatchAttributes
      */
     public function __construct(
         GeneratorResolver $generatorResolver,
         CollectionFactory $productAttributeCollectionFactory,
-        EngineResolverInterface $searchEngineResolver
+        array $exactMatchAttributes = []
     ) {
         $this->generatorResolver = $generatorResolver;
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
-        $this->searchEngineResolver = $searchEngineResolver;
+        $this->exactMatchAttributes = array_merge($this->exactMatchAttributes, $exactMatchAttributes);
     }
 
     /**
@@ -142,12 +141,9 @@ class ConfigReader
                 case 'static':
                 case 'text':
                 case 'varchar':
-                    if (in_array($attribute->getFrontendInput(), ['select', 'multiselect'])) {
+                    if ($this->isExactMatchAttribute($attribute)) {
                         $request['queries'][$queryName] = $this->generateFilterQuery($queryName, $filterName);
                         $request['filters'][$filterName] = $this->generateTermFilter($filterName, $attribute);
-                    } elseif ($attribute->getAttributeCode() === 'sku') {
-                        $request['queries'][$queryName] = $this->generateFilterQuery($queryName, $filterName);
-                        $request['filters'][$filterName] = $this->generateSkuTermFilter($filterName, $attribute);
                     } else {
                         $request['queries'][$queryName] = $this->generateMatchQuery($queryName, $attribute);
                     }
@@ -229,27 +225,6 @@ class ConfigReader
     }
 
     /**
-     * Generate term filter for sku field
-     *
-     * Sku needs to be treated specially to allow for exact match
-     *
-     * @param string $filterName
-     * @param Attribute $attribute
-     * @return array
-     */
-    private function generateSkuTermFilter(string $filterName, Attribute $attribute)
-    {
-        $field = $this->isElasticSearch() ? 'sku.filter_sku' : 'sku';
-
-        return [
-            'type' => FilterInterface::TYPE_TERM,
-            'name' => $filterName,
-            'field' => $field,
-            'value' => '$' . $attribute->getAttributeCode() . '$',
-        ];
-    }
-
-    /**
      * Return array representation of query based on filter
      *
      * @param string $queryName
@@ -292,16 +267,20 @@ class ConfigReader
     }
 
     /**
-     * Check if the current search engine is elasticsearch
+     * Check if attribute's filter should use exact match
      *
+     * @param Attribute $attribute
      * @return bool
      */
-    private function isElasticSearch()
+    private function isExactMatchAttribute(Attribute $attribute)
     {
-        $searchEngine = $this->searchEngineResolver->getCurrentSearchEngine();
-        if (strpos($searchEngine, 'elasticsearch') === 0) {
+        if (in_array($attribute->getFrontendInput(), ['select', 'multiselect'])) {
             return true;
         }
+        if (in_array($attribute->getAttributeCode(), $this->exactMatchAttributes)) {
+            return true;
+        }
+
         return false;
     }
 }
