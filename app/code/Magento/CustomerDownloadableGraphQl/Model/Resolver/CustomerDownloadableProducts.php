@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\DownloadableGraphQl\Resolver\Customer;
+namespace Magento\CustomerDownloadableGraphQl\Model\Resolver;
 
 use Magento\DownloadableGraphQl\Model\ResourceModel\GetPurchasedDownloadableProducts;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
@@ -20,7 +20,7 @@ use Magento\GraphQl\Model\Query\ContextInterface;
  *
  * Returns available downloadable products for customer
  */
-class DownloadableProducts implements ResolverInterface
+class CustomerDownloadableProducts implements ResolverInterface
 {
     /**
      * @var GetPurchasedDownloadableProducts

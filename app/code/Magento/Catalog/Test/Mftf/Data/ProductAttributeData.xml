@@ -390,4 +390,12 @@
         <data key="frontend_input">swatch_visual</data>
         <data key="attribute_code" unique="suffix">visual_swatch</data>
     </entity>
+    <entity name="ProductColorAttribute" type="ProductAttribute">
+        <data key="frontend_label">Color</data>
+        <data key="attribute_code" unique="suffix">color_attr</data>
+    </entity>
+    <entity name="ProductSizeAttribute" type="ProductAttribute">
+        <data key="frontend_label">Size</data>
+        <data key="attribute_code" unique="suffix">size_attr</data>
+    </entity>
 </entities>

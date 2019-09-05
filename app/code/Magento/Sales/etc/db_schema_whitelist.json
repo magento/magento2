@@ -815,7 +815,9 @@
             "shipping_and_handling": true,
             "adjustment_positive": true,
             "adjustment_negative": true,
-            "order_base_grand_total": true
+            "order_base_grand_total": true,
+            "order_currency_code": true,
+            "base_currency_code": true
         },
         "index": {
             "SALES_CREDITMEMO_GRID_ORDER_INCREMENT_ID": true,
