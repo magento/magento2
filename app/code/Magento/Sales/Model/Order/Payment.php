@@ -684,7 +684,6 @@ class Payment extends Info implements OrderPaymentInterface
                         $gateway->refund($this, $baseAmountToRefund);
 
                         $creditmemo->setTransactionId($this->getLastTransId());
-                        // phpcs:ignore Magento2.Exceptions.ThrowCatch
                     } catch (\Magento\Framework\Exception\LocalizedException $e) {
                         if (!$captureTxn) {
                             throw new \Magento\Framework\Exception\LocalizedException(
