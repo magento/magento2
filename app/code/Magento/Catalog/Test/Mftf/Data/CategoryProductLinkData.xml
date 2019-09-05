@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DefaultCategoryProductLink" type="CategoryProductLink">
+        <var key="sku" entityKey="sku" entityType="product"/>
+        <var key="category_id" entityKey="id" entityType="category"/>
+    </entity>
+    <entity name="CustomCategoryProductLink" type="CategoryProductLink">
+        <var key="sku" entityKey="sku" entityType="product2"/>
+        <var key="category_id" entityKey="id" entityType="category"/>
+    </entity>
+</entities>
