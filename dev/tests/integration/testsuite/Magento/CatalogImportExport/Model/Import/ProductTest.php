@@ -376,8 +376,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Tests adding of custom options with multiple store views
      *
-     * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      * @magentoAppIsolation enabled
      */
     public function testSaveCustomOptionsWithMultipleStoreViews()
@@ -388,7 +388,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $storeCodes = [
             'admin',
             'default',
-            'fixture_second_store',
+            'secondstore',
         ];
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $importFile = 'product_with_custom_options_and_multiple_store_views.csv';
