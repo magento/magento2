@@ -457,6 +457,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {
                 $connection->delete($table, ['option_id = ?' => $intOptionId]);
+                $this->clearSelectedOptionInEntities($object, $intOptionId);
             }
             return false;
         }
@@ -473,6 +474,35 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $intOptionId;
+    }
+
+    /**
+     * Clear selected option in entities
+     *
+     * @param EntityAttribute|AbstractModel $object
+     * @param int $optionId
+     * @return void
+     */
+    private function clearSelectedOptionInEntities($object, $optionId)
+    {
+        $backendTable = $object->getBackendTable();
+        $attributeId = $object->getAttributeId();
+        if (!$backendTable || !$attributeId) {
+            return;
+        }
+
+        $where = 'attribute_id = ' . $attributeId;
+        $update = [];
+
+        if ($object->getBackendType() === 'varchar') {
+            $where.= " AND FIND_IN_SET('$optionId',value)";
+            $update['value'] = new \Zend_Db_Expr("TRIM(BOTH ',' FROM REPLACE(CONCAT(',',value,','),',$optionId,',','))");
+        } else {
+            $where.= ' AND value = ' . $optionId;
+            $update['value'] = null;
+        }
+
+        $this->getConnection()->update($backendTable, $update, $where);
     }
 
     /**
