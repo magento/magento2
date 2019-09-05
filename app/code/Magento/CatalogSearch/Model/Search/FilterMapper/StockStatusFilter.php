@@ -13,7 +13,6 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 
 /**
- * Class StockStatusFilter
  * Adds filter by stock status to base select
  *
  * @deprecated
@@ -97,7 +96,7 @@ class StockStatusFilter
         $this->addMainStockStatusJoin($select, $stockValues, $mainTableAlias, $showOutOfStockFlag);
 
         if ($type === self::FILTER_ENTITY_AND_SUB_PRODUCTS) {
-            $this->addSubProductsStockStatusJoin($select, $stockValues, $mainTableAlias, $showOutOfStockFlag);
+            $this->addSubProductsStockStatusJoin($select, $stockValues, $showOutOfStockFlag);
         }
 
         return $select;
@@ -105,6 +104,7 @@ class StockStatusFilter
 
     /**
      * Adds filter join for products by stock status
+     *
      * In case when $showOutOfStockFlag is true - joins are still required to filter only enabled products
      *
      * @param Select $select
@@ -147,15 +147,15 @@ class StockStatusFilter
 
     /**
      * Adds filter join for sub products by stock status
+     *
      * In case when $showOutOfStockFlag is true - joins are still required to filter only enabled products
      *
      * @param Select $select
      * @param array|int $stockValues
-     * @param string $mainTableAlias
      * @param bool $showOutOfStockFlag
      * @return void
      */
-    private function addSubProductsStockStatusJoin(Select $select, $stockValues, $mainTableAlias, $showOutOfStockFlag)
+    private function addSubProductsStockStatusJoin(Select $select, $stockValues, $showOutOfStockFlag)
     {
         $catalogInventoryTable = $this->resourceConnection->getTableName('cataloginventory_stock_status');
         $select->joinInner(

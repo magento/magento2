@@ -11,7 +11,6 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\CatalogInventory\Model\Stock;
 
 /**
- * Class FilterMapper
  * This class applies filters to Select based on SelectContainer configuration
  *
  * @deprecated
@@ -66,8 +65,7 @@ class FilterMapper
     }
 
     /**
-     * Applies filters to Select query in SelectContainer
-     * based on SelectContainer configuration
+     * Applies filters to Select query in SelectContainer based on SelectContainer configuration
      *
      * @param SelectContainer $selectContainer
      * @return SelectContainer
@@ -98,8 +96,11 @@ class FilterMapper
         $appliedFilters = [];
 
         if ($selectContainer->hasVisibilityFilter()) {
-            $select = $this->visibilityFilter->apply($select, $selectContainer->getVisibilityFilter(),
-                VisibilityFilter::FILTER_BY_JOIN);
+            $select = $this->visibilityFilter->apply(
+                $select,
+                $selectContainer->getVisibilityFilter(),
+            VisibilityFilter::FILTER_BY_JOIN
+            );
             $appliedFilters[$this->aliasResolver->getAlias($selectContainer->getVisibilityFilter())] = true;
         }
 
