@@ -22,7 +22,7 @@ use Magento\MediaStorage\Service\ImageResize;
 use Magento\Catalog\Model\Product\Media\Config as ProductMediaConfig;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Media storage service
  */
 class Media implements AppInterface
 {
@@ -150,7 +150,7 @@ class Media implements AppInterface
     {
         $this->appState->setAreaCode(Area::AREA_GLOBAL);
 
-        if (trim($this->mediaDirectoryPath,'/') !== trim($this->directory->getAbsolutePath(),'/')) {
+        if (trim($this->mediaDirectoryPath, '/') !== trim($this->directory->getAbsolutePath(), '/')) {
             // Path to media directory changed or absent - update the config
             /** @var Config $config */
             $config = $this->configFactory->create(['cacheFile' => $this->configCacheFile]);
@@ -167,7 +167,7 @@ class Media implements AppInterface
             /** @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync */
             $sync = $this->syncFactory->create(['directory' => $this->directory]);
             $sync->synchronize($this->relativeFileName);
-            if (stripos($this->relativeFileName,$this->productMediaConfig->getBaseMediaPathAddition()) === 0) {
+            if (stripos($this->relativeFileName, $this->productMediaConfig->getBaseMediaPathAddition()) === 0) {
                 $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
             }
             if ($this->directory->isReadable($this->relativeFileName)) {
@@ -182,6 +182,9 @@ class Media implements AppInterface
         return $this->response;
     }
 
+    /**
+     * Set placeholder image as response
+     */
     private function setPlaceholderImage()
     {
         $placeholder = $this->placeholderFactory->create(['type' => 'image']);
@@ -200,7 +203,7 @@ class Media implements AppInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
     {

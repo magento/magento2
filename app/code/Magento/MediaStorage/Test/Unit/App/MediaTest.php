@@ -147,8 +147,14 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->will($this->returnValueMap(
                 [
-                    [null, self::MEDIA_DIRECTORY],
-                    [self::RELATIVE_FILE_PATH, $filePath],
+                    [
+                        null,
+                        self::MEDIA_DIRECTORY
+                    ],
+                    [
+                        self::RELATIVE_FILE_PATH,
+                        $filePath
+                    ],
                 ]
             ));
         $this->configMock->expects($this->once())->method('save');
@@ -173,8 +179,14 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->will($this->returnValueMap(
                 [
-                    [null, self::MEDIA_DIRECTORY],
-                    [self::RELATIVE_FILE_PATH, $filePath],
+                    [
+                        null,
+                        self::MEDIA_DIRECTORY
+                    ],
+                    [
+                        self::RELATIVE_FILE_PATH,
+                        $filePath
+                    ],
                 ]
             ));
         $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);

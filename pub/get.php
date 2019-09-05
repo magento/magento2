@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Stdlib\Cookie\PhpCookieReader;
 
-require dirname(__DIR__) . '/app/bootstrap.php';
+require __DIR__ . '/app/bootstrap.php';
 
 $mediaDirectory = null;
 $allowedResources = [];
@@ -34,56 +34,57 @@ $request = new \Magento\MediaStorage\Model\File\Storage\Request(
     )
 );
 
-if (stripos($relativePath,DirectoryList::MEDIA . '/') === 0) {
-    $relativePath = substr($relativePath,strlen(DirectoryList::MEDIA )+1);
+if (stripos($relativePath, DirectoryList::MEDIA . '/') === 0) {
+    $relativePath = substr($relativePath, strlen(DirectoryList::MEDIA)+1);
 }
+
 $relativePath = $request->getPathInfo();
+$mediaDirectory = null;
 if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
     $config = json_decode(file_get_contents($configCacheFile), true);
 
     //checking update time
     if (filemtime($configCacheFile) + $config['update_time'] > time()) {
-        $mediaDirectory = $config['media_directory'];
         $allowedResources = $config['allowed_resources'];
-
-        // Serve file if it's materialized
-        if ($mediaDirectory) {
-            if (!$isAllowed($relativePath, $allowedResources)) {
-                require_once 'errors/404.php';
-                exit;
-            }
-            $mediaAbsPath = $mediaDirectory . '/' . $relativePath;
-            if (is_readable($mediaAbsPath)) {
-                if (is_dir($mediaAbsPath)) {
-                    require_once 'errors/404.php';
-                    exit;
-                }
-                $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
-                    new \Magento\Framework\HTTP\PhpEnvironment\Response(),
-                    new \Magento\Framework\File\Mime()
-                );
-                $transfer->send($mediaAbsPath);
-                exit;
-            }
-        }
+        $mediaDirectory = $config['media_directory'];
     }
 }
 
-// Materialize file in application
-$params = $_SERVER;
-if (empty($mediaDirectory)) {
-    $params[ObjectManagerFactory::INIT_PARAM_DEPLOYMENT_CONFIG] = [];
-    $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
+if ($mediaDirectory) {
+    // Serve file if it's materialized
+    if (!$isAllowed($relativePath, $allowedResources)) {
+        require __DIR__ . '/pub/errors/404.php';
+    }else{
+        $mediaAbsPath = $mediaDirectory . '/' . $relativePath;
+        if (is_readable($mediaAbsPath)) {
+            if (is_dir($mediaAbsPath)) {
+                require __DIR__ . '/pub/errors/404.php';
+            }
+            $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
+                new \Magento\Framework\HTTP\PhpEnvironment\Response(),
+                new \Magento\Framework\File\Mime()
+            );
+            $transfer->send($mediaAbsPath);
+        }
+    }
+}else{
+    // Materialize file in application
+    $params = $_SERVER;
+    if (empty($mediaDirectory)) {
+        $params[ObjectManagerFactory::INIT_PARAM_DEPLOYMENT_CONFIG] = [];
+        $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
+    }
+    $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+    /** @var \Magento\MediaStorage\App\Media $app */
+    $app = $bootstrap->createApplication(
+        \Magento\MediaStorage\App\Media::class,
+        [
+            'mediaDirectory' => $mediaDirectory,
+            'configCacheFile' => $configCacheFile,
+            'isAllowed' => $isAllowed,
+            'relativeFileName' => $relativePath,
+        ]
+    );
+    $bootstrap->run($app);
 }
-$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
-/** @var \Magento\MediaStorage\App\Media $app */
-$app = $bootstrap->createApplication(
-    \Magento\MediaStorage\App\Media::class,
-    [
-        'mediaDirectory' => $mediaDirectory,
-        'configCacheFile' => $configCacheFile,
-        'isAllowed' => $isAllowed,
-        'relativeFileName' => $relativePath,
-    ]
-);
-$bootstrap->run($app);
+
