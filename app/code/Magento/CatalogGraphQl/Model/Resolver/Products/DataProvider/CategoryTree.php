@@ -140,6 +140,9 @@ class CategoryTree
             if ($node->kind === 'InlineFragment') {
                 continue;
             }
+            if ($node->kind === 'FragmentSpread') {
+                continue;
+            }
 
             $this->joinAttributesRecursively($collection, $node);
         }
