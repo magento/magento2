@@ -152,6 +152,7 @@ type CartPrices {
     discount: CartDiscount
     subtotal_with_discount_excluding_tax: Money
     applied_taxes: [CartTaxItem]
+    discounts: CartPromotions
 }
 
 type CartTaxItem {
@@ -318,10 +319,21 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
     product: ProductInterface!
 }
 
+type Discount {
+    amount: Money!
+    label: String!
+}
+
 type CartItemPrices {
     price: Money!
     row_total: Money!
     row_total_including_tax: Money!
+    discounts: [Discount]
+    discount: Money
+}
+
+type CartPromotions {
+  discounts: [Discount] @doc(description: "Shows discount breakdown at Cart level")
 }
 
 type SelectedCustomizableOption {
