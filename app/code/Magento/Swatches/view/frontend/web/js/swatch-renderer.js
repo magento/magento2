@@ -754,7 +754,7 @@ define([
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
-            if (checkAdditionalData['update_product_preview_image'] === '1') {
+            if (parseInt(checkAdditionalData['update_product_preview_image']) === 1) {
                 $widget._loadMedia();
             }
 
