@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Catalog\Model\Category;
 use Magento\CatalogGraphQl\Model\Resolver\Category\CheckCategoryIsActive;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -66,8 +67,10 @@ class CategoryTree implements ResolverInterface
 
         $rootCategoryId = isset($args['id']) ? (int)$args['id'] :
             (int)$context->getExtensionAttributes()->getStore()->getRootCategoryId();
-        $this->checkCategoryIsActive->execute($rootCategoryId);
 
+        if ($rootCategoryId !== Category::TREE_ROOT_ID) {
+            $this->checkCategoryIsActive->execute($rootCategoryId);
+        }
         $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
 
         if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
