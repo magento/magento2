@@ -40,9 +40,8 @@ class Details extends \Magento\Framework\View\Element\Template
             $childNamesSortOrder[$childName] = $sortOrder;
         }
 
-        asort($childNamesSortOrder);
-        $childNamesSortOrder = array_keys($childNamesSortOrder);
+        asort($childNamesSortOrder, SORT_NUMERIC);
 
-        return $childNamesSortOrder;
+        return array_keys($childNamesSortOrder);
     }
 }
