@@ -8,6 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCategorySidebarSection">
+        <element name="layeredFilterBlock" type="block" selector="#layered-filter-block"/>
         <element name="filterOptionsTitle" type="text" selector="//div[@class='filter-options-title' and contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="filterOptions" type="text" selector=".filter-options-content .items"/>
         <element name="filterOption" type="text" selector=".filter-options-content .item"/>

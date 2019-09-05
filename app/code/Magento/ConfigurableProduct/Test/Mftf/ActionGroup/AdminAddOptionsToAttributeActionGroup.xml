@@ -8,6 +8,44 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateNewAttributeWithOptions">
+        <arguments>
+            <argument name="labelName" type="string"/>
+            <argument name="inputType" type="string"/>
+            <argument name="firstOption" type="string"/>
+            <argument name="secondOption" type="string"/>
+            <argument name="thirdOption" type="string"/>
+            <argument name="fourthOption" type="string"/>
+            <argument name="useInLayer" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="createNewAttribute"/>
+        <fillField stepKey="fillDefaultLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{labelName}}"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" stepKey="checkInputType" userInput="{{inputType}}"/>
+        <click selector="{{AttributeOptionsSection.AddOption}}" stepKey="clickAddOption6"/>
+        <fillField selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('1')}}" userInput="{{firstOption}}" stepKey="fillAdminValue6"/>
+        <click selector="{{AttributeOptionsSection.AddOption}}" stepKey="clickAddOption7"/>
+        <fillField selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('2')}}" userInput="{{secondOption}}" stepKey="fillAdminValue7"/>
+        <click selector="{{AttributeOptionsSection.AddOption}}" stepKey="clickAddOption8"/>
+        <fillField selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('3')}}" userInput="{{thirdOption}}" stepKey="fillAdminValue8"/>
+        <click selector="{{AttributeOptionsSection.AddOption}}" stepKey="clickAddOption9"/>
+        <fillField selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('4')}}" userInput="{{fourthOption}}" stepKey="fillAdminValue9"/>
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInLayeredNavigation}}" stepKey="selectUseInLayer" userInput="{{useInLayer}}"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForGridPageLoad"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+    </actionGroup>
+    <actionGroup name="CreateAttributeWithOptions" extends="CreateNewAttributeWithOptions">
+        <arguments>
+            <argument name="fifthOption" type="string"/>
+        </arguments>
+        <click selector="{{AttributeOptionsSection.AddOption}}" after="fillAdminValue9" stepKey="clickAddOption10"/>
+        <fillField selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('5')}}" after="clickAddOption10" userInput="{{fifthOption}}" stepKey="fillAdminValue10"/>
+    </actionGroup>
     <actionGroup name="addOptionsToAttributeActionGroup">
         <annotations>
             <description>Adds 5 provided Options to a new Attribute on the Configurable Product creation/edit page.</description>

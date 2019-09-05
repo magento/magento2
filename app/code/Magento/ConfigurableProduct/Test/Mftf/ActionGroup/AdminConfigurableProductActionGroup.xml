@@ -8,6 +8,59 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateConfigurableProductWithAttributeSet">
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+            <argument name="category" defaultValue="_defaultCategory"/>
+            <argument name="label" type="string"/>
+            <argument name="option1" type="string"/>
+        </arguments>
+        <!-- fill in basic configurable product values -->
+        <comment userInput="fill in basic configurable product values" stepKey="commentFillInProductValue"/>
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{label}}" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{product.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{product.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{category.name}}]" stepKey="fillCategory"/>
+        <selectOption selector="{{AdminProductFormSection.additionalOptions}}" parameterArray="{{option1}}" stepKey="searchAndMultiSelect1"/>
+    </actionGroup>
+    <actionGroup name="CreateConfigurationsForOptions">
+        <arguments>
+            <argument name="option2" type="string"/>
+            <argument name="price" type="string"/>
+            <argument name="sku" type="string"/>
+        </arguments>
+        <!-- create configurations for colors the product is available in -->
+        <comment userInput="create configurations for colors the product is available in" stepKey="commentCreateConfigurations"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters2"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{option2}}" stepKey="fillFilterAttributeCodeField2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton12"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton22"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="waitForNextPageOpened2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSkus"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="{{price}}" stepKey="enterAttributePrice"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="{{sku}}" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextStep3"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="openSaveDropDown"/>
+        <click selector="{{AdminGridMainControls.saveAndNew}}" stepKey="clickToSaveAndNew"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+    </actionGroup>
+    <actionGroup name="CreateConfigurableProductWithAttributeSetAndOption" extends="createConfigurationsForOptions">
+        <arguments>
+            <argument name="colorOption" type="string"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeOption('colorOption')}}" after="clickOnSelectAll2" stepKey="clickToUncheckOption"/>
+    </actionGroup>
     <!--Filter the product grid and view expected products-->
     <actionGroup name="viewConfigurableProductInAdminGrid">
         <annotations>
