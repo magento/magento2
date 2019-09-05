@@ -20,12 +20,12 @@ class CleanExpiredQuotes
     /**
      * @var StoresConfig
      */
-    private $storesConfig;
+    protected $storesConfig;
 
     /**
      * @var QuoteCollectionFactory
      */
-    private $quoteCollectionFactory;
+    protected $quoteCollectionFactory;
 
     /**
      * @var array
@@ -35,7 +35,7 @@ class CleanExpiredQuotes
     /**
      * @var ExpireQuotesFilterFieldsProvider
      */
-    private $expireQuotesFilterFieldsProvider;
+    protected $expireQuotesFilterFieldsProvider;
 
     /**
      * @param StoresConfig $storesConfig
