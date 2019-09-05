@@ -8,7 +8,11 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="head.additional">
-            <block class="Magento\Translation\Block\Html\Head\Dictionary" name="translation_dictionary" template="Magento_Translation::dictionary.phtml"/>
+            <block name="translation_dictionary" template="Magento_Translation::dictionary.phtml">
+                <arguments>
+                    <argument name="dictionary_view_model" xsi:type="object">Magento\Translation\ViewModel\Dictionary</argument>
+                </arguments>
+            </block>
         </referenceBlock>
     </body>
 </page>

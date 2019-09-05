@@ -4,17 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Translation\Block\Html\Head;
+namespace Magento\Translation\ViewModel;
 
-use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Translation\Model\FileManager;
-use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Translation\Model\Js\Config as JsConfig;
 
 /**
- * Block responsible for getting translate dictionary file for the layout.
+ * View model responsible for getting translate dictionary file for the layout.
  */
-class Dictionary extends Template
+class Dictionary implements ArgumentInterface
 {
     /**
      * @var FileManager
@@ -22,31 +21,18 @@ class Dictionary extends Template
     private $fileManager;
 
     /**
-     * @var PageConfig
-     */
-    protected $pageConfig;
-
-    /**
      * @var JsConfig
      */
     private $config;
 
     /**
-     * @param Template\Context $context
-     * @param PageConfig $pageConfig
      * @param FileManager $fileManager
      * @param JsConfig $config
-     * @param array $data
      */
     public function __construct(
-        Template\Context $context,
-        PageConfig $pageConfig,
         FileManager $fileManager,
-        JsConfig $config,
-        array $data = []
+        JsConfig $config
     ) {
-        parent::__construct($context, $data);
-        $this->pageConfig = $pageConfig;
         $this->fileManager = $fileManager;
         $this->config = $config;
     }
@@ -59,9 +45,8 @@ class Dictionary extends Template
     public function getTranslationDictionaryFile(): string
     {
         $translateDictionaryConfig = $this->fileManager->createTranslateDictionaryConfigAsset(JsConfig::DICTIONARY_FILE_NAME);
-        $translateDictionaryConfigRelPath = $translateDictionaryConfig->getFilePath();
 
-        return $this->_assetRepo->getUrl($translateDictionaryConfigRelPath);
+        return $translateDictionaryConfig->getUrl();
     }
 
     /**

@@ -4,17 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Translation\Block\Html\Head\Dictionary $block  */
+/** @var \Magento\Translation\ViewModel\Dictionary $viewModel  */
+$viewModel = $block->getData('dictionary_view_model');
 ?>
-<?php if ($block->dictionaryEnabled()) : ?>
-<link rel="preload" as="script" href="<?= $block->getTranslationDictionaryFile() ?>">
-<script>
-    require.config({
-        map: {
-            '*': {
-                'dictionary': '<?= $block->getTranslationDictionaryFile() ?>'
+<?php if ($viewModel->dictionaryEnabled()) : ?>
+    <script type="application/json" src="<?= $viewModel->getTranslationDictionaryFile() ?>"></script>
+    <script>
+        require.config({
+            map: {
+                '*': {
+                    'dictionary': '<?= $viewModel->getTranslationDictionaryFile() ?>'
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 <?php endif; ?>
