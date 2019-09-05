@@ -94,7 +94,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::PUB)
+            ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->directoryMock));
 
         $this->responseMock = $this->createMock(\Magento\MediaStorage\Model\File\Storage\Response::class);
