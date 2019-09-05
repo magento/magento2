@@ -11,9 +11,6 @@
     <entity name="SetMinQueryLengthToDefault" type="catalog_search_config_def">
         <requiredEntity type="enable">DefaultMinQueryLength</requiredEntity>
     </entity>
-    <entity name="SetSearchEngineToDefault" type="catalog_search_config_def">
-        <requiredEntity type="enable_engine">DefaultSearchEngine</requiredEntity>
-    </entity>
     <entity name="UncheckMinQueryLengthAndSet" type="catalog_search_config_query_length">
         <requiredEntity type="number">SetMinQueryLengthToOne</requiredEntity>
     </entity>
@@ -25,8 +22,5 @@
     </entity>
     <entity name="SetMinQueryLengthToOne" type="number">
         <data key="value">1</data>
-    </entity>
-    <entity name="DefaultSearchEngine" type="enable_engine">
-        <data key="inherit">true</data>
     </entity>
 </entities>

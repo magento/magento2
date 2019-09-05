@@ -11,7 +11,7 @@
     <test name="StrorefrontElasticsearchSearchInvalidValueTest">
         <annotations>
             <features value="Search"/>
-            <stories value="Searches That Contain Question Mark Followed by Semicolon Will Result In Error Page"/>
+            <stories value="Search Product on Storefront"/>
             <title value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
             <description value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
             <severity value="MAJOR"/>
@@ -21,18 +21,25 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create category-->
+            <comment userInput="Create category" stepKey="commentCreateCategory"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Enable Elasticsearch-->
             <comment userInput="Enable Elasticsearch" stepKey="commentEnableElasticsearch"/>
             <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="enableElasticsearch"/>
             <!--Set Minimal Query Length-->
             <comment userInput="Set Minimal Query Length" stepKey="commentSetMinQueryLength"/>
             <magentoCLI command="config:set catalog/search/min_query_length 2" stepKey="setMinQueryLength"/>
+            <!--Reindex indexes and clear cache-->
+            <comment userInput="Reindex indexes and clear cache" stepKey="commentReindexClearCache"/>
+            <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCache"/>
         </before>
         <after>
             <!--Set configs to default-->
             <comment userInput="Set configs to default" stepKey="commentSetDefault"/>
-            <createData entity="SetMinQueryLengthToDefault" stepKey="setMinimumQueryLengthToDefault"/>
-            <createData entity="SetSearchEngineToDefault" stepKey="setSearchEngineToDefault"/>
+            <magentoCLI command="config:set catalog/search/min_query_length 3" stepKey="setMinQueryLengthPreviousState"/>
+            <magentoCLI command="config:set catalog/search/engine mysql" stepKey="resetSearchEnginePreviousState"/>
             <!--Delete create data-->
             <comment userInput="Delete create data" stepKey="commentDeletedData"/>
             <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
@@ -44,18 +51,19 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{SimpleProduct.sku}}"/>
             </actionGroup>
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Create new searchable product attribute-->
         <comment userInput="Create new searchable product attribute" stepKey="commentCreateAttribute"/>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-        <actionGroup ref="StorefrontCreateSearchableProductAttribute" stepKey="createAttribute">
+        <actionGroup ref="AdminCreateSearchableProductAttribute" stepKey="createAttribute">
             <argument name="attribute" value="textProductAttribute"/>
         </actionGroup>
-        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
         <!--Assign attribute to the Default set-->
         <comment userInput="Assign attribute to the Default set" stepKey="commentAssignToDefaultSet"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
         <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="{{textProductAttribute.attribute_code}}"/>
@@ -71,8 +79,13 @@
         <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
+        <actionGroup ref="SetCategoryByName" stepKey="addCategoryToProduct">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
         <fillField selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" userInput="searchable" stepKey="fillTheAttributeRequiredInputField"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush  catalog_product_attribute " stepKey="flushCache"/>
         <!--Assert search results on storefront-->
         <comment userInput="Assert search results on storefront" stepKey="commentAssertSearchResult"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
