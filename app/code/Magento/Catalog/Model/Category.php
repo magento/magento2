@@ -131,6 +131,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         'page_layout',
         'custom_layout_update',
         'custom_apply_to_products',
+        'custom_use_parent_settings',
     ];
 
     /**
@@ -331,9 +332,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated because resource models should be used directly
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     protected function _getResource()
     {
+        //phpcs:enable Generic.CodeAnalysis.UselessOverridingMethod
         return parent::_getResource();
     }
     // phpcs:enable
