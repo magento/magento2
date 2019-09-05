@@ -33,15 +33,6 @@
         </annotations>
     </test>
 
-    <!-- MSI-1319 -->
-    <test name="AdminCreateOrderWithGroupedProductDefaultStockTest">
-        <annotations>
-            <skip>
-                <issueId value="MSI-1759"/>
-            </skip>
-        </annotations>
-    </test>
-
     <!-- MAGETWO-87435 -->
     <test name="EndToEndB2CGuestUserTest">
         <annotations>

@@ -46,19 +46,10 @@
             <waitForPageLoad stepKey="waitForDashboardLoad"/>
 
             <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
-            <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
-            <waitForPageLoad time="30" stepKey="waitForStockListPageLoad"/>
-            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultStockByName">
-                <argument name="keyword" value="_defaultStock.name"/>
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
             </actionGroup>
-            <click selector="{{AdminGridRow.editByValue(_defaultStock.name)}}" stepKey="clickEditDefaultStock"/>
-            <waitForPageLoad time="30" stepKey="waitFroDefaultStockEditPageLoad"/>
-            <selectOption selector="{{AdminEditStockSalesChannelsSection.websites}}" userInput="Main Website" stepKey="selectDefaultWebsiteAsSalesChannelForDefaultStock"/>
-            <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
-
-            <comment userInput="Perform reindex and cache flush after assign default stock to main website." stepKey="reindexCacheFlushAfterAssignDefaultStockToMainWebsite"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
@@ -140,9 +131,9 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <comment userInput="Select shipping method and check grand total and shipping cost." stepKey="selectShippingMethodComment"/>
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
-        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$445.98" stepKey="seeOrderSubTotal"/>
-        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="$10.00" stepKey="seeOrderShipping"/>
-        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="$455.98" stepKey="seeCorrectGrandTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$891.96" stepKey="seeOrderSubTotal"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="$20.00" stepKey="seeOrderShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="$911.96" stepKey="seeCorrectGrandTotal"/>
 
         <comment userInput="Submit order." stepKey="submitOrderComment"/>
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
@@ -155,7 +146,7 @@
             <argument name="value" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkSimpleProductSourceQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="998" stepKey="checkSimpleProductSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="996" stepKey="checkSimpleProductSalableQtyAfterPlaceOrder"/>
 
         <comment userInput="Check virtual product quantity and salable quantity." stepKey="checkVirtualProductQuantityComment"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckVirtualProductQtyAfterPlaceOrder"/>
@@ -164,6 +155,6 @@
             <argument name="value" value="$$virtualProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkVirtualProductSourceQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="998" stepKey="checkVirtualProductSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="996" stepKey="checkVirtualProductSalableQtyAfterPlaceOrder"/>
     </test>
 </tests>
