@@ -89,10 +89,30 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
 
             if ($rewrite) {
                 $href = $store->getUrl('', ['_direct' => $rewrite->getRequestPath()]);
+
+                if ($this->addStoreCodeParam($store, $href)) {
+                    $href .= (strpos($href, '?') === false ? '?' : '&') . '___store=' . $store->getCode();
+                }
             }
             $this->_href = $href;
         }
         return $this->_href;
+    }
+
+    /**
+     * Checks whether store code query param should be appended to the URL
+     *
+     * @param \Magento\Store\Model\Store $store
+     * @param string $url
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function addStoreCodeParam(\Magento\Store\Model\Store $store, string $url): bool
+    {
+        return $this->getStoreId()
+            && !$store->isUseStoreInUrl()
+            && $store->getId() !==  $this->_storeManager->getStore()->getId()
+            && strpos($url, '___store') === false;
     }
 
     /**

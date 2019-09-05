@@ -141,16 +141,19 @@ class LinkTest extends TestCase
      *
      * @dataProvider dataProviderForTestGetHrefWithoutUrlStoreSuffix
      * @param string $path
+     * @param int|null $storeId
      * @param bool $includeStoreCode
      * @param string $expected
      * @throws \ReflectionException
      */
     public function testStoreCodeShouldBeIncludedInURLOnlyIfItIsConfiguredSo(
         string $path,
+        ?int $storeId,
         bool $includeStoreCode,
         string $expected
     ) {
         $this->block->setData('id_path', 'entity_type/entity_id');
+        $this->block->setData('store_id', $storeId);
         $objectManager = new ObjectManager($this);
 
         $rewrite = $this->createPartialMock(UrlRewrite::class, ['getRequestPath']);
@@ -192,17 +195,27 @@ class LinkTest extends TestCase
         $url->expects($this->any())
             ->method('getUrl')
             ->willReturnCallback(
-                function ($route, $params) use ($store) {
-                    return rtrim($store->getBaseUrl(), '/') .'/'. ltrim($params['_direct'], '/');
+                function ($route, $params) use ($storeId) {
+                    $baseUrl = rtrim($this->storeManager->getStore($storeId)->getBaseUrl(), '/');
+                    return $baseUrl .'/' . ltrim($params['_direct'], '/');
                 }
             );
 
         $store->addData(['store_id' => 1, 'code' => 'french']);
 
+        $store2 = clone $store;
+        $store2->addData(['store_id' => 2, 'code' => 'german']);
+
         $this->storeManager
             ->expects($this->any())
             ->method('getStore')
-            ->willReturn($store);
+            ->willReturnMap(
+                [
+                    [null, $store],
+                    [1, $store],
+                    [2, $store2],
+                ]
+            );
 
         $this->urlFinder->expects($this->once())
             ->method('findOneByData')
@@ -210,7 +223,7 @@ class LinkTest extends TestCase
                 [
                     UrlRewrite::ENTITY_ID => 'entity_id',
                     UrlRewrite::ENTITY_TYPE => 'entity_type',
-                    UrlRewrite::STORE_ID => $store->getStoreId(),
+                    UrlRewrite::STORE_ID => $this->storeManager->getStore($storeId)->getStoreId(),
                 ]
             )
             ->will($this->returnValue($rewrite));
@@ -219,7 +232,7 @@ class LinkTest extends TestCase
             ->method('getRequestPath')
             ->will($this->returnValue($path));
 
-        $this->assertContains($expected, $this->block->getHref());
+        $this->assertEquals($expected, $this->block->getHref());
     }
 
     /**
@@ -255,8 +268,13 @@ class LinkTest extends TestCase
     public function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
     {
         return [
-            ['/accessories.html', true, 'french/accessories.html'],
-            ['/accessories.html', false, '/accessories.html'],
+            ['/accessories.html', null, true, 'french/accessories.html'],
+            ['/accessories.html', null, false, '/accessories.html'],
+            ['/accessories.html', 1, true, 'french/accessories.html'],
+            ['/accessories.html', 1, false, '/accessories.html'],
+            ['/accessories.html', 2, true, 'german/accessories.html'],
+            ['/accessories.html', 2, false, '/accessories.html?___store=german'],
+            ['/accessories.html?___store=german', 2, false, '/accessories.html?___store=german'],
         ];
     }
 
