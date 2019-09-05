@@ -10,6 +10,7 @@ require __DIR__ . '/../../ConfigurableProduct/_files/configurable_products.php';
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 
@@ -27,18 +28,7 @@ $attribute->setIsSearchable(1)
 /** @var AttributeRepositoryInterface $attributeRepository */
 $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
 $attributeRepository->save($attribute);
-
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-$outOfStockChildProduct = $productRepository->get('simple_10');
-$outOfStockChildProduct->setStockData(
-    ['use_config_manage_stock' => 1,
-        'qty' => 0,
-        'is_qty_decimal' => 0,
-        'is_in_stock' => 0]
-);
-$productRepository->save($outOfStockChildProduct);
-
+CacheCleaner::cleanAll();
 /** @var \Magento\Indexer\Model\Indexer\Collection $indexerCollection */
 $indexerCollection = Bootstrap::getObjectManager()->get(\Magento\Indexer\Model\Indexer\Collection::class);
 $indexerCollection->load();
