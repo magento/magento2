@@ -11,9 +11,9 @@ input PaymentMethodInput {
 }
 
 input BraintreeInput {
-    payment_method_nonce: String!
-    is_active_payment_token_enabler: Boolean!
-    device_data: String
+    payment_method_nonce: String! @doc(description:"Required input for Braintrees payments")
+    is_active_payment_token_enabler: Boolean! @doc(description:"Required input for Braintrees payments")
+    device_data: String @doc(description:"Additional information for Braintrees payments")
 }
 
 input BraintreeCcVaultInput {
