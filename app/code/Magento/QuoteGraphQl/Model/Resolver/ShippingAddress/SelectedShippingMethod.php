@@ -64,14 +64,7 @@ class SelectedShippingMethod implements ResolverInterface
                 ],
             ];
         } else {
-            $data = [
-                'carrier_code' => null,
-                'method_code' => null,
-                'carrier_title' => $carrierTitle,
-                'method_title' => $methodTitle,
-                'amount' => null,
-                'base_amount' => null,
-            ];
+            $data = null;
         }
         return $data;
     }
