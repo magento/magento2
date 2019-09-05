@@ -496,7 +496,9 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($object->getBackendType() === 'varchar') {
             $where.= " AND FIND_IN_SET('$optionId',value)";
-            $update['value'] = new \Zend_Db_Expr("TRIM(BOTH ',' FROM REPLACE(CONCAT(',',value,','),',$optionId,',','))");
+            $update['value'] = new \Zend_Db_Expr(
+                "TRIM(BOTH ',' FROM REPLACE(CONCAT(',',value,','),',$optionId,',','))"
+            );
         } else {
             $where.= ' AND value = ' . $optionId;
             $update['value'] = null;
