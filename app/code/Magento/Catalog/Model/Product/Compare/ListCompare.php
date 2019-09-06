@@ -53,8 +53,6 @@ class ListCompare extends \Magento\Framework\DataObject
     protected $_compareItemFactory;
 
     /**
-     * Product Repository
-     *
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
