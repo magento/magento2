@@ -79,22 +79,6 @@ class GetSpecifiedShippingAddressTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     */
-    public function testShippingAddressOnCreatedEmptyCart()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $query = $this->getQuery($maskedQuoteId);
-
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-        self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('shipping_addresses', $response['cart']);
-
-        self::assertCount(0, $response['cart']['shipping_addresses']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -108,28 +92,7 @@ class GetSpecifiedShippingAddressTest extends GraphQlAbstract
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('shipping_addresses', $response['cart']);
 
-        $expectedShippingAddressData = [
-            'firstname' => null,
-            'lastname' => null,
-            'company' => null,
-            'street' => [
-                ''
-            ],
-            'city' => null,
-            'region' => [
-                'code' => null,
-                'label' => null,
-            ],
-            'postcode' => null,
-            'country' => [
-                'code' => null,
-                'label' => null,
-            ],
-            'telephone' => null,
-            '__typename' => 'ShippingCartAddress',
-            'customer_notes' => null,
-        ];
-        self::assertEquals($expectedShippingAddressData, current($response['cart']['shipping_addresses']));
+        self::assertEquals(0, $response['cart']['shipping_addresses']);
     }
 
     /**
