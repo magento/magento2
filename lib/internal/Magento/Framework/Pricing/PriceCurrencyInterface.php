@@ -47,7 +47,7 @@ interface PriceCurrencyInterface
      * @param int $precision
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
-     * @return float
+     * @return string
      */
     public function format(
         $amount,
