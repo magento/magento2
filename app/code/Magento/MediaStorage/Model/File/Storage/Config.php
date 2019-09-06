@@ -6,12 +6,17 @@
 namespace Magento\MediaStorage\Model\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\MediaStorage\Model\File\Storage;
 
 class Config
 {
+    const CACHE_ID = 'config';
+
     /**
      * Config cache file path
      *
@@ -26,64 +31,64 @@ class Config
      */
     protected $config;
 
-    /**
-     * File stream handler
+    /***
+     * Allowd resources
      *
-     * @var DirectoryWrite
+     * @var string[]
      */
-    protected $rootDirectory;
+    protected $allowedResources;
+
+    /***
+     * ConfigStorage
+     *
+     * @var Storage
+     */
+    protected $storage;
+
+    /**
+     * Config serializer
+     *
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Config Cache
+     *
+     * @var Cache
+     */
+    private $cache;
+
 
     /**
      * @param \Magento\MediaStorage\Model\File\Storage $storage
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param string $cacheFile
+     * @param \Magento\MediaStorage\Model\Cache\Type\MediaStorage
      */
     public function __construct(
         \Magento\MediaStorage\Model\File\Storage $storage,
-        \Magento\Framework\Filesystem $filesystem,
-        $cacheFile
+        SerializerInterface $serializer = null,
+        \Magento\MediaStorage\Model\Cache\Type\MediaStorage $cache
     ) {
-        $this->config = $storage->getScriptConfig();
-        $this->rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $this->cacheFilePath = $cacheFile;
+        $this->cache = $cache;
+        $this->storage = $storage;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
-     * Retrieve media directory
-     *
-     * @return string
-     */
-    public function getMediaDirectory()
-    {
-        return $this->config['media_directory'];
-    }
-
-    /**
-     * Retrieve list of allowed resources
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getAllowedResources()
     {
-        return $this->config['allowed_resources'];
-    }
-
-    /**
-     * Save config in cache file
-     *
-     * @return void
-     */
-    public function save()
-    {
-        /** @var Write $file */
-        $file = $this->rootDirectory->openFile($this->rootDirectory->getRelativePath($this->cacheFilePath), 'w');
-        try {
-            $file->lock();
-            $file->write(json_encode($this->config));
-            $file->unlock();
-            $file->close();
-        } catch (FileSystemException $e) {
-            $file->close();
+        if (null === $this->allowedResources) {
+            $allowedResources = $this->cache->load(self::CACHE_ID);
+            if ($allowedResources && is_string($allowedResources)) {
+                $this->allowedResources = $this->serializer->unserialize($allowedResources);
+            } else {
+                $this->allowedResources = $this->storage->getScriptConfig();
+                $this->cache->save($this->serializer->serialize($this->allowedResources), self::CACHE_ID);
+            }
         }
+        return $this->allowedResources['allowed_resources'];
     }
 }

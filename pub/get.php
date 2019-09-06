@@ -6,26 +6,18 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\App\Cache\Frontend\Factory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Stdlib\Cookie\PhpCookieReader;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
-include __DIR__ . '/app/bootstrap.php';
+require_once __DIR__ . '/../app/bootstrap.php';
 
-$mediaDirectory = null;
-$allowedResources = [];
-$configCacheFile = BP . '/var/resource_config.json';
-
-$isAllowed = function ($resource, array $allowedResources) {
-    foreach ($allowedResources as $allowedResource) {
-        if (0 === stripos($resource, $allowedResource)) {
-            return true;
-        }
-    }
-    return false;
-};
+$filesystem = new FileSystem(
+    new Directorylist(__DIR__ . '/..',Directorylist::getDefaultConfig()),
+    new Filesystem\Directory\ReadFactory( new Filesystem\DriverPool() ),
+    new Filesystem\Directory\WriteFactory( new Filesystem\DriverPool() )
+);
 
 $request = new \Magento\MediaStorage\Model\File\Storage\Request(
     new Request(
@@ -34,59 +26,24 @@ $request = new \Magento\MediaStorage\Model\File\Storage\Request(
     )
 );
 
-if (stripos($relativePath, DirectoryList::MEDIA . '/') === 0) {
-    $relativePath = substr($relativePath, strlen(DirectoryList::MEDIA)+1);
-}
-
-$relativePath = $request->getPathInfo();
-$mediaDirectory = null;
-if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
-    $config = json_decode(file_get_contents($configCacheFile), true);
-
-    //checking update time
-    if (filemtime($configCacheFile) + $config['update_time'] > time()) {
-        $allowedResources = $config['allowed_resources'];
-        $mediaDirectory = $config['media_directory'];
-    }
-}
-
-if ($mediaDirectory) {
-    // Serve file if it's materialized
-    if (!$isAllowed($relativePath, $allowedResources)) {
-        include __DIR__ . '/pub/errors/404.php';
-    }else{
-        $mediaAbsPath = $mediaDirectory . '/' . $relativePath;
-        if (is_readable($mediaAbsPath)) {
-            if (is_dir($mediaAbsPath)) {
-                include __DIR__ . '/pub/errors/404.php';
-            }
-            $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
-                new \Magento\Framework\HTTP\PhpEnvironment\Response(),
-                new \Magento\Framework\File\Mime()
-            );
-            $transfer->send($mediaAbsPath);
-        }
-    }
-}else{
-    // Materialize file in application
-    $params = $_SERVER;
-    if (empty($mediaDirectory)) {
-        $params[ObjectManagerFactory::INIT_PARAM_DEPLOYMENT_CONFIG] = [];
-        $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
-    }
-    $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
-    /**
- * @var \Magento\MediaStorage\App\Media $app 
-*/
+// Serve file if it's materialized
+$mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getAbsolutePath();
+$relativePath = substr($request->getPathInfo(),strlen(DirectoryList::MEDIA )+1);
+$mediaAbsPath = $mediaDirectory . '/' . $relativePath;
+if (is_readable($mediaAbsPath) && !is_dir($mediaAbsPath)) {
+    $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
+        new \Magento\Framework\HTTP\PhpEnvironment\Response(),
+        new \Magento\Framework\File\Mime()
+    );
+    $transfer->send($mediaAbsPath);
+}else {
+    $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, array());
+    /** @var \Magento\MediaStorage\App\Media $app */
     $app = $bootstrap->createApplication(
         \Magento\MediaStorage\App\Media::class,
         [
-            'mediaDirectory' => $mediaDirectory,
-            'configCacheFile' => $configCacheFile,
-            'isAllowed' => $isAllowed,
-            'relativeFileName' => $relativePath,
+            'relativeFileName' => $relativePath
         ]
     );
     $bootstrap->run($app);
 }
-
