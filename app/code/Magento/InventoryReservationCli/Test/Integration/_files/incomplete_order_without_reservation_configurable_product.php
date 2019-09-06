@@ -8,7 +8,8 @@ declare(strict_types=1);
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__ . '/../../../../../../../dev/tests/integration/testsuite/Magento/Sales/_files/order_configurable_product.php';
+require __DIR__ .
+    '/../../../../../../../dev/tests/integration/testsuite/Magento/Sales/_files/order_configurable_product.php';
 
 $objectManager = Bootstrap::getObjectManager();
 
