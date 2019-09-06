@@ -735,7 +735,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor'
+                \Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor::class
             );
         }
         return $this->collectionProcessor;
@@ -845,7 +845,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             throw new CouldNotSaveException(__($e->getMessage()));
         } catch (LocalizedException $e) {
             throw $e;
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
                 __('The product was unable to be saved. Please try again.'),

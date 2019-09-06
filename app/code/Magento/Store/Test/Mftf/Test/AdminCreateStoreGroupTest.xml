@@ -21,6 +21,14 @@
             <createData stepKey="b2" entity="customStoreGroup"/>
         </before>
         <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup">
+                <argument name="storeGroupName" value="customStoreGroup.name" />
+            </actionGroup>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup2">
+                <argument name="storeGroupName" value="customStoreGroup.name" />
+            </actionGroup>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 

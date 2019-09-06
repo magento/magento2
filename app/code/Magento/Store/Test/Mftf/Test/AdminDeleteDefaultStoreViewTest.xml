@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteDefaultStoreViewTest">
+        <annotations>
+            <stories value="Store creation ('app:config:import' with pre-defined stores) fails during installation"/>
+            <title value="Delete Default Store View"/>
+            <description value="Test another store view should be set as default when default store view is deleted"/>
+            <testCaseId value="MC-19306"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+        </annotations>
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Create custom store view-->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+            <argument name="StoreGroup" value="_defaultStoreGroup"/>
+            <argument name="customStore" value="storeViewData"/>
+        </actionGroup>
+
+        <!--Change the default store view to the custom store view-->
+        <actionGroup ref="ChangeDefaultStoreViewActionGroup" stepKey="changeDefaultStoreViewToCustomStoreView">
+            <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}"/>
+            <argument name="storeViewName" value="{{storeViewData.name}}"/>
+        </actionGroup>
+
+        <!--Delete custom store view -->
+        <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
+            <argument name="customStore" value="storeViewData"/>
+        </actionGroup>
+
+        <!--Verify that the default store view is now the default store view-->
+        <actionGroup ref="AssertDefaultStoreViewActionGroup" stepKey="assertDefaultStoreViewActionGroup">
+            <argument name="storeGroupName" value="{{_defaultStoreGroup.name}}"/>
+            <argument name="storeViewName" value="{{_defaultStore.name}}"/>
+        </actionGroup>
+    </test>
+</tests>
