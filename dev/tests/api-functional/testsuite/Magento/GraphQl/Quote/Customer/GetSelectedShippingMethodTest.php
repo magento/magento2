@@ -171,7 +171,7 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
 
         $shippingAddress = current($response['cart']['shipping_addresses']);
         self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
-        self::assertNull('selected_shipping_method', $shippingAddress['selected_shipping_method']);
+        self::assertNull($shippingAddress['selected_shipping_method']);
     }
 
     /**
