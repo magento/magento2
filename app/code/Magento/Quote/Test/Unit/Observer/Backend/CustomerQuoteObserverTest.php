@@ -157,11 +157,14 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $this->customerQuote->execute($this->observerMock);
     }
 
+    /**
+     * @return array
+     */
     public function dispatchDataProvider()
     {
         return [
-            [true, ['website1']],
-            [true, ['website1', 'website2']],
+            [true, [['website1']]],
+            [true, [['website1'], ['website2']]],
             [false, ['website1']],
             [false, ['website1', 'website2']],
         ];

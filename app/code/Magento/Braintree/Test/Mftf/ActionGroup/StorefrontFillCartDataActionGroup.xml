@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontFillCartDataActionGroup">
+        <annotations>
+            <description>Fills Cart Data with Braintree using the provided Data Entity.</description>
+        </annotations>
+        <arguments>
+            <argument name="cartData" defaultValue="PaymentAndShippingInfo"/>
+        </arguments>
+
+        <switchToIFrame selector="{{BraintreeConfigurationPaymentSection.cartFrame}}" stepKey="switchToIframe"/>
+        <waitForElementVisible selector="{{BraintreeConfigurationPaymentSection.cartCode}}" stepKey="waitCartCodeElement"/>
+        <fillField selector="{{BraintreeConfigurationPaymentSection.cartCode}}" userInput="{{cartData.cardNumber}}" stepKey="setCartCode"/>
+        <switchToIFrame stepKey="switchBack"/>
+        <switchToIFrame selector="{{BraintreeConfigurationPaymentSection.monthFrame}}" stepKey="switchToIframe1"/>
+        <waitForElementVisible selector="{{BraintreeConfigurationPaymentSection.month}}" stepKey="waitMonthElement"/>
+        <fillField selector="{{BraintreeConfigurationPaymentSection.month}}" userInput="{{cartData.month}}" stepKey="setMonth"/>
+        <switchToIFrame stepKey="switchBack1"/>
+        <switchToIFrame selector="{{BraintreeConfigurationPaymentSection.yearFrame}}" stepKey="switchToIframe2"/>
+        <waitForElementVisible selector="{{BraintreeConfigurationPaymentSection.year}}" stepKey="waitYearElement"/>
+        <fillField selector="{{BraintreeConfigurationPaymentSection.year}}" userInput="{{cartData.year}}" stepKey="setYear"/>
+        <switchToIFrame stepKey="switchBack2"/>
+        <switchToIFrame selector="{{BraintreeConfigurationPaymentSection.codeFrame}}" stepKey="switchToIframe3"/>
+        <waitForElementVisible selector="{{BraintreeConfigurationPaymentSection.verificationNumber}}" stepKey="waitVerificationNumber"/>
+        <fillField selector="{{BraintreeConfigurationPaymentSection.verificationNumber}}" userInput="{{cartData.cvv}}" stepKey="setVerificationNumber"/>
+        <switchToIFrame stepKey="SwitchBackToWindow"/>
+    </actionGroup>
+</actionGroups>

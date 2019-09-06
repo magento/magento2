@@ -10,6 +10,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
@@ -239,11 +240,13 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             case \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH:
             case \Magento\Paypal\Model\Config::PAYMENT_ACTION_SALE:
                 $payment = $this->getInfoInstance();
+                /** @var Order $order */
                 $order = $payment->getOrder();
                 $order->setCanSendNewEmailFlag(false);
                 $payment->setAmountAuthorized($order->getTotalDue());
                 $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
                 $this->_generateSecureSilentPostHash($payment);
+                $this->setStore($order->getStoreId());
                 $request = $this->_buildTokenRequest($payment);
                 $response = $this->postRequest($request, $this->getConfig());
                 $this->_processTokenErrors($response, $payment);
@@ -437,8 +440,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     }
 
     /**
-     * Get store id from response if exists
-     * or default
+     * Get store id from response if exists or default
      *
      * @return int
      */
@@ -461,7 +463,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         /** @var \Magento\Paypal\Model\Payflow\Request $request */
         $request = $this->_requestFactory->create();
         $cscEditable = $this->getConfigData('csc_editable');
-
         $data = parent::buildBasicRequest();
 
         $request->setData($data->getData());
@@ -511,6 +512,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 
     /**
      * If response is failed throw exception
+     *
      * Set token data in payment object
      *
      * @param \Magento\Framework\DataObject $response
@@ -555,6 +557,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     protected function _generateSecureSilentPostHash($payment)
     {
+        //phpcs:ignore Magento2.Security.InsecureFunction
         $secureHash = md5($this->mathRandom->getRandomString(10));
         $payment->setAdditionalInformation($this->_secureSilentPostHashKey, $secureHash);
         return $secureHash;

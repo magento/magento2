@@ -251,6 +251,6 @@ class Structure
      */
     private function getArrayValueByKey($key, array $array)
     {
-        return isset($array[$key]) ? $array[$key] : [];
+        return $array[$key] ?? [];
     }
 }

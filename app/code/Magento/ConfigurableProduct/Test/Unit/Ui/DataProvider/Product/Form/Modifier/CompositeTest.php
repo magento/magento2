@@ -164,15 +164,21 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     {
         $meta = ['some meta'];
         $modifiers = ['modifier1', 'modifier2'];
-        $this->productMock->expects(static::any())
+        $this->productMock->expects(self::any())
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
-        $this->allowedProductTypesMock->expects(static::once())
+        $this->allowedProductTypesMock->expects(self::once())
             ->method('isAllowedProductType')
             ->with($this->productMock)
             ->willReturn(false);
-        $this->objectManagerMock->expects(static::never())
-            ->method('get');
+        $this->objectManagerMock->expects(self::exactly(2))
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['modifier1', $this->createModifierMock($meta, ['modifier1_meta'])],
+                    ['modifier2', $this->createModifierMock(['modifier1_meta'], $meta)],
+                ]
+            );
 
         $this->assertSame($meta, $this->createCompositeModifier($modifiers)->modifyMeta($meta));
     }

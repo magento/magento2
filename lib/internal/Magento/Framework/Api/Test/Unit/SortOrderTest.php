@@ -37,6 +37,9 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($sortOrder, $this->sortOrder->getDirection());
     }
 
+    /**
+     * @return array
+     */
     public function sortOrderDirectionProvider()
     {
         return [[SortOrder::SORT_ASC], [SortOrder::SORT_DESC]];
@@ -52,6 +55,9 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
         $this->sortOrder->setDirection($invalidDirection);
     }
 
+    /**
+     * @return array
+     */
     public function invalidSortDirectionProvider()
     {
         return [
@@ -84,6 +90,16 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
     {
         $this->sortOrder = new SortOrder([
             SortOrder::DIRECTION => 'not-asc-or-desc'
+        ]);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     */
+    public function testValidateField()
+    {
+        $this->sortOrder = new SortOrder([
+            SortOrder::FIELD => 'invalid field (value);'
         ]);
     }
 }

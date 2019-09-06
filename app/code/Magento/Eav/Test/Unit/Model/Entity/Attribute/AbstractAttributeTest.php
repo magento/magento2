@@ -19,12 +19,12 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             false,
             true,
             [
-                'getData', 'usesSource', 'getSource', 'convertToObjects'
+                '_getData', 'usesSource', 'getSource', 'convertToObjects'
             ]
         );
 
         $model->expects($this->once())
-            ->method('getData')
+            ->method('_getData')
             ->with(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::OPTIONS)
             ->willReturn(['options']);
         $model->expects($this->never())->method('usesSource');
@@ -46,12 +46,12 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             false,
             true,
             [
-                'getData', 'usesSource', 'getSource', 'convertToObjects'
+                '_getData', 'usesSource', 'getSource', 'convertToObjects'
             ]
         );
 
         $model->expects($this->once())
-            ->method('getData')
+            ->method('_getData')
             ->with(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::OPTIONS)
             ->willReturn([]);
         $model->expects($this->once())->method('usesSource')->willReturn(false);
@@ -74,12 +74,12 @@ class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
             false,
             true,
             [
-                'getData', 'usesSource', 'getSource', 'convertToObjects', 'getAllOptions'
+                '_getData', 'usesSource', 'getSource', 'convertToObjects', 'getAllOptions'
             ]
         );
 
         $model->expects($this->once())
-            ->method('getData')
+            ->method('_getData')
             ->with(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::OPTIONS)
             ->willReturn([]);
         $model->expects($this->once())->method('usesSource')->willReturn(true);

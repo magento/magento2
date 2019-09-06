@@ -4,40 +4,72 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Guest;
 
-class Form extends \Magento\Framework\App\Action\Action
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Helper\Guest as GuestHelper;
+
+/**
+ * Class Form
+ */
+class Form extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @var CustomerSession|null
+     */
+    private $customerSession;
+
+    /**
+     * @var GuestHelper|null
+     */
+    private $guestHelper;
+
+    /**
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     * @param CustomerSession|null $customerSession
+     * @param GuestHelper|null $guestHelper
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        Context $context,
+        PageFactory $resultPageFactory,
+        CustomerSession $customerSession = null,
+        GuestHelper $guestHelper = null
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
+        $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(CustomerSession::class);
+        $this->guestHelper = $guestHelper ?: ObjectManager::getInstance()->get(GuestHelper::class);
     }
 
     /**
      * Order view form page
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return Redirect|Page
      */
     public function execute()
     {
-        if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
+        if ($this->customerSession->isLoggedIn()) {
             return $this->resultRedirectFactory->create()->setPath('customer/account/');
         }
+
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->set(__('Orders and Returns'));
-        $this->_objectManager->get(\Magento\Sales\Helper\Guest::class)->getBreadcrumbs($resultPage);
+        $this->guestHelper->getBreadcrumbs($resultPage);
+
         return $resultPage;
     }
 }

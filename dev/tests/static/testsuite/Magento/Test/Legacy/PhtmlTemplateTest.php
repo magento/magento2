@@ -7,19 +7,22 @@
  */
 namespace Magento\Test\Legacy;
 
+/**
+ * Static test for phtml template files.
+ */
 class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
 {
     public function testBlockVariableInsteadOfThis()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * Test usage of methods and variables in template through $this
-         *
-         * @param string $file
-         */
+            /**
+             * Test usage of methods and variables in template through $this
+             *
+             * @param string $file
+             */
             function ($file) {
-                $this->assertNotRegExp(
+                self::assertNotRegExp(
                     '/this->(?!helper)\S*/iS',
                     file_get_contents($file),
                     'Access to members and methods of Block class through $this is ' .
@@ -46,7 +49,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                $this->assertNotRegexp(
+                self::assertNotRegexp(
                     '/block->_[^_]+\S*\(/iS',
                     file_get_contents($file),
                     'Access to protected and private members of Block class is ' .
@@ -61,18 +64,43 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * "text/javascript" type attribute in not obligatory to use in templates due to HTML5 standards.
-         * For more details please go to "http://www.w3.org/TR/html5/scripting-1.html".
-         *
-         * @param string $file
-         */
+            /**
+             * "text/javascript" type attribute in not obligatory to use in templates due to HTML5 standards.
+             * For more details please go to "http://www.w3.org/TR/html5/scripting-1.html".
+             *
+             * @param string $file
+             */
             function ($file) {
-                $this->assertNotRegexp(
+                self::assertNotRegexp(
                     '/type="text\/javascript"/',
                     file_get_contents($file),
                     'Please do not use "text/javascript" type attribute.'
                 );
+            },
+            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+        );
+    }
+
+    public function testJqueryUiLibraryIsNotUsedInTemplates()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * 'jquery/ui' library is not obligatory to use in phtml files.
+             * It's better to use needed jquery ui widget instead.
+             *
+             * @param string $file
+             */
+            function ($file) {
+                if (strpos($file, '/view/frontend/templates/') !== false
+                    || strpos($file, '/view/base/templates/') !== false
+                ) {
+                    self::assertNotRegexp(
+                        '/(["\'])jquery\/ui\1/',
+                        file_get_contents($file),
+                        'Please do not use "jquery/ui" library in templates. Use needed jquery ui widget instead.'
+                    );
+                }
             },
             \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
         );

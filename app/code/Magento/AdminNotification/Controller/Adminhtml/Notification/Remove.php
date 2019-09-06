@@ -31,11 +31,14 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
 
             try {
                 $model->setIsRemove(1)->save();
-                $this->messageManager->addSuccess(__('The message has been removed.'));
+                $this->messageManager->addSuccessMessage(__('The message has been removed.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __("We couldn't remove the messages because of an error."));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __("We couldn't remove the messages because of an error.")
+                );
             }
 
             $this->_redirect('adminhtml/*/');

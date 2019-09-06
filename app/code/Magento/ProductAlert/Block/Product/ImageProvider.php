@@ -60,10 +60,7 @@ class ImageProvider
         $this->appEmulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
 
         try {
-            $image = $this->imageBuilder->setProduct($product)
-                ->setImageId($imageId)
-                ->setAttributes($attributes)
-                ->create();
+            $image = $this->imageBuilder->create($product, $imageId, $attributes);
         } catch (\Exception $exception) {
             $this->appEmulation->stopEnvironmentEmulation();
             throw $exception;

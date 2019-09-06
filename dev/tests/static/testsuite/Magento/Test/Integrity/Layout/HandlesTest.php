@@ -78,11 +78,11 @@ class HandlesTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * Test validate that head block doesn't exist in layout
-         *
-         * @param string $layoutFile
-         */
+            /**
+             * Test validate that head block doesn't exist in layout
+             *
+             * @param string $layoutFile
+             */
             function ($layoutFile) {
                 $dom = new \DOMDocument();
                 $dom->load($layoutFile);

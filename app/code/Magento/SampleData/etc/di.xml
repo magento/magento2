@@ -15,10 +15,4 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\SampleData\Filesystem\Directory\Read" type="Magento\Framework\Filesystem\Directory\Read">
-        <arguments>
-            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
-        </arguments>
-    </virtualType>
-    <preference for="Magento\Framework\Filesystem\Directory\ReadInterface" type="Magento\SampleData\Filesystem\Directory\Read" />
 </config>

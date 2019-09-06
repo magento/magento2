@@ -39,6 +39,9 @@ class TypeMapperTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function mapDataProvider()
     {
         return [

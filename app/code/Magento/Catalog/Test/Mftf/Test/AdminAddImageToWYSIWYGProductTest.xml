@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddImageToWYSIWYGProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="MAGETWO-42041-Default WYSIWYG toolbar configuration with Magento Media Gallery"/>
+            <group value="Catalog"/>
+            <title value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
+            <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-84375"/>
+            <skip>
+                <issueId value="MC-17232"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        </before>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
+        <waitForPageLoad stepKey="waitForPageLoadProductCreatePage"/>
+        <actionGroup ref="fillMainProductForm" stepKey="fillBasicProductInfo" />
+
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />
+        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
+        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.Browse}}" stepKey="clickBrowse1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForBrowseModal" />
+        <see selector="{{ProductDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn1" />
+        <see selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn1" />
+        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn1" />
+        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" stepKey="createFolder1" />
+        <waitForElement selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" stepKey="waitForPopUp1" />
+        <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName1" />
+        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.AcceptFolderName}}" stepKey="acceptFolderName11" />
+        <conditionalClick selector="{{ProductDescriptionWYSIWYGToolbarSection.StorageRootArrow}}" dependentSelector="{{ProductDescriptionWYSIWYGToolbarSection.checkIfArrowExpand}}" stepKey="clickStorageRootArrowIfClosed" visible="true"/>
+        <conditionalClick selector="{{ProductDescriptionWYSIWYGToolbarSection.WysiwygArrow}}" dependentSelector="{{ProductDescriptionWYSIWYGToolbarSection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
+        <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder1" />
+        <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading4"/>
+        <attachFile selector="{{ProductDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload1"/>
+        <waitForElementVisible  selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage1" />
+        <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.imageSelected(ImageUpload1.value)}}" stepKey="seeImageSelected1" />
+        <see selector="{{ProductDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn1"/>
+        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected1" />
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirmDelete1"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete1" />
+        <waitForElementNotVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="waitForImageDeleted1" />
+        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="dontSeeImage1" />
+        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn2" />
+        <attachFile selector="{{ProductDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload2"/>
+        <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage2" />
+        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="clickInsertBtn1" />
+        <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.ImageDescription}}" stepKey="waitForImageDescriptionButton1" />
+        <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.ImageDescription}}" userInput="{{ImageUpload1.content}}" stepKey="fillImageDescription1" />
+        <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.Height}}" userInput="{{ImageUpload1.height}}" stepKey="fillImageHeight1" />
+        <click selector="{{ProductDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn1" />
+        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="scrollToTinyMCE4" />
+        <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="clickInsertImageIcon2" />
+        <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Browse}}" stepKey="clickBrowse2" />
+        <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.CancelBtn}}" stepKey="waitForCancelButton2"/>
+        <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn2" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading13"/>
+        <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn2" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading14"/>
+        <dontSeeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
+        <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload3"/>
+        <waitForElementVisible  selector="{{ProductShortDescriptionWYSIWYGToolbarSection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage3" />
+        <waitForElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="waitForDeletebtn" />
+        <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn2"/>
+        <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected2" />
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirm3"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete2" />
+        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn4" />
+        <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage4"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload4"/>
+        <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage4" />
+        <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="clickInsertBtn" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading11" />
+        <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="waitForOkBtn2" />
+        <fillField selector="{{ProductShortDescriptionWYSIWYGToolbarSection.ImageDescription}}" userInput="{{ImageUpload3.content}}" stepKey="fillImageDescription2" />
+        <fillField selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Height}}" userInput="{{ImageUpload3.height}}" stepKey="fillImageHeight2" />
+        <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn2" />
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading12" />
+        <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource3"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload1.fileName)}}" stepKey="assertMediaSource1"/>
+    </test>
+</tests>

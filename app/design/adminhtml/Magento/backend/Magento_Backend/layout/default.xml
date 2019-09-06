@@ -7,6 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
+        <meta name="robots" content="NOINDEX,NOFOLLOW"/>
         <css src="jquery/jstree/themes/default/style.css"/>
         <css src="css/styles-old.css"/>
         <css src="css/styles.css"/>

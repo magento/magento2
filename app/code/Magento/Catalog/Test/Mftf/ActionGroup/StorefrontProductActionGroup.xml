@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Check the simple product on the product page -->
+    <actionGroup name="StorefrontCheckSimpleProduct">
+        <annotations>
+            <description>Validates that the provided Simple Product information is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{product.name}}" stepKey="AssertProductNameInTitle"/>
+        <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+        <see userInput="${{product.price}}.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="assertAddToCart"/>
+        <see userInput="{{product.custom_attributes[description]}}" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
+        <see userInput="{{product.custom_attributes[short_description]}}" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
+    </actionGroup>
+
+    <!-- Assert product image in Storefront Product page -->
+    <actionGroup name="assertProductImageStorefrontProductPage">
+        <annotations>
+            <description>Validates that the provided Product Image is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{product.urlKey}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Assert product image in Storefront Product page -->
+    <actionGroup name="assertProductImageStorefrontProductPage2">
+        <annotations>
+            <description>Validates that the provided Product Image is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Assert no product image in Storefront Product page -->
+    <actionGroup name="assertProductImageNotInStorefrontProductPage">
+        <annotations>
+            <description>Validates that the provided Product Image is not present.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{product.urlKey}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+
+    <!-- Assert no product image in Storefront Product page -->
+    <actionGroup name="assertProductImageNotInStorefrontProductPage2">
+        <annotations>
+            <description>Validates that the provided Product Image is not present.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+</actionGroups>

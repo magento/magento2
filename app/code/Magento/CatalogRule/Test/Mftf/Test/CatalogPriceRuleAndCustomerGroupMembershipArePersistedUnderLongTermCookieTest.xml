@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CatalogPriceRuleAndCustomerGroupMembershipArePersistedUnderLongTermCookieTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="Check the price"/>
+            <title value="Verify that Catalog Price Rule and Customer Group Membership are persisted under long-term cookie"/>
+            <description value="Verify that Catalog Price Rule and Customer Group Membership are persisted under long-term cookie"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-69455"/>
+            <group value="persistent"/>
+        </annotations>
+        <before>
+            <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
+            <createData entity="PersistentLogoutClearDisable" stepKey="persistentLogoutClearDisable"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">50</field>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="group_id">1</field>
+            </createData>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <!--Create Catalog Rule-->
+            <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="createCatalogPriceRule">
+                <argument name="catalogRule" value="_defaultCatalogRule"/>
+                <argument name="categoryId" value="$$createCategory.id$$"/>
+            </actionGroup>
+            <actionGroup ref="selectGeneralCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
+            <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
+            <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <!-- Delete the rule -->
+            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
+            <createData entity="PersistentLogoutClearEnabled" stepKey="persistentLogoutClearEnabled"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Go to category and check price-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" userInput="$$createProduct.price$$" stepKey="checkPriceSimpleProduct"/>
+
+        <!--Login to storefront from customer and check price-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage2"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductSpecialPriceByNumber('1')}}" userInput="45.00" stepKey="checkPriceSimpleProduct2"/>
+
+        <!--Click *Sign Out* and check the price of the Simple Product-->
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOut"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage3"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome2"/>
+        <seeElement selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="checkLinkNotYoy"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductSpecialPriceByNumber('1')}}" userInput="45.00" stepKey="checkPriceSimpleProduct3"/>
+
+        <!--Click the *Not you?* link and check the price for Simple Product-->
+        <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickNext"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage4"/>
+        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome3"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" userInput="$$createProduct.price$$" stepKey="checkPriceSimpleProduct4"/>
+    </test>
+</tests>

@@ -148,7 +148,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Creat OrderTaxDetails mock from array of data
+     * Create OrderTaxDetails mock from array of data
      *
      * @param $inputArray
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Api\Data\OrderTaxDetailsInterface

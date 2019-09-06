@@ -1,0 +1,32 @@
+{
+    "adminnotification_inbox": {
+        "column": {
+            "notification_id": true,
+            "severity": true,
+            "date_added": true,
+            "title": true,
+            "description": true,
+            "url": true,
+            "is_read": true,
+            "is_remove": true
+        },
+        "index": {
+            "ADMINNOTIFICATION_INBOX_SEVERITY": true,
+            "ADMINNOTIFICATION_INBOX_IS_READ": true,
+            "ADMINNOTIFICATION_INBOX_IS_REMOVE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "admin_system_messages": {
+        "column": {
+            "identity": true,
+            "severity": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

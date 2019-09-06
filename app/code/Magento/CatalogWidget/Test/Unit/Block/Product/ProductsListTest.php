@@ -87,8 +87,8 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
     {
         $this->collectionFactory =
             $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()->getMock();
         $this->visibility = $this->getMockBuilder(\Magento\Catalog\Model\Product\Visibility::class)
             ->setMethods(['getVisibleInCatalogIds'])
             ->disableOriginalConstructor()
@@ -144,10 +144,14 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
         $this->productsList->setData('conditions', 'some_serialized_conditions');
 
         $this->productsList->setData('page_var_name', 'page_number');
+        $this->productsList->setTemplate('test_template');
+        $this->productsList->setData('title', 'test_title');
         $this->request->expects($this->once())->method('getParam')->with('page_number')->willReturn(1);
 
         $this->request->expects($this->once())->method('getParams')->willReturn('request_params');
-        $this->priceCurrency->expects($this->once())->method('getCurrencySymbol')->willReturn('$');
+        $currency = $this->createMock(\Magento\Directory\Model\Currency::class);
+        $currency->expects($this->once())->method('getCode')->willReturn('USD');
+        $this->priceCurrency->expects($this->once())->method('getCurrency')->willReturn($currency);
 
         $this->serializer->expects($this->any())
             ->method('serialize')
@@ -157,14 +161,17 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
 
         $cacheKey = [
             'CATALOG_PRODUCTS_LIST_WIDGET',
-            '$',
+            'USD',
             1,
             'blank',
             'context_group',
             1,
             5,
+            10,
             'some_serialized_conditions',
-            json_encode('request_params')
+            json_encode('request_params'),
+            'test_template',
+            'test_title'
         ];
         $this->assertEquals($cacheKey, $this->productsList->getCacheKeyInfo());
     }
@@ -249,9 +256,10 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
      * Test public `createCollection` method and protected `getPageSize` method via `createCollection`
      *
      * @param bool $pagerEnable
-     * @param int $productsCount
-     * @param int $productsPerPage
-     * @param int $expectedPageSize
+     * @param int  $productsCount
+     * @param int  $productsPerPage
+     * @param int  $expectedPageSize
+     *
      * @dataProvider createCollectionDataProvider
      */
     public function testCreateCollection($pagerEnable, $productsCount, $productsPerPage, $expectedPageSize)
@@ -267,6 +275,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
                 'addAttributeToSelect',
                 'addUrlRewrite',
                 'addStoreFilter',
+                'addAttributeToSort',
                 'setPageSize',
                 'setCurPage',
                 'distinct'
@@ -281,6 +290,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
         $collection->expects($this->once())->method('addUrlRewrite')->willReturnSelf();
         $collection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSort')->with('created_at', 'desc')->willReturnSelf();
         $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->willReturnSelf();
         $collection->expects($this->once())->method('setCurPage')->willReturnSelf();
         $collection->expects($this->once())->method('distinct')->willReturnSelf();
@@ -309,6 +319,9 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($collection, $this->productsList->createCollection());
     }
 
+    /**
+     * @return array
+     */
     public function createCollectionDataProvider()
     {
         return [
@@ -380,6 +393,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $collection
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getConditionsForCollection($collection)

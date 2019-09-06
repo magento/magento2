@@ -1,33 +1,40 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\CartItemRepositoryInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartItemInterfaceFactory;
 
-class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
+/**
+ * Repository for quote item.
+ */
+class Repository implements CartItemRepositoryInterface
 {
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
      * Product repository.
      *
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @var \Magento\Quote\Api\Data\CartItemInterfaceFactory
+     * @var CartItemInterfaceFactory
      */
     protected $itemDataFactory;
 
@@ -42,25 +49,28 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     private $cartItemOptionsProcessor;
 
     /**
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
+     * @param CartRepositoryInterface $quoteRepository
+     * @param ProductRepositoryInterface $productRepository
+     * @param CartItemInterfaceFactory $itemDataFactory
+     * @param CartItemOptionsProcessor $cartItemOptionsProcessor
      * @param CartItemProcessorInterface[] $cartItemProcessors
      */
     public function __construct(
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory,
+        CartRepositoryInterface $quoteRepository,
+        ProductRepositoryInterface $productRepository,
+        CartItemInterfaceFactory $itemDataFactory,
+        CartItemOptionsProcessor $cartItemOptionsProcessor,
         array $cartItemProcessors = []
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->productRepository = $productRepository;
         $this->itemDataFactory = $itemDataFactory;
+        $this->cartItemOptionsProcessor = $cartItemOptionsProcessor;
         $this->cartItemProcessors = $cartItemProcessors;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($cartId)
     {
@@ -70,21 +80,26 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
         /** @var  \Magento\Quote\Model\Quote\Item  $item */
         foreach ($quote->getAllVisibleItems() as $item) {
-            $item = $this->getCartItemOptionsProcessor()->addProductOptions($item->getProductType(), $item);
-            $output[] = $this->getCartItemOptionsProcessor()->applyCustomOptions($item);
+            $item = $this->cartItemOptionsProcessor->addProductOptions($item->getProductType(), $item);
+            $output[] = $this->cartItemOptionsProcessor->applyCustomOptions($item);
         }
         return $output;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $cartId = $cartItem->getQuoteId();
-        $quote = $this->quoteRepository->getActive($cartId);
+        if (!$cartId) {
+            throw new InputException(
+                __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'quoteId'])
+            );
+        }
 
+        $quote = $this->quoteRepository->getActive($cartId);
         $quoteItems = $quote->getItems();
         $quoteItems[] = $cartItem;
         $quote->setItems($quoteItems);
@@ -94,7 +109,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($cartId, $itemId)
     {
@@ -103,29 +118,16 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $quoteItem = $quote->getItemById($itemId);
         if (!$quoteItem) {
             throw new NoSuchEntityException(
-                __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
+                __('The %1 Cart doesn\'t contain the %2 item.', $cartId, $itemId)
             );
         }
         try {
             $quote->removeItem($itemId);
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not remove item from quote'));
+            throw new CouldNotSaveException(__("The item couldn't be removed from the quote."));
         }
 
         return true;
-    }
-
-    /**
-     * @return CartItemOptionsProcessor
-     * @deprecated 100.1.0
-     */
-    private function getCartItemOptionsProcessor()
-    {
-        if (!$this->cartItemOptionsProcessor instanceof CartItemOptionsProcessor) {
-            $this->cartItemOptionsProcessor = ObjectManager::getInstance()->get(CartItemOptionsProcessor::class);
-        }
-
-        return $this->cartItemOptionsProcessor;
     }
 }

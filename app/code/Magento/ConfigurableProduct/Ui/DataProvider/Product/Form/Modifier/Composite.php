@@ -45,6 +45,11 @@ class Composite extends AbstractModifier
     protected $allowedProductTypes;
 
     /**
+     * @var ModifierInterface[]
+     */
+    private $modifiersObjects = [];
+
+    /**
      * @param LocatorInterface $locator
      * @param ObjectManagerInterface $objectManager
      * @param AssociatedProducts $associatedProducts
@@ -63,6 +68,19 @@ class Composite extends AbstractModifier
         $this->associatedProducts = $associatedProducts;
         $this->allowedProductTypes = $allowedProductTypes;
         $this->modifiers = $modifiers;
+
+        foreach ($this->modifiers as $modifierClass) {
+            /** @var ModifierInterface $bundleModifier */
+            $modifier = $this->objectManager->get($modifierClass);
+            if (!$modifier instanceof ModifierInterface) {
+                throw new \InvalidArgumentException(__(
+                    'Type %1 is not an instance of %2',
+                    $modifierClass,
+                    ModifierInterface::class
+                ));
+            }
+            $this->modifiersObjects[] = $modifier;
+        }
     }
 
     /**
@@ -86,6 +104,10 @@ class Composite extends AbstractModifier
             }
         }
 
+        foreach ($this->modifiersObjects as $modifier) {
+            $data = $modifier->modifyData($data);
+        }
+
         return $data;
     }
 
@@ -95,19 +117,11 @@ class Composite extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if ($this->allowedProductTypes->isAllowedProductType($this->locator->getProduct())) {
-            foreach ($this->modifiers as $modifierClass) {
-                /** @var ModifierInterface $bundleModifier */
-                $modifier = $this->objectManager->get($modifierClass);
-                if (!$modifier instanceof ModifierInterface) {
-                    throw new \InvalidArgumentException(__(
-                        'Type %1 is not an instance of %2',
-                        $modifierClass,
-                        ModifierInterface::class
-                    ));
-                }
+            foreach ($this->modifiersObjects as $modifier) {
                 $meta = $modifier->modifyMeta($meta);
             }
         }
+
         return $meta;
     }
 }

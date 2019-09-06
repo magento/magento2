@@ -30,4 +30,18 @@ class FooterTest extends \PHPUnit\Framework\TestCase
             $this->block->getIdentities()
         );
     }
+
+    /**
+     * Check Footer block has cache lifetime.
+     *
+     * @throws \ReflectionException
+     * @return void
+     */
+    public function testGetCacheLifetime()
+    {
+        $reflection = new \ReflectionClass($this->block);
+        $method = $reflection->getMethod('getCacheLifetime');
+        $method->setAccessible(true);
+        $this->assertEquals(3600, $method->invoke($this->block));
+    }
 }

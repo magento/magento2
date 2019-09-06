@@ -147,6 +147,9 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $imageModel->getUrl());
     }
 
+    /**
+     * @return array
+     */
     public function getPathDataProvider()
     {
         return [

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Webapi\Controller\Rest\RequestProcessorPool">
+        <arguments>
+            <argument name="requestProcessors" xsi:type="array">
+                <item name="asyncSchema" xsi:type="object" sortOrder="60">Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor</item>
+                <item name="async" xsi:type="object" sortOrder="150">Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor</item>
+                <item name="asyncBulkSchema" xsi:type="object" sortOrder="180">Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkSchemaRequestProcessor</item>
+                <item name="asyncBulk" xsi:type="object" sortOrder="200">Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkRequestProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

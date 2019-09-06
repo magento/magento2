@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogInventory\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\CatalogInventory\Model\Configuration;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 
 /**
  * Catalog inventory module observer
@@ -15,16 +16,16 @@ use Magento\Framework\Event\ObserverInterface;
 class UpdateItemsStockUponConfigChangeObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock
+     * @var Item
      */
-    protected $resourceStock;
+    protected $resourceStockItem;
 
     /**
-     * @param \Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock
+     * @param Item $resourceStockItem
      */
-    public function __construct(\Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock)
+    public function __construct(Item $resourceStockItem)
     {
-        $this->resourceStock = $resourceStock;
+        $this->resourceStockItem = $resourceStockItem;
     }
 
     /**
@@ -35,9 +36,18 @@ class UpdateItemsStockUponConfigChangeObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        $website = $observer->getEvent()->getWebsite();
-        $this->resourceStock->updateSetOutOfStock($website);
-        $this->resourceStock->updateSetInStock($website);
-        $this->resourceStock->updateLowStockDate($website);
+        $website = (int) $observer->getEvent()->getWebsite();
+        $changedPaths = (array) $observer->getEvent()->getChangedPaths();
+
+        if (\array_intersect([
+            Configuration::XML_PATH_MANAGE_STOCK,
+            Configuration::XML_PATH_MIN_QTY,
+            Configuration::XML_PATH_BACKORDERS,
+            Configuration::XML_PATH_NOTIFY_STOCK_QTY,
+        ], $changedPaths)) {
+            $this->resourceStockItem->updateSetOutOfStock($website);
+            $this->resourceStockItem->updateSetInStock($website);
+            $this->resourceStockItem->updateLowStockDate($website);
+        }
     }
 }

@@ -70,6 +70,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->isSetFlag($configPath));
     }
 
+    /**
+     * @return array
+     */
     public function isSetFlagDataProvider()
     {
         return [

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductInfoDetailsSection">
+        <element name="productNameForReview" type="text" selector=".legend.review-legend>strong" />
+        <element name="detailsTab" type="button" selector="#tab-label-description-title" />
+        <!-- The tab transform to an accordion when window resize -->
+        <element name="detailsSectionToggleState" type="button" selector="//*[@id='tab-label-description-title']/ancestor::div[@aria-selected='{{boolean}}'][@aria-expanded='{{boolean}}']" parameterized="true"/>
+    </section>
+</sections>

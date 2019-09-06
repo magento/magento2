@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SetMinQueryLengthToDefault" type="catalog_search_config_def">
+        <requiredEntity type="enable">DefaultMinQueryLength</requiredEntity>
+    </entity>
+    <entity name="UncheckMinQueryLengthAndSet" type="catalog_search_config_query_length">
+        <requiredEntity type="number">SetMinQueryLengthToOne</requiredEntity>
+    </entity>
+    <entity name="DefaultMinQueryLength" type="enable">
+        <data key="inherit">true</data>
+    </entity>
+    <entity name="DefaultMinQueryLengthDisable" type="enable">
+        <data key="inherit">0</data>
+    </entity>
+    <entity name="SetMinQueryLengthToOne" type="number">
+        <data key="value">1</data>
+    </entity>
+
+</entities>

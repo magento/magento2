@@ -36,7 +36,7 @@ class AssertNewsletterQueueInGrid extends AbstractAssertForm
         $indexQueue->open();
         $indexQueue->getQueueTemplateGrid()->search(['newsletter_subject' => $queue->getNewsletterSubject()]);
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $indexQueue->getQueueTemplateGrid()->isRowVisible($filter, false, false),
             'Newsletter Queue \'' . $queue->getNewsletterSubject() . '\' is absent in grid.'
         );

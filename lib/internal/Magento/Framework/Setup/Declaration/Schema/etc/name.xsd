@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:simpleType name="nameType">
+        <xs:annotation>
+            <xs:documentation>
+                We can`t create column index or constraint with name length more than 64 char
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="64" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="referenceIdType">
+        <xs:union memberTypes="nameType">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>
+                        The attribute can contain only [A-Z0-9_].
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Z0-9_]+" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+</xs:schema>

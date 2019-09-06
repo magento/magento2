@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Indexer;
-use Magento\Catalog\Model\Category;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -285,6 +284,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $category->getUseFlatResource());
     }
 
+    /**
+     * @return object
+     */
     protected function getCategoryModel()
     {
         return $this->objectManager->getObject(
@@ -313,6 +315,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function reindexFlatEnabledTestDataProvider()
     {
         return [
@@ -372,16 +377,22 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->category->reindex();
     }
 
+    /**
+     * @return array
+     */
     public function reindexFlatDisabledTestDataProvider()
     {
         return [
-            [false, null, null, null, 0],
-            [true, null, null, null, 0],
-            [false, [], null, null, 0],
-            [false, ["1", "2"], null, null, 1],
-            [false, null, 1, null, 1],
-            [false, ["1", "2"], 0, 1, 1],
-            [false, null, 1, 1, 0],
+            [false, null, null, null, null, null, 0],
+            [true, null, null, null, null, null,  0],
+            [false, [], null, null, null, null, 0],
+            [false, ["1", "2"], null, null, null, null, 1],
+            [false, null, 1, null, null, null, 1],
+            [false, ["1", "2"], 0, 1, null, null,  1],
+            [false, null, 1, 1, null, null, 0],
+            [false, ["1", "2"], null, null, 0, 1,  1],
+            [false, ["1", "2"], null, null, 1, 0,  1],
+
         ];
     }
 
@@ -399,11 +410,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $affectedIds,
         $isAnchorOrig,
         $isAnchor,
+        $isActiveOrig,
+        $isActive,
         $expectedProductReindexCall
     ) {
         $this->category->setAffectedProductIds($affectedIds);
         $this->category->setData('is_anchor', $isAnchor);
         $this->category->setOrigData('is_anchor', $isAnchorOrig);
+        $this->category->setData('is_active', $isActive);
+        $this->category->setOrigData('is_active', $isActiveOrig);
+
         $this->category->setAffectedProductIds($affectedIds);
 
         $pathIds = ['path/1/2', 'path/2/3'];
@@ -414,7 +430,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('isFlatEnabled')
             ->will($this->returnValue(false));
 
-        $this->productIndexer->expects($this->exactly(1))
+        $this->productIndexer
             ->method('isScheduled')
             ->willReturn($productScheduled);
         $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
@@ -431,43 +447,49 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomAttributes()
     {
-        $nameAttributeCode = 'name';
-        $descriptionAttributeCode = 'description';
+        $interfaceAttributeCode = 'name';
+        $customAttributeCode = 'description';
+        $initialCustomAttributeValue = 'initial description';
+        $newCustomAttributeValue = 'new description';
+
         $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
         $interfaceAttribute->expects($this->once())
             ->method('getAttributeCode')
-            ->willReturn($nameAttributeCode);
-        $descriptionAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
-        $descriptionAttribute->expects($this->once())
+            ->willReturn($interfaceAttributeCode);
+        $colorAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
+        $colorAttribute->expects($this->once())
             ->method('getAttributeCode')
-            ->willReturn($descriptionAttributeCode);
-        $customAttributesMetadata = [$interfaceAttribute, $descriptionAttribute];
+            ->willReturn($customAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
 
         $this->metadataServiceMock->expects($this->once())
             ->method('getCustomAttributesMetadata')
             ->willReturn($customAttributesMetadata);
-        $this->category->setData($nameAttributeCode, "sub");
+        $this->category->setData($interfaceAttributeCode, 10);
 
-        //The color attribute is not set, expect empty custom attribute array
+        //The description attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->category->getCustomAttributes());
 
-        //Set the color attribute;
-        $this->category->setData($descriptionAttributeCode, "description");
+        //Set the description attribute;
+        $this->category->setData($customAttributeCode, $initialCustomAttributeValue);
         $attributeValue = new \Magento\Framework\Api\AttributeValue();
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
-        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
-        $this->assertEquals("description", $this->category->getCustomAttribute($descriptionAttributeCode)->getValue());
+        $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
+        $this->assertEquals(
+            $initialCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
+        );
 
         //Change the attribute value, should reflect in getCustomAttribute
-        $this->category->setData($descriptionAttributeCode, "new description");
+        $this->category->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
         $this->assertEquals(1, count($this->category->getCustomAttributes()));
-        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
+        $this->assertNotNull($this->category->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
-            "new description",
-            $this->category->getCustomAttribute($descriptionAttributeCode)->getValue()
+            $newCustomAttributeValue,
+            $this->category->getCustomAttribute($customAttributeCode)->getValue()
         );
     }
 

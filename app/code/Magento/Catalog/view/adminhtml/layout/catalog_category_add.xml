@@ -21,9 +21,6 @@
             <uiComponent name="category_form"/>
             <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="Magento_Catalog::catalog/category/edit.phtml" />
         </referenceContainer>
-        <referenceContainer name="js">
-            <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>
-        </referenceContainer>
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="catalog_category_page_head_components" template="Magento_Catalog::js/components.phtml"/>
         </referenceBlock>

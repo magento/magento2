@@ -97,7 +97,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
         } else {
             $exceptionMessage = 'Some error renaming file';
             $renameMockEvent = $this->throwException(new FileSystemException(new Phrase($exceptionMessage)));
-            $this->expectException(\Magento\Framework\Exception\FileSystemException::class, $exceptionMessage);
+            $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+            $this->expectExceptionMessage($exceptionMessage);
         }
 
         $this->_filesystemDriverMock->expects($this->once())
@@ -110,6 +111,9 @@ class IoTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($success, $this->_object->writeResultFile($resultFileName, self::FILE_CONTENT));
     }
 
+    /**
+     * @return array
+     */
     public function testWriteResultFileAlreadyExistsDataProvider()
     {
         return [
@@ -201,6 +205,9 @@ class IoTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($exists, $this->_object->fileExists($fileName));
     }
 
+    /**
+     * @return array
+     */
     public function fileExistsDataProvider()
     {
         return [

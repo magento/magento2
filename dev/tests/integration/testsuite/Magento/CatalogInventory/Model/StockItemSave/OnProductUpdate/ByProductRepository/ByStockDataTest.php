@@ -43,6 +43,7 @@ class ByStockDataTest extends \PHPUnit\Framework\TestCase
      * Test saving of stock item on product save by 'setStockData' method (deprecated) via product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveBySetStockData()
     {
@@ -59,6 +60,7 @@ class ByStockDataTest extends \PHPUnit\Framework\TestCase
      * via product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveBySetData()
     {

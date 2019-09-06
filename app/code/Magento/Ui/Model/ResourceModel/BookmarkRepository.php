@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Model\ResourceModel;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -91,7 +92,9 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         $bookmark = $this->bookmarkFactory->create();
         $this->bookmarkResourceModel->load($bookmark, $bookmarkId);
         if (!$bookmark->getId()) {
-            throw new NoSuchEntityException(__('Bookmark with id "%1" does not exist.', $bookmarkId));
+            throw new NoSuchEntityException(
+                __('The bookmark with "%1" ID doesn\'t exist. Verify your information and try again.', $bookmarkId)
+            );
         }
         return $bookmark;
     }

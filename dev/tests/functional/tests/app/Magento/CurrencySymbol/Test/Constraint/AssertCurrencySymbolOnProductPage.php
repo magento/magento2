@@ -42,7 +42,7 @@ class AssertCurrencySymbolOnProductPage extends AbstractConstraint
         preg_match('`(.*?)\d`', $price, $matches);
 
         $symbolOnPage = isset($matches[1]) ? $matches[1] : null;
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $currencySymbol->getCustomCurrencySymbol(),
             $symbolOnPage,
             'Wrong Currency Symbol is displayed on Product page.'

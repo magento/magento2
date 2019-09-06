@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="catalog_product_super_attribute" resource="default" engine="innodb"
+           comment="Catalog Product Super Attribute Table">
+        <column xsi:type="int" name="product_super_attribute_id" padding="10" unsigned="true" nullable="false"
+                identity="true" comment="Product Super Attribute ID"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Product ID"/>
+        <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Attribute ID"/>
+        <column xsi:type="smallint" name="position" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Position"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="product_super_attribute_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CAT_PRD_SPR_ATTR_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="catalog_product_super_attribute" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="CATALOG_PRODUCT_SUPER_ATTRIBUTE_PRODUCT_ID_ATTRIBUTE_ID">
+            <column name="product_id"/>
+            <column name="attribute_id"/>
+        </constraint>
+    </table>
+    <table name="catalog_product_super_attribute_label" resource="default" engine="innodb"
+           comment="Catalog Product Super Attribute Label Table">
+        <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Value ID"/>
+        <column xsi:type="int" name="product_super_attribute_id" padding="10" unsigned="true" nullable="false"
+                identity="false" default="0" comment="Product Super Attribute ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <column xsi:type="smallint" name="use_default" padding="5" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Use Default Value"/>
+        <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Value"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="value_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_309442281DF7784210ED82B2CC51E5D5"
+                    table="catalog_product_super_attribute_label" column="product_super_attribute_id"
+                    referenceTable="catalog_product_super_attribute" referenceColumn="product_super_attribute_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CATALOG_PRODUCT_SUPER_ATTRIBUTE_LABEL_STORE_ID_STORE_STORE_ID"
+                    table="catalog_product_super_attribute_label" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="CAT_PRD_SPR_ATTR_LBL_PRD_SPR_ATTR_ID_STORE_ID">
+            <column name="product_super_attribute_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <index referenceId="CATALOG_PRODUCT_SUPER_ATTRIBUTE_LABEL_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="catalog_product_super_link" resource="default" engine="innodb"
+           comment="Catalog Product Super Link Table">
+        <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Link ID"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Product ID"/>
+        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Parent ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="link_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CAT_PRD_SPR_LNK_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="catalog_product_super_link" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CAT_PRD_SPR_LNK_PARENT_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="catalog_product_super_link" column="parent_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="CATALOG_PRODUCT_SUPER_LINK_PRODUCT_ID_PARENT_ID">
+            <column name="product_id"/>
+            <column name="parent_id"/>
+        </constraint>
+        <index referenceId="CATALOG_PRODUCT_SUPER_LINK_PARENT_ID" indexType="btree">
+            <column name="parent_id"/>
+        </index>
+    </table>
+</schema>

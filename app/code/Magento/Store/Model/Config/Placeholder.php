@@ -90,9 +90,10 @@ class Placeholder
 
             if ($url) {
                 $value = str_replace('{{' . $placeholder . '}}', $url, $value);
-            } elseif (strpos($value, $this->urlPlaceholder) !== false) {
-                // localhost is replaced for cli requests, for http requests method getDistroBaseUrl is used
-                $value = str_replace($this->urlPlaceholder, 'http://localhost/', $value);
+            } elseif (strpos($value, (string) $this->urlPlaceholder) !== false) {
+                $distroBaseUrl = $this->request->getDistroBaseUrl();
+
+                $value = str_replace($this->urlPlaceholder, $distroBaseUrl, $value);
             }
 
             if (null !== $this->_getPlaceholder($value)) {
@@ -114,7 +115,7 @@ class Placeholder
             $placeholder = $matches[1];
             if ($placeholder == 'unsecure_base_url' || $placeholder == 'secure_base_url' || strpos(
                 $value,
-                $this->urlPlaceholder
+                (string) $this->urlPlaceholder
             ) !== false
             ) {
                 return $placeholder;

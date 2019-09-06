@@ -224,6 +224,14 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
+        destroy: function () {
+            if (this.dnd()) {
+                this.dnd().destroy();
+            }
+            this._super();
+        },
+
         /**
          * Calls 'initObservable' of parent
          *
@@ -322,9 +330,7 @@ define([
             }
 
             if (this.defaultPagesState[this.currentPage()]) {
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             }
         },
 
@@ -434,13 +440,9 @@ define([
                     return initialize;
                 }));
 
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             } else if (this.hasInitialPagesState[this.currentPage()]) {
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             }
         },
 
@@ -533,22 +535,24 @@ define([
          * Init header elements
          */
         initHeader: function () {
-            var data;
+            var labels = [],
+                data;
 
             if (!this.labels().length) {
                 _.each(this.childTemplate.children, function (cell) {
                     data = this.createHeaderTemplate(cell.config);
                     cell.config.labelVisible = false;
                     _.extend(data, {
+                        defaultLabelVisible: data.visible(),
                         label: cell.config.label,
                         name: cell.name,
                         required: !!cell.config.validation,
                         columnsHeaderClasses: cell.config.columnsHeaderClasses,
                         sortOrder: cell.config.sortOrder
                     });
-
-                    this.labels.push(data);
+                    labels.push(data);
                 }, this);
+                this.labels(_.sortBy(labels, 'sortOrder'));
             }
         },
 
@@ -712,6 +716,8 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
+            this.clear();
+
             if (page === 1 && !this.recordData().length) {
                 return false;
             }
@@ -753,7 +759,6 @@ define([
          * Change page to next
          */
         nextPage: function () {
-            this.clear();
             this.currentPage(this.currentPage() + 1);
         },
 
@@ -761,7 +766,6 @@ define([
          * Change page to previous
          */
         previousPage: function () {
-            this.clear();
             this.currentPage(this.currentPage() - 1);
         },
 
@@ -839,7 +843,8 @@ define([
         deleteRecord: function (index, recordId) {
             var recordInstance,
                 lastRecord,
-                recordsData;
+                recordsData,
+                lastRecordIndex;
 
             if (this.deleteProperty) {
                 recordsData = this.recordData();
@@ -858,12 +863,13 @@ define([
                 this.update = true;
 
                 if (~~this.currentPage() === this.pages()) {
+                    lastRecordIndex = this.startIndex + this.getChildItems().length - 1;
                     lastRecord =
                         _.findWhere(this.elems(), {
-                            index: this.startIndex + this.getChildItems().length - 1
+                            index: lastRecordIndex
                         }) ||
                         _.findWhere(this.elems(), {
-                            index: (this.startIndex + this.getChildItems().length - 1).toString()
+                            index: lastRecordIndex.toString()
                         });
 
                     lastRecord.destroy();
@@ -901,7 +907,7 @@ define([
             prop = prop || this.identificationProperty;
 
             return _.reject(this.getChildItems(), function (recordData) {
-                return ~~recordData[prop] === ~~id;
+                return recordData[prop].toString() === id.toString();
             }, this);
         },
 
@@ -1124,6 +1130,18 @@ define([
             });
 
             this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+        },
+
+        /**
+         * Set the changed property if the current page is different
+         * than the default state
+         *
+         * @return void
+         */
+        setChangedForCurrentPage: function () {
+            this.pagesChanged[this.currentPage()] =
+                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+            this.changed(_.some(this.pagesChanged));
         }
     });
 });

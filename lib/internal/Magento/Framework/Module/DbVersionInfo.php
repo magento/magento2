@@ -31,6 +31,11 @@ class DbVersionInfo
     private $moduleResource;
 
     /**
+     * @var array
+     */
+    private $dbVersionErrorsCache = null;
+
+    /**
      * @param ModuleListInterface $moduleList
      * @param ResourceInterface $moduleResource
      */
@@ -65,27 +70,6 @@ class DbVersionInfo
     }
 
     /**
-     * Get array of errors if DB is out of date, return [] if DB is current
-     *
-     * @return string[] Array of errors, each error contains module name, current version, required version,
-     *                  and type (schema or data).  The array will be empty if all schema and data are current.
-     */
-    public function getDbVersionErrors()
-    {
-        $errors = [];
-        foreach ($this->moduleList->getNames() as $moduleName) {
-            if (!$this->isSchemaUpToDate($moduleName)) {
-                $errors[] = $this->getSchemaInfo($moduleName);
-            }
-
-            if (!$this->isDataUpToDate($moduleName)) {
-                $errors[] = $this->getDataInfo($moduleName);
-            }
-        }
-        return $errors;
-    }
-
-    /**
      * Check if DB schema is up to date, version info if it is not.
      *
      * @param string $moduleName
@@ -103,6 +87,29 @@ class DbVersionInfo
             self::KEY_MODULE => $moduleName,
             self::KEY_TYPE => 'schema'
         ];
+    }
+
+    /**
+     * Get array of errors if DB is out of date, return [] if DB is current.
+     *
+     * @return string[] Array of errors, each error contains module name, current version, required version,
+     *                  and type (schema or data).  The array will be empty if all schema and data are current.
+     */
+    public function getDbVersionErrors()
+    {
+        if ($this->dbVersionErrorsCache === null) {
+            $this->dbVersionErrorsCache = [];
+            foreach ($this->moduleList->getNames() as $moduleName) {
+                if (!$this->isSchemaUpToDate($moduleName)) {
+                    $this->dbVersionErrorsCache[] = $this->getSchemaInfo($moduleName);
+                }
+                if (!$this->isDataUpToDate($moduleName)) {
+                    $this->dbVersionErrorsCache[] = $this->getDataInfo($moduleName);
+                }
+            }
+        }
+
+        return $this->dbVersionErrorsCache;
     }
 
     /**
@@ -131,17 +138,20 @@ class DbVersionInfo
      * @param string $moduleName
      * @param string|bool $version
      * @return bool
-     * @throws \UnexpectedValueException
      */
     private function isModuleVersionEqual($moduleName, $version)
     {
         $module = $this->moduleList->getOne($moduleName);
-        if (empty($module['setup_version'])) {
-            throw new \UnexpectedValueException("Setup version for module '$moduleName' is not specified");
-        }
-        $configVer = $module['setup_version'];
+        $configVer = isset($module['setup_version']) ? $module['setup_version'] : null;
 
-        return ($version !== false
-            && version_compare($configVer, $version) === ModuleDataSetupInterface::VERSION_COMPARE_EQUAL);
+        if (empty($configVer)) {
+            /**
+             * If setup_version was removed, this means that we want to ignore old scripts and do installation only
+             * with declarative schema and data/schema patches
+             */
+            return true;
+        }
+
+        return version_compare($configVer, $version) === ModuleDataSetupInterface::VERSION_COMPARE_EQUAL;
     }
 }

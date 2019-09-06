@@ -3,16 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\UrlRewrite\Model\Storage;
 
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Psr\Log\LoggerInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Url rewrites DB storage.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DbStorage extends AbstractStorage
 {
     /**
@@ -26,7 +34,7 @@ class DbStorage extends AbstractStorage
     const ERROR_CODE_DUPLICATE_ENTRY = 1062;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $connection;
 
@@ -36,15 +44,15 @@ class DbStorage extends AbstractStorage
     protected $resource;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
-     * @param DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param UrlRewriteFactory    $urlRewriteFactory
+     * @param DataObjectHelper     $dataObjectHelper
+     * @param ResourceConnection   $resource
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
@@ -54,8 +62,8 @@ class DbStorage extends AbstractStorage
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
-        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()
+            ->get(LoggerInterface::class);
 
         parent::__construct($urlRewriteFactory, $dataObjectHelper);
     }
@@ -63,8 +71,8 @@ class DbStorage extends AbstractStorage
     /**
      * Prepare select statement for specific filter
      *
-     * @param array $data
-     * @return \Magento\Framework\DB\Select
+     * @param  array $data
+     * @return Select
      */
     protected function prepareSelect(array $data)
     {
@@ -74,11 +82,12 @@ class DbStorage extends AbstractStorage
         foreach ($data as $column => $value) {
             $select->where($this->connection->quoteIdentifier($column) . ' IN (?)', $value);
         }
+
         return $select;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doFindAllByData(array $data)
     {
@@ -86,7 +95,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function doFindOneByData(array $data)
     {
@@ -96,42 +105,20 @@ class DbStorage extends AbstractStorage
             $result = null;
 
             $requestPath = $data[UrlRewrite::REQUEST_PATH];
-
-            $data[UrlRewrite::REQUEST_PATH] = [
+            $decodedRequestPath = urldecode($requestPath);
+            $data[UrlRewrite::REQUEST_PATH] = array_unique(
+                [
                 rtrim($requestPath, '/'),
                 rtrim($requestPath, '/') . '/',
-            ];
+                rtrim($decodedRequestPath, '/'),
+                rtrim($decodedRequestPath, '/') . '/',
+                ]
+            );
 
             $resultsFromDb = $this->connection->fetchAll($this->prepareSelect($data));
-
-            if (count($resultsFromDb) === 1) {
-                $resultFromDb = current($resultsFromDb);
-                $redirectTypes = [OptionProvider::TEMPORARY, OptionProvider::PERMANENT];
-
-                // If request path matches the DB value or it's redirect - we can return result from DB
-                $canReturnResultFromDb = ($resultFromDb[UrlRewrite::REQUEST_PATH] === $requestPath
-                    || in_array((int)$resultFromDb[UrlRewrite::REDIRECT_TYPE], $redirectTypes, true));
-
-                // Otherwise return 301 redirect to request path from DB results
-                $result = $canReturnResultFromDb ? $resultFromDb : [
-                    UrlRewrite::ENTITY_TYPE => 'custom',
-                    UrlRewrite::ENTITY_ID => '0',
-                    UrlRewrite::REQUEST_PATH => $requestPath,
-                    UrlRewrite::TARGET_PATH => $resultFromDb[UrlRewrite::REQUEST_PATH],
-                    UrlRewrite::REDIRECT_TYPE => OptionProvider::PERMANENT,
-                    UrlRewrite::STORE_ID => $resultFromDb[UrlRewrite::STORE_ID],
-                    UrlRewrite::DESCRIPTION => null,
-                    UrlRewrite::IS_AUTOGENERATED => '0',
-                    UrlRewrite::METADATA => null,
-                ];
-            } else {
-                // If we have 2 results - return the row that matches request path
-                foreach ($resultsFromDb as $resultFromDb) {
-                    if ($resultFromDb[UrlRewrite::REQUEST_PATH] === $requestPath) {
-                        $result = $resultFromDb;
-                        break;
-                    }
-                }
+            if ($resultsFromDb) {
+                $urlRewrite = $this->extractMostRelevantUrlRewrite($requestPath, $resultsFromDb);
+                $result = $this->prepareUrlRewrite($requestPath, $urlRewrite);
             }
 
             return $result;
@@ -141,32 +128,176 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * {@inheritdoc}
+     * Extract most relevant url rewrite from url rewrites list
+     *
+     * @param  string $requestPath
+     * @param  array  $urlRewrites
+     * @return array|null
      */
-    protected function doReplace(array $urls)
+    private function extractMostRelevantUrlRewrite(string $requestPath, array $urlRewrites): ?array
     {
-        foreach ($this->createFilterDataBasedOnUrls($urls) as $type => $urlData) {
-            $urlData[UrlRewrite::ENTITY_TYPE] = $type;
-            $this->deleteByData($urlData);
+        $prioritizedUrlRewrites = [];
+        foreach ($urlRewrites as $urlRewrite) {
+            switch (true) {
+                case $urlRewrite[UrlRewrite::REQUEST_PATH] === $requestPath:
+                    $priority = 1;
+                    break;
+                case $urlRewrite[UrlRewrite::REQUEST_PATH] === urldecode($requestPath):
+                    $priority = 2;
+                    break;
+                case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim($requestPath, '/'):
+                    $priority = 3;
+                    break;
+                case rtrim($urlRewrite[UrlRewrite::REQUEST_PATH], '/') === rtrim(urldecode($requestPath), '/'):
+                    $priority = 4;
+                    break;
+                default:
+                    $priority = 5;
+                    break;
+            }
+            $prioritizedUrlRewrites[$priority] = $urlRewrite;
         }
-        $data = [];
+        ksort($prioritizedUrlRewrites);
+
+        return array_shift($prioritizedUrlRewrites);
+    }
+
+    /**
+     * Prepare url rewrite
+     *
+     * If request path matches the DB value or it's redirect - we can return result from DB
+     * Otherwise return 301 redirect to request path from DB results
+     *
+     * @param  string $requestPath
+     * @param  array  $urlRewrite
+     * @return array
+     */
+    private function prepareUrlRewrite(string $requestPath, array $urlRewrite): array
+    {
+        $redirectTypes = [OptionProvider::TEMPORARY, OptionProvider::PERMANENT];
+        $canReturnResultFromDb = (
+            in_array($urlRewrite[UrlRewrite::REQUEST_PATH], [$requestPath, urldecode($requestPath)], true)
+            || in_array((int) $urlRewrite[UrlRewrite::REDIRECT_TYPE], $redirectTypes, true)
+        );
+        if (!$canReturnResultFromDb) {
+            $urlRewrite = [
+                UrlRewrite::ENTITY_TYPE => 'custom',
+                UrlRewrite::ENTITY_ID => '0',
+                UrlRewrite::REQUEST_PATH => $requestPath,
+                UrlRewrite::TARGET_PATH => $urlRewrite[UrlRewrite::REQUEST_PATH],
+                UrlRewrite::REDIRECT_TYPE => OptionProvider::PERMANENT,
+                UrlRewrite::STORE_ID => $urlRewrite[UrlRewrite::STORE_ID],
+                UrlRewrite::DESCRIPTION => null,
+                UrlRewrite::IS_AUTOGENERATED => '0',
+                UrlRewrite::METADATA => null,
+            ];
+        }
+
+        return $urlRewrite;
+    }
+
+    /**
+     * Delete old URLs from DB.
+     *
+     * @param  UrlRewrite[] $urls
+     * @return void
+     */
+    private function deleteOldUrls(array $urls): void
+    {
+        $oldUrlsSelect = $this->connection->select();
+        $oldUrlsSelect->from(
+            $this->resource->getTableName(self::TABLE_NAME)
+        );
+
+        $uniqueEntities = $this->prepareUniqueEntities($urls);
+        foreach ($uniqueEntities as $storeId => $entityTypes) {
+            foreach ($entityTypes as $entityType => $entities) {
+                $oldUrlsSelect->orWhere(
+                    $this->connection->quoteIdentifier(
+                        UrlRewrite::STORE_ID
+                    ) . ' = ' . $this->connection->quote($storeId, 'INTEGER') .
+                    ' AND ' . $this->connection->quoteIdentifier(
+                        UrlRewrite::ENTITY_ID
+                    ) . ' IN (' . $this->connection->quote($entities, 'INTEGER') . ')' .
+                    ' AND ' . $this->connection->quoteIdentifier(
+                        UrlRewrite::ENTITY_TYPE
+                    ) . ' = ' . $this->connection->quote($entityType)
+                );
+            }
+        }
+
+        // prevent query locking in a case when nothing to delete
+        $checkOldUrlsSelect = clone $oldUrlsSelect;
+        $checkOldUrlsSelect->reset(Select::COLUMNS);
+        $checkOldUrlsSelect->columns('count(*)');
+        $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
+
+        if ($hasOldUrls) {
+            $this->connection->query(
+                $oldUrlsSelect->deleteFromSelect(
+                    $this->resource->getTableName(self::TABLE_NAME)
+                )
+            );
+        }
+    }
+
+    /**
+     * Prepare array with unique entities
+     *
+     * @param  UrlRewrite[] $urls
+     * @return array
+     */
+    private function prepareUniqueEntities(array $urls): array
+    {
+        $uniqueEntities = [];
+        /** @var UrlRewrite $url */
         foreach ($urls as $url) {
-            $data[] = $url->toArray();
+            $entityIds = (!empty($uniqueEntities[$url->getStoreId()][$url->getEntityType()])) ?
+                $uniqueEntities[$url->getStoreId()][$url->getEntityType()] : [];
+
+            if (!\in_array($url->getEntityId(), $entityIds)) {
+                $entityIds[] = $url->getEntityId();
+            }
+            $uniqueEntities[$url->getStoreId()][$url->getEntityType()] = $entityIds;
         }
+
+        return $uniqueEntities;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function doReplace(array $urls): array
+    {
+        $this->connection->beginTransaction();
+
         try {
+            $this->deleteOldUrls($urls);
+
+            $data = [];
+            foreach ($urls as $url) {
+                $data[] = $url->toArray();
+            }
+
             $this->insertMultiple($data);
+
+            $this->connection->commit();
+            // @codingStandardsIgnoreStart
         } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            // @codingStandardsIgnoreEnd
+            $this->connection->rollBack();
+
             /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
             $urlConflicted = [];
             foreach ($urls as $url) {
                 $urlFound = $this->doFindOneByData(
                     [
-                        UrlRewriteData::REQUEST_PATH => $url->getRequestPath(),
-                        UrlRewriteData::STORE_ID => $url->getStoreId()
+                        UrlRewrite::REQUEST_PATH => $url->getRequestPath(),
+                        UrlRewrite::STORE_ID => $url->getStoreId(),
                     ]
                 );
-                if (isset($urlFound[UrlRewriteData::URL_REWRITE_ID])) {
-                    $urlConflicted[$urlFound[UrlRewriteData::URL_REWRITE_ID]] = $url->toArray();
+                if (isset($urlFound[UrlRewrite::URL_REWRITE_ID])) {
+                    $urlConflicted[$urlFound[UrlRewrite::URL_REWRITE_ID]] = $url->toArray();
                 }
             }
             if ($urlConflicted) {
@@ -179,6 +310,9 @@ class DbStorage extends AbstractStorage
             } else {
                 throw $e->getPrevious() ?: $e;
             }
+        } catch (\Exception $e) {
+            $this->connection->rollBack();
+            throw $e;
         }
 
         return $urls;
@@ -187,12 +321,12 @@ class DbStorage extends AbstractStorage
     /**
      * Insert multiple
      *
-     * @param array $data
+     * @param  array $data
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException|\Exception
      * @throws \Exception
      */
-    protected function insertMultiple($data)
+    protected function insertMultiple($data): void
     {
         try {
             $this->connection->insertMultiple($this->resource->getTableName(self::TABLE_NAME), $data);
@@ -212,10 +346,11 @@ class DbStorage extends AbstractStorage
     /**
      * Get filter for url rows deletion due to provided urls
      *
-     * @param UrlRewrite[] $urls
-     * @return array
+     * @param      UrlRewrite[] $urls
+     * @return     array
+     * @deprecated Not used anymore.
      */
-    protected function createFilterDataBasedOnUrls($urls)
+    protected function createFilterDataBasedOnUrls($urls): array
     {
         $data = [];
         foreach ($urls as $url) {
@@ -227,11 +362,12 @@ class DbStorage extends AbstractStorage
                 }
             }
         }
+
         return $data;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByData(array $data)
     {

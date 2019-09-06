@@ -1,0 +1,44 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type BundleItem @doc(description: "BundleItem defines an individual item in a bundle product.") {
+    option_id: Int @doc(description: "An ID assigned to each type of item in a bundle product.")
+    title: String @doc(description: "The display name of the item.")
+    required: Boolean @doc(description: "Indicates whether the item must be included in the bundle.")
+    type: String @doc(description: "The input type that the customer uses to select the item. Examples include radio button and checkbox.")
+    position: Int @doc(description: "he relative position of this item compared to the other bundle items.")
+    sku: String @doc(description: "The SKU of the bundle product.")
+    options: [BundleItemOption] @doc(description: "An array of additional options for this bundle item.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleItemLinks")
+}
+
+type BundleItemOption @doc(description: "BundleItemOption defines characteristics and options for a specific bundle item.") {
+    id: Int @doc(description: "The ID assigned to the bundled item option.")
+    label: String @doc(description: "The text that identifies the bundled item option.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\Label")
+    qty: Float @deprecated(reason: "The `qty` is deprecated. Use `quantity` instead.") @doc(description: "Indicates the quantity of this specific bundle item.")
+    quantity: Float @doc(description: "Indicates the quantity of this specific bundle item.")
+    position: Int @doc(description: "When a bundle item contains multiple options, the relative position of this option compared to the other options.")
+    is_default: Boolean @doc(description: "Indicates whether this option is the default option.")
+    price: Float @doc(description: "The price of the selected option.")
+    price_type: PriceTypeEnum @doc(description: "One of FIXED, PERCENT, or DYNAMIC.")
+    can_change_quantity: Boolean @doc(description: "Indicates whether the customer can change the number of items for this option.")
+    product: ProductInterface @doc(description: "Contains details about this product option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
+}
+
+type BundleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "BundleProduct defines basic features of a bundle product and contains multiple BundleItems.") {
+    price_view: PriceViewEnum @doc(description: "One of PRICE_RANGE or AS_LOW_AS.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\PriceView")
+    dynamic_price: Boolean @doc(description: "Indicates whether the bundle product has a dynamic price.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicPrice")
+    dynamic_sku: Boolean @doc(description: "Indicates whether the bundle product has a dynamic SK.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicSku")
+    ship_bundle_items: ShipBundleItemsEnum @doc(description: "Indicates whether to ship bundle items together or individually.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\ShipBundleItems")
+    dynamic_weight: Boolean @doc(description: "Indicates whether the bundle product has a dynamically calculated weight.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicWeight")
+    items: [BundleItem] @doc(description: "An array containing information about individual bundle items.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleItems")
+}
+
+enum PriceViewEnum @doc(description: "This enumeration defines whether a bundle product's price is displayed as the lowest possible value or as a range.") {
+    PRICE_RANGE
+    AS_LOW_AS
+}
+
+enum ShipBundleItemsEnum @doc(description: "This enumeration defines whether bundle items must be shipped together.") {
+    TOGETHER
+    SEPARATELY
+}

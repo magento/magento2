@@ -3,9 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order;
 
+use Magento\Customer\Model\AttributeMetadataDataProvider;
+use Magento\Customer\Model\ResourceModel\Form\Attribute\Collection as AttributeCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\OrderAddressSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -41,19 +46,87 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
     private $collectionProcessor;
 
     /**
+     * @var AttributeMetadataDataProvider
+     */
+    private $attributeMetadataDataProvider;
+
+    /**
+     * @var AttributeCollection|null
+     */
+    private $attributesList = null;
+
+    /**
      * AddressRepository constructor.
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
+     * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
      */
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        AttributeMetadataDataProvider $attributeMetadataDataProvider = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->attributeMetadataDataProvider = $attributeMetadataDataProvider ?: ObjectManager::getInstance()
+            ->get(AttributeMetadataDataProvider::class);
+    }
+
+    /**
+     * Format multiline and multiselect attributes
+     *
+     * @param OrderAddressInterface $orderAddress
+     *
+     * @return void
+     */
+    private function formatCustomAddressAttributes(OrderAddressInterface $orderAddress)
+    {
+        $attributesList = $this->getAttributesList();
+
+        foreach ($attributesList as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            if (!$orderAddress->hasData($attributeCode)) {
+                continue;
+            }
+            $attributeValue = $orderAddress->getData($attributeCode);
+            if (is_array($attributeValue)) {
+                $glue = $attribute->getFrontendInput() === 'multiline' ? PHP_EOL : ',';
+                $attributeValue = trim(implode($glue, $attributeValue));
+            }
+            $orderAddress->setData($attributeCode, $attributeValue);
+        }
+    }
+
+    /**
+     * Get list of custom attributes.
+     *
+     * @return AttributeCollection|null
+     */
+    private function getAttributesList()
+    {
+        if (!$this->attributesList) {
+            $attributesList = $this->attributeMetadataDataProvider->loadAttributesCollection(
+                'customer_address',
+                'customer_register_address'
+            );
+            $attributesList->addFieldToFilter('is_user_defined', 1);
+            $attributesList->addFieldToFilter(
+                'frontend_input',
+                [
+                    'in' => [
+                        'multiline',
+                        'multiselect',
+                    ],
+                ]
+            );
+
+            $this->attributesList = $attributesList;
+        }
+
+        return $this->attributesList;
     }
 
     /**
@@ -67,14 +140,16 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('Id required'));
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
         }
 
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\OrderAddressInterface $entity */
             $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
 
             $this->registry[$id] = $entity;
@@ -87,7 +162,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      * Find order addresses by criteria.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Sales\Api\Data\OrderAddressInterface[]
+     * @return \Magento\Sales\Model\ResourceModel\Order\Address\Collection
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -95,7 +170,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
         $searchResult = $this->searchResultFactory->create();
         $this->collectionProcessor->process($searchCriteria, $searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
-        
+
         return $searchResult;
     }
 
@@ -113,7 +188,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
 
             unset($this->registry[$entity->getEntityId()]);
         } catch (\Exception $e) {
-            throw new CouldNotDeleteException(__('Could not delete order address'), $e);
+            throw new CouldNotDeleteException(__("The order address couldn't be deleted."), $e);
         }
 
         return true;
@@ -141,11 +216,12 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      */
     public function save(\Magento\Sales\Api\Data\OrderAddressInterface $entity)
     {
+        $this->formatCustomAddressAttributes($entity);
         try {
             $this->metadata->getMapper()->save($entity);
             $this->registry[$entity->getEntityId()] = $entity;
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save order address'), $e);
+            throw new CouldNotSaveException(__("The order address couldn't be saved."), $e);
         }
 
         return $this->registry[$entity->getEntityId()];

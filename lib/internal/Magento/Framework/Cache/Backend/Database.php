@@ -27,11 +27,11 @@
  * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  */
 
-/**
- * Database cache backend
- */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Database cache backend.
+ */
 class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
@@ -139,7 +139,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * Note : return value is always "string" (unserialization is done by the core not by the backend)
      *
-     * @param  string  $id                     Cache id
+     * @param  string $id Cache id
      * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
      */
@@ -216,16 +216,15 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                 $time = time();
                 $expire = $lifetime === 0 || $lifetime === null ? 0 : $time + $lifetime;
 
+                $idCol = $connection->quoteIdentifier('id');
                 $dataCol = $connection->quoteIdentifier('data');
+                $createCol = $connection->quoteIdentifier('create_time');
+                $updateCol = $connection->quoteIdentifier('update_time');
                 $expireCol = $connection->quoteIdentifier('expire_time');
-                $query = "INSERT INTO {$dataTable} (\n                    {$connection->quoteIdentifier(
-                'id'
-            )},\n                    {$dataCol},\n                    {$connection->quoteIdentifier(
-                'create_time'
-            )},\n                    {$connection->quoteIdentifier(
-                'update_time'
-            )},\n                    {$expireCol})\n                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE\n
-            {$dataCol}=VALUES({$dataCol}),\n                    {$expireCol}=VALUES({$expireCol})";
+
+                $query = "INSERT INTO {$dataTable} ({$idCol}, {$dataCol}, {$createCol}, {$updateCol}, {$expireCol}) " .
+                    "VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE {$dataCol}=VALUES({$dataCol}), " .
+                    "{$updateCol}=VALUES({$updateCol}), {$expireCol}=VALUES({$expireCol})";
 
                 $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
             }
@@ -433,7 +432,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             return $this->_getConnection()->update(
                 $this->_getDataTable(),
                 ['expire_time' => new \Zend_Db_Expr('expire_time+' . $extraLifetime)],
-                ['id=?' => $id, 'expire_time = 0 OR expire_time>' => time()]
+                ['id=?' => $id, 'expire_time = 0 OR expire_time>?' => time()]
             );
         } else {
             return true;

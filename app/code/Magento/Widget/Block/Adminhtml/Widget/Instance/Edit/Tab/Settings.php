@@ -78,7 +78,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Returns status flag about this tab can be shown or not
      *
      * @return true
      */

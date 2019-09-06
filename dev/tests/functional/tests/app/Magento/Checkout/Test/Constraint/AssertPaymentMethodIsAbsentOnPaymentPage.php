@@ -23,7 +23,7 @@ class AssertPaymentMethodIsAbsentOnPaymentPage extends AbstractConstraint
      */
     public function processAssert(CheckoutOnepage $checkoutOnepage, array $payment)
     {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $checkoutOnepage->getPaymentBlock()->isVisiblePaymentMethod($payment),
             'Payment method' . $payment['method']. ' is present on Checkout Payment Page.'
         );

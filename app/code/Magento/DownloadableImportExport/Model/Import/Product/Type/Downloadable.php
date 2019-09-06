@@ -407,7 +407,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Get additional attributes for dowloadable product.
+     * Get additional attributes for downloadable product.
      *
      * @param array $rowData
      * @return array

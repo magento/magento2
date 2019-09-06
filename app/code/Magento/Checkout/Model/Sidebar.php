@@ -85,7 +85,7 @@ class Sidebar
     {
         $item = $this->cart->getQuote()->getItemById($itemId);
         if (!$item instanceof CartItemInterface) {
-            throw new LocalizedException(__('We can\'t find the quote item.'));
+            throw new LocalizedException(__("The quote item isn't found. Verify the item and try again."));
         }
         return $this;
     }

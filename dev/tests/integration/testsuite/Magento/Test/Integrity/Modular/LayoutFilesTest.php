@@ -77,9 +77,8 @@ class LayoutFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected function isSkippedArgument(array $argumentData)
     {
-        // Do not take into account argument name and parameters
-        unset($argumentData['name']);
-        unset($argumentData['param']);
+        // Do not take into account argument name, shared and parameters
+        unset($argumentData['name'], $argumentData['param'], $argumentData['shared']);
 
         $isUpdater = isset($argumentData['updater']);
         unset($argumentData['updater']);
@@ -93,13 +92,11 @@ class LayoutFilesTest extends \PHPUnit\Framework\TestCase
                 $typeAttr => 'object',
                 'value' => $prCollection,
             ],
-            [$typeAttr => 'object', 'value' => \Magento\Solr\Model\ResourceModel\Search\Grid\Collection::class],
             [$typeAttr => 'object', 'value' => \Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid::class],
             [
                 $typeAttr => 'object',
                 'value' => \Magento\CustomerSegment\Model\ResourceModel\Segment\Report\Detail\Collection::class
             ],
-            [$typeAttr => 'options', 'model' => \Magento\Solr\Model\Adminhtml\Search\Grid\Options::class],
             [$typeAttr => 'options', 'model' => \Magento\Logging\Model\ResourceModel\Grid\ActionsGroup::class],
             [$typeAttr => 'options', 'model' => \Magento\Logging\Model\ResourceModel\Grid\Actions::class],
         ];

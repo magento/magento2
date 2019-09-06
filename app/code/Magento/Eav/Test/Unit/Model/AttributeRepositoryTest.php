@@ -100,7 +100,7 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage entity_type_code is a required field.
+     * @expectedExceptionMessage "entity_type_code" is required. Enter and try again.
      */
     public function testGetListInputException()
     {
@@ -124,7 +124,12 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
         $collectionSize = 1;
 
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
+            ->setMethods(['getPageSize'])
             ->getMockForAbstractClass();
+
+        $searchCriteriaMock->expects($this->any())
+            ->method('getPageSize')
+            ->willReturn($collectionSize);
 
         $attributeMock = $this->createAttributeMock($attributeCode, $attributeId);
 

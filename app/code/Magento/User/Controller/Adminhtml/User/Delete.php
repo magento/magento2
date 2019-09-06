@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
@@ -29,7 +30,9 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
             try {
                 $currentUserPassword = (string)$this->getRequest()->getPost(UserEdit::CURRENT_USER_PASSWORD_FIELD);
                 if (empty($currentUserPassword)) {
-                    throw new AuthenticationException(__('You have entered an invalid password for current user.'));
+                    throw new AuthenticationException(
+                        __('The password entered for the current user is invalid. Verify the password and try again.')
+                    );
                 }
                 $currentUser->performIdentityCheck($currentUserPassword);
                 /** @var \Magento\User\Model\User $model */

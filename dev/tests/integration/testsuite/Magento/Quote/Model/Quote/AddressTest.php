@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
  * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
  */
-class AddressTest extends \PHPUnit\Framework\TestCase
+class AddressTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /** @var \Magento\Quote\Model\Quote $quote */
     protected $_quote;
@@ -24,6 +24,28 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     /**@var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
     protected $customerRepository;
+
+    /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+    protected $addressRepository;
+
+    /** @var \Magento\Framework\Reflection\DataObjectProcessor */
+    protected $dataProcessor;
+
+    /**
+     * phpcs:ignoreFile
+     */
+    public static function setUpBeforeClass()
+    {
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
 
     /**
      * Initialize quote and customer fixtures
@@ -48,6 +70,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->_address->setId(1);
         $this->_address->load($this->_address->getId());
         $this->_address->setQuote($this->_quote);
+
+        $this->addressRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\AddressRepositoryInterface::class
+        );
+
+        $this->dataProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\Reflection\DataObjectProcessor::class
+        );
     }
 
     protected function tearDown()
@@ -225,7 +255,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->setLastname('Doe')
             ->setTelephone('123456')
             ->setPostcode('12345')
-            ->setCountryId(1)
+            ->setCountryId('US')
             ->setCity($city)
             ->setStreet([$street]);
         $addressData = $addressRepository->save($addressData);
@@ -308,5 +338,24 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ['test', 'test'],
             [[123, true], [123, true]]
         ];
+    }
+
+    public function testSaveShippingAddressWithEmptyRegionId()
+    {
+        $customerAddress = $this->addressRepository->getById(1);
+        $customerAddress->setRegionId(0);
+
+        $address = $this->dataProcessor->buildOutputDataArray(
+            $customerAddress,
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
+
+        $shippingAddress = $this->_quote->getShippingAddress();
+        $shippingAddress->addData($address);
+
+        $shippingAddress->save();
+
+        $this->assertEquals(0, $shippingAddress->getRegionId());
+        $this->assertEquals(0, $shippingAddress->getRegion());
     }
 }

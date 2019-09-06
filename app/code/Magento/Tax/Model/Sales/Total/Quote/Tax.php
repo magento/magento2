@@ -152,12 +152,23 @@ class Tax extends CommonTaxCollector
         $total->setBaseTotalAmount('subtotal', 0);
         $total->setTotalAmount('tax', 0);
         $total->setBaseTotalAmount('tax', 0);
+        $total->setTotalAmount('shipping', 0);
+        $total->setBaseTotalAmount('shipping', 0);
         $total->setTotalAmount('discount_tax_compensation', 0);
         $total->setBaseTotalAmount('discount_tax_compensation', 0);
         $total->setTotalAmount('shipping_discount_tax_compensation', 0);
         $total->setBaseTotalAmount('shipping_discount_tax_compensation', 0);
         $total->setSubtotalInclTax(0);
         $total->setBaseSubtotalInclTax(0);
+        $total->setShippingInclTax(0);
+        $total->setBaseShippingInclTax(0);
+        $total->setShippingTaxAmount(0);
+        $total->setBaseShippingTaxAmount(0);
+        $total->setShippingAmountForDiscount(0);
+        $total->setBaseShippingAmountForDiscount(0);
+        $total->setBaseShippingAmountForDiscount(0);
+        $total->setTotalAmount('extra_tax', 0);
+        $total->setBaseTotalAmount('extra_tax', 0);
     }
 
     /**
@@ -254,7 +265,7 @@ class Tax extends CommonTaxCollector
     {
         $extraTaxableDetails = [];
         foreach ($itemsByType as $itemType => $itemTaxDetails) {
-            if ($itemType != self::ITEM_TYPE_PRODUCT and $itemType != self::ITEM_TYPE_SHIPPING) {
+            if ($itemType != self::ITEM_TYPE_PRODUCT && $itemType != self::ITEM_TYPE_SHIPPING) {
                 foreach ($itemTaxDetails as $itemCode => $itemTaxDetail) {
                     /** @var \Magento\Tax\Api\Data\TaxDetailsInterface $taxDetails */
                     $taxDetails = $itemTaxDetail[self::KEY_ITEM];
@@ -392,11 +403,11 @@ class Tax extends CommonTaxCollector
         $total->setShippingTaxAmount($shippingTaxAmount);
         $total->setDiscountTaxCompensationAmount($discountTaxCompensation); // accessed via 'discount_tax_compensation'
         $total->setSubtotalInclTax($subtotalInclTax);
-        return;
     }
 
     /**
      * Process model configuration array.
+     *
      * This method can be used for changing totals collect sort order
      *
      * @param   array $config

@@ -270,4 +270,22 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $result = $this->filter->mediaDirective($construction);
         $this->assertEquals($baseUrl . $image, $result);
     }
+
+    public function testMediaDirectiveWithEncodedQuotes()
+    {
+        $image = 'wysiwyg/VB.png';
+        $construction = ['{{media url=&quot;' . $image . '&quot;}}', 'media', ' url=&quot;' . $image . '&quot;'];
+        $baseUrl = 'http://localhost/pub/media/';
+
+        $this->storeMock->expects($this->once())
+            ->method('getBaseUrl')
+            ->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
+            ->willReturn($baseUrl);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
+        $result = $this->filter->mediaDirective($construction);
+        $this->assertEquals($baseUrl . $image, $result);
+    }
 }

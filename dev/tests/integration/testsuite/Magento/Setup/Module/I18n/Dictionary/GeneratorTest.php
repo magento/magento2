@@ -6,6 +6,7 @@
 namespace Magento\Setup\Module\I18n\Dictionary;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Setup\Module\I18n\Dictionary\Generator;
 use Magento\Setup\Module\I18n\ServiceLocator;
 
 class GeneratorTest extends \PHPUnit\Framework\TestCase
@@ -46,6 +47,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
+        $paths->setValue(['module' => [], 'theme' => []]);
         $paths->setAccessible(false);
 
         $this->testDir = realpath(__DIR__ . '/_files');

@@ -183,7 +183,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $this->_prepareVisibleFields($fieldset);
         }
 
-        // Set default sender and recipient from billing and shipping adresses
+        // Set default sender and recipient from billing and shipping addresses
         if (!$this->getMessage()->getSender()) {
             $this->getMessage()->setSender($this->getDefaultSender());
         }
@@ -194,7 +194,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->getMessage()->setType($this->getEntityType());
 
-        // Overridden default data with edited when block reloads througth Ajax
+        // Overridden default data with edited when block reloads through Ajax
         $this->_applyPostData();
         $form->setValues($this->getMessage()->getData());
         $this->setForm($form);

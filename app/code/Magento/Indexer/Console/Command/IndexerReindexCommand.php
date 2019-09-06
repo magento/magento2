@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Framework\Console\Cli;
@@ -57,7 +58,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -69,7 +70,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -104,7 +105,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc} Returns the ordered list of specified indexers and related indexers.
+     * @inheritdoc
+     *
+     * Returns the ordered list of specified indexers and related indexers.
      */
     protected function getIndexers(InputInterface $input)
     {
@@ -186,7 +189,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                     $this->getDependentIndexerIds($id)
                 );
             }
-        };
+        }
 
         return array_unique($dependentIndexerIds);
     }
@@ -237,7 +240,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     private function validateSharedIndex($sharedIndex)
     {
         if (empty($sharedIndex)) {
-            throw new \InvalidArgumentException('sharedIndex must be a valid shared index identifier');
+            throw new \InvalidArgumentException(
+                'The sharedIndex is an invalid shared index identifier. Verify the identifier and try again.'
+            );
         }
         $indexerIds = $this->getIndexerIdsBySharedIndex($sharedIndex);
         if (empty($indexerIds)) {
@@ -269,6 +274,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
+     * Get indexer registry
+     *
      * @return IndexerRegistry
      * @deprecated 100.2.0
      */
@@ -281,6 +288,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
+     * Get dependency info provider
+     *
      * @return DependencyInfoProvider
      * @deprecated 100.2.0
      */

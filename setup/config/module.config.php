@@ -32,7 +32,12 @@ return [
     ],
     'service_manager' => [
         'aliases' => [
-            'translator' => 'MvcTranslator',
+            'translator' => 'MvcTranslator'
+        ]
+    ],
+    'controllers' => [
+        'abstract_factories' => [
+            \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
         ],
     ],
 ];

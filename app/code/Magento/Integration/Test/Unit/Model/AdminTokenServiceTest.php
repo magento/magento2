@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Oauth\Token;
 
+/**
+ * Test for Magento\Integration\Model\AdminTokenService class.
+ */
 class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\AdminTokenService */
@@ -98,10 +102,6 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->_tokenService->revokeAdminAccessToken($adminId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This user has no tokens.
-     */
     public function testRevokeAdminAccessTokenWithoutAdminId()
     {
         $this->_tokenModelCollectionMock->expects($this->once())
@@ -116,7 +116,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The tokens could not be revoked.
+     * @expectedExceptionMessage The tokens couldn't be revoked.
      */
     public function testRevokeAdminAccessTokenCannotRevoked()
     {

@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Utility;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Component\ComponentFile;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\View\Design\Theme\ThemePackageList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Design\Theme\ThemePackage;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 
 /**
- * A helper to gather specific kind of files in Magento application
+ * A helper to gather specific kind of files in Magento application.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -142,12 +146,13 @@ class Files
      * Getter for an instance of self
      *
      * @return \Magento\Framework\App\Utility\Files
-     * @throws \Exception when there is no instance set
+     * @throws LocalizedException when there is no instance set
      */
     public static function init()
     {
         if (!self::$_instance) {
-            throw new \Exception('Instance is not set yet.');
+            // phpcs:ignore Magento2.Exceptions.DirectThrow.FoundDirectThrow
+            throw new LocalizedException(__('Instance is not set yet.'));
         }
         return self::$_instance;
     }
@@ -162,7 +167,8 @@ class Files
     {
         $result = [];
         foreach ($files as $file) {
-            $result[$file] = [$file];
+            $key = str_replace(BP . '/', '', $file);
+            $result[$key] = [$file];
         }
         return $result;
     }
@@ -391,7 +397,7 @@ class Files
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
             $files = [];
             foreach ($configXmlPaths as $xmlPath) {
-                $files = array_merge($files, glob($xmlPath));
+                $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
             }
             self::$_cache[$cacheKey] = $files;
         }
@@ -407,21 +413,25 @@ class Files
      * @param string $fileNamePattern
      * @param array $excludedFileNames
      * @param bool $asDataSet
+     * @param bool $collectWithContext
      * @return array
      * @codingStandardsIgnoreStart
      */
     public function getConfigFiles(
         $fileNamePattern = '*.xml',
         $excludedFileNames = ['wsdl.xml', 'wsdl2.xml', 'wsi.xml'],
-        $asDataSet = true
+        $asDataSet = true,
+        $collectWithContext = false
     ) {
         $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
-            $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
+            $method = $collectWithContext ? 'collectFilesWithContext' : 'collectFiles';
+            $files = $this->dirSearch->{$method}(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
             $files = array_filter(
                 $files,
-                function ($file) use ($excludedFileNames) {
-                    return !in_array(basename($file), $excludedFileNames);
+                function ($file) use ($excludedFileNames, $collectWithContext) {
+                    /** @var ComponentFile $file */
+                    return !in_array(basename($collectWithContext ? $file->getFullPath() : $file), $excludedFileNames);
                 }
             );
             self::$_cache[$cacheKey] = $files;
@@ -471,6 +481,14 @@ class Files
                 $files,
                 $this->getFilesSubset(
                     $this->componentRegistrar->getPaths(ComponentRegistrar::THEME),
+                    $fileNamePattern,
+                    []
+                )
+            );
+            $files = array_merge(
+                $files,
+                $this->getFilesSubset(
+                    $this->componentRegistrar->getPaths(ComponentRegistrar::SETUP),
                     $fileNamePattern,
                     []
                 )
@@ -581,6 +599,8 @@ class Files
     }
 
     /**
+     * Collect layout files
+     *
      * @param string $location
      * @param array $incomingParams
      * @param bool $asDataSet
@@ -602,7 +622,7 @@ class Files
                 $params[$key] = $incomingParams[$key];
             }
         }
-        $cacheKey = md5($location . '|' . implode('|', $params));
+        $cacheKey = hash('sha256', $location . '|' . implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
             $files = [];
@@ -703,6 +723,8 @@ class Files
     }
 
     /**
+     * Parse theme layout files
+     *
      * @param array $themeFiles
      * @param string $currentThemePath
      * @param ThemePackage $theme
@@ -753,7 +775,7 @@ class Files
                 $params[$key] = $incomingParams[$key];
             }
         }
-        $cacheKey = md5(implode('|', $params));
+        $cacheKey = hash('sha256', implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
             self::$_cache[__METHOD__][$cacheKey] = self::getFiles(
@@ -831,6 +853,8 @@ class Files
     }
 
     /**
+     * Returns list of all theme paths
+     *
      * @param string $area
      * @param string $module
      * @param string $subFolder
@@ -1119,6 +1143,37 @@ class Files
             return self::composeDataSets(self::$_cache[$key]);
         }
         return self::$_cache[$key];
+    }
+
+    /**
+     * Returns list of db_schema files, used by Magento application.
+     *
+     * @param string $fileNamePattern
+     * @param array $excludedFileNames
+     * @param bool $asDataSet
+     * @return array
+     * @codingStandardsIgnoreStart
+     */
+    public function getDbSchemaFiles(
+        $fileNamePattern = 'db_schema.xml',
+        $excludedFileNames = [],
+        $asDataSet = true
+    ) {
+        $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
+        if (!isset(self::$_cache[$cacheKey])) {
+            $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
+            $files = array_filter(
+                $files,
+                function ($file) use ($excludedFileNames) {
+                    return !in_array(basename($file), $excludedFileNames);
+                }
+            );
+            self::$_cache[$cacheKey] = $files;
+        }
+        if ($asDataSet) {
+            return self::composeDataSets(self::$_cache[$cacheKey]);
+        }
+        return self::$_cache[$cacheKey];
     }
 
     /**
@@ -1456,7 +1511,7 @@ class Files
     public function getModuleFile($namespace, $module, $file)
     {
         return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $namespace . '_' . $module) .
-        '/' . $file;
+            '/' . $file;
     }
 
     /**
@@ -1557,7 +1612,12 @@ class Files
             $result = array_merge($result, $files);
         }
         if (!empty($incorrectPatterns)) {
-            throw new \Exception("The following patterns didn't return any result:\n" . join("\n", $incorrectPatterns));
+            throw new LocalizedException(
+                __(
+                    "The following patterns didn't return any result:\n%1",
+                    join("\n", $incorrectPatterns)
+                )
+            );
         }
         return $result;
     }

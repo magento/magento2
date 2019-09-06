@@ -89,6 +89,9 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock));
     }
 
+    /**
+     * @return array
+     */
     public function changedDataProvider()
     {
         return [

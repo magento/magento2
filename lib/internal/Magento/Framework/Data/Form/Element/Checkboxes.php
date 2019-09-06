@@ -121,13 +121,13 @@ class Checkboxes extends AbstractElement
             return;
         }
         if (!is_array($checked)) {
-            $checked = [strval($checked)];
+            $checked = [(string)$checked];
         } else {
             foreach ($checked as $k => $v) {
-                $checked[$k] = strval($v);
+                $checked[$k] = (string)$v;
             }
         }
-        if (in_array(strval($value), $checked)) {
+        if (in_array((string)$value, $checked)) {
             return 'checked';
         }
         return;
@@ -141,13 +141,13 @@ class Checkboxes extends AbstractElement
     {
         if ($disabled = $this->getData('disabled')) {
             if (!is_array($disabled)) {
-                $disabled = [strval($disabled)];
+                $disabled = [(string)$disabled];
             } else {
                 foreach ($disabled as $k => $v) {
-                    $disabled[$k] = strval($v);
+                    $disabled[$k] = (string)$v;
                 }
             }
-            if (in_array(strval($value), $disabled)) {
+            if (in_array((string)$value, $disabled)) {
                 return 'disabled';
             }
         }
@@ -177,14 +177,6 @@ class Checkboxes extends AbstractElement
         }
         return;
     }
-
-    //    public function getName($value)
-    //    {
-    //        if ($name = $this->getData('name')) {
-    //            return str_replace('$value', $value, $name);
-    //        }
-    //        return ;
-    //    }
 
     /**
      * @param array $option

@@ -14,7 +14,6 @@
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationResourcesPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessActivationMessage" />
-            <data name="issue" xsi:type="string">MAGETWO-66745: Magento\Integration\Test\TestCase\ActivateIntegrationEntityTest with ActivateIntegrationEntityTestVariation1 fails randomly</data>
         </variation>
     </testCase>
 </config>

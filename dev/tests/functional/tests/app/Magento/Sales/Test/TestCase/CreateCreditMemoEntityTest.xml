@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest" summary="Create Credit Memo for Offline Payment Methods" ticketId="MAGETWO-29116">
         <variation name="CreateCreditMemoEntityTestVariation1" summary="Assert items return to stock (partial refund)">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="order/data/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="invoiceId" xsi:type="string">0</item>
@@ -37,6 +38,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoItems" />
         </variation>
         <variation name="CreateCreditMemoEntityTestVariation2" summary="Assert 0 shipping refund">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="order/data/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="invoiceId" xsi:type="string">0</item>
@@ -64,6 +66,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoItems" />
         </variation>
         <variation name="CreateCreditMemoEntityTestVariationWithCashOnDeliveryPaymentMethod" summary="Assert 0 shipping refund with Cash on delivery payment method">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="order/data/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="invoiceId" xsi:type="string">0</item>
@@ -87,6 +90,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundedGrandTotalOnFrontend" />
         </variation>
         <variation name="CreateCreditMemoEntityTestVariationWithPurchaseOrderPaymentMethod" summary="Assert 0 shipping refund with Purchase Order payment method">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="order/data/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="invoiceId" xsi:type="string">0</item>
@@ -104,6 +108,7 @@
             </data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/payment_auth_expiration/method" xsi:type="string">purchaseorder</data>
+            <data name="order/data/payment_auth_expiration/po_number" xsi:type="string">po_number</data>
             <data name="order/data/price/dataset" xsi:type="string">full_refund_with_zero_shipping_refund</data>
             <data name="configData" xsi:type="string">purchaseorder</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />

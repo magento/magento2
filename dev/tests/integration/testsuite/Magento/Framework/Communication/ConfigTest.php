@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * Get topic configuration by its name
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid XML in file 0:
+     * @expectedExceptionMessage The XML in file "0" is invalid:
     Element 'topic', attribute 'schema': [facet 'pattern'] The value '55\Customer\Api\CustomerRepositoryInterface::delete' is not accepted by the pattern '[a-zA-Z]+[a-zA-Z0-9\\]+::[a-zA-Z0-9]+'.
     Line: 9
 
@@ -50,6 +50,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     Element 'handler', attribute 'type': '55\Customer\Api\CustomerRepositoryInterface' is not a valid value of the atomic type 'serviceTypeType'.
     Line: 10
+    Verify the XML and try again.
      *
      */
     // @codingStandardsIgnoreEnd

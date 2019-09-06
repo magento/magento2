@@ -3,16 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
@@ -29,12 +38,15 @@ use Magento\Customer\Model\CustomerExtractor;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Customer\Controller\AbstractAccount;
 
 /**
+ * Post create customer action
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreatePost extends \Magento\Customer\Controller\AbstractAccount
+class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
@@ -127,6 +139,11 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     private $formKeyValidator;
 
     /**
+     * @var CustomerRepository
+     */
+    private $customerRepository;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -145,6 +162,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerExtractor $customerExtractor
      * @param DataObjectHelper $dataObjectHelper
      * @param AccountRedirect $accountRedirect
+     * @param CustomerRepository $customerRepository
      * @param Validator $formKeyValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -168,6 +186,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         CustomerExtractor $customerExtractor,
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
+        CustomerRepository $customerRepository,
         Validator $formKeyValidator = null
     ) {
         $this->session = $customerSession;
@@ -188,6 +207,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->dataObjectHelper = $dataObjectHelper;
         $this->accountRedirect = $accountRedirect;
         $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
+        $this->customerRepository = $customerRepository;
         parent::__construct($context);
     }
 
@@ -274,6 +294,31 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $url = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
+        $resultRedirect->setUrl($this->_redirect->error($url));
+
+        return new InvalidRequestException(
+            $resultRedirect,
+            [new Phrase('Invalid Form Key. Please refresh the page.')]
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return null;
+    }
+
+    /**
      * Create customer account action
      *
      * @return void
@@ -282,46 +327,42 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($this->session->isLoggedIn() || !$this->registration->isAllowed()) {
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
 
-        if (!$this->getRequest()->isPost() || !$this->formKeyValidator->validate($this->getRequest())) {
+        if (!$this->getRequest()->isPost()
+            || !$this->formKeyValidator->validate($this->getRequest())
+        ) {
             $url = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
-            $resultRedirect->setUrl($this->_redirect->error($url));
-            return $resultRedirect;
+            return $this->resultRedirectFactory->create()
+                ->setUrl($this->_redirect->error($url));
         }
-
         $this->session->regenerateId();
-
         try {
             $address = $this->extractAddress();
             $addresses = $address === null ? [] : [$address];
-
             $customer = $this->customerExtractor->extract('customer_account_create', $this->_request);
             $customer->setAddresses($addresses);
-
             $password = $this->getRequest()->getParam('password');
             $confirmation = $this->getRequest()->getParam('password_confirmation');
             $redirectUrl = $this->session->getBeforeAuthUrl();
-
             $this->checkPasswordConfirmation($password, $confirmation);
+
+            $extensionAttributes = $customer->getExtensionAttributes();
+            $extensionAttributes->setIsSubscribed($this->getRequest()->getParam('is_subscribed', false));
+            $customer->setExtensionAttributes($extensionAttributes);
 
             $customer = $this->accountManagement
                 ->createAccount($customer, $password, $redirectUrl);
-
-            if ($this->getRequest()->getParam('is_subscribed', false)) {
-                $this->subscriberFactory->create()->subscribeCustomerById($customer->getId());
-            }
 
             $this->_eventManager->dispatch(
                 'customer_register_success',
                 ['account_controller' => $this, 'customer' => $customer]
             );
-
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
             if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
                 $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
@@ -375,8 +416,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 
         $this->session->setCustomerFormData($this->getRequest()->getPostValue());
         $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
-        $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
-        return $resultRedirect;
+        return $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
     }
 
     /**

@@ -78,7 +78,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     private $backendUrlBuilder;
 
     /**
-     * @var \Magento\Email\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configVariables;
 
@@ -104,9 +104,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaper = $this->objectManager->getObject(\Magento\Framework\Escaper::class);
 
         $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
@@ -142,7 +140,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
         $this->emogrifier = $this->objectManager->getObject(\Pelago\Emogrifier::class);
 
-        $this->configVariables = $this->getMockBuilder(\Magento\Email\Model\Source\Variables::class)
+        $this->configVariables = $this->getMockBuilder(\Magento\Variable\Model\Source\Variables::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -158,23 +156,25 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     protected function getModel($mockedMethods = null)
     {
         return $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
-            ->setConstructorArgs([
-                $this->string,
-                $this->logger,
-                $this->escaper,
-                $this->assetRepo,
-                $this->scopeConfig,
-                $this->coreVariableFactory,
-                $this->storeManager,
-                $this->layout,
-                $this->layoutFactory,
-                $this->appState,
-                $this->backendUrlBuilder,
-                $this->emogrifier,
-                $this->configVariables,
-                [],
-                $this->cssInliner,
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->string,
+                    $this->logger,
+                    $this->escaper,
+                    $this->assetRepo,
+                    $this->scopeConfig,
+                    $this->coreVariableFactory,
+                    $this->storeManager,
+                    $this->layout,
+                    $this->layoutFactory,
+                    $this->appState,
+                    $this->backendUrlBuilder,
+                    $this->emogrifier,
+                    $this->configVariables,
+                    [],
+                    $this->cssInliner,
+                ]
+            )
             ->setMethods($mockedMethods)
             ->getMock();
     }

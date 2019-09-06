@@ -22,7 +22,7 @@ class AssertCartPriceRuleFreeShippingIsApplied extends AssertCartPriceRuleApplyi
     {
         $shippingPrice = $this->checkoutCart->getTotalsBlock()->getShippingPrice();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $shippingPrice,
             self::FREE_SHIPPING_PRICE,
             'Current shipping price: \'' . $shippingPrice

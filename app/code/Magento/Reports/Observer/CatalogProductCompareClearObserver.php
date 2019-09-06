@@ -18,12 +18,20 @@ class CatalogProductCompareClearObserver implements ObserverInterface
     protected $_productCompFactory;
 
     /**
+     * @var \Magento\Reports\Model\ReportStatus
+     */
+    private $reportStatus;
+
+    /**
      * @param \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory
+     * @param \Magento\Reports\Model\ReportStatus $reportStatus
      */
     public function __construct(
-        \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory
+        \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory,
+        \Magento\Reports\Model\ReportStatus $reportStatus
     ) {
         $this->_productCompFactory = $productCompFactory;
+        $this->reportStatus = $reportStatus;
     }
 
     /**
@@ -32,13 +40,15 @@ class CatalogProductCompareClearObserver implements ObserverInterface
      * Reset count of compared products cache
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $this->_productCompFactory->create()->calculate();
+        if (!$this->reportStatus->isReportEnabled(\Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW)) {
+            return;
+        }
 
-        return $this;
+        $this->_productCompFactory->create()->calculate();
     }
 }

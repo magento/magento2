@@ -6,6 +6,9 @@
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
+/**
+ * Class GroupTest
+ */
 class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -91,6 +94,9 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function isCollapseStateDataProvider()
     {
         return [

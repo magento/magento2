@@ -77,6 +77,10 @@ class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @param array $optionsData
+     * @return array
+     */
     protected function setupOptions(array $optionsData)
     {
         $options = [];
@@ -105,6 +109,10 @@ class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
         return $options;
     }
 
+    /**
+     * @param $optionsData
+     * @return array
+     */
     protected function setupSingleValueOptions($optionsData)
     {
         $options = [];
@@ -279,7 +287,7 @@ class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
     {
         $optionValueMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceType', 'getPrice', 'getId', '__wakeup'])
+            ->setMethods(['getPriceType', 'getPrice', 'getId', '__wakeup', 'getOption', 'getData'])
             ->getMock();
         $optionValueMock->expects($this->any())
             ->method('getPriceType')
@@ -288,6 +296,29 @@ class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getPrice')
             ->with($this->equalTo(true))
             ->will($this->returnValue($price));
+
+        $optionValueMock->expects($this->any())
+            ->method('getData')
+            ->with(\Magento\Catalog\Model\Product\Option\Value::KEY_PRICE)
+            ->willReturn($price);
+
+        $optionMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProduct'])
+            ->getMock();
+
+        $optionValueMock->expects($this->any())->method('getOption')->willReturn($optionMock);
+
+        $optionMock->expects($this->any())->method('getProduct')->willReturn($this->product);
+
+        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
+        $priceMock->method('getValue')->willReturn($price);
+
+        $this->priceInfo->method('getPrice')->willReturn($priceMock);
+
         return $optionValueMock;
     }
 

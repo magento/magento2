@@ -173,7 +173,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
         if (is_string($storeId)) {
-            $storeId = intval($storeId);
+            $storeId = (int) $storeId;
         }
 
         if ($storeId) {
@@ -602,9 +602,10 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param \Magento\Catalog\Model\Category $category
      * @param bool $recursive
      * @param bool $isActive
+     * @param bool $sortByPosition
      * @return array
      */
-    public function getChildren($category, $recursive = true, $isActive = true)
+    public function getChildren($category, $recursive = true, $isActive = true, $sortByPosition = false)
     {
         $select = $this->getConnection()->select()->from(
             $this->getMainStoreTable($category->getStoreId()),
@@ -618,6 +619,9 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         }
         if ($isActive) {
             $select->where('is_active = ?', '1');
+        }
+        if ($sortByPosition) {
+            $select->order('position ASC');
         }
         $_categories = $this->getConnection()->fetchAll($select);
         $categoriesIds = [];
@@ -695,8 +699,20 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             $this->getTable('catalog_category_product'),
             ['product_id', 'position']
         )->where(
-            'category_id = :category_id'
+            "{$this->getTable('catalog_category_product')}.category_id = ?",
+            $category->getId()
         );
+        $websiteId = $category->getStore()->getWebsiteId();
+        if ($websiteId) {
+            $select->join(
+                ['product_website' => $this->getTable('catalog_product_website')],
+                "product_website.product_id = {$this->getTable('catalog_category_product')}.product_id",
+                []
+            )->where(
+                'product_website.website_id = ?',
+                $websiteId
+            );
+        }
         $bind = ['category_id' => (int)$category->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);

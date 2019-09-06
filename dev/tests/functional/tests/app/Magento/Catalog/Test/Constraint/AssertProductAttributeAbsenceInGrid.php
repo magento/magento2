@@ -36,7 +36,7 @@ class AssertProductAttributeAbsenceInGrid extends AbstractConstraint
         ];
 
         $attributeIndex->open();
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $attributeIndex->getGrid()->isRowVisible($filter),
             'Attribute \'' . $attribute->getFrontendLabel() . '\' is present in Attribute grid.'
         );

@@ -5,7 +5,8 @@
  */
 namespace Magento\Braintree\Model\Report;
 
-use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
+use Magento\Braintree\Model\Report\Row\TransactionMap;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
@@ -26,7 +27,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @var string
      */
-    protected $_itemObjectClass = \Magento\Braintree\Model\Report\Row\TransactionMap::class;
+    protected $_itemObjectClass = TransactionMap::class;
 
     /**
      * @var array
@@ -39,9 +40,9 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     private $filterMapper;
 
     /**
-     * @var BraintreeAdapter
+     * @var BraintreeAdapterFactory
      */
-    private $braintreeAdapter;
+    private $braintreeAdapterFactory;
 
     /**
      * @var \Braintree\ResourceCollection | null
@@ -50,17 +51,17 @@ class TransactionsCollection extends Collection implements SearchResultInterface
 
     /**
      * @param EntityFactoryInterface $entityFactory
-     * @param BraintreeAdapter $braintreeAdapter
+     * @param BraintreeAdapterFactory $braintreeAdapterFactory
      * @param FilterMapper $filterMapper
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
-        BraintreeAdapter $braintreeAdapter,
+        BraintreeAdapterFactory $braintreeAdapterFactory,
         FilterMapper $filterMapper
     ) {
         parent::__construct($entityFactory);
         $this->filterMapper = $filterMapper;
-        $this->braintreeAdapter = $braintreeAdapter;
+        $this->braintreeAdapterFactory = $braintreeAdapterFactory;
     }
 
     /**
@@ -110,7 +111,8 @@ class TransactionsCollection extends Collection implements SearchResultInterface
         // Fetch all transaction IDs in order to filter
         if (empty($this->collection)) {
             $filters = $this->getFilters();
-            $this->collection = $this->braintreeAdapter->search($filters);
+            $this->collection = $this->braintreeAdapterFactory->create()
+                ->search($filters);
         }
 
         return $this->collection;

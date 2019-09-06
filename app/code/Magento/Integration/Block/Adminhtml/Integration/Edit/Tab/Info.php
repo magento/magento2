@@ -78,7 +78,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Returns status flag about this tab can be shown or not
      *
      * @return true
      */
@@ -146,6 +146,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Callback URL'),
                 'name' => self::DATA_ENDPOINT,
                 'disabled' => $disabled,
+                'class' => 'validate-url',
                 // @codingStandardsIgnoreStart
                 'note' => __(
                     'Enter URL where Oauth credentials can be sent when using Oauth for token exchange. We strongly recommend using https://.'

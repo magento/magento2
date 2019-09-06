@@ -7,8 +7,6 @@ namespace Magento\Framework\DB\Test\Unit;
 
 use \Magento\Framework\DB\Select;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
  * Class SelectTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -99,7 +97,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
      *
      * @param int $callCount
      * @param string|null $returnValue
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getConnectionMockWithMockedQuote($callCount, $returnValue = null)
     {

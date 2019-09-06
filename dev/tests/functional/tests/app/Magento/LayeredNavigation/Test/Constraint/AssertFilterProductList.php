@@ -53,7 +53,7 @@ class AssertFilterProductList extends AbstractConstraint
                 sort($productNames);
                 $pageProductNames = $catalogCategoryView->getListProductBlock()->getProductNames();
                 sort($pageProductNames);
-                \PHPUnit_Framework_Assert::assertEquals($productNames, $pageProductNames);
+                \PHPUnit\Framework\Assert::assertEquals($productNames, $pageProductNames);
             }
             $catalogCategoryView->getLayeredNavigationBlock()->clearAll();
         }

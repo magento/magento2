@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCustomRadioOptions">
+        <annotations>
+            <description>Adds a custom Radio Product Option with 3 Radio Options to a Product based on the provided Options.</description>
+        </annotations>
+        <!-- ActionGroup will add a single custom option to a product -->
+        <!-- You must already be on the product creation page -->
+        <arguments>
+            <argument name="customOptionName"/>
+            <argument name="productOption"/>
+            <argument name="productOption2"/>
+        </arguments>
+
+        <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
+        <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
+
+        <!-- Fill in the option and select the type of radio (once) -->
+        <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionName}}"/>
+        <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
+        <waitForPageLoad stepKey="waitForDropdownOpen"/>
+        <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Radio Buttons')}}"/>
+
+        <!-- Add three radio options based on the parameter -->
+        <click stepKey="clickAddValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+
+        <fillField stepKey="fillInValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption.title}}"/>
+        <fillField stepKey="fillInValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption.price}}"/>
+
+        <click stepKey="clickAddValue2" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+
+        <fillField stepKey="fillInValueTitle2" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{productOption2.title}}"/>
+        <fillField stepKey="fillInValuePrice2" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{productOption2.price}}"/>
+    </actionGroup>
+
+    <!--Add a custom option of type "file" to a product-->
+    <actionGroup name="AddProductCustomOptionFile">
+        <annotations>
+            <description>Add a custom File Product Option to a Product based on the provided File.</description>
+        </annotations>
+        <arguments>
+            <argument name="option" defaultValue="ProductOptionFile"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" stepKey="waitForOption"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{option.title}}" stepKey="fillTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="openTypeSelect"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionType('File')}}" stepKey="selectTypeFile"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPriceByTitle(option.title)}}" stepKey="waitForElements"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPriceByTitle(option.title)}}" userInput="{{option.price}}" stepKey="fillPrice"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceTypeByTitle(option.title)}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensionByTitle(option.title)}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
+    </actionGroup>
+
+    <actionGroup name="AddProductCustomOptionField">
+        <annotations>
+            <description>Add a custom Field Product Option to a Product based on the provided Option.</description>
+        </annotations>
+        <arguments>
+            <argument name="option" defaultValue="ProductOptionField"/>
+        </arguments>
+
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToAddButtonOption"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" stepKey="waitForOption"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{option.title}}" stepKey="fillTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="openTypeSelect"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionType('Field')}}" stepKey="selectTypeFile"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPriceByTitle(option.title)}}" stepKey="waitForElements"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPriceByTitle(option.title)}}" userInput="{{option.price}}" stepKey="fillPrice"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceTypeByTitle(option.title)}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionSkuByTitle(option.title)}}" userInput="{{option.title}}" stepKey="fillSku"/>
+    </actionGroup>
+
+    <actionGroup name="importProductCustomizableOptions">
+        <annotations>
+            <description>Import custom Product Options for the provided Product Name.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
+        <waitForElementVisible selector="{{AdminProductImportOptionsSection.selectProductTitle}}" stepKey="waitForTitleVisible"/>
+        <conditionalClick selector="{{AdminProductImportOptionsSection.resetFiltersButton}}" dependentSelector="{{AdminProductImportOptionsSection.resetFiltersButton}}" visible="true" stepKey="clickResetFilters"/>
+        <click selector="{{AdminProductImportOptionsSection.filterButton}}" stepKey="clickFilterButton"/>
+        <waitForElementVisible selector="{{AdminProductImportOptionsSection.nameField}}" stepKey="waitForNameField"/>
+        <fillField selector="{{AdminProductImportOptionsSection.nameField}}" userInput="{{productName}}" stepKey="fillProductName"/>
+        <click selector="{{AdminProductImportOptionsSection.applyFiltersButton}}" stepKey="clickApplyFilters"/>
+        <checkOption selector="{{AdminProductImportOptionsSection.firstRowItemCheckbox}}"  stepKey="checkProductCheckbox"/>
+        <click selector="{{AdminProductImportOptionsSection.importButton}}" stepKey="clickImport"/>
+    </actionGroup>
+
+    <actionGroup name="resetImportOptionFilter">
+        <annotations>
+            <description>Click on the Reset Filters button for the Import Options filters on the Product grid page.</description>
+        </annotations>
+
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
+        <click selector="{{AdminProductImportOptionsSection.resetFiltersButton}}" stepKey="clickResetFilterButton"/>
+    </actionGroup>
+
+    <actionGroup name="checkCustomizableOptionImport">
+        <annotations>
+            <description>Validate that the Custom Product Option Import value is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="option" defaultValue="ProductOptionField"/>
+            <argument name="optionIndex" type="string"/>
+        </arguments>
+
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionTitleInput(optionIndex)}}" stepKey="grabOptionTitle"/>
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionPrice(optionIndex)}}" stepKey="grabOptionPrice"/>
+        <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionSku(optionIndex)}}" stepKey="grabOptionSku"/>
+        <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionTitle" stepKey="assertOptionTitle"/>
+        <assertEquals expected="{{option.price}}" expectedType="string" actual="$grabOptionPrice" stepKey="assertOptionPrice"/>
+        <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionSku" stepKey="assertOptionSku"/>
+    </actionGroup>
+    <!-- Assumes we are on product edit page -->
+    <actionGroup name="AdminDeleteAllProductCustomOptions">
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="expandContentTab"/>
+        <waitForPageLoad time="10" stepKey="waitCustomizableOptionsTabOpened"/>
+        <executeInSelenium function="function($webdriver) use ($I) {
+        $buttons = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('[data-index=\'options\'] [data-index=\'delete_button\']'));
+        while(!empty($buttons)) {
+            $button = reset($buttons);
+            $I->executeJS('arguments[0].scrollIntoView(false)', [$button]);
+            $button->click();
+            $webdriver->wait()->until(\Facebook\WebDriver\WebDriverExpectedCondition::stalenessOf($button));
+            $buttons = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('[data-index=\'options\'] [data-index=\'delete_button\']'));
+        }
+        }" stepKey="deleteCustomOptions"/>
+        <dontSeeElement selector="{{AdminProductCustomizableOptionsSection.customOptionButtonDelete}}" stepKey="assertNoCustomOptions"/>
+    </actionGroup>
+    <!-- Assumes we are on product edit page -->
+    <actionGroup name="AdminAssertProductHasNoCustomOptions">
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="expandContentTab"/>
+        <waitForPageLoad time="10" stepKey="waitCustomizableOptionsTabOpened"/>
+        <dontSeeElement selector="{{AdminProductCustomizableOptionsSection.customOption}}" stepKey="assertNoCustomOptions"/>
+    </actionGroup>
+    <!-- Assumes we are on product edit page -->
+    <actionGroup name="AdminAssertProductHasNoCustomOption" extends="AdminAssertProductCustomOptionVisible">
+        <remove keyForRemoval="assertCustomOptionVisible"/>
+        <dontSeeElement selector="{{AdminProductCustomizableOptionsSection.fillOptionTitle(option.title)}}" after="waitCustomizableOptionsTabOpened" stepKey="assertNoCustomOption"/>
+    </actionGroup>
+    <!-- Assumes we are on product edit page -->
+    <actionGroup name="AdminAssertProductCustomOptionVisible">
+        <arguments>
+            <argument name="option" defaultValue="ProductOptionField"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="expandContentTab"/>
+        <waitForPageLoad time="10" stepKey="waitCustomizableOptionsTabOpened"/>
+        <seeElement selector="{{AdminProductCustomizableOptionsSection.fillOptionTitle(option.title)}}" stepKey="assertCustomOptionVisible"/>
+    </actionGroup>
+    <!-- Assumes we are on product edit page -->
+    <actionGroup name="AdminDeleteProductCustomOption" extends="AdminAssertProductCustomOptionVisible">
+        <remove keyForRemoval="assertCustomOptionVisible"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.deleteCustomOptions(option.title)}}" after="waitCustomizableOptionsTabOpened" stepKey="clickDeleteCustomOption"/>
+    </actionGroup>
+</actionGroups>

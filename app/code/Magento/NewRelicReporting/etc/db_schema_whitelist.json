@@ -1,0 +1,61 @@
+{
+    "reporting_counts": {
+        "column": {
+            "entity_id": true,
+            "type": true,
+            "count": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "reporting_module_status": {
+        "column": {
+            "entity_id": true,
+            "name": true,
+            "active": true,
+            "setup_version": true,
+            "state": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "reporting_orders": {
+        "column": {
+            "entity_id": true,
+            "customer_id": true,
+            "total": true,
+            "total_base": true,
+            "item_count": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "reporting_users": {
+        "column": {
+            "entity_id": true,
+            "type": true,
+            "action": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "reporting_system_updates": {
+        "column": {
+            "entity_id": true,
+            "type": true,
+            "action": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

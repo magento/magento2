@@ -44,7 +44,7 @@ class AssertTaxRuleForm extends AbstractConstraint
         $taxRuleNew->getTaxRuleForm()->openAdditionalSettings();
         $formData = $taxRuleNew->getTaxRuleForm()->getData($taxRule);
         $dataDiff = $this->verifyForm($formData, $data);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             empty($dataDiff),
             'Tax Rule form was filled not right.'
             . "\nLog:\n" . implode(";\n", $dataDiff)

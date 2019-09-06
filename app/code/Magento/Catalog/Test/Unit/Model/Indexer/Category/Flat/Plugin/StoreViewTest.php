@@ -88,7 +88,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeAndAfterSaveNoNeed()
     {
-        $this->mockConfigFlatEnabledNeever();
+        $this->mockConfigFlatEnabledNever();
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
             ['isObjectNew', 'dataHasChangedFor', '__wakeup']
@@ -114,7 +114,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(true));
     }
 
-    protected function mockConfigFlatEnabledNeever()
+    protected function mockConfigFlatEnabledNever()
     {
         $this->stateMock->expects($this->never())->method('isFlatEnabled');
     }

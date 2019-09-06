@@ -47,7 +47,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
                 'scopeOverriddenValue' => $scopeOverriddenValue
             ]
         );
-        $resource = $this->createPartialMock(\StdClass::class, ['getMainTable']);
+        $resource = $this->createPartialMock(\stdClass::class, ['getMainTable']);
         $resource->expects($this->any())->method('getMainTable')->will($this->returnValue('table'));
 
         $this->_model->expects($this->any())->method('_getResource')->will($this->returnValue($resource));

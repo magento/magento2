@@ -29,7 +29,7 @@ interface ProductAttributeOptionManagementInterface
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
-     * @return bool
+     * @return string
      */
     public function add($attributeCode, $option);
 

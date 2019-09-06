@@ -4,27 +4,48 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var \Magento\Multishipping\Block\Checkout\Success $block */
 ?>
-<div class="multicheckout success">
-    <h2 class="subtitle"><?= $block->escapeHtml(__('Thank you for your purchase!')) ?></h2>
-    <p><?= $block->escapeHtml(__('Thanks for your order. We\'ll email you order details and tracking information.')) ?></p>
-    <?php if ($_orderIds = $block->getOrderIds()): ?>
-    <p class="order-number">
-        <?php $flag = false ?>
-        <span>
-            <?php if (count($_orderIds) > 1): ?>
-                <?= $block->escapeHtml(__('Your order numbers are: ')) ?>
-            <?php else : ?>
-                <?= $block->escapeHtml(__('Your order number is: ')) ?>
-            <?php endif; ?>
-        </span>
-        <?php foreach ($_orderIds as $orderId => $incrementId): ?><?php if ($flag): ?><?= ', ' ?><?php endif; ?><?php $flag = true ?><a href="<?= /* @escapeNotVerified */ $block->getViewOrderUrl($orderId) ?>"><?= /* @escapeNotVerified */ $incrementId ?></a><?php endforeach; ?>
-    </p>
-    <?php endif; ?>
-    <?= $block->getChildHtml() ?>
-    <div class="actions">
-        <a class="action continue" title="<?= $block->escapeHtml(__('Continue Shopping')) ?>" href="<?= /* @escapeNotVerified */ $block->getContinueUrl() ?>"><span><?= $block->escapeHtml(__('Continue Shopping')) ?></span></a>
+<form action="<?= $block->escapeUrl($block->getContinueUrl()); ?>" method="post">
+    <div class="multicheckout success">
+        <p><?= $block->escapeHtml(__('For successfully order items, you\'ll receive a confirmation email including '.
+                'order numbers, tracking information and more details.')) ?></p>
+        <?php if ($orderIds = $block->getOrderIds()) : ?>
+            <h3><?= $block->escapeHtml(__('Successfully ordered'))?></h3>
+            <div class="orders-succeed">
+            <ul class="orders-list">
+            <?php foreach ($orderIds as $orderId => $incrementId) : ?>
+                <li class="shipping-list">
+                    <div class="order-id"><a href="<?= $block->escapeUrl($block->getViewOrderUrl($orderId)); ?>">
+                        <?= $block->escapeHtml($incrementId); ?></a>
+                    </div>
+                <?php $shippingAddress = $block->getCheckoutData()->getOrderShippingAddress($orderId); ?>
+                    <div class="shipping-item">
+                        <?php if ($shippingAddress) : ?>
+                        <span class="shipping-label"><?= $block->escapeHtml(__('Ship to:')); ?></span>
+                        <span class="shipping-address">
+                            <?= $block->escapeHtml(
+                                $block->getCheckoutData()->formatOrderShippingAddress($shippingAddress)
+                            ); ?>
+                        </span>
+                        <?php else : ?>
+                            <span class="shipping-address">
+                                <?= $block->escapeHtml(__('No shipping required.')); ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+            </div>
+        <?php endif; ?>
+        <?= $block->getChildHtml() ?>
+        <div class="actions-toolbar" id="review-buttons-container">
+            <div class="primary">
+                <button type="submit"
+                        class="action primary submit"><span><?= $block->escapeHtml(__('Continue Shopping')); ?></span>
+                </button>
+            </div>
+        </div>
     </div>
-</div>
+</form>

@@ -29,7 +29,7 @@ class AssertAttributeSetSuccessSaveMessage extends AbstractConstraint
     public function processAssert(CatalogProductSetIndex $productSetIndex)
     {
         $actualMessage = $productSetIndex->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'

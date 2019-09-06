@@ -290,10 +290,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMethodNotTransparentInterface()
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            __('We cannot retrieve the transparent payment method model object.')
-        );
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage((string)__('We cannot retrieve the transparent payment method model object.'));
 
         $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();

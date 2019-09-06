@@ -231,10 +231,10 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->_importedRows += count($values);
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw new \Magento\Framework\Exception\LocalizedException(__('Unable to import data'), $e);
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while importing table rates.')
@@ -320,7 +320,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function getCsvFile($filePath)
     {
-        $pathInfo = pathInfo($filePath);
+        $pathInfo = pathinfo($filePath);
         $dirName = isset($pathInfo['dirname']) ? $pathInfo['dirname'] : '';
         $fileName = isset($pathInfo['basename']) ? $pathInfo['basename'] : '';
 

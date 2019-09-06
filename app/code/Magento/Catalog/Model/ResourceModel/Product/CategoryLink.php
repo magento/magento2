@@ -83,15 +83,18 @@ class CategoryLink
         $insertUpdate = $this->processCategoryLinks($categoryLinks, $oldCategoryLinks);
         $deleteUpdate = $this->processCategoryLinks($oldCategoryLinks, $categoryLinks);
 
-        list($delete, $insert) = $this->analyseUpdatedLinks($deleteUpdate, $insertUpdate);
+        list($delete, $insert, $update) = $this->analyseUpdatedLinks($deleteUpdate, $insertUpdate);
 
         return array_merge(
-            $this->updateCategoryLinks($product, $insert),
-            $this->deleteCategoryLinks($product, $delete)
+            $this->deleteCategoryLinks($product, $delete),
+            $this->updateCategoryLinks($product, $insert, true),
+            $this->updateCategoryLinks($product, $update)
         );
     }
 
     /**
+     * Get category link metadata
+     *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
      */
     private function getCategoryLinkMetadata()
@@ -113,16 +116,22 @@ class CategoryLink
     private function processCategoryLinks($newCategoryPositions, &$oldCategoryPositions)
     {
         $result = ['changed' => [], 'updated' => []];
+
+        $oldCategoryPositions = array_values($oldCategoryPositions);
         foreach ($newCategoryPositions as $newCategoryPosition) {
-            $key = array_search(
-                $newCategoryPosition['category_id'],
-                array_column($oldCategoryPositions, 'category_id')
-            );
+            $key = false;
+
+            foreach ($oldCategoryPositions as $oldKey => $oldCategoryPosition) {
+                if ((int)$oldCategoryPosition['category_id'] === (int)$newCategoryPosition['category_id']) {
+                    $key = $oldKey;
+                    break;
+                }
+            }
 
             if ($key === false) {
                 $result['changed'][] = $newCategoryPosition;
             } elseif ($oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']) {
-                $result['updated'][] = $newCategoryPositions[$key];
+                $result['updated'][] = $newCategoryPosition;
                 unset($oldCategoryPositions[$key]);
             }
         }
@@ -131,17 +140,18 @@ class CategoryLink
     }
 
     /**
+     * Update category links
+     *
      * @param ProductInterface $product
      * @param array $insertLinks
+     * @param bool $insert
      * @return array
      */
-    private function updateCategoryLinks(ProductInterface $product, array $insertLinks)
+    private function updateCategoryLinks(ProductInterface $product, array $insertLinks, $insert = false)
     {
         if (empty($insertLinks)) {
             return [];
         }
-
-        $connection = $this->resourceConnection->getConnection();
 
         $data = [];
         foreach ($insertLinks as $categoryLink) {
@@ -153,17 +163,30 @@ class CategoryLink
         }
 
         if ($data) {
-            $connection->insertOnDuplicate(
-                $this->getCategoryLinkMetadata()->getEntityTable(),
-                $data,
-                ['position']
-            );
+            $connection = $this->resourceConnection->getConnection();
+            if ($insert) {
+                $connection->insertArray(
+                    $this->getCategoryLinkMetadata()->getEntityTable(),
+                    array_keys($data[0]),
+                    $data,
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
+                );
+            } else {
+                // for mass update category links with constraint by unique key use insert on duplicate statement
+                $connection->insertOnDuplicate(
+                    $this->getCategoryLinkMetadata()->getEntityTable(),
+                    $data,
+                    ['position']
+                );
+            }
         }
 
         return array_column($insertLinks, 'category_id');
     }
 
     /**
+     * Delete category links
+     *
      * @param ProductInterface $product
      * @param array $deleteLinks
      * @return array
@@ -215,7 +238,7 @@ class CategoryLink
     }
 
     /**
-     * Analyse category links for update or/and delete
+     * Analyse category links for update or/and delete. Return array of links for delete, insert and update
      *
      * @param array $deleteUpdate
      * @param array $insertUpdate
@@ -226,8 +249,7 @@ class CategoryLink
         $delete = $deleteUpdate['changed'] ?: [];
         $insert = $insertUpdate['changed'] ?: [];
         $insert = array_merge_recursive($insert, $deleteUpdate['updated']);
-        $insert = array_merge_recursive($insert, $insertUpdate['updated']);
 
-        return [$delete, $insert];
+        return [$delete, $insert, $insertUpdate['updated']];
     }
 }

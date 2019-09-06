@@ -40,12 +40,12 @@ class AssertSynonymGroupInGrid extends AbstractConstraint
         $this->prepareFilter($synonymGroup, $synonymFilter);
         $synonymGroupIndex->getSynonymGroupGrid()->search($this->filter);
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $synonymGroupIndex->getSynonymGroupGrid()->isRowVisible($this->filter, false, false),
             'Synonym Group is absent in Synonym grid'
         );
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             count($synonymGroupIndex->getSynonymGroupGrid()->getAllIds()),
             1,
             'There is more than one synonyms founded'

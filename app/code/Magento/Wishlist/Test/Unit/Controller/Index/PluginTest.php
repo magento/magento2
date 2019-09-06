@@ -29,6 +29,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $redirector;
 
     /**
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $messageManager;
+
+    /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
@@ -53,6 +58,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->authenticationState = $this->createMock(\Magento\Wishlist\Model\AuthenticationState::class);
         $this->config = $this->createMock(\Magento\Framework\App\Config::class);
         $this->redirector = $this->createMock(\Magento\Store\App\Response\Redirect::class);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
     }
 
@@ -63,17 +69,22 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             $this->authenticationState,
             $this->config,
             $this->redirector,
+            $this->messageManager,
             $this->request
         );
     }
 
+    /**
+     * @return \Magento\Wishlist\Controller\Index\Plugin
+     */
     protected function getPlugin()
     {
         return new \Magento\Wishlist\Controller\Index\Plugin(
             $this->customerSession,
             $this->authenticationState,
             $this->config,
-            $this->redirector
+            $this->redirector,
+            $this->messageManager
         );
     }
 

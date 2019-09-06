@@ -14,6 +14,9 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
  * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
  * @api
  * @since 100.0.3
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class IndexIterator implements \Iterator
 {

@@ -16,9 +16,9 @@ class InfoBackupsListCommandTest extends \PHPUnit\Framework\TestCase
         $table = $this->createMock(\Symfony\Component\Console\Helper\Table::class);
         $table->expects($this->once())->method('setHeaders')->with(['Backup Filename', 'Backup Type']);
         $table->expects($this->once())->method('addRow')->with(['backupFile_media.tgz', 'media']);
-        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
-        $helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
-        $helperSet->expects($this->once())->method('get')->with('table')->will($this->returnValue($table));
+        /** @var \Symfony\Component\Console\Helper\TableFactory|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        $tableFactoryMock = $this->createMock(\Symfony\Component\Console\Helper\TableFactory::class);
+        $tableFactoryMock->expects($this->once())->method('create')->will($this->returnValue($table));
         /** @var \Magento\Framework\App\Filesystem\DirectoryList
          * |\PHPUnit_Framework_MockObject_MockObject $directoryList
          */
@@ -29,8 +29,7 @@ class InfoBackupsListCommandTest extends \PHPUnit\Framework\TestCase
         $file->expects($this->once())
             ->method('readDirectoryRecursively')
             ->will($this->returnValue(['backupFile_media.tgz']));
-        $command = new InfoBackupsListCommand($directoryList, $file);
-        $command->setHelperSet($helperSet);
+        $command = new InfoBackupsListCommand($directoryList, $file, $tableFactoryMock);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
         $expected = 'Showing backup files in ';

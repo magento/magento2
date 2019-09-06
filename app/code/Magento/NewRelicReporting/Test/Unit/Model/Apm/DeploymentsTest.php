@@ -252,6 +252,9 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     private function getDataVariables()
     {
         $description = 'Event description';

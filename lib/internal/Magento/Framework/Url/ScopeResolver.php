@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Url;
 
 /**
@@ -40,7 +41,7 @@ class ScopeResolver implements \Magento\Framework\Url\ScopeResolverInterface
         $scope = $this->scopeResolver->getScope($scopeId);
         if (!$scope instanceof \Magento\Framework\Url\ScopeInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Invalid scope object')
+                new \Magento\Framework\Phrase('The scope object is invalid. Verify the scope object and try again.')
             );
         }
 

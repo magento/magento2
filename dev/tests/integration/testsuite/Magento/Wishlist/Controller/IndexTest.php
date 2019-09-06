@@ -122,11 +122,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_product_qty_increments.php
      */
     public function testAllcartAction()
     {
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey();
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setParam('form_key', $formKey);
         $this->dispatch('wishlist/index/allcart');
 
@@ -157,6 +159,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
 
         $this->getRequest()->setPostValue($request);
+        $this->getRequest()->setMethod('POST');
 
         $this->_objectManager->get(\Magento\Framework\Registry::class)->register(
             'wishlist',
@@ -169,9 +172,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
         );
 
-        $actualResult = \Zend_Mime_Decode::decodeQuotedPrintable(
-            $transportBuilder->getSentMessage()->getRawMessage()
-        );
+        $actualResult = quoted_printable_decode($transportBuilder->getSentMessage()->getRawMessage());
 
         $this->assertStringMatchesFormat(
             '%A' . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject())

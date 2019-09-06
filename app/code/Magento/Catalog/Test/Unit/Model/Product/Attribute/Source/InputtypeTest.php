@@ -27,26 +27,40 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
         $this->inputtypeModel = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product\Attribute\Source\Inputtype::class,
             [
-                'coreRegistry' => $this->registry
+                'coreRegistry' => $this->registry,
+                'optionsArray' => $this->getInputTypeSet()
             ]
         );
     }
 
     public function testToOptionArray()
     {
-        $inputTypesSet = [
-            ['value' => 'text', 'label' => 'Text Field'],
-            ['value' => 'textarea', 'label' => 'Text Area'],
-            ['value' => 'date', 'label' => 'Date'],
-            ['value' => 'boolean', 'label' => 'Yes/No'],
-            ['value' => 'multiselect', 'label' => 'Multiple Select'],
-            ['value' => 'select', 'label' => 'Dropdown'],
+
+        $extraValues = [
             ['value' => 'price', 'label' => 'Price'],
-            ['value' => 'media_image', 'label' => 'Media Image'],
+            ['value' => 'media_image', 'label' => 'Media Image']
         ];
+        $inputTypesSet = $this->getInputTypeSet();
+        $inputTypesSet = array_merge($inputTypesSet, $extraValues);
 
         $this->registry->expects($this->once())->method('registry');
         $this->registry->expects($this->once())->method('register');
         $this->assertEquals($inputTypesSet, $this->inputtypeModel->toOptionArray());
+    }
+
+    /**
+     * @return array
+     */
+    private function getInputTypeSet()
+    {
+        return [
+            ['value' => 'text', 'label' => 'Text Field'],
+            ['value' => 'textarea', 'label' => 'Text Area'],
+            ['value' => 'texteditor', 'label' => 'Text Editor'],
+            ['value' => 'date', 'label' => 'Date'],
+            ['value' => 'boolean', 'label' => 'Yes/No'],
+            ['value' => 'multiselect', 'label' => 'Multiple Select'],
+            ['value' => 'select', 'label' => 'Dropdown']
+        ];
     }
 }

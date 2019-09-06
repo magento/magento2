@@ -58,8 +58,8 @@ class ReportSystemCacheFlushToNewRelic implements ObserverInterface
             if ($user->getId()) {
                 $this->deploymentsFactory->create()->setDeployment(
                     'Cache Flush',
-                    $user->getUsername() . ' flushed the cache.',
-                    $user->getUsername()
+                    $user->getUserName() . ' flushed the cache.',
+                    $user->getUserName()
                 );
             }
         }

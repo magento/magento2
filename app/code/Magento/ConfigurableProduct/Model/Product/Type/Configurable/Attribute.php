@@ -1,7 +1,5 @@
 <?php
 /**
- * Catalog Configurable Product Attribute Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,15 +8,18 @@ namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * Catalog Configurable Product Attribute Model
+ *
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
  */
 class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\ConfigurableProduct\Api\Data\OptionInterface
 {
-    /**#@+
+    /**
      * Constants for field names
      */
     const KEY_ATTRIBUTE_ID = 'attribute_id';
@@ -27,9 +28,10 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_IS_USE_DEFAULT = 'is_use_default';
     const KEY_VALUES = 'values';
     const KEY_PRODUCT_ID = 'product_id';
-    /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var MetadataPool|\Magento\Framework\EntityManager\MetadataPool
+     */
     private $metadataPool;
 
     /**
@@ -85,7 +87,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLabel()
     {
@@ -114,8 +116,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Load configurable attribute by product and product's attribute
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute  $attribute
-     * @return void
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @throws LocalizedException
      */
     public function loadByProductAndAttribute($product, $attribute)
     {
@@ -143,7 +145,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
      * @codeCoverageIgnore
      */
     public function getAttributeId()
@@ -152,7 +155,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
      * @codeCoverageIgnore
      */
     public function getPosition()
@@ -161,7 +165,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
      * @codeCoverageIgnore
      */
     public function getIsUseDefault()
@@ -170,7 +175,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
      * @codeCoverageIgnore
      */
     public function getValues()
@@ -181,8 +187,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     //@codeCoverageIgnoreStart
 
     /**
-     * @param string $attributeId
-     * @return $this
+     * @inheritDoc
      */
     public function setAttributeId($attributeId)
     {
@@ -190,8 +195,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param string $label
-     * @return $this
+     * @inheritDoc
      */
     public function setLabel($label)
     {
@@ -199,8 +203,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param int $position
-     * @return $this
+     * @inheritDoc
      */
     public function setPosition($position)
     {
@@ -208,8 +211,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param bool $isUseDefault
-     * @return $this
+     * @inheritDoc
      */
     public function setIsUseDefault($isUseDefault)
     {
@@ -217,8 +219,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterface[] $values
-     * @return $this
+     * @inheritDoc
      */
     public function setValues(array $values = null)
     {
@@ -226,9 +227,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface|null
+     * @inheritDoc
      */
     public function getExtensionAttributes()
     {
@@ -236,10 +235,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
-     * @return $this
+     * @inheritDoc
      */
     public function setExtensionAttributes(
         \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
@@ -248,7 +244,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getProductId()
     {
@@ -256,7 +252,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setProductId($value)
     {

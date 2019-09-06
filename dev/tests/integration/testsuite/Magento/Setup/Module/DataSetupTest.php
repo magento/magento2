@@ -41,15 +41,6 @@ class DataSetupTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \Zend_Db_Statement_Exception
      */
-    public function testGetTableRow()
-    {
-        $this->assertNotEmpty($this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification'));
-        $this->_model->getTableRow('setup/module', 'module', 'Magento_AdminNotification');
-    }
-
-    /**
-     * @expectedException \Zend_Db_Statement_Exception
-     */
     public function testDeleteTableRow()
     {
         $this->_model->deleteTableRow('setup/module', 'module', 'integration_test_fixture_setup');

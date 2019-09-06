@@ -21,14 +21,14 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductComparePage" />
         </variation>
         <variation name="AddCompareProductsTestVariation3">
-            <data name="products" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
+            <data name="products" xsi:type="string">configurableProduct::configurable_as_low_as</data>
             <data name="isCustomerLoggedIn" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareItemsLink" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductComparePage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareBlockOnCmsPage" />
         </variation>
         <variation name="AddCompareProductsTestVariation4">
-            <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products,catalogProductVirtual::default,downloadableProduct::default,groupedProduct::grouped_product_with_price,configurableProduct::configurable_with_qty_1,bundleProduct::bundle_dynamic_product,bundleProduct::bundle_fixed_product</data>
+            <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products,catalogProductVirtual::default,downloadableProduct::default,groupedProduct::grouped_product_with_price,configurableProduct::configurable_as_low_as,bundleProduct::bundle_dynamic_product,bundleProduct::bundle_fixed_product</data>
             <data name="isCustomerLoggedIn" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareItemsLink" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductComparePage" />

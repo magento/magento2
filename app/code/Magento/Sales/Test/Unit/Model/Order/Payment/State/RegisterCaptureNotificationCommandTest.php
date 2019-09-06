@@ -32,26 +32,29 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @param bool $isTransactionPending
      * @param bool $isFraudDetected
+     * @param string|null $currentState
      * @param string $expectedState
      * @param string $expectedStatus
      * @param string $expectedMessage
-     *
+     * @return void
      * @dataProvider commandResultDataProvider
      */
     public function testExecute(
-        $isTransactionPending,
-        $isFraudDetected,
-        $expectedState,
-        $expectedStatus,
-        $expectedMessage
-    ) {
+        bool $isTransactionPending,
+        bool $isFraudDetected,
+        $currentState,
+        string $expectedState,
+        string $expectedStatus,
+        string $expectedMessage
+    ): void {
+        $order = $this->getOrder($currentState);
         $actualReturn = (new RegisterCaptureNotificationCommand($this->getStatusResolver()))->execute(
             $this->getPayment($isTransactionPending, $isFraudDetected),
             $this->amount,
-            $this->getOrder()
+            $order
         );
 
-        $this->assertOrderStateAndStatus($this->getOrder(), $expectedState, $expectedStatus);
+        $this->assertOrderStateAndStatus($order, $expectedState, $expectedStatus);
         self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
     }
 
@@ -64,30 +67,42 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
             [
                 false,
                 false,
+                Order::STATE_COMPLETE,
+                Order::STATE_COMPLETE,
+                $this->newOrderStatus,
+                'Registered notification about captured amount of %1.',
+            ],
+            [
+                false,
+                false,
+                null,
                 Order::STATE_PROCESSING,
                 $this->newOrderStatus,
-                'Registered notification about captured amount of %1.'
+                'Registered notification about captured amount of %1.',
             ],
             [
                 true,
                 false,
+                Order::STATE_PROCESSING,
                 Order::STATE_PAYMENT_REVIEW,
                 $this->newOrderStatus,
-                'An amount of %1 will be captured after being approved at the payment gateway.'
+                'An amount of %1 will be captured after being approved at the payment gateway.',
             ],
             [
                 false,
                 true,
+                Order::STATE_PROCESSING,
                 Order::STATE_PAYMENT_REVIEW,
                 Order::STATUS_FRAUD,
-                'Order is suspended as its capture amount %1 is suspected to be fraudulent.'
+                'Order is suspended as its capture amount %1 is suspected to be fraudulent.',
             ],
             [
                 true,
                 true,
+                Order::STATE_PROCESSING,
                 Order::STATE_PAYMENT_REVIEW,
                 Order::STATUS_FRAUD,
-                'Order is suspended as its capture amount %1 is suspected to be fraudulent.'
+                'Order is suspended as its capture amount %1 is suspected to be fraudulent.',
             ],
         ];
     }
@@ -107,15 +122,19 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string|null $state
      * @return Order|MockObject
      */
-    private function getOrder()
+    private function getOrder($state)
     {
+        /** @var Order|MockObject $order */
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getBaseCurrency', 'getOrderStatusByState'])
             ->getMock();
         $order->method('getBaseCurrency')
             ->willReturn($this->getCurrency());
+        $order->setState($state);
 
         return $order;
     }
@@ -159,7 +178,7 @@ class RegisterCaptureNotificationCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function assertOrderStateAndStatus($order, $expectedState, $expectedStatus)
     {
-        $order->method('setState')->with($expectedState);
-        $order->method('setStatus')->with($expectedStatus);
+        self::assertEquals($expectedState, $order->getState(), 'The order {state} should match.');
+        self::assertEquals($expectedStatus, $order->getStatus(), 'The order {status} should match.');
     }
 }

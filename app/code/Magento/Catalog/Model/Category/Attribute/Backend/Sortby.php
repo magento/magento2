@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 /**
@@ -58,7 +59,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('The value of attribute "%1" must be unique.', $label)
+                    __('The value of the "%1" attribute isn\'t unique. Set a unique value and try again.', $label)
                 );
             }
         }

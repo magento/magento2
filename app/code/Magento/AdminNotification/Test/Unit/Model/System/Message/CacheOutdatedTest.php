@@ -62,6 +62,9 @@ class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedSum, $this->_messageModel->getIdentity());
     }
 
+    /**
+     * @return array
+     */
     public function getIdentityDataProvider()
     {
         $cacheTypeMock1 = $this->createPartialMock(\stdClass::class, ['getCacheType']);
@@ -95,6 +98,9 @@ class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_messageModel->isDisplayed());
     }
 
+    /**
+     * @return array
+     */
     public function isDisplayedDataProvider()
     {
         $cacheTypesMock = $this->createPartialMock(\stdClass::class, ['getCacheType']);

@@ -24,7 +24,7 @@ class AssertCartSectionIsEmptyOnBackendOrderPage extends AbstractConstraint
     {
         $orderCreateIndex->open();
         $backendOrderSidebarBlock = $orderCreateIndex->getBackendOrderSidebarBlock()->noItemsInCartCheck();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $backendOrderSidebarBlock,
             "Customer's Shopping Cart section on Order Create backend page is not empty."
         );

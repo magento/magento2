@@ -5,13 +5,14 @@
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Container;
-use Magento\Ui\Component\Form;
-use Magento\Ui\Component\DynamicRows;
-use Magento\Ui\Component\Modal;
-use Magento\Framework\UrlInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Container;
+use Magento\Ui\Component\DynamicRows;
+use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Modal;
 
 /**
  * Data provider for Configurable panel
@@ -89,7 +90,7 @@ class ConfigurablePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -97,7 +98,7 @@ class ConfigurablePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
@@ -196,7 +197,7 @@ class ConfigurablePanel extends AbstractModifier
                                         'autoRender' => false,
                                         'componentType' => 'insertListing',
                                         'component' => 'Magento_ConfigurableProduct/js'
-                                            .'/components/associated-product-insert-listing',
+                                            . '/components/associated-product-insert-listing',
                                         'dataScope' => $this->associatedListingPrefix
                                             . static::ASSOCIATED_PRODUCT_LISTING,
                                         'externalProvider' => $this->associatedListingPrefix
@@ -327,14 +328,12 @@ class ConfigurablePanel extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' =>
-                                            $this->dataScopeName . '.configurableModal',
+                                        'targetName' => $this->dataScopeName . '.configurableModal',
                                         'actionName' => 'trigger',
                                         'params' => ['active', true],
                                     ],
                                     [
-                                        'targetName' =>
-                                            $this->dataScopeName . '.configurableModal',
+                                        'targetName' => $this->dataScopeName . '.configurableModal',
                                         'actionName' => 'openModal',
                                     ],
                                 ],
@@ -466,7 +465,19 @@ class ConfigurablePanel extends AbstractModifier
                         [],
                         ['dataScope' => 'product_link']
                     ),
-                    'sku_container' => $this->getColumn('sku', __('SKU')),
+                    'sku_container' => $this->getColumn(
+                        'sku',
+                        __('SKU'),
+                        [
+                            'validation' => [
+                                    'required-entry' => true,
+                                    'max_text_length' => Sku::SKU_MAX_LENGTH,
+                                ],
+                        ],
+                        [
+                            'elementTmpl' => 'Magento_ConfigurableProduct/components/cell-sku',
+                        ]
+                    ),
                     'price_container' => $this->getColumn(
                         'price',
                         __('Price'),
@@ -563,6 +574,7 @@ class ConfigurablePanel extends AbstractModifier
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => $name,
             'visibleIfCanEdit' => false,
+            'labelVisible' => false,
             'imports' => [
                 'visible' => '!${$.provider}:${$.parentScope}.canEdit'
             ],
@@ -581,6 +593,7 @@ class ConfigurablePanel extends AbstractModifier
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => $label,
             'dataScope' => '',
+            'showLabel' => false
         ];
         $container['children'] = [
             $name . '_edit' => $fieldEdit,

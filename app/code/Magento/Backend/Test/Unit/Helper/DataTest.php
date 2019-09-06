@@ -60,6 +60,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     public function getPrepareFilterStringValuesDataProvider()
     {
         return [

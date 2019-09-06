@@ -8,7 +8,7 @@
  */
 define([
     'jquery',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/cookies'
 ], function ($) {
     'use strict';
@@ -29,7 +29,7 @@ define([
                 });
 
                 if ($.mage.cookies.get(this.options.cookieName)) {
-                    window.location.reload();
+                    this.element.hide();
                 } else {
                     window.location.href = this.options.noCookiesUrl;
                 }

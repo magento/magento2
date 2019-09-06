@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/constraints/constraint.xsd" />
+    
+    <xs:complexType name="primary">
+        <xs:annotation>
+            <xs:documentation>
+                With help of this element, foreign key constraint can be described.
+                This constraint allows to have reference
+                For this you need 4 settings, described below.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="column" type="constraintColumnType" maxOccurs="unbounded" minOccurs="0" />
+        </xs:sequence>
+
+        <xs:attributeGroup ref="baseConstraint" />
+    </xs:complexType>
+
+    <xs:complexType name="constraintColumnType">
+        <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+</xs:schema>

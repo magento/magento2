@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Test\Unit\Scope;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -76,7 +77,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Enter a scope before proceeding.
+     * @expectedExceptionMessage A scope is missing. Enter a scope and try again.
      */
     public function testEmptyScope()
     {
@@ -85,7 +86,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Enter a scope code before proceeding.
+     * @expectedExceptionMessage A scope code is missing. Enter a code and try again.
      */
     public function testEmptyScopeCode()
     {
@@ -103,7 +104,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "not_default_scope" value doesn't exist. Enter another value.
+     * @expectedExceptionMessage The "not_default_scope" value doesn't exist. Enter another value and try again.
      */
     public function testScopeNotExist()
     {
@@ -118,7 +119,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "not_exist_scope_code" value doesn't exist. Enter another value.
+     * @expectedExceptionMessage The "not_exist_scope_code" value doesn't exist. Enter another value and try again.
      */
     public function testScopeCodeNotExist()
     {

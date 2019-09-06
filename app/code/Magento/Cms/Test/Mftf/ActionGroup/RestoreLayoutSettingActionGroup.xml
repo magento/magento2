@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="RestoreLayoutSetting">
+        <annotations>
+            <description>Sets the 'Default Page Layout' to '1 column'. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="waittForDefaultCMSLayout" after="expandDefaultLayouts"/>
+        <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="selectOneColumn" before="clickSaveConfig"/>
+    </actionGroup>
+</actionGroups>

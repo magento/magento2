@@ -6,7 +6,7 @@
 namespace Magento\Swatches\Observer;
 
 use Magento\Config\Model\Config\Source;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -21,21 +21,23 @@ class AddFieldsToAttributeObserver implements ObserverInterface
     protected $yesNo;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
     /**
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      * @param Source\Yesno $yesNo
      */
-    public function __construct(Manager $moduleManager, Source\Yesno $yesNo)
+    public function __construct(ModuleManagerInterface $moduleManager, Source\Yesno $yesNo)
     {
         $this->moduleManager = $moduleManager;
         $this->yesNo = $yesNo;
     }
 
     /**
+     * Execute.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */

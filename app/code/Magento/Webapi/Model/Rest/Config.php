@@ -6,7 +6,7 @@
 namespace Magento\Webapi\Model\Rest;
 
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Model\Config as ModelConfig;
+use Magento\Webapi\Model\ConfigInterface as ModelConfigInterface;
 use Magento\Webapi\Model\Config\Converter;
 
 /**
@@ -21,6 +21,7 @@ class Config
     const HTTP_METHOD_DELETE = 'DELETE';
     const HTTP_METHOD_PUT = 'PUT';
     const HTTP_METHOD_POST = 'POST';
+    const HTTP_METHOD_PATCH = 'PATCH';
     /**#@-*/
 
     /**#@+
@@ -43,11 +44,13 @@ class Config
     protected $_routeFactory;
 
     /**
-     * @param ModelConfig $config
+     * @param ModelConfigInterface $config
      * @param \Magento\Framework\Controller\Router\Route\Factory $routeFactory
      */
-    public function __construct(ModelConfig $config, \Magento\Framework\Controller\Router\Route\Factory $routeFactory)
-    {
+    public function __construct(
+        ModelConfigInterface $config,
+        \Magento\Framework\Controller\Router\Route\Factory $routeFactory
+    ) {
         $this->_config = $config;
         $this->_routeFactory = $routeFactory;
     }
@@ -125,7 +128,7 @@ class Config
         ksort($servicesRoutes, SORT_STRING);
         foreach ($servicesRoutes as $url => $httpMethods) {
             // skip if baseurl is not null and does not match
-            if (!$serviceBaseUrl || strpos(trim($url, '/'), trim($serviceBaseUrl, '/')) !== 0) {
+            if (!$serviceBaseUrl || strpos(trim($url, '/'), (string) trim($serviceBaseUrl, '/')) !== 0) {
                 // base url does not match, just skip this service
                 continue;
             }

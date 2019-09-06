@@ -68,8 +68,10 @@
 }
 
 //  Remove address and phone number link color on iOS
-.address-details a {
-    &:extend(.no-link a);
+.email-non-inline() {
+    .address-details a {
+        &:extend(.no-link a);
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
@@ -203,7 +205,8 @@
         text-align: center;
     }
 
-    .item-price {
+    .item-price,
+    .item-subtotal {
         text-align: right;
     }
 

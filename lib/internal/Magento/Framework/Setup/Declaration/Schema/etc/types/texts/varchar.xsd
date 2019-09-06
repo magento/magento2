@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/column.xsd"/>
+
+    <xs:complexType name="varchar">
+        <xs:complexContent>
+            <xs:extension base="abstractColumnType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Varchar is the small text field. It do not have max length. But we suppose, that this field can be used for
+                        string columns that are in role of some key, like customer email or product sku. We add limitation for 1024 characters
+                        on this type. This limitation is justified by SQL engine limitations, like {max sort size} or {max index size}.
+                        For example, in MySQL, default max sort size (max_sort_length) is 1024 symbols.
+                    </xs:documentation>
+                </xs:annotation>
+
+                <xs:attribute name="length">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:integer">
+                            <xs:maxInclusive value="1024"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="default" type="xs:string" />
+                <xs:attribute name="nullable" type="xs:boolean" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>
