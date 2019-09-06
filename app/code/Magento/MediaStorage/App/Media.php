@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\MediaStorage\App;
 
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
@@ -19,6 +20,7 @@ use Magento\Framework\App\Area;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Service\ImageResize;
 use Magento\Catalog\Model\Product\Media\Config as ProductMediaConfig;
+use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Media storage
@@ -79,8 +81,8 @@ class Media implements AppInterface
      * @param string                 $relativeFileName
      * @param Filesystem             $filesystem
      * @param PlaceholderFactory     $placeholderFactory
-     * @param State                  $state
      * @param ImageResize            $imageResize
+     * @param ProductMediaConfig     $productMediaConfig
      */
     public function __construct(
         \Magento\MediaStorage\Model\File\Storage\Config $config,
@@ -89,7 +91,6 @@ class Media implements AppInterface
         $relativeFileName,
         Filesystem $filesystem,
         PlaceholderFactory $placeholderFactory,
-        State $state,
         ImageResize $imageResize,
         ProductMediaConfig $productMediaConfig
     ) {
@@ -99,7 +100,6 @@ class Media implements AppInterface
         $this->relativeFileName = $relativeFileName;
         $this->syncFactory = $syncFactory;
         $this->placeholderFactory = $placeholderFactory;
-        $this->appState = $state;
         $this->imageResize = $imageResize;
         $this->productMediaConfig = $productMediaConfig;
     }
@@ -112,21 +112,19 @@ class Media implements AppInterface
      */
     public function launch()
     {
-        $this->appState->setAreaCode(Area::AREA_GLOBAL);
-
         if (!$this->isAllowedResource($this->relativeFileName)) {
             throw new \LogicException('The specified path is not allowed.');
         }
 
         try {
             /**
- * @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync 
-*/
+             * @var \Magento\MediaStorage\Model\File\Storage\Synchronization $sync
+             */
             $directory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-            $sync = $this->syncFactory->create(['directory' =>  $directory]);
+            $sync = $this->syncFactory->create(['directory' => $directory]);
             $sync->synchronize($this->relativeFileName);
 
-            if(stripos($this->relativeFileName, $this->productMediaConfig->getBaseMediaPathAddition()) === 0) {
+            if (stripos($this->relativeFileName, $this->productMediaConfig->getBaseMediaPathAddition()) === 0) {
                 $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
             }
             if ($directory->isReadable($this->relativeFileName)) {
@@ -144,10 +142,10 @@ class Media implements AppInterface
     /***
      * Validate resource allowed / filename relative to media dir
      *
-     * @param  $resource
+     * @param  string $resource
      * @return bool
      */
-    private function isAllowedResource( $resource )
+    private function isAllowedResource($resource)
     {
         $allowedResources = $this->config->getAllowedResources();
         foreach ($allowedResources as $allowedResource) {
@@ -158,6 +156,9 @@ class Media implements AppInterface
         return false;
     }
 
+    /***
+     * set placeholderimage as response
+     */
     private function setPlaceholderImage()
     {
         $placeholder = $this->placeholderFactory->create(['type' => 'image']);
@@ -176,7 +177,7 @@ class Media implements AppInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
     {

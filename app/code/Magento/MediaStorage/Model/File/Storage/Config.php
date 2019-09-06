@@ -61,8 +61,8 @@ class Config
 
 
     /**
-     * @param \Magento\MediaStorage\Model\File\Storage $storage
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\MediaStorage\Model\File\Storage            $storage
+     * @param \Magento\Framework\Filesystem                       $filesystem
      * @param \Magento\MediaStorage\Model\Cache\Type\MediaStorage
      */
     public function __construct(

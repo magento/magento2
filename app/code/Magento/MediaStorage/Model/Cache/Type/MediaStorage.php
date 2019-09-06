@@ -5,11 +5,11 @@
  */
 namespace Magento\MediaStorage\Model\Cache\Type;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /****
  * Class MediaStorage
+ *
  * @package Magento\MediaStorage\Model\Cache\Type
  */
 class MediaStorage extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
@@ -32,7 +32,6 @@ class MediaStorage extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     /**
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
      * @param StoreManagerInterface                          $storeManager
-     * @param UserContextInterface                           $userContext
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool,
