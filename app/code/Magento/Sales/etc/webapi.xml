@@ -13,6 +13,15 @@
             <resource ref="Magento_Sales::actions_view" />
         </resources>
     </route>
+    <route url="/V1/orders/mine" method="GET">
+        <service class="Magento\Sales\Api\GetCustomerOrdersHistoryInterface" method="execute"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
     <route url="/V1/orders" method="GET">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="getList"/>
         <resources>
