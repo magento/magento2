@@ -14,7 +14,6 @@ namespace Magento\Widget\Model\Config;
 /**
  * Widget Converter Model
  *
- * @since 100.0.2
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -64,7 +63,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @return array
      * @throws \LogicException
      */
-    protected function processWidgetSubNode($widgetSubNode, $widgetArray)
+    private function processWidgetSubNode(\DOMNode $widgetSubNode, array $widgetArray)
     {
         switch ($widgetSubNode->nodeName) {
             case 'label':
@@ -102,7 +101,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $widgetArray
      * @return array
      */
-    protected function processParameters($widgetSubNode, $widgetArray)
+    private function processParameters(\DOMNode $widgetSubNode, array $widgetArray)
     {
         /** @var $parameter \DOMNode */
         foreach ($widgetSubNode->childNodes as $parameter) {
@@ -124,7 +123,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $widgetArray
      * @return array
      */
-    protected function processContainers($widgetSubNode, $widgetArray)
+    private function processContainers(\DOMNode $widgetSubNode, array $widgetArray)
     {
         if (!isset($widgetArray['supported_containers'])) {
             $widgetArray['supported_containers'] = [];
