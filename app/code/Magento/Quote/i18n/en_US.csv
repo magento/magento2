@@ -37,6 +37,7 @@ Subtotal,Subtotal
 "Invalid customer id %1","Invalid customer id %1"
 "Invalid address id %1","Invalid address id %1"
 "Invalid customer address id %1","Invalid customer address id %1"
+"Customer record does not exist for quote id %1","Customer record does not exist for quote id %1"
 "Cannot create quote","Cannot create quote"
 "Cannot assign customer to the given cart. The cart belongs to different store.","Cannot assign customer to the given cart. The cart belongs to different store."
 "Cannot assign customer to the given cart. The cart is not anonymous.","Cannot assign customer to the given cart. The cart is not anonymous."
