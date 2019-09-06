@@ -13,7 +13,6 @@ namespace Magento\Widget\Model\Config;
 
 /**
  * Widget Converter Model
- *
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
