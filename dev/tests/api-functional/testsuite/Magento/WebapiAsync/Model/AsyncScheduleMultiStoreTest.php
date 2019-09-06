@@ -243,7 +243,6 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
             foreach ($this->skus as $sku) {
                 $this->productRepository->deleteById($sku);
             }
-        // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             throw $e;
             //nothing to delete
