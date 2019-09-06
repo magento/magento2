@@ -69,6 +69,21 @@ class GetSpecifiedShippingAddressTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     */
+    public function testShippingAddressOnCreatedEmptyCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $response = $this->graphQlQuery($query);
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('shipping_addresses', $response['cart']);
+
+        self::assertCount(0, $response['cart']['shipping_addresses']);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
