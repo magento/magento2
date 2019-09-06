@@ -1,0 +1,12 @@
+<script>
+    require(
+        ['jquery'],
+        function ($) {
+            $(document).on('save', 'form#edit_form', function () {
+                if ($(this).valid()) {
+                    $('body').trigger('processStart');
+                }
+            });
+        }
+    )
+</script>
