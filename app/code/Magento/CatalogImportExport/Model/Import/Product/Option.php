@@ -1458,6 +1458,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ) {
                 if ($this->_isPriceGlobal) {
                     $prices[$nextOptionId][Store::DEFAULT_STORE_ID] = $priceData;
+                } else {
+                    $prices[$nextOptionId][$this->_rowStoreId] = $priceData;
                 }
             }
 
