@@ -18,4 +18,15 @@ $viewModel = $block->getData('dictionary_view_model');
             }
         });
     </script>
+<?php else: ?>
+<!--work-around for embedded translation strategy-->
+    <script>
+        require.config({
+            map: {
+                '*': {
+                    'dictionary': 'https://mage21.test/static/frontend/Magento/luma/en_US/js-translation.json'
+                }
+            }
+        });
+    </script>
 <?php endif; ?>

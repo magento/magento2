@@ -6,8 +6,8 @@
 
 namespace Magento\Translation\ViewModel;
 
+use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Magento\Translation\Model\FileManager;
 use Magento\Translation\Model\Js\Config as JsConfig;
 
 /**
@@ -16,24 +16,24 @@ use Magento\Translation\Model\Js\Config as JsConfig;
 class Dictionary implements ArgumentInterface
 {
     /**
-     * @var FileManager
-     */
-    private $fileManager;
-
-    /**
      * @var JsConfig
      */
     private $config;
 
     /**
-     * @param FileManager $fileManager
+     * @var AssetRepository
+     */
+    private $assetRepo;
+
+    /**
+     * @param AssetRepository $assetRepo
      * @param JsConfig $config
      */
     public function __construct(
-        FileManager $fileManager,
+        AssetRepository $assetRepo,
         JsConfig $config
     ) {
-        $this->fileManager = $fileManager;
+        $this->assetRepo = $assetRepo;
         $this->config = $config;
     }
 
@@ -44,13 +44,11 @@ class Dictionary implements ArgumentInterface
      */
     public function getTranslationDictionaryFile(): string
     {
-        $translateDictionaryConfig = $this->fileManager->createTranslateDictionaryConfigAsset(JsConfig::DICTIONARY_FILE_NAME);
-
-        return $translateDictionaryConfig->getUrl();
+        return $this->assetRepo->getUrl(JsConfig::DICTIONARY_FILE_NAME);
     }
 
     /**
-     * Is js translation set to dictionary mode
+     * Is js translation set to dictionary mode.
      *
      * @return bool
      */
