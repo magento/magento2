@@ -34,51 +34,39 @@ class SelectedShippingMethod implements ResolverInterface
         $carrierTitle = '';
         $methodTitle = '';
 
-        if (count($rates) > 0 && !empty($address->getShippingMethod())) {
-            list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
-
-            /** @var Rate $rate */
-            foreach ($rates as $rate) {
-                if ($rate->getCode() == $address->getShippingMethod()) {
-                    $carrierTitle = $rate->getCarrierTitle();
-                    $methodTitle = $rate->getMethodTitle();
-                    break;
-                }
-            }
-
-            /** @var Currency $currency */
-            $currency = $context->getExtensionAttributes()->getStore()->getBaseCurrency();
-
-            $data = [
-                'carrier_code' => $carrierCode,
-                'method_code' => $methodCode,
-                'carrier_title' => $carrierTitle,
-                'method_title' => $methodTitle,
-                'amount' => [
-                    'value' => $address->getShippingAmount(),
-                    'currency' => $address->getQuote()->getQuoteCurrencyCode(),
-                ],
-                'base_amount' => [
-                    'value' => $address->getBaseShippingAmount(),
-                    'currency' => $currency->getCode(),
-                ],
-            ];
-        } else {
-            $data = [
-                'carrier_code' => '',
-                'method_code' => '',
-                'carrier_title' => $carrierTitle,
-                'method_title' => $methodTitle,
-                'amount' => [
-                    'value' => null,
-                    'currency' => null,
-                ],
-                'base_amount' => [
-                    'value' => null,
-                    'currency' => null,
-                ],
-            ];
+        if (!count($rates) || empty($address->getShippingMethod())) {
+            return null;
         }
+
+        list($carrierCode, $methodCode) = explode('_', $address->getShippingMethod(), 2);
+
+        /** @var Rate $rate */
+        foreach ($rates as $rate) {
+            if ($rate->getCode() == $address->getShippingMethod()) {
+                $carrierTitle = $rate->getCarrierTitle();
+                $methodTitle = $rate->getMethodTitle();
+                break;
+            }
+        }
+
+        /** @var Currency $currency */
+        $currency = $context->getExtensionAttributes()->getStore()->getBaseCurrency();
+
+        $data = [
+            'carrier_code' => $carrierCode,
+            'method_code' => $methodCode,
+            'carrier_title' => $carrierTitle,
+            'method_title' => $methodTitle,
+            'amount' => [
+                'value' => $address->getShippingAmount(),
+                'currency' => $address->getQuote()->getQuoteCurrencyCode(),
+            ],
+            'base_amount' => [
+                'value' => $address->getBaseShippingAmount(),
+                'currency' => $currency->getCode(),
+            ],
+        ];
+
         return $data;
     }
 }
