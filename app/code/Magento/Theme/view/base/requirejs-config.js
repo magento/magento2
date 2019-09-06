@@ -29,7 +29,8 @@ var config = {
         },
         'matchMedia': {
             'exports': 'mediaCheck'
-        }
+        },
+        'magnifier/magnifier': ['jquery']
     },
     'paths': {
         'jquery/validate': 'jquery/jquery.validate',
