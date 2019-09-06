@@ -81,7 +81,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (!$this->_storeManager->isSingleStoreMode()) {
             $fieldset = $form->addFieldset(
                 'store_labels_fieldset',
-                ['legend' => __('Store View Specific Labels'), 'class' => 'store-scope']
+                ['legend' => __('Store View Specific Labels'), 'class' => 'store-scope no-margin-top-tooltip']
             );
         } else {
             $fieldset = $form->addFieldset(
