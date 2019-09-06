@@ -11,6 +11,7 @@
             <data name="integration/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessDeleteMessage" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNotInGrid" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>
 </config>
