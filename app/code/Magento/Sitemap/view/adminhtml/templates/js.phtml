@@ -1,12 +1,7 @@
-<script>
-    require(
-        ['jquery'],
-        function ($) {
-            $(document).on('save', 'form#edit_form', function () {
-                if ($(this).valid()) {
-                    $('body').trigger('processStart');
-                }
-            });
+<script type="text/x-magento-init">
+    {
+        "#edit_form": {
+            "Magento_Sitemap/js/form-submit-loader" : {}
         }
-    )
+    }
 </script>
