@@ -10,7 +10,7 @@
     <test name="StorefrontCartTotalValueWithFullDiscountUsingCartRuleTest">
         <annotations>
             <features value="Quote"/>
-            <stories value="Cart total value with full discount"/>
+            <stories value="Cart total with full discount"/>
             <title value="Cart Total value when 100% discount applied through Cart Rule"/>
             <description value="Cart Total value when 100% discount applied through Cart Rule"/>
             <severity value="CRITICAL"/>
@@ -30,12 +30,8 @@
             <magentoCLI command="config:set tax/calculation/shipping_includes_tax 1"  stepKey="setSippingPrice"/>
             <magentoCLI command="config:set tax/calculation/cross_border_trade_enabled 0"  stepKey="setCrossBorderTrade"/>
             <magentoCLI command="config:set tax/calculation/discount_tax 1"  stepKey="setDiscount"/>
-            <magentoCLI command="config:set tax/cart_display/gift_wrapping 1"  stepKey="setGiftWrapping"/>
-            <magentoCLI command="config:set tax/cart_display/printed_card 1"  stepKey="setPrintedCart"/>
             <magentoCLI command="config:set tax/cart_display/price 2"  stepKey="setPrice"/>
             <magentoCLI command="config:set tax/cart_display/subtotal 2"  stepKey="setSubtotal"/>
-            <magentoCLI command="config:set tax/sales_display/gift_wrapping 1"  stepKey="setSalesGiftWrapping"/>
-            <magentoCLI command="config:set tax/sales_display/printed_card 1"  stepKey="setSalesPrintedCart"/>
             <magentoCLI command="config:set carriers/freeshipping/active 1"  stepKey="setFreeShipping"/>
             <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
@@ -67,6 +63,8 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProductThird">
                 <field key="price">5.50</field>
             </createData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Removed created Data -->
@@ -100,12 +98,8 @@
             <magentoCLI command="config:set tax/calculation/shipping_includes_tax 0"  stepKey="unsetSippingPrice"/>
             <magentoCLI command="config:set tax/calculation/cross_border_trade_enabled 1"  stepKey="unsetCrossBorderTrade"/>
             <magentoCLI command="config:set tax/calculation/discount_tax 0"  stepKey="unsetDiscount"/>
-            <magentoCLI command="config:set tax/cart_display/gift_wrapping 0"  stepKey="unsetGiftWrapping"/>
-            <magentoCLI command="config:set tax/cart_display/printed_card 0"  stepKey="unsetPrintedCart"/>
             <magentoCLI command="config:set tax/cart_display/price 0"  stepKey="unsetPrice"/>
             <magentoCLI command="config:set tax/cart_display/subtotal 0"  stepKey="unsetSubtotal"/>
-            <magentoCLI command="config:set tax/sales_display/gift_wrapping 0"  stepKey="unsetSalesGiftWrapping"/>
-            <magentoCLI command="config:set tax/sales_display/printed_card 0"  stepKey="unsetSalesPrintedCart"/>
             <magentoCLI command="config:set carriers/freeshipping/active 0"  stepKey="unsetFreeShipping"/>
             <!-- Log out -->
             <comment userInput="Log out" stepKey="commentLogOut"/>
@@ -132,9 +126,9 @@
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="6" stepKey="seeCartQuantity"/>
         <!-- Go to the shopping cart page -->
         <comment userInput="Go to the shopping cart page" stepKey="commentGotToShippingCartPage"/>
-        <amOnPage url="/checkout/cart/" stepKey="onPageShoppingCart"/>
-        <waitForPageLoad stepKey="waitForCartPageLoad"/>
-        <wait time="200" stepKey="erfgr"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.orderTotal}}" stepKey="waitForOrderTotalVisible"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$31.40" stepKey="seeDiscountAmount"/>
         <see selector="{{CheckoutCartSummarySection.subTotal}}" userInput="$31.40" stepKey="seeSubTotal"/>
         <see selector="{{CheckoutCartSummarySection.orderTotal}}" userInput="0.00" stepKey="seeOrderTotal"/>
