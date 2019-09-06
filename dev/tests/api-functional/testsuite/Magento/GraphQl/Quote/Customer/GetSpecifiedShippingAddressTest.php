@@ -92,7 +92,7 @@ class GetSpecifiedShippingAddressTest extends GraphQlAbstract
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('shipping_addresses', $response['cart']);
 
-        self::assertEquals(0, $response['cart']['shipping_addresses']);
+        self::assertEquals([], $response['cart']['shipping_addresses']);
     }
 
     /**
