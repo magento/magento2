@@ -1155,6 +1155,10 @@ class Category extends AbstractResource
             )->where('entity_type_id = ?', CategorySetup::CATEGORY_ENTITY_TYPE_ID)
             ->where('attribute_code = ?', 'is_anchor')
             ->limit(1);
+        $isAnchorAttributeCode = $connection->fetchOne($selectAttributeCode);
+        if (empty($isAnchorAttributeCode) || (int)$isAnchorAttributeCode <= 0) {
+            return [];
+        }
 
         $select = $connection->select()
             ->from(
@@ -1166,7 +1170,7 @@ class Category extends AbstractResource
                 ['is_anchor' => 'cce_int.value']
             )->where(
                 'cce_int.attribute_id = ?',
-                $connection->fetchOne($selectAttributeCode)
+                $isAnchorAttributeCode
             )->where(
                 "cce.path LIKE '%/{$categoryId}' OR cce.path LIKE '%/{$categoryId}/%'"
             )->order('path');

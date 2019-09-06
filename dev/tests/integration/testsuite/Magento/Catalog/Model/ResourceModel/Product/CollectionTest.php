@@ -99,6 +99,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      */
     public function testSetVisibility()
@@ -116,6 +117,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      */
     public function testSetCategoryWithStoreFilter()
@@ -131,8 +133,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->load();
 
         $collectionStoreFilterAfter = Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
-        );
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
+        )->create();
         $collectionStoreFilterAfter->addStoreFilter(1)->addCategoryFilter($category);
         $collectionStoreFilterAfter->load();
         $this->assertEquals($this->collection->getItems(), $collectionStoreFilterAfter->getItems());
@@ -141,6 +143,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      */
     public function testSetCategoryFilter()

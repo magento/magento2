@@ -2107,6 +2107,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $anchorCategory = [];
 
         $categories = $this->categoryResourceModel->getCategoryWithChildren($categoryId);
+        if (empty($categories)) {
+            return $categoryIds;
+        }
+
         $firstCategory = array_shift($categories);
         if ($firstCategory['is_anchor'] == 1) {
             $anchorCategory[] = (int)$firstCategory['entity_id'];
