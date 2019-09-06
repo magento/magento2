@@ -20,7 +20,6 @@ var config = {
         'jquery/hover-intent': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
-        'mage/common': ['jquery'],
         'mage/new-gallery': ['jquery'],
         'mage/webapi': ['jquery'],
         'jquery/ui': ['jquery'],
@@ -28,14 +27,8 @@ var config = {
         'tinymce': {
             'exports': 'tinymce'
         },
-        'moment': {
-            'exports': 'moment'
-        },
         'matchMedia': {
             'exports': 'mediaCheck'
-        },
-        'jquery/jquery-storageapi': {
-            'deps': ['jquery/jquery.cookie']
         }
     },
     'paths': {
