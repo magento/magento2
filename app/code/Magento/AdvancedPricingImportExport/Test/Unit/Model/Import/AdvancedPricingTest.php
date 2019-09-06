@@ -15,6 +15,9 @@ use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory 
  */
 class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
+    /**
+     * DB Table data
+     */
     const TABLE_NAME = 'tableName';
     const LINK_FIELD = 'linkField';
 
