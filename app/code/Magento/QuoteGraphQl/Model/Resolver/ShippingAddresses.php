@@ -54,10 +54,10 @@ class ShippingAddresses implements ResolverInterface
         /** @var Quote $cart */
         $cart = $value['model'];
 
+        $addressesData = [];
         $shippingAddresses = $cart->getAllShippingAddresses();
 
-        $addressesData = [];
-        if (!empty($shippingAddresses)) {
+        if (count($shippingAddresses)) {
             foreach ($shippingAddresses as $shippingAddress) {
                 $address = $this->extractQuoteAddressData->execute($shippingAddress);
 
