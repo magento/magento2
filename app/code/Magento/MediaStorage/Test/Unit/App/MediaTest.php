@@ -143,7 +143,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
                 'filesystem' => $this->filesystemMock
             ]
         );
-        $filePath = '../ve/absolute/path/to/test/file.png';
+        $filePath = '/absolute/path/to/test/file.png';
         $this->directoryMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will(
