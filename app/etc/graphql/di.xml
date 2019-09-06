@@ -7,21 +7,4 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
-    <virtualType name="GraphQlLogger" type="Magento\Framework\Logger\Monolog">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="error" xsi:type="object">GraphQlErrorHandler</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="GraphQlErrorHandler" type="Magento\Framework\Logger\Handler\Base">
-        <arguments>
-            <argument name="fileName" xsi:type="string">var/log/graphql/exception.log</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\GraphQl\Query\ErrorHandler">
-        <arguments>
-            <argument name="logger" xsi:type="object">GraphQlLogger</argument>
-        </arguments>
-    </type>
 </config>
