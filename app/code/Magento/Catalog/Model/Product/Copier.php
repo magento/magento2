@@ -43,10 +43,12 @@ class Copier
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
-        \Magento\Catalog\Model\ProductFactory $productFactory
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Model\Product\Action $productAction = null
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
+        $this->productAction = $productAction ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product\Action::class);
     }
 
     /**
@@ -136,10 +138,13 @@ class Copier
             }
             do {
                 $urlKey = $this->modifyUrl($urlKey);
-                $duplicate->setUrlKey($urlKey);
-                $duplicate->setData('url_path', null);
+                $productIds = [$duplicate->getId()];
+                $attributesData = [
+                    'url_key' => $urlKey,
+                    'url_path' => null
+                ];
                 try {
-                    $duplicate->save();
+                    $this->productAction->updateAttributes($productIds, $attributesData, $storeId);
                     $isDuplicateSaved = true;
                     // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {

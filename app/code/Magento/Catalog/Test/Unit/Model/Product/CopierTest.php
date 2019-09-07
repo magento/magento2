@@ -53,6 +53,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ProductFactory::class,
             ['create']
         );
+        $this->productActionMock = $this->createMock(\Magento\Catalog\Model\Product\Action::class);
         $this->optionRepositoryMock = $this->createMock(
             \Magento\Catalog\Model\Product\Option\Repository::class
         );
@@ -69,7 +70,8 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($this->metadata);
         $this->_model = new Copier(
             $this->copyConstructorMock,
-            $this->productFactoryMock
+            $this->productFactoryMock,
+            $this->productActionMock
         );
 
         $this->setProperties($this->_model, [
@@ -161,8 +163,6 @@ class CopierTest extends \PHPUnit\Framework\TestCase
                 'setUpdatedAt',
                 'setId',
                 'getEntityId',
-                'save',
-                'setUrlKey',
                 'setStoreId',
                 'getStoreIds',
             ]
@@ -186,9 +186,11 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $duplicateMock->expects($this->atLeastOnce())->method('getStoreIds')->willReturn([]);
         $duplicateMock->expects($this->atLeastOnce())->method('setData')->willReturn($duplicateMock);
         $this->copyConstructorMock->expects($this->once())->method('build')->with($this->productMock, $duplicateMock);
-        $duplicateMock->expects($this->once())->method('setUrlKey')->with('urk-key-2')->willReturn($duplicateMock);
-        $duplicateMock->expects($this->once())->method('save');
 
+        $this->productActionMock->expects($this->once())
+            ->method('updateAttributes')
+            ->with([3], ['url_key' => 'urk-key-2'], 2);
+        
         $this->metadata->expects($this->any())->method('getLinkField')->willReturn('linkField');
 
         $duplicateMock->expects($this->any())->method('getData')->willReturnMap([
