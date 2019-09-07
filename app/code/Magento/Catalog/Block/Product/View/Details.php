@@ -30,18 +30,28 @@ class Details extends \Magento\Framework\View\Element\Template
     {
         $groupChildNames = $this->getGroupChildNames($groupName, $callback);
         $layout = $this->getLayout();
-
         $childNamesSortOrder = [];
+        $sortedChildNames = [];
+        $notSortedChildNames = [];
 
         foreach ($groupChildNames as $childName) {
             $alias = $layout->getElementAlias($childName);
-            $sortOrder = (int)$this->getChildData($alias, 'sort_order') ?? 0;
 
-            $childNamesSortOrder[$sortOrder] = $childName;
+            if ($sortOrder = (int) $this->getChildData($alias, 'sort_order')) {
+                $childNamesSortOrder[$sortOrder][] = $childName;
+            } else {
+                $notSortedChildNames[0][] = $childName;
+            }
         }
 
         ksort($childNamesSortOrder, SORT_NUMERIC);
 
-        return $childNamesSortOrder;
+        foreach ($childNamesSortOrder + $notSortedChildNames as $childNames) {
+            foreach ($childNames as $childName) {
+                array_push($sortedChildNames, $childName);
+            }
+        }
+
+        return $sortedChildNames;
     }
 }
