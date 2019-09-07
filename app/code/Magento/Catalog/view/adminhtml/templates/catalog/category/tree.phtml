@@ -507,7 +507,12 @@
                             })(jQuery);
                             this.closeModal();
                         }
-                    }]
+                    }],
+                    keyEventHandlers: {
+                        enterKey: function () {
+                            this.buttons[1].click();
+                        }
+                    }
 
                 }).trigger('openModal');
 
