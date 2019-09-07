@@ -15,7 +15,7 @@
                                     'name': 'agreement[' + agreementId + ']',
                                     'value': agreementId
                                     }"/>
-                <label class="label" data-bind="attr: {'for': $parent.getCheckboxId($parentContext, agreementId)}">
+                <label data-bind="attr: {'for': $parent.getCheckboxId($parentContext, agreementId)}">
                     <button type="button"
                             class="action action-show"
                             data-bind="click: function(data, event) { return $parent.showContent(data, event) }"

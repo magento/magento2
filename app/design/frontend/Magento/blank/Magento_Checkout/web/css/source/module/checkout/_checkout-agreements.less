@@ -8,6 +8,16 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    .checkout-agreement.field.choice.required {
+        display:flex;
+        &::after {
+                color: #e02b27;
+                content: '*';
+                font-size: 1.2rem;
+                margin: 3px 0 0 5px;
+            }
+    }
+    
     .checkout-agreements-block {
         .checkout-agreements {
             margin-bottom: @indent__base;
