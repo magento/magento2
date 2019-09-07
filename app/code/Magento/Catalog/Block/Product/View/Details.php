@@ -45,8 +45,9 @@ class Details extends \Magento\Framework\View\Element\Template
         }
 
         ksort($childNamesSortOrder, SORT_NUMERIC);
+        $childNamesSortOrder += $notSortedChildNames;
 
-        foreach ($childNamesSortOrder + $notSortedChildNames as $childNames) {
+        foreach ($childNamesSortOrder as $childNames) {
             foreach ($childNames as $childName) {
                 array_push($sortedChildNames, $childName);
             }
