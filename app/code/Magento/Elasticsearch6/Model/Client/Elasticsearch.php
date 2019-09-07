@@ -254,39 +254,7 @@ class Elasticsearch implements ClientInterface
                             'type' => 'text'
                         ],
                     ],
-                    'dynamic_templates' => [
-                        [
-                            'price_mapping' => [
-                                'match' => 'price_*',
-                                'match_mapping_type' => 'string',
-                                'mapping' => [
-                                    'type' => 'float',
-                                    'store' => true,
-                                ],
-                            ],
-                        ],
-                        [
-                            'position_mapping' => [
-                                'match' => 'position_*',
-                                'match_mapping_type' => 'string',
-                                'mapping' => [
-                                    'type' => 'integer',
-                                    'index' => false,
-                                ],
-                            ],
-                        ],
-                        [
-                            'string_mapping' => [
-                                'match' => '*',
-                                'match_mapping_type' => 'string',
-                                'mapping' => [
-                                    'type' => 'text',
-                                    'index' => false,
-                                    'copy_to' => '_search'
-                                ],
-                            ],
-                        ],
-                    ],
+                    'dynamic_templates' => $this->getDynamicTemplates(),
                 ],
             ],
         ];
@@ -296,6 +264,48 @@ class Elasticsearch implements ClientInterface
         }
 
         $this->getClient()->indices()->putMapping($params);
+    }
+
+    /**
+     * get dynamic demplates
+     *
+     * @return []
+     */
+    public function getDynamicTemplates() {
+        
+        return [
+            [
+                'price_mapping' => [
+                    'match' => 'price_*',
+                    'match_mapping_type' => 'string',
+                    'mapping' => [
+                        'type' => 'float',
+                        'store' => true,
+                    ],
+                ],
+            ],
+            [
+                'position_mapping' => [
+                    'match' => 'position_*',
+                    'match_mapping_type' => 'string',
+                    'mapping' => [
+                        'type' => 'integer',
+                        'index' => false,
+                    ],
+                ],
+            ],
+            [
+                'string_mapping' => [
+                    'match' => '*',
+                    'match_mapping_type' => 'string',
+                    'mapping' => [
+                        'type' => 'text',
+                        'index' => false,
+                        'copy_to' => '_search'
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
