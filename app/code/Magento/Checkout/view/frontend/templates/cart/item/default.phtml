@@ -75,7 +75,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 <span class="pricing msrp">
                     <span class="msrp notice"><?= $block->escapeHtml(__('See price before order confirmation.')) ?></span>
                     <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
-                    <a href="#" class="action help map"
+                    <a href="javascript:void(0);" class="action help map"
                        id="<?= ($block->escapeHtmlAttr($helpLinkId)) ?>"
                        data-mage-init='{"addToCart":{
                                             "helpLinkId": "#<?= $block->escapeJs($block->escapeHtml($helpLinkId)) ?>",
