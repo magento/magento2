@@ -828,7 +828,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                     $storeIds[] = $websiteStores;
                 }
             }
-            $this->setStoreIds(array_merge(...$storeIds));
+            if ($storeIds) {
+                $storeIds = array_merge(...$storeIds);
+            }
+            $this->setStoreIds($storeIds);
         }
         return $this->getData('store_ids');
     }

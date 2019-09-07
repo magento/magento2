@@ -49,16 +49,17 @@ class DataProviderTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->repo = $objectManager->get(GetPageByIdentifierInterface::class);
+        $this->filesFaker = $objectManager->get(CustomLayoutManager::class);
+        $this->request = $objectManager->get(HttpRequest::class);
         $this->provider = $objectManager->create(
             DataProvider::class,
             [
                 'name' => 'test',
                 'primaryFieldName' => 'page_id',
-                'requestFieldName' => 'page_id'
+                'requestFieldName' => 'page_id',
+                'customLayoutManager' => $this->filesFaker
             ]
         );
-        $this->filesFaker = $objectManager->get(CustomLayoutManager::class);
-        $this->request = $objectManager->get(HttpRequest::class);
     }
 
     /**
