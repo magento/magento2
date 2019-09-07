@@ -197,6 +197,7 @@ type Cart {
     available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
+    total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity")
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
@@ -243,7 +244,7 @@ type SelectedShippingMethod {
     carrier_title: String
     method_title: String
     amount: Money
-    base_amount: Money
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
 }
 
 type AvailableShippingMethod {
@@ -253,7 +254,7 @@ type AvailableShippingMethod {
     method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
     amount: Money!
-    base_amount: Money @doc(description: "Could be null if method is not available")
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
     price_excl_tax: Money!
     price_incl_tax: Money!
     available: Boolean!

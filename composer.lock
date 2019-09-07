@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6fd70adf831929273a251803fa361cd4",
+    "content-hash": "485287ce3a33ce9873eb328c8b42f3f1",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6791,16 +6791,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "3",
+            "version": "4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "73a7b7f3c00b02242f45f706571430735586f608"
+                "reference": "d24e0230a532e19941ed264f57db38fad5b1008a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/73a7b7f3c00b02242f45f706571430735586f608",
-                "reference": "73a7b7f3c00b02242f45f706571430735586f608",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/d24e0230a532e19941ed264f57db38fad5b1008a",
+                "reference": "d24e0230a532e19941ed264f57db38fad5b1008a",
                 "shasum": ""
             },
             "require": {
@@ -6817,7 +6817,7 @@
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
-            "time": "2019-06-18T21:01:42+00:00"
+            "time": "2019-08-06T15:58:37+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
