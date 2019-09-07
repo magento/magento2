@@ -20,8 +20,10 @@ $_height = $block->getImagesHeight();
         data-mime-type="<?= $block->escapeHtmlAttr($file->getMimeType()) ?>"
     >
         <p class="nm" style="height:<?= $block->escapeHtmlAttr($_height) ?>px;">
-        <?php if ($block->getFileThumbUrl($file)) : ?>
-            <img src="<?= $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
+        <?php if ($block->getFileThumbUrl($file) && strpos($file->getMimeType(), 'icon') === 0): ?>
+        <img src="<?= $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
+        <?php else: ?>
+            <img src="<?= $block->escapeHtmlAttr($file->getUrl()) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
         <?php endif; ?>
         </p>
         <?php if ($block->getFileWidth($file)) : ?>
