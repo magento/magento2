@@ -39,7 +39,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     private $response;
 
     /**
-     * Prepare Mock Object
+     * Prepare test preconditions
      */
     protected function setUp()
     {
