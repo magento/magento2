@@ -74,9 +74,13 @@ class CouponCodeValidationTest extends TestCase
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->setMethods(['addFilter', 'create'])
             ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->quoteMock = $this->createPartialMock(Quote::class, [
-            'getCouponCode', 'setCouponCode', 'getId'
-        ]);
+        $this->quoteMock = $this->createPartialMock(Quote::class,
+            [
+                'getCouponCode',
+                'setCouponCode',
+                'getId'
+            ]
+        );
 
         $this->couponCodeValidation = new CouponCodeValidation(
             $this->codeLimitManagerMock,
