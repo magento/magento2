@@ -19,8 +19,10 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <attachFile selector="{{BlockSelectImageSection.uploadFile}}" userInput="{{image.file}}" stepKey="attachLogo"/>
         <waitForElementVisible selector="{{BlockSelectImageSection.addSelected}}" stepKey="waitForAddSelected"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
         <click  selector="{{BlockSelectImageSection.addSelected}}" stepKey="clickAddSelected"/>
         <waitForElementVisible selector="{{BlockInsertOrEditImageSection.ok}}" stepKey="waitForOkButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
         <click  selector="{{BlockInsertOrEditImageSection.ok}}" stepKey="clickOk"/>
     </actionGroup>
 </actionGroups>

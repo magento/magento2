@@ -41,6 +41,6 @@
     <section name="BlockSelectImageSection">
         <element name="uploadFile" type="input" selector="input.fileupload"/>
         <element name="addSelected" type="button" selector="#insert_files"/>
-        <element name="treeRoot" type="text" selector="//div[contains(@class, 'jstree')]//a[contains(text(), 'Storage Root')]"/>
+        <element name="treeRoot" type="text" selector="#root"/>
     </section>
 </sections>
