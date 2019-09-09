@@ -15,8 +15,6 @@ use GraphQL\Error\Error;
  * GraphQL error handler
  *
  * @see \Magento\Framework\GraphQl\Query\QueryProcessor
- *
- * @api
  */
 interface ErrorHandlerInterface
 {
