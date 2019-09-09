@@ -811,7 +811,6 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        /** @var AdapterInterface $connection */
         $connection = $this->getConnection();
         $tableDescription = $connection->describeTable($this->getMainTable());
         $preparedValue = $connection->prepareColumnValue($tableDescription[$this->getIdFieldName()], $object->getId());
