@@ -59,6 +59,7 @@ class Message implements MailMessageInterface
     public function setBody($body)
     {
         if (is_string($body)) {
+            $body = wordwrap($body, 800, "\r\n", true);
             $body = self::createMimeFromString($body, $this->messageType);
         }
         $this->zendMessage->setBody($body);
