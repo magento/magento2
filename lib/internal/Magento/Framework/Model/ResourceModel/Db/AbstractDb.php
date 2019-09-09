@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Phrase;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Abstract resource model
@@ -301,7 +302,7 @@ abstract class AbstractDb extends AbstractResource
      * Get connection by resource name
      *
      * @param string $resourceName
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @return AdapterInterface|false
      */
     protected function _getConnection($resourceName)
     {
@@ -320,7 +321,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Get connection
      *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @return AdapterInterface|false
      */
     public function getConnection()
     {
@@ -793,13 +794,10 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $tableDescription = $this->getConnection()
-            ->describeTable($this->getMainTable());
-        $preparedValue = $this->getConnection()
-            ->prepareColumnValue(
-                $tableDescription[$this->getIdFieldName()],
-                $object->getId()
-            );
+        /** @var AdapterInterface $connection */
+        $connection = $this->getConnection();
+        $tableDescription = $connection->describeTable($this->getMainTable());
+        $preparedValue = $connection->prepareColumnValue($tableDescription[$this->getIdFieldName()], $object->getId());
         $condition  = $this->getIdFieldName() . '=' . $preparedValue;
 
         /**
@@ -808,22 +806,22 @@ abstract class AbstractDb extends AbstractResource
         if ($this->_isPkAutoIncrement) {
             $data = $this->prepareDataForUpdate($object);
             if (!empty($data)) {
-                $this->getConnection()->update($this->getMainTable(), $data, $condition);
+                $connection->update($this->getMainTable(), $data, $condition);
             }
         } else {
-            $select = $this->getConnection()->select()->from(
+            $select = $connection->select()->from(
                 $this->getMainTable(),
                 [$this->getIdFieldName()]
             )->where(
                 $condition
             );
-            if ($this->getConnection()->fetchOne($select) !== false) {
+            if ($connection->fetchOne($select) !== false) {
                 $data = $this->prepareDataForUpdate($object);
                 if (!empty($data)) {
-                    $this->getConnection()->update($this->getMainTable(), $data, $condition);
+                    $connection->update($this->getMainTable(), $data, $condition);
                 }
             } else {
-                $this->getConnection()->insert(
+                $connection->insert(
                     $this->getMainTable(),
                     $this->_prepareDataForSave($object)
                 );
