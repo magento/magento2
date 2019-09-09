@@ -79,7 +79,7 @@ class ProductSearch
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria,
-        SearchResultsInterface $searchResult,
+        SearchResultInterface $searchResult,
         array $attributes = []
     ): SearchResultsInterface {
         /** @var Collection $collection */
@@ -92,11 +92,11 @@ class ProductSearch
         $collection->load();
         $this->collectionPostProcessor->process($collection, $attributes);
 
-        $searchResult = $this->searchResultsFactory->create();
-        $searchResult->setSearchCriteria($searchCriteria);
-        $searchResult->setItems($collection->getItems());
-        $searchResult->setTotalCount($collection->getSize());
-        return $searchResult;
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
+        $searchResults->setItems($collection->getItems());
+        $searchResults->setTotalCount($collection->getSize());
+        return $searchResults;
     }
 
     /**

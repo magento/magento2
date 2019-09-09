@@ -403,6 +403,10 @@ interface LayerFilterItemInterface @typeResolver(class: "Magento\\CatalogGraphQl
     items_count: Int @doc(description: "Count of items by filter.") @deprecated(reason: "Use AggregationOption.count instead.")
 }
 
+type LayerFilterItem implements LayerFilterItemInterface {
+
+}
+
 type Aggregation @doc(description: "A bucket that contains information for each filterable option (such as price, category ID, and custom attributes).") {
     count: Int @doc(description: "The number of options in the aggregation group.")
     label: String @doc(description: "The aggregation display name.")
@@ -410,13 +414,13 @@ type Aggregation @doc(description: "A bucket that contains information for each 
     options: [AggregationOption] @doc(description: "Array of options for the aggregation.")
 }
 
-type AggregationOption {
+interface AggregationOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\AggregationOptionTypeResolverComposite") {
     count: Int @doc(description: "The number of items that match the aggregation option.")
     label: String @doc(description: "Aggregation option display label.")
     value: String! @doc(description: "The internal ID that represents the value of the option.")
 }
 
-type LayerFilterItem implements LayerFilterItemInterface {
+type AggregationOption implements AggregationOptionInterface {
 
 }
 

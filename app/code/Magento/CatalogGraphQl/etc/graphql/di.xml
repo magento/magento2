@@ -28,6 +28,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\AggregationOptionTypeResolverComposite">
+        <arguments>
+            <argument name="typeResolvers" xsi:type="array">
+                <item name="aggregation_option" xsi:type="object">Magento\CatalogGraphQl\Model\AggregationOptionTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\GraphQl\Schema\Type\Entity\DefaultMapper">
         <arguments>
             <argument name="map" xsi:type="array">
