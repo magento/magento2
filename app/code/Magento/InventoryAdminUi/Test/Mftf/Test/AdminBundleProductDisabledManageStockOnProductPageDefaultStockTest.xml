@@ -62,7 +62,7 @@
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
         <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="5" stepKey="fillProductDefaultQty"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="1" stepKey="fillProductDefaultQty"/>
         <!--Set Product stock status to "Out of Stock".-->
         <scrollToTopOfPage stepKey="scrollToTheTopOfBundleProductPage"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="selectOutOfStock"/>
@@ -86,6 +86,6 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPageToVerifyBundleProduct"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoadToVerifyBundleProduct"/>
         <see userInput="$$bundleProduct.name$$" stepKey="assertProductIsPresent"/>
-        <see userInput="$615.00" stepKey="assertProductPriceIsPresent"/>
+        <see userInput="$$simpleProduct.price$$" stepKey="assertProductPriceIsPresent"/>
     </test>
 </tests>

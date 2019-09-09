@@ -110,7 +110,7 @@
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
         <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="5" stepKey="fillProductDefaultQty"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="1" stepKey="fillProductDefaultQty"/>
         <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignBundleProductToAdditionalWebsite">
             <argument name="website" value="{{customWebsite.name}}"/>
         </actionGroup>
@@ -121,6 +121,6 @@
         <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$category.name$$.html" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see userInput="{{BundleProduct.name}}" stepKey="assertProductPresent"/>
-        <see userInput="$615.00" stepKey="assertProductPricePresent"/>
+        <see userInput="$$simpleProduct.price$$" stepKey="assertProductPricePresent"/>
     </test>
 </tests>
