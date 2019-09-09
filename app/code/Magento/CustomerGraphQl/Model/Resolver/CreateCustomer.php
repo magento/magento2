@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Newsletter\Model\Config;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Create customer account resolver
@@ -66,7 +67,7 @@ class CreateCustomer implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
-        if (!$this->newsLetterConfig->isActive()) {
+        if (!$this->newsLetterConfig->isActive(ScopeInterface::SCOPE_STORE)) {
             $args['input']['is_subscribed'] = false;
         }
       
