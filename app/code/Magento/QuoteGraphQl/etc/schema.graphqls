@@ -149,10 +149,10 @@ type CartPrices {
     grand_total: Money
     subtotal_including_tax: Money
     subtotal_excluding_tax: Money
-    discount: CartDiscount
+    discount: CartDiscount @deprecated(reason: "Use discounts instead ")
     subtotal_with_discount_excluding_tax: Money
     applied_taxes: [CartTaxItem]
-    discounts: CartPromotions
+    discounts: [Discount]
 }
 
 type CartTaxItem {
@@ -191,7 +191,8 @@ type PlaceOrderOutput {
 
 type Cart {
     items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
-    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon")
+    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @deprecated(reason: "Use applied_coupons instead ")
+    applied_coupons: [AppliedCoupon]
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
     shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: BillingCartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
@@ -330,10 +331,6 @@ type CartItemPrices {
     row_total_including_tax: Money!
     discounts: [Discount]
     discount: Money
-}
-
-type CartPromotions {
-  discounts: [Discount] @doc(description: "Shows discount breakdown at Cart level")
 }
 
 type SelectedCustomizableOption {
