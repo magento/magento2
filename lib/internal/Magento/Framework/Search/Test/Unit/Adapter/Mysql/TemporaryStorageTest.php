@@ -176,7 +176,7 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
         if ($persistentConnection) {
             $this->adapter->expects($this->once())
                 ->method('dropTemporaryTable');
-            $tableInteractionCount += 1;
+            $tableInteractionCount++;
         }
         $table->expects($this->at($tableInteractionCount))
             ->method('addColumn')
@@ -187,14 +187,14 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
                 ['unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Entity ID'
             );
-        $tableInteractionCount += 1;
+        $tableInteractionCount++;
         $table->expects($this->at($tableInteractionCount))
             ->method('addColumn')
             ->with(
                 'score',
                 Table::TYPE_DECIMAL,
                 [32, 16],
-                ['unsigned' => true, 'nullable' => false],
+                ['unsigned' => true, 'nullable' => true],
                 'Score'
             );
         $table->expects($this->once())

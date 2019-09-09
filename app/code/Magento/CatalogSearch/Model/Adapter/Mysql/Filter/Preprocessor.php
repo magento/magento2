@@ -201,8 +201,8 @@ class Preprocessor implements PreprocessorInterface
                 )
                 ->joinLeft(
                     ['current_store' => $table],
-                    'current_store.entity_id = main_table.entity_id AND '
-                        . 'current_store.attribute_id = main_table.attribute_id AND current_store.store_id = '
+                    "current_store.{$linkIdField} = main_table.{$linkIdField} AND "
+                        . "current_store.attribute_id = main_table.attribute_id AND current_store.store_id = "
                         . $currentStoreId,
                     null
                 )
