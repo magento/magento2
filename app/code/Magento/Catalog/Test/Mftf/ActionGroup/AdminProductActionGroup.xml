@@ -241,19 +241,6 @@
         <seeInField userInput="{{simpleProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="assertFieldUrlKey"/>
     </actionGroup>
 
-    <actionGroup name="FillAdminSimpleProductFormWithoutSave" extends="FillAdminSimpleProductForm">
-        <remove keyForRemoval="openSeoSection"/>
-        <remove keyForRemoval="fillUrlKey"/>
-        <remove keyForRemoval="assertFieldSku"/>
-        <remove keyForRemoval="assertFieldPrice"/>
-        <remove keyForRemoval="saveProduct"/>
-        <remove keyForRemoval="assertSaveMessageSuccess"/>
-        <remove keyForRemoval="assertFieldName"/>
-        <remove keyForRemoval="assertFieldSku"/>
-        <remove keyForRemoval="assertFieldPrice"/>
-        <remove keyForRemoval="openSeoSectionAssert"/>
-        <remove keyForRemoval="assertFieldUrlKey"/>
-    </actionGroup>
     <!--Fill fields for simple product in a category in Admin, including text option with char limit-->
     <actionGroup name="AdminCreateSimpleProductWithTextOptionCharLimit">
         <annotations>
