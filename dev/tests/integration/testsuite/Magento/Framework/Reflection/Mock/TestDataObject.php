@@ -53,7 +53,7 @@ class TestDataObject implements TestDataInterface
     }
 
     /**
-     * @return TestExtensionAttributes|null
+     * @return \Magento\Framework\Reflection\Mock\TestDataExtensionInterface|null
      */
     public function getExtensionAttributes()
     {

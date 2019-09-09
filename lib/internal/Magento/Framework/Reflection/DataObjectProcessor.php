@@ -7,6 +7,7 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Phrase;
+use ReflectionException;
 
 /**
  * Data object processor for array serialization using class reflection
@@ -76,6 +77,7 @@ class DataObjectProcessor
      * @param string $dataObjectType
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws ReflectionException
      */
     public function buildOutputDataArray($dataObject, $dataObjectType)
     {

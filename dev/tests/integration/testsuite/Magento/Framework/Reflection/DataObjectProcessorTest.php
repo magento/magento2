@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Reflection;
 
+use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManagerInterface;
@@ -41,6 +42,21 @@ class DataObjectProcessorTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->dataObjectProcessor = $this->objectManager->get(DataObjectProcessor::class);
         $this->dtoProcessor = $this->objectManager->get(DtoProcessor::class);
+
+        /** @var Config $config */
+        $config = $this->objectManager->get(Config::class);
+        $config->merge([TestDataInterface::class => [
+            'attribute1' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ],
+            'attribute2' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ]
+        ]]);
     }
 
     /**

@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Reflection\Mock;
 
-interface TestDataInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface TestDataInterface extends ExtensibleDataInterface
 {
     /**
      * @return string
@@ -30,7 +32,7 @@ interface TestDataInterface
     public function isRequiredBilling();
 
     /**
-     * @return \Magento\Framework\Api\ExtensionAttributesInterface|null
+     * @return \Magento\Framework\Reflection\Mock\TestDataExtensionInterface|null
      */
     public function getExtensionAttributes();
 }
