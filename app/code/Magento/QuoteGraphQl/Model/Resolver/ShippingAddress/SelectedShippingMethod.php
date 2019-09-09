@@ -46,9 +46,6 @@ class SelectedShippingMethod implements ResolverInterface
                 }
             }
 
-            /** @var Currency $currency */
-            $currency = $context->getExtensionAttributes()->getStore()->getBaseCurrency();
-
             $data = [
                 'carrier_code' => $carrierCode,
                 'method_code' => $methodCode,
@@ -58,10 +55,8 @@ class SelectedShippingMethod implements ResolverInterface
                     'value' => $address->getShippingAmount(),
                     'currency' => $address->getQuote()->getQuoteCurrencyCode(),
                 ],
-                'base_amount' => [
-                    'value' => $address->getBaseShippingAmount(),
-                    'currency' => $currency->getCode(),
-                ],
+                /** @deprecated The field should not be used on the storefront */
+                'base_amount' => null,
             ];
         } else {
             $data = null;
