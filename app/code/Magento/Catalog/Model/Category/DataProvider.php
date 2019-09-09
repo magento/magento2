@@ -67,6 +67,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         'size' => 'multiline_count',
     ];
 
+    private $boolMetaProperties = ['visible', 'required'];
+
     /**
      * Form element mapping
      *
@@ -358,6 +360,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
                 $meta[$code][$metaName] = $value;
+                if (in_array($metaName, $this->boolMetaProperties, true)) {
+                    $meta[$code][$metaName] = (bool)$meta[$code][$metaName];
+                }
                 if ('frontend_input' === $origName) {
                     $meta[$code]['formElement'] = isset($this->formElement[$value])
                         ? $this->formElement[$value]

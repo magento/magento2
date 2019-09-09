@@ -91,6 +91,33 @@ class DataProviderTest extends TestCase
     }
 
     /**
+     * Check that deprecated custom layout attribute is hidden.
+     *
+     * @return void
+     */
+    public function testOldCustomLayoutInvisible(): void
+    {
+        //Testing a category without layout xml
+        /** @var Category $category */
+        $category = $this->categoryFactory->create();
+        $category->load($id = 2);
+        $this->registry->register('category', $category);
+
+        $meta = $this->dataProvider->getMeta();
+        $this->assertArrayHasKey('design', $meta);
+        $this->assertArrayHasKey('children', $meta['design']);
+        $this->assertArrayHasKey('custom_layout_update', $meta['design']['children']);
+        $this->assertArrayHasKey('arguments', $meta['design']['children']['custom_layout_update']);
+        $this->assertArrayHasKey('data', $meta['design']['children']['custom_layout_update']['arguments']);
+        $this->assertArrayHasKey(
+            'config',
+            $meta['design']['children']['custom_layout_update']['arguments']['data']
+        );
+        $config = $meta['design']['children']['custom_layout_update']['arguments']['data']['config'];
+        $this->assertTrue($config['visible'] === false);
+    }
+
+    /**
      * Check that custom layout update file attribute is processed correctly.
      *
      * @return void
@@ -117,6 +144,31 @@ class DataProviderTest extends TestCase
     }
 
     /**
+     * Extract custom layout update file attribute's options from metadata.
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function extractCustomLayoutOptions(array $meta): array
+    {
+        $this->assertArrayHasKey('design', $meta);
+        $this->assertArrayHasKey('children', $meta['design']);
+        $this->assertArrayHasKey('custom_layout_update_file', $meta['design']['children']);
+        $this->assertArrayHasKey('arguments', $meta['design']['children']['custom_layout_update_file']);
+        $this->assertArrayHasKey('data', $meta['design']['children']['custom_layout_update_file']['arguments']);
+        $this->assertArrayHasKey(
+            'config',
+            $meta['design']['children']['custom_layout_update_file']['arguments']['data']
+        );
+        $this->assertArrayHasKey(
+            'options',
+            $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']
+        );
+
+        return $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']['options'];
+    }
+
+    /**
      * Check that proper options are returned for a category.
      *
      * @return void
@@ -131,25 +183,12 @@ class DataProviderTest extends TestCase
         $this->registry->register('category', $category);
 
         $meta = $this->dataProvider->getMeta();
-        $this->assertArrayHasKey('design', $meta);
-        $this->assertArrayHasKey('children', $meta['design']);
-        $this->assertArrayHasKey('custom_layout_update_file', $meta['design']['children']);
-        $this->assertArrayHasKey('arguments', $meta['design']['children']['custom_layout_update_file']);
-        $this->assertArrayHasKey('data', $meta['design']['children']['custom_layout_update_file']['arguments']);
-        $this->assertArrayHasKey(
-            'config',
-            $meta['design']['children']['custom_layout_update_file']['arguments']['data']
-        );
-        $this->assertArrayHasKey(
-            'options',
-            $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']
-        );
+        $list = $this->extractCustomLayoutOptions($meta);
         $expectedList = [
             ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
             ['label' => 'test1', 'value' => 'test1', '__disableTmpl' => true],
             ['label' => 'test2', 'value' => 'test2', '__disableTmpl' => true]
         ];
-        $list = $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']['options'];
         sort($expectedList);
         sort($list);
         $this->assertEquals($expectedList, $list);
@@ -159,19 +198,6 @@ class DataProviderTest extends TestCase
         $this->fakeFiles->setCategoryFakeFiles((int)$category->getId(), ['test3']);
 
         $meta = $this->dataProvider->getMeta();
-        $this->assertArrayHasKey('design', $meta);
-        $this->assertArrayHasKey('children', $meta['design']);
-        $this->assertArrayHasKey('custom_layout_update_file', $meta['design']['children']);
-        $this->assertArrayHasKey('arguments', $meta['design']['children']['custom_layout_update_file']);
-        $this->assertArrayHasKey('data', $meta['design']['children']['custom_layout_update_file']['arguments']);
-        $this->assertArrayHasKey(
-            'config',
-            $meta['design']['children']['custom_layout_update_file']['arguments']['data']
-        );
-        $this->assertArrayHasKey(
-            'options',
-            $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']
-        );
         $expectedList = [
             ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
             [
@@ -181,7 +207,7 @@ class DataProviderTest extends TestCase
             ],
             ['label' => 'test3', 'value' => 'test3', '__disableTmpl' => true],
         ];
-        $list = $meta['design']['children']['custom_layout_update_file']['arguments']['data']['config']['options'];
+        $list = $this->extractCustomLayoutOptions($meta);
         sort($expectedList);
         sort($list);
         $this->assertEquals($expectedList, $list);
