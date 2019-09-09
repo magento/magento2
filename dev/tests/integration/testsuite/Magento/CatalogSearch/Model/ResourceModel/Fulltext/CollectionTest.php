@@ -26,6 +26,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($filters as $field => $value) {
             $fulltextCollection->addFieldToFilter($field, $value);
         }
+        if ($request == 'quick_search_container' && isset($filters['search_term'])) {
+            $fulltextCollection->addSearchFilter($filters['search_term']);
+        }
         $fulltextCollection->loadWithFilter();
         $items = $fulltextCollection->getItems();
         $this->assertCount($expectedCount, $items);
@@ -48,7 +51,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 ['searchRequestName' => 'quick_search_container']
             );
 
-            $fulltextCollection->addFieldToFilter('search_term', 'shorts');
+            $fulltextCollection->addSearchFilter('shorts');
             $fulltextCollection->setOrder('relevance');
             $fulltextCollection->load();
             $items = $fulltextCollection->getItems();

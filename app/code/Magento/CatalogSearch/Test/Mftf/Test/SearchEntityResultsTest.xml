@@ -92,6 +92,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
+
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="ThisShouldn'tReturnAnything"/>
@@ -100,6 +101,7 @@
     </test>
     <test name="QuickSearchWithTwoCharsEmptyResults" extends="QuickSearchEmptyResults">
         <annotations>
+            <features value="CatalogSearch"/>
             <stories value="Search Product on Storefront"/>
             <title value="User should not get search results on query that only contains two characters"/>
             <description value="Use of 2 character query to return no products"/>
@@ -107,13 +109,18 @@
             <testCaseId value="MC-14794"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-15827"/>
-            </skip>
         </annotations>
-        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,2); return ret;" stepKey="getFirstTwoLetters" before="searchStorefront"/>
-        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
-            <argument name="phrase" value="{$getFirstTwoLetters}"/>
+        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,2); return ret;" before="searchStorefront" stepKey="getFirstTwoLetters"/>
+        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,3); return ret;" before="searchStorefront" stepKey="getFirstThreeLetters"/>
+
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" after="checkEmpty" stepKey="searchStorefrontThreeLetters">
+            <argument name="phrase" value="$getFirstThreeLetters"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchTooShortStringActionGroup" after="searchStorefrontThreeLetters" stepKey="checkCannotSearchWithTooShortString">
+            <argument name="phrase" value="$getFirstTwoLetters"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchRelatedSearchTermsAppearsActionGroup" after="checkCannotSearchWithTooShortString" stepKey="checkRelatedSearchTerm">
+            <argument name="term" value="$getFirstThreeLetters"/>
         </actionGroup>
     </test>
     <test name="QuickSearchProductByNameWithThreeLetters" extends="QuickSearchProductBySku">

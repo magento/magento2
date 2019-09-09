@@ -41,6 +41,24 @@
         <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
     </actionGroup>
 
+    <actionGroup name="StorefrontQuickSearchTooShortStringActionGroup" extends="StorefrontCheckQuickSearchStringActionGroup">
+        <annotations>
+            <description>Fill the Storefront Search field. Submits the Form. Validates that 'Minimum Search query length' warning appears.</description>
+        </annotations>
+
+        <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="Minimum Search query length is 3" stepKey="assertQuickSearchNeedThreeOrMoreChars"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchRelatedSearchTermsAppearsActionGroup">
+        <arguments>
+            <argument name="term" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontCatalogSearchMainSection.relatedSearchTermsTitle}}" stepKey="waitMessageAppears"/>
+        <see selector="{{StorefrontCatalogSearchMainSection.relatedSearchTermsTitle}}" userInput="Related search terms" stepKey="checkRelatedTermsTitle"/>
+        <see selector="{{StorefrontCatalogSearchMainSection.relatedSearchTerm}}" userInput="{{term}}" stepKey="checkRelatedTermExists"/>
+    </actionGroup>
+
     <!-- Opens product from QuickSearch and performs assertions-->
     <actionGroup name="StorefrontOpenProductFromQuickSearch">
         <annotations>
@@ -101,7 +119,7 @@
 
         <dontSee selector="{{StorefrontQuickSearchResultsSection.allResults}}" userInput="{{productName}}" stepKey="dontSeeProductName"/>
     </actionGroup>
-    
+
     <!-- Open advanced search page -->
     <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">
         <annotations>
