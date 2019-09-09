@@ -72,7 +72,6 @@ class Download extends ExportController implements HttpGetActionInterface
                     DirectoryList::VAR_DIR
                 );
             }
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (LocalizedException | \Exception $exception) {
             throw new LocalizedException(__('There are no export file with such name %1', $fileName));
         }
