@@ -221,6 +221,7 @@ class General extends AbstractModifier
                         'validate-zero-or-greater' => true
                     ],
                     'additionalClasses' => 'admin__field-small',
+                    'sortOrder' => 0,
                     'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
                     'imports' => $disabled ? [] : [
                         'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
@@ -266,6 +267,7 @@ class General extends AbstractModifier
                         ],
                     ],
                     'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
+                    'sortOrder' => 10,
                     'disabled' => $disabled,
                 ]
             );
