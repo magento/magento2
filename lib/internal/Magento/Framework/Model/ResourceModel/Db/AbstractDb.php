@@ -786,6 +786,24 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
+     * Check in column value should be quoted
+     *
+     * Based on column description
+     *
+     * @param array $columnDescription
+     * @return bool
+     */
+    private function isNeedToQuoteValue(array $columnDescription): bool
+    {
+        $result = true;
+        if (!empty($columnDescription['DATA_TYPE'])
+            && in_array($columnDescription['DATA_TYPE'], ['smallint', 'int'])) {
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
      * Update existing object
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -798,7 +816,9 @@ abstract class AbstractDb extends AbstractResource
         $connection = $this->getConnection();
         $tableDescription = $connection->describeTable($this->getMainTable());
         $preparedValue = $connection->prepareColumnValue($tableDescription[$this->getIdFieldName()], $object->getId());
-        $condition  = $this->getIdFieldName() . '=' . $preparedValue;
+        $condition  = (!$this->isNeedToQuoteValue($tableDescription[$this->getIdFieldName()]))
+            ? $this->getIdFieldName() . '=' . $preparedValue
+            : $connection->quoteInto($this->getIdFieldName() . '=?', $preparedValue);
 
         /**
          * Not auto increment primary key support
