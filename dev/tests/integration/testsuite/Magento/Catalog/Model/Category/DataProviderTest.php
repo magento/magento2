@@ -100,7 +100,7 @@ class DataProviderTest extends TestCase
         //Testing a category without layout xml
         /** @var Category $category */
         $category = $this->categoryFactory->create();
-        $category->load($id = 2);
+        $category->load(2);
         $this->registry->register('category', $category);
 
         $meta = $this->dataProvider->getMeta();
@@ -179,7 +179,7 @@ class DataProviderTest extends TestCase
         //Testing a category without layout xml
         /** @var Category $category */
         $category = $this->categoryFactory->create();
-        $category->load($id = 2);
+        $category->load(2);
         $this->fakeFiles->setCategoryFakeFiles((int)$category->getId(), ['test1', 'test2']);
         $this->registry->register('category', $category);
 

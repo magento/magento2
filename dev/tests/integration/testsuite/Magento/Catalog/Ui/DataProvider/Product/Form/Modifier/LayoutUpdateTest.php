@@ -107,6 +107,32 @@ class LayoutUpdateTest extends TestCase
     }
 
     /**
+     * Extract options meta.
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function extractCustomLayoutOptions(array $meta): array
+    {
+        $this->assertArrayHasKey('design', $meta);
+        $this->assertArrayHasKey('children', $meta['design']);
+        $this->assertArrayHasKey('container_custom_layout_update_file', $meta['design']['children']);
+        $this->assertArrayHasKey('children', $meta['design']['children']['container_custom_layout_update_file']);
+        $this->assertArrayHasKey(
+            'custom_layout_update_file',
+            $meta['design']['children']['container_custom_layout_update_file']['children']
+        );
+        $fieldMeta = $meta['design']['children']['container_custom_layout_update_file']['children'];
+        $fieldMeta = $fieldMeta['custom_layout_update_file'];
+        $this->assertArrayHasKey('arguments', $fieldMeta);
+        $this->assertArrayHasKey('data', $fieldMeta['arguments']);
+        $this->assertArrayHasKey('config', $fieldMeta['arguments']['data']);
+        $this->assertArrayHasKey('options', $fieldMeta['arguments']['data']['config']);
+
+        return $fieldMeta['arguments']['data']['config']['options'];
+    }
+
+    /**
      * Check that entity specific options are returned.
      *
      * @return void
@@ -118,29 +144,15 @@ class LayoutUpdateTest extends TestCase
         //Testing a category without layout xml
         $product = $this->repo->get('simple');
         $this->locator->method('getProduct')->willReturn($product);
-        $this->fakeFiles->setFakeFiles((int)$product->getId(), ['test1', 'test2']);
+        $this->fakeFiles->setFakeFiles((int)$product->getId(), ['testOne', 'test_two']);
 
         $meta = $this->eavModifier->modifyMeta([]);
-        $this->assertArrayHasKey('design', $meta);
-        $this->assertArrayHasKey('children', $meta['design']);
-        $this->assertArrayHasKey('container_custom_layout_update_file', $meta['design']['children']);
-        $this->assertArrayHasKey('children', $meta['design']['children']['container_custom_layout_update_file']);
-        $this->assertArrayHasKey(
-            'custom_layout_update_file',
-            $meta['design']['children']['container_custom_layout_update_file']['children']
-        );
-        $fieldMeta = $meta['design']['children']['container_custom_layout_update_file']['children'];
-        $fieldMeta = $fieldMeta['custom_layout_update_file'];
-        $this->assertArrayHasKey('arguments', $fieldMeta);
-        $this->assertArrayHasKey('data', $fieldMeta['arguments']);
-        $this->assertArrayHasKey('config', $fieldMeta['arguments']['data']);
-        $this->assertArrayHasKey('options', $fieldMeta['arguments']['data']['config']);
+        $list = $this->extractCustomLayoutOptions($meta);
         $expectedList = [
             ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
-            ['label' => 'test1', 'value' => 'test1', '__disableTmpl' => true],
-            ['label' => 'test2', 'value' => 'test2', '__disableTmpl' => true]
+            ['label' => 'testOne', 'value' => 'testOne', '__disableTmpl' => true],
+            ['label' => 'test_two', 'value' => 'test_two', '__disableTmpl' => true]
         ];
-        $list = $fieldMeta['arguments']['data']['config']['options'];
         sort($expectedList);
         sort($list);
         $this->assertEquals($expectedList, $list);
@@ -150,20 +162,7 @@ class LayoutUpdateTest extends TestCase
         $this->fakeFiles->setFakeFiles((int)$product->getId(), ['test3']);
 
         $meta = $this->eavModifier->modifyMeta([]);
-        $this->assertArrayHasKey('design', $meta);
-        $this->assertArrayHasKey('children', $meta['design']);
-        $this->assertArrayHasKey('container_custom_layout_update_file', $meta['design']['children']);
-        $this->assertArrayHasKey('children', $meta['design']['children']['container_custom_layout_update_file']);
-        $this->assertArrayHasKey(
-            'custom_layout_update_file',
-            $meta['design']['children']['container_custom_layout_update_file']['children']
-        );
-        $fieldMeta = $meta['design']['children']['container_custom_layout_update_file']['children'];
-        $fieldMeta = $fieldMeta['custom_layout_update_file'];
-        $this->assertArrayHasKey('arguments', $fieldMeta);
-        $this->assertArrayHasKey('data', $fieldMeta['arguments']);
-        $this->assertArrayHasKey('config', $fieldMeta['arguments']['data']);
-        $this->assertArrayHasKey('options', $fieldMeta['arguments']['data']['config']);
+        $list = $this->extractCustomLayoutOptions($meta);
         $expectedList = [
             ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
             [
@@ -173,7 +172,6 @@ class LayoutUpdateTest extends TestCase
             ],
             ['label' => 'test3', 'value' => 'test3', '__disableTmpl' => true],
         ];
-        $list = $fieldMeta['arguments']['data']['config']['options'];
         sort($expectedList);
         sort($list);
         $this->assertEquals($expectedList, $list);
