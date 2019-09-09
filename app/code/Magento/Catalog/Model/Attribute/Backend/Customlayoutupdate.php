@@ -8,9 +8,7 @@ namespace Magento\Catalog\Model\Attribute\Backend;
 use Magento\Catalog\Model\AbstractModel;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
-use Magento\Eav\Model\Entity\Attribute\Exception;
-use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate as CategoryLayoutUpdate;
-use Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate as ProductLayoutUpdate;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 
 /**
  * Layout update attribute backend
@@ -20,18 +18,15 @@ use Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate as ProductLayou
  * @SuppressWarnings(PHPMD.LongVariable)
  * @since 100.0.2
  */
-class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Customlayoutupdate extends AbstractBackend
 {
     /**
-     * Layout update validator factory
-     *
      * @var ValidatorFactory
+     * @deprecated Is not used anymore.
      */
     protected $_layoutUpdateValidatorFactory;
 
     /**
-     * Construct the custom layout update class
-     *
      * @param ValidatorFactory $layoutUpdateValidatorFactory
      */
     public function __construct(ValidatorFactory $layoutUpdateValidatorFactory)
@@ -40,31 +35,19 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
     }
 
     /**
-     * Validate the custom layout update
-     *
-     * @param \Magento\Framework\DataObject $object
-     * @return bool
-     * @throws Exception
+     * @inheritDoc
+     * @param AbstractModel $object
      */
     public function validate($object)
     {
-        $attributeName = $this->getAttribute()->getName();
-        $xml = trim($object->getData($attributeName));
-
-        if (!$this->getAttribute()->getIsRequired() && empty($xml)) {
-            return true;
+        if (parent::validate($object)) {
+            $attrCode = $this->getAttribute()->getAttributeCode();
+            $value = $this->extractValue($object);
+            if ($value && $object->getOrigData($attrCode) !== $value) {
+                throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
+            }
         }
 
-        /** @var $validator \Magento\Framework\View\Model\Layout\Update\Validator */
-        $validator = $this->_layoutUpdateValidatorFactory->create();
-        if (!$validator->isValid($xml)) {
-            $messages = $validator->getMessages();
-            //Add first message to exception
-            $message = array_shift($messages);
-            $eavExc = new Exception(__($message));
-            $eavExc->setAttributeCode($attributeName);
-            throw $eavExc;
-        }
         return true;
     }
 
@@ -78,23 +61,34 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
     private function extractValue(AbstractModel $object, ?string $attributeCode = null)
     {
         $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
-        $attribute = $object->getCustomAttribute($attributeCode);
+        $data = $object->getData();
+        //Custom attributes must not be initialized if they have not already been or it will break the saving process.
+        if (array_key_exists(AbstractModel::CUSTOM_ATTRIBUTES, $data)
+            && array_key_exists($attributeCode, $data[AbstractModel::CUSTOM_ATTRIBUTES])) {
+            return $object->getCustomAttribute($attributeCode)->getValue();
+        } elseif (array_key_exists($attributeCode, $data)) {
+            return $data[$attributeCode];
+        }
 
-        return $object->getData($attributeCode) ?? ($attribute ? $attribute->getValue() : null);
+        return null;
     }
 
     /**
      * Put an attribute value.
      *
      * @param AbstractModel $object
-     * @param mixed $value
+     * @param string|null $value
      * @param string|null $attributeCode
      * @return void
      */
-    private function putValue(AbstractModel $object, $value, ?string $attributeCode = null): void
+    private function putValue(AbstractModel $object, ?string $value, ?string $attributeCode = null): void
     {
         $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
-        $object->setCustomAttribute($attributeCode, $value);
+        $data = $object->getData();
+        if (array_key_exists(AbstractModel::CUSTOM_ATTRIBUTES, $data)
+            && array_key_exists($attributeCode, $data[AbstractModel::CUSTOM_ATTRIBUTES])) {
+            $object->setCustomAttribute($attributeCode, $value);
+        }
         $object->setData($attributeCode, $value);
     }
 
@@ -105,18 +99,11 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
      */
     public function beforeSave($object)
     {
-        $attributeName = $this->getAttribute()->getName();
-        $value = $this->extractValue($object);
-        //New values are not accepted
-        if ($value && $object->getOrigData($attributeName) !== $value) {
-            throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
-        }
+        //Validate first, validation might have been skipped.
+        $this->validate($object);
         //If custom file was selected we need to remove this attribute
         $file = $this->extractValue($object, 'custom_layout_update_file');
-        if ($file
-            && $file !== CategoryLayoutUpdate::VALUE_USE_UPDATE_XML
-            && $file !== ProductLayoutUpdate::VALUE_USE_UPDATE_XML
-        ) {
+        if ($file && $file !== AbstractLayoutUpdate::VALUE_USE_UPDATE_XML) {
             $this->putValue($object, null);
         }
 

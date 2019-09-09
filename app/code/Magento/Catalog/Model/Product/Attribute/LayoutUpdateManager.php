@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute;
 
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\DataObject;
@@ -16,7 +15,6 @@ use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Model\Layout\Merge as LayoutProcessor;
 use Magento\Framework\View\Model\Layout\MergeFactory as LayoutProcessorFactory;
-use Magento\Framework\View\Result\Page as PageLayout;
 
 /**
  * Manage available layout updates for products.

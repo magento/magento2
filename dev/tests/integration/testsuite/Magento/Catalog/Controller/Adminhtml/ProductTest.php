@@ -449,8 +449,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     /**
      * Test custom update files functionality.
      *
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      * @throws \Throwable
      * @return void
      */
@@ -463,8 +463,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         /** @var ProductLayoutUpdateManager $layoutManager */
         $layoutManager = Bootstrap::getObjectManager()->get(ProductLayoutUpdateManager::class);
         $layoutManager->setFakeFiles((int)$product->getId(), [$file]);
+        $productData = $product->getData();
+        unset($productData['options']);
+        unset($productData[$product->getIdFieldName()]);
         $requestData = [
-            'product' => $product->getData()
+            'product' => $productData
         ];
         $uri = 'backend/catalog/product/save';
 
@@ -476,7 +479,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setParam('id', $product->getId());
         $this->dispatch($uri);
         $this->assertSessionMessages(
-            self::equalTo(['tst']),
+            self::equalTo(['Selected layout update is not available']),
             MessageInterface::TYPE_ERROR
         );
 
