@@ -251,7 +251,6 @@ QUERY;
         $newFirstname = '';
         $newLastname = 'Rowe';
         $currentPassword = 'test123#';
-
         $query = <<<QUERY
 mutation {
     createCustomer(
@@ -274,6 +273,38 @@ mutation {
 }
 QUERY;
         $this->graphQlMutation($query);
+    }
+ 
+    /**
+     * @magentoConfigFixture default_store newsletter/general/active 0
+     */
+    public function testCreateCustomerSubscribed()
+    {
+        $newFirstname = 'Richard';
+        $newLastname = 'Rowe';
+        $newEmail = 'new_customer@example.com';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            firstname: "{$newFirstname}"
+            lastname: "{$newLastname}"
+            email: "{$newEmail}"
+            is_subscribed: true
+        }
+    ) {
+        customer {
+            email
+            is_subscribed
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($query);
+
+        $this->assertEquals(false, $response['createCustomer']['customer']['is_subscribed']);
     }
 
     public function tearDown()
