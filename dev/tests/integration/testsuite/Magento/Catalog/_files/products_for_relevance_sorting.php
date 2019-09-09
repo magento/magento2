@@ -6,10 +6,26 @@
 declare(strict_types=1);
 
 // phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/../../Framework/Search/_files/products.php';
+include __DIR__ . '/../../Framework/Search/_files/products.php';
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$categoryLinkRepository = $objectManager->create(
+    \Magento\Catalog\Api\CategoryLinkRepositoryInterface::class,
+    [
+        'productRepository' => $productRepository
+    ]
+);
+$categoryLinkManagement = $objectManager->create(
+    \Magento\Catalog\Api\CategoryLinkManagementInterface::class,
+    [
+        'productRepository' => $productRepository,
+        'categoryLinkRepository' => $categoryLinkRepository
+    ]
+);
 $category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(
@@ -21,7 +37,7 @@ $category->setId(
 )->setParentId(
     2
 )->setPath(
-    '1/2/300'
+    '1/2/330'
 )->setLevel(
     2
 )->setAvailableSortBy(
@@ -45,31 +61,52 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($defaultAttributeSet)
     ->setStoreId(1)
     ->setWebsiteIds([1])
-    ->setName('Red White and Blue striped Shoes')
-    ->setSku('red white and blue striped shoes')
+    ->setName('Navy Striped Shoes')
+    ->setSku('navy-striped-shoes')
     ->setPrice(40)
     ->setWeight(8)
     ->setDescription('Red white and blue flip flops at <b>one</b>')
-    ->setMetaTitle('Multi colored shoes meta title')
-    ->setMetaKeyword('red, white,flip-flops, women, kids')
-    ->setMetaDescription('flip flops women kids meta description')
+    ->setMetaTitle('navy colored shoes meta title')
+    ->setMetaKeyword('navy, striped , women, kids')
+    ->setMetaDescription('shoes women kids meta description')
     ->setStockData(['use_config_manage_stock' => 0])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->save();
-/** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->get(ProductRepositoryInterface::class);
-$skus = ['green_socks', 'white_shorts','red_trousers','blue_briefs','grey_shorts', 'red white and blue striped shoes' ];
-$products = [];
-foreach ($skus as $sku) {
-    $products = $productRepository->get($sku);
-}
+
+/** @var $product \Magento\Catalog\Model\Product */
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
+$product->isObjectNew(true);
+$product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
+    ->setAttributeSetId($defaultAttributeSet)
+    ->setStoreId(1)
+    ->setWebsiteIds([1])
+    ->setName('ocean blue Shoes')
+    ->setSku('ocean-blue-shoes')
+    ->setPrice(40)
+    ->setWeight(8)
+    ->setDescription('light blue shoes <b>one</b>')
+    ->setMetaTitle('light blue shoes meta title')
+    ->setMetaKeyword('light, blue , women, kids')
+    ->setMetaDescription('shoes women kids meta description')
+    ->setStockData(['use_config_manage_stock' => 0])
+    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->save();
+
+/** @var \Magento\Catalog\Model\Product $greyProduct */
+$greyProduct = $productRepository->get('grey_shorts');
+$greyProduct->setDescription('Description with blue lines');
+$productRepository->save($greyProduct);
+
+$skus = ['green_socks', 'white_shorts','red_trousers','blue_briefs','grey_shorts',
+    'navy-striped-shoes', 'ocean-blue-shoes'];
+
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
-        $categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
-foreach ($products as $product) {
+$categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+foreach ($skus as $sku) {
     $categoryLinkManagement->assignProductToCategories(
-        $product->getSku(),
-        [300]
+        $sku,
+        [330]
     );
 }

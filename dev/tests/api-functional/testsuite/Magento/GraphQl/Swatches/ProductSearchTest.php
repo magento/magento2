@@ -30,7 +30,7 @@ class ProductSearchTest extends GraphQlAbstract
     products (
         filter:{
             sku:{
-                like:"%simple%"
+                in:["simple1", "simple2", "simple3"]
             }
         }
         pageSize: 4
