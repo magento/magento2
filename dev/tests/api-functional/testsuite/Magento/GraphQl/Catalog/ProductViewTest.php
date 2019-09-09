@@ -981,7 +981,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: {sku: {in: ["12345"]}})
     {
         items
         {
@@ -1031,7 +1031,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: {sku: {in: ["12345"]}})
     {
         items
         {
@@ -1085,7 +1085,11 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: 
+             {
+             sku: {in:["12345"]}
+             }
+          )
     {
         items
         {

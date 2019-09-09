@@ -106,7 +106,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testLayeredNavigationWithConfigurableChildrenOutOfStock()
+    public function testLayeredNavigationForConfigurableProducts()
     {
         CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
@@ -704,59 +704,6 @@ QUERY;
             );
         }
     }
-    /**
-     *
-     * @return string
-     */
-    private function getQueryProductsWithCustomAttribute($attributeCode, $optionValue) : string
-    {
-        return <<<QUERY
-{
-  products(filter:{                   
-                   $attributeCode: {eq: "{$optionValue}"}
-                   }
-                   pageSize: 3
-                   currentPage: 1
-       )
-  {
-  total_count
-    items 
-     {
-      name
-      sku
-      }
-    page_info{
-      current_page
-      page_size
-      total_pages
-    }
-    filters{
-      name
-      request_var
-      filter_items_count 
-      filter_items{
-        label
-        items_count
-        value_string
-        __typename
-      }
-      
-       
-    }  
-    aggregations{
-        attribute_code
-        count
-        label
-        options{
-           label
-           value
-    }
-  }
-      
-    } 
-}
-QUERY;
-    }
 
     /**
      * Get array with expected data for layered navigation filters
@@ -849,7 +796,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterProductsWithinSpecificPriceRangeSortedByNameDesc()
+    public function testFilterWithinSpecificPriceRangeSortedByNameDesc()
     {
         $query
             = <<<QUERY
@@ -1355,10 +1302,11 @@ QUERY;
         $this->assertEquals(4, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters'],'Filters should have the Category layer');
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
-        $productsInResponse = ['Blue briefs', 'ocean blue Shoes', 'Navy Striped Shoes','Grey shorts'];
+        $productsInResponse = ['ocean blue Shoes', 'Blue briefs', 'Navy Striped Shoes','Grey shorts'];
         for ($i = 0; $i < count($response['products']['items']); $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
         }
+        $this->assertCount(2, $response['products']['aggregations']);
     }
 
     /**
@@ -1521,7 +1469,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
-    public function testFilterProductsWithinASpecificPriceRangeSortedByPriceDESC()
+    public function testFilterWithinASpecificPriceRangeSortedByPriceDESC()
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
