@@ -43,11 +43,6 @@ class ProductSearchTest extends GraphQlAbstract
      */
     public function testFilterLn()
     {
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
-        $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
-        /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $options */
-        $options = $attribute->getOptions();
         $query = <<<QUERY
 {
     products (
@@ -128,9 +123,8 @@ QUERY;
 
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['aggregations']);
-        $this->assertNotEmpty($response['products']['filters'],'Filters is empty');
+        $this->assertNotEmpty($response['products']['filters'], 'Filters is empty');
         $this->assertCount(2, $response['products']['aggregations'], 'Aggregation count does not match');
-        //$this->assertResponseFields($response['products']['aggregations'])
 
         // Custom attribute filter layer data
         $this->assertResponseFields(
@@ -224,6 +218,7 @@ QUERY;
   products(filter:{                   
                    $attributeCode: {eq: "{$optionValue}"}
                    }
+                   sort:{relevance:DESC}
                    pageSize: 3
                    currentPage: 1
        )
@@ -278,8 +273,9 @@ QUERY;
         $indexer->load('catalogsearch_fulltext');
         $indexer->reindexAll();
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count']);
+        $this->assertEquals(3, $response['products']['total_count'], 'Number of products returned is incorrect');
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
+        $this->assertCount(3, $response['products']['aggregations'], 'Incorrect count of aggregations');
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
          //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
@@ -288,7 +284,7 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [ 'name' => $filteredProducts[$itemIndex]->getName(),
-                    'sku' => $filteredProducts[$itemIndex]->getSku()
+                  'sku' => $filteredProducts[$itemIndex]->getSku()
                 ]
             );
         }
@@ -627,8 +623,8 @@ QUERY;
         $this->assertEquals(2, $response['products']['total_count']);
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product1 = $productRepository->get('simple-4');
-        $product2 = $productRepository->get('simple');
+        $product1 = $productRepository->get('simple');
+        $product2 = $productRepository->get('simple-4');
         $filteredProducts = [$product1, $product2];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
@@ -1069,8 +1065,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertEquals(['page_size' => 2, 'current_page' => 1], $response['products']['page_info']);
-        $this->assertEquals
-        (
+        $this->assertEquals(
             [
                 ['sku' => $product1->getSku(), 'name' => $product1->getName()],
                 ['sku' => $product2->getSku(), 'name' => $product2->getName()]
@@ -1192,7 +1187,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-
+         $this->assertEquals(2, $response['products']['total_count'], 'Incorrect count of products returned');
         /** @var CategoryLinkManagement $productLinks */
         $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
         /** @var CategoryRepositoryInterface $categoryRepository */
@@ -1300,9 +1295,9 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(4, $response['products']['total_count']);
-        $this->assertNotEmpty($response['products']['filters'],'Filters should have the Category layer');
+        $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
-        $productsInResponse = ['ocean blue Shoes', 'Blue briefs', 'Navy Striped Shoes','Grey shorts'];
+        $productsInResponse = ['ocean blue Shoes','Blue briefs','Navy Striped Shoes','Grey shorts'];
         for ($i = 0; $i < count($response['products']['items']); $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
         }
@@ -1437,11 +1432,13 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 
         $prod1 = $productRepository->get('blue_briefs');
-
+        $prod2 = $productRepository->get('grey_shorts');
+        $prod3 = $productRepository->get('navy-striped-shoes');
+        $prod4 = $productRepository->get('ocean-blue-shoes');
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
+        $this->assertEquals(4, $response['products']['total_count']);
 
-        $filteredProducts = [$prod1];
+        $filteredProducts = [$prod1, $prod2, $prod3, $prod4];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
@@ -1453,7 +1450,7 @@ QUERY;
                     'price' => [
                         'minimalPrice' => [
                             'amount' => [
-                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'value' => $filteredProducts[$itemIndex]->getPrice(),
                                 'currency' => 'USD'
                             ]
                         ]
