@@ -290,7 +290,7 @@ class PhpRule implements RuleInterface
     protected function _caseGetUrl(string $currentModule, string &$contents): array
     {
         $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<route_id>[a-z0-9\-_]{3,}|\*)'
-            .'(\/(?<controller_name>[a-z0-9\-_]+|\*))?(\/(?<action_name>[a-z0-9\-_]+|\*))?\3)#i';
+            .'(/(?<controller_name>[a-z0-9\-_]+|\*))?(/(?<action_name>[a-z0-9\-_]+|\*))?\3)#i';
 
         $dependencies = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
@@ -304,11 +304,11 @@ class PhpRule implements RuleInterface
                 $actionName = $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
 
                 // skip rest
-                if ($routeId === "rest") { //MC-17627
+                if ($routeId === "rest") { //MC-19890
                     continue;
                 }
                 // skip wildcards
-                if ($routeId === "*" || $controllerName === "*" || $actionName === "*") {  //MC-17627
+                if ($routeId === "*" || $controllerName === "*" || $actionName === "*") { //MC-19890
                     continue;
                 }
                 $modules = $this->routeMapper->getDependencyByRoutePath(
