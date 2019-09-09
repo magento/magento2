@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCheckoutAddressSection">
-        <element name="changeAddressButton" type="button" selector="(//button[contains(@class,'action action-additional')][contains(@data-bind,'openAddressSelection')])[{{index}}]" parameterized="true"/>
+        <element name="changeAddressButton" type="button" selector=".checkout-billing-address .change-address-popup button.action-additional"/>
     </section>
 </sections>
