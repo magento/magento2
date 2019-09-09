@@ -36,13 +36,23 @@ class CustomlayoutupdateTest extends TestCase
     private $category;
 
     /**
+     * Recreate the category model.
+     *
+     * @return void
+     */
+    private function recreateCategory(): void
+    {
+        $this->category = $this->categoryFactory->create();
+        $this->category->load(2);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
     {
         $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryFactory::class);
-        $this->category = $this->categoryFactory->create();
-        $this->category->load(2);
+        $this->recreateCategory();
         $this->attribute = $this->category->getAttributes()['custom_layout_update']->getBackend();
     }
 
@@ -100,19 +110,22 @@ class CustomlayoutupdateTest extends TestCase
         $this->attribute->beforeSave($this->category);
         $this->assertEmpty($this->category->getCustomAttribute('custom_layout_update')->getValue());
         $this->assertEquals('new', $this->category->getCustomAttribute('custom_layout_update_file')->getValue());
+        $this->assertEmpty($this->category->getData('custom_layout_update'));
+        $this->assertEquals('new', $this->category->getData('custom_layout_update_file'));
 
         //Existing update chosen
-        $this->category->setCustomAttribute('custom_layout_update', 'test');
+        $this->recreateCategory();
+        $this->category->setData('custom_layout_update', 'test');
         $this->category->setOrigData('custom_layout_update', 'test');
-        $this->category->setCustomAttribute(
+        $this->category->setData(
             'custom_layout_update_file',
             \Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML
         );
         $this->attribute->beforeSave($this->category);
-        $this->assertEquals('test', $this->category->getCustomAttribute('custom_layout_update')->getValue());
+        $this->assertEquals('test', $this->category->getData('custom_layout_update'));
         /** @var AbstractBackend $fileAttribute */
         $fileAttribute = $this->category->getAttributes()['custom_layout_update_file']->getBackend();
         $fileAttribute->beforeSave($this->category);
-        $this->assertEquals(null, $this->category->getCustomAttribute('custom_layout_update_file')->getValue());
+        $this->assertEquals(null, $this->category->getData('custom_layout_update_file'));
     }
 }

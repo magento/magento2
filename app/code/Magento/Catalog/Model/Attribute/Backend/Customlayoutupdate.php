@@ -42,9 +42,11 @@ class Customlayoutupdate extends AbstractBackend
     {
         if (parent::validate($object)) {
             $attrCode = $this->getAttribute()->getAttributeCode();
-            $value = $this->extractValue($object);
-            if ($value && $object->getOrigData($attrCode) !== $value) {
-                throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
+            if ($object instanceof AbstractModel) {
+                $value = $this->extractValue($object);
+                if ($value && $object->getOrigData($attrCode) !== $value) {
+                    throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
+                }
             }
         }
 
@@ -61,16 +63,8 @@ class Customlayoutupdate extends AbstractBackend
     private function extractValue(AbstractModel $object, ?string $attributeCode = null)
     {
         $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
-        $data = $object->getData();
-        //Custom attributes must not be initialized if they have not already been or it will break the saving process.
-        if (array_key_exists(AbstractModel::CUSTOM_ATTRIBUTES, $data)
-            && array_key_exists($attributeCode, $data[AbstractModel::CUSTOM_ATTRIBUTES])) {
-            return $object->getCustomAttribute($attributeCode)->getValue();
-        } elseif (array_key_exists($attributeCode, $data)) {
-            return $data[$attributeCode];
-        }
 
-        return null;
+        return $object->getData($attributeCode);
     }
 
     /**
@@ -84,9 +78,7 @@ class Customlayoutupdate extends AbstractBackend
     private function putValue(AbstractModel $object, ?string $value, ?string $attributeCode = null): void
     {
         $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
-        $data = $object->getData();
-        if (array_key_exists(AbstractModel::CUSTOM_ATTRIBUTES, $data)
-            && array_key_exists($attributeCode, $data[AbstractModel::CUSTOM_ATTRIBUTES])) {
+        if ($object->hasData(AbstractModel::CUSTOM_ATTRIBUTES)) {
             $object->setCustomAttribute($attributeCode, $value);
         }
         $object->setData($attributeCode, $value);

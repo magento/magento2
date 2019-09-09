@@ -23,22 +23,13 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
      * Extract attribute value.
      *
      * @param AbstractModel $model
-     * @throws LocalizedException
      * @return mixed
      */
     private function extractAttributeValue(AbstractModel $model)
     {
         $code = $this->getAttribute()->getAttributeCode();
-        $data = $model->getData();
-        //Custom attributes must not be initialized if they have not already been or it will break the saving process.
-        if (array_key_exists(AbstractModel::CUSTOM_ATTRIBUTES, $data)
-            && array_key_exists($code, $data[AbstractModel::CUSTOM_ATTRIBUTES])) {
-            return $model->getCustomAttribute($code)->getValue();
-        } elseif (array_key_exists($code, $data)) {
-            return $data[$code];
-        }
 
-        return null;
+        return $model->getData($code);
     }
 
     /**
@@ -85,9 +76,7 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
     private function setAttributeValue(?string $value, AbstractModel $forObject): void
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
-        $data = $forObject->getData();
-        if (array_key_exists(AbstractModel::CUSTOM_ATTRIBUTES, $data)
-            && array_key_exists($attrCode, $data[AbstractModel::CUSTOM_ATTRIBUTES])) {
+        if ($forObject->hasData(AbstractModel::CUSTOM_ATTRIBUTES)) {
             $forObject->setCustomAttribute($attrCode, $value);
         }
         $forObject->setData($attrCode, $value);
