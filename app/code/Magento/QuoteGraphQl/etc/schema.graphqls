@@ -85,6 +85,7 @@ input SetShippingAddressesOnCartInput {
 input ShippingAddressInput {
     customer_address_id: Int # If provided then will be used address from address book
     address: CartAddressInput
+    customer_notes: String
 }
 
 input SetBillingAddressOnCartInput {
@@ -211,7 +212,6 @@ interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Mo
     postcode: String
     country: CartAddressCountry
     telephone: String
-    customer_notes: String
 }
 
 type ShippingCartAddress implements CartAddressInterface {
@@ -219,9 +219,11 @@ type ShippingCartAddress implements CartAddressInterface {
     selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod")
     items_weight: Float
     cart_items: [CartItemQuantity]
+    customer_notes: String
 }
 
 type BillingCartAddress implements CartAddressInterface {
+    customer_notes: String @deprecated (reason: "The field is used only in shipping address")
 }
 
 type CartItemQuantity {
