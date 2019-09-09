@@ -235,7 +235,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $dbRuleTables = [];
         foreach (glob($replaceFilePattern) as $fileName) {
             //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
+            $dbRuleTables = array_merge($dbRuleTables, include $fileName);
         }
         self::$_rulesInstances = [
             new PhpRule(
