@@ -34,6 +34,7 @@ class LayoutUpdate extends AbstractLayoutUpdate
 
     /**
      * @inheritDoc
+     *
      * @param AbstractModel|Product $forModel
      */
     protected function listAvailableValues(AbstractModel $forModel): array

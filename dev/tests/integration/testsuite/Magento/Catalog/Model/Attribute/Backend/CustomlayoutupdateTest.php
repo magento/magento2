@@ -90,9 +90,10 @@ class CustomlayoutupdateTest extends TestCase
         $this->assertTrue($caughtException);
 
         //Removing a value
-        $this->category->setCustomAttribute('custom_layout_update', null);
+        $this->category->setCustomAttribute('custom_layout_update', '');
         $this->category->setOrigData('custom_layout_update', 'test');
         $this->attribute->beforeSave($this->category);
+        $this->assertNull($this->category->getCustomAttribute('custom_layout_update')->getValue());
     }
 
     /**

@@ -35,7 +35,26 @@ class Customlayoutupdate extends AbstractBackend
     }
 
     /**
+     * Extract an attribute value.
+     *
+     * @param AbstractModel $object
+     * @param string|null $attributeCode
+     * @return mixed
+     */
+    private function extractValue(AbstractModel $object, ?string $attributeCode = null)
+    {
+        $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
+        $value = $object->getData($attributeCode);
+        if (!$value) {
+            $value = null;
+        }
+
+        return $value;
+    }
+
+    /**
      * @inheritDoc
+     *
      * @param AbstractModel $object
      */
     public function validate($object)
@@ -54,30 +73,15 @@ class Customlayoutupdate extends AbstractBackend
     }
 
     /**
-     * Extract an attribute value.
-     *
-     * @param AbstractModel $object
-     * @param string|null $attributeCode
-     * @return mixed
-     */
-    private function extractValue(AbstractModel $object, ?string $attributeCode = null)
-    {
-        $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
-
-        return $object->getData($attributeCode);
-    }
-
-    /**
      * Put an attribute value.
      *
      * @param AbstractModel $object
      * @param string|null $value
-     * @param string|null $attributeCode
      * @return void
      */
-    private function putValue(AbstractModel $object, ?string $value, ?string $attributeCode = null): void
+    private function putValue(AbstractModel $object, ?string $value): void
     {
-        $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
+        $attributeCode = $this->getAttribute()->getName();
         if ($object->hasData(AbstractModel::CUSTOM_ATTRIBUTES)) {
             $object->setCustomAttribute($attributeCode, $value);
         }
@@ -86,6 +90,7 @@ class Customlayoutupdate extends AbstractBackend
 
     /**
      * @inheritDoc
+     *
      * @param AbstractModel $object
      * @throws LocalizedException
      */
@@ -93,10 +98,13 @@ class Customlayoutupdate extends AbstractBackend
     {
         //Validate first, validation might have been skipped.
         $this->validate($object);
+        $value = $this->extractValue($object);
         //If custom file was selected we need to remove this attribute
         $file = $this->extractValue($object, 'custom_layout_update_file');
         if ($file && $file !== AbstractLayoutUpdate::VALUE_USE_UPDATE_XML) {
             $this->putValue($object, null);
+        } else {
+            $this->putValue($object, $value);
         }
 
         return parent::beforeSave($object);

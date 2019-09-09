@@ -127,7 +127,8 @@ class DataProviderTest extends TestCase
         //File has value
         /** @var Category $category */
         $category = $this->categoryFactory->create();
-        $category->load($id = 2);
+        $id = 2;
+        $category->load($id);
         $category->setData('custom_layout_update', null);
         $category->setData('custom_layout_update_file', $file = 'test-file');
         $this->registry->register('category', $category);

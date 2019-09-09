@@ -316,7 +316,9 @@ class CategoryRepositoryTest extends WebapiAbstract
                     'operation' => self::SERVICE_NAME . 'Save',
                 ],
             ];
-        $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $data['id'] = $id;
