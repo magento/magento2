@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 class ProductAttributeOptionsTest extends GraphQlAbstract
 {
@@ -18,6 +19,17 @@ class ProductAttributeOptionsTest extends GraphQlAbstract
      */
     public function testCustomAttributeMetadataOptions()
     {
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        $attribute = $eavConfig->getAttribute('catalog_product', 'dropdown_attribute');
+        /** @var AttributeOptionInterface[] $options */
+        $options = $attribute->getOptions();
+        array_shift($options);
+        $optionValues = [];
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+        for ($i = 0; $i < count($options); $i++) {
+            $optionValues[] = $options[$i]->getValue();
+        }
         $query
             = <<<QUERY
 {
@@ -69,15 +81,15 @@ QUERY;
             [
                 [
                     'label' => 'Option 1',
-                    'value' => '10'
+                    'value' => $optionValues[0]
                 ],
                 [
                     'label' => 'Option 2',
-                    'value' => '11'
+                    'value' => $optionValues[1]
                 ],
                 [
                     'label' => 'Option 3',
-                    'value' => '12'
+                    'value' => $optionValues[2]
                 ]
             ]
         ];
