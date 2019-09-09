@@ -13,9 +13,6 @@ namespace Magento\Framework\Pricing;
  */
 interface PriceCurrencyInterface
 {
-    /**
-     * Default precision
-     */
     const DEFAULT_PRECISION = 2;
 
     /**
