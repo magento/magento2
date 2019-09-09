@@ -27,6 +27,11 @@ class AddVirtualProductWithCustomOptionsToCartTest extends GraphQlAbstract
     private $productCustomOptionsRepository;
 
     /**
+     * @var GetCustomOptionsValuesForQueryBySku
+     */
+    private $getCustomOptionsValuesForQueryBySku;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -34,6 +39,7 @@ class AddVirtualProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->productCustomOptionsRepository = $objectManager->get(ProductCustomOptionRepositoryInterface::class);
+        $this->getCustomOptionsValuesForQueryBySku = $objectManager->get(GetCustomOptionsValuesForQueryBySku::class);
     }
 
     /**
@@ -49,7 +55,7 @@ class AddVirtualProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $quantity = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $customOptionsValues = $this->getCustomOptionsValuesForQuery($sku);
+        $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
         /* Generate customizable options fragment for GraphQl request */
         $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
 
@@ -133,42 +139,6 @@ mutation {
   }
 }
 QUERY;
-    }
-
-    /**
-     * Generate an array with test values for customizable options
-     * based on the option type
-     *
-     * @param string $sku
-     * @return array
-     */
-    private function getCustomOptionsValuesForQuery(string $sku): array
-    {
-        $customOptions = $this->productCustomOptionsRepository->getList($sku);
-        $customOptionsValues = [];
-
-        foreach ($customOptions as $customOption) {
-            $optionType = $customOption->getType();
-            if ($optionType == 'field' || $optionType == 'area') {
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => 'test'
-                ];
-            } elseif ($optionType == 'drop_down') {
-                $optionSelectValues = $customOption->getValues();
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => reset($optionSelectValues)->getOptionTypeId()
-                ];
-            } elseif ($optionType == 'multiple') {
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => '[' . implode(',', array_keys($customOption->getValues())) . ']'
-                ];
-            }
-        }
-
-        return $customOptionsValues;
     }
 
     /**
