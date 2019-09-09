@@ -14,27 +14,12 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @inheritdoc
  */
 class SelectedShippingMethod implements ResolverInterface
 {
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param StoreManagerInterface $storeManager
-     */
-    public function __construct(
-        StoreManagerInterface $storeManager
-    ) {
-        $this->storeManager = $storeManager;
-    }
-
     /**
      * @inheritdoc
      */
@@ -61,9 +46,6 @@ class SelectedShippingMethod implements ResolverInterface
                 }
             }
 
-            /** @var Currency $currency */
-            $currency = $this->storeManager->getStore()->getBaseCurrency();
-
             $data = [
                 'carrier_code' => $carrierCode,
                 'method_code' => $methodCode,
@@ -73,10 +55,8 @@ class SelectedShippingMethod implements ResolverInterface
                     'value' => $address->getShippingAmount(),
                     'currency' => $address->getQuote()->getQuoteCurrencyCode(),
                 ],
-                'base_amount' => [
-                    'value' => $address->getBaseShippingAmount(),
-                    'currency' => $currency->getCode(),
-                ],
+                /** @deprecated The field should not be used on the storefront */
+                'base_amount' => null,
             ];
         } else {
             $data = [
@@ -85,6 +65,7 @@ class SelectedShippingMethod implements ResolverInterface
                 'carrier_title' => $carrierTitle,
                 'method_title' => $methodTitle,
                 'amount' => null,
+                /** @deprecated The field should not be used on the storefront */
                 'base_amount' => null,
             ];
         }

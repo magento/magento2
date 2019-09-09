@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
@@ -16,6 +18,7 @@ use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
+use Magento\Store\Model\Store;
 
 /**
  * Create Ship Bundle Items and Affect Bundle Product Selections fields
@@ -814,6 +817,6 @@ class BundlePanel extends AbstractModifier
      */
     protected function isDefaultStore()
     {
-        return $this->locator->getProduct()->getStoreId() == 0;
+        return $this->locator->getProduct()->getStoreId() == Store::DEFAULT_STORE_ID;
     }
 }

@@ -20,6 +20,7 @@
         <element name="relatedDependent" type="block" selector="//div[@data-index='related']//div[contains(@class, '_show')]"/>
         <element name="selectedRelatedProduct" type="block" selector="//span[@data-index='name']"/>
         <element name="removeRelatedProduct" type="button" selector="//span[text()='Related Products']//..//..//..//span[text()='{{productName}}']//..//..//..//..//..//button[@class='action-delete']" parameterized="true"/>
+        <element name="selectedProductSku" type="text" selector="//div[@data-index='{{section}}']//span[@data-index='sku']" parameterized="true" timeout="30"/>
     </section>
     <section name="AdminAddUpSellProductsModalSection">
         <element name="Modal" type="button" selector=".product_form_product_form_related_upsell_modal"/>

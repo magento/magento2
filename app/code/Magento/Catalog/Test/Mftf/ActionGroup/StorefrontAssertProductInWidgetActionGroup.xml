@@ -10,27 +10,39 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Check the product in recently viewed widget -->
     <actionGroup name="StorefrontAssertProductInRecentlyViewedWidgetActionGroup">
+        <annotations>
+            <description>Validate that the provided Product appears in the Recently Viewed Products widget.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>
+
         <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" stepKey="waitWidgetRecentlyViewedProductsGrid"/>
         <see selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyViewedWidget"/>
     </actionGroup>
 
     <!-- Check the product in recently compared widget -->
     <actionGroup name="StorefrontAssertProductInRecentlyComparedWidgetActionGroup">
+        <annotations>
+            <description>Validate that the provided Product appears in the Recently Compared Products widget.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>
+
         <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" stepKey="waitWidgetRecentlyComparedProductsGrid"/>
         <see selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyComparedWidget"/>
     </actionGroup>
 
     <!-- Check the product in recently ordered widget -->
     <actionGroup name="StorefrontAssertProductInRecentlyOrderedWidgetActionGroup">
+        <annotations>
+            <description>Validate that the provided Product appears in the Recently Ordered Products widget.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>
+
         <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" stepKey="waitWidgetRecentlyOrderedProductsGrid"/>
         <see selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyOrderedWidget"/>
     </actionGroup>

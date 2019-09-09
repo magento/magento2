@@ -20,12 +20,14 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ImportExport\Model\Import\Source\Csv;
 
 /**
  * Class ProductTest
@@ -36,6 +38,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * phpcs:disable Generic.PHP.NoSilencedErrors, Generic.Metrics.NestingLevel, Magento2.Functions.StaticFunction
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
@@ -95,6 +98,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             try {
                 $product = $productRepository->get($productSku, false, null, true);
                 $productRepository->delete($product);
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (NoSuchEntityException $e) {
                 // nothing to delete
             }
@@ -372,8 +376,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Tests adding of custom options with multiple store views
      *
-     * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      * @magentoAppIsolation enabled
      */
     public function testSaveCustomOptionsWithMultipleStoreViews()
@@ -384,7 +388,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $storeCodes = [
             'admin',
             'default',
-            'fixture_second_store',
+            'secondstore',
         ];
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $importFile = 'product_with_custom_options_and_multiple_store_views.csv';
@@ -623,6 +627,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                         explode(',', $optionData)
                     )
                 );
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $option = array_merge(...$option);
 
                 if (!empty($option['type']) && !empty($option['name'])) {
@@ -689,12 +694,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 }
             } else {
                 $existingOptionId = array_search($optionKey, $expectedOptions);
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $expectedData[$existingOptionId] = array_merge(
                     $this->getOptionData($option),
                     $expectedData[$existingOptionId]
                 );
                 if ($optionValues) {
                     foreach ($optionValues as $optionKey => $optionValue) {
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $expectedValues[$existingOptionId][$optionKey] = array_merge(
                             $optionValue,
                             $expectedValues[$existingOptionId][$optionKey]
@@ -840,6 +847,58 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that new images should be added after the existing ones.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testNewImagesShouldBeAddedAfterExistingOnes()
+    {
+        $this->importDataForMediaTest('import_media.csv');
+
+        $product = $this->getProductBySku('simple_new');
+
+        $items = array_values($product->getMediaGalleryImages()->getItems());
+
+        $images = [
+            ['file' => '/m/a/magento_image.jpg', 'label' => 'Image Label'],
+            ['file' => '/m/a/magento_small_image.jpg', 'label' => 'Small Image Label'],
+            ['file' => '/m/a/magento_thumbnail.jpg', 'label' => 'Thumbnail Label'],
+            ['file' => '/m/a/magento_additional_image_one.jpg', 'label' => 'Additional Image Label One'],
+            ['file' => '/m/a/magento_additional_image_two.jpg', 'label' => 'Additional Image Label Two'],
+        ];
+
+        $this->assertCount(5, $items);
+        $this->assertEquals(
+            $images,
+            array_map(
+                function (\Magento\Framework\DataObject $item) {
+                    return $item->toArray(['file', 'label']);
+                },
+                $items
+            )
+        );
+
+        $this->importDataForMediaTest('import_media_additional_images.csv');
+        $product->cleanModelCache();
+        $product = $this->getProductBySku('simple_new');
+        $items = array_values($product->getMediaGalleryImages()->getItems());
+        $images[] = ['file' => '/m/a/magento_additional_image_three.jpg', 'label' => ''];
+        $images[] = ['file' => '/m/a/magento_additional_image_four.jpg', 'label' => ''];
+        $this->assertCount(7, $items);
+        $this->assertEquals(
+            $images,
+            array_map(
+                function (\Magento\Framework\DataObject $item) {
+                    return $item->toArray(['file', 'label']);
+                },
+                $items
+            )
+        );
+    }
+
+    /**
      * Test that errors occurred during importing images are logged.
      *
      * @magentoAppIsolation enabled
@@ -888,6 +947,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_two.jpg',
                 'dest' => $dirPath . '/magento_additional_image_two.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_three.jpg',
+                'dest' => $dirPath . '/magento_additional_image_three.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_four.jpg',
+                'dest' => $dirPath . '/magento_additional_image_four.jpg',
             ],
         ];
 
@@ -1097,6 +1164,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test url keys properly generated in multistores environment.
      *
+     * @magentoConfigFixture current_store catalog/seo/product_use_categories 1
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
      * @magentoDbIsolation enabled
@@ -1644,6 +1712,92 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testUpdateUrlRewritesOnImport()
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_category.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => \Magento\Catalog\Model\Product::ENTITY
+            ]
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple');
+
+        $repUrlRewriteCol = $this->objectManager->create(
+            UrlRewriteCollection::class
+        );
+
+        /** @var UrlRewriteCollection $collUrlRewrite */
+        $collUrlRewrite = $repUrlRewriteCol->addFieldToSelect(['request_path'])
+            ->addFieldToFilter('entity_id', ['eq'=> $product->getEntityId()])
+            ->addFieldToFilter('entity_type', ['eq'=> 'product'])
+            ->load();
+
+        $this->assertCount(2, $collUrlRewrite);
+
+        $this->assertEquals(
+            sprintf('%s.html', $product->getUrlKey()),
+            $collUrlRewrite->getFirstItem()->getRequestPath()
+        );
+
+        $this->assertContains(
+            sprintf('men/tops/%s.html', $product->getUrlKey()),
+            $collUrlRewrite->getLastItem()->getRequestPath()
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithoutChangingUrlKeys()
+    {
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_without_url_key_column.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->assertEquals('url-key', $productRepository->get('simple1')->getUrlKey());
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
@@ -1990,7 +2144,17 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
-        $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == $expectedErrors);
+        $this->assertEquals(
+            $expectedErrors,
+            $this->_model->getErrorAggregator()->getErrorsCount(),
+            array_reduce(
+                $this->_model->getErrorAggregator()->getAllErrors(),
+                function ($output, $error) {
+                    return "$output\n{$error->getErrorMessage()}";
+                },
+                ''
+            )
+        );
     }
 
     /**
@@ -2168,7 +2332,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     *
      */
     public function testImportDataChangeAttributeSet()
     {
@@ -2186,7 +2349,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
         $errors = $this->_model->setParameters(
             [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => \Magento\Catalog\Model\Product::ENTITY
             ]
         )->setSource(

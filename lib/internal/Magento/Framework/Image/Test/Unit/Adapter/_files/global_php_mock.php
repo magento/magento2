@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\Image\Test\Unit\Adapter\Gd2Test;
@@ -33,6 +36,16 @@ function ini_get($paramName)
 function getimagesize($file)
 {
     return Gd2Test::$imageData;
+}
+
+/**
+ * @param $file
+ * @return mixed
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
+function filesize($file)
+{
+    return Gd2Test::$imageSize;
 }
 
 /**

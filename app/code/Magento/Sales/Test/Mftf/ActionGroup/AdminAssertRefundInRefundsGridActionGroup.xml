@@ -9,12 +9,16 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertRefundInRefundsGridActionGroup">
+        <annotations>
+            <description>Goes to the Admin Credit Memo grid page. Filters the grid for the provided Order ID, Memo ID, Refund Status and Refunded Total. Validates that the provided details are present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="orderId" type="string"/>
             <argument name="memoId" type="string"/>
             <argument name="refundStatus" type="string"/>
             <argument name="refundedTotal" type="string"/>
         </arguments>
+
         <!--Assert refund in refunds grid-->
         <amOnPage url="{{AdminCreditMemosGridPage.url}}" stepKey="onCreditMemosGrid"/>
         <waitForPageLoad stepKey="waitForLoadingPage"/>
@@ -34,4 +38,3 @@
         <see userInput="{{refundedTotal}}" selector="{{AdminCreditMemosGridSection.rowCreditMemos}}" stepKey="refundedPrice"/>
     </actionGroup>
 </actionGroups>
-

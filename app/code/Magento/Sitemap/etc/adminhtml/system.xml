@@ -83,10 +83,12 @@
                 <label>Sitemap File Limits</label>
                 <field id="max_lines" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Maximum No of URLs Per File</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
                 </field>
                 <field id="max_file_size" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Maximum File Size</label>
                     <comment>File size in bytes.</comment>
+                    <validate>validate-number validate-greater-than-zero</validate>
                 </field>
             </group>
             <group id="search_engines" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
