@@ -2043,11 +2043,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        if($emailrequired) {
+        if ($emailrequired) {
           return $this->getData('account/email');
         } else {
            $email = $this->getData('account/email');
-           if (empty($email)) {
+            if (empty($email)) {
                $host = $this->_scopeConfig->getValue(
                    self::XML_PATH_DEFAULT_EMAIL_DOMAIN,
                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -2057,11 +2057,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                $account = $this->getData('account');
                $account['email'] = $email;
                $this->setData('account', $account);
-           }
+            }
 
            return $email;
         }
-
     }
 
     /**

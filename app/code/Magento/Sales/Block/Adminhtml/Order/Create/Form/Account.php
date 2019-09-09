@@ -149,7 +149,7 @@ class Account extends AbstractForm
     {
         switch ($element->getId()) {
             case 'email':
-                $element->setRequired($this->isEmailRequiredCreateOrder());
+                $element->setRequired($this->isEmailRequiredToCreateOrder());
                 $element->setClass('validate-email admin__control-text');
                 break;
         }
@@ -212,7 +212,7 @@ class Account extends AbstractForm
      *
      * @return bool
      */
-    private function isEmailRequiredCreateOrder()
+    private function isEmailRequiredToCreateOrder()
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_REQUIRED_CREATE_ORDER,
