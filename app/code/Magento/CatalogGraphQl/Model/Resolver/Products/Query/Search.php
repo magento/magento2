@@ -110,6 +110,8 @@ class Search
         } else {
             $maxPages = 0;
         }
+        $searchCriteria->setPageSize($realPageSize);
+        $searchCriteria->setCurrentPage($realCurrentPage);
 
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
