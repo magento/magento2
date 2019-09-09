@@ -11,7 +11,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Phrase;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Abstract resource model
@@ -302,7 +301,7 @@ abstract class AbstractDb extends AbstractResource
      * Get connection by resource name
      *
      * @param string $resourceName
-     * @return AdapterInterface|false
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
      */
     protected function _getConnection($resourceName)
     {
@@ -321,7 +320,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Get connection
      *
-     * @return AdapterInterface|false
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
      */
     public function getConnection()
     {
