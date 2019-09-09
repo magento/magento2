@@ -15,6 +15,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Collection test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
