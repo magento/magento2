@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\DataProvider\Product;
 
+use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
@@ -84,6 +85,7 @@ class SearchCriteriaBuilder
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
         $searchCriteria = $this->builder->build('products', $args);
+        $isSearch = !empty($args['search']);
         $this->updateRangeFilters($searchCriteria);
 
         if ($includeAggregation) {
@@ -94,13 +96,15 @@ class SearchCriteriaBuilder
         }
         $searchCriteria->setRequestName($requestName);
 
-        if (!empty($args['search'])) {
+        if ($isSearch) {
             $this->addFilter($searchCriteria, 'search_term', $args['search']);
         }
+
         if (!$searchCriteria->getSortOrders()) {
-            $this->addDefaultSortOrder($searchCriteria);
+            $this->addDefaultSortOrder($searchCriteria, $isSearch);
         }
-        $this->addVisibilityFilter($searchCriteria, !empty($args['search']), !empty($args['filter']));
+
+        $this->addVisibilityFilter($searchCriteria, $isSearch, !empty($args['filter']));
 
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
@@ -168,12 +172,15 @@ class SearchCriteriaBuilder
      * Sort by relevance DESC by default
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param bool $isSearch
      */
-    private function addDefaultSortOrder(SearchCriteriaInterface $searchCriteria): void
+    private function addDefaultSortOrder(SearchCriteriaInterface $searchCriteria, $isSearch = false): void
     {
+        $sortField = $isSearch ? 'relevance' : EavAttributeInterface::POSITION;
+        $sortDirection = $isSearch ? SortOrder::SORT_DESC : SortOrder::SORT_ASC;
         $defaultSortOrder = $this->sortOrderBuilder
-            ->setField('relevance')
-            ->setDirection(SortOrder::SORT_DESC)
+            ->setField($sortField)
+            ->setDirection($sortDirection)
             ->create();
 
         $searchCriteria->setSortOrders([$defaultSortOrder]);
