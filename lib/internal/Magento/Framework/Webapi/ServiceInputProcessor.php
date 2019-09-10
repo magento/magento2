@@ -9,10 +9,15 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Webapi;
 
+use InvalidArgumentException;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -21,47 +26,42 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
-use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariable)
  * @api
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
+    public const EXTENSION_ATTRIBUTES_TYPE = ExtensionAttributesInterface::class;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $typeProcessor;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Api\AttributeValueFactory
+     * @var AttributeValueFactory
      */
     protected $attributeValueFactory;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     * @var CustomAttributeTypeLocatorInterface
      */
     protected $customAttributeTypeLocator;
 
     /**
-     * @var \Magento\Framework\Reflection\MethodsMap
+     * @var MethodsMap
      */
     protected $methodsMap;
-
-    /**
-     * @var \Magento\Framework\Reflection\NameFinder
-     */
-    private $nameFinder;
 
     /**
      * @var array
@@ -110,6 +110,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         MethodsMap $methodsMap,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
         ConfigInterface $config = null,
+        DtoProcessor $dtoProcessor = null,
         array $customAttributePreprocessors = []
     ) {
         $this->typeProcessor = $typeProcessor;
@@ -124,22 +125,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->dtoProcessor = $dtoProcessor
             ?: ObjectManager::getInstance()->get(DtoProcessor::class);
         $this->customAttributePreprocessors = $customAttributePreprocessors;
-    }
-
-    /**
-     * The getter function to get the new NameFinder dependency
-     *
-     * @return \Magento\Framework\Reflection\NameFinder
-     *
-     * @deprecated 100.1.0
-     */
-    private function getNameFinder()
-    {
-        if ($this->nameFinder === null) {
-            $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Reflection\NameFinder::class);
-        }
-        return $this->nameFinder;
     }
 
     /**
@@ -184,49 +169,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
         $this->processInputError($inputError);
         return $inputData;
-    }
-
-    /**
-     * Retrieve constructor data
-     *
-     * @param string $className
-     * @param array $data
-     * @return array
-     * @throws \ReflectionException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function getConstructorData(string $className, array $data): array
-    {
-        $preferenceClass = $this->config->getPreference($className);
-        $class = new ClassReflection($preferenceClass ?: $className);
-
-        try {
-            $constructor = $class->getMethod('__construct');
-        } catch (\ReflectionException $e) {
-            $constructor = null;
-        }
-
-        if ($constructor === null) {
-            return [];
-        }
-
-        $res = [];
-        $parameters = $constructor->getParameters();
-        foreach ($parameters as $parameter) {
-            if (isset($data[$parameter->getName()])) {
-                $parameterType = $this->typeProcessor->getParamType($parameter);
-
-                try {
-                    $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
-                } catch (\ReflectionException $e) {
-                    // Parameter was not correclty declared or the class is uknown.
-                    // By not returing the contructor value, we will automatically fall back to the "setters" way.
-                    continue;
-                }
-            }
-        }
-
-        return $res;
     }
 
     /**
@@ -282,7 +224,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             ) {
                 try {
                     $attributeValue = $this->convertValue($customAttributeValue, $type);
-                // phpcs:ignore Magento2.Exceptions.ThrowCatch
+                    // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (SerializationException $e) {
                     throw new SerializationException(
                         new Phrase(
