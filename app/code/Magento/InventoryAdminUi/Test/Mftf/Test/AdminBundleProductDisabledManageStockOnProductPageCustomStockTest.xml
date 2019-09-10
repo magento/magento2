@@ -90,7 +90,6 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <dontSee userInput="{{BundleProduct.name}}" stepKey="assertProductIsNotPresent"/>
-        <dontSee userInput="$615.00" stepKey="assertProductPriceIsNotPresent"/>
         <!--Disable "Manage Stock" On Product Page.-->
         <amOnPage url="{{AdminProductEditPage.url($$bundleProduct.id$$)}}" stepKey="openProductEditPageToSetStockStatus"/>
         <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink"/>
