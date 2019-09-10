@@ -16,6 +16,7 @@
             <description value="Ability to manage categories by admin user with permission for 1 store"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-19264"/>
+            <useCaseId value="MC-16455"/>
             <group value="Catalog"/>
         </annotations>
         <before>
@@ -27,7 +28,7 @@
                 <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
                 <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewA"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
             <!--Create simple category and product-->
             <comment userInput="Create simple product and category" stepKey="createCategoryAndProduct"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
