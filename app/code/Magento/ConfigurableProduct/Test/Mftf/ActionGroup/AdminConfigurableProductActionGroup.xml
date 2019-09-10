@@ -16,7 +16,7 @@
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
         </arguments>
-        
+
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoadInitial"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
@@ -103,6 +103,65 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+        <seeInTitle userInput="{{product.name}}" stepKey="seeProductNameInTitle"/>
+    </actionGroup>
+
+    <actionGroup name="createConfigurableProductWithTwoAttributes" extends="createConfigurableProduct">
+        <annotations>
+            <description>Goes to the Admin Product grid page. Creates a Configurable Product with 2 product attributes.</description>
+        </annotations>
+        <arguments>
+            <argument name="attribute1" defaultValue="ProductColorAttribute"/>
+            <argument name="attribute2" defaultValue="ProductSizeAttribute"/>
+        </arguments>
+        <remove keyForRemoval="clickOnNewAttribute"/>
+        <remove keyForRemoval="waitForIFrame"/>
+        <remove keyForRemoval="switchToNewAttributeIFrame"/>
+        <remove keyForRemoval="fillDefaultLabel"/>
+        <remove keyForRemoval="clickOnNewAttributePanel"/>
+        <remove keyForRemoval="waitForSaveAttribute"/>
+        <remove keyForRemoval="switchOutOfIFrame"/>
+        <remove keyForRemoval="waitForFilters"/>
+        <remove keyForRemoval="clickOnFilters"/>
+        <remove keyForRemoval="fillFilterAttributeCodeField"/>
+        <remove keyForRemoval="clickApplyFiltersButton"/>
+        <remove keyForRemoval="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(attribute1.attribute_code)}}" stepKey="selectAttribute1" after="clickOnCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(attribute2.attribute_code)}}" stepKey="selectAttribute2" after="selectAttribute1"/>
+        <remove keyForRemoval="waitCreateNewValueAppears"/>
+        <remove keyForRemoval="clickOnCreateNewValue1"/>
+        <remove keyForRemoval="fillFieldForNewAttribute1"/>
+        <remove keyForRemoval="clickOnSaveNewAttribute1"/>
+        <remove keyForRemoval="clickOnCreateNewValue2"/>
+        <remove keyForRemoval="fillFieldForNewAttribute2"/>
+        <remove keyForRemoval="clickOnSaveNewAttribute2"/>
+        <remove keyForRemoval="clickOnCreateNewValue3"/>
+        <remove keyForRemoval="fillFieldForNewAttribute3"/>
+        <remove keyForRemoval="clickOnSaveNewAttribute3"/>
+        <remove keyForRemoval="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attribute1.frontend_label)}}" stepKey="selectAllOptionsOfAttribute1" before="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attribute2.frontend_label)}}" stepKey="selectAllOptionsOfAttribute2" before="clickOnNextButton2"/>
+        <remove keyForRemoval="applyUniquePricesByAttributeToEachSku"/>
+        <remove keyForRemoval="clickOnApplyUniquePricesByAttributeToEachSku"/>
+        <remove keyForRemoval="selectAttributes"/>
+        <remove keyForRemoval="fillAttributePrice1"/>
+        <remove keyForRemoval="fillAttributePrice2"/>
+        <remove keyForRemoval="fillAttributePrice3"/>
+        <remove keyForRemoval="clickOnSaveButton2"/>
+        <remove keyForRemoval="clickOnConfirmInPopup"/>
+        <remove keyForRemoval="seeSaveProductMessage"/>
+        <remove keyForRemoval="seeProductNameInTitle"/>
+    </actionGroup>
+    <actionGroup name="saveConfigurableProduct">
+        <annotations>
+            <description>Save configurable product</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
         <seeInTitle userInput="{{product.name}}" stepKey="seeProductNameInTitle"/>
@@ -296,12 +355,21 @@
         <fillField userInput="{{firstOption.weight}}" selector="{{AdminProductFormConfigurationsSection.confProductWeightCell(firstOption.name)}}" stepKey="fillFieldWeightForFirstAttributeOption"/>
         <fillField userInput="{{secondOption.weight}}" selector="{{AdminProductFormConfigurationsSection.confProductWeightCell(secondOption.name)}}" stepKey="fillFieldWeightForSecondAttributeOption"/>
     </actionGroup>
-
+    <actionGroup name="changeConfigurableProductChildProductPrice">
+        <annotations>
+            <description>Change the price of a configurable child product in the grid under configurations.</description>
+        </annotations>
+        <arguments>
+            <argument name="productAttributes" type="string"/>
+            <argument name="productPrice" type="string"/>
+        </arguments>
+        <fillField userInput="{{productPrice}}" selector="{{AdminProductFormConfigurationsSection.confProductPriceCell(productAttributes)}}" stepKey="fillPriceForConfigurableProductAttributeOption"/>
+    </actionGroup>
     <actionGroup name="changeProductConfigurationsInGridExceptSku" extends="changeProductConfigurationsInGrid">
         <annotations>
             <description>EXTENDS: changeProductConfigurationsInGrid. Removes 'fillFieldSkuForFirstAttributeOption' and 'fillFieldSkuForSecondAttributeOption'.</description>
         </annotations>
-        
+
         <remove keyForRemoval="fillFieldSkuForFirstAttributeOption"/>
         <remove keyForRemoval="fillFieldSkuForSecondAttributeOption"/>
     </actionGroup>

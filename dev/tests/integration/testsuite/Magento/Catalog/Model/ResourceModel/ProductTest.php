@@ -9,7 +9,17 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\StateException;
 
+/**
+ * Tests product resource model
+ *
+ * @see \Magento\Catalog\Model\ResourceModel\Product
+ * @see \Magento\Catalog\Model\ResourceModel\AbstractResource
+ */
 class ProductTest extends TestCase
 {
     /**
@@ -51,6 +61,87 @@ class ProductTest extends TestCase
         $product = $this->productRepository->get($sku);
         $actual = $this->model->getAttributeRawValue($product->getId(), $attribute, null);
         self::assertEquals($product->getName(), $actual);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_store_scope_attribute.php
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws StateException
+     */
+    public function testGetAttributeRawValueGetDefault()
+    {
+        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 0, true);
+        $product->setCustomAttribute('store_scoped_attribute_code', 'default_value');
+        $this->productRepository->save($product);
+
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'store_scoped_attribute_code', 1);
+        $this->assertEquals('default_value', $actual);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_store_scope_attribute.php
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws StateException
+     */
+    public function testGetAttributeRawValueGetStoreSpecificValueNoDefault()
+    {
+        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 0, true);
+        $product->setCustomAttribute('store_scoped_attribute_code', null);
+        $this->productRepository->save($product);
+
+        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 1, true);
+        $product->setCustomAttribute('store_scoped_attribute_code', 'store_value');
+        $this->productRepository->save($product);
+
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'store_scoped_attribute_code', 1);
+        $this->assertEquals('store_value', $actual);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_store_scope_attribute.php
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws StateException
+     */
+    public function testGetAttributeRawValueGetStoreSpecificValueWithDefault()
+    {
+        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 0, true);
+        $product->setCustomAttribute('store_scoped_attribute_code', 'default_value');
+        $this->productRepository->save($product);
+
+        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 1, true);
+        $product->setCustomAttribute('store_scoped_attribute_code', 'store_value');
+        $this->productRepository->save($product);
+
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'store_scoped_attribute_code', 1);
+        $this->assertEquals('store_value', $actual);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_store_scope_attribute.php
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws StateException
+     * @throws NoSuchEntityException
+     */
+    public function testGetAttributeRawValueGetStoreValueFallbackToDefault()
+    {
+        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 0, true);
+        $product->setCustomAttribute('store_scoped_attribute_code', 'default_value');
+        $this->productRepository->save($product);
+
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'store_scoped_attribute_code', 1);
+        $this->assertEquals('default_value', $actual);
     }
 
     /**
