@@ -202,4 +202,23 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="catalog/search/elasticsearch6_password" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_username" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="catalog/search/elasticsearch6_enable_auth" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_index_prefix" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_password" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_server_port" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_username" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_server_timeout" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
