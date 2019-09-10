@@ -251,9 +251,15 @@ class Curl extends AbstractCurl implements CategoryInterface
         $curl->write($url, [], CurlInterface::GET);
         $response = $curl->read();
         $curl->close();
-        preg_match('~\{"value":"(\d+)","label":"' . preg_quote($landingName) . '"\}~', $response, $matches);
-        $id = isset($matches[1]) ? (int)$matches[1] : null;
+        preg_match(
+            '/\{[^\{]*?\\"value\\":\\"(\d+)\\"[^\{]*?\\"label\\":\\"' .preg_quote($landingName) .'\\".*?\}/',
+            $response,
+            $matches
+        );
+        if (empty($matches[1])) {
+            throw new \RuntimeException('Failed to extract CMS block ID from a category page');
+        }
 
-        return $id;
+        return (int)$matches[1];
     }
 }
