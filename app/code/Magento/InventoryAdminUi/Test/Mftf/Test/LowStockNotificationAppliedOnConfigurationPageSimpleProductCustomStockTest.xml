@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LowStockNotificationAppliedOnConfigurationPageSimpleProductCustomStockTest" extends="LowStockNotificationSimpleProductAdditionalStockTest">
+        <annotations>
+            <stories value="Simple Product On Custom Stock"/>
+            <title value="Low Stock Notification on Configuration Page for Simple Product On Additional Stock."/>
+            <description value="Verify low stock notifications working correctly for simple product on Configuration Page in multi stock environment on additional stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/446482/scenarios/1652216"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <after>
+            <!--Revert 'Notify Quantity Bellow' configuration-->
+            <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 0" stepKey="setLowStockNotification" after="deleteProduct"/>
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterRevertConfiguration"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterRevertConfiguration"/>
+        </after>
+
+        <remove keyForRemoval="uncheckNotifyQtyUseDefault"/>
+        <remove keyForRemoval="setLowStockNotification"/>
+        <!--Set 'Notify Quantity Bellow' to 95-->
+        <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 95" stepKey="setLowStockNotification" before="navigateToLowStockReportPageBeforeApplyCustomNotifyQtyForProduct"/>
+        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterSetConfiguration"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterSetConfiguration"/>
+    </test>
+</tests>

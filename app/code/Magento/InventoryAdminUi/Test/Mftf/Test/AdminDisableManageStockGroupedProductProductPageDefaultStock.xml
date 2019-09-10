@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDisableManageStockGroupedProductProductPageDefaultStock" extends="AdminCreateGroupedProductCustomStock">
+        <annotations>
+            <stories value="Grouped Product Default Stock."/>
+            <title value="Disable 'Manage Stock' Grouped Product On Default Stock."/>
+            <description value="Verify, 'Out of Stock' grouped product is visible on storefront, if 'Manage Stock' is disabled for grouped product on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457017/scenarios/1699962"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="loginAsAdmin">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+        </after>
+        <remove keyForRemoval="assignTestSourceToCreatedProduct"/>
+        <remove keyForRemoval="setCustomSourceQuantity"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setDefaultSourceQuantity" after="openVirtualProductEditPage"/>
+        <!--Set grouped product stock status.-->
+        <scrollToTopOfPage stepKey="scrollToTheTopOfBundleProductPage" after="fillDefaultQtyForVirtualProduct"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="selectOutOfStock" after="fillDefaultQtyForVirtualProduct"/>
+        <actionGroup ref="AdminChangeManageStockStatusOnProductEditPageActionGroup" stepKey="disableMangeStockOnProductEditPage" after="selectOutOfStock">
+            <argument name="manageStock" value="No"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -50,6 +50,11 @@
         </after>
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <!--Assign Default Stock to Default Website.-->
+        <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+            <argument name="stockName" value="{{_defaultStock.name}}"/>
+            <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
         <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
         <!--Set Product to 'Out of Stock'.-->
         <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setProductToOutOfStock"/>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserEnableQtyIncrementsForSimpleProductOnTestSourceTest" extends="AdminUserApplyMinMaxQtyForSimpleProductOnTestSourceTest">
+        <annotations>
+            <stories value="Simple Product Custom Stock."/>
+            <title value="Quantity increments enabled with simple product on custom stock."/>
+            <description value="Enable Qty Increments  applied to Simple product on product page and checked on frontend."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/481999/scenarios/1655285"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <remove keyForRemoval="setMaxMinQty"/>
+        <!--Set product quantity increments.-->
+        <actionGroup ref="AdminEnableQtyIncrementsOnProductEditPageActionGroup" stepKey="setQtyIncrements" before="saveProduct">
+            <argument name="qtyIncrements" value="5"/>
+        </actionGroup>
+        <!--Verify error message.-->
+        <see selector="//div[@class='product pricing']" userInput="$$product.name$$ is available to buy in increments of 5" before="fillProductQtyLowerThanAllowed" stepKey="verifyNotice"/>
+        <remove keyForRemoval="seeLowQtyErrorMessage"/>
+        <see selector="#qty-error" userInput="You can buy this product only in quantities of 5 at a time." stepKey="seeIncrementQtyError" after="witForLowQtyAdded"/>
+        <remove keyForRemoval="fillProductQtyGreaterThanAllowed"/>
+        <remove keyForRemoval="addToCartGreaterThenAllowedQty"/>
+        <remove keyForRemoval="witForHighQtyAdded"/>
+        <remove keyForRemoval="seeHighQtyErrorMessage"/>
+    </test>
+</tests>

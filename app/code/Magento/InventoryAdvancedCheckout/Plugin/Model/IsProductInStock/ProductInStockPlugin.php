@@ -10,6 +10,7 @@ namespace Magento\InventoryAdvancedCheckout\Plugin\Model\IsProductInStock;
 use Magento\AdvancedCheckout\Model\IsProductInStockInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\IsProductSalableInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
@@ -41,21 +42,29 @@ class ProductInStockPlugin
     private $websiteRepository;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param IsProductSalableInterface $isProductSalable
      * @param StockResolverInterface $stockResolver
      * @param WebsiteRepositoryInterface $websiteRepository
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         IsProductSalableInterface $isProductSalable,
         StockResolverInterface $stockResolver,
-        WebsiteRepositoryInterface $websiteRepository
+        WebsiteRepositoryInterface $websiteRepository,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->productRepository = $productRepository;
         $this->isProductSalable = $isProductSalable;
         $this->stockResolver = $stockResolver;
         $this->websiteRepository = $websiteRepository;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -78,7 +87,8 @@ class ProductInStockPlugin
         $product = $this->productRepository->getById($productId);
         $website = $this->websiteRepository->getById($websiteId);
         $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
-
-        return $this->isProductSalable->execute($product->getSku(), $stock->getStockId());
+        return $this->defaultStockProvider->getId() === $stock->getStockId()
+            ? $proceed($productId, $websiteId)
+            : $this->isProductSalable->execute($product->getSku(), $stock->getStockId());
     }
 }

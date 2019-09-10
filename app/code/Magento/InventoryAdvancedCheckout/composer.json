@@ -6,6 +6,7 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-store": "*",
+        "magento/module-inventory-catalog-api": "*",
         "magento/module-inventory-sales-api": "*"
     },
     "suggest": {
