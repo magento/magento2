@@ -9,10 +9,22 @@
  */
 namespace Magento\Framework\Filter;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Filter\DirectiveProcessor\SimpleDirective;
+use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
+use Magento\Framework\Filter\DirectiveProcessor\ForDirective;
+use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
+use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
+use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
+use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
+use Magento\Framework\Stdlib\StringUtils;
+
 /**
  * Template filter
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Template implements \Zend_Filter_Interface
 {
@@ -59,58 +71,65 @@ class Template implements \Zend_Filter_Interface
     protected $templateProcessor = null;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
     /**
-     * @var string[]
+     * @var DirectiveProcessorInterface[]
      */
-    private $restrictedMethods = [
-        'addafterfiltercallback',
-        'getresourcecollection',
-        'load',
-        'save',
-        'getcollection',
-        'getresource',
-        'getconfig',
-        'setvariables',
-        'settemplateprocessor',
-        'gettemplateprocessor',
-        'vardirective',
-        'delete',
-        'getdatausingmethod',
-        '__destruct',
-        '__call',
-        '__callstatic',
-        '__set',
-        '__unset',
-        '__sleep',
-        '__wakeup',
-        '__invoke',
-        '__set_state',
-        '__debuginfo',
-        '___callparent',
-        '___callplugins'
+    private $directiveProcessors;
+
+    /**
+     * @var bool
+     */
+    private $strictMode = false;
+
+    /**
+     * @var VariableResolverInterface|null
+     */
+    private $variableResolver;
+
+    private $legacyDirectives = [
+        'depend' => true,
+        'if' => true,
+        'template' => true,
+        'var' => true,
+    ];
+
+    private $defaultProcessors = [
+        'depend' => DependDirective::class,
+        'if' => IfDirective::class,
+        'template' => TemplateDirective::class,
+        'for' => ForDirective::class,
+        'var' => VarDirective::class,
+        'simple' => SimpleDirective::class,
+        'legacy' => LegacyDirective::class,
     ];
 
     /**
-     * @var array[]
-     */
-    private $restrictedMethodsByInstanceType = [
-        \Magento\Framework\DB\Adapter\AdapterInterface::class => [
-            '*'
-        ]
-    ];
-
-    /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param StringUtils $string
      * @param array $variables
+     * @param DirectiveProcessorInterface[] $directiveProcessors
+     * @param VariableResolverInterface|null $variableResolver
      */
-    public function __construct(\Magento\Framework\Stdlib\StringUtils $string, $variables = [])
-    {
+    public function __construct(
+        StringUtils $string,
+        $variables = [],
+        $directiveProcessors = [],
+        VariableResolverInterface $variableResolver = null
+    ) {
         $this->string = $string;
         $this->setVariables($variables);
+        $this->directiveProcessors = $directiveProcessors;
+        $this->variableResolver = $variableResolver ?? ObjectManager::getInstance()
+                ->get(VariableResolverInterface::class);
+
+        if (empty($directiveProcessors)) {
+            foreach ($this->defaultProcessors as $name => $defaultProcessor) {
+                $this->directiveProcessors[$name] = ObjectManager::getInstance()->get($defaultProcessor);
+            }
+        }
     }
 
     /**
@@ -122,6 +141,9 @@ class Template implements \Zend_Filter_Interface
     public function setVariables(array $variables)
     {
         foreach ($variables as $name => $value) {
+            if ($this->strictMode && is_object($value) && !$value instanceof DataObject) {
+                continue;
+            }
             $this->templateVars[$name] = $value;
         }
         return $this;
@@ -155,101 +177,36 @@ class Template implements \Zend_Filter_Interface
      * @param string $value
      * @return string
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function filter($value)
     {
-        // "depend", "if", and "template" directives should be first
-        foreach ([
-                     self::CONSTRUCTION_DEPEND_PATTERN => 'dependDirective',
-                     self::CONSTRUCTION_IF_PATTERN => 'ifDirective',
-                     self::CONSTRUCTION_TEMPLATE_PATTERN => 'templateDirective',
-                 ] as $pattern => $directive) {
-            if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
+        foreach ($this->directiveProcessors as $name => $directiveProcessor) {
+            if (!$directiveProcessor instanceof DirectiveProcessorInterface) {
+                throw new \InvalidArgumentException(
+                    'Directive processors must implement ' . DirectiveProcessorInterface::class
+                );
+            }
+
+            if (preg_match_all($directiveProcessor->getRegularExpression(), $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
-                    $callback = [$this, $directive];
-                    if (!is_callable($callback)) {
-                        continue;
-                    }
-                    try {
+                    if (isset($this->legacyDirectives[$name])) {
+                        $callback = [$this, $name . 'Directive'];
+                        if (!is_callable($callback)) {
+                            continue;
+                        }
                         $replacedValue = call_user_func($callback, $construction);
-                    } catch (\Exception $e) {
-                        throw $e;
+                    } else {
+                        $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
                     }
+
                     $value = str_replace($construction[0], $replacedValue, $value);
                 }
             }
         }
 
-        $value = $this->filterFor($value);
-
-        if (preg_match_all(self::CONSTRUCTION_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
-            foreach ($constructions as $construction) {
-                $callback = [$this, $construction[1] . 'Directive'];
-                if (!is_callable($callback)) {
-                    continue;
-                }
-                try {
-                    $replacedValue = call_user_func($callback, $construction);
-                } catch (\Exception $e) {
-                    throw $e;
-                }
-                $value = str_replace($construction[0], $replacedValue, $value);
-            }
-        }
-
         $value = $this->afterFilter($value);
-        return $value;
-    }
-
-    /**
-     * Filter the string as template.
-     *
-     * @param string $value
-     * @example syntax {{for item in order.items}} name: {{var item.name}} {{/for}} order items collection.
-     * @example syntax {{for thing in things}} {{var thing.whatever}} {{/for}} e.g.:custom collection.
-     * @return string
-     */
-    private function filterFor($value)
-    {
-        if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
-            foreach ($constructions as $construction) {
-                if (!$this->isValidLoop($construction)) {
-                    return $value;
-                }
-
-                $fullTextToReplace = $construction[0];
-                $loopData = $this->getVariable($construction['loopData'], '');
-
-                $loopTextToReplace = $construction['loopBody'];
-                $loopItemVariableName = preg_replace('/\s+/', '', $construction['loopItem']);
-
-                if (is_array($loopData) || $loopData instanceof \Traversable) {
-                    $replaceText = $this->getLoopReplacementText($loopData, $loopItemVariableName, $loopTextToReplace);
-                    $value = str_replace($fullTextToReplace, $replaceText, $value);
-                }
-            }
-        }
 
         return $value;
-    }
-
-    /**
-     * Check if the matched construction is valid.
-     *
-     * @param array $construction
-     * @return bool
-     */
-    private function isValidLoop(array $construction)
-    {
-        $requiredFields = ['loopBody', 'loopItem', 'loopData'];
-        $validFields = array_filter(
-            $requiredFields,
-            function ($field) use ($construction) {
-                return isset($construction[$field]) && strlen(trim($construction[$field]));
-            }
-        );
-        return count($requiredFields) == count($validFields);
     }
 
     /**
@@ -304,16 +261,14 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return string
+     * @deprecated Use the directive interfaces instead
      */
     public function varDirective($construction)
     {
-        if (count($this->templateVars) == 0) {
-            // If template prepossessing
-            return $construction[0];
-        }
+        $directive = $this->directiveProcessors['var'] ?? ObjectManager::getInstance()
+            ->get(VarDirective::class);
 
-        $replacedValue = $this->getVariable($construction[2], '');
-        return $replacedValue;
+        return $directive->process($construction, $this, $this->templateVars);
     }
 
     /**
@@ -328,22 +283,14 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return mixed
+     * @deprecated Use the directive interfaces instead
      */
     public function templateDirective($construction)
     {
-        // Processing of {template config_path=... [...]} statement
-        $templateParameters = $this->getParameters($construction[2]);
-        if (!isset($templateParameters['config_path']) || !$this->getTemplateProcessor()) {
-            // Not specified template or not set include processor
-            $replacedValue = '{Error in template processing}';
-        } else {
-            // Including of template
-            $configPath = $templateParameters['config_path'];
-            unset($templateParameters['config_path']);
-            $templateParameters = array_merge_recursive($templateParameters, $this->templateVars);
-            $replacedValue = call_user_func($this->getTemplateProcessor(), $configPath, $templateParameters);
-        }
-        return $replacedValue;
+        $directive = $this->directiveProcessors['template'] ?? ObjectManager::getInstance()
+            ->get(TemplateDirective::class);
+
+        return $directive->process($construction, $this, $this->templateVars);
     }
 
     /**
@@ -351,19 +298,14 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return string
+     * @deprecated Use the directive interfaces instead
      */
     public function dependDirective($construction)
     {
-        if (count($this->templateVars) == 0) {
-            // If template processing
-            return $construction[0];
-        }
+        $directive = $this->directiveProcessors['depend'] ?? ObjectManager::getInstance()
+            ->get(DependDirective::class);
 
-        if ($this->getVariable($construction[1], '') == '') {
-            return '';
-        } else {
-            return $construction[2];
-        }
+        return $directive->process($construction, $this, $this->templateVars);
     }
 
     /**
@@ -371,21 +313,14 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return string
+     * @deprecated Use the directive interfaces instead
      */
     public function ifDirective($construction)
     {
-        if (count($this->templateVars) == 0) {
-            return $construction[0];
-        }
+        $directive = $this->directiveProcessors['if'] ?? ObjectManager::getInstance()
+            ->get(IfDirective::class);
 
-        if ($this->getVariable($construction[1], '') == '') {
-            if (isset($construction[3]) && isset($construction[4])) {
-                return $construction[4];
-            }
-            return '';
-        } else {
-            return $construction[2];
-        }
+        return $directive->process($construction, $this, $this->templateVars);
     }
 
     /**
@@ -393,6 +328,7 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string $value raw parameters
      * @return array
+     * @deprecated Use the directive interfaces instead
      */
     protected function getParameters($value)
     {
@@ -408,74 +344,19 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Validate method call initiated in a template.
-     *
-     * Deny calls for methods that may disrupt template processing.
-     *
-     * @param object $object
-     * @param string $method
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    private function validateVariableMethodCall($object, string $method): void
-    {
-        if ($object instanceof self || $object instanceof \Magento\Framework\DataObject) {
-            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
-                throw new \InvalidArgumentException("Method $method cannot be called from template.");
-            }
-        } else {
-            foreach ($this->restrictedMethodsByInstanceType as $instanceType => $restrictedMethods) {
-                if ($object instanceof $instanceType &&
-                    (in_array('*', $restrictedMethods) || in_array(mb_strtolower($method), $restrictedMethods))
-                ) {
-                    throw new \InvalidArgumentException("Method $method cannot be called from template.");
-                }
-            }
-        }
-    }
-
-    /**
-     * Return variable value for var construction.
+     * Resolve a variable's value for a given var directive construction
      *
      * @param string $value raw parameters
      * @param string $default default value
      * @return string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated Use \Magento\Framework\Filter\VariableResolverInterface instead
      */
     protected function getVariable($value, $default = '{no_value_defined}')
     {
         \Magento\Framework\Profiler::start('email_template_processing_variables');
-        $tokenizer = new Template\Tokenizer\Variable();
-        $tokenizer->setString($value);
-        $stackVars = $tokenizer->tokenize();
-        $result = $default;
-        $last = 0;
-        for ($i = 0, $count = count($stackVars); $i < $count; $i++) {
-            if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
-                // Getting of template value
-                $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
-            } elseif (isset($stackVars[$i - 1]['variable']) && is_object($stackVars[$i - 1]['variable'])) {
-                if ($stackVars[$i]['type'] == 'property') {
-                    $stackVars[$i]['variable'] = $this->evaluateObjectPropertyAccess(
-                        $stackVars[$i - 1]['variable'],
-                        $stackVars[$i]['name']
-                    );
-                } elseif ($stackVars[$i]['type'] == 'method') {
-                    $stackVars[$i]['variable'] = $this->evaluateObjectMethodCall(
-                        $stackVars[$i - 1]['variable'],
-                        $stackVars[$i]['name'],
-                        $stackVars[$i]['args']
-                    );
-                }
-                $last = $i;
-            }
-        }
-
-        if (isset($stackVars[$last]['variable'])) {
-            // If value for construction exists set it
-            $result = $stackVars[$last]['variable'];
-        }
+        $result = $this->variableResolver->resolve($value, $this, $this->templateVars) ?? $default;
         \Magento\Framework\Profiler::stop('email_template_processing_variables');
+
         return $result;
     }
 
@@ -523,6 +404,7 @@ class Template implements \Zend_Filter_Interface
      *
      * @param array $stack
      * @return array
+     * @deprecated Use new directive processor interfaces
      */
     protected function getStackArgs($stack)
     {
@@ -537,51 +419,34 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Process loop text to replace.
+     * Change the operating mode for filtering and return the previous mode
      *
-     * @param array $loopData
-     * @param string $loopItemVariableName
-     * @param string $loopTextToReplace
-     * @return string
+     * Returning the previous value makes it easy to perform single operations in a single mode:
+     *
+     * <code>
+     * $previousMode = $filter->setStrictMode(true);
+     * $filter->filter($value);
+     * $filter->setStrictMode($previousMode);
+     * </code>
+     *
+     * @param bool $strictMode Enable strict parsing of directives
+     * @return bool The previous mode from before the change
      */
-    private function getLoopReplacementText(array $loopData, $loopItemVariableName, $loopTextToReplace)
+    public function setStrictMode(bool $strictMode): bool
     {
-        $loopText = [];
-        $loopIndex = 0;
-        $loopDataObject = new \Magento\Framework\DataObject();
+        $current = $this->strictMode;
+        $this->strictMode = $strictMode;
 
-        foreach ($loopData as $loopItemDataObject) {
-            // Loop item can be an array or DataObject.
-            // If loop item is an array, convert it to DataObject
-            // to have unified interface if the collection
-            if (!$loopItemDataObject instanceof \Magento\Framework\DataObject) {
-                if (!is_array($loopItemDataObject)) {
-                    continue;
-                }
-                $loopItemDataObject = new \Magento\Framework\DataObject($loopItemDataObject);
-            }
+        return $current;
+    }
 
-            $loopDataObject->setData('index', $loopIndex++);
-            $this->templateVars['loop'] = $loopDataObject;
-            $this->templateVars[$loopItemVariableName] = $loopItemDataObject;
-
-            if (preg_match_all(
-                self::CONSTRUCTION_PATTERN,
-                $loopTextToReplace,
-                $attributes,
-                PREG_SET_ORDER
-            )
-            ) {
-                $subText = $loopTextToReplace;
-                foreach ($attributes as $attribute) {
-                    $text = $this->getVariable($attribute[2], '');
-                    $subText = str_replace($attribute[0], $text, $subText);
-                }
-                $loopText[] = $subText;
-            }
-            unset($this->templateVars[$loopItemVariableName]);
-        }
-        $replaceText = implode('', $loopText);
-        return $replaceText;
+    /**
+     * Return if the template is rendered with strict directive processing
+     *
+     * @return bool
+     */
+    public function isStrictMode(): bool
+    {
+        return $this->strictMode;
     }
 }

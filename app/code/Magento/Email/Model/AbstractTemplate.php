@@ -362,12 +362,17 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $variables = $this->addEmailVariables($variables, $storeId);
         $processor->setVariables($variables);
 
+        $previousStrictMode = $processor->setStrictMode(is_numeric($this->getTemplateId()));
+
         try {
             $result = $processor->filter($this->getTemplateText());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \LogicException(__($e->getMessage()), $e->getCode(), $e);
+        } finally {
+            $processor->setStrictMode($previousStrictMode);
         }
+
         if ($isDesignApplied) {
             $this->cancelDesignConfig();
         }

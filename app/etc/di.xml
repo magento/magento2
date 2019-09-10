@@ -1799,4 +1799,5 @@
         <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
+    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
 </config>
