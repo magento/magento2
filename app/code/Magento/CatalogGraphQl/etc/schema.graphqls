@@ -416,6 +416,7 @@ type StoreConfig @doc(description: "The type contains information about a store 
     grid_per_page : Int @doc(description: "Products per Page on Grid Default Value.")
     list_per_page : Int @doc(description: "Products per Page on List Default Value.")
     catalog_default_sort_by : String @doc(description: "Default Sort By.")
+    root_category_id: Int @doc(description: "The ID of the root category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\RootCategoryId")
 }
 
 type ProductVideo @doc(description: "Contains information about a product video.") implements MediaGalleryInterface {
