@@ -792,11 +792,11 @@ abstract class AbstractDb extends AbstractResource
      * @param array $columnDescription
      * @return bool
      */
-    private function isNeedToQuoteValue(array $columnDescription): bool
+    private function isNumericValue(array $columnDescription): bool
     {
         $result = true;
         if (!empty($columnDescription['DATA_TYPE'])
-            && in_array($columnDescription['DATA_TYPE'], ['smallint', 'int'])) {
+            && in_array($columnDescription['DATA_TYPE'], ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'])) {
             $result = false;
         }
         return $result;
@@ -814,8 +814,8 @@ abstract class AbstractDb extends AbstractResource
         $connection = $this->getConnection();
         $tableDescription = $connection->describeTable($this->getMainTable());
         $preparedValue = $connection->prepareColumnValue($tableDescription[$this->getIdFieldName()], $object->getId());
-        $condition  = (!$this->isNeedToQuoteValue($tableDescription[$this->getIdFieldName()]))
-            ? $this->getIdFieldName() . '=' . $preparedValue
+        $condition  = (!$this->isNumericValue($tableDescription[$this->getIdFieldName()]))
+            ? sprintf('%s=%d', $this->getIdFieldName(), $preparedValue)
             : $connection->quoteInto($this->getIdFieldName() . '=?', $preparedValue);
 
         /**
