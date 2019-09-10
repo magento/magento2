@@ -195,6 +195,7 @@
              Websites: Main Website
              Customer Groups: NOT LOGGED IN  -->
         <fillField userInput="{{SimpleCatalogPriceRule.name}}" selector="{{AdminCartPriceRulesFormSection.ruleName}}" stepKey="fillRuleName"/>
+        <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
         <selectOption userInput="{{SimpleCatalogPriceRule.websites}}" selector="{{AdminCartPriceRulesFormSection.websites}}" stepKey="selectWebsite"/>
         <selectOption userInput="{{SimpleCatalogPriceRule.customerGroups}}" selector="{{AdminCartPriceRulesFormSection.customerGroups}}" stepKey="selectCustomerGroups"/>
 
