@@ -785,7 +785,7 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Check in column value should be quoted
+     * Check is column data type is numeric
      *
      * Based on column description
      *
