@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\Product\Compare;
 
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Product Compare List Model
@@ -53,12 +55,12 @@ class ListCompare extends \Magento\Framework\DataObject
     protected $_compareItemFactory;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
-    
+
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder 
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
@@ -71,8 +73,8 @@ class ListCompare extends \Magento\Framework\DataObject
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param array $data
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ProductRepositoryInterface $productRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory,
@@ -81,16 +83,16 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
         array $data = [],
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository = null,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder = null
+        ProductRepositoryInterface $productRepository = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->_compareItemFactory = $compareItemFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
-        $this->productRepository = $productRepository ?: ObjectManager::getInstance()->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->productRepository = $productRepository ?: ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
         parent::__construct($data);
     }
 
