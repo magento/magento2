@@ -55,6 +55,7 @@ mutation {
             telephone: "88776655"
             save_in_address_book: false
           }
+          customer_notes: "Test note"
         }
       ]
     }
@@ -73,6 +74,7 @@ mutation {
           label
         }
         __typename
+        customer_notes
       }
     }
   }
@@ -527,7 +529,8 @@ QUERY;
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
-            ['response_field' => '__typename', 'expected_value' => 'ShippingCartAddress']
+            ['response_field' => '__typename', 'expected_value' => 'ShippingCartAddress'],
+            ['response_field' => 'customer_notes', 'expected_value' => 'Test note']
         ];
 
         $this->assertResponseFields($shippingAddressResponse, $assertionMap);
