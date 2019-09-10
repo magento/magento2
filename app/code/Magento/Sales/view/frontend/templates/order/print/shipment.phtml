@@ -29,55 +29,55 @@
                     <?php endforeach; ?>
                 </table>
             </div>
+
             <div class="block block-order-details-view">
                 <div class="block-title">
                     <strong><?= $block->escapeHtml(__('Order Information')) ?></strong>
                 </div>
-                <div class="block-content">
-                    <div class="box box-order-shipping-address">
-                        <div class="box-title">
-                            <strong><?= $block->escapeHtml(__('Shipping Address')) ?></strong>
-                        </div>
-                        <div class="box-content">
-                            <address><?= $block->getShipmentAddressFormattedHtml($shipment) ?></address>
-                        </div>
-                    </div>
-
-                    <div class="box box-order-shipping-method">
-                        <div class="box-title">
-                            <strong><?= $block->escapeHtml(__('Shipping Method')) ?></strong>
-                        </div>
-                        <div class="box-content">
-                        <?= $block->escapeHtml($block->getObjectData($order, 'shipping_description')) ?>
-                        <?php $tracks = $block->getShipmentTracks($shipment);
-                        if ($tracks) : ?>
-                            <dl class="order-tracking">
-                            <?php foreach ($tracks as $track) : ?>
-                                <dt class="tracking-title"><?= $block->escapeHtml($block->getObjectData($track, 'title')) ?></dt>
-                                <dd class="tracking-content"><?= $block->escapeHtml($block->getObjectData($track, 'number')) ?></dd>
-                            <?php endforeach; ?>
-                            </dl>
-                        <?php endif; ?>
-                        </div>
-                    </div>
-
-                    <div class="box box-order-billing-method">
-                        <div class="box-title">
-                            <strong><?= $block->escapeHtml(__('Billing Address')) ?></strong>
-                        </div>
-                        <div class="box-content">
-                            <address><?= $block->getBillingAddressFormattedHtml($order) ?></address>
-                        </div>
-                    </div>
-
-                    <div class="box box-order-billing-method">
-                        <div class="box-title">
-                            <strong><?= $block->escapeHtml(__('Payment Method')) ?></strong>
-                        </div>
-                        <div class="box-content">
-                            <?= $block->getPaymentInfoHtml() ?>
-                        </div>
-                    </div>
+                <div class="table-wrapper">
+                    <table class="data table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span><?= $block->escapeHtml(__('Shipping Address')) ?></span>
+                                </th>
+                                <th>
+                                    <span><?= $block->escapeHtml(__('Shipping Method')) ?></span>
+                                </th>
+                                <th>
+                                    <span><?= $block->escapeHtml(__('Billing Address')) ?></span>
+                                </th>
+                                <th>
+                                    <span><?= $block->escapeHtml(__('Payment Method')) ?></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="block-content">
+                            <tr>
+                                <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>">
+                                    <address><?= $block->getShipmentAddressFormattedHtml($shipment) ?></address>
+                                </td>
+                                <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>">
+                                    <?= $block->escapeHtml($block->getObjectData($order, 'shipping_description')) ?>
+                                    <?php $tracks = $block->getShipmentTracks($shipment);
+                                    if ($tracks) : ?>
+                                        <dl class="order-tracking">
+                                        <?php foreach ($tracks as $track) : ?>
+                                            <dt class="tracking-title"><?= $block->escapeHtml($block->getObjectData($track, 'title')) ?></dt>
+                                            <dd class="tracking-content"><?= $block->escapeHtml($block->getObjectData($track, 'number')) ?></dd>
+                                        <?php endforeach; ?>
+                                        </dl>
+                                    <?php endif; ?>
+                                </td>
+                                <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>">
+                                    <address><?= $block->getBillingAddressFormattedHtml($order) ?></address>
+                                </td>
+                                <td class="box-content" data-th="<?= $block->escapeHtml(__('Payment Method')) ?>">
+                                    <?= $block->getPaymentInfoHtml() ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
