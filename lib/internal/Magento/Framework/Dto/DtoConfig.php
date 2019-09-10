@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Dto;
 
-use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\CacheInterface\Proxy as CacheInterface;
 use Magento\Framework\Config\Data;
-use Magento\Framework\Dto\Config\Reader;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Dto\Config\Reader\Proxy as Reader;
+use Magento\Framework\Serialize\SerializerInterface\Proxy as SerializerInterface;
 
 /**
  * DTO config
