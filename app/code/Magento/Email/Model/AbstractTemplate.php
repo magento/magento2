@@ -361,12 +361,19 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $variables = $this->addEmailVariables($variables, $storeId);
         $processor->setVariables($variables);
 
+        $previousStrictMode = $processor->setStrictMode(
+            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
+        );
+
         try {
             $result = $processor->filter($this->getTemplateText());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \LogicException(__($e->getMessage()), $e->getCode(), $e);
+        } finally {
+            $processor->setStrictMode($previousStrictMode);
         }
+
         if ($isDesignApplied) {
             $this->cancelDesignConfig();
         }
@@ -453,6 +460,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $store = $this->storeManager->getStore($storeId);
         if (!isset($variables['store'])) {
             $variables['store'] = $store;
+        }
+        if (!isset($variables['store']['frontend_name'])) {
+            $variables['store']['frontend_name'] = $store->getFrontendName();
         }
         if (!isset($variables['logo_url'])) {
             $variables['logo_url'] = $this->getLogoUrl($storeId);
