@@ -38,7 +38,6 @@
         <remove keyForRemoval="selectFlatRateShipping"/>
         <remove keyForRemoval="seeOrderShipping"/>
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$50.99" stepKey="seeOrderSubTotal" after="waitForPageLoadOrder"/>
-        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="$0.00" stepKey="seeOrderShipping" after="seeOrderSubTotal"/>
         <remove keyForRemoval="checkOrderStatus"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="checkOrderStatus" after="checkSuccessMessage"/>
     </test>
