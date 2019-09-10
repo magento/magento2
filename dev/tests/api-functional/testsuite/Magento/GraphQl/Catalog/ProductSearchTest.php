@@ -702,6 +702,205 @@ QUERY;
     }
 
     /**
+     *  Filter by exact match of product url key
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testFilterBySingleProductUrlKey()
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var Product $product */
+        $product = $productRepository->get('simple-4');
+        $urlKey = $product->getUrlKey();
+
+        $query = <<<QUERY
+{
+  products(filter:{
+                   url_key:{eq:"{$urlKey}"}
+                   }
+                   pageSize: 3
+                   currentPage: 1
+       )
+  {
+  total_count
+    items 
+     {
+      name
+      sku
+      url_key
+      }
+    page_info{
+      current_page
+      page_size
+      total_pages
+    }
+    filters{
+      name
+      request_var
+      filter_items_count 
+      filter_items{
+        label
+        items_count
+        value_string
+        __typename
+      }
+    }
+     aggregations
+    {
+        attribute_code
+        count
+        label
+        options
+        {
+          count
+          label
+          value
+        }
+    }
+  } 
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(1, $response['products']['total_count'], 'More than 1 product found');
+        $this->assertCount(2, $response['products']['aggregations']);
+        $this->assertResponseFields($response['products']['items'][0],
+            [
+                'name' => $product->getName(),
+                'sku' => $product->getSku(),
+                'url_key'=> $product->getUrlKey()
+            ]
+        );
+        $this->assertEquals('Price', $response['products']['aggregations'][0]['label']);
+        $this->assertEquals('Category', $response['products']['aggregations'][1]['label']);
+        //Disable the product
+        $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+        $productRepository->save($product);
+        $query2 = <<<QUERY
+{
+  products(filter:{
+                   url_key:{eq:"{$urlKey}"}
+                   }
+                   pageSize: 3
+                   currentPage: 1
+       )
+  {
+  total_count
+    items 
+     {
+      name
+      sku
+      url_key
+      }
+    
+    filters{
+      name
+      request_var
+      filter_items_count      
+    }
+     aggregations
+    {
+        attribute_code
+        count
+        label
+        options
+        {
+          count
+          label
+          value
+        }
+    }
+  } 
+}
+QUERY;
+        $response = $this->graphQlQuery($query2);
+        $this->assertEquals(0, $response['products']['total_count'], 'Total count should be zero');
+        $this->assertEmpty($response['products']['items']);
+        $this->assertEmpty($response['products']['aggregations']);
+    }
+
+    /**
+     *  Filter by multiple product url keys
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testFilterByMultipleProductUrlKeys()
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        /** @var Product $product */
+        $product1 = $productRepository->get('simple');
+        $product2 = $productRepository->get('12345');
+        $product3 = $productRepository->get('simple-4');
+        $filteredProducts = [$product1, $product2, $product3];
+        $urlKey =[];
+        foreach ($filteredProducts as $product) {
+            $urlKey[] = $product->getUrlKey();
+        }
+
+        $query = <<<QUERY
+{
+  products(filter:{
+                   url_key:{in:["{$urlKey[0]}", "{$urlKey[1]}", "{$urlKey[2]}"]}
+                   }
+                   pageSize: 3
+                   currentPage: 1
+       )
+  {
+  total_count
+    items 
+     {
+      name
+      sku
+      url_key
+      }
+    page_info{
+      current_page
+      page_size
+      
+    }
+    filters{
+      name
+      request_var
+      filter_items_count      
+    }
+     aggregations
+    {
+        attribute_code
+        count
+        label
+        options
+        {
+          count
+          label
+          value
+        }
+    }
+  } 
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(3, $response['products']['total_count'], 'Total count is incorrect');
+        $this->assertCount(2, $response['products']['aggregations']);
+
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
+            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
+            //validate that correct products are returned
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [ 'name' => $filteredProducts[$itemIndex]->getName(),
+                  'sku' => $filteredProducts[$itemIndex]->getSku(),
+                  'url_key'=> $filteredProducts[$itemIndex]->getUrlKey()
+                ]
+            );
+        }
+    }
+
+    /**
      * Get array with expected data for layered navigation filters
      *
      * @return array
