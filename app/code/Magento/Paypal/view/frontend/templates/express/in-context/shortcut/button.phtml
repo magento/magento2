@@ -10,16 +10,14 @@ use Magento\Paypal\Block\Express\InContext\Minicart\Button;
  * @var \Magento\Paypal\Block\Express\InContext\Minicart\Button $block
  */
 $config = [
-    'Magento_Paypal/js/in-context/button' => [
-        'id' => $block->escapeHtml($block->getContainerId()),
-        'linkDataAction' => $block->escapeHtml($block->getLinkAction()),
-        'paypalButton' => $block->escapeHtml(Button::PAYPAL_BUTTON_ID),
-        'addToCartSelector' => $block->escapeHtml($block->getAddToCartSelector())
-    ]
+    'id' => $block->escapeHtml($block->getContainerId()),
+    'linkDataAction' => $block->escapeHtml($block->getLinkAction()),
+    'paypalButton' => $block->escapeHtml(Button::PAYPAL_BUTTON_ID),
+    'addToCartSelector' => $block->escapeHtml($block->getAddToCartSelector())
 ];
 
 ?>
-<div data-mage-init='<?= /* @noEscape */ json_encode($config) ?>'
+<div data-mage-init='{"Magento_Paypal/js/in-context/button":<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($config) ?>}'
      class="paypal checkout paypal-logo <?= $block->escapeHtml($block->getContainerId()) ?>-container">
     <a data-action="<?= $block->escapeHtml($block->getLinkAction()) ?>" href="#">
         <img class="paypal-button-hidden"
