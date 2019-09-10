@@ -353,7 +353,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function isSubscribed()
     {
-        return $this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED;
+        return $this->getId() && $this->getStatus() === self::STATUS_SUBSCRIBED;
     }
 
     /**
