@@ -166,7 +166,7 @@ require([
                             rateValue = that.parent().find('input[type="checkbox"]').val();
 
                         confirm({
-                            content: '<?= /* @escapeNotVerified */ __('Do you really want to delete this tax rate?') ?>',
+                            content: '<?= $block->escapeJs(__('Do you really want to delete this tax rate?')) ?>',
                             actions: {
                                 /**
                                  * Confirm action.
