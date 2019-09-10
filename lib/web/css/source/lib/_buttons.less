@@ -200,14 +200,13 @@
     .lib-css(line-height, @_line-height);
     .lib-css(margin, @_margin);
     .lib-css(padding, @_padding);
-    .lib-link();
+    .lib-link(
+        @_link-color: @_link-color,
+        @_link-color-hover: @_link-color-hover
+    );
     background: none;
     border: 0;
     display: inline;
-
-    &:hover {
-        .lib-css(color, @_link-color-hover);
-    }
 
     &:hover,
     &:active,
