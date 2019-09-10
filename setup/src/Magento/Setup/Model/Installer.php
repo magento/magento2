@@ -442,6 +442,7 @@ class Installer
             }
         }
         if (!$dryRun) {
+            ksort($result);
             $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
         }
         return $result;
