@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminManageCategoriesByUserWithPermissionFor1StoreTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="user role"/>
+            <title value="Ability to manage categories by admin user with permission for 1 store"/>
+            <description value="Ability to manage categories by admin user with permission for 1 store"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-19264"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create new store and store view-->
+            <comment userInput="Create new store and store view" stepKey="createStoreAndStoreView"/>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore1">
+                <argument name="website" value="Main Website"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewA"/>
+            <!--Create simple category and product-->
+            <comment userInput="Create simple product and category" stepKey="createCategoryAndProduct"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create restricted user role-->
+            <actionGroup ref="AdminAddNewUserRoleWithCustomRoleScopes" stepKey="createLimitedRole">
+                <argument name="role" value="restrictedRole"/>
+                <argument name="customWebsiteName" value="{{SecondStoreGroupUnique.name}}"/>
+            </actionGroup>
+            <!--Create admin user with restricted role-->
+            <comment userInput="Create admin user with restricted role" stepKey="createUserWithRestrictedRole"/>
+            <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createRestrictedAdmin">
+                <argument name="role" value="restrictedRole"/>
+                <argument name="user" value="Admin3"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete product and category-->
+            <comment userInput="Delete product and category" stepKey="deleteProdAndCategory"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Delete User-->
+            <comment userInput="Delete User" stepKey="deleteUser"/>
+            <actionGroup ref="AdminDeleteCreatedUserActionGroup" stepKey="deleteLimitedUser">
+                <argument name="user" value="Admin3"/>
+            </actionGroup>
+            <!--Delete users roles-->
+            <comment userInput="Delete users roles" stepKey="deleteUserRole"/>
+            <actionGroup ref="AdminDeleteUserRoleWithSpecifiedPermissionActionGroup" stepKey="deleteRestrictedRole">
+                <argument name="role" value="restrictedRole"/>
+            </actionGroup>
+            <!--Delete store view-->
+            <comment userInput="Delete store view" stepKey="deleteStoreView"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+        </after>
+        <!--Login as restricted user-->
+        <comment userInput="Login as restricted user" stepKey="loginAsRestrictedUser"/>
+        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin">
+            <argument name="adminUser" value="Admin3"/>
+        </actionGroup>
+        <!--Open Product page-->
+        <comment userInput="openProductPage" stepKey="openProdPage"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--Check that ability to manage category is disabled-->
+        <comment userInput="Check that ability to manage category is disabled" stepKey="checkAbilityToManageCategory"/>
+        <grabAttributeFrom userInput="class" selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="grabAttributeFromInput"/>
+        <assertContains expectedType="string" expected="disabled" actual="$grabAttributeFromInput" stepKey="assertCategoryIsDisabled"/>
+        <!--Go to created category page-->
+        <comment userInput="Go to created category page" stepKey="visitAdminCategoryPage"/>
+        <actionGroup ref="goToAdminCategoryPageById" stepKey="goToAdminCategoryPage0">
+            <argument name="id" value="$$createCategory.id$$"/>
+        </actionGroup>
+        <!--Expand products in category tab-->
+        <comment userInput="Expand products in category tab" stepKey="expandProductsInCategoryTab"/>
+        <conditionalClick selector="{{AdminCategoryProductsSection.sectionHeader}}" dependentSelector="{{AdminCategoryProductsSection.matchByRule}}" visible="false" stepKey="openProductsInCategoryTab"/>
+        <!--Check that the ability to add product is disabled-->
+        <comment userInput="Check that the ability to add product is disabled" stepKey="checkAbilityToAddProduct"/>
+        <seeElement selector="{{AdminCategoryProductsSection.addProductsDisabled}}" stepKey="checkAbilityToAddProductIsDisabled"/>
+    </test>
+</tests>
