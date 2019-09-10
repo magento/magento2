@@ -7,26 +7,8 @@
 /** @var \Magento\Translation\ViewModel\Dictionary $viewModel  */
 $viewModel = $block->getData('dictionary_view_model');
 ?>
-<?php if ($viewModel->dictionaryEnabled()) : ?>
-    <script type="application/json" src="<?= $viewModel->getTranslationDictionaryFile() ?>"></script>
-    <script>
-        require.config({
-            map: {
-                '*': {
-                    'dictionary': '<?= $viewModel->getTranslationDictionaryFile() ?>'
-                }
-            }
-        });
-    </script>
-<?php else: ?>
-<!--work-around for embedded translation strategy-->
-    <script>
-        require.config({
-            map: {
-                '*': {
-                    'dictionary': 'https://mage21.test/static/frontend/Magento/luma/en_US/js-translation.json'
-                }
-            }
-        });
-    </script>
-<?php endif; ?>
+<script>
+    define('dictionary', function () {
+        return <?= /* @noEscape */ $viewModel->getTranslationDictionaryFileContent() ?>;
+    });
+</script>

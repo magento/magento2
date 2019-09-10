@@ -6,20 +6,17 @@
 
 namespace Magento\Translation\ViewModel;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Asset\File\NotFoundException;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Translation\Model\Js\Config as JsConfig;
 
 /**
- * View model responsible for getting translate dictionary file for the layout.
+ * View model responsible for getting translate dictionary file content for the layout.
  */
 class Dictionary implements ArgumentInterface
 {
-    /**
-     * @var JsConfig
-     */
-    private $config;
-
     /**
      * @var AssetRepository
      */
@@ -27,33 +24,27 @@ class Dictionary implements ArgumentInterface
 
     /**
      * @param AssetRepository $assetRepo
-     * @param JsConfig $config
      */
     public function __construct(
-        AssetRepository $assetRepo,
-        JsConfig $config
+        AssetRepository $assetRepo
     ) {
         $this->assetRepo = $assetRepo;
-        $this->config = $config;
     }
 
     /**
-     * Get translation dictionary file as an asset for the page.
+     * Get translation dictionary file content.
      *
      * @return string
      */
-    public function getTranslationDictionaryFile(): string
+    public function getTranslationDictionary(): string
     {
-        return $this->assetRepo->getUrl(JsConfig::DICTIONARY_FILE_NAME);
-    }
+        try {
+            $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
+            $content = $asset->getContent();
+        } catch (LocalizedException | NotFoundException $e) {
+            $content = '';
+        }
 
-    /**
-     * Is js translation set to dictionary mode.
-     *
-     * @return bool
-     */
-    public function dictionaryEnabled(): bool
-    {
-        return $this->config->dictionaryEnabled();
+        return $content;
     }
 }
