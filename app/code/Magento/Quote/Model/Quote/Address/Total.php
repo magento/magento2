@@ -168,7 +168,25 @@ class Total extends \Magento\Framework\DataObject
     {
         return $this->baseTotalAmounts;
     }
-    
+
+    /**
+     * Set discount breakdown per rule
+     *
+     * @param array $data
+     */
+    public function setDiscountPerRule($data)
+    {
+         $this->setData('discount_per_rule', $data);
+    }
+
+    /**
+     * Get discount breakdown per rule
+     */
+    public function getDiscountPerRule()
+    {
+        return $this->getData('discount_per_rule');
+    }
+
     //@codeCoverageIgnoreEnd
 
     /**
