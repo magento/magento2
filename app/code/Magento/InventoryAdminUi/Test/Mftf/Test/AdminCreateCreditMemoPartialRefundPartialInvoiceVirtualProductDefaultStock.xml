@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoPartialRefundPartialInvoiceVirtualProductDefaultStock" extends="AdminCreatePartialInvoiceForVirtualProductInDefaultStockMainWebsiteTest">
+        <annotations>
+            <stories value="Virtual Product Default Stock."/>
+            <title value="Create Credit Memo, partial refund with partial invoice, virtual product on default stock."/>
+            <description value="Verify, admin able to create Credit Memo with partial refund with partial invoice with virtual product on Default source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735141/scenarios/2487925"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Get order Id.-->
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId" after="clickSubmitOrder" />
+        <!--Admin Area Total Refund Credit Memo-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateCreditMemo" after="checkSalableQtyAfterInvoiceCreated"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskCreditMemo" after="onOrdersPageToCreateCreditMemo"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$orderId}" stepKey="searchOrderNumCreditMemo" after="waitForOrdersPageLoadingMaskCreditMemo"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchCreditMemo" after="searchOrderNumCreditMemo"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskCreditMemo" after="submitSearchCreditMemo"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowCreditMemo" after="waitForSubmitSearchLoadingMaskCreditMemo"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo" after="clickOrderRowCreditMemo"/>
+        <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox" after="clickCreditMemo"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="1" stepKey="partialRefund" after="returnToStockCheckbox"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund" after="partialRefund"/>
+        <waitForLoadingMaskToDisappear stepKey="updateQuantityLoadingMask" after="updateQuantityToRefund"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmit" after="updateQuantityLoadingMask"/>
+        <!--Verify Quantities of Virtual product after Credit Memo created-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterCreditMemoCreated" after="clickSubmit"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductToCheckQuantity" after="navigateToProductIndexPageForCheckProductQtyAfterCreditMemoCreated">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$virtualProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkProductSourceQtyAfterCreditMemoCreated" after="findVirtualProductToCheckQuantity"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="998" stepKey="checkSalableQtyAfterCreditMemoCreated" after="checkProductSourceQtyAfterCreditMemoCreated"/>
+    </test>
+</tests>

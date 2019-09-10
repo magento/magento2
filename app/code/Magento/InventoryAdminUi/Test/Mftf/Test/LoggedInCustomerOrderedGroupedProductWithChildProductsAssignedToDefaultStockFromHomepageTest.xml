@@ -96,5 +96,13 @@
                       after="placeOrder"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:"
              stepKey="checkOrderPlaceSuccessMessage" after="grabOrderNumber"/>
+        <remove keyForRemoval="checkSimpleProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkSimpleProductSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkSimpleProductSourceQtyAfterPlaceOrder" after="findSimpleProductBySkuToCheckQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="998" stepKey="checkSimpleProductSalableQtyAfterPlaceOrder" after="checkSimpleProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkVirtualProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkVirtualProductSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="1000" stepKey="checkVirtualProductSourceQtyAfterPlaceOrder" after="findVirtualProductBySkuToCheckQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}" userInput="998" stepKey="checkVirtualProductSalableQtyAfterPlaceOrder" after="checkVirtualProductSourceQtyAfterPlaceOrder"/>
     </test>
 </tests>

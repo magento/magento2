@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithGroupedProductCustomStockTest" extends="AdminCreateOrderWithGroupedProductDefaultStockTest">
+        <annotations>
+            <stories value="Grouped Product Custom Stock."/>
+            <title value="Create order with grouped product on custom stock from admin area"/>
+            <description value="Check, admin user able to create order with grouped product on custom stock from admin area."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419537/scenarios/2186548"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="customStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock" after="customSource"/>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+        </before>
+        <after>
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="logoutFromAdminArea">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </after>
+
+        <!--Assign simple product to additional source.-->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openSimpleProductEditPage" before="assignTestSourceToSimpleProduct"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToSimpleProduct" before="setCustomSourceSimpleProductQuantity">
+            <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1000" stepKey="setCustomSourceSimpleProductQuantity" before="saveSimpleProduct"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveSimpleProduct" before="navigateToProductIndexPageForEditVirtualProduct"/>
+        <!--Assign virtual product to additional source.-->
+        <scrollToTopOfPage stepKey="scrollToTheTopOfProductPage" before="setCustomSourceQuantity"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct" before="setCustomSourceQuantity">
+            <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1000" stepKey="setCustomSourceQuantity" before="saveAndCloseCreatedVirtualProduct"/>
+        <!--Verify simple product quantity.-->
+        <remove keyForRemoval="checkSimpleProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkSimpleProductSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$customSource.source[name]$$)}}" userInput="1000" stepKey="checkSimpleProductSourceQtyAfterPlaceOrder" after="findSimpleProductBySkuToCheckQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$customStock.stock[name]$$)}}" userInput="996" stepKey="checkSimpleProductSalableQtyAfterPlaceOrder" after="checkSimpleProductSourceQtyAfterPlaceOrder"/>
+        <!--Verify virtual product quantity.-->
+        <remove keyForRemoval="checkVirtualProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkVirtualProductSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$customSource.source[name]$$)}}" userInput="1000" stepKey="checkVirtualProductSourceQtyAfterPlaceOrder" after="findVirtualProductBySkuToCheckQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$customStock.stock[name]$$)}}" userInput="996" stepKey="checkVirtualProductSalableQtyAfterPlaceOrder" after="checkVirtualProductSourceQtyAfterPlaceOrder"/>
+    </test>
+</tests>
