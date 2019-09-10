@@ -638,7 +638,7 @@ QUERY;
                 ]
             );
         }
-        $this->assertNotEmpty($response['products']['filters'],'filters is empty');
+        $this->assertNotEmpty($response['products']['filters'], 'filters is empty');
         $this->assertNotEmpty($response['products']['aggregations'], 'Aggregations should not be empty');
         $this->assertCount(3, $response['products']['aggregations']);
 
@@ -1298,6 +1298,7 @@ QUERY;
         $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
         $productsInResponse = ['ocean blue Shoes','Blue briefs','Navy Striped Shoes','Grey shorts'];
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($i = 0; $i < count($response['products']['items']); $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
         }
@@ -1553,6 +1554,7 @@ QUERY;
         //verify that by default Price and category are the only layers available
         $filterNames = ['Category', 'Price'];
         $this->assertCount(2, $response['products']['filters'], 'Filter count does not match');
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($i = 0; $i < count($response['products']['filters']); $i++) {
             $this->assertEquals($filterNames[$i], $response['products']['filters'][$i]['name']);
         }
