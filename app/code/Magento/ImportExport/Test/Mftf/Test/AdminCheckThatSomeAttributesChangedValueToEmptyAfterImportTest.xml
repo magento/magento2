@@ -10,17 +10,17 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCheckThatSomeAttributesChangedValueToEmptyAfterImportTest">
         <annotations>
+            <features value="Import/Export"/>
             <stories value="Attribute importing"/>
             <title value="Check that some attributes changed the value to an empty after import CSV"/>
             <description value="Check that some attributes changed the value to an empty after import CSV"/>
-            <features value="Import/Export"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-11332"/>
             <useCaseId value="MAGETWO-61593"/>
             <group value="importExport"/>
-            <!--<skip>-->
-                <!--<issueId value="MC-17175" />-->
-            <!--</skip>-->
+            <skip>
+                <issueId value="MC-17175" />
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
