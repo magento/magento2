@@ -233,10 +233,6 @@ class VariationHandler
 
             foreach ($simpleProductData['media_gallery']['images'] as $imageId => $image) {
                 $image['variation_id'] = $variationId;
-                if (isset($imagesForCopy[$imageId][0])) {
-                    // skip duplicate image for first product
-                    unset($imagesForCopy[$imageId][0]);
-                }
                 $imagesForCopy[$imageId][] = $image;
             }
         }
