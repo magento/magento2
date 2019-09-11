@@ -81,13 +81,13 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($defaultAttributeSet)
     ->setStoreId(1)
     ->setWebsiteIds([1])
-    ->setName('ocean blue Shoes')
-    ->setSku('ocean-blue-shoes')
+    ->setName('light green Shoes')
+    ->setSku('light-green-shoes')
     ->setPrice(40)
     ->setWeight(8)
-    ->setDescription('light blue shoes <b>one</b>')
-    ->setMetaTitle('light blue shoes meta title')
-    ->setMetaKeyword('light, blue , women, kids')
+    ->setDescription('green polka dots shoes <b>one</b>')
+    ->setMetaTitle('light green shoes meta title')
+    ->setMetaKeyword('light, green , women, kids')
     ->setMetaDescription('shoes women kids meta description')
     ->setStockData(['use_config_manage_stock' => 0])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
@@ -100,7 +100,7 @@ $greyProduct->setDescription('Description with blue lines');
 $productRepository->save($greyProduct);
 
 $skus = ['green_socks', 'white_shorts','red_trousers','blue_briefs','grey_shorts',
-    'navy-striped-shoes', 'ocean-blue-shoes'];
+    'navy-striped-shoes', 'light-green-shoes'];
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);

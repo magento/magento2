@@ -218,7 +218,7 @@ QUERY;
   products(filter:{                   
                    $attributeCode: {eq: "{$optionValue}"}
                    }
-                   sort:{relevance:DESC}
+                   
                    pageSize: 3
                    currentPage: 1
        )
@@ -1493,12 +1493,12 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(4, $response['products']['total_count']);
+        $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
-        $productsInResponse = ['ocean blue Shoes','Blue briefs','Navy Striped Shoes','Grey shorts'];
-        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($i = 0; $i < count($response['products']['items']); $i++) {
+        $productsInResponse = ['Blue briefs','Navy Striped Shoes','Grey shorts'];
+        $count = count($response['products']['items']);
+        for ($i = 0; $i < $count; $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
         }
         $this->assertCount(2, $response['products']['aggregations']);
@@ -1634,11 +1634,10 @@ QUERY;
         $prod1 = $productRepository->get('blue_briefs');
         $prod2 = $productRepository->get('grey_shorts');
         $prod3 = $productRepository->get('navy-striped-shoes');
-        $prod4 = $productRepository->get('ocean-blue-shoes');
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(4, $response['products']['total_count']);
+        $this->assertEquals(3, $response['products']['total_count']);
 
-        $filteredProducts = [$prod1, $prod2, $prod3, $prod4];
+        $filteredProducts = [$prod1, $prod2, $prod3];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
@@ -1753,8 +1752,8 @@ QUERY;
         //verify that by default Price and category are the only layers available
         $filterNames = ['Category', 'Price'];
         $this->assertCount(2, $response['products']['filters'], 'Filter count does not match');
-        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($i = 0; $i < count($response['products']['filters']); $i++) {
+        $productCount = count($response['products']['filters']);
+        for ($i = 0; $i < $productCount; $i++) {
             $this->assertEquals($filterNames[$i], $response['products']['filters'][$i]['name']);
         }
     }
@@ -2031,8 +2030,8 @@ QUERY;
     private function assertProductItems(array $filteredProducts, array $actualResponse)
     {
         $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
-        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
+        $count = count($filteredProducts);
+        for ($itemIndex = 0; $itemIndex < $count; $itemIndex++) {
             $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
