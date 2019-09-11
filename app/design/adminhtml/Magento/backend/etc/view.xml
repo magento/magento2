@@ -63,6 +63,7 @@
         <item type="file">Lib::requirejs/text.js</item>
         <item type="file">Lib::date-format-normalizer.js</item>
         <item type="file">Lib::varien/js.js</item>
+        <item type="directory">Magento_Tinymce3::tiny_mce</item>
         <item type="directory">Lib::css</item>
         <item type="directory">Lib::lib</item>
         <item type="directory">Lib::prototype</item>

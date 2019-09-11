@@ -78,14 +78,6 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
         self::assertEquals(10, $amount['value']);
         self::assertArrayHasKey('currency', $amount);
         self::assertEquals('USD', $amount['currency']);
-
-        self::assertArrayHasKey('base_amount', $shippingAddress['selected_shipping_method']);
-        $baseAmount = $shippingAddress['selected_shipping_method']['base_amount'];
-
-        self::assertArrayHasKey('value', $baseAmount);
-        self::assertEquals(10, $baseAmount['value']);
-        self::assertArrayHasKey('currency', $baseAmount);
-        self::assertEquals('USD', $baseAmount['currency']);
     }
 
     /**
@@ -188,7 +180,6 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
         self::assertNull($shippingAddress['selected_shipping_method']['carrier_title']);
         self::assertNull($shippingAddress['selected_shipping_method']['method_title']);
         self::assertNull($shippingAddress['selected_shipping_method']['amount']);
-        self::assertNull($shippingAddress['selected_shipping_method']['base_amount']);
     }
 
     /**
@@ -237,10 +228,6 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
         carrier_title
         method_title
         amount {
-            value
-            currency
-        }
-        base_amount {
             value
             currency
         }
