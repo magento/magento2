@@ -47,4 +47,16 @@
         <data key="simple_action">to_percent</data>
         <data key="discount_amount">90</data>
     </entity>
+    <entity name="CatalogRuleToPercent90" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <array key="groups">
+            <item>NOT LOGGED IN</item>
+        </array>
+        <array key="websites">
+            <item>Main Website</item>
+        </array>
+        <data key="simple_action">Adjust final price to this percentage</data>
+        <data key="discount_amount">90</data>
+    </entity>
 </entities>

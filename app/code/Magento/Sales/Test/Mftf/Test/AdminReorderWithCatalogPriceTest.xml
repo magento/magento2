@@ -44,12 +44,9 @@
         <after>
             <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
             <!-- Delete the rule -->
-            <actionGroup ref="RemoveCatalogPriceRule" stepKey="deletePriceRule">
-                <argument name="ruleName" value="CatalogRuleToPercent.name" />
-            </actionGroup>
+            <actionGroup ref="deleteAllCatalogPriceRule" stepKey="removeAllExistingCartPriceRules"/>
 
             <!--Clear all filters in grid-->
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetCatalogRuleGridFilters"/>
             <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
