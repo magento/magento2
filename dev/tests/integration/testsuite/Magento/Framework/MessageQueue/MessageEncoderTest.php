@@ -7,12 +7,26 @@ declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue;
 
+use LogicException;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerExtension;
+use Magento\Customer\Api\Data\CustomerExtensionInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Framework\Communication\Config;
+use Magento\Framework\Communication\Config\Data;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MessageEncoderTest extends \PHPUnit\Framework\TestCase
+class MessageEncoderTest extends TestCase
 {
     /**
      * @var MessageEncoder
@@ -20,13 +34,13 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     private $encoder;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->encoder = $this->objectManager->create(MessageEncoder::class);
         $this->setBackwardCompatibleProperty(
             $this->encoder,
@@ -40,14 +54,14 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      */
-    public function testEncode()
+    public function testEncode(): void
     {
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        /** @var CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
         $fixtureCustomerId = 1;
         $customer = $customerRepository->getById($fixtureCustomerId);
-        /** @var \Magento\Customer\Api\Data\CustomerExtensionInterface $customerExtension */
-        $customerExtension = $this->objectManager->create(\Magento\Customer\Api\Data\CustomerExtension::class);
+        /** @var CustomerExtensionInterface $customerExtension */
+        $customerExtension = $this->objectManager->create(CustomerExtension::class);
         $customerExtension->setTestGroupCode('Some Group Code');
         $customer->setExtensionAttributes($customerExtension);
         $encodedCustomerData = json_decode($this->encoder->encode('customer.created', $customer), true);
@@ -61,14 +75,14 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      */
-    public function testEncodeArrayOfEntities()
+    public function testEncodeArrayOfEntities(): void
     {
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        /** @var CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
         $fixtureCustomerId = 1;
         $customer = $customerRepository->getById($fixtureCustomerId);
-        /** @var \Magento\Customer\Api\Data\CustomerExtensionInterface $customerExtension */
-        $customerExtension = $this->objectManager->create(\Magento\Customer\Api\Data\CustomerExtension::class);
+        /** @var CustomerExtensionInterface $customerExtension */
+        $customerExtension = $this->objectManager->create(CustomerExtension::class);
         $customerExtension->setTestGroupCode('Some Group Code');
         $customer->setExtensionAttributes($customerExtension);
         $encodedCustomerData = json_decode($this->encoder->encode('customer.list.retrieved', [$customer]), true);
@@ -78,73 +92,67 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedEncodedCustomerData, $encodedCustomerData[0]);
     }
 
-    public function testDecode()
+    public function testDecode(): void
     {
         $encodedMessage = $this->getCustomerDataAsJson('2015-07-22 12:43:36', '2015-07-22 12:45:36');
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $decodedCustomerObject */
+        /** @var CustomerInterface $decodedCustomerObject */
         $decodedCustomerObject = $this->encoder->decode('customer.created', $encodedMessage);
-        $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $decodedCustomerObject);
+        $this->assertInstanceOf(CustomerInterface::class, $decodedCustomerObject);
         $this->assertEquals('customer@example.com', $decodedCustomerObject->getEmail());
         $this->assertEquals(1, $decodedCustomerObject->getGroupId());
 
         $this->assertInstanceOf(
-            \Magento\Customer\Api\Data\CustomerExtensionInterface::class,
+            CustomerExtensionInterface::class,
             $decodedCustomerObject->getExtensionAttributes()
         );
         $this->assertEquals('Some Group Code', $decodedCustomerObject->getExtensionAttributes()->getTestGroupCode());
         $addresses = $decodedCustomerObject->getAddresses();
         $this->assertCount(1, $addresses, "Address was not decoded.");
         $this->assertInstanceOf(
-            \Magento\Customer\Api\Data\AddressInterface::class,
+            AddressInterface::class,
             $addresses[0]
         );
         $this->assertEquals('3468676', $addresses[0]->getTelephone());
         $this->assertEquals(true, $addresses[0]->isDefaultBilling());
 
         $this->assertInstanceOf(
-            \Magento\Customer\Api\Data\RegionInterface::class,
+            RegionInterface::class,
             $addresses[0]->getRegion()
         );
         $this->assertEquals('AL', $addresses[0]->getRegion()->getRegionCode());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error occurred during message decoding
-     */
-    public function testDecodeInvalidMessageFormat()
+    public function testDecodeInvalidMessageFormat(): void
     {
+        $this->expectExceptionMessage('Error occurred during message decoding');
+        $this->expectException(LocalizedException::class);
         $this->encoder->decode('customer.created', "{");
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testDecodeInvalidMessage()
+    public function testDecodeInvalidMessage(): void
     {
         $message =
             'Cannot inject property "not_existing_field" in class "Magento\Customer\Api\Data\CustomerInterface".';
         $this->expectExceptionMessage($message);
+        $this->expectException(LogicException::class);
         $this->encoder->decode('customer.created', '{"not_existing_field": "value"}');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error occurred during message decoding
-     */
-    public function testDecodeIncorrectMessage()
+    public function testDecodeIncorrectMessage(): void
     {
+        $this->expectExceptionMessage('Error occurred during message decoding');
+        $this->expectException(LocalizedException::class);
         $this->encoder->decode('customer.created', "{");
     }
 
     /**
-     * @return \Magento\Framework\MessageQueue\Config
+     * @return mixed
      */
     protected function getConfig()
     {
         $newData = include __DIR__ . '/_files/encoder_communication.php';
-        /** @var \Magento\Framework\Communication\Config\Data $configData */
-        $configData = $this->objectManager->create(\Magento\Framework\Communication\Config\Data::class);
+        /** @var Data $configData */
+        $configData = $this->objectManager->create(Data::class);
         $configData->reset();
         $configData->merge($newData);
         $config = $this->objectManager->create(Config::class, ['configData' => $configData]);
@@ -159,7 +167,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
      * @param string $updatedAt
      * @return string
      */
-    protected function getCustomerDataAsJson($createdAt, $updatedAt)
+    protected function getCustomerDataAsJson(string $createdAt, string $updatedAt): string
     {
         return <<<JSON
 {
@@ -218,10 +226,11 @@ JSON;
      * @param string $propertyName
      * @param object $propertyValue
      * @return void
+     * @throws ReflectionException
      */
-    public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue)
+    public function setBackwardCompatibleProperty($object, string $propertyName, $propertyValue): void
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($propertyName);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
