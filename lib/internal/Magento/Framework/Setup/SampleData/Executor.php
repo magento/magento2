@@ -49,7 +49,7 @@ class Executor
         try {
             $this->appState->emulateAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL, [$installer, 'install']);
             $this->state->setInstalled();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->state->setError();
             $this->logger->error('Sample Data error: ' . $e->getMessage());
         }
