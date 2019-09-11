@@ -11,6 +11,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture;
 class SemiVariadic
 {
     const DEFAULT_FOO_VALUE = 'bar';
+
     /**
      * @var OneScalar[]
      */
@@ -23,7 +24,8 @@ class SemiVariadic
 
     /**
      * SemiVariadic constructor.
-     * @param string $foo
+     *
+     * @param string      $foo
      * @param OneScalar[] ...$oneScalars
      */
     public function __construct(
@@ -35,7 +37,7 @@ class SemiVariadic
     }
 
     /**
-     * @param string $key
+     * @param  mixed $key
      * @return mixed
      */
     public function getOneScalarByKey($key)
