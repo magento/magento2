@@ -58,12 +58,8 @@
         <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
     <actionGroup name="CreateMultipleWebsiteCatalogPriceRule" extends="createCatalogPriceRule">
-        <arguments>
-            <argument name="customerGroup" defaultValue="General" type="string"/>
-        </arguments>
         <remove keyForRemoval="selectSite"/>
-        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroup}}" after="fillDiscountValue" stepKey="selectCustomerGroupMultiple"/>
-        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="['FirstWebsite', 'SecondWebsite']" after="selectCustomerGroupMultiple" stepKey="selectWebsite"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="['FirstWebsite', 'SecondWebsite']" stepKey="selectWebsite"/>
     </actionGroup>
     <actionGroup name="CreateCatalogPriceRuleViaTheUi">
         <arguments>
