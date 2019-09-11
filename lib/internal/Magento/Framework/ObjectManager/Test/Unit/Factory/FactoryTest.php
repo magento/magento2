@@ -50,22 +50,34 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException        \UnexpectedValueException
      * @expectedExceptionMessage Invalid parameter configuration provided for $firstParam argument
      */
     public function testResolveArgumentsException()
     {
         $configMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Config::class);
-        $configMock->expects($this->once())->method('getArguments')
-            ->will($this->returnValue([
-                'firstParam' => 1,
-            ]));
+        $configMock->expects($this->once())->method('getArguments')->will(
+            $this->returnValue(
+                [
+                    'firstParam' => 1,
+                ]
+            )
+        );
 
         $definitionsMock = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
-        $definitionsMock->expects($this->once())->method('getParameters')
-            ->will($this->returnValue([[
-                'firstParam', 'string', true, 'default_val', false
-            ]]));
+        $definitionsMock->expects($this->once())->method('getParameters')->will(
+            $this->returnValue(
+                [
+                    [
+                        'firstParam',
+                        'string',
+                        true,
+                        'default_val',
+                        false
+                    ]
+                ]
+            )
+        );
 
         $this->factory = new Developer(
             $configMock,
@@ -80,9 +92,14 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test create with one arg
+     */
     public function testCreateOneArg()
     {
-        /** @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar $result */
+        /**
+         * @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar $result
+         */
         $result = $this->factory->create(
             \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
             ['foo' => 'bar']
@@ -91,6 +108,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('bar', $result->getFoo());
     }
 
+    /**
+     * Test create with injectable
+     */
     public function testCreateWithInjectable()
     {
         // let's imitate that One is injectable by providing DI configuration for it
@@ -101,7 +121,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                 ],
             ]
         );
-        /** @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two $result */
+        /**
+         * @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two $result
+         */
         $result = $this->factory->create(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two::class);
         $this->assertInstanceOf(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two::class, $result);
         $this->assertInstanceOf(
@@ -113,8 +135,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $startingClass
-     * @param string $terminationClass
+     * @param        string $startingClass
+     * @param        string $terminationClass
      * @dataProvider circularDataProvider
      */
     public function testCircular($startingClass, $terminationClass)
@@ -139,23 +161,30 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * Test create using reflection
+     */
     public function testCreateUsingReflection()
     {
         $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Polymorphous::class;
         $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
         // should be more than defined in "switch" of create() method
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will($this->returnValue([
-            ['one', null, false, null, false],
-            ['two', null, false, null, false],
-            ['three', null, false, null, false],
-            ['four', null, false, null, false],
-            ['five', null, false, null, false],
-            ['six', null, false, null, false],
-            ['seven', null, false, null, false],
-            ['eight', null, false, null, false],
-            ['nine', null, false, null, false],
-            ['ten', null, false, null, false],
-        ]));
+        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
+            $this->returnValue(
+                [
+                    ['one', null, false, null, false],
+                    ['two', null, false, null, false],
+                    ['three', null, false, null, false],
+                    ['four', null, false, null, false],
+                    ['five', null, false, null, false],
+                    ['six', null, false, null, false],
+                    ['seven', null, false, null, false],
+                    ['eight', null, false, null, false],
+                    ['nine', null, false, null, false],
+                    ['ten', null, false, null, false],
+                ]
+            )
+        );
         $factory = new Developer($this->config, null, $definitions);
         $result = $factory->create(
             $type,
@@ -178,9 +207,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test create objects with variadic argument in constructor
      *
-     * @param $createArgs
-     * @param $expectedArg0
-     * @param $expectedArg1
+     * @param        $createArgs
+     * @param        $expectedArg0
+     * @param        $expectedArg1
      * @dataProvider testCreateUsingVariadicDataProvider
      */
     public function testCreateUsingVariadic(
@@ -191,20 +220,24 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic::class;
         $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
 
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will($this->returnValue([
-            [
+        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
+            $this->returnValue(
+                [
+                    [
                 'oneScalars',
                 \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
                 false,
                 [],
                 true
-            ],
-        ]));
+                    ],
+                ]
+            )
+        );
         $factory = new Developer($this->config, null, $definitions);
 
-
-
-        /** @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic $variadic */
+        /**
+         * @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic $variadic
+         */
         $variadic = is_null($createArgs)
             ? $factory->create($type)
             : $factory->create($type, $createArgs);
@@ -216,7 +249,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function testCreateUsingVariadicDataProvider() {
+    public function testCreateUsingVariadicDataProvider()
+    {
         $oneScalar1 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
         $oneScalar2 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
 
@@ -272,7 +306,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                 ],
             ]
         );
-        /** @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic $variadic */
+        /**
+         * @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic $variadic
+         */
         $variadic = $this->factory->create(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic::class);
 
         $this->assertSame($oneScalar1, $variadic->getOneScalarByKey(0));

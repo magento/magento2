@@ -120,7 +120,9 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
         try {
             return new $type(...array_values($args));
         } catch (\TypeError $exception) {
-            /** @var LoggerInterface $logger */
+            /**
+             * @var LoggerInterface $logger
+             */
             $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             $logger->critical(
                 sprintf('Type Error occurred when creating object: %s, %s', $type, $exception->getMessage())
@@ -249,7 +251,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
             }
 
             if ($isVariadic && is_array($argument)) {
-                $resolvedArguments = array_merge($resolvedArguments, $argument);
+                $resolvedArguments += $argument;
             } else {
                 $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
                 $resolvedArguments[] = $argument;
