@@ -303,6 +303,7 @@
         <item type="directory">Magento_Ui::templates/grid</item>
         <item type="directory">Magento_Ui::templates/dynamic-rows</item>
         <item type="directory">Magento_Swagger::swagger-ui</item>
+        <item type="directory">Magento_Tinymce3::tiny_mce</item>
         <item type="directory">Lib::modernizr</item>
         <item type="directory">Lib::tiny_mce</item>
         <item type="directory">Lib::varien</item>

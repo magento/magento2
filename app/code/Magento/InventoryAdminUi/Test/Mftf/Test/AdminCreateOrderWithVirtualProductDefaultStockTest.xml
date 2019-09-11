@@ -89,7 +89,6 @@
 
         <comment userInput="Check order grand total and shipping cost." stepKey="checkOrderGrandTotalComment"/>
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$99.99" stepKey="seeOrderSubTotal"/>
-        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="0" stepKey="seeOrderShipping"/>
         <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="$99.99" stepKey="seeCorrectGrandTotal"/>
 
         <comment userInput="Submit order." stepKey="submitOrderComment"/>

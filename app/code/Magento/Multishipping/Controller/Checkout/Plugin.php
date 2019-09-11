@@ -1,11 +1,15 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Controller\Checkout;
 
+/**
+ * Turns Off Multishipping mode for Quote.
+ */
 class Plugin
 {
     /**
@@ -30,6 +34,10 @@ class Plugin
      */
     public function beforeExecute(\Magento\Framework\App\Action\Action $subject)
     {
-        $this->cart->getQuote()->setIsMultiShipping(0);
+        $quote = $this->cart->getQuote();
+        if ($quote->getIsMultiShipping()) {
+            $quote->setIsMultiShipping(0);
+            $this->cart->saveQuote();
+        }
     }
 }
