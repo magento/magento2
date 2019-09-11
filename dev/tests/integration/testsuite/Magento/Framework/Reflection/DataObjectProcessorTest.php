@@ -60,17 +60,20 @@ class DataObjectProcessorTest extends TestCase
     }
 
     /**
+     * @param array $inputDataArray
      * @param array $expectedOutputDataArray
      *
-     * @throws SerializationException
      * @throws ReflectionException
+     * @throws SerializationException
      * @dataProvider buildOutputDataArrayDataProvider
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function testBuildOutputDataArray(array $expectedOutputDataArray): void
-    {
+    public function testBuildOutputDataArray(
+        array $inputDataArray,
+        array $expectedOutputDataArray
+    ): void {
         /** @var TestDataObject $testDataObject */
-        $testDataObject = $this->dtoProcessor->createFromArray($expectedOutputDataArray, TestDataObject::class);
+        $testDataObject = $this->dtoProcessor->createFromArray($inputDataArray, TestDataObject::class);
 
         $outputData = $this->dataObjectProcessor
             ->buildOutputDataArray($testDataObject, TestDataInterface::class);
@@ -95,9 +98,15 @@ class DataObjectProcessorTest extends TestCase
             'attribute2' => 'value2'
         ];
 
+        $inputDataArray = [];
+
         return [
-            'NoExtensionAttributes' => [$expectedOutputDataArray],
+            'NoExtensionAttributes' => [$inputDataArray, $expectedOutputDataArray],
             'WithExtensionAttributes' => [
+                array_merge(
+                    $inputDataArray,
+                    ['extension_attributes' => $extensionAttributeArray]
+                ),
                 array_merge(
                     $expectedOutputDataArray,
                     ['extension_attributes' => $extensionAttributeArray]
