@@ -251,7 +251,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
             }
 
             if ($isVariadic && is_array($argument)) {
-                $resolvedArguments += $argument;
+                $resolvedArguments = array_merge($resolvedArguments, $argument);
             } else {
                 $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
                 $resolvedArguments[] = $argument;

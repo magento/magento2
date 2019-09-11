@@ -314,4 +314,131 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($oneScalar1, $variadic->getOneScalarByKey(0));
         $this->assertSame($oneScalar2, $variadic->getOneScalarByKey(1));
     }
+
+    /**
+     * Test create objects with non variadic and variadic argument in constructor
+     *
+     * @param        $createArgs
+     * @param        $expectedFooValue
+     * @param        $expectedArg0
+     * @param        $expectedArg1
+     * @dataProvider testCreateUsingSemiVariadicDataProvider
+     */
+    public function testCreateUsingSemiVariadic(
+        $createArgs,
+        $expectedFooValue,
+        $expectedArg0,
+        $expectedArg1
+    ) {
+        $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::class;
+        $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+
+        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
+            $this->returnValue(
+                [
+                    [
+                        'foo',
+                        null,
+                        false,
+                        \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                        false
+                    ],
+                    [
+                        'oneScalars',
+                        \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
+                        false,
+                        [],
+                        true
+                    ],
+                ]
+            )
+        );
+        $factory = new Developer($this->config, null, $definitions);
+
+        /**
+         * @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic $semiVariadic
+         */
+        $semiVariadic = is_null($createArgs)
+            ? $factory->create($type)
+            : $factory->create($type, $createArgs);
+
+        $this->assertSame($expectedFooValue, $semiVariadic->getFoo());
+        $this->assertSame($expectedArg0, $semiVariadic->getOneScalarByKey(0));
+        $this->assertSame($expectedArg1, $semiVariadic->getOneScalarByKey(1));
+    }
+
+    /**
+     * @return array
+     */
+    public function testCreateUsingSemiVariadicDataProvider()
+    {
+        $oneScalar1 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
+        $oneScalar2 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
+
+        return [
+            'without_args'    => [
+                null,
+                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                null,
+                null,
+            ],
+            'with_empty_args' => [
+                [],
+                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                null,
+                null,
+            ],
+            'only_with_foo_value' => [
+                [
+                    'foo' => 'baz'
+                ],
+                'baz',
+                null,
+                null,
+            ],
+            'only_with_oneScalars_empty_value' => [
+                [
+                    'oneScalars' => []
+                ],
+                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                null,
+                null,
+            ],
+            'only_with_oneScalars_full_value' => [
+                [
+                    'oneScalars' => [
+                        $oneScalar1,
+                        $oneScalar2,
+                    ]
+                ],
+                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                $oneScalar1,
+                $oneScalar2,
+            ],
+            'with_all_values_defined_in_right_order' => [
+                [
+                    'foo' => 'baz',
+                    'oneScalars' => [
+                        $oneScalar1,
+                        $oneScalar2,
+                    ]
+                ],
+                'baz',
+                $oneScalar1,
+                $oneScalar2,
+            ],
+            'with_all_values_defined_in_reverse_order' => [
+                [
+                    'oneScalars' => [
+                        $oneScalar1,
+                        $oneScalar2,
+                    ],
+                    'foo' => 'baz',
+                ],
+                'baz',
+                $oneScalar1,
+                $oneScalar2,
+            ],
+        ];
+    }
 }
