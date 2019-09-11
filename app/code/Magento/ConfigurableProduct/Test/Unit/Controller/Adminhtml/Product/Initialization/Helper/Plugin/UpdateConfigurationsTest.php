@@ -187,6 +187,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $expectedData
      * @param bool $hasDataChanges
+     * @param bool $wasChanged
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)

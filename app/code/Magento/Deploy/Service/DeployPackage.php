@@ -134,9 +134,10 @@ class DeployPackage
             } catch (ContentProcessorException $exception) {
                 $errorMessage = __('Compilation from source: ')
                     . $file->getSourcePath()
-                    . PHP_EOL . $exception->getMessage();
+                    . PHP_EOL . $exception->getMessage() . PHP_EOL;
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
+                $package->deleteFile($file->getFileId());
             } catch (\Exception $exception) {
                 $this->logger->critical(
                     'Compilation from source ' . $file->getSourcePath() . ' failed' . PHP_EOL . (string)$exception
