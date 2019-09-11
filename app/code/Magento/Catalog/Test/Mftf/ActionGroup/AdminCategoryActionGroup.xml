@@ -396,4 +396,22 @@
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
     </actionGroup>
+
+    <actionGroup name="AdminCategoryAssignProduct">
+        <annotations>
+            <description>Assign products to category - using "Products in Category" tab.</description>
+        </annotations>
+        <arguments>
+            <argument name="productSku" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" dependentSelector="{{CatalogProductsSection.resetFilter}}" visible="false" stepKey="clickOnProductInCategory"/>
+        <waitForPageLoad stepKey="waitForProductsInCategoryOpened"/>
+        <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
+        <waitForPageLoad stepKey="waitForProductsToLoad"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnSku}}" userInput="{{productSku}}" stepKey="selectProduct"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForSearch"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+    </actionGroup>
 </actionGroups>
