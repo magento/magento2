@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * Test loading of category tree
@@ -48,6 +48,80 @@ class CategoryTest extends GraphQlAbstract
         $query = <<<QUERY
 {
   category(id: {$rootCategoryId}) {
+      id
+      level
+      description
+      path
+      path_in_store
+      product_count
+      url_key
+      url_path
+      children {
+        id
+        description
+        available_sort_by
+        default_sort_by
+        image
+        level
+        children {
+          id
+          filter_price_range
+          description
+          image
+          meta_keywords
+          level
+          is_anchor
+          children {
+            level
+            id
+          }
+        }
+      }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $responseDataObject = new DataObject($response);
+        //Some sort of smoke testing
+        self::assertEquals(
+            'Its a description of Test Category 1.2',
+            $responseDataObject->getData('category/children/0/children/1/description')
+        );
+        self::assertEquals(
+            'default-category',
+            $responseDataObject->getData('category/url_key')
+        );
+        self::assertEquals(
+            [],
+            $responseDataObject->getData('category/children/0/available_sort_by')
+        );
+        self::assertEquals(
+            'name',
+            $responseDataObject->getData('category/children/0/default_sort_by')
+        );
+        self::assertCount(
+            7,
+            $responseDataObject->getData('category/children')
+        );
+        self::assertCount(
+            2,
+            $responseDataObject->getData('category/children/0/children')
+        );
+        self::assertEquals(
+            13,
+            $responseDataObject->getData('category/children/0/children/1/id')
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testRootCategoryTree()
+    {
+        $query = <<<QUERY
+{
+  category {
       id
       level
       description
@@ -176,6 +250,25 @@ QUERY;
     public function testGetDisabledCategory()
     {
         $categoryId = 8;
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+      id
+      name
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Category doesn't exist
+     */
+    public function testGetCategoryIdZero()
+    {
+        $categoryId = 0;
         $query = <<<QUERY
 {
   category(id: {$categoryId}) {
@@ -419,8 +512,7 @@ QUERY;
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'price', 'expected_value' =>
-                [
+            ['response_field' => 'price', 'expected_value' => [
                     'minimalPrice' => [
                         'amount' => [
                             'value' => $product->getPrice(),
