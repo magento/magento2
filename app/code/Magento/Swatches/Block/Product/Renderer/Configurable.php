@@ -64,11 +64,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     private const XML_PATH_SWATCHES_PER_PRODUCT = 'catalog/frontend/swatches_per_product';
 
     /**
-     * Config path if swatch tooltips are enabled
-     */
-    private const XML_PATH_SHOW_SWATCH_TOOLTIP = 'catalog/frontend/show_swatch_tooltip';
-
-    /**
      * @var Product
      */
     protected $product;
@@ -212,19 +207,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_SWATCHES_PER_PRODUCT,
-            ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
-     * Get config if swatch tooltips should be rendered.
-     *
-     * @return string
-     */
-    public function getShowSwatchTooltip()
-    {
-        return $this->_scopeConfig->getValue(
-            self::XML_PATH_SHOW_SWATCH_TOOLTIP,
             ScopeInterface::SCOPE_STORE
         );
     }

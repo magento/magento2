@@ -7,6 +7,8 @@
 <?php
 /** @var $block \Magento\Swatches\Block\Product\Renderer\Listing\Configurable */
 $productId = $block->getProduct()->getId();
+/** @var \Magento\Swatches\ViewModel\Product\Renderer\Configurable $configurableViewModel */
+$configurableViewModel = $block->getConfigurableViewModel()
 ?>
 <div class="swatch-opt-<?= $block->escapeHtmlAttr($productId) ?>"
      data-role="swatch-option-<?= $block->escapeHtmlAttr($productId) ?>"></div>
@@ -23,7 +25,7 @@ $productId = $block->getProduct()->getId();
                 "jsonSwatchConfig": <?= /* @noEscape */ $block->getJsonSwatchConfig() ?>,
                 "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
                 "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>,
-                "showTooltip": <?= $block->escapeJs($block->getShowSwatchTooltip()) ?>
+                "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>
             }
         }
     }
