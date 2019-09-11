@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Api\Data;
 
 /**
- * Basic interface with data needed for export operation.
+ * Extended export interface for implementation of Skipped Attributes which are missing from the basic interface
  */
 interface ExtendedExportInfoInterface extends ExportInfoInterface
 {
