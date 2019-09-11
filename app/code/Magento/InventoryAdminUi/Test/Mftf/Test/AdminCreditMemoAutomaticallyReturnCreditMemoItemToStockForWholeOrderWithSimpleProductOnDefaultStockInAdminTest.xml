@@ -19,7 +19,7 @@
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735125/scenarios/2129621"/>
             <severity value="BLOCKER"/>
             <group value="msi"/>
-            <group value="multi_mode1"/>
+            <group value="multi_mode"/>
         </annotations>
 
         <before>
