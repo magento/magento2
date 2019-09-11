@@ -352,6 +352,16 @@ class DtoProcessor
         }
 
         $strategy = $this->getHydrationStrategy->execute($type, $data);
+        if (!empty($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_ORPHAN])) {
+            $firstProperty = current($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_ORPHAN]);
+            throw new \LogicException(
+                sprintf(
+                    'Cannot inject property "%s" in class "%s".',
+                    $firstProperty,
+                    $type
+                )
+            );
+        }
 
         $constructorParams = [];
         foreach ($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM] as $paramName => $info) {

@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Communication\Config;
 
 /**
@@ -15,11 +14,15 @@ use Magento\Framework\Communication\Config;
  */
 class MessageEncoderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var MessageEncoder */
-    protected $encoder;
+    /**
+     * @var MessageEncoder
+     */
+    private $encoder;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
-    protected $objectManager;
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
 
     protected function setUp()
     {
@@ -119,8 +122,8 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
      */
     public function testDecodeInvalidMessage()
     {
-        $message = 'Property "NotExistingField" does not have accessor method "getNotExistingField" in class '
-            . '"Magento\Customer\Api\Data\CustomerInterface".';
+        $message =
+            'Cannot inject property "not_existing_field" in class "Magento\Customer\Api\Data\CustomerInterface".';
         $this->expectExceptionMessage($message);
         $this->encoder->decode('customer.created', '{"not_existing_field": "value"}');
     }

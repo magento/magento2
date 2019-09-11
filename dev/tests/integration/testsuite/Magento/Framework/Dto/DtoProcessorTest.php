@@ -249,10 +249,14 @@ class DtoProcessorTest extends TestCase
         $this->assertSame(['abc', 'def', 'ghi'], $dto->getProp3());
     }
 
-    public function testCreateMutableDataObjectWithInvalidParameters(): void
+    public function testRaiseInjectionWithInvalidParameters(): void
     {
+        $this->expectExceptionMessage(
+            'Cannot inject property "some_weird_parameter" in class "Magento\Framework\Dto\Mock\MutableDto".'
+        );
+
         /** @var MutableDto $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $this->dataProcessor->createFromArray(
             [
                 'prop1' => 1,
                 'prop2' => 'b',
@@ -261,9 +265,5 @@ class DtoProcessorTest extends TestCase
             ],
             MutableDto::class
         );
-
-        $this->assertSame(1, $dto->getProp1());
-        $this->assertSame('b', $dto->getProp2());
-        $this->assertSame(['abc', 'def', 'ghi'], $dto->getProp3());
     }
 }
