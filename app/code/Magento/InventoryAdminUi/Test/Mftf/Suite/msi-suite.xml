@@ -6,8 +6,7 @@
   */
 -->
 
-<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
     <suite name="MSI_Single_Mode">
         <before>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
@@ -42,18 +41,68 @@
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
         </after>
     </suite>
-    <suite name="MSI_Sort_Order_Tests">
+    <suite name="MSI_Enterprise_Multi_Mode">
         <before>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
             <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
         </before>
         <include>
-            <group name="sort_order_test"/>
+            <group name="msi_ee"/>
         </include>
         <exclude>
             <group name="skip"/>
             <group name="single_mode"/>
+        </exclude>
+        <after>
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+        </after>
+    </suite>
+    <suite name="MSI_Enterprise_Single_Mode">
+        <before>
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+            <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
+        </before>
+        <include>
+            <group name="msi_ee"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
+            <group name="multi_mode"/>
+        </exclude>
+        <after>
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+        </after>
+    </suite>
+    <suite name="MSI_B2b_Multi_Mode">
+        <before>
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+            <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
+        </before>
+        <include>
+            <group name="msi_b2b"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
+            <group name="single_mode"/>
+        </exclude>
+        <after>
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+        </after>
+    </suite>
+    <suite name="MSI_B2b_Single_Mode">
+        <before>
+            <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
+            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+            <magentoCLI stepKey="enableStockManagement" command="config:set cataloginventory/item_options/manage_stock 1"/>
+        </before>
+        <include>
+            <group name="msi_b2b"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
             <group name="multi_mode"/>
         </exclude>
         <after>
