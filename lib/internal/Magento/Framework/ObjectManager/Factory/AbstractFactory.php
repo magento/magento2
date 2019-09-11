@@ -233,32 +233,44 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     {
         $resolvedArguments = [];
         foreach ($parameters as $parameter) {
-            list($paramName, $paramType, $paramRequired, $paramDefault, $isVariadic) = $parameter;
-            $argument = null;
-            if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
-                $argument = $arguments[$paramName];
-            } elseif ($paramRequired) {
-                if ($paramType) {
-                    $argument = ['instance' => $paramType];
-                } else {
-                    $this->creationStack = [];
-                    throw new \BadMethodCallException(
-                        'Missing required argument $' . $paramName . ' of ' . $requestedType . '.'
-                    );
-                }
-            } else {
-                $argument = $paramDefault;
-            }
-
-            if ($isVariadic && is_array($argument)) {
-                $resolvedArguments[] = $argument;
-            } else {
-                $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
-                $resolvedArguments[] = [$argument];
-            }
-
+            $resolvedArguments[] = $this->getResolvedArgument((string)$requestedType, $parameter, $arguments);
         }
 
         return empty($resolvedArguments) ? [] : array_merge(...$resolvedArguments);
+    }
+
+    /**
+     * Get resolved argument from parameter
+     *
+     * @param string $requestedType
+     * @param array  $parameter
+     * @param array  $arguments
+     * @return array
+     */
+    private function getResolvedArgument(string $requestedType, array $parameter, array $arguments): array
+    {
+        list($paramName, $paramType, $paramRequired, $paramDefault, $isVariadic) = $parameter;
+        $argument = null;
+        if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
+            $argument = $arguments[$paramName];
+        } elseif ($paramRequired) {
+            if ($paramType) {
+                $argument = ['instance' => $paramType];
+            } else {
+                $this->creationStack = [];
+                throw new \BadMethodCallException(
+                    'Missing required argument $' . $paramName . ' of ' . $requestedType . '.'
+                );
+            }
+        } else {
+            $argument = $paramDefault;
+        }
+
+        if ($isVariadic) {
+            return is_array($argument) ? $argument : [$argument];
+        }
+
+        $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
+        return [$argument];
     }
 }

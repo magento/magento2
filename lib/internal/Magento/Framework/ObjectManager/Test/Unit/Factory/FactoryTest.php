@@ -272,7 +272,14 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                 null,
                 null,
             ],
-            'with_args' => [
+            'with_single_arg' => [
+                [
+                    'oneScalars' => $oneScalar1
+                ],
+                $oneScalar1,
+                null,
+            ],
+            'with_full_args' => [
                 [
                     'oneScalars' => [
                         $oneScalar1,
@@ -402,6 +409,14 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                 ],
                 \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
                 null,
+                null,
+            ],
+            'only_with_oneScalars_single_value' => [
+                [
+                    'oneScalars' => $oneScalar1
+                ],
+                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                $oneScalar1,
                 null,
             ],
             'only_with_oneScalars_full_value' => [
