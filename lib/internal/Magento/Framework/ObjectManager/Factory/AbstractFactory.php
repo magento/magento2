@@ -242,9 +242,9 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     /**
      * Get resolved argument from parameter
      *
-     * @param string $requestedType
-     * @param array  $parameter
-     * @param array  $arguments
+     * @param  string $requestedType
+     * @param  array  $parameter
+     * @param  array  $arguments
      * @return array
      */
     private function getResolvedArgument(string $requestedType, array $parameter, array $arguments): array
