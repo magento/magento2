@@ -10,6 +10,7 @@ use Magento\Framework\Locale\Bundle\CurrencyBundle;
 use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
+use Magento\Framework\Validator\Locale;
 
 /**
  * Translated lists.
@@ -207,7 +208,11 @@ class TranslatedLists implements ListsInterface
             $locale = $this->localeResolver->getLocale();
         }
 
+        $language = \Locale::getPrimaryLanguage($locale);
         $translation = (new RegionBundle())->get($locale)['Countries'][$value];
+        if ($value == 'TW' && $language == 'en') {
+            $translation .= ", Province of China";
+        }
 
         return $translation ? (string)__($translation) : $translation;
     }
