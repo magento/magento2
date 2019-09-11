@@ -215,7 +215,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @inheritdoc
      * @since 101.1.0
      */
-    public function getMeta(): array
+    public function getMeta()
     {
         $meta = parent::getMeta();
         $meta = $this->prepareMeta($meta);
@@ -274,7 +274,10 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
-     * @inheritDoc
+     * Prepare meta data
+     *
+     * @param array $meta
+     * @return array
      * @since 101.0.0
      */
     public function prepareMeta($meta)
@@ -320,7 +323,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
-     * @inheritDoc
+     * Get data
+     *
+     * @return array
      * @since 101.0.0
      */
     public function getData()
@@ -411,7 +416,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @return array
      * @since 101.0.0
      */
-    protected function addUseConfigSettings($categoryData): array
+    protected function addUseConfigSettings($categoryData)
     {
         foreach ($this->elementsWithUseConfigSetting as $elementsWithUseConfigSetting) {
             if (!isset($categoryData['use_config'][$elementsWithUseConfigSetting])) {
@@ -436,7 +441,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @deprecated 101.1.0
      * @since 101.0.0
      */
-    protected function addUseDefaultSettings($category, $categoryData): array
+    protected function addUseDefaultSettings($category, $categoryData)
     {
         if ($category->getExistsStoreValueFlag('url_key') ||
             $category->getStoreId() === Store::DEFAULT_STORE_ID
@@ -510,7 +515,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @return array
      * @since 101.0.0
      */
-    protected function filterFields($categoryData): array
+    protected function filterFields($categoryData)
     {
         return array_diff_key($categoryData, array_flip($this->ignoreFields));
     }
@@ -558,7 +563,10 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
-     * @inheritDoc
+     * Category's fields default values
+     *
+     * @param array $result
+     * @return array
      * @since 101.0.0
      */
     public function getDefaultMetaData($result)
@@ -572,7 +580,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
-     * @inheritDoc
+     * List of fields groups and fields.
+     *
+     * @return array
      * @since 101.0.0
      */
     protected function getFieldsMap()
