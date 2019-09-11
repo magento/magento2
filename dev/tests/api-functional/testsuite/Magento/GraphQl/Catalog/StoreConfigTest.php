@@ -40,7 +40,8 @@ class StoreConfigTest extends GraphQlAbstract
     list_per_page_values,
     grid_per_page,
     list_per_page,
-    catalog_default_sort_by
+    catalog_default_sort_by,
+    root_category_id
   }
 }
 QUERY;
@@ -56,5 +57,6 @@ QUERY;
         $this->assertEquals('8', $response['storeConfig']['list_per_page_values']);
         $this->assertEquals(8, $response['storeConfig']['list_per_page']);
         $this->assertEquals('asc', $response['storeConfig']['catalog_default_sort_by']);
+        $this->assertEquals(2, $response['storeConfig']['root_category_id']);
     }
 }
