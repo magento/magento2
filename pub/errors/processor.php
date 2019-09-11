@@ -480,7 +480,7 @@ class Processor
      */
     public function saveReport($reportData)
     {
-        $this->reportData = $reportData;
+        $this->reportData = $reportData . PHP_EOL;
         $this->reportId   = abs((int)(microtime(true) * random_int(100, 1000)));
         $this->_reportFile = $this->_reportDir . '/' . $this->reportId;
         $this->_setReportData($reportData);
