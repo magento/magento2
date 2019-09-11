@@ -64,6 +64,7 @@ class GeneratedFiles
     public function cleanGeneratedFiles()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
+            $this->write->delete(self::REGENERATE_FLAG);
             $enabledCacheTypes = [];
 
             //TODO: to be removed in scope of MAGETWO-53476
@@ -96,7 +97,6 @@ class GeneratedFiles
             if ($this->write->isDirectory($cachePath)) {
                 $this->write->delete($cachePath);
             }
-            $this->write->delete(self::REGENERATE_FLAG);
             $this->enableCacheTypes($enabledCacheTypes);
         }
     }
