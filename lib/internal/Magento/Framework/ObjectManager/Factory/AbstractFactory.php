@@ -11,6 +11,9 @@ use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class AbstractFactory
+ */
 abstract class AbstractFactory implements \Magento\Framework\ObjectManager\FactoryInterface
 {
     /**
@@ -49,10 +52,10 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected $creationStack = [];
 
     /**
-     * @param \Magento\Framework\ObjectManager\ConfigInterface $config
-     * @param ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\ObjectManager\ConfigInterface     $config
+     * @param ObjectManagerInterface                               $objectManager
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
-     * @param array $globalArguments
+     * @param array                                                $globalArguments
      */
     public function __construct(
         \Magento\Framework\ObjectManager\ConfigInterface $config,
@@ -91,6 +94,8 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     }
 
     /**
+     * Get definitions
+     *
      * @return \Magento\Framework\ObjectManager\DefinitionInterface
      */
     public function getDefinitions()
@@ -105,7 +110,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Create object
      *
      * @param string $type
-     * @param array $args
+     * @param array  $args
      *
      * @return object
      * @throws RuntimeException
@@ -130,9 +135,9 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     /**
      * Resolve an argument
      *
-     * @param array &$argument
+     * @param array  &$argument
      * @param string $paramType
-     * @param mixed $paramDefault
+     * @param mixed  $paramDefault
      * @param string $paramName
      * @param string $requestedType
      *
@@ -214,8 +219,8 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * Resolve constructor arguments
      *
      * @param string $requestedType
-     * @param array $parameters
-     * @param array $arguments
+     * @param array  $parameters
+     * @param array  $arguments
      *
      * @return array
      *

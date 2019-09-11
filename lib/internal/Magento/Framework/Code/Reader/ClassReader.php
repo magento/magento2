@@ -5,12 +5,15 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+/**
+ * Class ClassReader
+ */
 class ClassReader implements ClassReaderInterface
 {
     /**
      * Read class constructor signature
      *
-     * @param string $className
+     * @param  string $className
      * @return array|null
      * @throws \ReflectionException
      */
@@ -42,7 +45,9 @@ class ClassReader implements ClassReaderInterface
     }
 
     /**
-     * @param \ReflectionParameter $parameter
+     * Get reflection parameter default value
+     *
+     * @param  \ReflectionParameter $parameter
      * @return array|mixed|null
      */
     private function getReflectionParameterDefaultValue(\ReflectionParameter $parameter)
@@ -63,7 +68,7 @@ class ClassReader implements ClassReaderInterface
      *     ...
      * )
      *
-     * @param string $className
+     * @param  string $className
      * @return string[]
      */
     public function getParents($className)
