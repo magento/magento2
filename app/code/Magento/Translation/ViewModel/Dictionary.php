@@ -38,6 +38,7 @@ class Dictionary implements ArgumentInterface
      */
     public function getTranslationDictionary(): string
     {
+        return '[]';
         try {
             $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
             $content = $asset->getContent();
