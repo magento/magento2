@@ -54,6 +54,11 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->productActionMock = $this->createMock(\Magento\Catalog\Model\Product\Action::class);
+        $this->urlPersist = $this->createMock(\Magento\UrlRewrite\Model\UrlPersistInterface::class);
+        $this->productUrlRewriteGenerator = $this->createPartialMock(
+            \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::class,
+            ['generate']
+        );
         $this->optionRepositoryMock = $this->createMock(
             \Magento\Catalog\Model\Product\Option\Repository::class
         );
@@ -71,7 +76,9 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $this->_model = new Copier(
             $this->copyConstructorMock,
             $this->productFactoryMock,
-            $this->productActionMock
+            $this->productActionMock,
+            $this->urlPersist,
+            $this->productUrlRewriteGenerator
         );
 
         $this->setProperties($this->_model, [
@@ -190,6 +197,9 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $this->productActionMock->expects($this->once())
             ->method('updateAttributes')
             ->with([3], ['url_key' => 'urk-key-2'], 2);
+        $this->urlPersist->expects($this->exactly($expectedReplaceCount))
+            ->method('replace')
+            ->with([3 => 'rewrite']);
         
         $this->metadata->expects($this->any())->method('getLinkField')->willReturn('linkField');
 

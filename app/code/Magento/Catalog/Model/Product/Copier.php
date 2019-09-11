@@ -40,15 +40,24 @@ class Copier
     /**
      * @param CopyConstructorInterface $copyConstructor
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Model\Product\Action $productAction = null
+     * @param \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist = null,
+     * @param \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator = null
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Model\Product\Action $productAction = null
+        \Magento\Catalog\Model\Product\Action $productAction = null,
+        \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist = null,
+        \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator = null
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
         $this->productAction = $productAction ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product\Action::class);
+        $this->urlPersist = $urlPersist ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\UrlRewrite\Model\UrlPersistInterface::class);
+        $this->productUrlRewriteGenerator = $productUrlRewriteGenerator ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::class);
     }
 
     /**
@@ -145,6 +154,8 @@ class Copier
                 ];
                 try {
                     $this->productAction->updateAttributes($productIds, $attributesData, $storeId);
+                    $duplicate = $duplicate->setStoreId($storeId)->load($duplicate->getId());
+                    $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($duplicate));
                     $isDuplicateSaved = true;
                     // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
