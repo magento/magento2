@@ -87,13 +87,13 @@
                 <requiredEntity createDataKey="createConfigChildProduct3"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllCatalogPriceRule" stepKey="deleteCatalogRules"/>
             <!--SKU Product Attribute is enabled for Promo Rule Conditions-->
             <actionGroup ref="navigateToEditProductAttribute" stepKey="navigateToSkuProductAttribute">
                 <argument name="attributeLabel" value="sku"/>
             </actionGroup>
             <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToYes"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
@@ -106,6 +106,11 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
+            <!-- Delete the rule -->
+            <actionGroup ref="RemoveCatalogPriceRule" stepKey="deletePriceRule">
+                <argument name="ruleName" value="CatalogRule96PercentDiscount.name" />
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCatalogRuleGridFilters"/>
             <!--SKU Product Attribute is disable for Promo Rule Conditions-->
             <actionGroup ref="navigateToEditProductAttribute" stepKey="navigateToSkuProductAttribute">
                 <argument name="attributeLabel" value="sku"/>
@@ -113,6 +118,7 @@
             <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo">
                 <argument name="useForPromoRule" value="No"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearAttributeGridFilters"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
@@ -128,14 +134,19 @@
         <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('3')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct"/>
 
         <!--Create and apply catalog price rule-->
-        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsSKU" stepKey="createCatalogPriceRule">
-            <argument name="catalogRule" value="CatalogRule96PercentDiscount" />
-            <argument name="productSku" value="$$createConfigChildProduct3.sku$$" />
+        <actionGroup ref="AdminStartCreateNewCatalogRuleActionGroup" stepKey="startCreateNewCatalogRulePage"/>
+        <actionGroup ref="AdminFillCatalogRuleFormActionGroup" stepKey="fillRuleFields">
+            <argument name="catalogRule" value="CatalogRule96PercentDiscount"/>
         </actionGroup>
-        <click selector="{{AdminCatalogPriceRuleGridSection.applyRulesButton}}" stepKey="clickApplyRules"/>
+        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillRuleConditions">
+            <argument name="condition" value="{{CatalogRuleProductConditions.productSku}}"/>
+            <argument name="conditionType" value="is"/>
+            <argument name="conditionValue" value="$$createConfigChildProduct3.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyRule"/>
 
-        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
 
         <!--Reopen category with products and Sort by price desc-->
         <actionGroup ref="GoToStorefrontCategoryPageByParameters" stepKey="goToStorefrontCategoryPage2">
@@ -147,10 +158,5 @@
         <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('1')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo2"/>
         <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('2')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
         <see selector="{{StorefrontCategoryMainSection.categoryPageProductName('3')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct2"/>
-
-        <!-- Delete the rule -->
-        <actionGroup ref="RemoveCatalogPriceRule" stepKey="deletePriceRule">
-            <argument name="ruleName" value="CatalogRule96PercentDiscount.name" />
-        </actionGroup>
     </test>
 </tests>

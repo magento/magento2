@@ -60,6 +60,7 @@
         </arguments>
         <!-- Go to storefront category page -->
         <amOnPage url="{{StorefrontCategoryPage.url(category)}}?product_list_mode={{mode}}&amp;product_list_order={{sortBy}}&amp;product_list_dir={{sort}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitCategoryPageLoaded"/>
     </actionGroup>
 
     <actionGroup name="VerifyCategoryPageParameters">
@@ -69,7 +70,6 @@
             <argument name="numOfProductsPerPage" type="string"/>
             <argument name="sortBy" type="string" defaultValue="position"/>
         </arguments>
-        <amOnPage url="{{StorefrontCategoryPage.url(categoryName)}}" stepKey="navigateToCategoryPage"/>
         <seeInTitle userInput="{{categoryName}}" stepKey="assertCategoryNameInTitle"/>
         <see userInput="{{categoryName}}" selector="{{StorefrontCategoryMainSection.categoryTitle}}" stepKey="assertCategoryName"/>
         <see userInput="{{mode}}" selector="{{StorefrontCategoryPagerSection.modeGridIsActive}}" stepKey="assertViewMode"/>
