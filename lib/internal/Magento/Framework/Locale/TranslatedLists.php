@@ -10,7 +10,6 @@ use Magento\Framework\Locale\Bundle\CurrencyBundle;
 use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
-use Magento\Framework\Validator\Locale;
 
 /**
  * Translated lists.
