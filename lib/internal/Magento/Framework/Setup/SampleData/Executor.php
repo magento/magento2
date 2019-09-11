@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Setup\SampleData;
 
+/**
+ * Performs sample data installations.
+ */
 class Executor
 {
     /**
@@ -39,6 +42,7 @@ class Executor
 
     /**
      * Execute SampleData module installation.
+     *
      * Catch exception if it appeared and continue installation
      *
      * @param InstallerInterface $installer
