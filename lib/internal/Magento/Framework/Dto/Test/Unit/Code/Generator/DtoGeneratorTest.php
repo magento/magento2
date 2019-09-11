@@ -8,10 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Dto\Test\Unit\Code\Generator;
 
-use Magento\Framework\Code\Generator\ClassGenerator;
-use Magento\Framework\Code\Generator\ClassGeneratorFactory;
-use Magento\Framework\Code\Generator\InterfaceGenerator;
-use Magento\Framework\Code\Generator\InterfaceGeneratorFactory;
 use Magento\Framework\Dto\Code\GetDtoSourceCode;
 use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\Reflection\TypeProcessor;

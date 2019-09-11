@@ -8,8 +8,8 @@ namespace Magento\Webapi\Test\Unit\Model;
 
 use Magento\Framework\Reflection\FieldNamer;
 use Magento\Framework\Reflection\MethodsMap;
-use Magento\Framework\Reflection\Mock\TestDataObject;
-use Magento\Framework\Reflection\Mock\TestDataInterface;
+use Magento\Framework\Reflection\Test\Unit\Mock\TestDataInterface;
+use Magento\Framework\Reflection\Test\Unit\Mock\TestDataObject;
 use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
