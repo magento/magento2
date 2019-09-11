@@ -137,7 +137,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     /**
      * Resolve an argument
      *
-     * @param array  &$argument
+     * @param array  $argument
      * @param string $paramType
      * @param mixed  $paramDefault
      * @param string $paramName
