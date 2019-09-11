@@ -129,7 +129,7 @@ class Generator
         }
 
         if ($this->isDto($className)) {
-            $this->dtoGenerator($className);
+            return $this->dtoGenerator($className);
         }
 
         return $this->suffixBasedGenerator($resultEntityType, $sourceClassName, $className);
@@ -291,6 +291,7 @@ class Generator
         }
 
         try {
+            // Avoid race conditions while loading the OM
             $dtoConfig = ObjectManager::getInstance()->get(DtoConfig::class);
         } catch (Exception $e) {
             return false;

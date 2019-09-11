@@ -12,11 +12,15 @@ use LogicException;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ImmutableExtensibleDataInterface;
 use Magento\Framework\Code\Generator\ClassGenerator;
-use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\Code\Generator\ClassGeneratorFactory;
 use Magento\Framework\Code\Generator\InterfaceGenerator;
+use Magento\Framework\Code\Generator\InterfaceGeneratorFactory;
 use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\Reflection\TypeProcessor;
 
+/**
+ * Dto Source code generator class
+ */
 class GetDtoSourceCode
 {
     /**
@@ -25,9 +29,9 @@ class GetDtoSourceCode
     private $dtoConfig;
 
     /**
-     * @var CodeGeneratorInterface
+     * @var ClassGeneratorFactory
      */
-    private $classGenerator;
+    private $classGeneratorFactory;
 
     /**
      * @var TypeProcessor
@@ -35,27 +39,27 @@ class GetDtoSourceCode
     private $typeProcessor;
 
     /**
-     * @var InterfaceGenerator
+     * @var InterfaceGeneratorFactory
      */
-    private $interfaceGenerator;
+    private $interfaceGeneratorFactory;
 
     /**
      * @param DtoConfig $dtoConfig
      * @param TypeProcessor $typeProcessor
-     * @param ClassGenerator|null $classGenerator
-     * @param InterfaceGenerator|null $interfaceGenerator
+     * @param ClassGeneratorFactory $classGeneratorFactory
+     * @param InterfaceGeneratorFactory $interfaceGeneratorFactory
      */
     public function __construct(
         DtoConfig $dtoConfig,
         TypeProcessor $typeProcessor,
-        ClassGenerator $classGenerator = null,
-        InterfaceGenerator $interfaceGenerator = null
+        ClassGeneratorFactory $classGeneratorFactory,
+        InterfaceGeneratorFactory $interfaceGeneratorFactory
     ) {
         $this->dtoConfig = $dtoConfig;
         $this->typeProcessor = $typeProcessor;
 
-        $this->classGenerator = $classGenerator ?: new ClassGenerator();
-        $this->interfaceGenerator = $interfaceGenerator ?: new InterfaceGenerator();
+        $this->classGeneratorFactory = $classGeneratorFactory; // ?: new ClassGenerator();
+        $this->interfaceGeneratorFactory = $interfaceGeneratorFactory; // ?: new InterfaceGenerator();
     }
 
     /**
@@ -106,13 +110,14 @@ class GetDtoSourceCode
 
         $methods = array_merge($methods, $this->getClassMethods($interfaceName, $config));
 
-        $this->classGenerator
-            ->setImplementedInterfaces([$config['interface']])
-            ->setName($className)
-            ->addProperties($this->getClassProperties($config))
-            ->addMethods($methods);
+        /** @var ClassGenerator $classGenerator */
+        $classGenerator = $this->classGeneratorFactory->create();
+        $classGenerator->setImplementedInterfaces([$config['interface']]);
+        $classGenerator->setName($className);
+        $classGenerator->addProperties($this->getClassProperties($config));
+        $classGenerator->addMethods($methods);
 
-        return 'declare(strict_types=1);' . "\n\n" . $this->fixCodeStyle($this->classGenerator->generate());
+        return 'declare(strict_types=1);' . "\n\n" . $this->fixCodeStyle($classGenerator->generate());
     }
 
     /**
@@ -132,17 +137,18 @@ class GetDtoSourceCode
         }
         unset($method);
 
-        $this->interfaceGenerator
-            ->setName($interfaceName)
-            ->addMethods($methods);
+        /** @var InterfaceGenerator $interfaceGenerator */
+        $interfaceGenerator = $this->interfaceGeneratorFactory->create();
+        $interfaceGenerator->setName($interfaceName);
+        $interfaceGenerator->addMethods($methods);
 
         if ($config['mutable']) {
-            $this->interfaceGenerator->setExtendedClass(ExtensibleDataInterface::class);
+            $interfaceGenerator->setExtendedClass(ExtensibleDataInterface::class);
         } else {
-            $this->interfaceGenerator->setExtendedClass(ImmutableExtensibleDataInterface::class);
+            $interfaceGenerator->setExtendedClass(ImmutableExtensibleDataInterface::class);
         }
 
-        return 'declare(strict_types=1);' . "\n\n" . $this->fixCodeStyle($this->interfaceGenerator->generate());
+        return 'declare(strict_types=1);' . "\n\n" . $this->fixCodeStyle($interfaceGenerator->generate());
     }
 
     /**
@@ -212,15 +218,13 @@ class GetDtoSourceCode
 
             $parametersByType[$type][] = [
                 'name' => $propertyName . ($propertyMetadata['optional'] ? ' = null' : ''),
-                'type' =>
-                    ($propertyMetadata['nullable'] || $propertyMetadata['optional'] ? '?' : '') . $attributeRealType
+                'type' => ($propertyMetadata['nullable'] || $propertyMetadata['optional'] ? '?' : '') . $attributeRealType
             ];
 
             $body[] = '$this->' . $propertyName . ' = $' . $propertyName . ';';
             $tags[] = [
                 'name' => 'param',
-                'description' =>
-                    $attributeDescriptiveType . ($propertyMetadata['nullable'] ? '|null ' : ' ') . '$' . $propertyName,
+                'description' => $attributeDescriptiveType . ($propertyMetadata['nullable'] ? '|null ' : ' ') . '$' . $propertyName,
             ];
         }
 
@@ -303,8 +307,7 @@ class GetDtoSourceCode
                     'tags' => [
                         [
                             'name' => 'param',
-                            'description' =>
-                                $attributeDescriptiveType . ($propertyMetadata['nullable'] ? '|null ' : ' ') . '$value',
+                            'description' => $attributeDescriptiveType . ($propertyMetadata['nullable'] ? '|null ' : ' ') . '$value',
                         ],
                         [
                             'name' => 'return',
@@ -352,8 +355,7 @@ class GetDtoSourceCode
                     'tags' => [
                         [
                             'name' => 'param',
-                            'description' =>
-                                $attributeDescriptiveType . ($propertyMetadata['nullable'] ? '|null ' : ' ') . '$value',
+                            'description' => $attributeDescriptiveType . ($propertyMetadata['nullable'] ? '|null ' : ' ') . '$value',
                         ],
                         [
                             'name' => 'return',

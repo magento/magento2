@@ -183,7 +183,7 @@ class DtoProcessorTest extends TestCase
         $this->assertSame(1, $dto->getTestDto1()->getProp1());
         $this->assertSame('b', $dto->getTestDto1()->getProp2());
         $this->assertSame(['abc', 'def', 'ghi'], $dto->getTestDto1()->getProp3());
-        $this->assertSame( [1, 2, 3, 4], $dto->getTestDto1()->getProp4());
+        $this->assertSame([1, 2, 3, 4], $dto->getTestDto1()->getProp4());
 
         $this->assertSame(2, $dto->getTestDto2()->getProp1());
         $this->assertSame('f', $dto->getTestDto2()->getProp2());
