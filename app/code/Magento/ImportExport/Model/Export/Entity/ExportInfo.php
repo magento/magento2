@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Export\Entity;
 
+use Magento\ImportExport\Api\Data\ExtendedExportInfoInterface;
+
 /**
  * Class ExportInfo implementation for ExportInfoInterface.
  */

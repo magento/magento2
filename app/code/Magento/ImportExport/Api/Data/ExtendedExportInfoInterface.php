@@ -5,9 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\ImportExport\Model\Export\Entity;
-
-use Magento\ImportExport\Api\Data\ExportInfoInterface;
+namespace Magento\ImportExport\Api\Data;
 
 /**
  * Basic interface with data needed for export operation.
