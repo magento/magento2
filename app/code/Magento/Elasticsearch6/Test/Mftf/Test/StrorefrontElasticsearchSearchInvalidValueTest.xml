@@ -40,8 +40,9 @@
             <comment userInput="Set configs to default" stepKey="commentSetDefault"/>
             <magentoCLI command="config:set catalog/search/min_query_length 3" stepKey="setMinQueryLengthPreviousState"/>
             <magentoCLI command="config:set catalog/search/engine mysql" stepKey="resetSearchEnginePreviousState"/>
-            <!--Delete create data-->
-            <comment userInput="Delete create data" stepKey="commentDeletedData"/>
+            <!--Delete created data-->
+            <comment userInput="Delete created data" stepKey="commentDeleteData"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
                 <argument name="ProductAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
             </actionGroup>
@@ -106,5 +107,11 @@
             <argument name="phrase" value="? anything at all ;"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForForthSearchTerm"/>
+        <!--Search for the product wit special symbols-->
+        <comment userInput="Search for the product wit special symbols" stepKey="commentSearchForProduct"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFifthSearchTerm">
+            <argument name="phrase" value="-+~/\\&lt;&gt;\’“:*$#@()!,.?`=%&amp;^"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForFifthSearchTerm"/>
     </test>
 </tests>
