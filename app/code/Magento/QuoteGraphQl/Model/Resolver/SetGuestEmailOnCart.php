@@ -86,7 +86,8 @@ class SetGuestEmailOnCart implements ResolverInterface
             throw new GraphQlInputException(__('The request is not allowed for logged in customers'));
         }
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId, $storeId);
         $this->checkCartCheckoutAllowance->execute($cart);
         $cart->setCustomerEmail($email);
 

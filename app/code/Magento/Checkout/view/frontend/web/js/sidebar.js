@@ -10,7 +10,7 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/decorate',
     'mage/collapsible',
     'mage/cookies'
@@ -261,6 +261,10 @@ define([
                 $(document).trigger('ajax:removeFromCart', {
                     productIds: [productData['product_id']]
                 });
+
+                if (window.location.href.indexOf(this.shoppingCartUrl) === 0) {
+                    window.location.reload();
+                }
             }
         },
 

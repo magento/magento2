@@ -61,6 +61,8 @@ class OrderCommentSender extends NotifySender
      */
     public function send(Order $order, $notify = true, $comment = '')
     {
+        $this->identityContainer->setStore($order->getStore());
+
         $transport = [
             'order' => $order,
             'comment' => $comment,

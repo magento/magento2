@@ -169,48 +169,6 @@ class DomTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param string $xml
-     * @param string $expectedValue
-     * @dataProvider validateWithDefaultValueDataProvider
-     */
-    public function testValidateWithDefaultValue($xml, $expectedValue)
-    {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
-
-        $actualErrors = [];
-
-        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
-        $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
-
-        $actualValue = $dom->getDom()
-            ->getElementsByTagName('root')->item(0)
-            ->getElementsByTagName('node')->item(0)
-            ->getAttribute('attribute_with_default_value');
-
-        $this->assertEmpty($actualErrors);
-        $this->assertEquals($expectedValue, $actualValue);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateWithDefaultValueDataProvider()
-    {
-        return [
-            'default_value' => [
-                '<root><node id="id1"/></root>',
-                'default_value'
-            ],
-            'custom_value' => [
-                '<root><node id="id1" attribute_with_default_value="non_default_value"/></root>',
-                'non_default_value'
-            ],
-        ];
-    }
-
     public function testValidateCustomErrorFormat()
     {
         $xml = '<root><unknown_node/></root>';
