@@ -12,9 +12,7 @@ use LogicException;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ImmutableExtensibleDataInterface;
 use Magento\Framework\Code\Generator\ClassGenerator;
-use Magento\Framework\Code\Generator\ClassGeneratorFactory;
 use Magento\Framework\Code\Generator\InterfaceGenerator;
-use Magento\Framework\Code\Generator\InterfaceGeneratorFactory;
 use Magento\Framework\Dto\DtoConfig;
 use Magento\Framework\Reflection\TypeProcessor;
 
@@ -29,37 +27,20 @@ class GetDtoSourceCode
     private $dtoConfig;
 
     /**
-     * @var ClassGeneratorFactory
-     */
-    private $classGeneratorFactory;
-
-    /**
      * @var TypeProcessor
      */
     private $typeProcessor;
 
     /**
-     * @var InterfaceGeneratorFactory
-     */
-    private $interfaceGeneratorFactory;
-
-    /**
      * @param DtoConfig $dtoConfig
      * @param TypeProcessor $typeProcessor
-     * @param ClassGeneratorFactory $classGeneratorFactory
-     * @param InterfaceGeneratorFactory $interfaceGeneratorFactory
      */
     public function __construct(
         DtoConfig $dtoConfig,
-        TypeProcessor $typeProcessor,
-        ClassGeneratorFactory $classGeneratorFactory,
-        InterfaceGeneratorFactory $interfaceGeneratorFactory
+        TypeProcessor $typeProcessor
     ) {
         $this->dtoConfig = $dtoConfig;
         $this->typeProcessor = $typeProcessor;
-
-        $this->classGeneratorFactory = $classGeneratorFactory; // ?: new ClassGenerator();
-        $this->interfaceGeneratorFactory = $interfaceGeneratorFactory; // ?: new InterfaceGenerator();
     }
 
     /**
@@ -111,7 +92,7 @@ class GetDtoSourceCode
         $methods = array_merge($methods, $this->getClassMethods($interfaceName, $config));
 
         /** @var ClassGenerator $classGenerator */
-        $classGenerator = $this->classGeneratorFactory->create();
+        $classGenerator = new ClassGenerator();
         $classGenerator->setImplementedInterfaces([$config['interface']]);
         $classGenerator->setName($className);
         $classGenerator->addProperties($this->getClassProperties($config));
@@ -138,7 +119,7 @@ class GetDtoSourceCode
         unset($method);
 
         /** @var InterfaceGenerator $interfaceGenerator */
-        $interfaceGenerator = $this->interfaceGeneratorFactory->create();
+        $interfaceGenerator = new InterfaceGenerator();
         $interfaceGenerator->setName($interfaceName);
         $interfaceGenerator->addMethods($methods);
 
