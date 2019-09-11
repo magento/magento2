@@ -92,7 +92,7 @@ class Widget extends \Magento\Backend\Block\Template
         )->setData(
             [
                 'label' => $this->escapeHtml($label),
-                'onclick' => $this->escapeJs($onclick),
+                'onclick' => $onclick,
                 'class' => $class,
                 'type' => 'button',
                 'id' => $buttonId

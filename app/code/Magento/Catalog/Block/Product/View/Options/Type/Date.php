@@ -158,8 +158,8 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Return drop-down html with range of values
      *
      * @param string $name Id/name of html select element
-     * @param int $from  Start position
-     * @param int $to    End position
+     * @param int $from Start position
+     * @param int $to End position
      * @param int|null $value Value selected
      * @return string Formatted Html
      */
