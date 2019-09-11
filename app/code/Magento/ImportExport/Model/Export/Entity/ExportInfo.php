@@ -122,11 +122,17 @@ class ExportInfo implements ExtendedExportInfoInterface
         $this->exportFilter = $exportFilter;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getSkipAttr()
     {
         return $this->skipAttr;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setSkipAttr($skipAttr)
     {
         $this->skipAttr = $skipAttr;

@@ -91,7 +91,13 @@ class ExportInfoFactory
     public function create($fileFormat, $entity, $exportFilter, $skipAttr)
     {
         $writer = $this->getWriter($fileFormat);
-        $entityAdapter = $this->getEntityAdapter($entity, $fileFormat, $exportFilter, $skipAttr, $writer->getContentType());
+        $entityAdapter = $this->getEntityAdapter(
+            $entity,
+            $fileFormat,
+            $exportFilter,
+            $skipAttr,
+            $writer->getContentType()
+        );
         $fileName = $this->generateFileName($entity, $entityAdapter, $writer->getFileExtension());
         /** @var ExportInfoInterface $exportInfo */
         $exportInfo = $this->objectManager->create(ExportInfoInterface::class);
@@ -169,13 +175,15 @@ class ExportInfoFactory
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity.'));
         }
-        $entityAdapter->setParameters([
-            'fileFormat' => $fileFormat,
-            'entity' => $entity,
-            'exportFilter' => $exportFilter,
-            'skipAttr' => $skipAttr,
-            'contentType' => $contentType,
-        ]);
+        $entityAdapter->setParameters(
+            [
+                'fileFormat' => $fileFormat,
+                'entity' => $entity,
+                'exportFilter' => $exportFilter,
+                'skipAttr' => $skipAttr,
+                'contentType' => $contentType,
+            ]
+        );
         return $entityAdapter;
     }
 
