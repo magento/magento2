@@ -21,7 +21,7 @@ if ($category->getId()) {
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $productsToDelete = ['green_socks', 'white_shorts','red_trousers','blue_briefs',
-    'grey_shorts', 'navy-striped-shoes','ocean-blue-shoes'];
+    'grey_shorts', 'navy-striped-shoes','light-green-shoes'];
 
 foreach ($productsToDelete as $sku) {
     try {
