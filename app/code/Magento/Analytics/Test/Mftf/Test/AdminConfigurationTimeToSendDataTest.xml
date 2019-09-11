@@ -25,9 +25,9 @@
         <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>
-        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingHour}}" userInput="11" stepKey="selectAdvancedReportingHour"/>
-        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingMinute}}" userInput="11" stepKey="selectAdvancedReportingMinute"/>
-        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingSeconds}}" userInput="00" stepKey="selectAdvancedReportingSeconds"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingHour}}" userInput="23" stepKey="selectAdvancedReportingHour"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingMinute}}" userInput="59" stepKey="selectAdvancedReportingMinute"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingSeconds}}" userInput="59" stepKey="selectAdvancedReportingSeconds"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
     </test>
