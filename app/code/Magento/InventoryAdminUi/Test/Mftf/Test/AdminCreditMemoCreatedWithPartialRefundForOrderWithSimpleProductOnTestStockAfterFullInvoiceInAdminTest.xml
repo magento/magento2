@@ -32,7 +32,7 @@
         <remove keyForRemoval="clickOrderRow"/>
         <remove keyForRemoval="clickShip"/>
         <remove keyForRemoval="waitForShipLoadingMask"/>
-        <remove keyForRemoval="shipPartialQuantity3"/>
+        <remove keyForRemoval="shipPartialQuantity"/>
         <remove keyForRemoval="submitShipment"/>
         <remove keyForRemoval="seeShipmentCreateSuccess"/>
 
