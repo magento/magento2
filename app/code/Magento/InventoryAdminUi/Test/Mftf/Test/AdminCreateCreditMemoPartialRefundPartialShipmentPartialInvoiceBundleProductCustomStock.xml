@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoPartialRefundPartialShipmentPartialInvoiceBundleProductCustomStock" extends="AdminCreateCreditMemoTotalRefundBundleProductCustomStock">
+        <annotations>
+            <stories value="Bundle Product Custom Stock."/>
+            <title value="Create Partial Refund Credit Memo with Partial Shipment and Partial Invoice with Bundle product on Custom stock."/>
+            <description value="Verify, admin able to create Credit Memo with partial refund with partial shipment and partial invoice. Bundle product on Custom source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735178/scenarios/2493223"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/inventory/issues/522"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="product"/>
+            <createData entity="SimpleProduct" stepKey="product" after="category">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext" after="waitForCheckoutPage"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton" after="clickNext"/>
+        <!--Admin Area Process Partial Invoice.-->
+        <scrollTo selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="scrollToQty" after="clickInvoice"/>
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="1" stepKey="invoiceQuantityPartial" after="scrollToQty"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="clickUpdateQty" after="invoiceQuantityPartial"/>
+        <waitForPageLoad stepKey="waitForQuantityUpdate" after="clickUpdateQty"/>
+        <!--Admin Area Process Partial Shipment.-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="checkSuccessMessage"/>
+        <fillField selector=".order-shipment-table tbody:nth-of-type(1) .col-qty input" userInput="1" stepKey="shipOneItem" after="clickShipAction"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="shipOneItem"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkShipmentSuccessMessage" after="clickSubmitShipment"/>
+        <!--Create Credit Memo with partial refund.-->
+        <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox" after="clickCreditMemo"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" stepKey="partialRefund" after="returnToStockCheckbox"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund" after="partialRefund"/>
+        <waitForLoadingMaskToDisappear stepKey="updateQuantityLoadingMask" after="updateQuantityToRefund"/>
+        <!--Verify product qty-->
+        <remove keyForRemoval="checkProductSourceQtyAfterCreditMemo"/>
+        <remove keyForRemoval="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="100" stepKey="checkProductSourceQtyAfterCreditMemo" after="findProductBySkuToCheckQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="95" stepKey="checkSalableQtyAfterCreditMemo" after="findProductBySkuToCheckQtyAfterCreditMemo"/>
+    </test>
+</tests>

@@ -87,14 +87,15 @@
             <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
         <!--Add product to cart.-->
-        <amOnPage url="{{StorefrontProductPage.url($$bundleProduct.name$$)}}" stepKey="navigateToGroupedPDP"/>
+        <amOnPage url="{{StorefrontProductPage.url($$bundleProduct.sku$$)}}" stepKey="navigateToGroupedPDP"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="waitForAddToCartButton"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="2" stepKey="fillQuantity"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
         <!--Place order.-->
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad time="30" stepKey="waitForCheckoutPage"/>
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
-        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
         <waitForPageLoad time="30" stepKey="waitForOrderPlacement"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
@@ -107,15 +108,15 @@
         <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
-        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 5" stepKey="orderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 2" stepKey="orderedQuantity"/>
         <!--Admin Area Check source quantity and salable quantity-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterPlaceOrder"/>
         <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProductBySkuToCheckQtyAfterPlaceOrder">
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$product.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.source[name]$$)}}" userInput="995" stepKey="checkSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="90" stepKey="checkSalableQtyAfterPlaceOrder"/>
         <!--Admin Area Process Full Invoice-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
@@ -145,7 +146,7 @@
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$product.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="995" stepKey="checkProductSourceQtyAfterCreditMemo"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="995" stepKey="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="90" stepKey="checkProductSourceQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="90" stepKey="checkSalableQtyAfterCreditMemo"/>
     </test>
 </tests>
