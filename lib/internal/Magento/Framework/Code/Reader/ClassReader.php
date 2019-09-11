@@ -28,7 +28,8 @@ class ClassReader implements ClassReaderInterface
                         $parameter->getName(),
                         $parameter->getClass() !== null ? $parameter->getClass()->getName() : null,
                         !$parameter->isOptional() && !$parameter->isDefaultValueAvailable(),
-                        $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null,
+                        $this->getReflectionParameterDefaultValue($parameter),
+                        $parameter->isVariadic(),
                     ];
                 } catch (\ReflectionException $e) {
                     $message = $e->getMessage();
@@ -38,6 +39,19 @@ class ClassReader implements ClassReaderInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param \ReflectionParameter $parameter
+     * @return array|mixed|null
+     */
+    private function getReflectionParameterDefaultValue(\ReflectionParameter $parameter)
+    {
+        if ($parameter->isVariadic()) {
+            return [];
+        }
+
+        return $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
     }
 
     /**

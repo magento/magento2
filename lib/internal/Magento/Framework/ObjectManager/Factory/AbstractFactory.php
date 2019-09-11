@@ -226,7 +226,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     {
         $resolvedArguments = [];
         foreach ($parameters as $parameter) {
-            list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
+            list($paramName, $paramType, $paramRequired, $paramDefault, $isVariadic) = $parameter;
             $argument = null;
             if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
                 $argument = $arguments[$paramName];
@@ -243,9 +243,13 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
                 $argument = $paramDefault;
             }
 
-            $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
+            if ($isVariadic && is_array($argument)) {
+                $resolvedArguments = array_merge($resolvedArguments, $argument);
+            } else {
+                $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
+                $resolvedArguments[] = $argument;
+            }
 
-            $resolvedArguments[] = $argument;
         }
         return $resolvedArguments;
     }
