@@ -1451,7 +1451,6 @@ QUERY;
   products(
         search:"{$search_term}"
         
-        sort:{relevance:DESC}
         pageSize: 5
         currentPage: 1
        )
