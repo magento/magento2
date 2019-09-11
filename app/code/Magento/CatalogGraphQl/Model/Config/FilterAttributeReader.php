@@ -46,15 +46,23 @@ class FilterAttributeReader implements ReaderInterface
     private $collectionFactory;
 
     /**
+     * @var array
+     */
+    private $exactMatchAttributes = ['sku'];
+
+    /**
      * @param MapperInterface $mapper
      * @param CollectionFactory $collectionFactory
+     * @param array $exactMatchAttributes
      */
     public function __construct(
         MapperInterface $mapper,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        array $exactMatchAttributes = []
     ) {
         $this->mapper = $mapper;
         $this->collectionFactory = $collectionFactory;
+        $this->exactMatchAttributes = array_merge($this->exactMatchAttributes, $exactMatchAttributes);
     }
 
     /**
@@ -94,7 +102,7 @@ class FilterAttributeReader implements ReaderInterface
      */
     private function getFilterType(Attribute $attribute): string
     {
-        if ($attribute->getAttributeCode() === 'sku') {
+        if (in_array($attribute->getAttributeCode(), $this->exactMatchAttributes)) {
             return self::FILTER_EQUAL_TYPE;
         }
 

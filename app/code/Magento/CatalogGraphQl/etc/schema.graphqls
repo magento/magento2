@@ -338,7 +338,7 @@ type ProductMediaGalleryEntriesVideoContent @doc(description: "ProductMediaGalle
     video_metadata: String @doc(description: "Optional data about the video.")
 }
 
-input ProductSortInput @deprecated(reason: "The attributes used in this input are hard-coded, and some of them are not sortable. Use @ProductAttributeSortInput instead") @doc(description: "ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
+input ProductSortInput @doc(description: "ProductSortInput is deprecated, use @ProductAttributeSortInput instead. ProductSortInput specifies the attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
     name: SortEnum @doc(description: "The product name. Customers use this name to identify the product.")
     sku: SortEnum @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
     description: SortEnum @doc(description: "Detailed information about the product. The value can include simple HTML tags.")
