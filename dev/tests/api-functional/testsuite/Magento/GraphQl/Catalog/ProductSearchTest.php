@@ -14,9 +14,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
 use Magento\Eav\Model\Config;
-use Magento\Framework\Config\Data;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -115,10 +112,7 @@ QUERY;
         $firstOption = $options[0]->getValue();
         $secondOption = $options[1]->getValue();
         $query = $this->getQueryProductsWithArrayOfCustomAttributes($attributeCode, $firstOption, $secondOption);
-        $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
+        $this->reIndexAndCleanCache();
         $response = $this->graphQlQuery($query);
 
         $this->assertEquals(2, $response['products']['total_count']);
@@ -262,23 +256,22 @@ QUERY;
 }
 QUERY;
 
+        $objectManager = Bootstrap::getObjectManager();
         /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('12345');
         $product3 = $productRepository->get('simple-4');
         $filteredProducts = [$product1, $product2, $product3 ];
-        $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
+        $countOfFilteredProducts = count($filteredProducts);
+        $this->reIndexAndCleanCache();
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count'], 'Number of products returned is incorrect');
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
         $this->assertCount(3, $response['products']['aggregations'], 'Incorrect count of aggregations');
+
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
+        for ($itemIndex = 0; $itemIndex < $countOfFilteredProducts; $itemIndex++) {
             $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
             //validate that correct products are returned
             $this->assertResponseFields(
@@ -290,7 +283,7 @@ QUERY;
         }
 
         /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        $eavConfig = $objectManager->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', 'second_test_configurable');
         // Validate custom attribute filter layer data from aggregations
         $this->assertResponseFields(
@@ -309,6 +302,14 @@ QUERY;
             ]
         );
     }
+    private function reIndexAndCleanCache()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $indexer = $objectManager->create(Indexer::class);
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
+        CacheCleaner::cleanAll();
+    }
     /**
      * Filter products using an array of  multi select custom attributes
      *
@@ -318,20 +319,17 @@ QUERY;
     public function testFilterProductsByMultiSelectCustomAttributes()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
-        CacheCleaner::cleanAll();
+        $this->reIndexAndCleanCache();
         $attributeCode = 'multiselect_attribute';
         /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        $eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
         array_shift($options);
+        $countOptions = count($options);
         $optionValues = [];
-        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($i = 0; $i < count($options); $i++) {
+        for ($i = 0; $i < $countOptions; $i++) {
             $optionValues[] = $options[$i]->getValue();
         }
         $query = <<<QUERY
@@ -413,11 +411,7 @@ QUERY;
      */
     public function testSearchAndFilterByCustomAttribute()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
-        CacheCleaner::cleanAll();
+        $this->reIndexAndCleanCache();
         $attribute_code = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attribute_code);
 
@@ -564,12 +558,7 @@ QUERY;
      */
     public function testFilterByCategoryIdAndCustomAttribute()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
-        CacheCleaner::cleanAll();
-
+        $this->reIndexAndCleanCache();
         $categoryId = 13;
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
         $query = <<<QUERY
@@ -765,7 +754,8 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(1, $response['products']['total_count'], 'More than 1 product found');
         $this->assertCount(2, $response['products']['aggregations']);
-        $this->assertResponseFields($response['products']['items'][0],
+        $this->assertResponseFields(
+            $response['products']['items'][0],
             [
                 'name' => $product->getName(),
                 'sku' => $product->getSku(),
@@ -1440,17 +1430,14 @@ QUERY;
      */
     public function testSearchAndSortByRelevance()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
+        $this->reIndexAndCleanCache();
         $search_term ="blue";
         $query
             = <<<QUERY
 {
   products(
         search:"{$search_term}"
-        
+        sort:{relevance:DESC}
         pageSize: 5
         currentPage: 1
        )
@@ -1571,10 +1558,7 @@ QUERY;
      */
     public function testProductBasicFullTextSearchQuery()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
+       $this->reIndexAndCleanCache();
         $textToSearch = 'blue';
         $query
             =<<<QUERY
