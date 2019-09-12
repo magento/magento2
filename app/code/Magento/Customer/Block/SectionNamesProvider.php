@@ -13,7 +13,7 @@ class SectionNamesProvider implements ArgumentInterface
     /**
      * @var \Magento\Framework\Config\DataInterface
      */
-    protected $sectionConfig;
+    private $sectionConfig;
 
     /**
      * @param \Magento\Framework\Config\DataInterface $sectionConfig
