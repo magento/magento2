@@ -629,7 +629,7 @@ class Processor
      */
     private function getMaxReportDirNestingLevel(string $reportId): int
     {
-        return (integer)floor(mb_strlen($reportId) / self::NUMBER_SYMBOLS_IN_SUBDIR_NAME);
+        return (int)floor(strlen($reportId) / self::NUMBER_SYMBOLS_IN_SUBDIR_NAME);
     }
 
     /**
