@@ -174,7 +174,9 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             }
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_disabledAttrs = array_merge($this->_disabledAttrs, $model->getDisabledAttrs());
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_indexValueAttributes = array_merge(
                     $this->_indexValueAttributes,
                     $model->getIndexValueAttributes()
@@ -199,6 +201,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     public function export()
     {
         //Execution time may be very long
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
 
         $writer = $this->getWriter();
@@ -355,6 +358,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         $linkedTierPricesData = [];
         foreach ($tierPricesData as $tierPriceData) {
             $sku = $productLinkIdToSkuMap[$tierPriceData['product_link_id']];
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $linkedTierPricesData[] = array_merge(
                 $tierPriceData,
                 [ImportAdvancedPricing::COL_SKU => $sku]

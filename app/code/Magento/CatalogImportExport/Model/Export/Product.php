@@ -484,7 +484,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_disabledAttrs = array_merge($this->_disabledAttrs, $model->getDisabledAttrs());
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_indexValueAttributes = array_merge(
                     $this->_indexValueAttributes,
                     $model->getIndexValueAttributes()
@@ -923,6 +925,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($rawData as $productId => $productData) {
                 foreach ($productData as $storeId => $dataRow) {
                     if ($storeId == Store::DEFAULT_STORE_ID && isset($stockItemRows[$productId])) {
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
                     }
                     $this->appendMultirowData($dataRow, $multirawData);
