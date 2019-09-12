@@ -11,6 +11,7 @@
         <annotations>
             <stories value="Duplicate Product"/>
             <features value="ConfigurableProduct"/>
+            <stories value="Duplicate Product"/>
             <title value="Visibility of duplicate product on the Storefront"/>
             <description value="Check visibility of duplicate product on the Storefront"/>
             <severity value="AVERAGE"/>
