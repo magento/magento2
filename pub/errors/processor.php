@@ -506,7 +506,12 @@ class Processor
             @mkdir($reportDirName, 0777, true);
         }
         $this->_setReportData($reportData);
-        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData));
+
+        if (!file_exists($this->_reportDir)) {
+            @mkdir($this->_reportDir, 0777, true);
+        }
+
+        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData). PHP_EOL);
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
