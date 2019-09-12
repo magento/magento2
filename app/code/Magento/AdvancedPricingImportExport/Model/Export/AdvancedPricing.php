@@ -150,6 +150,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     }
 
     /**
+     * Init type models
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
