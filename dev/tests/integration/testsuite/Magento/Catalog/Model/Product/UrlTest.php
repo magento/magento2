@@ -44,6 +44,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @magentoConfigFixture default_store web/unsecure/base_url http://sample.com/
      * @magentoConfigFixture default_store web/unsecure/base_link_url http://sample.com/
      * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://sample-second.com/
@@ -82,6 +83,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @magentoConfigFixture default/catalog/search/engine mysql
+     */
     public function testGetProductUrl()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -117,6 +121,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea frontend
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testGetUrl()
     {

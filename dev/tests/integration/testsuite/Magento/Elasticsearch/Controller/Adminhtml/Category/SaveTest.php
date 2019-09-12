@@ -35,13 +35,6 @@ class SaveTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $config = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $config->method('isElasticsearchEnabled')
-            ->willReturn(true);
-        $this->_objectManager->addSharedInstance($config, Config::class);
-
         $this->changeIndexerSchedule(FulltextIndexer::INDEXER_ID, true);
         $this->changeIndexerSchedule(CategoryIndexer::INDEXER_ID, true);
     }

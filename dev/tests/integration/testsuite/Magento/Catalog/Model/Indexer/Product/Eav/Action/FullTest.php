@@ -42,6 +42,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testReindexAll()
     {
