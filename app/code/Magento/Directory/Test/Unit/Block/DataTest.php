@@ -17,6 +17,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Escaper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -57,13 +58,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $serializerMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper
      */
-    private $escaperMock;
+    private $escaper;
 
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->escaper= $objectManagerHelper->getObject(Escaper::class);
         $this->prepareContext();
 
         $this->helperDataMock = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
@@ -129,12 +131,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getLayout')
             ->willReturn($this->layoutMock);
 
-        $this->escaperMock = $this->createPartialMock(
-            \Magento\Framework\Escaper::class,
-            ['escapeHtml']
-        );
-
-        $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
+        $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
     }
 
     protected function prepareCountryCollection()
@@ -311,8 +308,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-
-        $this->escaperMock->expects($this->once())->method('escapeHtml')->with(__($title))->willReturn($title);
 
         $elementHtmlSelect->expects($this->once())
             ->method('setName')

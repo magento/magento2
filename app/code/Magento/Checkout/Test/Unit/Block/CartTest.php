@@ -38,7 +38,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $quoteMock = $this->createMock(Quote::class);
         $checkoutSession = $this->createMock(Session::class);
         $this->layoutMock = $this->createMock(LayoutInterface::class);
-        $this->escaper = $this->createMock(Escaper::class);
+        $this->escaper = $objectManager->getObject(Escaper::class);
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([]);
         $checkoutSession->expects($this->any())->method('getQuote')->willReturn($quoteMock);
         $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
@@ -59,8 +59,6 @@ class CartTest extends \PHPUnit\Framework\TestCase
     {
         $this->layoutMock->expects($this->any())->method('getBlock')->willReturn(false);
         $name='blockMethod';
-        $expected='blockMethod';
-        $this->escaper->expects($this->once())->method('escapeHtml')->with($name)->willReturn($expected);
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage(
             (string)__('Invalid method: %1', $name)

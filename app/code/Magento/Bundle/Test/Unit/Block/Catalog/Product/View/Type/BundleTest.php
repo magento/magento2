@@ -7,6 +7,7 @@ namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type;
 
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
 use Magento\Catalog\Block\Product\Context;
+use \Magento\Framework\Escaper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -89,10 +90,8 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaper = $this->createPartialMock(
-            \Magento\Framework\Escaper::class,
-            ['escapeHtml']
-        );
+        $this->escaper = $objectHelper->getObject(Escaper::class);
+
         $this->context->expects($this->once())->method('getRegistry')->willReturn($registry);
         $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
         $this->context->expects($this->once())->method('getEventManager')->willReturn($this->eventManager);
@@ -127,10 +126,8 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $option->expects($this->any())->method('getType')->willReturn('checkbox');
+        $expected='There is no defined renderer for &quot;checkbox&quot; option type.';
 
-        $data='There is no defined renderer for "checkbox" option type.';
-        $expected='There is no defined renderer for "checkbox" option type.';
-        $this->escaper->expects($this->once())->method('escapeHtml')->with($data)->willReturn($expected);
         $layout = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->setMethods(['getChildName', 'getBlock'])
             ->disableOriginalConstructor()
