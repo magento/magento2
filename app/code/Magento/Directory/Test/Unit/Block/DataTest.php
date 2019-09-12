@@ -56,6 +56,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $serializerMock;
 
+    /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -123,6 +128,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())
             ->method('getLayout')
             ->willReturn($this->layoutMock);
+
+        $this->escaperMock = $this->createPartialMock(
+            \Magento\Framework\Escaper::class,
+            ['escapeHtml']
+        );
+
+        $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
     }
 
     protected function prepareCountryCollection()
@@ -135,9 +147,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods([
-                'create'
-            ])
+            ->setMethods(
+                [
+                    'create'
+                ]
+            )
             ->getMock();
 
         $this->countryCollectionFactoryMock->expects($this->any())
@@ -285,16 +299,20 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $elementHtmlSelect = $this->getMockBuilder(\Magento\Framework\View\Element\Html\Select::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'setName',
-                'setId',
-                'setTitle',
-                'setValue',
-                'setOptions',
-                'setExtraParams',
-                'getHtml',
-            ])
+            ->setMethods(
+                [
+                    'setName',
+                    'setId',
+                    'setTitle',
+                    'setValue',
+                    'setOptions',
+                    'setExtraParams',
+                    'getHtml',
+                ]
+            )
             ->getMock();
+
+        $this->escaperMock->expects($this->once())->method('escapeHtml')->with(__($title))->willReturn($title);
 
         $elementHtmlSelect->expects($this->once())
             ->method('setName')
