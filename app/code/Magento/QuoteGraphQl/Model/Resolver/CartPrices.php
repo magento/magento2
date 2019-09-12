@@ -115,7 +115,7 @@ class CartPrices implements ResolverInterface
     private function getDiscountValues(Total $total, Quote $quote)
     {
         $discountValues=[];
-        foreach ($total->getDiscountPerRule() as $key => $value) {
+        foreach ($total->getDiscountPerRule() as $value) {
             $discount = [];
             $amount = [];
             /**

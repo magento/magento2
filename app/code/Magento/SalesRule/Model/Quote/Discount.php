@@ -243,35 +243,37 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
         $discountBreakdown = $item->getDiscountBreakdown();
-        foreach ($discountBreakdown as $key => $value) {
-            $discountPerRule = $total->getDiscountPerRule() ?? [];
-            /**
-             * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount
-             */
-            $discount = $value['discount'];
-            $rule = $value['rule'];
-            if (array_key_exists($key, $discountPerRule)) {
+        if ($discountBreakdown) {
+            foreach ($discountBreakdown as $key => $value) {
+                $discountPerRule = $total->getDiscountPerRule() ?? [];
                 /**
-                 * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $ruleDiscount
+                 * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount
                  */
-                $ruleDiscount = $this->discountFactory->create();
-                /**
-                 * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-                 */
-                $discountData = $discountPerRule[$key]['discount'];
-                $ruleDiscount->setAmount($discountData->getAmount()+$discount->getAmount());
-                $ruleDiscount->setBaseAmount($discountData->getBaseAmount()+$discount->getBaseAmount());
-                $ruleDiscount->setOriginalAmount($discountData->getOriginalAmount()+$discount->getOriginalAmount());
-                $ruleDiscount->setBaseOriginalAmount(
-                    $discountData->getBaseOriginalAmount()+$discount->getBaseOriginalAmount()
-                );
-                $discountPerRule[$key]['discount'] = $ruleDiscount;
-                $discountPerRule[$key]['rule'] = $rule;
-            } else {
-                $discountPerRule[$key]['discount'] = $discount;
-                $discountPerRule[$key]['rule'] = $rule;
+                $discount = $value['discount'];
+                $rule = $value['rule'];
+                if (array_key_exists($key, $discountPerRule)) {
+                    /**
+                     * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $ruleDiscount
+                     */
+                    $ruleDiscount = $this->discountFactory->create();
+                    /**
+                     * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
+                     */
+                    $discountData = $discountPerRule[$key]['discount'];
+                    $ruleDiscount->setAmount($discountData->getAmount()+$discount->getAmount());
+                    $ruleDiscount->setBaseAmount($discountData->getBaseAmount()+$discount->getBaseAmount());
+                    $ruleDiscount->setOriginalAmount($discountData->getOriginalAmount()+$discount->getOriginalAmount());
+                    $ruleDiscount->setBaseOriginalAmount(
+                        $discountData->getBaseOriginalAmount()+$discount->getBaseOriginalAmount()
+                    );
+                    $discountPerRule[$key]['discount'] = $ruleDiscount;
+                    $discountPerRule[$key]['rule'] = $rule;
+                } else {
+                    $discountPerRule[$key]['discount'] = $discount;
+                    $discountPerRule[$key]['rule'] = $rule;
+                }
+                $total->setDiscountPerRule($discountPerRule);
             }
-            $total->setDiscountPerRule($discountPerRule);
         }
         return $this;
     }

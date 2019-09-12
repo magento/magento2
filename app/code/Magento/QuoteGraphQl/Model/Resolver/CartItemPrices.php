@@ -89,7 +89,7 @@ class CartItemPrices implements ResolverInterface
     private function getDiscountValues($cartItem, $currencyCode)
     {
         $discountValues=[];
-        foreach ($cartItem->getDiscountBreakdown() as $key => $value) {
+        foreach ($cartItem->getDiscountBreakdown() as $value) {
             $discount = [];
             $amount = [];
             /**

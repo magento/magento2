@@ -56,8 +56,8 @@ class RulesApplier
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\SalesRule\Model\Utility $utility,
-        DataFactory $discountDataFactory,
-        ChildrenValidationLocator $childrenValidationLocator = null
+        ChildrenValidationLocator $childrenValidationLocator = null,
+        DataFactory $discountDataFactory = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
