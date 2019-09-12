@@ -14,8 +14,7 @@
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
                 "expirableSectionNames": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getExpirableSectionNames()) ?>,
                 "cookieLifeTime": "<?= $block->escapeJs($block->getCookieLifeTime()) ?>",
-                "updateSessionUrl": "<?= $block->escapeJs($block->escapeUrl($block->getCustomerDataUrl('customer/account/updateSession'))) ?>",
-                "sectionsName": <?= $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getData('sectionsNameProvider')->getSectionsName()) ?>
+                "updateSessionUrl": "<?= $block->escapeJs($block->escapeUrl($block->getCustomerDataUrl('customer/account/updateSession'))) ?>"
             }
         }
     }
