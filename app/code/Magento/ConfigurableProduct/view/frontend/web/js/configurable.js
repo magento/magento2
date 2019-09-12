@@ -372,12 +372,7 @@ define([
                 index = 1,
                 allowedProducts,
                 i,
-                j,
-                basePrice = parseFloat(this.options.spConfig.prices.basePrice.amount),
-                optionFinalPrice,
-                optionPriceDiff,
-                optionPrices = this.options.spConfig.optionPrices,
-                allowedProductMinPrice;
+                j;
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -391,9 +386,6 @@ define([
             if (options) {
                 for (i = 0; i < options.length; i++) {
                     allowedProducts = [];
-                    optionPriceDiff = 0;
-
-                    /* eslint-disable max-depth */
                     if (prevConfig) {
                         for (j = 0; j < options[i].products.length; j++) {
                             // prevConfig.config can be undefined
@@ -405,36 +397,27 @@ define([
                         }
                     } else {
                         allowedProducts = options[i].products.slice(0);
-
-                        if (typeof allowedProducts[0] !== 'undefined' &&
-                            typeof optionPrices[allowedProducts[0]] !== 'undefined') {
-                            allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
-                            optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
-                            optionPriceDiff = optionFinalPrice - basePrice;
-
-                            if (optionPriceDiff !== 0) {
-                                options[i].label = options[i].label + ' ' + priceUtils.formatPrice(
-                                    optionPriceDiff,
-                                    this.options.priceFormat,
-                                    true);
-                            }
-                        }
                     }
 
                     if (allowedProducts.length > 0) {
                         options[i].allowedProducts = allowedProducts;
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
-
                         if (typeof options[i].price !== 'undefined') {
-                            element.options[index].setAttribute('price', options[i].price);
+                            element.options[index].setAttribute('price', options[i].prices);
                         }
 
                         element.options[index].config = options[i];
+
+
+
+
                         index++;
                     }
-
-                    /* eslint-enable max-depth */
+                    if (i == 0) {
+                        this.options.values[attributeId] = options[i].id;
+                    }
                 }
+                if (window.location.href.indexOf('#') !== -1) {this._parseQueryParams(window.location.href.substr(window.location.href.indexOf('#') + 1));}
             }
         },
 
