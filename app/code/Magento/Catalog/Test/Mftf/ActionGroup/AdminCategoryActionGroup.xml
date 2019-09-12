@@ -405,13 +405,10 @@
             <argument name="productSku" type="string"/>
         </arguments>
 
-        <conditionalClick selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" dependentSelector="{{CatalogProductsSection.resetFilter}}" visible="false" stepKey="clickOnProductInCategory"/>
-        <waitForPageLoad time="30" stepKey="waitForProductsInCategoryOpened"/>
-        <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
-        <waitForPageLoad time="30" stepKey="waitForProductsToLoad"/>
-        <fillField selector="{{AdminCategoryContentSection.productTableColumnSku}}" userInput="{{productSku}}" stepKey="selectProduct"/>
-        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad time="30" stepKey="waitForSearch"/>
+        <conditionalClick selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="false" stepKey="clickOnProductInCategory"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickOnResetFilter"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnSku}}" userInput="{{productSku}}" stepKey="fillSkuFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
     </actionGroup>
 </actionGroups>
