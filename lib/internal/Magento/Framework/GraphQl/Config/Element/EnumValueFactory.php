@@ -34,16 +34,22 @@ class EnumValueFactory
      * @param string $name
      * @param string $value
      * @param string $description
+     * @param string $deprecationReason
      * @return EnumValue
      */
-    public function create(string $name, string $value, string $description = ''): EnumValue
-    {
+    public function create(
+        string $name,
+        string $value,
+        string $description = '',
+        string $deprecationReason = ''
+    ): EnumValue {
         return $this->objectManager->create(
             EnumValue::class,
             [
                 'name' => $name,
                 'value' => $value,
-                'description' => $description
+                'description' => $description,
+                'deprecationReason' => $deprecationReason
             ]
         );
     }
