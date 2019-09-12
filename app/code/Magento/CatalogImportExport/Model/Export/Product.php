@@ -526,7 +526,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (empty($productIds)) {
             return [];
         }
-        
+
         $productEntityJoinField = $this->getProductEntityLinkField();
 
         $select = $this->_connection->select()->from(
@@ -732,7 +732,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     self::COL_CATEGORY,
                     self::COL_PRODUCT_WEBSITES,
                 ],
-                $this->_getExportMainAttrCodes(),
+                $this->_getExportAttrCodes(),
                 [self::COL_ADDITIONAL_ATTRIBUTES],
                 reset($stockItemRows) ? array_keys(end($stockItemRows)) : [],
                 [
@@ -1330,7 +1330,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $dataRow[self::COL_SKU] = $sku;
         $dataRow[self::COL_ATTR_SET] = $attributeSet;
         $dataRow[self::COL_TYPE] = $type;
-        
+
         return $dataRow;
     }
 
