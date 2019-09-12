@@ -29,7 +29,7 @@
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
                         <?php $dots = 'dots' . uniqid(); ?>
                         <?php $id = 'id' . uniqid(); ?>
-                        <?= $block->escapeHtml($_option['value'], ['a']) ?><?php if (isset($_option['remainder']) && $_option['remainder']) : ?><span id="<?= /* @noEscape */ $dots; ?>"> ...</span><span id="<?= /* @noEscape */ $id; ?>"><?= $block->escapeHtml($_option['remainder'], ['a']) ?></span>
+                        <?= $block->escapeHtml($_option['value'], ['a', 'br']) ?><?php if (isset($_option['remainder']) && $_option['remainder']) : ?><span id="<?= /* @noEscape */ $dots; ?>"> ...</span><span id="<?= /* @noEscape */ $id; ?>"><?= $block->escapeHtml($_option['remainder'], ['a']) ?></span>
                             <script>
                                 require(['prototype'], function() {
                                     $('<?= /* @noEscape */ $id; ?>').hide();
