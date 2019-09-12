@@ -25,7 +25,7 @@ foreach ($attributesToDelete as $attributeCode) {
     $attributeRepository->delete($attribute);
 }
 /** @var $product \Magento\Catalog\Model\Product */
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = Bootstrap::getObjectManager();
 
 $entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)->loadByCode('catalog_product');
 

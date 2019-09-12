@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */
 $registry = $objectManager->get(\Magento\Framework\Registry::class);
@@ -12,7 +11,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $category \Magento\Catalog\Model\Category */
-$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+$category = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category->load(330);
 if ($category->getId()) {
     $category->delete();
