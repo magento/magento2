@@ -159,7 +159,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
             if ($this->_dateExists()) {
                 if ($this->useCalendar()) {
-                    $timestamp += $this->_localeDate->date($value['date'], null, true, false)->getTimestamp();
+                    $timestamp += $this->_localeDate->date($value['date'], null, false, false)->getTimestamp();
                 } else {
                     $timestamp += mktime(0, 0, 0, $value['month'], $value['day'], $value['year']);
                 }
