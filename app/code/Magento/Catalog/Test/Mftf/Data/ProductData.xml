@@ -351,6 +351,15 @@
         <data key="filename">adobe-base</data>
         <data key="file_extension">jpg</data>
     </entity>
+    <entity name="TestImage" type="image">
+        <data key="title" unique="suffix">test_image</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">test_image.jpg</data>
+        <data key="filename">test_image</data>
+        <data key="file_extension">jpg</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="type_id">simple</data>
@@ -1163,6 +1172,33 @@
         <data key="status">1</data>
         <data key="quantity">10</data>
         <requiredEntity type="product_extension_attribute">EavStock10</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <!-- Products from file "export_import_configurable_product.csv" -->
+    <entity name="ApiSimpleOneExportImport" type="product2">
+        <data key="sku">api-simple-one-export-import</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name">Api Simple Product One Export Import</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-simple-one-export-import</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleTwoExportImport" type="product2">
+        <data key="sku">api-simple-two-export-import</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name">Api Simple Product Two Export Import</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-simple-two-export-import</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
     <entity name="SimpleProductPrice10Qty1" type="product">

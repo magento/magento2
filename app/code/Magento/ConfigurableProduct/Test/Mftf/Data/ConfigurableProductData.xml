@@ -78,4 +78,19 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <!-- Configurable product from file "export_import_configurable_product.csv"-->
+    <entity name="ApiConfigurableExportImportProduct" type="product">
+        <data key="sku">api-configurable-export-import-product</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name">API Configurable Export Import Product</data>
+        <data key="urlKey">api-configurable-export-import-product</data>
+        <data key="price">123.00</data>
+        <data key="weight">2</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
 </entities>
