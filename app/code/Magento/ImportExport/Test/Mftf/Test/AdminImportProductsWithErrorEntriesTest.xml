@@ -31,7 +31,7 @@
         </after>
 
         <!--Import products with "Skip error entries"-->
-        <actionGroup ref="AdminImportProductsWithCheckDataActionGroup" stepKey="importProductsWithSkipErrorEntries">
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductsWithSkipErrorEntries">
             <argument name="behavior" value="Add/Update"/>
             <argument name="validationStrategy" value="Skip error entries"/>
             <argument name="importFile" value="catalog_product_err_img.csv"/>
@@ -41,7 +41,7 @@
         <see selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 1, 2, 3, 4, 5, 6, 7, 8, 9, 10" stepKey="seeTenImportError"/>
 
         <!--Import products with "Stop on Error" and "Allowed Errors Count" equals 5-->
-        <actionGroup ref="AdminImportProductsWithCheckDataActionGroup" stepKey="importProductsWithAllowedErrorsCountFive">
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductsWithAllowedErrorsCountFive">
             <argument name="behavior" value="Add/Update"/>
             <argument name="allowedErrorsCount" value="5"/>
             <argument name="importFile" value="catalog_product_err_img.csv"/>
@@ -53,7 +53,7 @@
         <see selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 1, 2, 3, 4, 5, 6" stepKey="seeAboutFiveImportError"/>
 
         <!--Import products with "Stop on Error" and "Allowed Errors Count" equals 11-->
-        <actionGroup ref="AdminImportProductsWithCheckDataActionGroup" stepKey="importProductsWithAllowedErrorsCountEleven">
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductsWithAllowedErrorsCountEleven">
             <argument name="behavior" value="Add/Update"/>
             <argument name="allowedErrorsCount" value="11"/>
             <argument name="importFile" value="catalog_product_err_img.csv"/>

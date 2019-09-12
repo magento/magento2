@@ -37,7 +37,7 @@
         <see selector="{{AdminImportValidationMessagesSection.messageByType(importMessageType)}}" userInput="{{importMessage}}" stepKey="seeImportMessage"/>
     </actionGroup>
 
-    <actionGroup name="AdminImportProductsWithCheckDataActionGroup" extends="AdminImportProductsActionGroup">
+    <actionGroup name="AdminImportProductsWithCheckValidationResultActionGroup" extends="AdminImportProductsActionGroup">
         <arguments>
             <argument name="validationNoticeMessage" type="string"/>
             <argument name="validationMessage" type="string" defaultValue="File is valid! To start import process press &quot;Import&quot; button"/>
