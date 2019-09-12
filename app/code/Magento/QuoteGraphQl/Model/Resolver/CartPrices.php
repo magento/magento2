@@ -126,7 +126,7 @@ class CartPrices implements ResolverInterface
              * @var \Magento\SalesRule\Model\Rule $rule $rule
              */
             $rule = $value['rule'];
-            $discount['label'] = $rule->getStoreLabel($quote->getStore());
+            $discount['label'] = $rule->getStoreLabel($quote->getStore()) ?: __('Discount');
             $amount['value'] = $discountData->getAmount();
             $amount['currency'] = $quote->getQuoteCurrencyCode();
             $discount['amount'] = $amount;

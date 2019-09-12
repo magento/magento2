@@ -156,7 +156,7 @@ class RulesApplier
      */
     protected function applyRule($item, $rule, $address, $couponCode)
     {
-        $discountData = $this->getDiscountData($item, $rule, $address);
+        $discountData = $this->getDiscountData($item, $rule);
         $this->setDiscountData($discountData, $item);
 
         $this->maintainAddressCouponCode($address, $rule, $couponCode);
@@ -170,10 +170,9 @@ class RulesApplier
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
      */
-    protected function getDiscountData($item, $rule, $address)
+    protected function getDiscountData($item, $rule)
     {
         $qty = $this->validatorUtility->getItemQty($item, $rule);
 
@@ -182,7 +181,7 @@ class RulesApplier
         $discountData = $discountCalculator->calculate($rule, $item, $qty);
         $this->eventFix($discountData, $item, $rule, $qty);
         $this->validatorUtility->deltaRoundingFix($discountData, $item);
-        $this->setDiscountBreakdown($discountData, $item, $rule, $address);
+        $this->setDiscountBreakdown($discountData, $item, $rule);
 
         /**
          * We can't use row total here because row total not include tax
@@ -200,10 +199,9 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param Address $address
      * @return $this
      */
-    protected function setDiscountBreakdown($discountData, $item, $rule, $address)
+    protected function setDiscountBreakdown($discountData, $item, $rule)
     {
         /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
         $discount = $this->discountFactory->create();
@@ -212,11 +210,8 @@ class RulesApplier
         $discount->setBaseAmount($discountData->getBaseAmount());
         $discount->setOriginalAmount($discountData->getOriginalAmount());
         $discountBreakdown = $item->getDiscountBreakdown() ?? [];
-        $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore());
-        if ($ruleLabel) {
-            $discountBreakdown[$rule->getId()]['discount'] = $discount;
-            $discountBreakdown[$rule->getId()]['rule'] = $rule;
-        }
+        $discountBreakdown[$rule->getId()]['discount'] = $discount;
+        $discountBreakdown[$rule->getId()]['rule'] = $rule;
         $item->setDiscountBreakdown($discountBreakdown);
         return $this;
     }
