@@ -15,21 +15,27 @@
                     <label>Cron configuration options for group: </label>
                     <field id="schedule_generate_every" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Generate Schedules Every</label>
+                        <validate>validate-zero-or-greater validate-digits</validate>
                     </field>
                     <field id="schedule_ahead_for" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Schedule Ahead for</label>
+                        <validate>validate-zero-or-greater validate-digits</validate>
                     </field>
                     <field id="schedule_lifetime" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Missed if Not Run Within</label>
+                        <validate>validate-zero-or-greater validate-digits</validate>
                     </field>
                     <field id="history_cleanup_every" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>History Cleanup Every</label>
+                        <validate>validate-zero-or-greater validate-digits</validate>
                     </field>
                     <field id="history_success_lifetime" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Success History Lifetime</label>
+                        <validate>validate-zero-or-greater validate-digits</validate>
                     </field>
                     <field id="history_failure_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Failure History Lifetime</label>
+                        <validate>validate-zero-or-greater validate-digits</validate>
                     </field>
                     <field id="use_separate_process" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Use Separate Process</label>
