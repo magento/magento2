@@ -30,6 +30,7 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="category"/>
             </createData>
+            <createData entity="ApiBundleProduct" stepKey="bundleProduct"/>
             <createData entity="FullSource1" stepKey="additionalSource"/>
             <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
             <!--Assign source to stock.-->
@@ -62,15 +63,12 @@
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
                 <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
             </actionGroup>
-            <!--Delete bundle product.-->
-            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteBundleProduct">
-                <argument name="productName" value="BundleProduct.name"/>
-            </actionGroup>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
             <!--Delete category, simple product and stock. Revert configuration.-->
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
         </after>
 
@@ -88,15 +86,8 @@
         <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignProductToAdditionalWebsite">
             <argument name="website" value="{{customWebsite.name}}"/>
         </actionGroup>
-        <!--Create bundle product.-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle"/>
-        <waitForPageLoad stepKey="waitForProductPageLoadBundle"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct">
-            <argument name="product" value="BundleProduct"/>
-        </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillBundleProductNameAndSku">
-            <argument name="product" value="BundleProduct"/>
-        </actionGroup>
+        <!--Add simple product to bundle product.-->
+        <amOnPage url="{{AdminProductEditPage.url($$bundleProduct.id$$)}}" stepKey="openProductEditPageToAssignOption"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
         <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
@@ -120,7 +111,7 @@
         <!--Verify product on storefront.-->
         <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$category.name$$.html" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <see userInput="{{BundleProduct.name}}" stepKey="assertProductPresent"/>
+        <see userInput="$$bundleProduct.name$$" stepKey="assertProductPresent"/>
         <see userInput="$$simpleProduct.price$$" stepKey="assertProductPricePresent"/>
     </test>
 </tests>

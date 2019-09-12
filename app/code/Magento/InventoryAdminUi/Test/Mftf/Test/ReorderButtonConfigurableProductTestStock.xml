@@ -25,6 +25,6 @@
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage" after="waitForCustomerDashboardPageLoad">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
-        <dontSeeElement selector="//td[text()='{$orderNumber}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="verifyReorderButton" after="goToMyOrdersPage"/>
+        <dontSeeElement selector="//td[text()='{$grabOrderNumber}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="verifyReorderButton" after="goToMyOrdersPage"/>
     </test>
 </tests>
