@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductInTheShoppingCartCouldBeReachedByAdminDuringOrderCreationWithMultiWebsiteConfigTest">
+        <annotations>
+            <stories value="Admin create order"/>
+            <title value="Product in the shopping cart could be reached by admin during order creation with multi website config"/>
+            <description value="Product in the shopping cart could be reached by admin during order creation with multi website config"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-6353"/>
+            <group value="sales"/>
+            <skip>
+                <issueId value="MC-20129"/>
+            </skip>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="goToProductPageViaID" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetWebsite" stepKey="assignProductToSecondWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create customer account for Second Website-->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageUsingStoreCodeInUrlActionGroup" stepKey="goToCreateCustomerPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="Thank you for registering with {{customStoreGroup.name}}." />
+        </actionGroup>
+
+        <!--Open product page and add to cart-->
+        <actionGroup ref="StorefrontOpenProductPageUsingStoreCodeInUrlActionGroup" stepKey="openProductPageUsingStoreCodeInUrl">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+
+        <!--Create new order for existing Customer And Store-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+
+        <!--Assert product in Shopping cart section-->
+        <actionGroup ref="AdminAssertProductInShoppingCartSectionActionGroup" stepKey="seeProductInShoppingCart">
+            <argument name="product" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!--Move product to the order from shopping cart-->
+        <actionGroup ref="AdminMoveProductToItemsOrderedFromShoppingCartActionGroup" stepKey="addProductToItemsOrderedFromShoppingCart">
+            <argument name="product" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!--Select shipping method-->
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+
+        <!--Checkout select Check/Money Order payment-->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
+
+        <!--Submit Order and verify information-->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+    </test>
+</tests>
