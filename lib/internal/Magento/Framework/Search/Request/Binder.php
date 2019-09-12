@@ -45,6 +45,10 @@ class Binder
         $limitList = ['from', 'size'];
         foreach ($limitList as $limit) {
             if (isset($bindData[$limit])) {
+                if ($limit === 'size' && $bindData[$limit] === 0 && isset($data[$limit])) {
+                    continue;
+                }
+
                 $data[$limit] = $bindData[$limit];
             }
         }
