@@ -323,7 +323,7 @@ define([
             sectionsNamesForInvalidation = _.contains(sectionNames, '*')
                 ? sectionConfig.getSectionNames()
                 : sectionNames;
-            
+
             $(document).trigger('customer-data-invalidate', [sectionsNamesForInvalidation]);
             buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
