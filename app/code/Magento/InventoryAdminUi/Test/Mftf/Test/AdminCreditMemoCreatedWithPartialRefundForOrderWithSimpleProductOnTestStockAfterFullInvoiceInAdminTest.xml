@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test
+        name="AdminCreditMemoCreatedWithPartialRefundForOrderWithSimpleProductOnTestStockAfterFullInvoiceInAdminTest"
+        extends="AdminCreditMemoCreatedWithPartialRefundForOrderWithSimpleProductOnTestStockAfterFullInvoiceAndPartialShipmentTest">
+        <annotations>
+            <stories value="MSI Credit Memo"/>
+            <title
+                value="Credit memo created with partial Refund for order with Simple product on Test stock after full invoice  in Admin"/>
+            <description
+                value="Credit memo created with partial Refund for order with Simple product on Test stock after full invoice  in Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735125/scenarios/1631892"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!-- remove create partial shipment step -->
+        <remove keyForRemoval="onOrdersPageToCreateShipment"/>
+        <remove keyForRemoval="waitForOrdersPageLoadingMask"/>
+        <remove keyForRemoval="searchOrderNum"/>
+        <remove keyForRemoval="submitSearchShipping"/>
+        <remove keyForRemoval="waitForSubmitSearchLoadingMask"/>
+        <remove keyForRemoval="clickOrderRow"/>
+        <remove keyForRemoval="clickShip"/>
+        <remove keyForRemoval="waitForShipLoadingMask"/>
+        <remove keyForRemoval="shipPartialQuantity"/>
+        <remove keyForRemoval="submitShipment"/>
+        <remove keyForRemoval="seeShipmentCreateSuccess"/>
+
+        <!-- Verify that items of Simple product on Test stock returned correctly after making partial refund -->
+        <remove keyForRemoval="checkProductSourceQtyAfterCreditMemo"/>
+        <remove keyForRemoval="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$createSource.source[name]$$)}}"
+             after="findVirtualProductBySkuToCheckQtyAfterCreditMemo"
+             userInput="100"
+             stepKey="checkProductSourceQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}"
+             after="checkProductSourceQtyAfterCreditMemo"
+             userInput="96"
+             stepKey="checkSalableQtyAfterCreditMemo"/>
+    </test>
+</tests>
