@@ -65,10 +65,10 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSku('navy-striped-shoes')
     ->setPrice(40)
     ->setWeight(8)
-    ->setDescription('Blue striped flip flops at <b>one</b>')
+    ->setDescription('blue striped flip flops at <b>one</b>')
     ->setMetaTitle('navy blue colored shoes meta title')
     ->setMetaKeyword('blue, navy, striped , women, kids')
-    ->setMetaDescription('blue', 'shoes women kids meta description')
+    ->setMetaDescription('blue shoes women kids meta description')
     ->setStockData(['use_config_manage_stock' => 0])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
@@ -96,7 +96,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 /** @var \Magento\Catalog\Model\Product $greyProduct */
 $greyProduct = $productRepository->get('grey_shorts');
-$greyProduct->setDescription('Description with blue lines');
+$greyProduct->setDescription('Description with Blue lines');
 $productRepository->save($greyProduct);
 
 $skus = ['green_socks', 'white_shorts','red_trousers','blue_briefs','grey_shorts',

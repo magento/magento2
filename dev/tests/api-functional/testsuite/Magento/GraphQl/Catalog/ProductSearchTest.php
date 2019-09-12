@@ -302,7 +302,11 @@ QUERY;
             ]
         );
     }
-    private function reIndexAndCleanCache()
+
+    /**
+     * @return void
+     */
+    private function reIndexAndCleanCache() : void
     {
         $objectManager = Bootstrap::getObjectManager();
         $indexer = $objectManager->create(Indexer::class);
@@ -1558,7 +1562,7 @@ QUERY;
      */
     public function testProductBasicFullTextSearchQuery()
     {
-       $this->reIndexAndCleanCache();
+        $this->reIndexAndCleanCache();
         $textToSearch = 'blue';
         $query
             =<<<QUERY
