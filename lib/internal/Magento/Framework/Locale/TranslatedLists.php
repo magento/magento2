@@ -207,11 +207,7 @@ class TranslatedLists implements ListsInterface
             $locale = $this->localeResolver->getLocale();
         }
 
-        $language = \Locale::getPrimaryLanguage($locale);
         $translation = (new RegionBundle())->get($locale)['Countries'][$value];
-        if ($value == 'TW' && $language == 'en') {
-            $translation .= ", Province of China";
-        }
 
         return $translation ? (string)__($translation) : $translation;
     }
