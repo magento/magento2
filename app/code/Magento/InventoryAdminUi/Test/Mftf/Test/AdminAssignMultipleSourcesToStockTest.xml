@@ -23,8 +23,25 @@
             <createData entity="BasicMsiStock1" stepKey="createStock1"/>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
-            <createData entity="FullSource1" stepKey="createSource3"/>
-            <createData entity="FullSource2" stepKey="createSource4"/>
+            <createData entity="FullSource3" stepKey="createSource3"/>
+            <createData entity="FullSource4" stepKey="createSource4"/>
+            <createData entity="FullSource5" stepKey="createSource5"/>
+            <createData entity="FullSource6" stepKey="createSource6"/>
+            <createData entity="FullSource7" stepKey="createSource7"/>
+            <createData entity="FullSource8" stepKey="createSource8"/>
+            <createData entity="FullSource9" stepKey="createSource9"/>
+            <createData entity="FullSource10" stepKey="createSource10"/>
+            <createData entity="FullSource11" stepKey="createSource11"/>
+            <createData entity="FullSource12" stepKey="createSource12"/>
+            <createData entity="FullSource13" stepKey="createSource13"/>
+            <createData entity="FullSource14" stepKey="createSource14"/>
+            <createData entity="FullSource15" stepKey="createSource15"/>
+            <createData entity="FullSource16" stepKey="createSource16"/>
+            <createData entity="FullSource17" stepKey="createSource17"/>
+            <createData entity="FullSource18" stepKey="createSource18"/>
+            <createData entity="FullSource19" stepKey="createSource19"/>
+            <createData entity="FullSource20" stepKey="createSource20"/>
+            <createData entity="FullSource21" stepKey="createSource21"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
@@ -54,6 +71,91 @@
         <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock4">
             <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
             <argument name="filter_value" value="$$createSource4.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock5">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource5.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock6">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource6.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock7">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource7.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock8">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource8.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock9">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource9.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock10">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource10.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock11">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource11.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock12">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource12.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock13">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource13.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock14">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource14.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock15">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource15.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock16">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource16.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock17">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource17.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock18">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource18.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock19">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource19.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock20">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource20.source[name]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOnStockEditPageAssignSourceToStock" stepKey="onStockEditPageAssignSourceToStock21">
+            <argument name="filter_selector" value="AdminManageStockGridFilterControls.name"/>
+            <argument name="filter_value" value="$$createSource21.source[name]$$"/>
         </actionGroup>
 
         <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSource1CodeInGrid1"/>
