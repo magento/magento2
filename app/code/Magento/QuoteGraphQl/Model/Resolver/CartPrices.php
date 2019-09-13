@@ -115,19 +115,22 @@ class CartPrices implements ResolverInterface
     private function getDiscountValues(Total $total, Quote $quote)
     {
         $discountValues=[];
-        foreach ($total->getDiscounts() as $value) {
-            $discount = [];
-            $amount = [];
-            /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
-            $discountData = $value['discount'];
-            /* @var \Magento\SalesRule\Model\Rule $rule*/
-            $rule = $value['rule'];
-            $discount['label'] = $rule->getStoreLabel($quote->getStore()) ?: __('Discount');
-            $amount['value'] = $discountData->getAmount();
-            $amount['currency'] = $quote->getQuoteCurrencyCode();
-            $discount['amount'] = $amount;
-            $discountValues[] = $discount;
+        if ($total->getDiscounts()) {
+            foreach ($total->getDiscounts() as $value) {
+                $discount = [];
+                $amount = [];
+                /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
+                $discountData = $value['discount'];
+                /* @var \Magento\SalesRule\Model\Rule $rule*/
+                $rule = $value['rule'];
+                $discount['label'] = $rule->getStoreLabel($quote->getStore()) ?: __('Discount');
+                $amount['value'] = $discountData->getAmount();
+                $amount['currency'] = $quote->getQuoteCurrencyCode();
+                $discount['amount'] = $amount;
+                $discountValues[] = $discount;
+            }
+            return $discountValues;
         }
-        return $discountValues;
+        return null;
     }
 }

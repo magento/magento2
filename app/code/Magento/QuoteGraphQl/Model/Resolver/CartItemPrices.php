@@ -87,20 +87,23 @@ class CartItemPrices implements ResolverInterface
      */
     private function getDiscountValues($cartItem, $currencyCode)
     {
-        $discountValues=[];
-        foreach ($cartItem->getDiscountBreakdown() as $value) {
-            $discount = [];
-            $amount = [];
-            /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
-            $discountData = $value['discount'];
-            /* @var \Magento\SalesRule\Model\Rule $rule */
-            $rule = $value['rule'];
-            $discount['label'] = $rule->getStoreLabel($cartItem->getQuote()->getStore()) ?: __('Discount');
-            $amount['value'] = $discountData->getAmount();
-            $amount['currency'] = $currencyCode;
-            $discount['amount'] = $amount;
-            $discountValues[] = $discount;
+        if ($cartItem->getDiscountBreakdown()) {
+            $discountValues=[];
+            foreach ($cartItem->getDiscountBreakdown() as $value) {
+                $discount = [];
+                $amount = [];
+                /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
+                $discountData = $value['discount'];
+                /* @var \Magento\SalesRule\Model\Rule $rule */
+                $rule = $value['rule'];
+                $discount['label'] = $rule->getStoreLabel($cartItem->getQuote()->getStore()) ?: __('Discount');
+                $amount['value'] = $discountData->getAmount();
+                $amount['currency'] = $currencyCode;
+                $discount['amount'] = $amount;
+                $discountValues[] = $discount;
+            }
+            return $discountValues;
         }
-        return $discountValues;
+        return null;
     }
 }
