@@ -2,7 +2,7 @@
 
 namespace Magento\Customer\Block;
 
-use Magento\Framework\Config\DataInterface;
+use Magento\Customer\CustomerData\SectionPool;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
@@ -11,17 +11,17 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class SectionNamesProvider implements ArgumentInterface
 {
     /**
-     * @var \Magento\Framework\Config\DataInterface
+     * @var SectionPool
      */
-    private $sectionConfig;
+    private $sectionPool;
 
     /**
-     * @param \Magento\Framework\Config\DataInterface $sectionConfig
+     * @param SectionPool $sectionPool
      */
     public function __construct(
-        DataInterface $sectionConfig
+        SectionPool $sectionPool
     ) {
-        $this->sectionConfig = $sectionConfig->get('sections');
+        $this->sectionPool = $sectionPool;
     }
 
     /**
@@ -31,17 +31,6 @@ class SectionNamesProvider implements ArgumentInterface
      */
     public function getSectionNames()
     {
-        $resultSectionNames = [];
-        foreach ($this->sectionConfig as $sectionRule => $sectionNames) {
-            if (is_array($sectionNames)) {
-                $resultSectionNames = array_merge($resultSectionNames, $sectionNames);
-            }
-        }
-
-        if ($allNameIndex = array_search('*', $resultSectionNames, true)) {
-            unset($resultSectionNames[$allNameIndex]);
-        }
-
-        return array_values(array_unique($resultSectionNames));
+        return $this->sectionPool->getSectionNames();
     }
 }
