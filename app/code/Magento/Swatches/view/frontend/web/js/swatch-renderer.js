@@ -385,7 +385,8 @@ define([
             var $widget = this,
                 container = this.element,
                 classes = this.options.classes,
-                chooseText = this.options.jsonConfig.chooseText;
+                chooseText = this.options.jsonConfig.chooseText,
+                selectedArray = []; // Variable declation for autoselect element array
 
             $widget.optionsMap = {};
 
@@ -406,7 +407,7 @@ define([
                 if ($widget.options.enableControlLabel) {
                     label +=
                         '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
-                            item.label +
+                        item.label +
                         '</span>' +
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
@@ -422,17 +423,17 @@ define([
                 // Create new control
                 container.append(
                     '<div class="' + classes.attributeClass + ' ' + item.code + '" ' +
-                         'attribute-code="' + item.code + '" ' +
-                         'attribute-id="' + item.id + '">' +
-                        label +
-                        '<div aria-activedescendant="" ' +
-                             'tabindex="0" ' +
-                             'aria-invalid="false" ' +
-                             'aria-required="true" ' +
-                             'role="listbox" ' + listLabel +
-                             'class="' + classes.attributeOptionsWrapper + ' clearfix">' +
-                            options + select +
-                        '</div>' + input +
+                    'attribute-code="' + item.code + '" ' +
+                    'attribute-id="' + item.id + '">' +
+                    label +
+                    '<div aria-activedescendant="" ' +
+                    'tabindex="0" ' +
+                    'aria-invalid="false" ' +
+                    'aria-required="true" ' +
+                    'role="listbox" ' + listLabel +
+                    'class="' + classes.attributeOptionsWrapper + ' clearfix">' +
+                    options + select +
+                    '</div>' + input +
                     '</div>'
                 );
 
@@ -450,7 +451,10 @@ define([
                         };
                     }
                 });
+                //Create array for Autoselect swatch
+                selectedArray.push($widget.element.find('[attribute-id=' + item.id + '] .swatch-option')[0]);
             });
+
 
             // Connect Tooltip
             container
@@ -469,6 +473,12 @@ define([
             //Emulate click on all swatches from Request
             $widget._EmulateSelected($.parseQuery());
             $widget._EmulateSelected($widget._getSelectedAttributes());
+
+            //Trigger click for Autoselect first option swatch
+            $.each(selectedArray, function () {
+                if(this != undefined) this.click();
+            });
+
         },
 
         /**
