@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoWholeOrderWithConfigurableProductFromCustomSourceTest" extends="AdminCreateShipmentForWholeOrderWithConfigurableProductFromCustomSourceTest">
+        <annotations>
+            <stories value="Configurable Product Custom Stock."/>
+            <title value="Create Credit Memo With Configurable Product on Custom Stock."/>
+            <description value="Verify, admin able to crate credit memo with configurable product on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735184/scenarios/1477534"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Create full invoice.-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNumInvoice"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskGridForInvoice"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadSubmitInvoice"/>
+        <scrollToTopOfPage stepKey="scrollToTopMessage"/>
+        <waitForPageLoad stepKey="waitForPageLoadSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="verifyOrderStatus"/>
+        <!--Create full credit memo.-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmit"/>
+        <!--Verify product quantity.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGridAfterCreditMemo"/>
+        <waitForPageLoad time="30" stepKey="waitForGridLoadAfterCreditMemo"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProductForQuantityCheckAfterCreditMemo">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{ConfigurableMsiProduct.sku}}"/>
+        </actionGroup>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{colorProductAttribute1.name}}" stepKey="verifyWhiteVariationName"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="100" stepKey="verifyWhiteVariationPrice"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createSource1.source[name]$$: 100" stepKey="verifyWhiteVariationQuantityForSource"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createStock.stock[name]$$: 100" stepKey="verifyWhiteVariationQuantityForStock"/>
+    </test>
+</tests>
+

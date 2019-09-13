@@ -31,6 +31,12 @@
                 <field key="price">10.00</field>
                 <requiredEntity createDataKey="category"/>
             </createData>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
         </before>
         <after>
             <!--Disable additional source.-->
@@ -45,7 +51,6 @@
         </after>
 
         <!--Set Product to 'Out of Stock'.-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
         <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
         <selectOption selector="{{AdminProductSourcesGrid.rowStatus('0')}}" userInput="Out of Stock" stepKey="setProductToOutOfStock"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="saveProduct"/>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="RegisteredCustomerCreateOrderWithSimpleProductAdditionalStockAdditionalWebsiteTest" extends="AdminAssignSimpleProductToAdditionalStockAdditionalWebsiteTest">
+        <annotations>
+            <stories value="Simple Product Custom Stock"/>
+            <title value="Create Order with Simple Product On Custom Stock and Custom Webiste"/>
+            <description value="Verify, customer should be able to create order with simple product assigned to additional stock and additional website."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/2903395"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Register customer.-->
+        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickOnCreateAccountLink"/>
+        <fillField userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" stepKey="fillLastName"/>
+        <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}" stepKey="fillEmail"/>
+        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}" stepKey="fillPassword"/>
+        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" stepKey="fillConfirmPassword"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+        <!-- Add simple product to shopping cart -->
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$simpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToPDP"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
+        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProductAddedMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $$simpleProduct.name$$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+        <!--Place order from storefront.-->
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <!-- Fill customer new shipping address -->
+        <actionGroup ref="CustomerCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--Verify product quantity after order placement.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterOrderPlacement"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProductBySkuToCheckQtyAfterOrderPlacement">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="99" stepKey="checkSalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>

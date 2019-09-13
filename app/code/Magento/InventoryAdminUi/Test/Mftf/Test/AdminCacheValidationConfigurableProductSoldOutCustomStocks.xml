@@ -18,7 +18,7 @@
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
-        
+
         <before>
             <!--Create category and customer.-->
             <createData entity="SimpleSubCategory" stepKey="category"/>
@@ -106,8 +106,7 @@
         <!-- Source Selection -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMask"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}"
-                   stepKey="searchOrderNum"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMask"/>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateShipmentBundleProductCustomStock" extends="AdminCreateCreditMemoTotalRefundBundleProductCustomStock">
+        <annotations>
+            <stories value="Bundle Product Custom Stock."/>
+            <title value="Create Shipment with Bundle product on Custom stock."/>
+            <description value="Verify, admin able to create Shipment with Bundle product on Custom source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735287/scenarios/1479456"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/inventory/issues/522"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="product"/>
+            <createData entity="SimpleProduct" stepKey="product" after="category">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext" after="waitForCheckoutPage"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton" after="clickNext"/>
+        <!--Admin Area Process Shipment.-->
+        <remove keyForRemoval="clickInvoice"/>
+        <remove keyForRemoval="clickSubmitInvoice"/>
+        <remove keyForRemoval="checkSuccessMessage"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="clickOrderRowInvoice"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="clickShipAction"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkSuccessMessage" after="waitForPageLoadSuccessMessage"/>
+        <!--Remove Credit Memo Creation.-->
+        <remove keyForRemoval="onOrdersPageToCreateCreditMemo"/>
+        <remove keyForRemoval="waitForOrdersPageLoadingMaskCreditMemo"/>
+        <remove keyForRemoval="searchOrderNumCreditMemo"/>
+        <remove keyForRemoval="submitSearchCreditMemo"/>
+        <remove keyForRemoval="waitForSubmitSearchLoadingMaskCreditMemo"/>
+        <remove keyForRemoval="clickOrderRowCreditMemo"/>
+        <remove keyForRemoval="clickCreditMemo"/>
+        <remove keyForRemoval="updateQuantityLoadingMask"/>
+        <remove keyForRemoval="clickSubmit"/>
+    </test>
+</tests>

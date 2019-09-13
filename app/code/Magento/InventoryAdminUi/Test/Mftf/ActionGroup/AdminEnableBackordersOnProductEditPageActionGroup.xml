@@ -13,7 +13,7 @@
         <click selector="{{AdminProductSourcesSection.advancedInventory}}" stepKey="goToAdvancedInventory"/>
         <waitForPageLoad time="30" stepKey="waitAdvancedInventoryLoaded"/>
         <uncheckOption selector="{{AdminAdvancedInventorySection.backordersUseDefault}}" stepKey="clickOnUseDefaultBackorders"/>
-        <selectOption selector="{{AdminAdvancedInventorySection.backorders}}" userInput="Allow Qty Below 0" stepKey="selectBackordersType"/>
+        <selectOption selector="{{AdminAdvancedInventorySection.backorders}}" userInput="{{backOrders}}" stepKey="selectBackordersType"/>
         <click selector="{{AdminAdvancedInventoryControlsSection.done}}" stepKey="clickOnDone"/>
     </actionGroup>
 </actionGroups>

@@ -13,7 +13,7 @@
             <stories value="Grouped Product Custom Stock."/>
             <title value="Re-order grouped product on custom stock from storefront."/>
             <description value="Verify, customer able to re-order grouped product assigned to custom stock."/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735287/scenarios/1583150"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735207/scenarios/1484171"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
