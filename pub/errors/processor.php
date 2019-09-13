@@ -612,7 +612,7 @@ class Processor
      */
     private function getReportDirNestingLevel(string $reportId): int
     {
-        $envName = 'MAGE_LOG_REPORT_DIR_NESTING_LEVEL';
+        $envName = 'MAGE_ERROR_REPORT_DIR_NESTING_LEVEL';
         $value = $_ENV[$envName] ?? getenv($envName);
         if(false === $value && property_exists($this->_config, 'dir_nesting_level')) {
             $value = $this->_config->dir_nesting_level;

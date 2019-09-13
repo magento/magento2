@@ -19,7 +19,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->processor = $this->createProcessor();
     }
@@ -28,7 +28,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      * {@inheritdoc}
      * @throws \Exception
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $reportDir = $this->processor->_reportDir;
         $this->removeDirRecursively($reportDir);
@@ -45,7 +45,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         int $logReportDirNestingLevelChanged,
         string $exceptionMessage
     ) {
-        $_ENV['MAGE_LOG_REPORT_DIR_NESTING_LEVEL'] = $logReportDirNestingLevel;
+        $_ENV['MAGE_ERROR_REPORT_DIR_NESTING_LEVEL'] = $logReportDirNestingLevel;
         $reportData = [
             0 => $exceptionMessage,
             1 => 'exceptionTrace',
@@ -60,7 +60,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             $this->fail("Failed to generate report id");
         }
         $this->assertEquals($expectedReportData, $processor->reportData);
-        $_ENV['MAGE_LOG_REPORT_DIR_NESTING_LEVEL'] = $logReportDirNestingLevelChanged;
+        $_ENV['MAGE_ERROR_REPORT_DIR_NESTING_LEVEL'] = $logReportDirNestingLevelChanged;
         $processor = $this->createProcessor();
         $processor->loadReport($reportId);
         $this->assertEquals($expectedReportData, $processor->reportData, "File contents of report don't match");

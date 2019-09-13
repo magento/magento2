@@ -25,7 +25,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
     /**
      * @var Filesystem
      */
-    protected $_filesystem;
+    private $filesystem;
 
     /**
      * @var LoggerInterface
@@ -48,7 +48,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
         LoggerInterface $logger
     ) {
         $this->encryptor = $encryptor;
-        $this->_filesystem = $filesystem;
+        $this->filesystem = $filesystem;
         $this->logger = $logger;
     }
 
@@ -166,7 +166,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
         $bootstrapCode = $bootstrap->getErrorCode();
         if (Bootstrap::ERR_MAINTENANCE == $bootstrapCode) {
             // phpcs:ignore Magento2.Security.IncludeFile
-            require $this->_filesystem
+            require $this->filesystem
                 ->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath('errors/503.php');
             return true;
@@ -214,7 +214,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
         if ($exception instanceof InitException) {
             $this->logger->critical($exception);
             // phpcs:ignore Magento2.Security.IncludeFile
-            require $this->_filesystem
+            require $this->filesystem
                 ->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath('errors/404.php');
             return true;
@@ -250,7 +250,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
         $reportData['report_id'] = $this->encryptor->getHash(implode('', $reportData));
         $this->logger->critical($exception, ['report_id' => $reportData['report_id']]);
         // phpcs:ignore Magento2.Security.IncludeFile
-        require $this->_filesystem
+        require $this->filesystem
             ->getDirectoryRead(DirectoryList::PUB)
             ->getAbsolutePath('errors/report.php');
         return true;
@@ -268,7 +268,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
     private function redirectToSetup(Bootstrap $bootstrap, \Exception $exception, ResponseHttp $response)
     {
         $setupInfo = new SetupInfo($bootstrap->getParams());
-        $projectRoot = $this->_filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
+        $projectRoot = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
         if ($setupInfo->isAvailable()) {
             $response->setRedirect($setupInfo->getUrl());
             $response->sendHeaders();

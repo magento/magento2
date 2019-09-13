@@ -9,7 +9,6 @@ use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Event;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
@@ -70,7 +69,7 @@ class Http implements \Magento\Framework\AppInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param Event\Manager $eventManager
+     * @param Manager $eventManager
      * @param AreaList $areaList
      * @param RequestHttp $request
      * @param ResponseHttp $response
@@ -81,7 +80,7 @@ class Http implements \Magento\Framework\AppInterface
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        Event\Manager $eventManager,
+        Manager $eventManager,
         AreaList $areaList,
         RequestHttp $request,
         ResponseHttp $response,

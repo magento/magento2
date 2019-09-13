@@ -49,17 +49,17 @@ class ExceptionHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var LoggerInterface|MockObject
      */
-    protected $loggerMock;
+    private $loggerMock;
 
     /**
      * @var ResponseHttp|MockObject
      */
-    protected $responseMock;
+    private $responseMock;
 
     /**
      * @var RequestHttp|MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     protected function setUp()
     {

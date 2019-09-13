@@ -5,81 +5,100 @@
  */
 namespace Magento\Framework\App\Test\Unit;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as HelperObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\App\Request\Http as RequestHttp;
+use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\Http as AppHttp;
+use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\App\ExceptionHandlerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\App\Route\ConfigInterface\Proxy;
+use Magento\Framework\App\Request\PathInfoProcessorInterface;
+use Magento\Framework\Stdlib\StringUtils;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var HelperObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHttp|MockObject
      */
-    protected $responseMock;
+    private $responseMock;
 
     /**
-     * @var \Magento\Framework\App\Http
+     * @var AppHttp
      */
-    protected $http;
+    private $http;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var FrontControllerInterface|MockObject
      */
-    protected $frontControllerMock;
+    private $frontControllerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
-    protected $eventManagerMock;
+    private $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var RequestHttp|MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
-    protected $objectManagerMock;
+    private $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var AreaList|MockObject
      */
-    protected $areaListMock;
+    private $areaListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigLoader|MockObject
      */
-    protected $configLoaderMock;
+    private $configLoaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ExceptionHandlerInterface|MockObject
      */
-    protected $exceptionHandlerMock;
+    private $exceptionHandlerMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $cookieReaderMock = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class)
+        $this->objectManager = new HelperObjectManager($this);
+        $cookieReaderMock = $this->getMockBuilder(CookieReaderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $routeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Route\ConfigInterface\Proxy::class)
+        $routeConfigMock = $this->getMockBuilder(Proxy::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $pathInfoProcessorMock = $this->getMockBuilder(\Magento\Framework\App\Request\PathInfoProcessorInterface::class)
+        $pathInfoProcessorMock = $this->getMockBuilder(PathInfoProcessorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
+        $converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
-        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(RequestHttp::class)
             ->setConstructorArgs(
                 [
                     'cookieReader' => $cookieReaderMock,
@@ -91,7 +110,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             )
             ->setMethods(['getFrontName', 'isHead'])
             ->getMock();
-        $this->areaListMock = $this->getMockBuilder(\Magento\Framework\App\AreaList::class)
+        $this->areaListMock = $this->getMockBuilder(AreaList::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCodeByFrontName'])
             ->getMock();
@@ -99,20 +118,20 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMock();
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
         $this->frontControllerMock = $this->getMockBuilder(\Magento\Framework\App\FrontControllerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
+        $this->eventManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $this->exceptionHandlerMock = $this->createMock(\Magento\Framework\App\ExceptionHandlerInterface::class);
+        $this->exceptionHandlerMock = $this->createMock(ExceptionHandlerInterface::class);
 
         $this->http = $this->objectManager->getObject(
-            \Magento\Framework\App\Http::class,
+            AppHttp::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'eventManager' => $this->eventManagerMock,
