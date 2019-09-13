@@ -57,6 +57,7 @@
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>
