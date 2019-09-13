@@ -725,7 +725,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function setHeaderColumns($customOptionsData, $stockItemRows)
     {
         $exportAttributes = count($this->_parameters["skip_attr"]) ?
-            $this->_getExportAttrCodes() :
+            array_intersect($this->_getExportMainAttrCodes(), $this->_getExportAttrCodes()) :
             $this->_getExportMainAttrCodes();
 
         if (!$this->_headerColumns) {
