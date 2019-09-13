@@ -117,4 +117,7 @@
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
     </entity>
+    <entity name="DefaultCategory" type="category">
+        <data key="name">Default Category</data>
+    </entity>
 </entities>
