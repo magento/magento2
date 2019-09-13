@@ -171,12 +171,6 @@ class Total extends \Magento\Framework\DataObject
         return $this->baseTotalAmounts;
     }
 
-    /**
-     * Set discount breakdown per rule
-     *
-     * @param array $data
-     */
-
     //@codeCoverageIgnoreEnd
 
     /**
