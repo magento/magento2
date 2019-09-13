@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddToOrderConfigurableProductWithTwoOptionsActionGroup" extends="AdminAddToOrderConfigurableProductActionGroup">
+        <arguments>
+            <argument name="attribute" type="string"/>
+            <argument name="secondAttribute" type="string"/>
+            <argument name="option" type="string"/>
+            <argument name="optionTwo" type="string"/>
+            <argument name="quantity" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormConfigureProductSection.optionSelectNew(secondAttribute)}}" stepKey="clickSelector2" after="selectionOption"/>
+        <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelectNew(secondAttribute)}}" userInput="{{optionTwo}}" stepKey="selectionOption2" after="clickSelector2"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+    </actionGroup>
+</actionGroups>

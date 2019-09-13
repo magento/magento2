@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderOfTheOrderWithConfigurableProductWithDropDownAttributeOnDefaultStockFromAdminTest">
+        <annotations>
+            <stories value="Reorder of the Order"/>
+            <title
+                value="Reorder of the Order with Configurable product with drop-down attribute on Default stock from Admin"/>
+            <description
+                value="Reorder of the Order with Configurable product with drop-down attribute on Default stock from Admin"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735208/scenarios/2628138"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <!-- Create first attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createFirstConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+
+            <!-- Create second attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createSecondConfigProductAttribute"/>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOptionThree">
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOptionFour">
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+            <!--Create additional source and stock.-->
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="createSource"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="createSource"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ConfigurableMsiProduct"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
+            <deleteData createDataKey="createSecondConfigProductAttribute" stepKey="deleteSecondConfigProductAttribute"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Create a configurable product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$simpleCategory.name$$]" stepKey="fillCategory"/>
+        <actionGroup ref="createConfigurationsForTwoAttributeCustomSource"
+                     stepKey="createConfigurationsWithCustomStock">
+            <argument name="attributeCode" value="$$createFirstConfigProductAttribute.attribute_code$$"/>
+            <argument name="secondAttributeCode" value="$$createSecondConfigProductAttribute.attribute_code$$"/>
+            <argument name="sourceName" value="{{_defaultSource.name}}"/>
+        </actionGroup>
+        <!-- Save configurable product -->
+        <actionGroup ref="saveProductForm" stepKey="saveConfigurableProduct"/>
+
+        <!-- Create order -->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="newOrder">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterConfigProduct">
+            <argument name="productSKU" value="{{ConfigurableMsiProduct.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddToOrderConfigurableProductWithTwoOptionsActionGroup" stepKey="addConfProduct">
+            <argument name="attribute"
+                      value="$$createFirstConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="secondAttribute"
+                      value="$$createSecondConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="option" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
+            <argument name="optionTwo"
+                      value="$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
+            <argument name="quantity" value="5"/>
+        </actionGroup>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
+
+        <!--Verify that reservation '-5' items of 'Configurable product 1-red' on Default stock is created correctly -->
+        <amOnPage url="{{AdminProductIndexPage.url}}"
+                  stepKey="navigateToProductIndexPageForCheckProductQty"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput"
+                     stepKey="findVirtualProductBySkuToCheckQty">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value"
+                      value="{{ConfigurableMsiProduct.sku}}-$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$-$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}"
+             userInput="100" stepKey="checkProductSourceQty"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}"
+             userInput="95" stepKey="checkSalableQty"/>
+
+        <!-- Open Order Index Page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders1"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+
+        <!-- Filter Order using orderId -->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById1">
+            <argument name="orderId" value="$getOrderId"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction1"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <!-- Reorder the product -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickOnReorderButton"/>
+        <waitForPageLoad stepKey="waitForReorderFormToLoad"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder1"/>
+
+        <!--Verify that reservation '-5' items of 'Configurable product 1-red' on Default stock is created correctly -->
+        <amOnPage url="{{AdminProductIndexPage.url}}"
+                  stepKey="navigateToProductIndexPageForCheckProductQtyAfterReorder"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput"
+                     stepKey="findProductBySkuToCheckQtyAfterReorder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value"
+                      value="{{ConfigurableMsiProduct.sku}}-$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$-$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}"
+             userInput="100" stepKey="checkProductSourceQtyAfterReorder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}"
+             userInput="90" stepKey="checkSalableQtyAfterReorder"/>
+    </test>
+</tests>

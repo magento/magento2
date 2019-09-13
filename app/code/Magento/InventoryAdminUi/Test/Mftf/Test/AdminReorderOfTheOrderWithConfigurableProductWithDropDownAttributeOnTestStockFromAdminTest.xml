@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderOfTheOrderWithConfigurableProductWithDropDownAttributeOnTestStockFromAdminTest"
+          extends="AdminReorderOfTheOrderWithConfigurableProductWithDropDownAttributeOnDefaultStockFromAdminTest">
+        <annotations>
+            <stories value="Reorder of the Order"/>
+            <title
+                value="Reorder of the Order with Configurable product with drop-down attribute on Test stock from Admin."/>
+            <description
+                value="Reorder of the Order with Configurable product with drop-down attribute on Test stock from Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735208/scenarios/1482690"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="createSource"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="logoutOfAdmin1">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </after>
+
+        <remove keyForRemoval="createConfigurationsWithCustomStock"/>
+        <!-- Configurable Product with drop-down attribute created and its variables assigned to Test Stock in admin -->
+        <actionGroup ref="createConfigurationsForTwoAttributeCustomSource"
+                     stepKey="createConfigurationsWithCustomStock"
+                     before="saveConfigurableProduct">
+            <argument name="attributeCode" value="$$createFirstConfigProductAttribute.attribute_code$$"/>
+            <argument name="secondAttributeCode" value="$$createSecondConfigProductAttribute.attribute_code$$"/>
+            <argument name="sourceName" value="$$createSource.source[name]$$"/>
+        </actionGroup>
+
+        <!--Verify that reservation '-5' items of 'Configurable product 1-red' on Custom stock is created correctly -->
+        <remove keyForRemoval="checkProductSourceQty"/>
+        <remove keyForRemoval="checkSalableQty"/>
+
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource.source[name]$$)}}"
+             userInput="100" stepKey="checkProductSourceQty" after="goToOrders1"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}"
+             userInput="95" stepKey="checkSalableQty" after="checkProductSourceQty"/>
+
+        <!--Verify that reservation '-5' items of 'Configurable product 1-red' on Test stock is created correctly -->
+        <remove keyForRemoval="checkProductSourceQtyAfterReorder"/>
+        <remove keyForRemoval="checkSalableQtyAfterReorder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource.source[name]$$)}}"
+             userInput="100" stepKey="checkProductSourceQtyAfterReorder" after="findProductBySkuToCheckQtyAfterReorder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}"
+             userInput="90" stepKey="checkSalableQtyAfterReorder" after="checkProductSourceQtyAfterReorder"/>
+    </test>
+</tests>

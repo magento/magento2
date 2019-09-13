@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontButtonReorderForTheOrderWithConfigurableProductOnDefaultStockInCustomerCabinetOnHomepageIsNotPresentIfProductSoldOutTest">
+        <annotations>
+            <stories value="Configurable Product Custom Stock."/>
+            <title
+                value="Button 'Reorder' for the Order with Configurable product on Default stock in customer cabinet on Homepage is not present if product sold out."/>
+            <description
+                value="Button 'Reorder' for the Order with Configurable product on Default stock in customer cabinet on Homepage is not present if product sold out."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735208/scenarios/2630678"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="createSource"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="createSource"/>
+            </createData>
+            <!-- Create first attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createFirstConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+
+            <!-- Create second attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createSecondConfigProductAttribute"/>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOptionThree">
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOptionFour">
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ConfigurableMsiProduct"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
+            <deleteData createDataKey="createSecondConfigProductAttribute" stepKey="deleteSecondConfigProductAttribute"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Create a configurable product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$simpleCategory.name$$]" stepKey="fillCategory"/>
+        <actionGroup ref="createConfigurationsForTwoAttributeCustomSource"
+                     stepKey="createConfigurationsWithCustomStock">
+            <argument name="attributeCode" value="$$createFirstConfigProductAttribute.attribute_code$$"/>
+            <argument name="secondAttributeCode" value="$$createSecondConfigProductAttribute.attribute_code$$"/>
+            <argument name="sourceName" value="{{_defaultSource.name}}"/>
+        </actionGroup>
+
+        <!-- Save configurable product -->
+        <actionGroup ref="saveProductForm" stepKey="saveConfigurableProduct"/>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <!-- Add Configurable Product to the cart -->
+        <actionGroup ref="StorefrontAddConfigurableProductWithTwoAttributesToTheCartActionGroup" stepKey="addConfigurableProductToCart" >
+            <argument name="urlKey" value="{{ConfigurableMsiProduct.urlKey}}" />
+            <argument name="productAttribute" value="$$createFirstConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="secondProductAttribute" value="$$createSecondConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="productOption" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
+            <argument name="secondProductOption" value="$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
+            <argument name="qty" value="100"/>
+        </actionGroup>
+
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout" />
+        <click selector=".continue" stepKey="clickOnNextPaymentPage" />
+        <waitForPageLoad stepKey="waitForPageLoadCheckout1" />
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder" />
+        <waitForPageLoad stepKey="waitUntilOrderPlaced" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderId" />
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage" />
+
+        <!-- Shipment created for whole  order -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMask"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$getOrderId}" stepKey="searchOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchShipping"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMask"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForShipLoadingMask"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
+
+        <!--Verify reorder button is not visible-->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage" />
+        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage" >
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+        <dontSeeElement selector="//td[text()='{$getOrderId}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="verifyReorderButton"/>
+    </test>
+</tests>
