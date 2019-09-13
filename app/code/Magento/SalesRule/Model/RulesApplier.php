@@ -12,7 +12,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 
 /**
- * Class RulesApplier
+ * Rules Applier Model
  *
  * @package Magento\SalesRule\Model\Validator
  */
@@ -201,7 +201,7 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return $this
      */
-    protected function setDiscountBreakdown($discountData, $item, $rule)
+    private function setDiscountBreakdown($discountData, $item, $rule)
     {
         /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
         $discount = $this->discountFactory->create();

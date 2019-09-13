@@ -40,9 +40,9 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     protected $priceCurrency;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory
+     * @var DataFactory
      */
-    protected $discountFactory;
+    private $discountFactory;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -245,13 +245,13 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $discountBreakdown = $item->getDiscountBreakdown();
         if ($discountBreakdown) {
             foreach ($discountBreakdown as $key => $value) {
-                $discountPerRule = $total->getDiscountPerRule() ?? [];
+                $discountPerRule = $total->getDiscounts() ?? [];
                 /**
                  * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount
                  */
                 $discount = $value['discount'];
                 $rule = $value['rule'];
-                if (array_key_exists($key, $discountPerRule)) {
+                if (isset($discountPerRule[$key])) {
                     /**
                      * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $ruleDiscount
                      */
@@ -272,7 +272,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     $discountPerRule[$key]['discount'] = $discount;
                     $discountPerRule[$key]['rule'] = $rule;
                 }
-                $total->setDiscountPerRule($discountPerRule);
+                $total->setDiscounts($discountPerRule);
             }
         }
         return $this;

@@ -92,13 +92,9 @@ class CartItemPrices implements ResolverInterface
         foreach ($cartItem->getDiscountBreakdown() as $value) {
             $discount = [];
             $amount = [];
-            /**
-             * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-             */
+            /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
             $discountData = $value['discount'];
-            /**
-             * @var \Magento\SalesRule\Model\Rule $rule $rule
-             */
+            /* @var \Magento\SalesRule\Model\Rule $rule */
             $rule = $value['rule'];
             $discount['label'] = $rule->getStoreLabel($cartItem->getQuote()->getStore()) ?: __('Discount');
             $amount['value'] = $discountData->getAmount();
