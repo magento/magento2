@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialCreditMemoFullInvoiceConfigurableProductCustomStockTest">
+        <annotations>
+            <stories value="Configurable Product Custom Stock."/>
+            <title value="Create Credit Memo with Partial Refund with Full Invoice on Custom Stock."/>
+            <description value="Verify, admin able to create credit memo with partial refund with full invoice on custom stock with configurable product."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735184/scenarios/1477647"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create customer and category-->
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <!--Create configurable product.-->
+            <createData entity="ApiConfigurableProduct" stepKey="configurableProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <!--Create configurable variation.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <amOnPage url="{{AdminProductEditPage.url($$configurableProduct.id$$)}}" stepKey="openConfigurableProductEditPage"/>
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton"/>
+            <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="selectColorAttribute"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStep"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorWhite"/>
+            <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameWhite"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveWhiteColor"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+            <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="openSelectSourcesModalWindow"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchAdditionalSourceByNameForAssignment">
+                <argument name="keyword" value="$$additionalSource.source[name]$$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($$additionalSource.source[name]$$)}}" stepKey="selectAdditionalSource"/>
+            <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="daneAssignSources"/>
+            <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="100" stepKey="fillQuantityForAdditionalSource"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProduct"/>
+            <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessage"/>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource1">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+            <deleteData createDataKey="configurableProduct" stepKey="deleteConfigurableProduct"/>
+        </after>
+
+        <!-- Login as Customer and add Product to Cart-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!--Add configurable option to cart.-->
+        <amOnPage url="$$configurableProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
+        <selectOption selector="{{StorefrontConfigurableProductPage.productAttributeDropDown}}" userInput="{{colorProductAttribute1.name}}" stepKey="selectWhiteVariation"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="5" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <!-- Place Order -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="checkMoneyOrderPayment"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--Create full invoice.-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNumInvoice"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskGridForInvoice"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad stepKey="waitPageToBeLoaded"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadSubmitInvoice"/>
+        <scrollToTopOfPage stepKey="scrollToTopMessage"/>
+        <waitForPageLoad stepKey="waitForPageLoadSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="verifyOrderStatus"/>
+        <!--Create Partial Credit Memo-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="1" stepKey="partialRefund"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund"/>
+        <waitForLoadingMaskToDisappear stepKey="updateQuantityLoadingMask"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmit"/>
+        <!--Verify product quantity.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGridAfterCreditMemo"/>
+        <waitForPageLoad time="30" stepKey="waitForGridLoadAfterCreditMemo"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProductForQuantityCheckAfterCreditMemo">
+            <argument name="selector" value="AdminProductGridFilterSection.nameFilter"/>
+            <argument name="value" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{colorProductAttribute1.name}}" stepKey="verifyWhiteVariationName"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$configurableProduct.price$$" stepKey="verifyWhiteVariationPrice"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$additionalSource.source[name]$$: 100" stepKey="verifyWhiteVariationQuantityForSource"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$additionalStock.stock[name]$$: 96" stepKey="verifyWhiteVariationQuantityForStock"/>
+    </test>
+</tests>
+

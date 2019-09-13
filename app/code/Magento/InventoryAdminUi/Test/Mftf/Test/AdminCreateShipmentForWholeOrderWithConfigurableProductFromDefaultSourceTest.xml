@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateShipmentForWholeOrderWithConfigurableProductFromDefaultSourceTest" extends="AdminCreateShipmentForWholeOrderWithConfigurableProductFromCustomSourceTest">
+        <annotations>
+            <stories value="Configurable Product Default Stock"/>
+            <title value="Admin user created shipment for whole order with Configurable product from default source and Main Website"/>
+            <description value="admin user should be able to create shipment for whole order with configurable product on default Source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735184/scenarios/2131592"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="createStock"/>
+            <remove keyForRemoval="assignSourceToStock1"/>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="loginAsAdmin">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+
+            <!--Assign default stock to configurable product variations.-->
+            <remove keyForRemoval="searchCustomSourceByNameForAssignment"/>
+            <remove keyForRemoval="selectCustomSource1"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchDefaultSourceByNameForAssignment" after="clearSourcesFilter">
+                <argument name="keyword" value="_defaultSource.name"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue(_defaultSource.name)}}" stepKey="selectDefaultSource" after="searchDefaultSourceByNameForAssignment"/>
+        </before>
+        <after>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+            <remove keyForRemoval="deleteCustomStock"/>
+        </after>
+
+        <!--Verify product quantity.-->
+        <remove keyForRemoval="seeProductQuantityInGridSource1"/>
+        <remove keyForRemoval="seeProductSalableQuantityInGridSource"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{_defaultSource.name}}: 95" stepKey="verifyDefaultSourceQuantity" after="seeProductPriceInGrid"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="{{_defaultStock.name}}: 95" stepKey="verifyDefaultStockQuantity" after="verifyDefaultSourceQuantity"/>
+    </test>
+</tests>
+

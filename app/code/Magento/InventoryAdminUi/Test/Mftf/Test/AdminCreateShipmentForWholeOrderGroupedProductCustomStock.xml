@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateShipmentForWholeOrderGroupedProductCustomStock" extends="AdminCreateCreditMemoTotalRefundGroupedProductDefaultStock">
+        <annotations>
+            <stories value="Grouped Product Custom Stock."/>
+            <title value="Create Shipment for Grouped product on Custom stock."/>
+            <description value="Verify, admin able to create shipment for grouped product on custom source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735289/scenarios/1479707"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="product"/>
+            <createData entity="_defaultCategory" stepKey="category" after="groupedProduct"/>
+            <createData entity="SimpleProduct" stepKey="product" after="category">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <!--Create additional stock and link additional source to stock.-->
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="additionalSource"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="disableSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="additionalStock" after="logoutOfAdmin" stepKey="deleteStock"/>
+            <deleteData createDataKey="category" after="deleteStock" stepKey="deleteCategory"/>
+        </after>
+
+        <!--Assign simple product to additional source.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openVirtualProductEditPage" before="assignTestSourceToCreatedProduct"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct" before="setCustomSourceQuantity">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setCustomSourceQuantity" before="saveSimpleProduct"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveSimpleProduct" before="openGroupedProductEditPage"/>
+        <!--Place order.-->
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext" after="waitForCheckoutPage"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton" after="clickNext"/>
+        <!--Verify product quantity after order placement.-->
+        <remove keyForRemoval="checkProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder" after="findProductBySkuToCheckQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $additionalStock.stock[name]$$)}}" userInput="98" stepKey="checkSalableQtyAfterPlaceOrder" after="checkProductSourceQtyAfterPlaceOrder"/>
+        <!--Admin Area Process Partial Shipment.-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="checkSuccessMessage"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="clickShipAction"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkShipmentSuccessMessage" after="clickSubmitShipment"/>
+        <!--Remove Credit Memo creation.-->
+        <remove keyForRemoval="onOrdersPageToCreateCreditMemo"/>
+        <remove keyForRemoval="waitForOrdersPageLoadingMaskCreditMemo"/>
+        <remove keyForRemoval="searchOrderNumCreditMemo"/>
+        <remove keyForRemoval="submitSearchCreditMemo"/>
+        <remove keyForRemoval="waitForSubmitSearchLoadingMaskCreditMemo"/>
+        <remove keyForRemoval="clickOrderRowCreditMemo"/>
+        <remove keyForRemoval="clickCreditMemo"/>
+        <remove keyForRemoval="updateQuantityLoadingMask"/>
+        <remove keyForRemoval="clickSubmit"/>
+        <!--Verify product quantity.-->
+        <remove keyForRemoval="checkProductSourceQtyAfterCreditMemo"/>
+        <remove keyForRemoval="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource.source[name]$$)}}" userInput="98" stepKey="checkProductSourceQtyAfterCreditMemo" after="findProductBySkuToCheckQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="98" stepKey="checkSalableQtyAfterCreditMemo" after="checkProductSourceQtyAfterCreditMemo"/>
+    </test>
+</tests>

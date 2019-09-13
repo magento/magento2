@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateFullInvoiceForOrderWithDownloadableProductOnCustomStockTest" extends="AdminCreateFullInvoiceForOrderWithSimpleProductOnCustomStockTest">
+        <annotations>
+            <stories value="Downloadable product Custom Stock"/>
+            <title value="Full Invoice with downloadable product on custom stock."/>
+            <description value="Admin user create Invoice for whole order with Downloadable product on Custom stock from Main Website"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735234/scenarios/1855455"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="simpleProduct"/>
+            <!-- Create downloadable Product -->
+            <createData entity="DownloadableProductWithTwoLink100" stepKey="simpleProduct" after="cleanCache">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink1" after="simpleProduct">
+                <requiredEntity createDataKey="simpleProduct"/>
+            </createData>
+            <createData entity="downloadableLink2" stepKey="addDownloadableLink2" after="addDownloadableLink1">
+                <requiredEntity createDataKey="simpleProduct"/>
+            </createData>
+        </before>
+
+        <remove keyForRemoval="seeOrderSubTotal"/>
+        <remove keyForRemoval="selectShippingMethodComment"/>
+        <remove keyForRemoval="selectFlatRateShipping"/>
+        <remove keyForRemoval="seeOrderShipping"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="$50.99" stepKey="seeOrderSubTotal" after="waitForPageLoadOrder"/>
+        <remove keyForRemoval="checkOrderStatus"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="checkOrderStatus" after="checkSuccessMessage"/>
+    </test>
+</tests>

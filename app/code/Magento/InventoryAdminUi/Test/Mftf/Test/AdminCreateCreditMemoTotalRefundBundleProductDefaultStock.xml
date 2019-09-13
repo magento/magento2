@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoTotalRefundBundleProductDefaultStock" extends="AdminCreateCreditMemoTotalRefundBundleProductCustomStock">
+        <annotations>
+            <stories value="Bundle Product Default Stock."/>
+            <title value="Create Credit Memo with Bundle product on Default stock."/>
+            <description value="Verify, admin able to create Credit Memo with total refund. Bundle product on Default source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735178/scenarios/2556386"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Remove additional stock and link.-->
+            <remove keyForRemoval="additionalStock"/>
+            <remove keyForRemoval="sourceStockLink"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="loginAsAdmin">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+            <remove keyForRemoval="deleteStock"/>
+        </after>
+
+        <!--Set 'Default' Source quantity.-->
+        <remove keyForRemoval="assignTestSourceToCreatedProduct"/>
+        <remove keyForRemoval="setCustomSourceQuantity"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setDefaultSourceQuantity" after="openVirtualProductEditPage"/>
+        <!--Verify product quantity after order has been placed.-->
+        <remove keyForRemoval="checkProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="100" stepKey="checkProductSourceQtyAfterPlaceOrder" after="findProductBySkuToCheckQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}" userInput="90" stepKey="checkSalableQtyAfterPlaceOrder" after="checkProductSourceQtyAfterPlaceOrder"/>
+        <!--Verify product quantity after invoice gas been created.-->
+        <remove keyForRemoval="checkProductSourceQtyAfterCreditMemo"/>
+        <remove keyForRemoval="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="90" stepKey="checkProductSourceQtyAfterCreditMemo" after="findProductBySkuToCheckQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}" userInput="90" stepKey="checkSalableQtyAfterCreditMemo" after="checkProductSourceQtyAfterCreditMemo"/>
+    </test>
+</tests>
