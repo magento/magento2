@@ -28,6 +28,7 @@
                 </field>
                 <field id="configuration_update_time" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Environment Update Time</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
             </group>
         </section>
