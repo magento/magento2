@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Widget to display catalog link
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Widget;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * Render the URL of given entity
+ */
 class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento\Widget\Block\BlockInterface
 {
     /**
@@ -63,10 +61,9 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
 
     /**
      * Prepare url using passed id path and return it
-     * or return false if path was not found in url rewrites.
      *
      * @throws \RuntimeException
-     * @return string|false
+     * @return string|false if path was not found in url rewrites.
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getHref()
@@ -93,13 +90,29 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
             if ($rewrite) {
                 $href = $store->getUrl('', ['_direct' => $rewrite->getRequestPath()]);
 
-                if (strpos($href, '___store') === false) {
+                if ($this->addStoreCodeParam($store, $href)) {
                     $href .= (strpos($href, '?') === false ? '?' : '&') . '___store=' . $store->getCode();
                 }
             }
             $this->_href = $href;
         }
         return $this->_href;
+    }
+
+    /**
+     * Checks whether store code query param should be appended to the URL
+     *
+     * @param \Magento\Store\Model\Store $store
+     * @param string $url
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function addStoreCodeParam(\Magento\Store\Model\Store $store, string $url): bool
+    {
+        return $this->getStoreId()
+            && !$store->isUseStoreInUrl()
+            && $store->getId() !==  $this->_storeManager->getStore()->getId()
+            && strpos($url, '___store') === false;
     }
 
     /**
@@ -121,6 +134,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
 
     /**
      * Prepare label using passed text as parameter.
+     *
      * If anchor text was not specified get entity name from DB.
      *
      * @return string
@@ -150,9 +164,8 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
 
     /**
      * Render block HTML
-     * or return empty string if url can't be prepared
      *
-     * @return string
+     * @return string empty string if url can't be prepared
      */
     protected function _toHtml()
     {
