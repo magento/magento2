@@ -11,5 +11,11 @@
         <element name="filterByAttributeCode" type="input" selector="#export_filter_grid_filter_attribute_code"/>
         <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="search" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="chooseAttribute" type="checkbox" selector="//*[@name='export_filter[{{var}}]']/ancestor::tr//input[@type='checkbox']" parameterized="true"/>
+        <element name="fillFilter" type="input" selector="//*[@name='export_filter[{{var}}]']/ancestor::tr//input[@type='text']" parameterized="true"/>
+        <element name="continueBtn" type="button" selector="//*[@id='export_filter_container']/button" timeout="30"/>
+        <element name="selectByIndex" type="button" selector="//tr[@data-repeat-index='{{var}}']//button" parameterized="true" timeout="30"/>
+        <element name="download" type="button" selector="//tr[@data-repeat-index='{{var}}']//a[text()='Download']" parameterized="true" timeout="30"/>
+        <element name="delete" type="button" selector="//tr[@data-repeat-index='{{var}}']//a[text()='Delete']" parameterized="true" timeout="30"/>
     </section>
 </sections>

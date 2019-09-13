@@ -1,12 +1,13 @@
 <?php
 /**
- * Default configuration data reader. Reads configuration data from storage
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config\Initial;
 
+/**
+ * Default configuration data reader. Reads configuration data from storage
+ */
 class Reader
 {
     /**
@@ -52,12 +53,16 @@ class Reader
     protected $_schemaFile;
 
     /**
+     * @var \Magento\Framework\Config\DomFactory
+     */
+    private $domFactory;
+
+    /**
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
      * @param \Magento\Framework\Config\ConverterInterface $converter
      * @param SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\DomFactory $domFactory
      * @param string $fileName
-     * @param string $domDocumentClass
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

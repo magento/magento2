@@ -13,6 +13,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Product Test
@@ -40,7 +41,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManager;
 
@@ -208,6 +209,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $eavConfig;
 
     /**
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManager;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -215,7 +221,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->categoryIndexerMock = $this->getMockForAbstractClass(\Magento\Framework\Indexer\IndexerInterface::class);
 
         $this->moduleManager = $this->createPartialMock(
-            \Magento\Framework\Module\Manager::class,
+            \Magento\Framework\Module\ModuleManagerInterface::class,
             ['isEnabled']
         );
         $this->extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
@@ -303,13 +309,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $storeManager->expects($this->any())
+        $this->storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->store));
-        $storeManager->expects($this->any())
+        $this->storeManager->expects($this->any())
             ->method('getWebsite')
             ->will($this->returnValue($this->website));
         $this->indexerRegistryMock = $this->createPartialMock(
@@ -394,7 +400,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 'extensionFactory' => $this->extensionAttributesFactory,
                 'productPriceIndexerProcessor' => $this->productPriceProcessor,
                 'catalogProductOptionFactory' => $optionFactory,
-                'storeManager' => $storeManager,
+                'storeManager' => $this->storeManager,
                 'resource' => $this->resource,
                 'registry' => $this->registry,
                 'moduleManager' => $this->moduleManager,
@@ -450,6 +456,48 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedStoreIds, $this->model->getStoreIds());
     }
 
+    /**
+     * @dataProvider getSingleStoreIds
+     * @param bool $isObjectNew
+     */
+    public function testGetStoreSingleSiteModelIds(
+        bool $isObjectNew
+    ) {
+        $websiteIDs = [0 => 2];
+        $this->model->setWebsiteIds(
+            !$isObjectNew ? $websiteIDs : array_flip($websiteIDs)
+        );
+
+        $this->model->isObjectNew($isObjectNew);
+
+        $this->storeManager->expects(
+            $this->exactly(
+                (int) !$isObjectNew
+            )
+        )
+            ->method('isSingleStoreMode')
+            ->will($this->returnValue(true));
+
+        $this->website->expects(
+            $this->once()
+        )->method('getStoreIds')
+            ->will($this->returnValue($websiteIDs));
+
+        $this->assertEquals($websiteIDs, $this->model->getStoreIds());
+    }
+
+    public function getSingleStoreIds()
+    {
+        return [
+          [
+              false
+          ],
+          [
+              true
+          ],
+        ];
+    }
+
     public function testGetStoreId()
     {
         $this->model->setStoreId(3);
@@ -484,9 +532,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $abstractDbMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->setMethods(
+                [
                 'getCategoryCollection',
-            ])
+                ]
+            )
             ->getMockForAbstractClass();
         $getCategoryCollectionMock = $this->createMock(
             \Magento\Framework\Data\Collection::class
@@ -1217,7 +1267,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMediaGalleryImagesMerging()
     {
-        $mediaEntries = [
+        $mediaEntries =
+            [
             'images' => [
                 [
                     'value_id' => 1,
@@ -1233,24 +1284,28 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                     'file' => 'smallImageFile.jpg',
                     'media_type' => 'image',
                 ],
-            ]
-        ];
-        $expectedImageDataObject = new \Magento\Framework\DataObject([
+                ]
+            ];
+        $expectedImageDataObject = new \Magento\Framework\DataObject(
+            [
             'value_id' => 1,
             'file' => 'imageFile.jpg',
             'media_type' => 'image',
             'url' => 'http://magento.dev/pub/imageFile.jpg',
             'id' => 1,
             'path' => '/var/www/html/pub/imageFile.jpg',
-        ]);
-        $expectedSmallImageDataObject = new \Magento\Framework\DataObject([
+            ]
+        );
+        $expectedSmallImageDataObject = new \Magento\Framework\DataObject(
+            [
             'value_id' => 2,
             'file' => 'smallImageFile.jpg',
             'media_type' => 'image',
             'url' => 'http://magento.dev/pub/smallImageFile.jpg',
             'id' => 2,
             'path' => '/var/www/html/pub/smallImageFile.jpg',
-        ]);
+            ]
+        );
 
         $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $directoryMock->method('getAbsolutePath')->willReturnOnConsecutiveCalls(

@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogImportExport\Test\TestCase\ExportProductsTest" summary="Export products">
         <variation name="ExportProductsTestVariation1" summary="Export simple product and configured products with assigned images" ticketId="MAGETWO-46112">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
@@ -27,6 +28,7 @@
             </data>
         </variation>
         <variation name="ExportProductsTestVariation2" summary="Export simple and configured products with custom options" ticketId="MAGETWO-46113, MAGETWO-46109">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
@@ -43,6 +45,7 @@
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertExportProductDate" />
         </variation>
         <variation name="ExportProductsTestVariation3" summary="Export simple product with custom attribute" ticketId="MAGETWO-46121">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
@@ -58,7 +61,7 @@
             </data>
         </variation>
         <variation name="ExportProductsTestVariation5" summary="Export simple product assigned to Main Website and configurable product assigned to Custom Website" ticketId="MAGETWO-46114">
-            <data name="issue" xsi:type="string">>MC-13864 Consumer always read config from memory</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>

@@ -7,6 +7,9 @@ namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 
+/**
+ * Test for Magento\Sales\Model\Order\Email\Sender\InvoiceSender class.
+ */
 class InvoiceSenderTest extends AbstractSenderTest
 {
     /**
@@ -54,7 +57,7 @@ class InvoiceSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -90,7 +93,7 @@ class InvoiceSenderTest extends AbstractSenderTest
 
         $this->invoiceMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -136,11 +139,15 @@ class InvoiceSenderTest extends AbstractSenderTest
                     ]
                 );
 
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
+                $this->identityContainerMock->expects($this->once())
+                    ->method('getCopyMethod')
+                    ->willReturn('copy');
+
                 $this->senderBuilderFactoryMock->expects($this->once())
                     ->method('create')
                     ->willReturn($this->senderMock);
@@ -212,7 +219,7 @@ class InvoiceSenderTest extends AbstractSenderTest
 
         $this->invoiceMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with(false);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -247,7 +254,7 @@ class InvoiceSenderTest extends AbstractSenderTest
                 ]
             );
 
-        $this->identityContainerMock->expects($this->once())
+        $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);
 

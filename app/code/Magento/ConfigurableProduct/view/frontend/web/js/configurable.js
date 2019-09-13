@@ -26,9 +26,9 @@ define([
             state: {},
             priceFormat: {},
             optionTemplate: '<%- data.label %>' +
-            '<% if (typeof data.finalPrice.value !== "undefined") { %>' +
-            ' <%- data.finalPrice.formatted %>' +
-            '<% } %>',
+                '<% if (typeof data.finalPrice.value !== "undefined") { %>' +
+                ' <%- data.finalPrice.formatted %>' +
+                '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',

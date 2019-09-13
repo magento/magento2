@@ -30,6 +30,7 @@
             </data>
         </variation>
         <variation name="ExportProductsTestVariation8" summary="Export simple and configured products with custom options" ticketId="MAGETWO-46113, MAGETWO-46109">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/1" xsi:type="array">
                 <item name="fixture" xsi:type="string">configurableProduct</item>
@@ -45,7 +46,7 @@
             </data>
         </variation>
         <variation name="ExportProductsTestVariation9" summary="Export simple product assigned to Main Website and configurable product assigned to Custom Website" ticketId="MAGETWO-46114">
-            <data name="issue" xsi:type="string">>MC-13864 Consumer always read config from memory</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/1" xsi:type="array">
                 <item name="fixture" xsi:type="string">configurableProduct</item>

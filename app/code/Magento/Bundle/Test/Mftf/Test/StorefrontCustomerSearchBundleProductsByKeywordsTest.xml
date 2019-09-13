@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerSearchBundleProductsByKeywordsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle products list on Storefront"/>
+            <title value="Customer should be able to see search results when searching for bundle products by keyword"/>
+            <description value="Customer should be able to see search results when searching for bundle products by keyword"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-227"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProductNotVisibleIndividually" stepKey="createSimpleProduct"/>
+            <createData entity="DynamicBundleProductCustomDescription" stepKey="createDynamicBundle"/>
+            <createData entity="DropDownBundleOption" stepKey="dynamicBundleOption">
+                <requiredEntity createDataKey="createDynamicBundle"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createDynamicBundleLink">
+                <requiredEntity createDataKey="createDynamicBundle"/>
+                <requiredEntity createDataKey="dynamicBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="SimpleProductNotVisibleIndividually" stepKey="createSimpleProductTwo"/>
+            <createData entity="FixedBundleProductCustomDescription" stepKey="createFixedBundle"/>
+            <createData entity="DropDownBundleOption" stepKey="fixedBundleOption">
+                <requiredEntity createDataKey="createFixedBundle"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createFixedBundleLink">
+                <requiredEntity createDataKey="createFixedBundle"/>
+                <requiredEntity createDataKey="fixedBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProductTwo"/>
+            </createData>
+            <magentoCLI command="indexer:reindex" arguments="cataloginventory_stock catalogsearch_fulltext" stepKey="reindex"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createDynamicBundle" stepKey="deleteDynamicBundleProduct"/>
+            <deleteData createDataKey="createFixedBundle" stepKey="deleteFixedBundleProduct"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleProductTwo" stepKey="createSimpleProductTwo"/>
+        </after>
+        <!-- 1. Go to storefront home page -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <!-- 2. Fill quick search bar with test values unique for dynamic bundle product and click search -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchDynamic">
+            <argument name="phrase" value="Dynamic"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="assertDynamicBundleInSearchResultByDynamic">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGrid" stepKey="assertFixedBundleInSearchResultByDynamic">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByDescription">
+            <argument name="phrase" value="Dynamicscription"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="assertDynamicBundleInSearchResultByDescription">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGrid" stepKey="dontSeeFixedBundleInSearchResultByDescription">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchShortDescription">
+            <argument name="phrase" value="Dynamictest"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="assertDynamicBundleInSearchResultByShortDescription">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGrid" stepKey="dontSeeFixedBundleInSearchResultByShortDescription">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <!-- 3. Fill quick search bar with test values mutual for both products and click search -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchTest123">
+            <argument name="phrase" value="Test 123"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeDynamicBundleByTest123">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeFixedBundleByTest123">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchTesting321">
+            <argument name="phrase" value="Testing 321"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeDynamicBundleByTesting321">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeFixedBundleByTesting321">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchShort555">
+            <argument name="phrase" value="Short 555"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeDynamicBundleByShort555">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeFixedBundleByShort555">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <!-- 4. Fill quick search bar with test values unique for fixed bundle product and click search -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByFixed">
+            <argument name="phrase" value="Fixed"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeFixedBundleByFixed">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGrid" stepKey="dontSeeDynamicBundleByFixed">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByDescriptionForFixed">
+            <argument name="phrase" value="Fixedscription"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeFixedBundleByDescriptionForFixed">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGrid" stepKey="dontSeeDynamicProductByDescriptionForFixed">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByShortDescriptionForFixed">
+            <argument name="phrase" value="Fixedtest"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByName" stepKey="seeFixedBundleByShortDescriptionForFixed">
+            <argument name="productName" value="$createFixedBundle.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGrid" stepKey="dontSeeDynamicBundleByShortDescriptionForFixed">
+            <argument name="productName" value="$createDynamicBundle.name$"/>
+        </actionGroup>
+    </test>
+</tests>

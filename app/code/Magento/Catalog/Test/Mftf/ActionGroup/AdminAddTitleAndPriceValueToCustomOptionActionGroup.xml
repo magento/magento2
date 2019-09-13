@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add value, value title and value price to custom options (type: drop-down, checkbox, multiple select, radio buttons) -->
+    <actionGroup name="AdminAddTitleAndPriceValueToCustomOptionActionGroup">
+        <annotations>
+            <description>Clicks on 'Add Option'. Fills in the provided Custom Option Title/Type on the Admin Product creation/edit page under the 'Customizable Options' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="optionValue" type="entity"/>
+        </arguments>
+        
+        <click stepKey="clickAddValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+        <fillField stepKey="fillInValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{optionValue.title}}"/>
+        <fillField stepKey="fillInValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{optionValue.price}}"/>
+    </actionGroup>
+</actionGroups>

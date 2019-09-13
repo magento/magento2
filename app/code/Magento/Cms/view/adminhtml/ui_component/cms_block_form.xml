@@ -111,7 +111,7 @@
                 <dataScope>identifier</dataScope>
             </settings>
         </field>
-        <field name="storeviews" formElement="multiselect">
+        <field name="storeviews" formElement="multiselect" class="Magento\Store\Ui\Component\Form\Field\StoreView">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">block</item>
@@ -123,6 +123,10 @@
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>int</dataType>
+                <tooltip>
+                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <description>What is this?</description>
+                </tooltip>
                 <label translate="true">Store View</label>
                 <dataScope>store_id</dataScope>
             </settings>
@@ -144,9 +148,6 @@
                 <additionalClasses>
                     <class name="admin__field-wide">true</class>
                 </additionalClasses>
-                <validation>
-                    <rule name="required-entry" xsi:type="boolean">true</rule>
-                </validation>
                 <label/>
                 <dataScope>content</dataScope>
             </settings>

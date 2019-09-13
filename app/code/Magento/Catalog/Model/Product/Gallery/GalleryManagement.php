@@ -105,7 +105,10 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
             if ($existingEntry->getId() == $entry->getId()) {
                 $found = true;
-                if ($entry->getFile()) {
+
+                $file = $entry->getContent();
+
+                if ($file && $file->getBase64EncodedData() || $entry->getFile()) {
                     $entry->setId(null);
                 }
                 $existingMediaGalleryEntries[$key] = $entry;

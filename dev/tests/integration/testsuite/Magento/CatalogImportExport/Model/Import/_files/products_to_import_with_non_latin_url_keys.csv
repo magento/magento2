@@ -1,0 +1,5 @@
+sku,product_type,store_view_code,name,price,attribute_set_code,url_key
+imported-ukrainian-with-url-key,simple,,"Імпортований продукт з Url Key",50,Default,"імпортований продукт"
+imported-ukrainian-without-url-key,simple,,"Імпортований продукт без Url Key",55,Default,
+ukrainian-without-url-key,simple,,"Чудовий продукт без Url Key",55,Default,"новий url key після імпорту"
+ukrainian-with-url-key,simple,,"Нове ім'я після імпорту що стане url key",55,Default,

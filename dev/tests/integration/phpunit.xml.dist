@@ -74,6 +74,7 @@
         <!--<const name="MONGODB_DATABASE_NAME" value="magento_integration_tests"/>-->
         <!-- Connection parameters for RabbitMQ tests -->
         <!--<const name="RABBITMQ_MANAGEMENT_PORT" value="15672"/>-->
+        <!--<const name="TESTS_PARALLEL_RUN" value="1"/>-->
     </php>
     <!-- Test listeners -->
     <listeners>

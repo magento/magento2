@@ -362,7 +362,7 @@ define([
                 isInProductView = false;
 
             productId = this.element.parents('.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id');
+                .find('.price-box.price-final_price').attr('data-product-id');
 
             if (!productId) {
                 // Check individual product.
@@ -682,8 +682,8 @@ define([
          */
         _loadMedia: function () {
             var $main = this.inProductList ?
-                    this.element.parents('.product-item-info') :
-                    this.element.parents('.column.main'),
+                this.element.parents('.product-item-info') :
+                this.element.parents('.column.main'),
                 images;
 
             if (this.options.useAjax) {
@@ -750,7 +750,7 @@ define([
             $widget._Rebuild();
 
             if ($widget.element.parents($widget.options.selectorProduct)
-                    .find(this.options.selectorProductPrice).is(':data(mage-priceBox)')
+                .find(this.options.selectorProductPrice).is(':data(mage-priceBox)')
             ) {
                 $widget._UpdatePrice();
             }
@@ -787,7 +787,7 @@ define([
          */
         _toggleCheckedAttributes: function ($this, $wrapper) {
             $wrapper.attr('aria-activedescendant', $this.attr('id'))
-                    .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
+                .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
             $this.attr('aria-checked', true);
         },
 
