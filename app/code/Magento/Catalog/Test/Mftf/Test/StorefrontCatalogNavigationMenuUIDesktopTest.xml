@@ -16,6 +16,7 @@
             <testCaseId value="MC-11329"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
+            <group value="theme"/>
         </annotations>
         <before>
             <!-- Login as admin -->
@@ -24,7 +25,7 @@
         </before>
         <after>
             <actionGroup ref="DeleteDefaultCategoryChildren" stepKey="deleteRootCategoryChildren"/>
-            <actionGroup ref="AdminChangeMagentoThemeActionGroup" stepKey="changeThemeToDefault">
+            <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="changeThemeToDefault">
                 <argument name="theme" value="{{MagentoLumaTheme.name}}"/>
             </actionGroup>
             <!-- Admin log out -->
@@ -32,7 +33,7 @@
         </after>
 
         <!-- Go to Content > Themes. Change theme to Blank -->
-        <actionGroup ref="AdminChangeMagentoThemeActionGroup" stepKey="changeThemeToBlank">
+        <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="changeThemeToBlank">
             <argument name="theme" value="{{MagentoBlankTheme.name}}"/>
         </actionGroup>
 
@@ -194,7 +195,7 @@
         <deleteData createDataKey="createCategoryWithoutChildrenBlank" stepKey="deleteCategoryWithoutChildrenBlank"/>
 
         <!--  Go to Content > Themes. Change theme to Luma -->
-        <actionGroup ref="AdminChangeMagentoThemeActionGroup" stepKey="changeThemeToLuma">
+        <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="changeThemeToLuma">
             <argument name="theme" value="{{MagentoLumaTheme.name}}"/>
         </actionGroup>
 

@@ -11,7 +11,7 @@
     <section name="StorefrontNavigationMenuSection">
         <element name="navigationMenu" type="block" selector=".section-items.nav-sections-items li"/>
         <element name="subItemLevelHover" type="text" selector=".{{level}} .submenu a:hover" parameterized="true"/>
-        <element name="itemByNameAndLevel" type="text" selector="//a[span[contains(., '{{categoryName}}')]]/following-sibling::ul[contains(@class,'{{categoryLevel}}')]" parameterized="true"/>
+        <element name="itemByNameAndLevel" type="text" selector="//a[span[contains(., '{{itemName}}')]]/following-sibling::ul[contains(@class,'{{itemLevel}}')]" parameterized="true"/>
         <element name="subItemByLevel" type="text" selector="li.{{itemLevel}}.parent ul.{{itemLevel}}" parameterized="true"/>
         <element name="itemActiveState" type="text" selector=".navigation .level0.active>.level-top"/>
         <element name="subItemActiveState" type="text" selector=".navigation .level0 .submenu .active>a"/>
