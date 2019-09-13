@@ -303,8 +303,8 @@ MUTATION;
     {
         return [
             ['', 'Syntax Error: Expected Name, found )'],
-            ['input: ""', 'Expected type CustomerAddressInput!, found "".'],
-            ['input: "foo"', 'Expected type CustomerAddressInput!, found "foo".']
+            ['input: ""', 'requires type CustomerAddressInput!, found "".'],
+            ['input: "foo"', 'requires type CustomerAddressInput!, found "foo".']
         ];
     }
 
