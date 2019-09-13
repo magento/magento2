@@ -377,25 +377,8 @@
         <data key="attribute_code" unique="suffix">size_attr</data>
     </entity>
     <!-- Product attribute from file "export_import_configurable_product.csv" -->
-    <entity name="productAttributeWithTwoOptionsForExportImport" type="ProductAttribute">
+    <entity name="ProductAttributeWithTwoOptionsForExportImport" extends="productAttributeDropdownTwoOptions" type="ProductAttribute">
         <data key="attribute_code">attribute</data>
-        <data key="frontend_input">select</data>
-        <data key="scope">global</data>
-        <data key="is_required">false</data>
-        <data key="is_unique">false</data>
-        <data key="is_searchable">true</data>
-        <data key="is_visible">true</data>
-        <data key="is_visible_in_advanced_search">true</data>
-        <data key="is_visible_on_front">true</data>
-        <data key="is_filterable">true</data>
-        <data key="is_filterable_in_search">true</data>
-        <data key="used_in_product_listing">true</data>
-        <data key="is_used_for_promo_rules">true</data>
-        <data key="is_comparable">true</data>
-        <data key="is_used_in_grid">true</data>
-        <data key="is_visible_in_grid">true</data>
-        <data key="is_filterable_in_grid">true</data>
-        <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelForExportImport</requiredEntity>
     </entity>
 </entities>

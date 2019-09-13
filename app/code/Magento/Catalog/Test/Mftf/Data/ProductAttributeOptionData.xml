@@ -87,20 +87,10 @@
         <data key="value" unique="suffix">white</data>
     </entity>
     <!-- Product attribute options from file "export_import_configurable_product.csv" -->
-    <entity name="productAttributeOptionOneForExportImport" type="ProductAttributeOption">
-        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+    <entity name="ProductAttributeOptionOneForExportImport" extends="productAttributeOption1" type="ProductAttributeOption">
         <data key="label">option1</data>
-        <data key="is_default">false</data>
-        <data key="sort_order">0</data>
-        <requiredEntity type="StoreLabel">Option1Store0</requiredEntity>
-        <requiredEntity type="StoreLabel">Option1Store1</requiredEntity>
     </entity>
-    <entity name="productAttributeOptionTwoForExportImport" type="ProductAttributeOption">
-        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+    <entity name="ProductAttributeOptionTwoForExportImport" extends="productAttributeOption2" type="ProductAttributeOption">
         <data key="label">option2</data>
-        <data key="is_default">true</data>
-        <data key="sort_order">1</data>
-        <requiredEntity type="StoreLabel">Option2Store0</requiredEntity>
-        <requiredEntity type="StoreLabel">Option2Store1</requiredEntity>
     </entity>
 </entities>
