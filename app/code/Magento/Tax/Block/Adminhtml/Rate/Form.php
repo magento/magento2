@@ -9,6 +9,8 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -228,7 +230,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'note' => __(
                     "'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and are not longer than %1.",
                     $this->_taxData->getPostCodeSubStringLength()
-                )
+                ),
+                'class' => 'validate-length maximum-length-' . $this->_taxData->getPostCodeSubStringLength()
             ]
         );
 

@@ -179,7 +179,7 @@
 & when (@media-common = true) {
     .abs-block-title {
         margin-bottom: 15px;
-        
+
         > strong {
             .lib-heading(h3);
         }
@@ -194,7 +194,7 @@
     .abs-account-blocks {
         .block-title {
             &:extend(.abs-block-title all);
-            
+
             > .action {
                 margin-left: 15px;
             }
@@ -850,6 +850,51 @@
 }
 
 //
+//  Account pages: title
+//  ---------------------------------------------
+
+& when (@media-common = true) {
+    .abs-account-title {
+        > strong,
+        > span {
+            .lib-font-size(22);
+            .lib-css(font-weight, @font-weight__light);
+        }
+
+        .lib-css(border-bottom, 1px solid @border-color__base);
+        .lib-css(margin-bottom, @indent__m);
+        .lib-css(padding-bottom, @indent__s);
+    }
+}
+
+//
+//  Ratings: vertical alignment
+//  ---------------------------------------------
+
+& when (@media-common = true) {
+    .abs-rating-summary {
+        .rating {
+            &-summary {
+                display: table-row;
+            }
+
+            &-label {
+                display: table-cell;
+                padding-bottom: @indent__xs;
+                padding-right: @indent__m;
+                padding-top: 1px;
+                vertical-align: top;
+            }
+
+            &-result {
+                display: table-cell;
+                vertical-align: top;
+            }
+        }
+    }
+}
+
+//
 //  Add colon
 //  ---------------------------------------------
 
@@ -1245,7 +1290,7 @@
 }
 
 //
-//  Shopping cart sidebar and checkout sidebar totals
+//  Mini Cart and checkout sidebar totals
 //  ---------------------------------------------
 
 & when (@media-common = true) {

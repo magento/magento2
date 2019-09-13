@@ -343,4 +343,37 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="productAttributeDropdownTwoOptions" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">testattribute</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">Global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="VisualSwatchProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">swatch_visual</data>
+        <data key="attribute_code" unique="suffix">visual_swatch</data>
+    </entity>
+    <entity name="ProductColorAttribute" type="ProductAttribute">
+        <data key="frontend_label">Color</data>
+        <data key="attribute_code" unique="suffix">color_attr</data>
+    </entity>
+    <entity name="ProductSizeAttribute" type="ProductAttribute">
+        <data key="frontend_label">Size</data>
+        <data key="attribute_code" unique="suffix">size_attr</data>
+    </entity>
 </entities>

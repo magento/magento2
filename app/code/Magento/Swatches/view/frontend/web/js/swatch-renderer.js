@@ -10,7 +10,7 @@ define([
     'mage/smart-keyboard-handler',
     'mage/translate',
     'priceUtils',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'jquery/jquery.parsequery',
     'mage/validation/validation'
 ], function ($, _, mageTemplate, keyboardHandler, $t, priceUtils) {
@@ -750,7 +750,7 @@ define([
 
             $(document).trigger('updateMsrpPriceBlock',
                 [
-                    parseInt($this.attr('index'), 10) + 1,
+                    _.findKey($widget.options.jsonConfig.index, $widget.options.jsonConfig.defaultValues),
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
@@ -927,18 +927,9 @@ define([
             var $widget = this,
                 $product = $widget.element.parents($widget.options.selectorProduct),
                 $productPrice = $product.find(this.options.selectorProductPrice),
-                options = _.object(_.keys($widget.optionsMap), {}),
-                result,
+                result = $widget._getNewPrices(),
                 tierPriceHtml,
                 isShow;
-
-            $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var attributeId = $(this).attr('attribute-id');
-
-                options[attributeId] = $(this).attr('option-selected');
-            });
-
-            result = $widget.options.jsonConfig.optionPrices[_.findKey($widget.options.jsonConfig.index, options)];
 
             $productPrice.trigger(
                 'updatePrice',
@@ -951,7 +942,7 @@ define([
 
             $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
 
-            if (typeof result != 'undefined' && result.tierPrices.length) {
+            if (typeof result != 'undefined' && result.tierPrices && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
                     tierPriceHtml = mageTemplate(
                         this.options.tierPriceTemplate,
@@ -986,6 +977,35 @@ define([
         },
 
         /**
+         * Get new prices for selected options
+         *
+         * @returns {*}
+         * @private
+         */
+        _getNewPrices: function () {
+            var $widget = this,
+                optionPriceDiff = 0,
+                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts()),
+                optionPrices = this.options.jsonConfig.optionPrices,
+                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount),
+                optionFinalPrice,
+                newPrices;
+
+            if (!_.isEmpty(allowedProduct)) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+                optionPriceDiff = optionFinalPrice - basePrice;
+            }
+
+            if (optionPriceDiff !== 0) {
+                newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
+            } else {
+                newPrices = $widget.options.jsonConfig.prices;
+            }
+
+            return newPrices;
+        },
+
+        /**
          * Get prices
          *
          * @param {Object} newPrices
@@ -994,27 +1014,11 @@ define([
          * @private
          */
         _getPrices: function (newPrices, displayPrices) {
-            var $widget = this,
-                optionPriceDiff = 0,
-                allowedProduct, optionPrices, basePrice, optionFinalPrice;
+            var $widget = this;
 
             if (_.isEmpty(newPrices)) {
-                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
-                optionPrices = this.options.jsonConfig.optionPrices;
-                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount);
-
-                if (!_.isEmpty(allowedProduct)) {
-                    optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
-                    optionPriceDiff = optionFinalPrice - basePrice;
-                }
-
-                if (optionPriceDiff !== 0) {
-                    newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
-                } else {
-                    newPrices = $widget.options.jsonConfig.prices;
-                }
+                newPrices = $widget._getNewPrices();
             }
-
             _.each(displayPrices, function (price, code) {
 
                 if (newPrices[code]) {

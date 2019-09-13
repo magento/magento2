@@ -23,7 +23,7 @@
         <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="0" showInWebsite="0" showInStore="0">
             <label>Advanced</label>
             <tab>advanced</tab>
-            <resource>Magento_Backend::advanced</resource>
+            <resource>Magento_Config::advanced</resource>
             <group id="modules_disable_output" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Disable Modules Output</label>
                 <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset\Modules\DisableOutput</frontend_model>
@@ -145,7 +145,9 @@
                 <field id="allow_symlink" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Symlinks</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk.</comment>
+                    <comment>
+                        <![CDATA[<strong style="color:red">Warning!</strong> Enabling this feature is not recommended on production environments because it represents a potential security risk.]]>
+                    </comment>
                 </field>
                 <field id="minify_html" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minify Html</label>
@@ -181,10 +183,6 @@
                     <label>Minify JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
-                </field>
-                <field id="move_inline_to_bottom" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Move JS code to the bottom of the page</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -439,7 +437,7 @@
                     <label>Admin Session Lifetime (seconds)</label>
                     <comment>Please enter at least 60 and at most 31536000 (one year).</comment>
                     <backend_model>Magento\Backend\Model\Config\SessionLifetime\BackendModel</backend_model>
-                    <validate>validate-digits</validate>
+                    <validate>validate-digits validate-digits-range digits-range-60-31536000</validate>
                 </field>
             </group>
             <group id="dashboard" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -540,7 +538,7 @@
                     <label>Enable HTTP Strict Transport Security (HSTS)</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
-                    <comment><![CDATA[See <a href="https://www.owasp.org/index.php/HTTP_Strict_Transport_Security" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
+                    <comment><![CDATA[See <a href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
                     <depends>
                         <field id="use_in_frontend">1</field>
                         <field id="use_in_adminhtml">1</field>

@@ -9,7 +9,7 @@
 <?php if ($websites = $block->getWebsites()) : ?>
 
 <div class="store-switcher store-view">
-    <span class="store-switcher-label"><?= $block->escapeHtml(__('Store View:')) ?></span>
+    <span class="store-switcher-label"><?= $block->escapeHtml(__('Scope:')) ?></span>
     <div class="actions dropdown closable">
         <input type="hidden" name="store_switcher" id="store_switcher"
                data-role="store-view-id" data-param="<?= $block->escapeHtmlAttr($block->getStoreVarName()) ?>"
@@ -36,7 +36,6 @@
             <?php if ($block->hasDefaultOption()) : ?>
                 <li class="store-switcher-all <?php if (!($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) : ?>disabled<?php endif; ?> <?php if (!$block->hasScopeSelected()) : ?>current<?php endif; ?>">
                     <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) : ?>
-                        ?>
                         <a data-role="store-view-id" data-value="" href="#">
                             <?= $block->escapeHtml($block->getDefaultSelectionName()) ?>
                         </a>
