@@ -15,11 +15,11 @@
         "magento/module-media-storage": "*",
         "magento/module-require-js": "*",
         "magento/module-store": "*",
+        "magento/module-translation": "*",
         "magento/module-ui": "*",
         "magento/module-widget": "*"
     },
     "suggest": {
-        "magento/module-translation": "*",
         "magento/module-theme-sample-data": "*",
         "magento/module-deploy": "*",
         "magento/module-directory": "*"
