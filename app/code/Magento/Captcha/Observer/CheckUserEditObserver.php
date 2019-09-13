@@ -17,9 +17,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class CheckUserEditObserver implements ObserverInterface
 {
-    /**
-     * Form ID
-     */
     const FORM_ID = 'user_edit';
 
     /**
