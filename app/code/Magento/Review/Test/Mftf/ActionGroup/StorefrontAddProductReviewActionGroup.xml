@@ -12,7 +12,6 @@
             <argument name="review" type="entity" defaultValue="SimpleProductReview"/>
         </arguments>
         <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab"/>
-        <waitForPageLoad time="30" stepKey="waitForTabOpening"/>
         <fillField selector="{{StorefrontReviewFormSection.nicknameField}}" userInput="{{review.nickname}}" stepKey="fillNicknameField"/>
         <fillField selector="{{StorefrontReviewFormSection.summaryField}}" userInput="{{review.title}}" stepKey="fillSummaryField"/>
         <fillField selector="{{StorefrontReviewFormSection.reviewField}}" userInput="{{review.detail}}" stepKey="fillReviewField"/>

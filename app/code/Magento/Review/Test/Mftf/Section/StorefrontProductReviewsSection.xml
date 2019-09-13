@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductReviewsSection">
-        <element name="reviewsTab" type="button" selector="#tab-label-reviews-title"/>
+        <element name="reviewsTab" type="button" timeout="30" selector="#tab-label-reviews-title"/>
         <element name="reviewsBlock" type="block" selector="#customer-reviews"/>
         <element name="reviewTitle" type="text" selector=".item.review-item:nth-of-type({{row}}) .review-title" parameterized="true"/>
         <element name="reviewContent" type="text" selector=".item.review-item:nth-of-type({{row}}) .review-content" parameterized="true"/>
