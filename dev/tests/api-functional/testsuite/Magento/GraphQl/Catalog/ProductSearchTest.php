@@ -1486,7 +1486,7 @@ QUERY;
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
-        $productsInResponse = ['Blue briefs','Navy Striped Shoes','Grey shorts'];
+        $productsInResponse = ['Blue briefs','Navy Blue Striped Shoes','Grey shorts'];
         $count = count($response['products']['items']);
         for ($i = 0; $i < $count; $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
