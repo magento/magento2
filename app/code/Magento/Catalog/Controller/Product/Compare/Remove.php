@@ -31,7 +31,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare implements Http
                 $product = null;
             }
 
-            if ($product && $product->isSalable()) {
+            if ($product) {
                 /** @var $item \Magento\Catalog\Model\Product\Compare\Item */
                 $item = $this->_compareItemFactory->create();
                 if ($this->_customerSession->isLoggedIn()) {
