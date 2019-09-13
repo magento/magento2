@@ -688,7 +688,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'exception' => $e,
                 ]
             );
-        // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $consecutiveException) {
             $message = sprintf(
                 "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
