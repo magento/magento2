@@ -38,6 +38,8 @@ define([
                     });
                 }
             });
+
+            this._reloadPrice();
         },
 
         /**
