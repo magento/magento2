@@ -724,6 +724,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function setHeaderColumns($customOptionsData, $stockItemRows)
     {
+        $exportAttributes = count($this->_parameters["skip_attr"]) ?
+            $this->_getExportAttrCodes() :
+            $this->_getExportMainAttrCodes();
+
         if (!$this->_headerColumns) {
             $this->_headerColumns = array_merge(
                 [
@@ -734,7 +738,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     self::COL_CATEGORY,
                     self::COL_PRODUCT_WEBSITES,
                 ],
-                $this->_getExportAttrCodes(),
+                $exportAttributes,
                 [self::COL_ADDITIONAL_ATTRIBUTES],
                 reset($stockItemRows) ? array_keys(end($stockItemRows)) : [],
                 [
