@@ -12,6 +12,6 @@
         <element name="nicknameColumnFilter" type="input" selector="#reviwGrid_filter_nickname"/>
         <element name="massActions" type="button" selector="#reviwGrid_massaction-mass-select"/>
         <element name="massActionsSelect" type="button" selector="#reviwGrid_massaction-select"/>
-        <element name="submit" type="button" selector=".admin__grid-massaction-form .action-default.scalable"/>
+        <element name="submit" type="button" timeout="30" selector="#reviwGrid_massaction button[title='Submit']"/>
     </section>
 </sections>

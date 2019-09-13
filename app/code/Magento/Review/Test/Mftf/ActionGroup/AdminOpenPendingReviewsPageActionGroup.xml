@@ -9,6 +9,5 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenPendingReviewsPageActionGroup">
         <amOnPage url="{{AdminPendingReviewsPage.url}}" stepKey="openReviewsPageActionGroup"/>
-        <waitForPageLoad stepKey="waitForReviewsPageLoad"/>
     </actionGroup>
 </actionGroups>

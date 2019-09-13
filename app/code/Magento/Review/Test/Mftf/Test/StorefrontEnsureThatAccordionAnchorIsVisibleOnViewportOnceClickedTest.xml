@@ -62,11 +62,14 @@
             <deleteData createDataKey="createFourthAttribute" stepKey="deleteFourthAttribute"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 
+            <!--Logout from customer account-->
+            <actionGroup ref="CustomerLogoutStorefrontActionGroup" stepKey="logoutCustomer"/>
             <!-- Delete customer -->
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilters"/>
+            <actionGroup ref="logout" stepKey="logOut"/>
         </after>
 
         <!-- Edit the product and set those attributes values -->
