@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ReorderButtonConfigurableProductTestStock" extends="AdminCacheValidationConfigurableProductSoldOutCustomStocks">
+        <annotations>
+            <stories value="Configurable Product Custom Stock."/>
+            <title value="Reorder Button Visibility with Configurable Product on Custom Stock."/>
+            <description value="Verify,reorder button is not visible after shipment created for order with configurable product on custom source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735208/scenarios/2630678"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Verify reorder button is not visible-->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage" after="verifyProductIsAbsentOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad" after="goToCustomerDashboardPage"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage" after="waitForCustomerDashboardPageLoad">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+        <dontSeeElement selector="//td[text()='{$grabOrderNumber}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="verifyReorderButton" after="goToMyOrdersPage"/>
+    </test>
+</tests>

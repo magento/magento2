@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCanceledWithConfigurableProductWithSwatchAttributeViaTheAdminTest" extends="AdminOrderCreatedWithConfigurableProductWithSwatchAttributeViaTheAdminTest">
+        <annotations>
+            <stories value="Configurable Product Custom Stock."/>
+            <title value="Cancel Order with a Configurable Product with Visual Swatch Attributes on Custom Stock."/>
+            <description value="Verify, admin should be able to cancel Order using a Configurable Product with Visual Swatch Attributes that is assigned to Custom Stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735228/scenarios/1446622"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Cancel order.-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridToCancelOrder"/>
+        <waitForPageLoad time="30" stepKey="waitForOrderGridLoad"/>
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearFiltersForOrderCancel"/>
+        <fillField userInput="$grabTheOrderId1" selector="{{OrdersGridSection.search}}" stepKey="fillOrderIdToCancelOrder"/>
+        <click selector=".data-grid-search-control-wrap button" stepKey="applyFiltersToCancelOrder"/>
+        <waitForPageLoad stepKey="waitForFiltersAppliedForCancelOrder"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPageToCancelOrder"/>
+        <waitForPageLoad time="5" stepKey="waitForOrderPageLoadToCancelOrder"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
+        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
+        <!--Verify product quantity after order cancellation.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{visualSwatchColor2.name}}"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource1.source[name]$$)}}" userInput="100" stepKey="verifySourceQuantity"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$createStock1.stock[name]$$)}}" userInput="100" stepKey="verifyStockQuantity"/>
+    </test>
+</tests>

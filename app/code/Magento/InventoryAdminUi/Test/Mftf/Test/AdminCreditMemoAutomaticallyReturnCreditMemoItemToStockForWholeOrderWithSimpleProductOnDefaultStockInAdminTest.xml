@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreditMemoAutomaticallyReturnCreditMemoItemToStockForWholeOrderWithSimpleProductOnDefaultStockInAdminTest"
+          extends="AdminCreditMemoCreatedWithPartialRefundForOrderWithSimpleProductOnTestStockAfterFullInvoiceAndPartialShipmentTest">
+        <annotations>
+            <stories value="MSI Credit Memo"/>
+            <title
+                value="Automatically Return Credit Memo Item to Stock for whole order with Simple product on Default stock in Admin."/>
+            <description
+                value="Automatically Return Credit Memo Item to Stock for whole order with Simple product on Default stock in Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735125/scenarios/2129621"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="additionalStock"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <!--Set auto return configuration.-->
+            <magentoCLI command="config:set {{TurnOnAutoReturnConfiguration.path}} {{TurnOnAutoReturnConfiguration.value}}"
+                        stepKey="setAutoReturnOn"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <!--Revert auto return configuration.-->
+            <magentoCLI command="config:set {{TurnOffAutoReturnConfiguration.path}} {{TurnOffAutoReturnConfiguration.value}}"
+                        stepKey="setAutoReturnOff"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex" />
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <remove keyForRemoval="assignTestSourceToCreatedProduct"/>
+        <remove keyForRemoval="fillQuantityField"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}"
+                   after="openProductEditPageToAssignSource"
+                   userInput="100"
+                   stepKey="fillQuantityField"/>
+        <remove keyForRemoval="seeUpdatedQuantity1"/>
+        <remove keyForRemoval="seeUpdatedQuantity2"/>
+
+        <!-- remove create partial shipment step -->
+        <remove keyForRemoval="onOrdersPageToCreateShipment"/>
+        <remove keyForRemoval="waitForOrdersPageLoadingMask"/>
+        <remove keyForRemoval="searchOrderNum"/>
+        <remove keyForRemoval="submitSearchShipping"/>
+        <remove keyForRemoval="waitForSubmitSearchLoadingMask"/>
+        <remove keyForRemoval="clickOrderRow"/>
+        <remove keyForRemoval="clickShip"/>
+        <remove keyForRemoval="waitForShipLoadingMask"/>
+        <remove keyForRemoval="shipPartialQuantity"/>
+        <remove keyForRemoval="submitShipment"/>
+        <remove keyForRemoval="seeShipmentCreateSuccess"/>
+
+        <!--Remove steps "Partial Credit Memo" -->
+        <remove keyForRemoval="partialRefund"/>
+        <remove keyForRemoval="updateQuantityToRefund"/>
+        <remove keyForRemoval="updateQuantityLoadingMask"/>
+        <remove keyForRemoval="returnToStockCheckbox"/>
+
+        <!-- Verify in admin that after creating credit memo quantity on 'Default source' and salable quantity for  'Simple Product 1' are correct -->
+        <remove keyForRemoval="checkProductSourceQtyAfterCreditMemo"/>
+        <remove keyForRemoval="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1','Default Source')}}"
+             after="findVirtualProductBySkuToCheckQtyAfterCreditMemo"
+             userInput="100"
+             stepKey="checkProductSourceQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', 'Default Stock')}}"
+             after="checkProductSourceQtyAfterCreditMemo"
+             userInput="100"
+             stepKey="checkSalableQtyAfterCreditMemo"/>
+    </test>
+</tests>

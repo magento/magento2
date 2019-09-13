@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test
+        name="SimpleProductWithZeroQtyAndInStockStatusOnDefaultSourceIsVisibleOnHomePageIfBackordersEnabledOnProductPageTest"
+        extends="SimpleProductWithZeroQtyAndInStockStatusOnDefaultSourceIsVisibleOnHomePageIfBackordersEnabledOnConfigurationPageTest">
+        <annotations>
+            <stories value="CatalogInventory stock option"/>
+            <title
+                value="Simple product with 0 qty and 'In stock' status on Default Source is visible on Home page if backorders  enabled on Product page."/>
+            <description
+                value="Simple product with 0 qty and 'In stock' status on Default Source is visible on Home page if backorders  enabled on Product page."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735256/scenarios/2946872"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="setConfigAllowBackordersTrue"/>
+        </before>
+        <!-- Backorder  'Allow Qty Below 0 '  enabled on product page -->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPage1" before="openProductFromSubCategory1"/>
+        <actionGroup ref="AdminEnableBackordersOnProductEditPageActionGroup" stepKey="enableBackorders1" after="openProductEditPage1"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton1" after="enableBackorders1"/>
+        <waitForPageLoad stepKey="waitForSimpleProductSaved1" after="clickSaveButton1"/>
+
+        <remove keyForRemoval="setConfigAllowBackordersNotifyCustomer"/>
+
+        <!-- Backorder  'Allow Qty Below 0 and Notify Customer'  enabled on product page -->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPage2" before="cleanCache"/>
+        <actionGroup ref="AdminEnableBackordersOnProductEditPageActionGroup" stepKey="enableBackorders2" after="openProductEditPage2">
+        <argument name="backOrders" value="Allow Qty Below 0 and Notify Customer" />
+        </actionGroup>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton2" after="enableBackorders2"/>
+        <waitForPageLoad stepKey="waitForSimpleProductSaved2" after="clickSaveButton2"/>
+    </test>
+</tests>

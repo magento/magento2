@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="SimpleProductWithZeroQtyAndInStockStatusOnDefaultSourceIsVisibleOnHomePageIfBackordersEnabledOnConfigurationPageTest">
+        <annotations>
+            <stories value="CatalogInventory stock option"/>
+            <title value="Simple product with 0 qty and 'In stock' status on Default Source is visible on Home page if backorders  enabled on Configuration page."/>
+            <description value="Simple product with 0 qty and 'In stock' status on Default Source is visible on Home page if backorders  enabled on Configuration page."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735256/scenarios/2943490"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!-- Configure Magento to allow backorders -->
+            <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersEnable.path}} {{CatalogInventoryItemOptionsBackordersEnable.value}}" stepKey="setConfigAllowBackordersTrue"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <!--Create additional source and stock.-->
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="createSource"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="createSource"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
+            <!-- Set Magento back to default configuration -->
+            <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersDisable.path}} {{CatalogInventoryItemOptionsBackordersDisable.value}}" stepKey="setConfigAllowBackordersFalse"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Open category subcategory by direct URL. Verify simple product is visible on it. -->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromSubCategory1">
+            <argument name="category" value="$$simpleCategory$$"/>
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductDisplayedAsInStock1"/>
+
+        <!-- Configure Backorder  'Allow Qty Below 0 and Notify Customer'  enabled in Configuration -->
+        <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersEnable.path}} 2" stepKey="setConfigAllowBackordersNotifyCustomer"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+
+        <!--Open category subcategory by direct URL. Verify simple product is visible on it. -->
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromSubCategory2">
+            <argument name="category" value="$$simpleCategory$$"/>
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductDisplayedAsInOfStock2"/>
+
+    </test>
+</tests>

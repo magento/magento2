@@ -13,7 +13,7 @@
             <stories value="Grouped Product Custom Stock."/>
             <title value="Create Credit Memo with Grouped product on Custom stock. Partial refund."/>
             <description value="Verify, admin create Credit Memo with partial refund. Grouped product on Custom source."/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735182/scenarios/2553867"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735182/scenarios/2554050"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

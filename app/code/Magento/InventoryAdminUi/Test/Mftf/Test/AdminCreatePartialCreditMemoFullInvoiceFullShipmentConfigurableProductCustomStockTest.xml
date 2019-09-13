@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialCreditMemoFullInvoiceFullShipmentConfigurableProductCustomStockTest" extends="AdminCreatePartialCreditMemoFullInvoiceConfigurableProductCustomStockTest">
+        <annotations>
+            <stories value="Configurable Product Custom Stock."/>
+            <title value="Create Credit Memo with Partial Refund with Full Invoice and Full Shipment on Custom Stock."/>
+            <description value="Verify, admin able to create credit memo with partial refund with full invoice and full shipment on custom stock with configurable product."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735184/scenarios/2494481"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Create Full Shipment.-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="verifyOrderStatus"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="clickShipAction"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="verifyShipmentCreated" after="clickSubmitShipment"/>
+        <remove keyForRemoval="verifyWhiteVariationQuantityForSource"/>
+        <remove keyForRemoval="verifyWhiteVariationQuantityForStock"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$additionalSource.source[name]$$: 96" stepKey="verifyWhiteVariationQuantityForSource" after="verifyWhiteVariationPrice"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$additionalStock.stock[name]$$: 96" stepKey="verifyWhiteVariationQuantityForStock" after="verifyWhiteVariationQuantityForSource"/>
+    </test>
+</tests>
+

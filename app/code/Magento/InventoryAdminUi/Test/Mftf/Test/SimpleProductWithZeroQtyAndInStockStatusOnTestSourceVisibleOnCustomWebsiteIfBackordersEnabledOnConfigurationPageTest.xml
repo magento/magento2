@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test
+        name="SimpleProductWithZeroQtyAndInStockStatusOnTestSourceVisibleOnCustomWebsiteIfBackordersEnabledOnConfigurationPageTest"
+        extends="SimpleProductWithZeroQtyAndInStockStatusOnDefaultSourceIsVisibleOnHomePageIfBackordersEnabledOnConfigurationPageTest">
+        <annotations>
+            <stories value="CatalogInventory stock option"/>
+            <title
+                value="Simple product with 0 qty and 'In stock' status on Test source visible on Custom website  if backorders enabled on Configuration page."/>
+            <description
+                value="Simple product with 0 qty and 'In stock' status on Test source visible on Custom website  if backorders enabled on Configuration page."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735256/scenarios/2947625"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <!--Add store code to url.-->
+            <magentoCLI
+                command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
+                stepKey="addStoreCodeToUrlEnable"/>
+            <!--Create website, store and store view.-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite" after="loginAsAdmin">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore" after="createWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" after="createStore">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!--Assign Custom Stock to Additional Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignStockToAdditionalWebsite"
+                         after="createStoreView">
+                <argument name="stockName" value="{{BasicMsiStock1.name}}"/>
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <magentoCLI command="indexer:reindex" stepKey="reindex" after="assignStockToAdditionalWebsite"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache" after="reindex"/>
+        </before>
+        <after>
+            <!--Delete created website.-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite" before="logoutOfAdmin1">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <magentoCLI
+                command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
+                stepKey="addStoreCodeToUrlDisable" after="deleteWebsite"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="addStoreCodeToUrlDisable">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </after>
+        <!-- Assign product to custom website -->
+        <remove keyForRemoval="openProductFromSubCategory1"/>
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPage" before="seeProductDisplayedAsInStock1"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct" after="openProductEditPage">
+            <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="assignProductToAdditionalWebsite" after="assignTestSourceToCreatedProduct">
+            <argument name="website" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <!-- Simple product visible on Test website  with status 'In stock' -->
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$simpleProduct.name$$.html" stepKey="navigateToPDP1" after="assignProductToAdditionalWebsite"/>
+        <waitForPageLoad after="navigateToPDP1" stepKey="waitForProductPage1"/>
+
+        <!-- Simple product visible on Test website  with status 'In stock' -->
+        <remove keyForRemoval="openProductFromSubCategory2"/>
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$simpleProduct.name$$.html" stepKey="navigateToPDP2" before="seeProductDisplayedAsInOfStock2"/>
+        <waitForPageLoad after="navigateToPDP2" stepKey="waitForProductPage2"/>
+    </test>
+</tests>
