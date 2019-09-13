@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertReviewAtProductPageActionGroup">
+        <arguments>
+            <argument name="review" type="entity" defaultValue="simpleProductReview"/>
+            <argument name="rowIndex" type="string"/>
+        </arguments>
+        <see selector="{{StorefrontProductReviewsSection.reviewTitle(rowIndex)}}" userInput="{{review.title}}" stepKey="seeReviewTitle"/>
+        <see selector="{{StorefrontProductReviewsSection.reviewContent(rowIndex)}}" userInput="{{review.detail}}" stepKey="seeReviewContent"/>
+        <see selector="{{StorefrontProductReviewsSection.reviewAuthor(rowIndex)}}" userInput="{{review.nickname}}" stepKey="seeAuthorReview"/>
+    </actionGroup>
+</actionGroups>

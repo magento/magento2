@@ -11,6 +11,7 @@
             <data name="catalogPriceRule/dataset" xsi:type="string">active_catalog_price_rule_with_conditions</data>
             <data name="product" xsi:type="string">configurableProduct::two_options_by_one_dollar</data>
             <data name="productPrice/0/regular" xsi:type="string">1</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />

@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Unserialize\Test\Unit;
 
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Unserialize\Unserialize;
 
+/**
+ * Test unserializer that does not unserialize objects.
+ */
 class UnserializeTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -52,6 +57,10 @@ class UnserializeTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnserializeObject($serialized)
     {
+        $this->expectException(\PHPUnit\Framework\Exception::class);
+        $this->expectExceptionMessage(
+            'String contains serialized object'
+        );
         $this->assertFalse($this->unserialize->unserialize($serialized));
     }
 

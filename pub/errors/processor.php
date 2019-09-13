@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Error;
 
 use Magento\Framework\Serialize\Serializer\Json;
@@ -11,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Error processor
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:ignoreFile
  */
 class Processor
 {
@@ -486,7 +489,7 @@ class Processor
             @mkdir($this->_reportDir, 0777, true);
         }
 
-        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData));
+        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData). PHP_EOL);
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
@@ -501,7 +504,6 @@ class Processor
      *
      * @param int $reportId
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function loadReport($reportId)
     {

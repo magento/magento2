@@ -54,7 +54,7 @@ class TransactionResponseValidator extends AbstractValidator
             if (isset($transactionResponse['messages']['message']['code'])) {
                 $errorCodes[] = $transactionResponse['messages']['message']['code'];
                 $errorMessages[] = $transactionResponse['messages']['message']['text'];
-            } elseif ($transactionResponse['messages']['message']) {
+            } elseif (isset($transactionResponse['messages']['message'])) {
                 foreach ($transactionResponse['messages']['message'] as $message) {
                     $errorCodes[] = $message['code'];
                     $errorMessages[] = $message['description'];
@@ -62,7 +62,7 @@ class TransactionResponseValidator extends AbstractValidator
             } elseif (isset($transactionResponse['errors'])) {
                 foreach ($transactionResponse['errors'] as $message) {
                     $errorCodes[] = $message['errorCode'];
-                    $errorMessages[] = $message['errorCode'];
+                    $errorMessages[] = $message['errorText'];
                 }
             }
 
@@ -85,8 +85,10 @@ class TransactionResponseValidator extends AbstractValidator
             ?? $transactionResponse['errors'][0]['errorCode']
             ?? null;
 
-        return in_array($transactionResponse['responseCode'], [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD])
-            && $code
+        return !in_array($transactionResponse['responseCode'], [
+                self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD
+            ])
+            || $code
             && !in_array(
                 $code,
                 [

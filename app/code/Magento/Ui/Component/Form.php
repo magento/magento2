@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
+ * Ui component Form
  * @api
  * @since 100.0.2
  */
@@ -53,14 +54,15 @@ class Form extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataSourceData()
     {
         $dataSource = [];
 
         $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName(), null);
-        $filter = $this->filterBuilder->setField($this->getContext()->getDataProvider()->getPrimaryFieldName())
+        $idFieldName = $this->getContext()->getDataProvider()->getPrimaryFieldName();
+        $filter = $this->filterBuilder->setField($idFieldName)
             ->setValue($id)
             ->create();
         $this->getContext()->getDataProvider()
@@ -74,7 +76,7 @@ class Form extends AbstractComponent
             ];
         } elseif (isset($data['items'])) {
             foreach ($data['items'] as $item) {
-                if ($item[$item['id_field_name']] == $id) {
+                if ($item[$idFieldName] == $id) {
                     $dataSource = ['data' => ['general' => $item]];
                 }
             }

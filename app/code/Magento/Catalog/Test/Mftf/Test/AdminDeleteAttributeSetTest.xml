@@ -10,9 +10,10 @@
     <test name="AdminDeleteAttributeSetTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Attribute sets"/>
             <title value="Delete Attribute Set"/>
             <description value="Admin should be able to delete an attribute set"/>
-            <testCaseId value="MC-4413"/>
+            <testCaseId value="MC-10889"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
         </annotations>

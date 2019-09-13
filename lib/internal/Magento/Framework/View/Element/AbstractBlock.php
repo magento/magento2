@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
@@ -176,13 +178,20 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_cache;
 
     /**
+     * @var LockGuardedCacheLoader
+     */
+    private $lockQuery;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
      */
-    public function __construct(\Magento\Framework\View\Element\Context $context, array $data = [])
-    {
+    public function __construct(
+        \Magento\Framework\View\Element\Context $context,
+        array $data = []
+    ) {
         $this->_request = $context->getRequest();
         $this->_layout = $context->getLayout();
         $this->_eventManager = $context->getEventManager();
@@ -200,6 +209,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->filterManager = $context->getFilterManager();
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
+        $this->lockQuery = $context->getLockGuardedCacheLoader();
         if (isset($data['jsLayout'])) {
             $this->jsLayout = $data['jsLayout'];
             unset($data['jsLayout']);
@@ -658,19 +668,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         }
 
         $html = $this->_loadCache();
-        if ($html === false) {
-            if ($this->hasData('translate_inline')) {
-                $this->inlineTranslation->suspend($this->getData('translate_inline'));
-            }
-
-            $this->_beforeToHtml();
-            $html = $this->_toHtml();
-            $this->_saveCache($html);
-
-            if ($this->hasData('translate_inline')) {
-                $this->inlineTranslation->resume();
-            }
-        }
         $html = $this->_afterToHtml($html);
 
         /** @var \Magento\Framework\DataObject */
@@ -679,10 +676,13 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
                 'html' => $html,
             ]
         );
-        $this->_eventManager->dispatch('view_block_abstract_to_html_after', [
-            'block' => $this,
-            'transport' => $transportObject
-        ]);
+        $this->_eventManager->dispatch(
+            'view_block_abstract_to_html_after',
+            [
+                'block' => $this,
+                'transport' => $transportObject
+            ]
+        );
         $html = $transportObject->getHtml();
 
         return $html;
@@ -725,7 +725,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function getUiId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
-        return ' data-ui-id="' . $this->getJsId($arg1, $arg2, $arg3, $arg4, $arg5) . '" ';
+        return ' data-ui-id="' . $this->escapeHtmlAttr($this->getJsId($arg1, $arg2, $arg3, $arg4, $arg5)) . '" ';
     }
 
     /**
@@ -972,8 +972,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
      *
-     * @param  string $data
-     * @param  bool $addSlashes
+     * @param string $data
+     * @param bool $addSlashes
      * @return string
      * @deprecated 100.2.0
      */
@@ -1083,23 +1083,54 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Load block html from cache storage
      *
-     * @return string|false
+     * @return string
      */
     protected function _loadCache()
     {
+        $collectAction = function () {
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->suspend($this->getData('translate_inline'));
+            }
+
+            $this->_beforeToHtml();
+            return $this->_toHtml();
+        };
+
         if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            return false;
+            $html = $collectAction();
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->resume();
+            }
+            return $html;
         }
-        $cacheKey = $this->getCacheKey();
-        $cacheData = $this->_cache->load($cacheKey);
-        if ($cacheData) {
-            $cacheData = str_replace(
-                $this->_getSidPlaceholder($cacheKey),
-                $this->_sidResolver->getSessionIdQueryParam($this->_session) . '=' . $this->_session->getSessionId(),
-                $cacheData
-            );
-        }
-        return $cacheData;
+        $loadAction = function () {
+            $cacheKey = $this->getCacheKey();
+            $cacheData = $this->_cache->load($cacheKey);
+            if ($cacheData) {
+                $cacheData = str_replace(
+                    $this->_getSidPlaceholder($cacheKey),
+                    $this->_sidResolver->getSessionIdQueryParam($this->_session)
+                    . '='
+                    . $this->_session->getSessionId(),
+                    $cacheData
+                );
+            }
+            return $cacheData;
+        };
+
+        $saveAction = function ($data) {
+            $this->_saveCache($data);
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->resume();
+            }
+        };
+
+        return (string)$this->lockQuery->lockedLoadData(
+            $this->getCacheKey(),
+            $loadAction,
+            $collectAction,
+            $saveAction
+        );
     }
 
     /**

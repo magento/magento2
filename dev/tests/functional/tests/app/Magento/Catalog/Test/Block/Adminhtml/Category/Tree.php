@@ -187,6 +187,8 @@ class Tree extends Block
      */
     public function expandAllCategories()
     {
+        $this->getTemplateBlock()->waitLoader();
         $this->_rootElement->find($this->expandAll)->click();
+        $this->getTemplateBlock()->waitLoader();
     }
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="BundleProductWithTierPriceInCartTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Check that price of cart is correct when the bundle product added to the cart twice"/>
+            <title value="Customer should get the right subtotal in cart when the bundle product added to the cart twice"/>
+            <description value="Customer should be able to add one more bundle product to the cart and get the right price"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-19727"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
+            <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersAfter"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainFieldsForBundle"/>
+        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption1">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option1"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption2">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option2"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
+        <actionGroup ref="ProductSetAdvancedPricing" stepKey="addTierPriceProduct">
+            <argument name="group" value="ALL GROUPS"/>
+            <argument name="quantity" value="1"/>
+            <argument name="price" value="Discount"/>
+            <argument name="amount" value="50"/>
+        </actionGroup>
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url(BundleProduct.urlKey)}}" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickOnCustomizeAndAddToCartButton"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCartAgain">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$246.00"/>
+        </actionGroup>
+    </test>
+</tests>

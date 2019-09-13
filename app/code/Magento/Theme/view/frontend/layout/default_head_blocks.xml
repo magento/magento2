@@ -13,6 +13,14 @@
         <script src="mage/polyfill.js"/>
     </head>
     <body>
+        <referenceBlock name="head.additional">
+            <block name="critical_css_block" as="critical_css" template="Magento_Theme::html/header/criticalCss.phtml" ifconfig="dev/css/use_css_critical_path">
+                <arguments>
+                    <argument name="criticalCssViewModel" xsi:type="object">Magento\Theme\Block\Html\Header\CriticalCss</argument>
+                </arguments>
+            </block>
+            <block name="css_rel_preload_script" ifconfig="dev/css/use_css_critical_path" template="Magento_Theme::js/css_rel_preload.phtml"/>
+        </referenceBlock>
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml" before="-"/>
         </referenceContainer>

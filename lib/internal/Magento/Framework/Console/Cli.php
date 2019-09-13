@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Console;
 
 use Magento\Framework\App\Bootstrap;
@@ -22,9 +24,10 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Magento 2 CLI Application.
+ *
  * This is the hood for all command line tools supported by Magento.
  *
- * {@inheritdoc}
+ * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cli extends Console\Application
@@ -61,11 +64,11 @@ class Cli extends Console\Application
     /**
      * @param string $name the application name
      * @param string $version the application version
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
         try {
+            // phpcs:ignore Magento2.Security.IncludeFile
             $configuration = require BP . '/setup/config/application.config.php';
             $bootstrapApplication = new Application();
             $application = $bootstrapApplication->bootstrap($configuration);
@@ -78,7 +81,7 @@ class Cli extends Console\Application
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
-
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(static::RETURN_FAILURE);
         }
 
@@ -93,13 +96,18 @@ class Cli extends Console\Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @throws \Exception The exception in case of unexpected error
      */
     public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $exitCode = parent::doRun($input, $output);
+        $exitCode = null;
+        try {
+            $exitCode = parent::doRun($input, $output);
+        } catch (\Exception $e) {
+            $output->writeln($e->getTraceAsString());
+        }
 
         if ($this->initException) {
             throw $this->initException;
@@ -109,7 +117,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDefaultCommands()
     {
@@ -206,6 +214,7 @@ class Cli extends Console\Application
         $commands = [];
         foreach (CommandLocator::getCommands() as $commandListClass) {
             if (class_exists($commandListClass)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $commands = array_merge(
                     $commands,
                     $objectManager->create($commandListClass)->getCommands()
@@ -217,8 +226,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * Provides updated configuration in
-     * accordance to document root settings.
+     * Provides updated configuration in accordance to document root settings.
      *
      * @param array $config
      * @return array

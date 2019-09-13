@@ -72,7 +72,7 @@
                 </validation>
                 <dataType>int</dataType>
                 <tooltip>
-                    <link>http://docs.magento.com/m2/ce/user_guide/stores/websites-stores-views.html</link>
+                    <link>https://docs.magento.com/m2/ce/user_guide/stores/websites-stores-views.html</link>
                     <description translate="true">You can adjust the scope of this synonym group by selecting an option from the list.</description>
                 </tooltip>
                 <label translate="true">Scope</label>
@@ -127,6 +127,7 @@
                             <map name="false" xsi:type="boolean">false</map>
                             <map name="true" xsi:type="boolean">true</map>
                         </valueMap>
+                        <description translate="true">Merge existing synonyms</description>
                     </settings>
                 </checkbox>
             </formElements>

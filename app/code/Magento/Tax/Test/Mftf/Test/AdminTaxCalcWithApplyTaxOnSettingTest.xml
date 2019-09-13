@@ -10,7 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminTaxCalcWithApplyTaxOnSettingTest">
         <annotations>
-            <features value="AdminTaxCalcWithApplyTaxOnSettingTest"/>
+            <features value="Tax"/>
+            <stories value="Tax calculation"/>
             <title value="Tax calculation process following 'Apply Tax On' setting"/>
             <description value="Tax calculation process following 'Apply Tax On' setting"/>
             <severity value="MAJOR"/>

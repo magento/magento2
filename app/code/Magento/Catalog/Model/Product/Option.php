@@ -167,6 +167,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Construct function
+     *
      * @return void
      */
     protected function _construct()
@@ -215,6 +217,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Get values
+     *
      * @return ProductCustomOptionValuesInterface[]|null
      */
     public function getValues()
@@ -345,7 +349,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @since 101.0.0
      */
@@ -396,6 +401,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * After save
+     *
      * @return \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -424,7 +431,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
 
     /**
      * Return price. If $flag is true and price is percent
-     *  return converted percent to price
+     *
+     * Return converted percent to price
      *
      * @param bool $flag
      * @return float
@@ -555,7 +563,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -649,6 +657,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Get file extension
+     *
      * @return string|null
      */
     public function getFileExtension()
@@ -657,6 +667,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Get Max Characters
+     *
      * @return int|null
      */
     public function getMaxCharacters()
@@ -665,6 +677,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Get image size X
+     *
      * @return int|null
      */
     public function getImageSizeX()
@@ -673,6 +687,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Get image size Y
+     *
      * @return int|null
      */
     public function getImageSizeY()
@@ -780,6 +796,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Set File Extension
+     *
      * @param string $fileExtension
      * @return $this
      */
@@ -789,6 +807,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Set Max Characters
+     *
      * @param int $maxCharacters
      * @return $this
      */
@@ -798,6 +818,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Set Image Size X
+     *
      * @param int $imageSizeX
      * @return $this
      */
@@ -807,6 +829,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Set Image Size Y
+     *
      * @param int $imageSizeY
      * @return $this
      */
@@ -816,6 +840,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Set value
+     *
      * @param ProductCustomOptionValuesInterface[] $values
      * @return $this
      */
@@ -826,7 +852,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface|null
      */
@@ -852,6 +878,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Get Product Option Collection
+     *
      * @param Product $product
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
@@ -882,7 +910,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
      * @return $this
@@ -894,6 +922,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Get option repository
+     *
      * @return Option\Repository
      */
     private function getOptionRepository()
@@ -906,6 +936,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Get metadata pool
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
@@ -931,7 +963,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         preg_match_all('/(?<extensions>[a-z0-9]+)/i', strtolower($rawExtensions), $matches);
         if (!empty($matches)) {
             $extensions = implode(', ', array_unique($matches['extensions']));
+            $this->setFileExtension($extensions);
         }
-        $this->setFileExtension($extensions);
     }
 }

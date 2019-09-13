@@ -6,8 +6,6 @@
 
 namespace Magento\Reports\Model\ResourceModel\Customer;
 
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-
 /**
  * Customers Report collection.
  *
@@ -75,6 +73,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
     protected $orderResource;
 
     /**
+     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -89,10 +88,9 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param string $modelName
      *
-     * @param ResourceModelPoolInterface|null $resourceModelPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -111,8 +109,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory,
         \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        $modelName = self::CUSTOMER_MODEL_NAME,
-        ResourceModelPoolInterface $resourceModelPool = null
+        $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         parent::__construct(
             $entityFactory,
@@ -127,8 +124,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
             $entitySnapshot,
             $fieldsetConfig,
             $connection,
-            $modelName,
-            $resourceModelPool
+            $modelName
         );
         $this->orderResource = $orderResource;
         $this->quoteRepository = $quoteRepository;

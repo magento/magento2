@@ -105,7 +105,7 @@
                                                                     <item name="trigger" xsi:type="string">opc-new-shipping-address</item>
                                                                     <item name="buttons" xsi:type="array">
                                                                         <item name="save" xsi:type="array">
-                                                                            <item name="text" xsi:type="string" translate="true">Save Address</item>
+                                                                            <item name="text" xsi:type="string" translate="true">Ship here</item>
                                                                             <item name="class" xsi:type="string">action primary action-save-address</item>
                                                                         </item>
                                                                         <item name="cancel" xsi:type="array">
