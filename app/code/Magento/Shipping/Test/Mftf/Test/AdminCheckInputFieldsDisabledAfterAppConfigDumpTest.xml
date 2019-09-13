@@ -29,6 +29,7 @@
         <comment userInput="Assert configuration are disabled in Flat Rate section" stepKey="commentSeeDisabledFlatRateConfigs"/>
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
         <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandFlatRateTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodFlatRateSection.carriersEnableFlatRateActive}}" stepKey="waitForFlatRateTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersEnableFlatRateActive}}" userInput="disabled" stepKey="grabFlatRateActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabFlatRateActiveDisabled" stepKey="assertFlatRateActiveDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitle}}" userInput="disabled" stepKey="grabFlatRateTitleDisabled"/>
@@ -44,6 +45,7 @@
         <!--Assert configuration are disabled in Free Shipping section-->
         <comment userInput="Assert configuration are disabled in Free Shipping section" stepKey="commentSeeDisabledFreeShippingConfigs"/>
         <conditionalClick selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHead}}" dependentSelector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" visible="false" stepKey="expandFreeShippingTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" stepKey="waitForFreeShippingTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" userInput="disabled" stepKey="grabFreeShippingActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabFreeShippingActiveDisabled" stepKey="assertFreeShippingActiveDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingTitle}}" userInput="disabled" stepKey="grabFreeShippingTitleDisabled"/>
@@ -59,6 +61,7 @@
         <!--Assert configuration are disabled in Table Rates section-->
         <comment userInput="Assert configuration are disabled in Table Rates section" stepKey="commentSeeDisabledTableRatesConfigs"/>
         <conditionalClick selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTab}}" dependentSelector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" visible="false" stepKey="expandTableRateTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" stepKey="waitForTableRateTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" userInput="disabled" stepKey="grabTableRateActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabTableRateActiveDisabled" stepKey="assertTableRateActiveDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTitle}}" userInput="disabled" stepKey="grabTableRateTitleDisabled"/>

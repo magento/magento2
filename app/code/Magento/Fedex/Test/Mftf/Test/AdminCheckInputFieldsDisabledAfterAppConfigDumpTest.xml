@@ -13,6 +13,7 @@
         <comment userInput="Assert configuration are disabled in FedEx section" stepKey="commentSeeDisabledFedExConfigs"/>
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
         <conditionalClick selector="{{AdminShippingMethodFedExSection.carriersFedExTab}}" dependentSelector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" visible="false" stepKey="expandFedExTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" stepKey="waitFedExTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" userInput="disabled" stepKey="grabFedExActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabFedExActiveDisabled" stepKey="assertFedExActiveDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExActiveRMA}}" userInput="disabled" stepKey="grabFedExActiveRMADisabled"/>

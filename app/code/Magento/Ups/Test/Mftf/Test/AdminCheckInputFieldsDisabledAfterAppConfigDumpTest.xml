@@ -13,6 +13,7 @@
         <comment userInput="Assert configuration are disabled in UPS section" stepKey="commentSeeDisabledUPSConfigs"/>
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
         <conditionalClick selector="{{AdminShippingMethodsUpsSection.carriersUpsTab}}" dependentSelector="{{AdminShippingMethodsUpsSection.carriersUPSActive}}" visible="false" stepKey="expandUPSTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodsUpsSection.carriersUPSActive}}" stepKey="waitUPSTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSActive}}" userInput="disabled" stepKey="grabUPSActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabUPSActiveDisabled" stepKey="assertUPSActiveDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSActiveRMA}}" userInput="disabled" stepKey="grabUPSActiveRMADisabled"/>
