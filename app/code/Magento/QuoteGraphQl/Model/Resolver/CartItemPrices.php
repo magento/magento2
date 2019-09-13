@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Directory\Block\Currency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -83,7 +82,7 @@ class CartItemPrices implements ResolverInterface
      * Get Discount Values
      *
      * @param Item $cartItem
-     * @param Currency $currencyCode
+     * @param string $currencyCode
      * @return array
      */
     private function getDiscountValues($cartItem, $currencyCode)
