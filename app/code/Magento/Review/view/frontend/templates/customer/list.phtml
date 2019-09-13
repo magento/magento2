@@ -39,7 +39,9 @@
                     <?php endif; ?>
                     </td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Review')) ?>" class="col description">
+                        <?php //phpcs:disable ?>
                         <?= $this->helper(\Magento\Review\Helper\Data::class)->getDetailHtml($review->getDetail()) ?>
+                        <?php //phpcs:enable ?>
                     </td>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
                         <a href="<?= $block->escapeUrl($block->getReviewUrl($review)) ?>" class="action more">

@@ -47,17 +47,17 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                 <?php endif; ?>
                     <?php $countRecords = $block->getCollection()->getSize(); ?>
                     <div class="admin__control-support-text">
-                        <span id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>-total-count" <?= /* @noEscape */ $block->getUiId('total-count') ?>>
+                        <span id="<?= /* @noEscape */ $block->getHtmlId() ?>-total-count" <?= /* @noEscape */ $block->getUiId('total-count') ?>>
                             <?= /* @noEscape */ $countRecords ?>
                         </span>
                         <?= $block->escapeHtml(__('records found')) ?>
-                        <span id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>_massaction-count"
+                        <span id="<?= /* @noEscape */ $block->getHtmlId() ?>_massaction-count"
                               class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?= $block->escapeHtml(__('selected')) ?></span></span>
                     </div>
                 <?php if ($block->getPagerVisibility()) : ?>
                     <div class="admin__data-grid-pager-wrap">
                         <select name="<?= $block->escapeHtmlAttr($block->getVarNameLimit()) ?>"
-                                id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>_page-limit"
+                                id="<?= /* @noEscape */ $block->getHtmlId() ?>_page-limit"
                                 onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)" <?= /* @noEscape */ $block->getUiId('per-page') ?>
                                 class="admin__control-select">
                             <option value="20"<?php if ($block->getCollection()->getPageSize() == 20) : ?>
@@ -76,7 +76,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                                 selected="selected"<?php endif; ?>>200
                             </option>
                         </select>
-                        <label for="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>_page-limit"
+                        <label for="<?= /* @noEscape */ $block->getHtmlId() ?>_page-limit"
                             class="admin__control-support-text"><?= $block->escapeHtml(__('per page')) ?></label>
                         <div class="admin__data-grid-pager">
                             <?php $_curPage = $block->getCollection()->getCurPage() ?>
@@ -93,13 +93,13 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                             <?php endif; ?>
 
                             <input type="text"
-                                   id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>_page-current"
+                                   id="<?= /* @noEscape */ $block->getHtmlId() ?>_page-current"
                                    name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"
                                    value="<?= $block->escapeHtmlAttr($_curPage) ?>"
                                    class="admin__control-text"
                                    onkeypress="<?= /* @noEscape */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @noEscape */ $_lastPage ?>')" <?= /* @noEscape */ $block->getUiId('current-page') ?> />
 
-                            <label class="admin__control-support-text" for="<?= $block->escapeHtmlAttr($block->getHtmlId())
+                            <label class="admin__control-support-text" for="<?= /* @noEscape */ $block->getHtmlId()
                             ?>_page-current">
                                 <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                             </label>
