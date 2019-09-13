@@ -134,7 +134,9 @@ class CurrencyConverterApi extends AbstractImport
     private function getServiceHost(string $url): string
     {
         if (!$this->currencyConverterServiceHost) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $this->currencyConverterServiceHost = parse_url($url, PHP_URL_SCHEME) . '://'
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 . parse_url($url, PHP_URL_HOST);
         }
         return $this->currencyConverterServiceHost;

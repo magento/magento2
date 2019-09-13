@@ -106,7 +106,7 @@ class FixerIo extends AbstractImport
             [$accessKey, $currencyFrom, $currenciesStr],
             self::CURRENCY_CONVERTER_URL
         );
-
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
         try {
             $response = $this->getServiceResponse($url);
@@ -217,7 +217,9 @@ class FixerIo extends AbstractImport
     private function getServiceHost(string $url): string
     {
         if (!$this->currencyConverterServiceHost) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $this->currencyConverterServiceHost = parse_url($url, PHP_URL_SCHEME) . '://'
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 . parse_url($url, PHP_URL_HOST);
         }
         return $this->currencyConverterServiceHost;
