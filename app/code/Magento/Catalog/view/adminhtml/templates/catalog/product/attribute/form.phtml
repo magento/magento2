@@ -15,7 +15,7 @@
     <?= $block->getButtonsHtml('header') ?>
 </div>
 
-<form id="edit_form" class="admin__scope-old edit-form" action="<?= $block->escapeHtmlAttr($block->getSaveUrl()) ?>" method="post">
+<form id="edit_form" class="admin__scope-old edit-form" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post">
     <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
     <?= $block->getChildHtml('form') ?>
 </form>
