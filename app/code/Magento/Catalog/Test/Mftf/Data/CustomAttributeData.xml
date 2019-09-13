@@ -36,4 +36,8 @@
         <data key="attribute_code">news_from_date</data>
         <data key="value">2018-05-17 00:00:00</data>
     </entity>
+    <entity name="CustomAttributeCategoryIsAnchor" type="custom_attribute">
+        <data key="attribute_code">is_anchor</data>
+        <data key="value">0</data>
+    </entity>
 </entities>
