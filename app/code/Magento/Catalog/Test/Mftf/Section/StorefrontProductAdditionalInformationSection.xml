@@ -7,11 +7,13 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductAdditionalInformationSection">
         <element name="additionalInfoTab" type="button" selector="#tab-label-additional-title"/>
         <element name="additionalInfoContainer" type="block" selector="#additional"/>
         <element name="attributeLabel" type="text" selector="#product-attribute-specs-table .col.label"/>
         <element name="attributeValue" type="text" selector="#product-attribute-specs-table .col.data"/>
+        <!-- The tab transform to an accordion when window resize -->
+        <element name="moreInformationSectionToggleState" type="button" selector="#tab-label-additional[aria-expanded='{{expanded}}']" parameterized="true"/>
     </section>
 </sections>
