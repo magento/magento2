@@ -104,7 +104,7 @@
                                          </div>
                                      </div>
                                      <div class="field to">
-                                        <label for="gift-message-<?= (int) $_item->getId() ?>-to" class="label"><span><?= $block->escapeHtmlAttr(__('To')) ?></span></label>
+                                        <label for="gift-message-<?= (int) $_item->getId() ?>-to" class="label"><span><?= $block->escapeHtml(__('To')) ?></span></label>
                                         <div class="control">
                                             <input type="text" name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][to]" id="gift-message-<?= (int) $_item->getId() ?>-to" title="<?= $block->escapeHtmlAttr(__('To')) ?>" value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>" class="input-text">
                                         </div>

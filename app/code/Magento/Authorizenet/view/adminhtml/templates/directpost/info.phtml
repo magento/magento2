@@ -39,7 +39,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                         'required':true,
                         'validate-cc-type-select':'#<?= /* @noEscape */ $code ?>_cc_number'
                         }">
-                <option value=""><?= $block->escapeHtmlAttr(__('Please Select')) ?></option>
+                <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
                     <option value="<?= $block->escapeHtmlAttr($typeCode) ?>"
                             <?php if ($typeCode == $ccType) : ?>selected="selected"<?php endif; ?>>
