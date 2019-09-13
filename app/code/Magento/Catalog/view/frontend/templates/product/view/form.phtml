@@ -16,7 +16,7 @@
 <?php $_product = $block->getProduct(); ?>
 
 <div class="product-add-form">
-    <form data-product-sku="<?= $block->escapeHtml($_product->getSku()) ?>"
+    <form data-product-sku="<?= $block->escapeHtmlAttr($_product->getSku()) ?>"
           action="<?= $block->escapeUrl($block->getSubmitUrl($_product)) ?>" method="post"
           id="product_addtocart_form"<?php if ($_product->getOptions()) :?> enctype="multipart/form-data"<?php endif; ?>>
         <input type="hidden" name="product" value="<?= (int)$_product->getId() ?>" />

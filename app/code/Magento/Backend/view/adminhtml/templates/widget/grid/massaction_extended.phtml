@@ -38,7 +38,7 @@
             id="<?= $block->getHtmlId() ?>-mass-select"
             class="action-select-multiselect"
             data-menu="grid-mass-select">
-            <optgroup label="<?= $block->escapeHtml(__('Mass Actions')) ?>">
+            <optgroup label="<?= $block->escapeHtmlAttr(__('Mass Actions')) ?>">
                 <option disabled selected></option>
             <?php if ($block->getUseSelectAll()) : ?>
                 <option value="selectAll">

@@ -10,5 +10,5 @@
     "successText": "<?= $block->escapeHtmlAttr(__('Successful! Test again?')) ?>",
     "failedText": "<?= $block->escapeHtmlAttr(__('Connection failed! Test again?')) ?>",
     "fieldMapping": "<?= /* @noEscape */ $block->getFieldMapping() ?>"}, "validation": {}}'>
-    <span id="<?= $block->getHtmlId() ?>_result"><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
+    <span id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>_result"><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
 </button>

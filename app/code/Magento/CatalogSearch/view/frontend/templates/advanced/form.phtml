@@ -33,9 +33,9 @@
                         <div class="control">
                             <input type="text"
                                    name="<?= $block->escapeHtmlAttr($_code) ?>[from]"
-                                   value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'from')) ?>"
+                                   value="<?= $block->escapeHtmlAttr($block->getAttributeValue($_attribute, 'from')) ?>"
                                    id="<?= $block->escapeHtmlAttr($_code) ?>"
-                                   title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                                   title="<?= $block->escapeHtmlAttr($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
                                    data-validate="{number:true, 'less-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>_to'}" />
@@ -45,9 +45,9 @@
                         <div class="control">
                             <input type="text"
                                    name="<?= $block->escapeHtmlAttr($_code) ?>[to]"
-                                   value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'to')) ?>"
+                                   value="<?= $block->escapeHtmlAttr($block->getAttributeValue($_attribute, 'to')) ?>"
                                    id="<?= $block->escapeHtmlAttr($_code) ?>_to"
-                                   title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                                   title="<?= $block->escapeHtmlAttr($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
                                    data-validate="{number:true, 'greater-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>'}" />
@@ -62,9 +62,9 @@
                     <div class="field no-label">
                         <div class="control">
                             <input name="<?= $block->escapeHtmlAttr($_code) ?>[from]"
-                                   value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'from')) ?>"
+                                   value="<?= $block->escapeHtmlAttr($block->getAttributeValue($_attribute, 'from')) ?>"
                                    id="<?= $block->escapeHtmlAttr($_code) ?>"
-                                   title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                                   title="<?= $block->escapeHtmlAttr($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    type="text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
@@ -75,9 +75,9 @@
                         <div class="control">
                             <div class="addon">
                                 <input name="<?= $block->escapeHtmlAttr($_code) ?>[to]"
-                                       value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'to')) ?>"
+                                       value="<?= $block->escapeHtmlAttr($block->getAttributeValue($_attribute, 'to')) ?>"
                                        id="<?= $block->escapeHtmlAttr($_code) ?>_to"
-                                       title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                                       title="<?= $block->escapeHtmlAttr($block->getAttributeLabel($_attribute)) ?>"
                                        class="input-text"
                                        type="text"
                                        maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
@@ -123,8 +123,8 @@
                 <input type="text"
                        name="<?= $block->escapeHtmlAttr($_code) ?>"
                        id="<?= $block->escapeHtmlAttr($_code) ?>"
-                       value="<?= $block->escapeHtml($block->getAttributeValue($_attribute)) ?>"
-                       title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                       value="<?= $block->escapeHtmlAttr($block->getAttributeValue($_attribute)) ?>"
+                       title="<?= $block->escapeHtmlAttr($block->getAttributeLabel($_attribute)) ?>"
                        class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass($_attribute)) ?>"
                        maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>" />
             <?php endswitch; ?>
@@ -136,7 +136,7 @@
   <div class="primary">
     <button type="submit"
             class="action search primary"
-            title="<?= $block->escapeHtml(__('Search')) ?>">
+            title="<?= $block->escapeHtmlAttr(__('Search')) ?>">
         <span><?= $block->escapeHtml(__('Search')) ?></span>
     </button>
   </div>

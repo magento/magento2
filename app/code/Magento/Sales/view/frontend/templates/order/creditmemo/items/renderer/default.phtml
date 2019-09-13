@@ -53,16 +53,16 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></td>
-    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+    <td class="col sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></td>
+    <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Price')) ?>">
         <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= (float) $_item->getQty() ?></td>
-    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+    <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>"><?= (float) $_item->getQty() ?></td>
+    <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>
     </td>
-    <td class="col discount" data-th="<?= $block->escapeHtml(__('Discount Amount')) ?>"><?= /* @noEscape */ $_order->formatPrice(-$_item->getDiscountAmount()) ?></td>
-    <td class="col total" data-th="<?= $block->escapeHtml(__('Row Total')) ?>">
+    <td class="col discount" data-th="<?= $block->escapeHtmlAttr(__('Discount Amount')) ?>"><?= /* @noEscape */ $_order->formatPrice(-$_item->getDiscountAmount()) ?></td>
+    <td class="col total" data-th="<?= $block->escapeHtmlAttr(__('Row Total')) ?>">
         <?= $block->getItemRowTotalAfterDiscountHtml() ?>
     </td>
 </tr>

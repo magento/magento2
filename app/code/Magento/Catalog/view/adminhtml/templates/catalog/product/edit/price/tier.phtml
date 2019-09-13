@@ -21,7 +21,7 @@ $element = $block->getElement();
 <?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
 <?php $_showWebsite = $block->isMultiWebsites(); ?>
 <div class="field" id="attribute-<?= /* @noEscape */ $_htmlId ?>-container" data-attribute-code="<?= /* @noEscape */ $_htmlId ?>"
-     data-apply-to="<?= $block->escapeHtml(
+     data-apply-to="<?= $block->escapeHtmlAttr(
          $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(
              $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
          )
@@ -72,7 +72,7 @@ var tierPriceRowTemplate = '<tr>'
     + '</td>'
     + '<td class="col-price"><input class="<?= $block->escapeHtmlAttr($_htmlClass) ?> required-entry <?= $block->escapeHtmlAttr($_priceValueValidation) ?>" type="text" name="<?= /* @noEscape */ $_htmlName ?>[<%- data.index %>][price]" value="<%- data.price %>" id="tier_price_row_<%- data.index %>_price" /></td>'
     + '<td class="col-delete"><input type="hidden" name="<?= /* @noEscape */ $_htmlName ?>[<%- data.index %>][delete]" class="delete" value="" id="tier_price_row_<%- data.index %>_delete" />'
-    + '<button title="<?= $block->escapeHtml(__('Delete Tier')) ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
+    + '<button title="<?= $block->escapeHtmlAttr(__('Delete Tier')) ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
     + '<span><?= $block->escapeHtml(__("Delete")) ?></span></button></td>'
     + '</tr>';
 

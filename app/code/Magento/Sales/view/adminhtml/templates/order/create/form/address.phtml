@@ -69,7 +69,7 @@ endif; ?>
             <div class="admin__field-control">
                 <select id="<?= $block->escapeHtmlAttr($_id) ?>"
                         name="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlNamePrefix()) ?>[customer_address_id]"
-                        onchange="order.selectAddress(this, '<?= $block->escapeJs($_fieldsContainerId) ?>')"
+                        onchange="order.selectAddress(this, '<?= $block->escapeHtmlAttr($block->escapeJs($_fieldsContainerId)) ?>')"
                         class="admin__control-select">
                     <option value=""><?= $block->escapeHtml(__('Add New Address')) ?></option>
                     <?php foreach ($addressArray as $addressId => $address) : ?>

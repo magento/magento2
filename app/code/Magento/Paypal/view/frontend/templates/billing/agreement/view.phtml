@@ -20,7 +20,7 @@ $relatedOrders = $block->getRelatedOrders();
                         "cancelMessage" : "<?= $block->escapeHtml(__('Are you sure you want to do this?')) ?>",
                         "cancelUrl" : "<?= $block->escapeUrl($block->getCancelUrl()) ?>"
                     }}'
-                    type="button" title="<?= $block->escapeHtml(__('Cancel')) ?>"
+                    type="button" title="<?= $block->escapeHtmlAttr(__('Cancel')) ?>"
                     class="secondary action cancel" />
                 <span><?= $block->escapeHtml(__('Cancel')) ?></span>
             </button>
@@ -46,21 +46,21 @@ $relatedOrders = $block->getRelatedOrders();
                 </thead>
                 <tbody>
                 <tr>
-                    <td data-th="<?= $block->escapeHtml(__('Reference ID:')) ?>" class="col id">
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Reference ID:')) ?>" class="col id">
                         <?= $block->escapeHtml($block->getReferenceId()) ?>
                     </td>
-                    <td data-th="<?= $block->escapeHtml(__('Status:')) ?>" class="col status">
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Status:')) ?>" class="col status">
                         <?= $block->escapeHtml($block->getAgreementStatus()) ?>
                     </td>
-                    <td data-th="<?= $block->escapeHtml(__('Created:')) ?>" class="col created">
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Created:')) ?>" class="col created">
                         <?= $block->escapeHtml($block->getAgreementCreatedAt()) ?>
                     </td>
                     <?php if ($block->getAgreementUpdatedAt()) : ?>
-                        <td data-th="<?= $block->escapeHtml(__('Updated:')) ?>" class="col updated">
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Updated:')) ?>" class="col updated">
                             <?= $block->escapeHtml($block->getAgreementUpdatedAt()) ?>
                         </td>
                     <?php endif; ?>
-                    <td data-th="<?= $block->escapeHtml(__('Payment Method:')) ?>" class="col payment">
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Payment Method:')) ?>" class="col payment">
                         <?= $block->escapeHtml($block->getPaymentMethodTitle()) ?>
                     </td>
                 </tr>
@@ -92,25 +92,25 @@ $relatedOrders = $block->getRelatedOrders();
                     <tbody>
                         <?php foreach ($relatedOrders as $order) : ?>
                             <tr>
-                                <td data-th="<?= $block->escapeHtml(__('Order #')) ?>" class="col id">
+                                <td data-th="<?= $block->escapeHtmlAttr(__('Order #')) ?>" class="col id">
                                     <?= $block->escapeHtml($block->getOrderItemValue(
                                         $order,
                                         'order_increment_id'
                                     )); ?>
                                 </td>
-                                <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date">
+                                <td data-th="<?= $block->escapeHtmlAttr(__('Date')) ?>" class="col date">
                                     <?= $block->escapeHtml($block->getOrderItemValue($order, 'created_at')) ?>
                                 </td>
-                                <td data-th="<?= $block->escapeHtml(__('Ship To')) ?>" class="col shipto">
+                                <td data-th="<?= $block->escapeHtmlAttr(__('Ship To')) ?>" class="col shipto">
                                     <?= $block->escapeHtml($block->getOrderItemValue(
                                         $order,
                                         'shipping_address'
                                     )); ?>
                                 </td>
-                                <td data-th="<?= $block->escapeHtml(__('Order Total')) ?>" class="col total">
+                                <td data-th="<?= $block->escapeHtmlAttr(__('Order Total')) ?>" class="col total">
                                     <?= /* @noEscape */ $block->getOrderItemValue($order, 'order_total') ?>
                                 </td>
-                                <td data-th="<?= $block->escapeHtml(__('Order Status')) ?>" class="col status">
+                                <td data-th="<?= $block->escapeHtmlAttr(__('Order Status')) ?>" class="col status">
                                     <?= $block->escapeHtml($block->getOrderItemValue(
                                         $order,
                                         'status_label'

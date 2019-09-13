@@ -41,7 +41,7 @@ use Magento\Framework\App\Action\Action;
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">
-                                    <a title="<?= $block->escapeHtml($_item->getName()) ?>"
+                                    <a title="<?= $block->escapeHtmlAttr($_item->getName()) ?>"
                                        href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
                                        class="product-item-link">
                                         <?= $block->escapeHtml($_item->getName()) ?>
@@ -62,12 +62,12 @@ use Magento\Framework\App\Action\Action;
                                                 <div class="actions-primary">
                                                     <?php if ($_item->isSaleable()) : ?>
                                                         <?php $postParams = $block->getAddToCartPostParams($_item); ?>
-                                                        <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>" action="<?= $block->escapeUrl($postParams['action']) ?>" method="post">
+                                                        <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtmlAttr($_item->getSku()) ?>" action="<?= $block->escapeUrl($postParams['action']) ?>" method="post">
                                                             <input type="hidden" name="product" value="<?= $block->escapeHtmlAttr($postParams['data']['product']) ?>">
                                                             <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
                                                             <?= $block->getBlockHtml('formkey') ?>
                                                             <button type="submit"
-                                                                    title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
+                                                                    title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
                                                                     class="action tocart primary">
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>

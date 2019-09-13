@@ -74,7 +74,7 @@
                                     <span><?= $block->escapeHtml(__('Address')) ?></span>
                                 </label>
                                 <div class="control">
-                                    <input type="text" name="street[]" value="<?= $block->escapeHtml($block->getFormData()->getStreetLine($_i - 1)) ?>" title="<?= $block->escapeHtmlAttr(__('Street Address %1', $_i)) ?>" id="street_<?= /* @noEscape */ $_i ?>" class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>">
+                                    <input type="text" name="street[]" value="<?= $block->escapeHtmlAttr($block->getFormData()->getStreetLine($_i - 1)) ?>" title="<?= $block->escapeHtmlAttr(__('Street Address %1', $_i)) ?>" id="street_<?= /* @noEscape */ $_i ?>" class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>">
                                 </div>
                             </div>
                         <?php endfor; ?>
@@ -95,7 +95,7 @@
                     <select id="region_id" name="region_id" title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>" class="validate-select region_id" style="display:none;">
                         <option value=""><?= $block->escapeHtml(__('Please select a region, state or province.')) ?></option>
                     </select>
-                    <input type="text" id="region" name="region" value="<?= $block->escapeHtml($block->getRegion()) ?>" title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>" class="input-text <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('region')) ?>" style="display:none;">
+                    <input type="text" id="region" name="region" value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>" title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>" class="input-text <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('region')) ?>" style="display:none;">
                 </div>
             </div>
 

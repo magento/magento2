@@ -40,7 +40,7 @@ $stores = $block->getStoresSortedBySortOrder();
                 <th colspan="<?= (int)$colTotal ?>" class="col-actions-add">
                     <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
                         <button id="add_new_swatch_text_option_button"
-                                title="<?= $block->escapeHtml(__('Add Swatch')) ?>"
+                                title="<?= $block->escapeHtmlAttr(__('Add Swatch')) ?>"
                                 type="button" class="action- scalable add">
                             <span><?= $block->escapeHtml(__('Add Swatch')) ?></span>
                         </button>
