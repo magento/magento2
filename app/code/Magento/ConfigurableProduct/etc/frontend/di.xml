@@ -13,4 +13,7 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="product_identities_extender" type="Magento\ConfigurableProduct\Model\Plugin\Frontend\ProductIdentitiesExtender" />
     </type>
+    <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
+        <plugin name="used_products_cache" type="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsCache" />
+    </type>
 </config>
