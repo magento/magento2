@@ -92,6 +92,6 @@ class GetCustomer
         if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
             throw new GraphQlAuthenticationException(__("This account isn't confirmed. Verify and try again."));
         }
-        return $customer;
+        return $customer->setGroupId(null);
     }
 }

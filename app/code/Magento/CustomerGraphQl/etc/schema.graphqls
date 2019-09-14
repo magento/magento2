@@ -78,7 +78,7 @@ type RevokeCustomerTokenOutput {
 
 type Customer @doc(description: "Customer defines the customer name and address and other details") {
     created_at: String @doc(description: "Timestamp indicating when the account was created")
-    group_id: Int @doc(description: "The group assigned to the user. Default values are 0 (Not logged in), 1 (General), 2 (Wholesale), and 3 (Retailer)")
+    group_id: Int @doc(description: "The group assigned to the user. Default values are 0 (Not logged in), 1 (General), 2 (Wholesale), and 3 (Retailer)") @deprecated(reason: "Customer group should not be exposed in the storefront scenarios.")
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     firstname: String @doc(description: "The customer's first name")
     middlename: String @doc(description: "The customer's middle name")
