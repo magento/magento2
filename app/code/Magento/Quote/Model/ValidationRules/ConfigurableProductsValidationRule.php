@@ -10,7 +10,6 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * @inheritdoc
