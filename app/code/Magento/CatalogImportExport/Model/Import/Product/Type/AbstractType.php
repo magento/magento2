@@ -543,7 +543,7 @@ abstract class AbstractType
                 } else {
                     $resultAttrs[$attrCode] = $rowData[$attrCode];
                 }
-            } elseif (array_key_exists($attrCode, $rowData) && empty($rowData['_store'])) {
+            } elseif (array_key_exists($attrCode, $rowData)) {
                 $resultAttrs[$attrCode] = $rowData[$attrCode];
             } elseif ($withDefaultValue && null !== $attrParams['default_value'] && empty($rowData['_store'])) {
                 $resultAttrs[$attrCode] = $attrParams['default_value'];
