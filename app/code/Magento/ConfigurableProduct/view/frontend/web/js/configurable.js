@@ -432,11 +432,13 @@ define([
                         element.options[index].config = options[i];
                         index++;
                     }
-                    if (i == 0) {
+
+                    if (i === 0) {
                         this.options.values[attributeId] = options[i].id;
                     }
                     /* eslint-enable max-depth */
                 }
+
                 if (window.location.href.indexOf('#') !== -1) {
                     this._parseQueryParams(window.location.href.substr(window.location.href.indexOf('#') + 1));
                 }

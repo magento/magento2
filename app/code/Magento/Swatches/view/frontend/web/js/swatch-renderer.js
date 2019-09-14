@@ -480,6 +480,7 @@ define([
             });
 
         },
+        
         /**
          * Render swatch options by part of config
          *
