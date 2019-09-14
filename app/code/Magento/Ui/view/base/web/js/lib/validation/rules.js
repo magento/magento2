@@ -1076,7 +1076,7 @@ define([
 
                 return moment(value).isBefore(moment());
             },
-            $.mage.__('The Date of Birth should not be greater than today')
+            $.mage.__('The Date of Birth should not be greater than today.')
         ]
     }, function (data) {
         return {
