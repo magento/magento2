@@ -476,7 +476,9 @@ define([
 
             //Trigger click for Autoselect first option swatch
             $.each(selectedArray, function () {
-                if(this !== undefined) this.click();
+                if (this !== undefined) {
+                    this.click();
+                }
             });
 
         },
