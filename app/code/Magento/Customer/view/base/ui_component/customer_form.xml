@@ -264,6 +264,7 @@
             </argument>
             <settings>
                 <validation>
+                    <rule name="validate-date" xsi:type="boolean">true</rule>
                     <rule name="validate-dob" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
