@@ -17,7 +17,9 @@
     <input type="checkbox" name="persistent_remember_me" class="checkbox" id="<?= $block->escapeHtmlAttr($rememberMeId) ?>" <?php if ($block->isRememberMeChecked()) : ?> checked="checked" <?php endif; ?> title="<?= $block->escapeHtmlAttr(__('Remember Me')) ?>" />
     <label for="<?= $block->escapeHtmlAttr($rememberMeId) ?>" class="label"><span><?= $block->escapeHtml(__('Remember Me')) ?></span></label>
     <span class="tooltip wrapper">
-        <strong class="tooltip toggle"><?= $block->escapeHtml(__('What\'s this?')) ?></strong>
+        <strong class="tooltip toggle">
+            <?= $block->escapeHtml(__('What\'s this?')) ?>
+        </strong>
         <span class="tooltip content">
             <?= $block->escapeHtml(__('Check &quot;Remember Me&quot; to access your shopping cart on this computer even if you are not signed in.')) ?>
         </span>
