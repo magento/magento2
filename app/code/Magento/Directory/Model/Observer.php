@@ -83,6 +83,8 @@ class Observer
     }
 
     /**
+     * Schedule update currency rates
+     *
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
