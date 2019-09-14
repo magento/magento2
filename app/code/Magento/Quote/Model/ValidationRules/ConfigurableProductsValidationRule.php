@@ -10,7 +10,7 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
-use Magento\Store\Model\ScopeInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * @inheritdoc
@@ -60,18 +60,18 @@ class ConfigurableProductsValidationRule implements QuoteValidationRuleInterface
             $product = $item->getProduct();
 
             if (!$item->isDeleted()
-                && $product->getTypeId() === \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
+                && $product->getTypeId() === Configurable::TYPE_CODE
             ) {
                 $children = $product->getTypeInstance()->getUsedProducts($product);
-                $cartAllowedChildren = array_merge($cartAllowedChildren, array_map(function ($item) {
-                    return $item->getId();
-                }, $children));
+                foreach ($children as $child) {
+                    $cartAllowedChildren[$child->getId()] = '';
+                }
             } elseif (!$item->isDeleted() && $item->getParentItemId() && $item->getParentItem()) {
                 $cartAllSimpleWithConfigurableParent[] = $product->getId();
             }
         }
 
-        $notAvailableProducts = array_diff($cartAllSimpleWithConfigurableParent, $cartAllowedChildren);
+        $notAvailableProducts = array_diff($cartAllSimpleWithConfigurableParent, array_keys($cartAllowedChildren));
 
         if (!empty($notAvailableProducts)) {
             $validationErrors = [__($this->generalMessage)];
