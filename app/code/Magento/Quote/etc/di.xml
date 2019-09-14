@@ -110,6 +110,7 @@
                 <item name="BillingAddressValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\BillingAddressValidationRule</item>
                 <item name="PaymentMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule</item>
                 <item name="MinimumAmountValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\MinimumAmountValidationRule</item>
+                <item name="ConfigurableProductsValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\ConfigurableProductsValidationRule</item>
             </argument>
         </arguments>
     </type>
@@ -136,6 +137,11 @@
     <type name="Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule">
         <arguments>
             <argument name="generalMessage" xsi:type="string" translatable="true">Enter a valid payment method and try again.</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\ConfigurableProductsValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Product is not available at the moment.</argument>
         </arguments>
     </type>
 </config>
