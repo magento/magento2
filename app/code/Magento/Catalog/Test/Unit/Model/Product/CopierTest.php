@@ -197,7 +197,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $this->productActionMock->expects($this->once())
             ->method('updateAttributes')
             ->with([3], ['url_key' => 'urk-key-2'], 2);
-        $this->urlPersist->expects($this->exactly($expectedReplaceCount))
+        $this->urlPersist->expects($this->exactly(1))
             ->method('replace')
             ->with([3 => 'rewrite']);
         
