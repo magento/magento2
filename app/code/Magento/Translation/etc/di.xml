@@ -15,6 +15,7 @@
     <preference for="Magento\Framework\Phrase\RendererInterface" type="Magento\Framework\Phrase\Renderer\Composite" />
     <preference for="Magento\Translation\Model\Js\DataProviderInterface" type="Magento\Translation\Model\Js\DataProvider"/>
     <preference for="Magento\Framework\Translate\Js\Config" type="Magento\Translation\Model\Js\Config"/>
+    <preference for="Magento\Framework\Filesystem\DriverInterface" type="Magento\Framework\Filesystem\Driver\File"/>
     <type name="Magento\Framework\Translate\Inline">
         <arguments>
             <argument name="templateFileName" xsi:type="string">Magento_Translation::translate_inline.phtml</argument>
