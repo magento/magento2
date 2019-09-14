@@ -39,7 +39,7 @@
                 <textarea name="comment" id="comment" title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"><?= $block->escapeHtml($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('comment')) ?></textarea>
             </div>
         </div>
-        <?= $block->getChildHtml('form.additional.info') ?>
+        <?= $block->getChildHtml() ?>
     </fieldset>
     <div class="actions-toolbar">
         <div class="primary">

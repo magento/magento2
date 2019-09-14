@@ -7,6 +7,19 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="contactForm">
+            <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-" cacheable="false">
+                <action method="setFormId">
+                    <argument name="formId" xsi:type="string">contact_us</argument>
+                </action>
+                <action method="setImgWidth">
+                    <argument name="width" xsi:type="string">230</argument>
+                </action>
+                <action method="setImgHeight">
+                    <argument name="width" xsi:type="string">50</argument>
+                </action>
+            </block>
+        </referenceBlock>
         <referenceBlock name="authentication-popup">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">

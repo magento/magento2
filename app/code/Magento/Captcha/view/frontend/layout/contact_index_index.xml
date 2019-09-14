@@ -7,7 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="form.additional.info">
+        <referenceBlock name="contactForm">
             <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-" cacheable="false">
                 <action method="setFormId">
                     <argument name="formId" xsi:type="string">contact_us</argument>
@@ -19,7 +19,7 @@
                     <argument name="width" xsi:type="string">50</argument>
                 </action>
             </block>
-        </referenceContainer>
+        </referenceBlock>
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="captcha_page_head_components" template="Magento_Captcha::js/components.phtml"/>
         </referenceBlock>
