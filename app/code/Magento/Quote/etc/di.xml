@@ -141,7 +141,7 @@
     </type>
     <type name="Magento\Quote\Model\ValidationRules\ConfigurableProductsValidationRule">
         <arguments>
-            <argument name="generalMessage" xsi:type="string" translatable="true">Product is not available at the moment.</argument>
+            <argument name="generalMessage" xsi:type="string" translatable="true">Some of the products below do not have all the required options.</argument>
         </arguments>
     </type>
 </config>
