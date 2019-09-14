@@ -164,6 +164,7 @@ define([
 
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
+                $(regionList).find('option:selected').removeAttr("selected");
                 this._removeSelectOptions(regionList);
                 $.each(this.options.regionJson[country], $.proxy(function (key, value) {
                     this._renderSelectOption(regionList, key, value);
@@ -198,6 +199,7 @@ define([
                 regionInput.hide();
                 label.attr('for', regionList.attr('id'));
             } else {
+                regionInput.val('');
                 this._removeSelectOptions(regionList);
 
                 if (this.options.isRegionRequired) {
@@ -224,13 +226,7 @@ define([
                     postcode.addClass('required-entry').closest('.field').addClass('required');
             }
 
-            if (!this.options.defaultRegion) {
-                regionList.val('');
-                regionInput.val('');
-            } else {
-                // Add defaultvalue attribute to state/province select element
-                regionList.attr('defaultvalue', this.options.defaultRegion);
-            }
+            regionList.attr('defaultvalue', this.options.defaultRegion);
         },
 
         /**
