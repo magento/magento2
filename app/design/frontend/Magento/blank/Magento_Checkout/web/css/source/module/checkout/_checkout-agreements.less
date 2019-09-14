@@ -8,11 +8,10 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-    @color_1: #e02b27;
     .checkout-agreement.field.choice.required {
         display: flex;
         &::after {
-            color: @color_1;
+            color: @form-field-label-asterisk__color;
             content: '*';
             font-size: 1.2rem;  
             margin: 3px 0 0 5px;
