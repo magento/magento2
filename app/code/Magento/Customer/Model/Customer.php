@@ -513,7 +513,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Customer addresses collection
      *
-     * @return ResourceModel\Address\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressesCollection()
@@ -600,7 +600,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Validate password with salted hash
      *
      * @param string $password
-     * @return bool
+     * @return boolean
      * @throws \Exception
      */
     public function validatePassword($password)
