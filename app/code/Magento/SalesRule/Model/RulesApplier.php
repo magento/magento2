@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesRule\Model;
 
 use Magento\Quote\Model\Quote\Address;
@@ -41,31 +42,32 @@ class RulesApplier
 
     /**
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
-     * @param \Magento\Framework\Event\ManagerInterface                       $eventManager
-     * @param \Magento\SalesRule\Model\Utility                                $utility
-     * @param ChildrenValidationLocator|null                                  $childrenValidationLocator
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\SalesRule\Model\Utility $utility
+     * @param ChildrenValidationLocator|null $childrenValidationLocator
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\SalesRule\Model\Utility $utility,
         ChildrenValidationLocator $childrenValidationLocator = null
-    ) {
+    )
+    {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
         $this->_eventManager = $eventManager;
         $this->childrenValidationLocator = $childrenValidationLocator
-             ?: ObjectManager::getInstance()->get(ChildrenValidationLocator::class);
+            ?: ObjectManager::getInstance()->get(ChildrenValidationLocator::class);
     }
 
     /**
      * Apply rules to current order item
      *
-     * @param                                        \Magento\Quote\Model\Quote\Item\AbstractItem           $item
-     * @param                                        \Magento\SalesRule\Model\ResourceModel\Rule\Collection $rules
-     * @param                                        bool                                                   $skipValidation
-     * @param                                        mixed                                                  $couponCode
-     * @return                                       array
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\Collection $rules
+     * @param bool $skipValidation
+     * @param mixed $couponCode
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function applyRules($item, $rules, $skipValidation, $couponCode)
@@ -80,7 +82,7 @@ class RulesApplier
 
             if (!$skipValidation && !$rule->getActions()->validate($item)) {
                 if (!$this->childrenValidationLocator->isChildrenValidationRequired($item)) {
-                     continue;
+                    continue;
                 }
                 $childItems = $item->getChildren();
                 $isContinue = true;
@@ -110,8 +112,8 @@ class RulesApplier
     /**
      * Add rule discount description label to address object
      *
-     * @param  Address                       $address
-     * @param  \Magento\SalesRule\Model\Rule $rule
+     * @param Address $address
+     * @param \Magento\SalesRule\Model\Rule $rule
      * @return $this
      */
     public function addDiscountDescription($address, $rule)
@@ -123,7 +125,7 @@ class RulesApplier
             $label = $ruleLabel;
         } else {
             if (strlen($address->getCouponCode())) {
-                $label =  $address->getCouponCode();
+                $label = $address->getCouponCode();
 
                 if ($rule->getDescription()) {
                     $label = $rule->getDescription();
@@ -142,9 +144,9 @@ class RulesApplier
 
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule                $rule
-     * @param \Magento\Quote\Model\Quote\Address           $address
-     * @param mixed                                        $couponCode
+     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param mixed $couponCode
      * @return $this
      */
     protected function applyRule($item, $rule, $address, $couponCode)
@@ -160,7 +162,7 @@ class RulesApplier
 
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule                $rule
+     * @param \Magento\SalesRule\Model\Rule $rule
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
      */
     protected function getDiscountData($item, $rule)
@@ -186,7 +188,7 @@ class RulesApplier
 
     /**
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem       $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
      */
     protected function setDiscountData($discountData, $item)
@@ -202,9 +204,9 @@ class RulesApplier
     /**
      * Set coupon code to address if $rule contains validated coupon
      *
-     * @param  Address                       $address
-     * @param  \Magento\SalesRule\Model\Rule $rule
-     * @param  mixed                         $couponCode
+     * @param Address $address
+     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param mixed $couponCode
      * @return $this
      */
     public function maintainAddressCouponCode($address, $rule, $couponCode)
@@ -223,10 +225,10 @@ class RulesApplier
     /**
      * Fire event to allow overwriting of discount amounts
      *
-     * @param  \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param  \Magento\Quote\Model\Quote\Item\AbstractItem       $item
-     * @param  \Magento\SalesRule\Model\Rule                      $rule
-     * @param  float                                              $qty
+     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param float $qty
      * @return $this
      */
     protected function eventFix(
@@ -234,7 +236,8 @@ class RulesApplier
         \Magento\Quote\Model\Quote\Item\AbstractItem $item,
         \Magento\SalesRule\Model\Rule $rule,
         $qty
-    ) {
+    )
+    {
         $quote = $item->getQuote();
         $address = $item->getAddress();
 
@@ -255,7 +258,7 @@ class RulesApplier
 
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param int[]                                        $appliedRuleIds
+     * @param int[] $appliedRuleIds
      * @return $this
      */
     public function setAppliedRuleIds(\Magento\Quote\Model\Quote\Item\AbstractItem $item, array $appliedRuleIds)
