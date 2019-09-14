@@ -60,7 +60,7 @@ class ConfigurableProductsValidationRule implements QuoteValidationRuleInterface
             $product = $item->getProduct();
 
             if (!$item->isDeleted()
-                && $product->getTypeId() === Configurable::TYPE_CODE
+                && $product->getTypeId() === 'configurable'
             ) {
                 $children = $product->getTypeInstance()->getUsedProducts($product);
                 foreach ($children as $child) {
