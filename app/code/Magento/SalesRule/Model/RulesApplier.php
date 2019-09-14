@@ -12,6 +12,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 
 /**
  * Class RulesApplier
+ *
  * @package Magento\SalesRule\Model\Validator
  */
 class RulesApplier
@@ -40,9 +41,9 @@ class RulesApplier
 
     /**
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\SalesRule\Model\Utility $utility
-     * @param ChildrenValidationLocator|null $childrenValidationLocator
+     * @param \Magento\Framework\Event\ManagerInterface                       $eventManager
+     * @param \Magento\SalesRule\Model\Utility                                $utility
+     * @param ChildrenValidationLocator|null                                  $childrenValidationLocator
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
@@ -60,11 +61,11 @@ class RulesApplier
     /**
      * Apply rules to current order item
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\Collection $rules
-     * @param bool $skipValidation
-     * @param mixed $couponCode
-     * @return array
+     * @param                                        \Magento\Quote\Model\Quote\Item\AbstractItem           $item
+     * @param                                        \Magento\SalesRule\Model\ResourceModel\Rule\Collection $rules
+     * @param                                        bool                                                   $skipValidation
+     * @param                                        mixed                                                  $couponCode
+     * @return                                       array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function applyRules($item, $rules, $skipValidation, $couponCode)
@@ -109,8 +110,8 @@ class RulesApplier
     /**
      * Add rule discount description label to address object
      *
-     * @param Address $address
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param  Address                       $address
+     * @param  \Magento\SalesRule\Model\Rule $rule
      * @return $this
      */
     public function addDiscountDescription($address, $rule)
@@ -141,9 +142,9 @@ class RulesApplier
 
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
-     * @param mixed $couponCode
+     * @param \Magento\SalesRule\Model\Rule                $rule
+     * @param \Magento\Quote\Model\Quote\Address           $address
+     * @param mixed                                        $couponCode
      * @return $this
      */
     protected function applyRule($item, $rule, $address, $couponCode)
@@ -159,7 +160,7 @@ class RulesApplier
 
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param \Magento\SalesRule\Model\Rule                $rule
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
      */
     protected function getDiscountData($item, $rule)
@@ -185,7 +186,7 @@ class RulesApplier
 
     /**
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem       $item
      * @return $this
      */
     protected function setDiscountData($discountData, $item)
@@ -201,9 +202,9 @@ class RulesApplier
     /**
      * Set coupon code to address if $rule contains validated coupon
      *
-     * @param Address $address
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param mixed $couponCode
+     * @param  Address                       $address
+     * @param  \Magento\SalesRule\Model\Rule $rule
+     * @param  mixed                         $couponCode
      * @return $this
      */
     public function maintainAddressCouponCode($address, $rule, $couponCode)
@@ -222,10 +223,10 @@ class RulesApplier
     /**
      * Fire event to allow overwriting of discount amounts
      *
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param float $qty
+     * @param  \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
+     * @param  \Magento\Quote\Model\Quote\Item\AbstractItem       $item
+     * @param  \Magento\SalesRule\Model\Rule                      $rule
+     * @param  float                                              $qty
      * @return $this
      */
     protected function eventFix(
@@ -254,7 +255,7 @@ class RulesApplier
 
     /**
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param int[] $appliedRuleIds
+     * @param int[]                                        $appliedRuleIds
      * @return $this
      */
     public function setAppliedRuleIds(\Magento\Quote\Model\Quote\Item\AbstractItem $item, array $appliedRuleIds)
