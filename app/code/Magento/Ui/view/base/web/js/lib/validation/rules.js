@@ -1069,8 +1069,8 @@ define([
             $.mage.__('This link is not allowed.')
         ],
         'validate-dob': [
-            function (value, params, additionalParams) {
-                if(value === '') {
+            function (value) {
+                if (value === '') {
                     return true;
                 }
 
