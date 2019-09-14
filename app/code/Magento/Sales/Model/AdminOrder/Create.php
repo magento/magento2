@@ -2038,29 +2038,49 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     protected function _getNewCustomerEmail()
     {
-        $emailrequired = $this->_scopeConfig->getValue(
-            self::XML_PATH_EMAIL_REQUIRED_CREATE_ORDER,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $emailrequired = $this->getIsEmailRequired();
 
         if ($emailrequired) {
           return $this->getData('account/email');
         } else {
            $email = $this->getData('account/email');
             if (empty($email)) {
-               $host = $this->_scopeConfig->getValue(
-                   self::XML_PATH_DEFAULT_EMAIL_DOMAIN,
-                   \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-               );
-               $account = time();
-               $email = $account . '@' . $host;
-               $account = $this->getData('account');
-               $account['email'] = $email;
-               $this->setData('account', $account);
+              $email = $this-> generateEmail();
             }
-
            return $email;
         }
+    }
+
+    /**
+     * Check email is require
+     *
+     * @return bool
+     */
+    protected function getIsEmailRequired()
+    {
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_EMAIL_REQUIRED_CREATE_ORDER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Generate Email
+     *
+     * @return string
+     */
+    protected function generateEmail()
+    {
+        $host = $this->_scopeConfig->getValue(
+            self::XML_PATH_DEFAULT_EMAIL_DOMAIN,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $account = time();
+        $email = $account . '@' . $host;
+        $account = $this->getData('account');
+        $account['email'] = $email;
+        $this->setData('account', $account);
+        return $email;
     }
 
     /**
