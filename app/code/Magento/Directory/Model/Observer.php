@@ -14,6 +14,7 @@ namespace Magento\Directory\Model;
 
 /**
 * Class Observer
+*
 * @package Magento\Directory\Model
 */
 class Observer
