@@ -128,7 +128,7 @@ class Observer
             $importWarnings[] = __('FATAL ERROR:') . ' ' . __('Please specify the correct Import Service.');
         }
 
-        if (sizeof($errors) > 0) {
+        if (count($errors) > 0) {
             foreach ($errors as $error) {
                 $importWarnings[] = __('WARNING:') . ' ' . $error;
             }
@@ -138,7 +138,7 @@ class Observer
             self::XML_PATH_ERROR_RECIPIENT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if (sizeof($importWarnings) == 0) {
+        if (count($importWarnings) == 0) {
             $this->_currencyFactory->create()->saveRates($rates);
         } elseif ($errorRecipient) {
             //if $errorRecipient is not set, there is no sense send email to nobody
