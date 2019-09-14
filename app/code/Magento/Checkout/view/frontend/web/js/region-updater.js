@@ -164,7 +164,7 @@ define([
 
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
-                $(regionList).find('option:selected').removeAttr("selected");
+                $(regionList).find('option:selected').removeAttr('selected');
                 this._removeSelectOptions(regionList);
                 $.each(this.options.regionJson[country], $.proxy(function (key, value) {
                     this._renderSelectOption(regionList, key, value);
