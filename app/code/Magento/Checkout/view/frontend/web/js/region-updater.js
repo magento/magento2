@@ -224,8 +224,13 @@ define([
                     postcode.addClass('required-entry').closest('.field').addClass('required');
             }
 
-            // Add defaultvalue attribute to state/province select element
-            regionList.attr('defaultvalue', this.options.defaultRegion);
+            if (!this.options.defaultRegion) {
+                regionList.val('');
+                regionInput.val('');
+            } else {
+                // Add defaultvalue attribute to state/province select element
+                regionList.attr('defaultvalue', this.options.defaultRegion);
+            }
         },
 
         /**
