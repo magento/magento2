@@ -454,8 +454,7 @@ define([
                 //Create array for Autoselect swatch
                 selectedArray.push($widget.element.find('[attribute-id=' + item.id + '] .swatch-option')[0]);
             });
-
-
+            
             // Connect Tooltip
             container
                 .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
