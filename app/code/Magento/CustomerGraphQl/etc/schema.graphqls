@@ -36,7 +36,7 @@ input CustomerAddressInput {
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
-    custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Address custom attributes")
+    custom_attributes: [CustomerAddressAttributeInput] @doc(description: " Address custom attributes Deprecated: Custom attributes should not be put into custom_attributes container.")
 }
 
 input CustomerAddressRegionInput @doc(description: "CustomerAddressRegionInput defines the customer's state or province") {
@@ -115,7 +115,7 @@ type CustomerAddress @doc(description: "CustomerAddress contains detailed inform
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
     default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address")
     default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
-    custom_attributes: [CustomerAddressAttribute] @doc(description: "Address custom attributes")
+    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Custom attributes should not be put into custom_attributes container.") @doc(description: "Address custom attributes")
     extension_attributes: [CustomerAddressAttribute] @doc(description: "Address extension attributes")
 }
 
