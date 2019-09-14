@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Save action for catalog rule
@@ -26,18 +27,26 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog imple
     protected $dataPersistor;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Date $dateFilter
      * @param DataPersistorInterface $dataPersistor
+     * @param TimezoneInterface $localeDate
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         Date $dateFilter,
-        DataPersistorInterface $dataPersistor
+        DataPersistorInterface $dataPersistor,
+        TimezoneInterface $localeDate
     ) {
         $this->dataPersistor = $dataPersistor;
+        $this->localeDate = $localeDate;
         parent::__construct($context, $coreRegistry, $dateFilter);
     }
 
@@ -66,6 +75,9 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog imple
                 );
                 $data = $this->getRequest()->getPostValue();
 
+                if (!$this->getRequest()->getParam('from_date')) {
+                    $data['from_date'] = $this->localeDate->formatDate();
+                }
                 $filterValues = ['from_date' => $this->_dateFilter];
                 if ($this->getRequest()->getParam('to_date')) {
                     $filterValues['to_date'] = $this->_dateFilter;
