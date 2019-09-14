@@ -7,34 +7,6 @@
 //  Layout
 //  _____________________________________________
 
-//  Page Width mixin
-.lib-layout-width(
-    @_layout__min-width: @layout__min-width,
-    @_layout__max-width: @layout__max-width,
-    @_layout__indent: @layout-indent__width
-) when not (@responsive = true) {
-    ._lib-layout-width(@_layout__min-width, @_layout__max-width);
-    .lib-css(padding-left, @layout-indent__width);
-    .lib-css(padding-right, @layout-indent__width);
-    margin: 0 auto;
-}
-
-._lib-layout-width(
-        @_layout__min-width: @layout__min-width,
-        @_layout__max-width: @layout__max-width
-    ) when (@_layout__min-width = @_layout__max-width) {
-    .lib-css(width, @_layout__min-width);
-}
-
-._lib-layout-width(
-        @_layout__min-width: @layout__min-width,
-        @_layout__max-width: @layout__max-width
-    ) when not (@_layout__min-width = @_layout__max-width) {
-    .lib-css(max-width, @_layout__max-width);
-    .lib-css(min-width, @_layout__min-width);
-    width: auto;
-}
-
 #lib-layout-columns() {
     & when (@use-flex = true) {
         .lib-vendor-prefix-display(flex);
