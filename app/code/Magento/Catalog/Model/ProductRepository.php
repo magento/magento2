@@ -546,6 +546,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
+        $validationResult = $this->resourceModel->validate($product);
+        if (true !== $validationResult) {
+            throw new CouldNotSaveException(
+                __('Invalid product data: %1', implode(',', $validationResult))
+            );
+        }
+
         $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery'])) {
             $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
@@ -553,13 +560,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         if (!$product->getOptionsReadonly()) {
             $product->setCanSaveCustomOptions(true);
-        }
-
-        $validationResult = $this->resourceModel->validate($product);
-        if (true !== $validationResult) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Invalid product data: %1', implode(',', $validationResult))
-            );
         }
 
         if ($tierPrices !== null) {

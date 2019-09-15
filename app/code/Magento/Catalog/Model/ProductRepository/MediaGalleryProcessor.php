@@ -138,7 +138,7 @@ class MediaGalleryProcessor
 
         if (!$product->hasGalleryAttribute()) {
             throw new StateException(
-                __("The product that was requested doesn't exist. Verify the product and try again.")
+                __("The product that was requested doesn't have gallery attribute. Verify the product and try again.")
             );
         }
 
