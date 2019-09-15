@@ -9,6 +9,7 @@ use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Url\HostChecker;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -70,6 +71,11 @@ class Redirect
     protected $cookieManager;
 
     /**
+     * @var CookieMetadataFactory
+     */
+    protected $cookieMetadataFactory;
+
+    /**
      * @var HostChecker
      */
     private $hostChecker;
@@ -88,6 +94,7 @@ class Redirect
      * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerUrl
      * @param ResultFactory $resultFactory
+     * @param CookieMetadataFactory $cookieMetadataFactory
      * @param HostChecker|null $hostChecker
      */
     public function __construct(
@@ -99,6 +106,7 @@ class Redirect
         DecoderInterface $urlDecoder,
         CustomerUrl $customerUrl,
         ResultFactory $resultFactory,
+        CookieMetadataFactory $cookieMetadataFactory,
         HostChecker $hostChecker = null
     ) {
         $this->request = $request;
@@ -109,6 +117,7 @@ class Redirect
         $this->urlDecoder = $urlDecoder;
         $this->customerUrl = $customerUrl;
         $this->resultFactory = $resultFactory;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->hostChecker = $hostChecker ?: ObjectManager::getInstance()->get(HostChecker::class);
     }
 
@@ -279,7 +288,11 @@ class Redirect
      */
     public function setRedirectCookie($route)
     {
-        $this->getCookieManager()->setPublicCookie(self::LOGIN_REDIRECT_URL, $route);
+        $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+            ->setHttpOnly(true)
+            ->setDuration(3600)
+            ->setPath($this->storeManager->getStore()->getStorePath());
+        $this->getCookieManager()->setPublicCookie(self::LOGIN_REDIRECT_URL, $route, $cookieMetadata);
     }
 
     /**
@@ -289,6 +302,8 @@ class Redirect
      */
     public function clearRedirectCookie()
     {
-        $this->getCookieManager()->deleteCookie(self::LOGIN_REDIRECT_URL);
+        $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+            ->setPath($this->storeManager->getStore()->getStorePath());
+        $this->getCookieManager()->deleteCookie(self::LOGIN_REDIRECT_URL, $cookieMetadata);
     }
 }
