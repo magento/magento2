@@ -176,7 +176,11 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $idFieldValue = $this->getConnection()->prepareColumnValue(
+            $this->_getColumnDefinition($this->getIdFieldName(), $this->getMainTable()),
+            $object->getId()
+        );
+        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $idFieldValue);
         $data = $this->_prepareDataForSave($object);
         unset($data[$this->getIdFieldName()]);
         $this->getConnection()->update($this->getMainTable(), $data, $condition);

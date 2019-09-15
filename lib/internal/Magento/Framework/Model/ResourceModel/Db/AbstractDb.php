@@ -358,7 +358,7 @@ abstract class AbstractDb extends AbstractResource
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
-        
+
         return $this;
     }
 
@@ -373,6 +373,7 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function _getLoadSelect($field, $value, $object)
     {
+        $value = $this->getConnection()->prepareColumnValue($this->_getColumnDefinition($field, $this->getMainTable()), $value);
         $field = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), $field));
         $select = $this->getConnection()->select()->from($this->getMainTable())->where($field . '=?', $value);
         return $select;
@@ -793,7 +794,11 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $idFieldValue = $this->getConnection()->prepareColumnValue(
+            $this->_getColumnDefinition($this->getIdFieldName(), $this->getMainTable()),
+            $object->getId()
+        );
+        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $idFieldValue);
         /**
          * Not auto increment primary key support
          */

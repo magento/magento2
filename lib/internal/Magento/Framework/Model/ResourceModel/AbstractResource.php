@@ -190,6 +190,17 @@ abstract class AbstractResource
     }
 
     /**
+     * @param string $column
+     * @param string $table
+     * @return array
+     */
+    protected function _getColumnDefinition($column, $table)
+    {
+        $fields = $this->getConnection()->describeTable($table);
+        return $fields[$column] ?: null;
+    }
+
+    /**
      * Prepare value for save
      *
      * @param mixed $value
