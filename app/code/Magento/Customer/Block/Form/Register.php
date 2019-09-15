@@ -230,6 +230,6 @@ class Register extends \Magento\Directory\Block\Data
      * @return bool
      */
     public function getShowAddressFields():bool {
-          return $this->_scopeConfig->getValue((bool)$this->getData('show_address_fields'));
+          return (bool)$this->_scopeConfig->getValue($this->getData('show_address_fields'));
     }
 }
