@@ -397,4 +397,20 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals(3, $this->_block->getRequiredCharacterClassesNumber());
     }
+
+    /**
+     * Test Get Show Address Fields when configuration value is Equal NULL
+     */
+    public function testShowAddressFieldsWhenNull(){
+        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue(null));
+        $this->assertEquals(0,$this->_block->getShowAddressFields());
+    }
+
+    /**
+     * Test Get Show Address Fields when configuration value is Equal True
+     */
+    public function testShowAddressFieldsWhenTrue(){
+        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue(1));
+        $this->assertEquals(1,$this->_block->getShowAddressFields());
+    }
 }
