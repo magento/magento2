@@ -118,7 +118,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $priceRule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
-        if($priceRule->getId()) {
+        if($priceRule && $priceRule->getId()) {
             $this->addExportType('*/*/exportCouponsCsv', __('CSV'));
             $this->addExportType('*/*/exportCouponsXml', __('Excel XML'));
         }
