@@ -7,9 +7,7 @@
 namespace Magento\Framework\Api;
 
 use LogicException;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Reflection\TypeProcessor;
 use ReflectionClass;
 use ReflectionException;
 use Zend\Code\Reflection\ClassReflection;
@@ -39,22 +37,13 @@ class ExtensionAttributesFactory
     private $classInterfaceMap = [];
 
     /**
-     * @var TypeProcessor
-     */
-    private $typeProcessor;
-
-    /**
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param TypeProcessor $typeProcessor
      */
-    public function __construct(
-        ObjectManagerInterface $objectManager,
-        TypeProcessor $typeProcessor
-    ) {
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
         $this->objectManager = $objectManager;
-        $this->typeProcessor = $typeProcessor;
     }
 
     /**
@@ -85,18 +74,6 @@ class ExtensionAttributesFactory
         if (!preg_match('/@return\s+([\w\\\\]+)/', $methodDocBlock, $matches)) {
             throw new LogicException(
                 "Method 'getExtensionAttributes' must specify a return value."
-            );
-        }
-
-        $extensionInterfaceName = $this->typeProcessor
-            ->resolveFullyQualifiedClassName($interfaceReflection, $extensionClassName . 'Interface');
-
-        $returnExtensionInterfaceName = $this->typeProcessor
-            ->resolveFullyQualifiedClassName($interfaceReflection, $matches[1]);
-
-        if ($returnExtensionInterfaceName !== $extensionInterfaceName) {
-            throw new LogicException(
-                "Method 'getExtensionAttributes' must return $returnExtensionInterfaceName"
             );
         }
 
