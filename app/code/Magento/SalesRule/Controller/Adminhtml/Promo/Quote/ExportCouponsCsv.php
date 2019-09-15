@@ -1,19 +1,25 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class ExportCouponsCsv
+ * @package Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+ */
 class ExportCouponsCsv extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
      * Export coupon codes as CSV file
      *
-     * @return \Magento\Framework\App\ResponseInterface|null
+     * @return ResponseInterface|null|void
+     * @throws Exception
      */
     public function execute()
     {
