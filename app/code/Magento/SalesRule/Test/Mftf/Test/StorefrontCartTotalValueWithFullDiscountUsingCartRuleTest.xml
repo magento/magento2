@@ -9,14 +9,14 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCartTotalValueWithFullDiscountUsingCartRuleTest">
         <annotations>
-            <features value="Quote"/>
+            <features value="SalesRule"/>
             <stories value="Cart total with full discount"/>
             <title value="Cart Total value when 100% discount applied through Cart Rule"/>
             <description value="Cart Total value when 100% discount applied through Cart Rule"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-19524"/>
             <useCaseId value="MC-17869"/>
-            <group value="quote"/>
+            <group value="SalesRule"/>
         </annotations>
         <before>
             <!-- log in -->
@@ -129,6 +129,8 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.orderTotal}}" stepKey="waitForOrderTotalVisible"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectCountry"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForOrderTotalUpdate"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$31.40" stepKey="seeDiscountAmount"/>
         <see selector="{{CheckoutCartSummarySection.subTotal}}" userInput="$31.40" stepKey="seeSubTotal"/>
         <see selector="{{CheckoutCartSummarySection.orderTotal}}" userInput="0.00" stepKey="seeOrderTotal"/>
