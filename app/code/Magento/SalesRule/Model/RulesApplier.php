@@ -51,8 +51,7 @@ class RulesApplier
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\SalesRule\Model\Utility $utility,
         ChildrenValidationLocator $childrenValidationLocator = null
-    )
-    {
+    ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
         $this->_eventManager = $eventManager;
@@ -236,8 +235,7 @@ class RulesApplier
         \Magento\Quote\Model\Quote\Item\AbstractItem $item,
         \Magento\SalesRule\Model\Rule $rule,
         $qty
-    )
-    {
+    ) {
         $quote = $item->getQuote();
         $address = $item->getAddress();
 
