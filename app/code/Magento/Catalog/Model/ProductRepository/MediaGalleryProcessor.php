@@ -86,17 +86,9 @@ class MediaGalleryProcessor
                     $newEntries[] = $entry;
                 }
             }
-            foreach ($existingMediaGallery as $key => &$existingEntry) {
-                if (isset($entriesById[$existingEntry['value_id']])) {
-                    $updatedEntry = $entriesById[$existingEntry['value_id']];
-                    if ($updatedEntry['file'] === null) {
-                        unset($updatedEntry['file']);
-                    }
-                    $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
-                } else {
-                    //set the removed flag
-                    $existingEntry['removed'] = true;
-                }
+            foreach ($existingMediaGallery as $key => $existingEntry) {
+                $updatedEntry = $entriesById[$existingEntry['value_id']] ?? null;
+                $existingMediaGallery[$key] = $this->updateMediaGalleryEntry($existingEntry, $updatedEntry);
             }
             $product->setData('media_gallery', ["images" => $existingMediaGallery]);
         } else {
@@ -110,6 +102,26 @@ class MediaGalleryProcessor
 
         $this->processMediaAttributes($product, $images);
         $this->processEntries($product, $newEntries, $entriesById);
+    }
+
+    /**
+     * @param array $existingEntry
+     * @param array|null $updatedEntry
+     * @return array
+     */
+    public function updateMediaGalleryEntry(
+        array $existingEntry,
+        ?array $updatedEntry
+    ) :array {
+        if ($updatedEntry !== null) {
+            if ($updatedEntry['file'] === null) {
+                unset($updatedEntry['file']);
+            }
+            $existingEntry = array_merge($existingEntry, $updatedEntry);
+        } else {
+            $existingEntry['removed'] = true;
+        }
+        return $existingEntry;
     }
 
     /**
