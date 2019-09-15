@@ -320,7 +320,9 @@ class DtoProcessor
 
             if ($isArray) {
                 foreach ($attributeValue as $k => $v) {
-                    $extensionAttributes[$attributeName][$k] = $this->createFromArray($v, $attributeType);
+                    $extensionAttributes[$attributeName][$k] = $this->typeProcessor->isTypeSimple($attributeType) ?
+                        $v :
+                        $this->createFromArray($v, $attributeType);
                 }
             } else {
                 $extensionAttributes[$attributeName] = $this->createFromArray($attributeValue, $attributeType);

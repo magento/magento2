@@ -568,6 +568,8 @@ class TypeProcessor
      *
      * @param string $typeName
      * @return bool
+     * @deprecated
+     * @see isTypeSimple
      */
     public function isSimpleType(string $typeName): bool
     {
@@ -642,7 +644,7 @@ class TypeProcessor
         $typeName = trim($typeName);
 
         // Simple way to understand it is a basic type or a class name
-        if ($this->isSimpleType($typeName)) {
+        if ($this->isTypeSimple($typeName)) {
             return $typeName;
         }
 
