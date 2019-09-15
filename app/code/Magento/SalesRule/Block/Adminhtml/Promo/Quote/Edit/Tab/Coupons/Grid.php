@@ -116,8 +116,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             ['header' => __('Times Used'), 'index' => 'times_used', 'width' => '50', 'type' => 'number']
         );
 
-        $this->addExportType('*/*/exportCouponsCsv', __('CSV'));
-        $this->addExportType('*/*/exportCouponsXml', __('Excel XML'));
+        $priceRule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+
+        if($priceRule->getId()) {
+            $this->addExportType('*/*/exportCouponsCsv', __('CSV'));
+            $this->addExportType('*/*/exportCouponsXml', __('Excel XML'));
+        }
         return parent::_prepareColumns();
     }
 
