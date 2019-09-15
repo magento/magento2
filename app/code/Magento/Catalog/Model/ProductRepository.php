@@ -10,6 +10,7 @@ use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
@@ -533,6 +534,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
+
+            if ($product->getTypeId() === null) {
+                $product->setTypeId(Type::TYPE_SIMPLE);
+            }
         }
 
         $productDataArray = $this->extensibleDataObjectConverter
