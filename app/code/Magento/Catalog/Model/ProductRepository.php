@@ -536,7 +536,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $existingProduct = null;
 
             if ($product->getTypeId() === null) {
-                $product->setTypeId(Type::TYPE_SIMPLE);
+                $product->setTypeId(Type::DEFAULT_TYPE);
             }
         }
 
