@@ -47,11 +47,17 @@ class DataObjectProcessor
     private $processors;
 
     /**
+     * @var TypeProcessor
+     */
+    private $typeProcessor;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
+     * @param TypeProcessor $typeProcessor
      * @param array $processors
      */
     public function __construct(
@@ -60,6 +66,7 @@ class DataObjectProcessor
         FieldNamer $fieldNamer,
         CustomAttributesProcessor $customAttributesProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
+        TypeProcessor $typeProcessor,
         array $processors = []
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
@@ -68,6 +75,7 @@ class DataObjectProcessor
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->customAttributesProcessor = $customAttributesProcessor;
         $this->processors = $processors;
+        $this->typeProcessor = $typeProcessor;
     }
 
     /**

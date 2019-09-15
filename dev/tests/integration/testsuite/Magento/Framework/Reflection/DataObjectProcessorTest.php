@@ -9,8 +9,10 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Dto\DtoProcessor;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Reflection\Mock\ConfigureTestDataExtensionAttributes;
 use Magento\Framework\Reflection\Mock\TestDataInterface;
 use Magento\Framework\Reflection\Mock\TestDataObject;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -43,20 +45,7 @@ class DataObjectProcessorTest extends TestCase
         $this->dataObjectProcessor = $this->objectManager->get(DataObjectProcessor::class);
         $this->dtoProcessor = $this->objectManager->get(DtoProcessor::class);
 
-        /** @var Config $config */
-        $config = $this->objectManager->get(Config::class);
-        $config->merge([TestDataInterface::class => [
-            'attribute1' => [
-                'type' => 'string',
-                'resourceRefs' => '',
-                'join' => null
-            ],
-            'attribute2' => [
-                'type' => 'string',
-                'resourceRefs' => '',
-                'join' => null
-            ]
-        ]]);
+        ConfigureTestDataExtensionAttributes::execute();
     }
 
     /**
@@ -65,6 +54,7 @@ class DataObjectProcessorTest extends TestCase
      *
      * @throws ReflectionException
      * @throws SerializationException
+     * @throws LocalizedException
      * @dataProvider buildOutputDataArrayDataProvider
      * @SuppressWarnings(PHPMD.LongVariable)
      */
@@ -95,7 +85,11 @@ class DataObjectProcessorTest extends TestCase
 
         $extensionAttributeArray = [
             'attribute1' => 'value1',
-            'attribute2' => 'value2'
+            'attribute2' => 'value2',
+            'attribute3' => [
+                ['code' => 'key1', 'value' => 'value1'],
+                ['code' => 'key2', 'value' => 'value2'],
+            ]
         ];
 
         $inputDataArray = [];

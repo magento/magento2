@@ -19,6 +19,7 @@ use Magento\Framework\Api\ObjectFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Dto\DtoProcessor\DtoReflection;
 use Magento\Framework\Dto\DtoProcessor\GetHydrationStrategy;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -138,33 +139,47 @@ class DtoProcessor
     }
 
     /**
+     * @param string|int $propertyName
      * @param $value
      * @param string $type
+     * @param bool $typeCasting
      * @return array|object
-     * @throws ReflectionException
-     * @throws SerializationException
+     * @throws LocalizedException
      */
-    private function createObjectByType($value, string $type)
+    private function createObjectByType($propertyName, $value, string $type, bool $typeCasting=true)
     {
-        if (is_object($value) || ($type === 'array') || ($type === 'mixed')) {
-            return $value;
-        }
-
-        if ($this->typeProcessor->isArrayType($type)) {
-            $res = [];
-            foreach ($value as $k => $subValue) {
-                $itemType = $this->typeProcessor->getArrayItemType($type);
-                $res[$k] = $this->createObjectByType($subValue, $itemType);
+        try {
+            if (is_object($value) || ($type === 'array') || ($type === 'mixed')) {
+                return $value;
             }
 
-            return $res;
-        }
+            if ($this->typeProcessor->isArrayType($type)) {
+                $res = [];
+                foreach ($value as $k => $subValue) {
+                    $itemType = $this->typeProcessor->getArrayItemType($type);
+                    $res[$k] = $this->createObjectByType($k, $subValue, $itemType, $typeCasting);
+                }
 
-        if ($this->typeProcessor->isTypeSimple($type)) {
-            return $this->typeCaster->castValueToType($value, $type);
-        }
+                return $res;
+            }
 
-        return $this->createFromArray($value, $type);
+            if ($this->typeProcessor->isTypeSimple($type)) {
+                if ($typeCasting) {
+                    return $this->typeCaster->castValueToType($value, $type);
+                }
+
+                return $this->typeProcessor->processSimpleAndAnyType($value, $type);
+            }
+
+            return $this->createFromArray($value, $type);
+        } catch (\Exception $e) {
+            throw new LocalizedException(
+                new Phrase(
+                    'Error occurred during "%field_name" processing. %details',
+                    ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                )
+            );
+        }
     }
 
     /**
@@ -220,8 +235,8 @@ class DtoProcessor
      * @param string $dataObjectClassName
      * @param array $customAttributesValueArray
      * @return AttributeValue[]
+     * @throws LocalizedException
      * @throws SerializationException
-     * @throws ReflectionException
      */
     private function convertCustomAttributeValue(string $dataObjectClassName, array $customAttributesValueArray): array
     {
@@ -248,7 +263,7 @@ class DtoProcessor
                 $type = TypeProcessor::ANY_TYPE;
             }
 
-            $attributeValue = $this->createObjectByType($customAttributeValue, $type);
+            $attributeValue = $this->createObjectByType($key, $customAttributeValue, $type);
 
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
@@ -267,6 +282,7 @@ class DtoProcessor
      * @return array
      * @throws ReflectionException
      * @throws SerializationException
+     * @throws LocalizedException
      */
     private function injectExtensionAttributesByArray(string $type, array $data): array
     {
@@ -296,18 +312,25 @@ class DtoProcessor
                 $extensionAttributesType,
                 $attributeName
             );
-            $attributeType = $this->typeProcessor->isArrayType($methodReturnType)
+
+            $isArray = $this->typeProcessor->isArrayType($methodReturnType);
+            $attributeType = $isArray
                 ? $this->typeProcessor->getArrayItemType($methodReturnType)
                 : $methodReturnType;
 
-            $extensionAttributes[$attributeName] = $this->createFromArray($attributeValue, $attributeType);
+            if ($isArray) {
+                foreach ($attributeValue as $k => $v) {
+                    $extensionAttributes[$attributeName][$k] = $this->createFromArray($v, $attributeType);
+                }
+            } else {
+                $extensionAttributes[$attributeName] = $this->createFromArray($attributeValue, $attributeType);
+            }
         }
 
         $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $this->extensionAttributesFactory->create(
             $type,
             ['data' => $extensionAttributes]
         );
-
 
         return $data;
     }
@@ -317,11 +340,13 @@ class DtoProcessor
      *
      * @param array $data
      * @param string $type
+     * @param bool $typeCasting
      * @return object
+     * @throws LocalizedException
      * @throws ReflectionException
      * @throws SerializationException
      */
-    public function createFromArray(array $data, string $type)
+    public function createFromArray(array $data, string $type, bool $typeCasting=true)
     {
         // Normalize snake case properties
         foreach ($data as $k => $v) {
@@ -367,7 +392,12 @@ class DtoProcessor
         foreach ($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_CONSTRUCTOR_PARAM] as $paramName => $info) {
             $paramConstructor = $info['parameter'];
             $paramType = $info['type'];
-            $constructorParams[$paramConstructor] = $this->createObjectByType($data[$paramName], $paramType);
+            $constructorParams[$paramConstructor] = $this->createObjectByType(
+                $paramName,
+                $data[$paramName],
+                $paramType,
+                $typeCasting
+            );
         }
 
         if (!empty($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA])) {
@@ -375,7 +405,12 @@ class DtoProcessor
 
             foreach ($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_CONSTRUCTOR_DATA] as $paramName => $info) {
                 $paramType = $info['type'];
-                $constructorParams['data'][$paramName] = $this->createObjectByType($data[$paramName], $paramType);
+                $constructorParams['data'][$paramName] = $this->createObjectByType(
+                    $paramName,
+                    $data[$paramName],
+                    $paramType,
+                    $typeCasting
+                );
             }
         }
 
@@ -384,7 +419,7 @@ class DtoProcessor
         foreach ($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_SETTER] as $paramName => $info) {
             $methodName = $info['method'];
             $paramType = $info['type'];
-            $resObject->$methodName($this->createObjectByType($data[$paramName], $paramType));
+            $resObject->$methodName($this->createObjectByType($paramName, $data[$paramName], $paramType, $typeCasting));
         }
 
         if ($resObject instanceof CustomAttributesDataInterface) {
@@ -406,6 +441,7 @@ class DtoProcessor
      * @param $sourceObject
      * @param array $data
      * @return object
+     * @throws LocalizedException
      * @throws ReflectionException
      * @throws SerializationException
      */
@@ -424,6 +460,7 @@ class DtoProcessor
      *
      * @param $sourceObject
      * @return array
+     * @throws ReflectionException
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getObjectData($sourceObject): array

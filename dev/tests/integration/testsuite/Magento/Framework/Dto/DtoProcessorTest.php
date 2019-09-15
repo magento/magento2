@@ -266,4 +266,23 @@ class DtoProcessorTest extends TestCase
             MutableDto::class
         );
     }
+
+    public function testRaiseExceptionWithInvalidParametersType(): void
+    {
+        $this->expectExceptionMessage(
+            'Error occurred during "prop1" processing. '
+            . 'The "invalid_format" value\'s type is invalid. The "int" type was expected. Verify and try again.'
+        );
+
+        /** @var MutableDto $dto */
+        $this->dataProcessor->createFromArray(
+            [
+                'prop1' => 'invalid_format',
+                'prop2' => 'b',
+                'prop3' => ['abc', 'def', 'ghi']
+            ],
+            MutableDto::class,
+            false
+        );
+    }
 }

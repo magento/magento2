@@ -19,7 +19,6 @@ use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
-use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
@@ -69,11 +68,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $serviceTypeToEntityTypeMap;
 
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
      * @var PreprocessorInterface[]
      */
     private $customAttributePreprocessors;
@@ -97,7 +91,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
      * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
-     * @param ConfigInterface $config
+     * @param $config @deprecated
      * @param DtoProcessor|null $dtoProcessor
      * @param array $customAttributePreprocessors
      * @SuppressWarnings(PHPMD.LongVariable)
@@ -109,7 +103,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
-        ConfigInterface $config = null,
+        $config = null,
         DtoProcessor $dtoProcessor = null,
         array $customAttributePreprocessors = []
     ) {
@@ -120,8 +114,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->methodsMap = $methodsMap;
         $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap
             ?: ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
-        $this->config = $config
-            ?: ObjectManager::getInstance()->get(ConfigInterface::class);
         $this->dtoProcessor = $dtoProcessor
             ?: ObjectManager::getInstance()->get(DtoProcessor::class);
         $this->customAttributePreprocessors = $customAttributePreprocessors;
@@ -141,7 +133,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
      * @throws Exception
-     * @throws InputException
+     * @throws WebapiException
      * @throws LocalizedException
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
@@ -156,8 +148,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
                 try {
                     $inputData[] = $this->convertValue($paramValue, $param[MethodsMap::METHOD_META_TYPE]);
-                } catch (SerializationException $e) {
-                    throw new WebapiException(new Phrase($e->getMessage()));
+                } catch (\Exception $e) {
+                    throw new WebapiException(__($e->getMessage()));
                 }
             } else {
                 if ($param[MethodsMap::METHOD_META_HAS_DEFAULT_VALUE]) {
@@ -167,6 +159,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 }
             }
         }
+
         $this->processInputError($inputError);
         return $inputData;
     }
@@ -185,7 +178,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     protected function _createFromArray($className, $data)
     {
-        return $this->dtoProcessor->createFromArray($data, $className);
+        return $this->dtoProcessor->createFromArray($data, $className, false);
     }
 
     /**
