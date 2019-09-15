@@ -142,26 +142,5 @@
                 <label translate="true">Price</label>
             </settings>
         </column>
-        <column name="special_price" class="Magento\Catalog\Ui\Component\Listing\Columns\SpecialPrice" sortOrder="90">
-            <settings>
-                <addField>true</addField>
-                <filter>textRange</filter>
-                <label translate="true">Special Price</label>
-            </settings>
-        </column>
-        <column name="cost" class="Magento\Catalog\Ui\Component\Listing\Columns\Cost" sortOrder="100">
-            <settings>
-                <addField>true</addField>
-                <filter>textRange</filter>
-                <label translate="true">Cost</label>
-            </settings>
-        </column>
-        <column name="msrp" class="Magento\Catalog\Ui\Component\Listing\Columns\MSRP" sortOrder="110">
-            <settings>
-                <addField>true</addField>
-                <filter>textRange</filter>
-                <label translate="true">MSRP</label>
-            </settings>
-        </column>
     </columns>
 </listing>
