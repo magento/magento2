@@ -223,4 +223,13 @@ class Register extends \Magento\Directory\Block\Data
     {
         return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
+
+    /**
+     * Get show address fields
+     *
+     * @return bool
+     */
+    public function getShowAddressFields():bool {
+          return $this->_scopeConfig->getValue((bool)$this->getData('show_address_fields'));
+    }
 }

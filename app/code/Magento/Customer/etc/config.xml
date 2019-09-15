@@ -51,6 +51,7 @@
                 <suffix_options />
                 <dob_show />
                 <gender_show />
+                <show_address_fields>0</show_address_fields>
                 <telephone_show>req</telephone_show>
                 <company_show>opt</company_show>
                 <fax_show/>
