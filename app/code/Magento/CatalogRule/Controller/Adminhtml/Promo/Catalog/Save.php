@@ -50,16 +50,15 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     /**
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
         if ($this->getRequest()->getPostValue()) {
-
             /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
             $ruleRepository = $this->_objectManager->get(
                 \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface::class
             );
-
             /** @var \Magento\CatalogRule\Model\Rule $model */
             $model = $this->_objectManager->create(\Magento\CatalogRule\Model\Rule::class);
 
@@ -69,7 +68,6 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     ['request' => $this->getRequest()]
                 );
                 $data = $this->getRequest()->getPostValue();
-
                 if (!$this->getRequest()->getParam('from_date')) {
                     $data['from_date'] = $this->localeDate->formatDate();
                 }
