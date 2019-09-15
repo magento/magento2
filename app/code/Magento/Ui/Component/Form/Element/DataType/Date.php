@@ -112,10 +112,7 @@ class Date extends AbstractDataType
     {
         try {
             $dateObj = $this->localeDate->date(
-                new \DateTime(
-                    $date,
-                    new \DateTimeZone($this->localeDate->getConfigTimezone())
-                ),
+                $date,
                 $this->getLocale(),
                 true
             );
