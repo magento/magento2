@@ -96,11 +96,11 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                         $this->messageManager->addErrorMessage($errorMessage);
                     }
 
-                    if(isset($data['conditions_serialized'])){
+                    if(isset($data['conditions_serialized'])) {
                         unset($data['conditions_serialized']);
                     }
 
-                    if(isset($data['actions_serialized'])){
+                    if(isset($data['actions_serialized'])) {
                         unset($data['actions_serialized']);
                     }
 
