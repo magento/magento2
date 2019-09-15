@@ -185,7 +185,7 @@
         }
 
         .form-wishlist-search {
-            .lib-css(margin-bottom, @indent__l*2);
+            margin-bottom: @indent__l * 2;
             max-width: 500px;
 
             .fieldset {
@@ -216,8 +216,9 @@
 
     .block-wishlist-info-items {
         .block-title {
-            .lib-css(margin-bottom, @indent__base);
             .lib-font-size(22);
+            margin-bottom: @indent__base;
+            
             > strong {
                 font-weight: @font-weight__light;
             }
@@ -349,7 +350,7 @@
         .product {
             &-item {
                 &-checkbox {
-                    left: 20px;
+                    left: 0;
                     position: absolute;
                     top: 20px;
                 }
@@ -388,16 +389,16 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .wishlist {
         &.window.popup {
+            .field {
+                .lib-form-field-type-revert(@_type: block);
+            }
+
             bottom: auto;
             .lib-css(top, @desktop-popup-position-top);
             .lib-css(left, @desktop-popup-position-left);
             .lib-css(margin-left, @desktop-popup-margin-left);
             .lib-css(width, @desktop-popup-width);
             right: auto;
-
-            .field {
-                .lib-form-field-type-revert(@_type: block);
-            }
         }
     }
 

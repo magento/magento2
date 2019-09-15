@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
@@ -14,7 +15,7 @@ use Magento\Sales\Api\OrderManagementInterface;
 /**
  * Class MassHold
  */
-class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
+class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

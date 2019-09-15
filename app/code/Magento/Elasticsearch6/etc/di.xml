@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Elasticsearch\Model\Config">
+        <arguments>
+            <argument name="engineList" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">elasticsearch6</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">Elasticsearch 6.0+</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy">
+        <arguments>
+            <argument name="categoryFieldsProviders" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy">
+        <arguments>
+            <argument name="dataMappers" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
+        <arguments>
+            <argument name="productFieldMappers" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch6\Model\Adapter\FieldMapper\ProductFieldMapper</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
+        <arguments>
+            <argument name="clientFactories" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">\Magento\Elasticsearch6\Model\Client\ElasticsearchFactory</item>
+            </argument>
+            <argument name="clientOptions" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">\Magento\Elasticsearch\Model\Config</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexerHandler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexStructureFactory">
+        <arguments>
+            <argument name="structures" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexStructure</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogSearch\Model\ResourceModel\EngineProvider">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Engine</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Search\Model\AdapterFactory">
+        <arguments>
+            <argument name="adapters" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Search\Model\EngineResolver">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">elasticsearch6</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Elasticsearch6\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
+        <arguments>
+            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch6\Model\Client\Elasticsearch</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy">
+        <arguments>
+            <argument name="clientFactories" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch6\Model\Client\ElasticsearchFactory</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
+        <arguments>
+            <argument name="intervals" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Aggregation\Interval</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+
+    <type name="Magento\AdvancedSearch\Model\SuggestedQueries">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="string">Magento\Elasticsearch6\Model\DataProvider\Suggestions</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Elasticsearch6\Model\DataProvider\Suggestions">
+        <arguments>
+            <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="elasticsearch6FieldNameResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
+        <arguments>
+            <argument name="items" xsi:type="array">
+                <item name="notEav" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
+                <item name="special" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\SpecialAttribute</item>
+                <item name="price" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
+                <item name="categoryName" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
+                <item name="position" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
+                <item name="default" xsi:type="object">\Magento\Elasticsearch6\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\Elasticsearch6\Model\Adapter\FieldMapper\ProductFieldMapper"
+                 type="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
+        <arguments>
+            <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
+            <argument name="fieldNameResolver" xsi:type="object">elasticsearch6FieldNameResolver</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Search\Model\Search\PageSizeProvider">
+        <arguments>
+            <argument name="pageSizeBySearchEngine" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="number">10000</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="elasticsearchLayerCategoryItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Category\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\CatalogSearch\Model\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
+        <arguments>
+            <argument name="strategies" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="elasticsearchLayerSearchItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Search\ItemCollectionProvider">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">elasticsearchFulltextSearchCollectionFactory</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="catalog/search/elasticsearch6_password" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_username" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="catalog/search/elasticsearch6_enable_auth" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_index_prefix" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_password" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_server_port" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_username" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch6_server_timeout" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

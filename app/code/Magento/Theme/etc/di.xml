@@ -214,6 +214,10 @@
                     <item name="path" xsi:type="string">design/footer/absolute_footer</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>
                 </item>
+                <item name="footer_report_bugs" xsi:type="array">
+                    <item name="path" xsi:type="string">design/footer/report_bugs</item>
+                    <item name="fieldset" xsi:type="string">other_settings/footer</item>
+                </item>
                 <item name="default_robots" xsi:type="array">
                     <item name="path" xsi:type="string">design/search_engine_robots/default_robots</item>
                     <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
@@ -269,7 +273,7 @@
     <type name="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
         <plugin name="designConfigTheme" type="Magento\Theme\Model\Design\Config\Plugin\Dump" sortOrder="50"/>
     </type>
-    <type name="\Magento\Theme\Model\Design\Config\Plugin\Dump">
+    <type name="Magento\Theme\Model\Design\Config\Plugin\Dump">
         <arguments>
             <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
         </arguments>

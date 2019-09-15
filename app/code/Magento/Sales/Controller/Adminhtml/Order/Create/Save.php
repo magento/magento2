@@ -6,9 +6,10 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\PaymentException;
 
-class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
+class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create implements HttpPostActionInterface
 {
     /**
      * Saving quote and create order

@@ -127,6 +127,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'default' => 'CURRENT_TIMESTAMP',
                         'disabled' => false,
                         'onCreate' => null,
+                        'comment' => 'Column with type timestamp init update',
                     ],
                 'integer' =>
                     [
@@ -139,6 +140,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'default' => null,
                         'disabled' => false,
                         'onCreate' => null,
+                        'comment' => 'Integer'
                     ],
                 'decimal' =>
                     [
@@ -151,6 +153,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                         'default' => null,
                         'disabled' => false,
                         'onCreate' => null,
+                        'comment' => 'Decimal'
                     ],
             ],
             $tables['First_Module']['new_table']['columns']

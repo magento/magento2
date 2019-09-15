@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Payment\Block\Info $block
  * @see \Magento\Payment\Block\Info
  */
 ?>
 <dl class="payment-method">
-    <dt class="title"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
-<?php if ($block->getInstructions()): ?>
+    <dt class="title"><?= $block->escapeHtml($block->getTitle()) ?></dt>
+<?php if ($block->getInstructions()) : ?>
     <dd class="content"><?= /* @noEscape */ nl2br($block->escapeHtml($block->getInstructions())) ?></dd>
 <?php endif; ?>
 </dl>

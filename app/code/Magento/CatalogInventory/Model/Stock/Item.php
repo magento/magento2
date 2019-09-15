@@ -206,7 +206,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     public function getQty()
     {
-        return null === $this->_getData(static::QTY) ? null : floatval($this->_getData(static::QTY));
+        return null === $this->_getData(static::QTY) ? null : (float)$this->_getData(static::QTY);
     }
 
     /**

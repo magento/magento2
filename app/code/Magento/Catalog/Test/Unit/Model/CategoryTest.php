@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Indexer;
-use Magento\Eav\Model\Entity\GetCustomAttributeCodesInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -120,11 +119,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    /**
-     * @var GetCustomAttributeCodesInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $getCustomAttributeCodes;
-
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -165,10 +159,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
         $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()->getMock();
-        $this->getCustomAttributeCodes = $this->getMockBuilder(GetCustomAttributeCodesInterface::class)
-            ->setMethods(['execute'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
 
         $this->category = $this->getCategoryModel();
     }
@@ -321,7 +311,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 'indexerRegistry' => $this->indexerRegistry,
                 'metadataService' => $this->metadataServiceMock,
                 'customAttributeFactory' => $this->attributeValueFactory,
-                'getCustomAttributeCodes' => $this->getCustomAttributeCodes
             ]
         );
     }
@@ -394,13 +383,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function reindexFlatDisabledTestDataProvider()
     {
         return [
-            [false, null, null, null, 0],
-            [true, null, null, null, 0],
-            [false, [], null, null, 0],
-            [false, ["1", "2"], null, null, 1],
-            [false, null, 1, null, 1],
-            [false, ["1", "2"], 0, 1, 1],
-            [false, null, 1, 1, 0],
+            [false, null, null, null, null, null, 0],
+            [true, null, null, null, null, null,  0],
+            [false, [], null, null, null, null, 0],
+            [false, ["1", "2"], null, null, null, null, 1],
+            [false, null, 1, null, null, null, 1],
+            [false, ["1", "2"], 0, 1, null, null,  1],
+            [false, null, 1, 1, null, null, 0],
+            [false, ["1", "2"], null, null, 0, 1,  1],
+            [false, ["1", "2"], null, null, 1, 0,  1],
+
         ];
     }
 
@@ -418,11 +410,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $affectedIds,
         $isAnchorOrig,
         $isAnchor,
+        $isActiveOrig,
+        $isActive,
         $expectedProductReindexCall
     ) {
         $this->category->setAffectedProductIds($affectedIds);
         $this->category->setData('is_anchor', $isAnchor);
         $this->category->setOrigData('is_anchor', $isAnchorOrig);
+        $this->category->setData('is_active', $isActive);
+        $this->category->setOrigData('is_active', $isActiveOrig);
+
         $this->category->setAffectedProductIds($affectedIds);
 
         $pathIds = ['path/1/2', 'path/2/3'];
@@ -433,7 +430,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('isFlatEnabled')
             ->will($this->returnValue(false));
 
-        $this->productIndexer->expects($this->exactly(1))
+        $this->productIndexer
             ->method('isScheduled')
             ->willReturn($productScheduled);
         $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
@@ -455,10 +452,20 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $initialCustomAttributeValue = 'initial description';
         $newCustomAttributeValue = 'new description';
 
-        $this->getCustomAttributeCodes->expects($this->exactly(3))
-            ->method('execute')
-            ->willReturn([$customAttributeCode]);
-        $this->category->setData($interfaceAttributeCode, "sub");
+        $interfaceAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
+        $interfaceAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($interfaceAttributeCode);
+        $colorAttribute = $this->createMock(\Magento\Framework\Api\MetadataObjectInterface::class);
+        $colorAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($customAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
+
+        $this->metadataServiceMock->expects($this->once())
+            ->method('getCustomAttributesMetadata')
+            ->willReturn($customAttributesMetadata);
+        $this->category->setData($interfaceAttributeCode, 10);
 
         //The description attribute is not set, expect empty custom attribute array
         $this->assertEquals([], $this->category->getCustomAttributes());

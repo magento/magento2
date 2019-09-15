@@ -6,6 +6,7 @@
 
 namespace Magento\ProductVideo\Controller\Adminhtml\Product\Gallery;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Uploader;
@@ -13,7 +14,7 @@ use Magento\Framework\File\Uploader;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RetrieveImage extends \Magento\Backend\App\Action
+class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session

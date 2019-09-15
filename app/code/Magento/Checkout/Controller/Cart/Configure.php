@@ -7,13 +7,14 @@
 
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configure extends \Magento\Checkout\Controller\Cart
+class Configure extends \Magento\Checkout\Controller\Cart implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

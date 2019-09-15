@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\File;
 
+/**
+ * Utility for mime type retrieval
+ */
 class Mime
 {
     /**
@@ -61,7 +64,7 @@ class Mime
     /**
      * List of mime types that can be defined by file extension.
      *
-     * @var array $defineByExtensionList
+     * @var array
      */
     private $defineByExtensionList = [
         'txt'  => 'text/plain',
@@ -106,6 +109,7 @@ class Mime
 
     /**
      * Get mime type by the native mime_content_type function.
+     *
      * Search for extended mime type if mime_content_type() returned 'application/octet-stream' or 'text/plain'
      *
      * @param string $file

@@ -60,7 +60,7 @@ class MetadataProvider
         Filter $filter,
         TimezoneInterface $localeDate,
         ResolverInterface $localeResolver,
-        $dateFormat = 'M j, Y H:i:s A',
+        $dateFormat = 'M j, Y h:i:s A',
         array $data = []
     ) {
         $this->filter = $filter;

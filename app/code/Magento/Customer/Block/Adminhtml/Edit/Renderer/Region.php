@@ -48,7 +48,7 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
 
         $regionId = $element->getForm()->getElement('region_id')->getValue();
 
-        $html = '<div class="field field-state required admin__field _required">';
+        $html = '<div class="field field-state admin__field">';
         $element->setClass('input-text admin__control-text');
         $element->setRequired(true);
         $html .= $element->getLabelHtml() . '<div class="control admin__field-control">';

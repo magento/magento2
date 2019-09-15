@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Backend\Setup\ConfigOptionsList;
     use Magento\Framework\Config\ConfigOptionsListConstants;
     use Magento\Framework\Setup\SchemaListener;
+    use Magento\Setup\Model\AdminAccount;
     use Magento\Setup\Model\DeclarationInstaller;
     use Magento\Setup\Model\Installer;
     use Magento\Framework\App\Filesystem\DirectoryList;
@@ -268,17 +269,13 @@ namespace Magento\Setup\Test\Unit\Model {
         }
 
         /**
+         * @param array $request
+         * @param array $logMessages
+         * @dataProvider installDataProvider
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function testInstall()
+        public function testInstall(array $request, array $logMessages)
         {
-            $request = [
-                ConfigOptionsListConstants::INPUT_KEY_DB_HOST => '127.0.0.1',
-                ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
-                ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
-                ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
-                ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
-            ];
             $this->config->expects($this->atLeastOnce())
                 ->method('get')
                 ->willReturnMap(
@@ -353,7 +350,7 @@ namespace Magento\Setup\Test\Unit\Model {
                     [\Magento\Setup\Model\DeclarationInstaller::class, $this->declarationInstallerMock],
                     [\Magento\Framework\Registry::class, $registry]
                 ]));
-            $this->adminFactory->expects($this->once())->method('create')->willReturn(
+            $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(\Magento\Setup\Model\AdminAccount::class)
             );
             $this->sampleDataState->expects($this->once())->method('hasError')->willReturn(true);
@@ -366,9 +363,117 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects($this->once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
-            $this->setupLoggerExpectsForInstall();
+            call_user_func_array(
+                [
+                    $this->logger->expects($this->exactly(count($logMessages)))->method('log'),
+                    'withConsecutive'
+                ],
+                $logMessages
+            );
+            $this->logger->expects($this->exactly(2))
+                ->method('logSuccess')
+                ->withConsecutive(
+                    ['Magento installation complete.'],
+                    ['Magento Admin URI: /']
+                );
 
             $this->object->install($request);
+        }
+
+        /**
+         * @return array
+         */
+        public function installDataProvider()
+        {
+            return [
+                [
+                    'request' => [
+                        ConfigOptionsListConstants::INPUT_KEY_DB_HOST => '127.0.0.1',
+                        ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
+                        ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
+                        ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
+                        ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
+                    ],
+                    'logMessages' => [
+                        ['Starting Magento installation:'],
+                        ['File permissions check...'],
+                        ['Required extensions check...'],
+                        ['Enabling Maintenance Mode...'],
+                        ['Installing deployment configuration...'],
+                        ['Installing database schema:'],
+                        ['Schema creation/updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Schema post-updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Installing user configuration...'],
+                        ['Enabling caches:'],
+                        ['Current status:'],
+                        [''],
+                        ['Installing data...'],
+                        ['Data install/update:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Data post-updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        //['Installing admin user...'],
+                        ['Caches clearing:'],
+                        ['Cache cleared successfully'],
+                        ['Disabling Maintenance Mode:'],
+                        ['Post installation file permissions check...'],
+                        ['Write installation date...'],
+                        ['Sample Data is installed with errors. See log file for details']
+                    ],
+                ],
+                [
+                    'request' => [
+                        ConfigOptionsListConstants::INPUT_KEY_DB_HOST => '127.0.0.1',
+                        ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
+                        ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
+                        ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
+                        ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
+                        AdminAccount::KEY_USER => 'admin',
+                        AdminAccount::KEY_PASSWORD => '123',
+                        AdminAccount::KEY_EMAIL => 'admin@example.com',
+                        AdminAccount::KEY_FIRST_NAME => 'John',
+                        AdminAccount::KEY_LAST_NAME => 'Doe',
+                    ],
+                    'logMessages' => [
+                        ['Starting Magento installation:'],
+                        ['File permissions check...'],
+                        ['Required extensions check...'],
+                        ['Enabling Maintenance Mode...'],
+                        ['Installing deployment configuration...'],
+                        ['Installing database schema:'],
+                        ['Schema creation/updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Schema post-updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Installing user configuration...'],
+                        ['Enabling caches:'],
+                        ['Current status:'],
+                        [''],
+                        ['Installing data...'],
+                        ['Data install/update:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Data post-updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Installing admin user...'],
+                        ['Caches clearing:'],
+                        ['Cache cleared successfully'],
+                        ['Disabling Maintenance Mode:'],
+                        ['Post installation file permissions check...'],
+                        ['Write installation date...'],
+                        ['Sample Data is installed with errors. See log file for details']
+                    ],
+                ],
+            ];
         }
 
         public function testCheckInstallationFilePermissions()
@@ -589,44 +694,6 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
 
             return $newObject;
-        }
-
-        /**
-         * Set up logger expectations for install method
-         * @return void
-         */
-        private function setupLoggerExpectsForInstall()
-        {
-            $this->logger->expects($this->at(0))->method('log')->with('Starting Magento installation:');
-            $this->logger->expects($this->at(1))->method('log')->with('File permissions check...');
-            $this->logger->expects($this->at(3))->method('log')->with('Required extensions check...');
-            // at(2) invokes logMeta()
-            $this->logger->expects($this->at(5))->method('log')->with('Enabling Maintenance Mode...');
-            // at(4) - logMeta and so on...
-            $this->logger->expects($this->at(7))->method('log')->with('Installing deployment configuration...');
-            $this->logger->expects($this->at(9))->method('log')->with('Installing database schema:');
-            $this->logger->expects($this->at(11))->method('log')->with("Module 'Foo_One':");
-            $this->logger->expects($this->at(13))->method('log')->with("Module 'Bar_Two':");
-            $this->logger->expects($this->at(15))->method('log')->with('Schema post-updates:');
-            $this->logger->expects($this->at(16))->method('log')->with("Module 'Foo_One':");
-            $this->logger->expects($this->at(18))->method('log')->with("Module 'Bar_Two':");
-            $this->logger->expects($this->at(21))->method('log')->with('Installing user configuration...');
-            $this->logger->expects($this->at(23))->method('log')->with('Enabling caches:');
-            $this->logger->expects($this->at(27))->method('log')->with('Installing data...');
-            $this->logger->expects($this->at(28))->method('log')->with('Data install/update:');
-            $this->logger->expects($this->at(29))->method('log')->with("Module 'Foo_One':");
-            $this->logger->expects($this->at(31))->method('log')->with("Module 'Bar_Two':");
-            $this->logger->expects($this->at(33))->method('log')->with('Data post-updates:');
-            $this->logger->expects($this->at(34))->method('log')->with("Module 'Foo_One':");
-            $this->logger->expects($this->at(36))->method('log')->with("Module 'Bar_Two':");
-            $this->logger->expects($this->at(39))->method('log')->with('Installing admin user...');
-            $this->logger->expects($this->at(41))->method('log')->with('Caches clearing:');
-            $this->logger->expects($this->at(44))->method('log')->with('Disabling Maintenance Mode:');
-            $this->logger->expects($this->at(46))->method('log')->with('Post installation file permissions check...');
-            $this->logger->expects($this->at(48))->method('log')->with('Write installation date...');
-            $this->logger->expects($this->at(50))->method('logSuccess')->with('Magento installation complete.');
-            $this->logger->expects($this->at(52))->method('log')
-                ->with('Sample Data is installed with errors. See log file for details');
         }
     }
 }

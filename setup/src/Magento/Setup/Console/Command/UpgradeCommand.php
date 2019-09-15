@@ -47,10 +47,9 @@ class UpgradeCommand extends AbstractSetupCommand
     private $appState;
 
     /**
-     * Constructor.
-     *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
+     * @param AppState|null $appState
      */
     public function __construct(
         InstallerFactory $installerFactory,
@@ -102,7 +101,7 @@ class UpgradeCommand extends AbstractSetupCommand
                 InputOption::VALUE_OPTIONAL,
                 'Magento Installation will be run in dry-run mode',
                 false
-            ),
+            )
         ];
         $this->setName('setup:upgrade')
             ->setDescription('Upgrades the Magento application, DB data, and schema')
@@ -127,7 +126,10 @@ class UpgradeCommand extends AbstractSetupCommand
                 $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
                 $arrayInput = new ArrayInput([]);
                 $arrayInput->setInteractive($input->isInteractive());
-                $importConfigCommand->run($arrayInput, $output);
+                $result = $importConfigCommand->run($arrayInput, $output);
+                if ($result === \Magento\Framework\Console\Cli::RETURN_FAILURE) {
+                    throw new \Magento\Framework\Exception\RuntimeException(__('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME));
+                }
             }
 
             if (!$keepGenerated && $this->appState->getMode() === AppState::MODE_PRODUCTION) {

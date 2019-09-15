@@ -7,7 +7,9 @@
 
 namespace Magento\Checkout\Controller\Cart;
 
-class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * Update product configuration for a cart item

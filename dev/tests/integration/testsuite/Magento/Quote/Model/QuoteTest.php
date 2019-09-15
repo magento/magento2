@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -73,6 +74,46 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
+     * @magentoDataFixture Magento/Quote/_files/empty_quote.php
+     * @return void
+     */
+    public function testGetAddressWithVirtualProduct()
+    {
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('reserved_order_id_1', 'reserved_order_id');
+        $billingAddress = $this->objectManager->create(AddressInterface::class);
+        $billingAddress->setFirstname('Joe')
+            ->setLastname('Doe')
+            ->setCountryId('US')
+            ->setRegion('TX')
+            ->setCity('Austin')
+            ->setStreet('1000 West Parmer Line')
+            ->setPostcode('11501')
+            ->setTelephone('123456789');
+        $quote->setBillingAddress($billingAddress);
+        $shippingAddress = $this->objectManager->create(AddressInterface::class);
+        $shippingAddress->setFirstname('Joe')
+            ->setLastname('Doe')
+            ->setCountryId('US')
+            ->setRegion('NJ')
+            ->setCity('Newark')
+            ->setStreet('2775  Granville Lane')
+            ->setPostcode('07102')
+            ->setTelephone('9734685221');
+        $quote->setShippingAddress($shippingAddress);
+        $productRepository = $this->objectManager->create(
+            ProductRepositoryInterface::class
+        );
+        $product = $productRepository->get('virtual-product', false, null, true);
+        $quote->addProduct($product);
+        $quote->save();
+        $expectedAddress = $quote->getBillingAddress();
+        $this->assertEquals($expectedAddress, $quote->getAllItems()[0]->getAddress());
+    }
+
+    /**
      * @return void
      */
     public function testSetCustomerData(): void
@@ -98,6 +139,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $customer = $quote->getCustomer();
         $this->assertEquals($expected, $this->convertToArray($customer));
         $this->assertEquals('qa@example.com', $quote->getCustomerEmail());
+        $this->assertEquals('Joe', $quote->getCustomerFirstname());
+        $this->assertEquals('Dou', $quote->getCustomerLastname());
+        $this->assertEquals('Ivan', $quote->getCustomerMiddlename());
     }
 
     /**
@@ -328,6 +372,26 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Customer has address with country which not allowed in website
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture Magento/Backend/_files/allowed_countries_fr.php
+     * @return void
+     */
+    public function testAssignCustomerWithAddressChangeWithNotAllowedCountry()
+    {
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        $customerData = $this->_prepareQuoteForTestAssignCustomerWithAddressChange($quote);
+        $quote->assignCustomerWithAddressChange($customerData);
+
+        /** Check that addresses are empty */
+        $this->assertNull($quote->getBillingAddress()->getCountryId());
+        $this->assertNull($quote->getShippingAddress()->getCountryId());
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
      * @return void
      */
@@ -362,7 +426,8 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $quote->getItemsQty());
 
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The requested qty is not available');
+        // TODO: fix test or implementation as described in https://github.com/magento-engcom/msi/issues/1037
+//        $this->expectExceptionMessage('The requested qty is not available');
         $updateParams['qty'] = $productStockQty + 1;
         $quote->updateItem($updateParams['id'], $updateParams);
     }

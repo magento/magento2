@@ -3,13 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?= $block->getChildHtml('grid') ?>
 
-<?php if ($block->getShowButtons()): ?>
+<?php if ($block->getShowButtons()) : ?>
 <div class="form-buttons">
     <?= $block->getUnsubscribeButtonHtml() ?>
     <?= $block->getDeleteButtonHtml() ?>
@@ -18,13 +15,14 @@
 <script>
 require(["prototype", "mage/adminhtml/events"], function(){
 
-    <!--
     problemController = {
         checkCheckboxes:function (controlCheckbox) {
-            var elements = $('problemGrid').getElementsByClassName('problemCheckbox');
-            elements.each(function (obj) {
-                obj.checked = controlCheckbox.checked;
-            });
+            var elements = $$('input.problemCheckbox');
+            if (elements && elements.length) {
+                elements.each(function (obj) {
+                    obj.checked = controlCheckbox.checked;
+                });
+            }
         },
         rowClick:function (e) {
             if (!Event.element(e).hasClassName('problemCheckbox')) {

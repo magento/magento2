@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use GraphQL\Language\AST\FieldNode;
 use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
-use Magento\CatalogGraphQl\Model\Category\Hydrator;
 use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -17,6 +16,7 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
+use Magento\Catalog\Model\Category;
 
 /**
  * Category tree data provider
@@ -54,80 +54,74 @@ class CategoryTree
     private $metadata;
 
     /**
-     * @var Hydrator
-     */
-    private $hydrator;
-
-    /**
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
      * @param DepthCalculator $depthCalculator
      * @param LevelCalculator $levelCalculator
      * @param MetadataPool $metadata
-     * @param Hydrator $hydrator
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         AttributesJoiner $attributesJoiner,
         DepthCalculator $depthCalculator,
         LevelCalculator $levelCalculator,
-        MetadataPool $metadata,
-        Hydrator $hydrator
+        MetadataPool $metadata
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
         $this->depthCalculator = $depthCalculator;
         $this->levelCalculator = $levelCalculator;
         $this->metadata = $metadata;
-        $this->hydrator = $hydrator;
     }
 
     /**
+     * Returns categories tree starting from parent $rootCategoryId
+     *
      * @param ResolveInfo $resolveInfo
      * @param int $rootCategoryId
-     * @return array
+     * @return \Iterator
      */
-    public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId) : array
+    public function getTree(ResolveInfo $resolveInfo, int $rootCategoryId): \Iterator
     {
-        $categoryQuery = $resolveInfo->fieldASTs[0];
+        $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
         $this->joinAttributesRecursively($collection, $categoryQuery);
         $depth = $this->depthCalculator->calculate($categoryQuery);
         $level = $this->levelCalculator->calculate($rootCategoryId);
-        //Search for desired part of category tree
-        $collection->addPathFilter(sprintf('.*/%s/[/0-9]*$', $rootCategoryId));
-        $collection->addFieldToFilter('level', ['gt' => $level]);
-        $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
-        $collection->setOrder('level');
-        $collection->getSelect()->orWhere(
-            $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField() . ' = ?',
-            $rootCategoryId
-        );
-        return $this->processTree($collection->getIterator());
-    }
 
-    /**
-     * @param \Iterator $iterator
-     * @return array
-     */
-    private function processTree(\Iterator $iterator) : array
-    {
-        $tree = [];
-        while ($iterator->valid()) {
-            /** @var CategoryInterface $category */
-            $category = $iterator->current();
-            $iterator->next();
-            $nextCategory = $iterator->current();
-            $tree[$category->getId()] = $this->hydrator->hydrateCategory($category);
-            if ($nextCategory && (int) $nextCategory->getLevel() !== (int) $category->getLevel()) {
-                $tree[$category->getId()]['children'] = $this->processTree($iterator);
-            }
+        // If root category is being filter, we've to remove first slash
+        if ($rootCategoryId == Category::TREE_ROOT_ID) {
+            $regExpPathFilter = sprintf('.*%s/[/0-9]*$', $rootCategoryId);
+        } else {
+            $regExpPathFilter = sprintf('.*/%s/[/0-9]*$', $rootCategoryId);
         }
 
-        return $tree;
+        //Search for desired part of category tree
+        $collection->addPathFilter($regExpPathFilter);
+
+        $collection->addFieldToFilter('level', ['gt' => $level]);
+        $collection->addFieldToFilter('level', ['lteq' => $level + $depth - self::DEPTH_OFFSET]);
+        $collection->addAttributeToFilter('is_active', 1, "left");
+        $collection->setOrder('level');
+        $collection->setOrder(
+            'position',
+            $collection::SORT_ORDER_DESC
+        );
+        $collection->getSelect()->orWhere(
+            $collection->getSelect()
+                ->getConnection()
+                ->quoteIdentifier(
+                    'e.' . $this->metadata->getMetadata(CategoryInterface::class)->getIdentifierField()
+                ) . ' = ?',
+            $rootCategoryId
+        );
+
+        return $collection->getIterator();
     }
 
     /**
+     * Join attributes recursively
+     *
      * @param Collection $collection
      * @param FieldNode $fieldNode
      * @return void

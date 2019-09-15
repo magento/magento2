@@ -9,8 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
@@ -22,38 +20,38 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
  */
 class Products implements ResolverInterface
 {
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     private $productRepository;
 
-    /** @var Builder */
+    /**
+     * @var Builder
+     */
     private $searchCriteriaBuilder;
 
-    /** @var Filter */
+    /**
+     * @var Filter
+     */
     private $filterQuery;
-
-    /** @var ValueFactory */
-    private $valueFactory;
 
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param Builder $searchCriteriaBuilder
      * @param Filter $filterQuery
-     * @param ValueFactory $valueFactory
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         Builder $searchCriteriaBuilder,
-        Filter $filterQuery,
-        ValueFactory $valueFactory
+        Filter $filterQuery
     ) {
         $this->productRepository = $productRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterQuery = $filterQuery;
-        $this->valueFactory = $valueFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -61,13 +59,19 @@ class Products implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         $args['filter'] = [
             'category_id' => [
                 'eq' => $value['id']
             ]
         ];
         $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
+        if ($args['currentPage'] < 1) {
+            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
+        }
+        if ($args['pageSize'] < 1) {
+            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
+        }
         $searchCriteria->setCurrentPage($args['currentPage']);
         $searchCriteria->setPageSize($args['pageSize']);
         $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
@@ -94,14 +98,10 @@ class Products implements ResolverInterface
             'items'       => $searchResult->getProductsSearchResult(),
             'page_info'   => [
                 'page_size'    => $searchCriteria->getPageSize(),
-                'current_page' => $currentPage
+                'current_page' => $currentPage,
+                'total_pages' => $maxPages
             ]
         ];
-
-        $result = function () use ($data) {
-            return $data;
-        };
-
-        return $this->valueFactory->create($result);
+        return $data;
     }
 }

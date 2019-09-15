@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -60,7 +61,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -87,7 +88,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -145,19 +146,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Set store id for each collection item when collection was loaded
+     * Set store id for each collection item when collection was loaded.
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
      * @return $this
      */
     public function _afterLoad()
     {
-        parent::_afterLoad();
-        if ($this->getStoreId() && $this->_items) {
-            foreach ($this->_items as $item) {
-                $item->setStoreId($this->getStoreId());
-            }
-        }
-        return $this;
+        return parent::_afterLoad();
     }
 
     /**
@@ -356,7 +352,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get Catalog Rule Processor.
+     *
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
+     *
      * @deprecated 100.2.0
      */
     private function getCatalogRuleProcessor()

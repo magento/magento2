@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="oauth_consumer" resource="default" engine="innodb" comment="OAuth Consumers">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="0"
@@ -19,19 +19,19 @@
         <column xsi:type="varchar" name="secret" nullable="false" length="32" comment="Secret code"/>
         <column xsi:type="text" name="callback_url" nullable="true" comment="Callback URL"/>
         <column xsi:type="text" name="rejected_callback_url" nullable="false" comment="Rejected callback URL"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="OAUTH_CONSUMER_KEY">
+        <constraint xsi:type="unique" referenceId="OAUTH_CONSUMER_KEY">
             <column name="key"/>
         </constraint>
-        <constraint xsi:type="unique" name="OAUTH_CONSUMER_SECRET">
+        <constraint xsi:type="unique" referenceId="OAUTH_CONSUMER_SECRET">
             <column name="secret"/>
         </constraint>
-        <index name="OAUTH_CONSUMER_CREATED_AT" indexType="btree">
+        <index referenceId="OAUTH_CONSUMER_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>
-        <index name="OAUTH_CONSUMER_UPDATED_AT" indexType="btree">
+        <index referenceId="OAUTH_CONSUMER_UPDATED_AT" indexType="btree">
             <column name="updated_at"/>
         </index>
     </table>
@@ -57,21 +57,21 @@
                 comment="User type"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Token creation timestamp"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="OAUTH_TOKEN_ADMIN_ID_ADMIN_USER_USER_ID" table="oauth_token"
+        <constraint xsi:type="foreign" referenceId="OAUTH_TOKEN_ADMIN_ID_ADMIN_USER_USER_ID" table="oauth_token"
                     column="admin_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="OAUTH_TOKEN_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_token"
+        <constraint xsi:type="foreign" referenceId="OAUTH_TOKEN_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_token"
                     column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="oauth_token"
+        <constraint xsi:type="foreign" referenceId="OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="oauth_token"
                     column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="OAUTH_TOKEN_TOKEN">
+        <constraint xsi:type="unique" referenceId="OAUTH_TOKEN_TOKEN">
             <column name="token"/>
         </constraint>
-        <index name="OAUTH_TOKEN_CONSUMER_ID" indexType="btree">
+        <index referenceId="OAUTH_TOKEN_CONSUMER_ID" indexType="btree">
             <column name="consumer_id"/>
         </index>
     </table>
@@ -81,14 +81,14 @@
                 comment="Nonce Timestamp"/>
         <column xsi:type="int" name="consumer_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Consumer ID"/>
-        <constraint xsi:type="foreign" name="OAUTH_NONCE_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_nonce"
+        <constraint xsi:type="foreign" referenceId="OAUTH_NONCE_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_nonce"
                     column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="OAUTH_NONCE_NONCE_CONSUMER_ID">
+        <constraint xsi:type="unique" referenceId="OAUTH_NONCE_NONCE_CONSUMER_ID">
             <column name="nonce"/>
             <column name="consumer_id"/>
         </constraint>
-        <index name="OAUTH_NONCE_TIMESTAMP" indexType="btree">
+        <index referenceId="OAUTH_NONCE_TIMESTAMP" indexType="btree">
             <column name="timestamp"/>
         </index>
     </table>
@@ -107,22 +107,22 @@
                 comment="Oauth consumer"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Creation Time"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Update Time"/>
         <column xsi:type="smallint" name="setup_type" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Integration type - manual or config file"/>
         <column xsi:type="varchar" name="identity_link_url" nullable="true" length="255"
                 comment="Identity linking Url"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="integration_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="INTEGRATION_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="integration"
+        <constraint xsi:type="foreign" referenceId="INTEGRATION_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="integration"
                     column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="INTEGRATION_NAME">
+        <constraint xsi:type="unique" referenceId="INTEGRATION_NAME">
             <column name="name"/>
         </constraint>
-        <constraint xsi:type="unique" name="INTEGRATION_CONSUMER_ID">
+        <constraint xsi:type="unique" referenceId="INTEGRATION_CONSUMER_ID">
             <column name="consumer_id"/>
         </constraint>
     </table>
@@ -136,12 +136,12 @@
                 comment="User type (admin or customer)"/>
         <column xsi:type="smallint" name="failures_count" padding="5" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Number of failed authentication attempts in a row"/>
-        <column xsi:type="timestamp" name="lock_expires_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+        <column xsi:type="timestamp" name="lock_expires_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Lock expiration time"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="log_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="OAUTH_TOKEN_REQUEST_LOG_USER_NAME_USER_TYPE">
+        <constraint xsi:type="unique" referenceId="OAUTH_TOKEN_REQUEST_LOG_USER_NAME_USER_TYPE">
             <column name="user_name"/>
             <column name="user_type"/>
         </constraint>

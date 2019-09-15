@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Controller\Adminhtml\Reports;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Analytics\Model\Exception\State\SubscriptionUpdateException;
 use Magento\Analytics\Model\ReportUrlProvider;
 use Magento\Backend\App\Action;
@@ -16,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Provide redirect to resource with reports.
  */
-class Show extends Action
+class Show extends Action implements HttpGetActionInterface
 {
     /**
      * @var ReportUrlProvider

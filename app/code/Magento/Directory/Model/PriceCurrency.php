@@ -46,7 +46,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convert($amount, $scope = null, $currency = null)
     {
@@ -58,17 +58,15 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION)
     {
-        $currentCurrency = $this->getCurrency($scope, $currency);
-        $convertedValue = $this->getStore($scope)->getBaseCurrency()->convert($amount, $currentCurrency);
-        return round($convertedValue, $precision);
+        return $this->roundPrice($this->convert($amount, $scope, $currency), $precision);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function format(
         $amount,
@@ -82,7 +80,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertAndFormat(
         $amount,
@@ -97,7 +95,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCurrency($scope = null, $currency = null)
     {
@@ -118,6 +116,8 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
+     * Get currrency symbol
+     *
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return string
@@ -148,13 +148,22 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * Round price
-     *
-     * @param float $price
-     * @return float
+     * @inheritdoc
      */
     public function round($price)
     {
         return round($price, 2);
+    }
+
+    /**
+     * Round price with precision
+     *
+     * @param float $price
+     * @param int $precision
+     * @return float
+     */
+    public function roundPrice($price, $precision = self::DEFAULT_PRECISION)
+    {
+        return round($price, $precision);
     }
 }

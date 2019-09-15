@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
+use Magento\Catalog\Model\Category\Attribute\Source\Sortby;
+use Magento\Catalog\Model\Config;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
@@ -19,49 +19,35 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class SortFields implements ResolverInterface
 {
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @var \Magento\Catalog\Model\Config
+     * @var Config
      */
     private $catalogConfig;
-    
+
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-    
-    /**
-     * @var \Magento\Catalog\Model\Category\Attribute\Source\Sortby
+     * @var Sortby
      */
     private $sortbyAttributeSource;
 
     /**
-     * @param ValueFactory $valueFactory
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @oaram \Magento\Catalog\Model\Category\Attribute\Source\Sortby $sortbyAttributeSource
+     * @param Config $catalogConfig
+     * @param Sortby $sortbyAttributeSource
      */
     public function __construct(
-        ValueFactory $valueFactory,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Category\Attribute\Source\Sortby $sortbyAttributeSource
+        Config $catalogConfig,
+        Sortby $sortbyAttributeSource
     ) {
-        $this->valueFactory = $valueFactory;
         $this->catalogConfig = $catalogConfig;
-        $this->storeManager = $storeManager;
         $this->sortbyAttributeSource = $sortbyAttributeSource;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null) : Value
+    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $sortFieldsOptions = $this->sortbyAttributeSource->getAllOptions();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+
         array_walk(
             $sortFieldsOptions,
             function (&$option) {
@@ -69,14 +55,10 @@ class SortFields implements ResolverInterface
             }
         );
         $data = [
-            'default' => $this->catalogConfig->getProductListDefaultSortBy($this->storeManager->getStore()->getId()),
+            'default' => $this->catalogConfig->getProductListDefaultSortBy($storeId),
             'options' => $sortFieldsOptions,
         ];
-        
-        $result = function () use ($data) {
-            return $data;
-        };
 
-        return $this->valueFactory->create($result);
+        return $data;
     }
 }

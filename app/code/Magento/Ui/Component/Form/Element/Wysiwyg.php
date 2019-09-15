@@ -13,6 +13,8 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
+ * WYSIWYG form element
+ *
  * @api
  * @since 100.1.0
  */
@@ -50,8 +52,9 @@ class Wysiwyg extends AbstractElement
     ) {
         $wysiwygConfigData = isset($config['wysiwygConfigData']) ? $config['wysiwygConfigData'] : [];
         $this->form = $formFactory->create();
+        $wysiwygId = $context->getNamespace() . '_' . $data['name'];
         $this->editor = $this->form->addField(
-            $context->getNamespace() . '_' . $data['name'],
+            $wysiwygId,
             \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'force_load' => true,
@@ -62,6 +65,7 @@ class Wysiwyg extends AbstractElement
             ]
         );
         $data['config']['content'] = $this->editor->getElementHtml();
+        $data['config']['wysiwygId'] = $wysiwygId;
 
         parent::__construct($context, $components, $data);
     }

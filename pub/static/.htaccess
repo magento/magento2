@@ -22,6 +22,11 @@ Options -MultiViews
     RewriteCond %{REQUEST_FILENAME} !-l
 
     RewriteRule .* ../static.php?resource=$0 [L]
+    # Detects if moxieplayer request with uri params and redirects to uri without params
+    <Files moxieplayer.swf>
+     	RewriteCond %{QUERY_STRING} !^$
+     	RewriteRule ^(.*)$ %{REQUEST_URI}? [R=301,L]
+     </Files>
 </IfModule>
 
 ############################################

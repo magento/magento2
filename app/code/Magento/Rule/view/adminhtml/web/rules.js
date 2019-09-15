@@ -13,6 +13,7 @@ define([
     'mage/translate',
     'prototype'
 ], function (jQuery) {
+    'use strict';
 
     var VarienRulesForm = new Class.create();
 
@@ -101,6 +102,9 @@ define([
 
                     if (!elem.multiple) {
                         Event.observe(elem, 'change', this.hideParamInputField.bind(this, container));
+
+                        this.changeVisibilityForValueRuleParam(elem);
+
                     }
                     Event.observe(elem, 'blur', this.hideParamInputField.bind(this, container));
                 }
@@ -122,7 +126,7 @@ define([
                 var values = this.updateElement.value.split(','),
  s = '';
 
-                for (i = 0; i < values.length; i++) {
+                for (var i = 0; i < values.length; i++) {
                     s = values[i].strip();
 
                     if (s != '') {
@@ -220,6 +224,8 @@ define([
 
             var elem = Element.down(elemContainer, 'input.input-text');
 
+            jQuery(elem).trigger('contentUpdated');
+
             if (elem) {
                 elem.focus();
 
@@ -249,7 +255,7 @@ define([
                 if (elem && elem.options) {
                     var selectedOptions = [];
 
-                    for (i = 0; i < elem.options.length; i++) {
+                    for (var i = 0; i < elem.options.length; i++) {
                         if (elem.options[i].selected) {
                             selectedOptions.push(elem.options[i].text);
                         }
@@ -259,6 +265,8 @@ define([
 
                     label.innerHTML = str != '' ? str : '...';
                 }
+
+                this.changeVisibilityForValueRuleParam(elem);
 
                 elem = Element.down(container, 'input.input-text');
 
@@ -289,6 +297,23 @@ define([
             }
 
             this.shownElement = null;
+        },
+
+        changeVisibilityForValueRuleParam: function(elem) {
+            var parsedElementId = elem.id.split('__');
+            if (parsedElementId[2] !== 'operator') {
+                return false;
+            }
+
+            var valueElement = jQuery('#' + parsedElementId[0] + '__' + parsedElementId[1] + '__value');
+
+            if(elem.value === '<=>') {
+                valueElement.closest('.rule-param').hide();
+            } else {
+                valueElement.closest('.rule-param').show();
+            }
+
+            return true;
         },
 
         addRuleNewChild: function (elem) {

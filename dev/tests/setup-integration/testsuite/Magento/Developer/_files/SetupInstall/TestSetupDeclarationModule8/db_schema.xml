@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="module8_test_main_table" resource="default" engine="innodb" comment="Main Test Table for Module8">
+        <column xsi:type="int" name="module8_email_contact_id" padding="10" unsigned="true" nullable="false"
+                identity="true" comment="Email Contact ID"/>
+        <column xsi:type="int" name="module8_contact_group_id" padding="10" unsigned="true" nullable="false"
+                identity="false" comment="Contact Group ID"/>
+        <column xsi:type="smallint" name="module8_is_guest" padding="5" unsigned="true" nullable="true"
+                identity="false" comment="Is Guest"/>
+        <column xsi:type="varchar" name="module8_contact_id" nullable="true" length="15" comment="Contact ID"/>
+        <column xsi:type="varchar" name="module8_content" nullable="false" length="15" comment="Content"/>
+        <column xsi:type="int" name="module8_update_column" padding="11" unsigned="false" nullable="false"
+                identity="false" comment="Module_8 Update Column"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="module8_email_contact_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="MODULE8_INSTALL_UNIQUE_INDEX_2">
+            <column name="module8_email_contact_id"/>
+            <column name="module8_is_guest"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="MODULE8_INSTALL_UNIQUE_INDEX_TEMP" disabled="true">
+            <column name="module8_contact_group_id"/>
+        </constraint>
+        <index referenceId="MODULE8_INSTALL_INDEX_1" indexType="btree">
+            <column name="module8_email_contact_id"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_3" indexType="btree">
+            <column name="module8_is_guest"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_4" indexType="btree">
+            <column name="module8_contact_id"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_TEMP" indexType="btree" disabled="true">
+            <column name="module8_content"/>
+        </index>
+    </table>
+    <table name="module8_test_second_table" resource="default" engine="innodb" comment="Second Test Table for Module8">
+        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="module8_contact_id" padding="11" unsigned="false" nullable="true"
+                identity="false" comment="Contact ID"/>
+        <column xsi:type="varchar" name="module8_address" nullable="false" length="15" comment="Address"/>
+        <column xsi:type="smallint" name="module8_counter_with_multiline_comment" padding="5" unsigned="true"
+                nullable="true" identity="false" default="0"
+                comment="Empty&#10;                Counter&#10;                Multiline&#10;                Comment"/>
+        <column xsi:type="varchar" name="module8_second_address" nullable="true" length="15" comment="Second Address"/>
+        <column xsi:type="varchar" name="module8_temp_column" nullable="true" length="15"
+                comment="Temp column for remove" disabled="true"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="module8_entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="MODULE8_INSTALL_FK_ENTITY_ID_TEST_MAIN_TABLE_EMAIL_CONTACT_ID"
+                    table="module8_test_second_table" column="module8_entity_id"
+                    referenceTable="module8_test_main_table" referenceColumn="module8_email_contact_id"
+                    onDelete="NO ACTION"/>
+        <constraint xsi:type="foreign" referenceId="MODULE8_INSTALL_FK_ADDRESS_TEST_MAIN_TABLE_CONTACT_ID"
+                    table="module8_test_second_table" column="module8_address" referenceTable="module8_test_main_table"
+                    referenceColumn="module8_contact_id" onDelete="NO ACTION"/>
+        <constraint xsi:type="foreign" referenceId="MODULE8_INSTALL_FK_ADDRESS_TEST_MAIN_TABLE_MODULE8_CONTENT_TEMP"
+                    table="module8_test_second_table" column="module8_address" referenceTable="module8_test_main_table"
+                    referenceColumn="module8_content" onDelete="NO ACTION" disabled="true"/>
+        <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_1" indexType="btree">
+            <column name="module8_entity_id"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_2" indexType="btree">
+            <column name="module8_address"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_SECOND_TABLE_INDEX_3_TEMP" indexType="btree">
+            <column name="module8_second_address"/>
+        </index>
+    </table>
+    <table name="module8_test_update_table" resource="default" engine="innodb" comment="Update Test Table for Module8">
+        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="module8_entity_row_id" padding="10" unsigned="true" nullable="false"
+                identity="false" comment="Module8_entity_row_id"/>
+        <column xsi:type="smallint" name="module8_is_guest" padding="5" unsigned="true" nullable="true"
+                identity="false" comment="Is Guest"/>
+        <column xsi:type="smallint" name="module8_guest_browser_id" padding="5" unsigned="true" nullable="true"
+                identity="false" comment="Guest Browser ID"/>
+        <column xsi:type="smallint" name="module8_column_for_remove" padding="5" unsigned="true" nullable="true"
+                identity="false" comment="For remove"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="module8_entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="MODULE8_UPDATE_FK_MODULE8_IS_GUEST"
+                    table="module8_test_update_table" column="module8_is_guest" referenceTable="module8_test_main_table"
+                    referenceColumn="module8_is_guest" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="MODULE8_UPDATE_FK_TEMP" table="module8_test_update_table"
+                    column="module8_column_for_remove" referenceTable="module8_test_main_table"
+                    referenceColumn="module8_is_guest" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="MODULE8_UPDATE_UNIQUE_INDEX_TEMP">
+            <column name="module8_entity_id"/>
+            <column name="module8_is_guest"/>
+        </constraint>
+        <index referenceId="MODULE8_UPDATE_IS_GUEST_INDEX" indexType="btree">
+            <column name="module8_is_guest"/>
+        </index>
+        <index referenceId="MODULE8_UPDATE_TEMP_INDEX" indexType="btree">
+            <column name="module8_column_for_remove"/>
+            <column name="module8_guest_browser_id"/>
+        </index>
+    </table>
+    <table name="module8_test_temp_table" resource="default" engine="innodb" comment="module8_test_temp_table">
+        <column xsi:type="int" name="module8_entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="module8_counter" padding="10" unsigned="true" nullable="true" identity="false"
+                default="100" comment="Counter"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="module8_entity_id"/>
+        </constraint>
+    </table>
+</schema>

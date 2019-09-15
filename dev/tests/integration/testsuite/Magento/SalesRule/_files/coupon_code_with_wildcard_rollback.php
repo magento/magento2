@@ -14,8 +14,19 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 
+/** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+$searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+$searchCriteria = $searchCriteriaBuilder->addFilter('name', '5$ fixed discount on whole cart')
+    ->create();
+
+/** @var RuleRepositoryInterface $ruleRepository */
+$ruleRepository = Bootstrap::getObjectManager()->get(RuleRepositoryInterface::class);
+$items = $ruleRepository->getList($searchCriteria)
+    ->getItems();
+
+$salesRule = array_pop($items);
+
 /** @var Rule $salesRule */
-$salesRule = getSalesRule('5$ fixed discount on whole cart');
 if ($salesRule !== null) {
     /** @var RuleRepositoryInterface $ruleRepository */
     $ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
@@ -28,19 +39,4 @@ if ($coupon->getCouponId()) {
     /** @var CouponRepositoryInterface $couponRepository */
     $couponRepository = $objectManager->get(CouponRepositoryInterface::class);
     $couponRepository->deleteById($coupon->getCouponId());
-}
-
-function getSalesRule(string $name)
-{
-    /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-    $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-    $searchCriteria = $searchCriteriaBuilder->addFilter('name', $name)
-        ->create();
-
-    /** @var RuleRepositoryInterface $ruleRepository */
-    $ruleRepository = Bootstrap::getObjectManager()->get(RuleRepositoryInterface::class);
-    $items = $ruleRepository->getList($searchCriteria)
-        ->getItems();
-
-    return array_pop($items);
 }

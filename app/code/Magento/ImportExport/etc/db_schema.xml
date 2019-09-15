@@ -12,7 +12,7 @@
         <column xsi:type="varchar" name="entity" nullable="false" length="50" comment="Entity"/>
         <column xsi:type="varchar" name="behavior" nullable="false" length="10" default="append" comment="Behavior"/>
         <column xsi:type="longtext" name="data" nullable="true" comment="Data"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
     </table>
@@ -27,7 +27,7 @@
         <column xsi:type="varchar" name="execution_time" nullable="true" length="255" comment="Execution time"/>
         <column xsi:type="varchar" name="summary" nullable="true" length="255" comment="Summary"/>
         <column xsi:type="varchar" name="error_file" nullable="false" length="255" comment="Imported file with errors"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="history_id"/>
         </constraint>
     </table>

@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Qty */ ?>
@@ -13,9 +10,9 @@
 <fieldset id="product_composite_configure_fields_qty"
           class="fieldset product-composite-qty-block admin__fieldset <?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <div class="field admin__field">
-        <label class="label admin__field-label"><span><?= /* @escapeNotVerified */ __('Quantity') ?></span></label>
+        <label class="label admin__field-label"><span><?= $block->escapeHtml(__('Quantity')) ?></span></label>
         <div class="control admin__field-control">
-            <input id="product_composite_configure_input_qty" class="input-text admin__control-text qty" type="text" name="qty" value="<?= /* @escapeNotVerified */ $block->getQtyValue() * 1 ?>">
+            <input id="product_composite_configure_input_qty" class="input-text admin__control-text qty" type="text" name="qty" value="<?= $block->getQtyValue() * 1 ?>">
         </div>
     </div>
 </fieldset>

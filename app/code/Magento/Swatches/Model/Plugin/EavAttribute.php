@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
 use Magento\Swatches\Model\Swatch;
 
 /**
@@ -17,6 +18,11 @@ use Magento\Swatches\Model\Swatch;
 class EavAttribute
 {
     const DEFAULT_STORE_ID = 0;
+
+    /**
+     * @var SwatchResource
+     */
+    private $swatchResource;
 
     /**
      * Base option title used for string operations to detect is option already exists or new
@@ -64,17 +70,20 @@ class EavAttribute
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      * @param Json|null $serializer
+     * @param SwatchResource|null $swatchResource
      */
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
         \Magento\Swatches\Helper\Data $swatchHelper,
-        Json $serializer = null
+        Json $serializer = null,
+        SwatchResource $swatchResource = null
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
+        $this->swatchResource = $swatchResource ?: ObjectManager::getInstance()->create(SwatchResource::class);
     }
 
     /**
@@ -148,6 +157,7 @@ class EavAttribute
      * Prepare attribute for conversion from any swatch type to dropdown
      *
      * @param Attribute $attribute
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function convertSwatchToDropdown(Attribute $attribute)
@@ -157,6 +167,8 @@ class EavAttribute
             if (!empty($additionalData)) {
                 $additionalData = $this->serializer->unserialize($additionalData);
                 if (is_array($additionalData) && isset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY])) {
+                    $option = $attribute->getOption() ?: [];
+                    $this->cleanEavAttributeOptionSwatchValues($option);
                     unset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY]);
                     $attribute->setData('additional_data', $this->serializer->serialize($additionalData));
                 }
@@ -235,6 +247,8 @@ class EavAttribute
     {
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $this->processVisualSwatch($attribute);
+            $attributeOptions = $attribute->getOptiontext() ?: [];
+            $this->cleanTextSwatchValuesAfterSwitch($attributeOptions);
         } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
             $this->processTextualSwatch($attribute);
         }
@@ -265,6 +279,33 @@ class EavAttribute
                 $this->isSwatchExists = null;
             }
         }
+    }
+
+    /**
+     * Clean swatch option values after switching to the dropdown type.
+     *
+     * @param array $attributeOptions
+     * @param int|null  $swatchType
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function cleanEavAttributeOptionSwatchValues(array $attributeOptions, int $swatchType = null)
+    {
+        if (count($attributeOptions) && isset($attributeOptions['value'])) {
+            $optionsIDs = array_keys($attributeOptions['value']);
+
+            $this->swatchResource->clearSwatchOptionByOptionIdAndType($optionsIDs, $swatchType);
+        }
+    }
+
+    /**
+     * Cleaning the text type of swatch option values after switching.
+     *
+     * @param array $attributeOptions
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function cleanTextSwatchValuesAfterSwitch(array $attributeOptions)
+    {
+        $this->cleanEavAttributeOptionSwatchValues($attributeOptions, Swatch::SWATCH_TYPE_TEXTUAL);
     }
 
     /**
@@ -432,7 +473,7 @@ class EavAttribute
             $options = $attribute->getData('optiontext');
         }
         if ($options && !$this->isOptionsValid($options, $attribute)) {
-            throw new InputException(__('Admin is a required field in the each row'));
+            throw new InputException(__('Admin is a required field in each row'));
         }
         return true;
     }

@@ -15,6 +15,9 @@ use Magento\Framework\App\ObjectManager;
  * This strategy handles attributes which comply with two criteria:
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class TermDropdownStrategy implements FilterStrategyInterface
 {

@@ -27,6 +27,11 @@ class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
     protected $orderCollectionMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderManagementMock;
+
+    /**
      * @var ObjectManager
      */
     protected $objectManager;
@@ -44,10 +49,12 @@ class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->orderCollectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
+        $this->orderManagementMock = $this->createMock(\Magento\Sales\Api\OrderManagementInterface::class);
 
         $this->model = new CleanExpiredOrders(
             $this->storesConfigMock,
-            $this->collectionFactoryMock
+            $this->collectionFactoryMock,
+            $this->orderManagementMock
         );
     }
 
@@ -64,8 +71,11 @@ class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->exactly(2))
+            ->method('getAllIds')
+            ->willReturn([1, 2]);
         $this->orderCollectionMock->expects($this->exactly(4))->method('addFieldToFilter');
-        $this->orderCollectionMock->expects($this->exactly(4))->method('walk');
+        $this->orderManagementMock->expects($this->exactly(4))->method('cancel');
 
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $selectMock->expects($this->exactly(2))->method('where')->willReturnSelf();
@@ -92,14 +102,18 @@ class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->once())
+            ->method('getAllIds')
+            ->willReturn([1]);
         $this->orderCollectionMock->expects($this->exactly(2))->method('addFieldToFilter');
+        $this->orderManagementMock->expects($this->once())->method('cancel');
 
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $selectMock->expects($this->once())->method('where')->willReturnSelf();
         $this->orderCollectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
 
-        $this->orderCollectionMock->expects($this->once())
-            ->method('walk')
+        $this->orderManagementMock->expects($this->once())
+            ->method('cancel')
             ->willThrowException(new \Exception($exceptionMessage));
 
         $this->model->execute();

@@ -6,6 +6,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
@@ -16,7 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
+class Validate extends Product implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date

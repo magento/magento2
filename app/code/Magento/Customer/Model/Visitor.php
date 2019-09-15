@@ -6,10 +6,15 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestSafetyInterface;
+
 /**
  * Class Visitor
+ *
  * @package Magento\Customer\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
@@ -66,6 +71,11 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     protected $indexerRegistry;
 
     /**
+     * @var RequestSafetyInterface
+     */
+    private $requestSafety;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Session\SessionManagerInterface $session
@@ -78,6 +88,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
+     * @param RequestSafetyInterface|null $requestSafety
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -93,7 +104,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
-        array $data = []
+        array $data = [],
+        RequestSafetyInterface $requestSafety = null
     ) {
         $this->session = $session;
         $this->httpHeader = $httpHeader;
@@ -103,6 +115,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->indexerRegistry = $indexerRegistry;
+        $this->requestSafety = $requestSafety ?? ObjectManager::getInstance()->get(RequestSafetyInterface::class);
     }
 
     /**
@@ -175,7 +188,8 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function saveByRequest($observer)
     {
-        if ($this->skipRequestLogging || $this->isModuleIgnored($observer)) {
+        // prevent saving Visitor for safe methods, e.g. GET request
+        if ($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer)) {
             return $this;
         }
 
@@ -262,6 +276,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Destroy binding of checkout quote
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return  \Magento\Customer\Model\Visitor
      */
@@ -305,11 +320,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function getOnlineInterval()
     {
-        $configValue = intval(
-            $this->scopeConfig->getValue(
-                static::XML_PATH_ONLINE_INTERVAL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
+        $configValue = (int)$this->scopeConfig->getValue(
+            static::XML_PATH_ONLINE_INTERVAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }

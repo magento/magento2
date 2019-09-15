@@ -6,10 +6,16 @@
  */
 namespace Magento\Catalog\Controller\Product;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Catalog\Controller\Product as ProductAction;
 
-class View extends \Magento\Catalog\Controller\Product
+/**
+ * View a product on storefront. Needs to be accessible by POST because of the store switching.
+ */
+class View extends ProductAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Catalog\Helper\Product\View

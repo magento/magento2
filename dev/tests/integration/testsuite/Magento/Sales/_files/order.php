@@ -44,7 +44,9 @@ $orderItem->setProductId($product->getId())
     ->setBasePrice($product->getPrice())
     ->setPrice($product->getPrice())
     ->setRowTotal($product->getPrice())
-    ->setProductType('simple');
+    ->setProductType('simple')
+    ->setName($product->getName())
+    ->setSku($product->getSku());
 
 /** @var Order $order */
 $order = $objectManager->create(Order::class);

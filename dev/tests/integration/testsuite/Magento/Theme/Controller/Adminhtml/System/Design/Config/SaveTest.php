@@ -6,6 +6,7 @@
 
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Config;
 
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -29,6 +30,9 @@ class SaveTest extends AbstractBackendController
      */
     protected $uri = 'backend/theme/design_config/save';
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -36,6 +40,7 @@ class SaveTest extends AbstractBackendController
         $this->formKey = $this->_objectManager->get(
             FormKey::class
         );
+        $this->httpMethod = Http::METHOD_POST;
     }
 
     /**
@@ -107,12 +112,11 @@ class SaveTest extends AbstractBackendController
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function testAclHasAccess()
     {
-        $this->getRequest()->setMethod(
-            \Zend\Http\Request::METHOD_POST
-        );
-
         $this->getRequest()->setParams(
             [
                 'form_key' => $this->formKey->getFormKey()

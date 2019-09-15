@@ -15,7 +15,7 @@
                         <argument name="use_ajax" xsi:type="string">0</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                         <argument name="pager_visibility" xsi:type="string">0</argument>
-                        <argument name="dataSource" xsi:type="object">Magento\Reports\Model\ResourceModel\Refresh\Collection</argument>
+                        <argument name="dataSource" xsi:type="object" shared="false">Magento\Reports\Model\ResourceModel\Refresh\Collection</argument>
                     </arguments>
                     <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.block.refresh.statistics.massactions" as="grid.massaction">
                         <arguments>

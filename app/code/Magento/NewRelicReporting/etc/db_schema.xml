@@ -10,13 +10,13 @@
     <table name="reporting_counts" resource="default" engine="innodb"
            comment="Reporting for all count related events generated via the cron job">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="varchar" name="type" nullable="true" length="255" comment="Item Reported"/>
         <column xsi:type="int" name="count" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Count Value"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
     </table>
@@ -29,44 +29,44 @@
         <column xsi:type="varchar" name="state" nullable="true" length="255" comment="Module State"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
     </table>
     <table name="reporting_orders" resource="default" engine="innodb" comment="Reporting for all orders">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Customer Id"/>
-        <column xsi:type="decimal" name="total" scale="0" precision="10" unsigned="true" nullable="true"/>
-        <column xsi:type="decimal" name="total_base" scale="0" precision="10" unsigned="true" nullable="true"/>
+                comment="Customer ID"/>
+        <column xsi:type="decimal" name="total" scale="4" precision="20" unsigned="true" nullable="true"/>
+        <column xsi:type="decimal" name="total_base" scale="4" precision="20" unsigned="true" nullable="true"/>
         <column xsi:type="int" name="item_count" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Line Item Count"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
     </table>
     <table name="reporting_users" resource="default" engine="innodb" comment="Reporting for user actions">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="varchar" name="type" nullable="true" length="255" comment="User Type"/>
         <column xsi:type="varchar" name="action" nullable="true" length="255" comment="Action Performed"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
     </table>
     <table name="reporting_system_updates" resource="default" engine="innodb" comment="Reporting for system updates">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Id"/>
+                comment="Entity ID"/>
         <column xsi:type="varchar" name="type" nullable="true" length="255" comment="Update Type"/>
         <column xsi:type="varchar" name="action" nullable="true" length="255" comment="Action Performed"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
     </table>

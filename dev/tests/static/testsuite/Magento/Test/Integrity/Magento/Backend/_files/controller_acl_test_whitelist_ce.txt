@@ -32,3 +32,4 @@ Magento\Inventory\Controller\Adminhtml\Source\SourceCarrierDataProcessor
 Magento\Inventory\Controller\Adminhtml\Source\SourceHydrator
 Magento\Inventory\Controller\Adminhtml\Stock\StockSaveProcessor
 Magento\Inventory\Controller\Adminhtml\Stock\StockSourceLinkProcessor
+Magento\InventoryCatalogAdminUi\Controller\Adminhtml\Bulk\BulkPageProcessor

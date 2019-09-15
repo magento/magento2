@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+/**
+ * Collection test
+ */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -181,10 +184,35 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $productTable = $this->collection->getTable('catalog_product_entity');
         $urlRewriteTable = $this->collection->getTable('url_rewrite');
 
+        // phpcs:ignore
         $expected = 'SELECT `e`.*, `alias`.`request_path` FROM `' . $productTable . '` AS `e`'
             . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
             . ' AND (alias.entity_type = \'product\')';
 
         self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
+     * @magentoDbIsolation enabled
+     */
+    public function testAddAttributeToFilterAffectsGetSize(): void
+    {
+        $this->assertEquals(10, $this->collection->getSize());
+        $this->collection->addAttributeToFilter('sku', 'Product1');
+        $this->assertEquals(1, $this->collection->getSize());
+    }
+
+    /**
+     * Add tier price attribute filter to collection
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     */
+    public function testAddAttributeTierPriceToFilter(): void
+    {
+        $this->assertEquals(11, $this->collection->getSize());
+        $this->collection->addAttributeToFilter('tier_price', ['gt' => 0]);
+        $this->assertEquals(1, $this->collection->getSize());
     }
 }

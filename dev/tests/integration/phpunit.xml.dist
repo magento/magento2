@@ -72,10 +72,60 @@
         <!-- Connection parameters for MongoDB library tests -->
         <!--<const name="MONGODB_CONNECTION_STRING" value="mongodb://localhost:27017"/>-->
         <!--<const name="MONGODB_DATABASE_NAME" value="magento_integration_tests"/>-->
+        <!-- Connection parameters for RabbitMQ tests -->
+        <!--<const name="RABBITMQ_MANAGEMENT_PORT" value="15672"/>-->
+        <!--<const name="TESTS_PARALLEL_RUN" value="1"/>-->
     </php>
     <!-- Test listeners -->
     <listeners>
         <listener class="Magento\TestFramework\Event\PhpUnit"/>
         <listener class="Magento\TestFramework\ErrorLog\Listener"/>
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+            <arguments>
+                <string>var/allure-results</string> <!-- XML files output directory -->
+                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+                <array> <!-- A list of custom annotations to ignore (optional) -->
+                    <element key="codingStandardsIgnoreStart">
+                        <string>codingStandardsIgnoreStart</string>
+                    </element>
+                    <element key="codingStandardsIgnoreEnd">
+                        <string>codingStandardsIgnoreEnd</string>
+                    </element>
+                    <element key="expectedExceptionMessageRegExp">
+                        <string>expectedExceptionMessageRegExp</string>
+                    </element>
+                    <element key="magentoAdminConfigFixture">
+                        <string>magentoAdminConfigFixture</string>
+                    </element>
+                    <element key="magentoAppArea">
+                        <string>magentoAppArea</string>
+                    </element>
+                    <element key="magentoAppIsolation">
+                        <string>magentoAppIsolation</string>
+                    </element>
+                    <element key="magentoCache">
+                        <string>magentoCache</string>
+                    </element>
+                    <element key="magentoComponentsDir">
+                        <string>magentoComponentsDir</string>
+                    </element>
+                    <element key="magentoConfigFixture">
+                        <string>magentoConfigFixture</string>
+                    </element>
+                    <element key="magentoDataFixture">
+                        <string>magentoDataFixture</string>
+                    </element>
+                    <element key="magentoDataFixtureBeforeTransaction">
+                        <string>magentoDataFixtureBeforeTransaction</string>
+                    </element>
+                    <element key="magentoDbIsolation">
+                        <string>magentoDbIsolation</string>
+                    </element>
+                    <element key="magentoIndexerDimensionMode">
+                        <string>magentoIndexerDimensionMode</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 </phpunit>

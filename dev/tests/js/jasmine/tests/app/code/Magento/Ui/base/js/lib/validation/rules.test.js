@@ -15,7 +15,7 @@ define([
                 var value = '',
                     params = [1,3];
 
-                expect(rules['range-words'].handler(value, params)).toBe(false);
+                expect(rules['range-words'].handler(value, params)).toBe(true);
             });
 
             it('Check on redundant words', function () {
@@ -58,8 +58,32 @@ define([
                 expect(rules['validate-number'].handler(value)).toBe(true);
             });
 
+            it('Check on float without leading zero', function () {
+                var value = '.50';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
             it('Check on formatted float', function () {
                 var value = '1,000,000.50';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on space', function () {
+                var value = '10 000';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on formatted float (For International price)', function () {
+                var value = '10.000,00';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on formatted float (For International price)', function () {
+                var value = '10\'000.00';
 
                 expect(rules['validate-number'].handler(value)).toBe(true);
             });

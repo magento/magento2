@@ -61,6 +61,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
      * @param \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
@@ -82,6 +83,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Collect rates.
+     *
      * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -129,8 +132,10 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                             $freeQty += $item->getQty() * ($child->getQty() - $freeShipping);
                         }
                     }
-                } elseif ($item->getFreeShipping()) {
-                    $freeShipping = is_numeric($item->getFreeShipping()) ? $item->getFreeShipping() : 0;
+                } elseif ($item->getFreeShipping() || $item->getAddress()->getFreeShipping()) {
+                    $freeShipping = $item->getFreeShipping() ?
+                        $item->getFreeShipping() : $item->getAddress()->getFreeShipping();
+                    $freeShipping = is_numeric($freeShipping) ? $freeShipping : 0;
                     $freeQty += $item->getQty() - $freeShipping;
                     $freePackageValue += $item->getBaseRowTotal();
                 }
@@ -199,6 +204,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Get rate.
+     *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array|bool
      */
@@ -208,6 +215,8 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
+     * Get code.
+     *
      * @param string $type
      * @param string $code
      * @return array
@@ -218,12 +227,12 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $codes = [
             'condition_name' => [
                 'package_weight' => __('Weight vs. Destination'),
-                'package_value' => __('Price vs. Destination'),
+                'package_value_with_discount' => __('Price vs. Destination'),
                 'package_qty' => __('# of Items vs. Destination'),
             ],
             'condition_name_short' => [
                 'package_weight' => __('Weight (and above)'),
-                'package_value' => __('Order Subtotal (and above)'),
+                'package_value_with_discount' => __('Order Subtotal (and above)'),
                 'package_qty' => __('# of Items (and above)'),
             ],
         ];
@@ -269,7 +278,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         /** @var  \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
         $method = $this->_resultMethodFactory->create();
 
-        $method->setCarrier('tablerate');
+        $method->setCarrier($this->getCarrierCode());
         $method->setCarrierTitle($this->getConfigData('title'));
 
         $method->setMethod('bestway');

@@ -17,6 +17,8 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * Customer email notification
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailNotification implements EmailNotificationInterface
@@ -360,7 +362,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $type
      * @param string $backUrl
-     * @param string $storeId
+     * @param int $storeId
      * @param string $sendemailStoreId
      * @return void
      * @throws LocalizedException

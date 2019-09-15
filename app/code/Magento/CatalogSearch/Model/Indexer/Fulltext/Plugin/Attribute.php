@@ -7,6 +7,9 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
+/**
+ * Catalog search indexer plugin for catalog attribute.
+ */
 class Attribute extends AbstractPlugin
 {
     /**

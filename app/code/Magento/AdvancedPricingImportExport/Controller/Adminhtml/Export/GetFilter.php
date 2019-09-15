@@ -5,12 +5,14 @@
  */
 namespace Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing as ExportAdvancedPricing;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
-class GetFilter extends ExportController
+class GetFilter extends ExportController implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Get grid-filter of entity attributes action.

@@ -8,6 +8,9 @@ namespace Magento\Sales\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class Download. Represents download logic for files
+ */
 class Download
 {
     /**
@@ -36,6 +39,8 @@ class Download
     protected $rootDirBasePath;
 
     /**
+     * Constructor method
+     *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
@@ -78,11 +83,14 @@ class Download
         $this->_fileFactory->create(
             $info['title'],
             ['value' => $this->_rootDir->getRelativePath($relativePath), 'type' => 'filename'],
-            $this->rootDirBasePath
+            $this->rootDirBasePath,
+            $info['type']
         );
     }
 
     /**
+     * Method checks, if file can be returned depends on the given filepath
+     *
      * @param string $relativePath
      * @return bool
      */
@@ -90,7 +98,7 @@ class Download
     {
         $filePath = $this->_rootDir->getAbsolutePath($relativePath);
         $pathWithFixedSeparator = str_replace('\\', '/', $this->_rootDir->getDriver()->getRealPath($filePath));
-        return (strpos($pathWithFixedSeparator, $relativePath) !== false
+        return (strpos($pathWithFixedSeparator, (string) $relativePath) !== false
             && $this->_rootDir->isFile($relativePath) && $this->_rootDir->isReadable($relativePath))
             || $this->_processDatabaseFile($filePath, $relativePath);
     }

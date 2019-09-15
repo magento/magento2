@@ -9,6 +9,7 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Util\Command\Cli\DeployMode;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\User\Test\TestStep\LoginUserOnBackendStep;
 
 /**
  * Verify visibility of form elements on Configuration page.
@@ -53,9 +54,11 @@ class LoginAfterJSMinificationTest extends Injectable
     }
 
     /**
-     * Admin login test after JS minification is turned on in production mode
+     * Admin login test after JS minification is turned on in production mode.
+     *
      * @param DeployMode $cli
      * @param null $configData
+     *
      * @return void
      */
     public function test(
@@ -64,15 +67,26 @@ class LoginAfterJSMinificationTest extends Injectable
     ) {
         $this->configData = $configData;
 
-       //Pre-conditions
+        //Pre-conditions
         $cli->setDeployModeToDeveloper();
-        $this->objectManager->create(
+        $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
 
         // Steps
         $cli->setDeployModeToProduction();
-        $this->adminDashboardPage->open();
+        $this->stepFactory->create(LoginUserOnBackendStep::class)->run();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->stepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData]
+        )->cleanup();
     }
 }

@@ -5,10 +5,12 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CouponPost extends \Magento\Checkout\Controller\Cart
+class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * Sales quote repository

@@ -476,6 +476,13 @@
                                     </xs:documentation>
                                 </xs:annotation>
                             </xs:element>
+                            <xs:element name="aclResource" type="xs:string" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation>
+                                        ACL Resource used to validate access to UI Component data
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
                             <xs:element ref="param"/>
                         </xs:choice>
                         <xs:attribute name="name" type="xs:string" use="required">

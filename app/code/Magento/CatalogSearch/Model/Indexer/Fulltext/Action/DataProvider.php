@@ -7,11 +7,18 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
+use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 
 /**
+ * Catalog search full test search data provider.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
@@ -121,6 +128,16 @@ class DataProvider
      * @var int
      */
     private $antiGapMultiplier;
+
+    /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
+     * @var StockStatusRepositoryInterface
+     */
+    private $stockStatusRepository;
 
     /**
      * @param ResourceConnection $resource
@@ -546,6 +563,8 @@ class DataProvider
     {
         $index = [];
 
+        $indexData = $this->filterOutOfStockProducts($indexData, $storeId);
+
         foreach ($this->getSearchableAttributes('static') as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
 
@@ -568,14 +587,13 @@ class DataProvider
             }
         }
         foreach ($indexData as $entityId => $attributeData) {
-            foreach ($attributeData as $attributeId => $attributeValue) {
-                $value = $this->getAttributeValue($attributeId, $attributeValue, $storeId);
+            foreach ($attributeData as $attributeId => $attributeValues) {
+                $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
                 if (!empty($value)) {
-                    if (isset($index[$attributeId])) {
-                        $index[$attributeId][$entityId] = $value;
-                    } else {
-                        $index[$attributeId] = [$entityId => $value];
+                    if (!isset($index[$attributeId])) {
+                        $index[$attributeId] = [];
                     }
+                        $index[$attributeId][$entityId] = $value;
                 }
             }
         }
@@ -600,16 +618,16 @@ class DataProvider
      * Retrieve attribute source value for search
      *
      * @param int $attributeId
-     * @param mixed $valueId
+     * @param mixed $valueIds
      * @param int $storeId
      * @return string
      */
-    private function getAttributeValue($attributeId, $valueId, $storeId)
+    private function getAttributeValue($attributeId, $valueIds, $storeId)
     {
         $attribute = $this->getSearchableAttribute($attributeId);
-        $value = $this->engine->processAttributeValue($attribute, $valueId);
+        $value = $this->engine->processAttributeValue($attribute, $valueIds);
         if (false !== $value) {
-            $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
+            $optionValue = $this->getAttributeOptionValue($attributeId, $valueIds, $storeId);
             if (null === $optionValue) {
                 $value = $this->filterAttributeValue($value);
             } else {
@@ -624,13 +642,15 @@ class DataProvider
      * Get attribute option value
      *
      * @param int $attributeId
-     * @param int $valueId
+     * @param int|string $valueIds
      * @param int $storeId
      * @return null|string
      */
-    private function getAttributeOptionValue($attributeId, $valueId, $storeId)
+    private function getAttributeOptionValue($attributeId, $valueIds, $storeId)
     {
         $optionKey = $attributeId . '-' . $storeId;
+        $attributeValueIds = explode(',', $valueIds);
+        $attributeOptionValue = '';
         if (!array_key_exists($optionKey, $this->attributeOptions)
         ) {
             $attribute = $this->getSearchableAttribute($attributeId);
@@ -641,15 +661,22 @@ class DataProvider
                 $attribute->setStoreId($storeId);
                 $options = $attribute->getSource()->toOptionArray();
                 $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
-                $this->attributeOptions[$optionKey] = array_map(function ($value) {
-                    return $this->filterAttributeValue($value);
-                }, $this->attributeOptions[$optionKey]);
+                $this->attributeOptions[$optionKey] = array_map(
+                    function ($value) {
+                        return $this->filterAttributeValue($value);
+                    },
+                    $this->attributeOptions[$optionKey]
+                );
             } else {
                 $this->attributeOptions[$optionKey] = null;
             }
         }
-
-        return $this->attributeOptions[$optionKey][$valueId] ?? null;
+        foreach ($attributeValueIds as $attrValueId) {
+            if (isset($this->attributeOptions[$optionKey][$attrValueId])) {
+                $attributeOptionValue .= $this->attributeOptions[$optionKey][$attrValueId] . ' ';
+            }
+        }
+        return empty($attributeOptionValue) ? null : trim($attributeOptionValue);
     }
 
     /**
@@ -661,5 +688,69 @@ class DataProvider
     private function filterAttributeValue($value)
     {
         return preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
+    }
+
+    /**
+     * Filter out of stock products for products.
+     *
+     * @param array $indexData
+     * @param int $storeId
+     * @return array
+     */
+    private function filterOutOfStockProducts($indexData, $storeId): array
+    {
+        if (!$this->getStockConfiguration()->isShowOutOfStock($storeId)) {
+            $productIds = array_keys($indexData);
+            $stockStatusCriteria = $this->createStockStatusCriteria();
+            $stockStatusCriteria->setProductsFilter($productIds);
+            $stockStatusCollection = $this->getStockStatusRepository()->getList($stockStatusCriteria);
+            $stockStatuses = $stockStatusCollection->getItems();
+            $stockStatuses = array_filter(
+                $stockStatuses,
+                function (StockStatusInterface $stockStatus) {
+                    return StockStatusInterface::STATUS_IN_STOCK == $stockStatus->getStockStatus();
+                }
+            );
+            $indexData = array_intersect_key($indexData, $stockStatuses);
+        }
+        return $indexData;
+    }
+
+    /**
+     * Get stock configuration.
+     *
+     * @return StockConfigurationInterface
+     */
+    private function getStockConfiguration()
+    {
+        if (null === $this->stockConfiguration) {
+            $this->stockConfiguration = ObjectManager::getInstance()->get(StockConfigurationInterface::class);
+        }
+        return $this->stockConfiguration;
+    }
+
+    /**
+     * Create stock status criteria.
+     *
+     * Substitution of autogenerated factory in backward compatibility reasons.
+     *
+     * @return StockStatusCriteriaInterface
+     */
+    private function createStockStatusCriteria()
+    {
+        return ObjectManager::getInstance()->create(StockStatusCriteriaInterface::class);
+    }
+
+    /**
+     * Get stock status repository.
+     *
+     * @return StockStatusRepositoryInterface
+     */
+    private function getStockStatusRepository()
+    {
+        if (null === $this->stockStatusRepository) {
+            $this->stockStatusRepository = ObjectManager::getInstance()->get(StockStatusRepositoryInterface::class);
+        }
+        return $this->stockStatusRepository;
     }
 }

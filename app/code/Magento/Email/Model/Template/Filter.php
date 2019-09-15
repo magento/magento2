@@ -321,6 +321,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Get CSS processor
+     *
      * @deprecated 100.1.2
      * @return Css\Processor
      */
@@ -333,6 +335,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Get pub directory
+     *
      * @deprecated 100.1.2
      * @param string $dirType
      * @return ReadInterface
@@ -516,6 +520,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
@@ -523,6 +528,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Retrieve store URL directive
+     *
      * Support url and direct_url properties
      *
      * @param string[] $construction
@@ -607,7 +613,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
-
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $text = stripslashes($matches[2]);
 
         $params = [];
@@ -683,7 +689,7 @@ class Filter extends \Magento\Framework\Filter\Template
                     $callback = $modifier;
                 }
                 array_unshift($params, $value);
-                $value = call_user_func_array($callback, $params);
+                $value = $callback(...$params);
             }
         }
         return $value;
@@ -700,7 +706,7 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         switch ($type) {
             case 'html':
-                return htmlspecialchars($value, ENT_QUOTES);
+                return $this->_escaper->escapeHtml($value);
 
             case 'htmlentities':
                 return htmlentities($value, ENT_QUOTES);
@@ -849,7 +855,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return $css;
         } else {
             // Return CSS comment for debugging purposes
-            return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
+            return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
     }
 
@@ -958,6 +964,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Apply Inline CSS
+     *
      * Merge HTML and CSS and return HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
      * in order to support all email clients.
      *
