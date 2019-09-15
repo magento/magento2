@@ -189,6 +189,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return AttributeValue[]
      * @throws SerializationException
      * @throws LocalizedException
+     * @deprecated
      */
     protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {

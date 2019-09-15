@@ -97,6 +97,11 @@ class DtoProcessor
     private $dataObjectProcessor;
 
     /**
+     * @var bool
+     */
+    private $typeCasting;
+
+    /**
      * @param DtoReflection $dtoReflection
      * @param GetHydrationStrategy $getHydrationStrategy
      * @param ObjectFactory $objectFactory
@@ -109,6 +114,7 @@ class DtoProcessor
      * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param AttributeValueFactory $attributeValueFactory
+     * @param bool $typeCasting
      */
     public function __construct(
         DtoReflection $dtoReflection,
@@ -122,7 +128,8 @@ class DtoProcessor
         DataObjectProcessor $dataObjectProcessor,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
-        AttributeValueFactory $attributeValueFactory
+        AttributeValueFactory $attributeValueFactory,
+        bool $typeCasting = true
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectFactory = $objectFactory;
@@ -136,17 +143,17 @@ class DtoProcessor
         $this->getHydrationStrategy = $getHydrationStrategy;
         $this->typeCaster = $typeCaster;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->typeCasting = $typeCasting;
     }
 
     /**
      * @param string|int $propertyName
      * @param $value
      * @param string $type
-     * @param bool $typeCasting
      * @return array|object
      * @throws LocalizedException
      */
-    private function createObjectByType($propertyName, $value, string $type, bool $typeCasting=true)
+    private function createObjectByType($propertyName, $value, string $type)
     {
         try {
             if (is_object($value) || ($type === 'array') || ($type === 'mixed')) {
@@ -157,14 +164,14 @@ class DtoProcessor
                 $res = [];
                 foreach ($value as $k => $subValue) {
                     $itemType = $this->typeProcessor->getArrayItemType($type);
-                    $res[$k] = $this->createObjectByType($k, $subValue, $itemType, $typeCasting);
+                    $res[$k] = $this->createObjectByType($k, $subValue, $itemType);
                 }
 
                 return $res;
             }
 
             if ($this->typeProcessor->isTypeSimple($type)) {
-                if ($typeCasting) {
+                if ($this->typeCasting) {
                     return $this->typeCaster->castValueToType($value, $type);
                 }
 
@@ -263,7 +270,16 @@ class DtoProcessor
                 $type = TypeProcessor::ANY_TYPE;
             }
 
-            $attributeValue = $this->createObjectByType($key, $customAttributeValue, $type);
+            try {
+                $attributeValue = $this->createObjectByType($key, $customAttributeValue, $type);
+            } catch (\Exception $e) {
+                throw new SerializationException(
+                    __(
+                        'Attribute "%attribute_code" has invalid value. %details',
+                        ['attribute_code' => $customAttributeCode, 'details' => $e->getMessage()]
+                    )
+                );
+            }
 
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
@@ -280,9 +296,9 @@ class DtoProcessor
      * @param string $type
      * @param array $data
      * @return array
+     * @throws LocalizedException
      * @throws ReflectionException
      * @throws SerializationException
-     * @throws LocalizedException
      */
     private function injectExtensionAttributesByArray(string $type, array $data): array
     {
@@ -325,7 +341,10 @@ class DtoProcessor
                         $this->createFromArray($v, $attributeType);
                 }
             } else {
-                $extensionAttributes[$attributeName] = $this->createFromArray($attributeValue, $attributeType);
+                $extensionAttributes[$attributeName] = $this->createFromArray(
+                    $attributeValue,
+                    $attributeType
+                );
             }
         }
 
@@ -342,13 +361,12 @@ class DtoProcessor
      *
      * @param array $data
      * @param string $type
-     * @param bool $typeCasting
      * @return object
      * @throws LocalizedException
      * @throws ReflectionException
      * @throws SerializationException
      */
-    public function createFromArray(array $data, string $type, bool $typeCasting=true)
+    public function createFromArray(array $data, string $type)
     {
         // Normalize snake case properties
         foreach ($data as $k => $v) {
@@ -397,8 +415,7 @@ class DtoProcessor
             $constructorParams[$paramConstructor] = $this->createObjectByType(
                 $paramName,
                 $data[$paramName],
-                $paramType,
-                $typeCasting
+                $paramType
             );
         }
 
@@ -410,8 +427,7 @@ class DtoProcessor
                 $constructorParams['data'][$paramName] = $this->createObjectByType(
                     $paramName,
                     $data[$paramName],
-                    $paramType,
-                    $typeCasting
+                    $paramType
                 );
             }
         }
@@ -421,7 +437,7 @@ class DtoProcessor
         foreach ($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_SETTER] as $paramName => $info) {
             $methodName = $info['method'];
             $paramType = $info['type'];
-            $resObject->$methodName($this->createObjectByType($paramName, $data[$paramName], $paramType, $typeCasting));
+            $resObject->$methodName($this->createObjectByType($paramName, $data[$paramName], $paramType));
         }
 
         if ($resObject instanceof CustomAttributesDataInterface) {
