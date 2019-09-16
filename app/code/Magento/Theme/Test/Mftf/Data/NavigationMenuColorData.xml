@@ -8,13 +8,9 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="Layout" type="page_layout">
-        <data key="1column">1 column</data>
-    </entity>
-    <entity name="MagentoBlankTheme" type="theme">
-        <data key="name">Magento Blank</data>
-    </entity>
-    <entity name="MagentoLumaTheme" type="theme">
-        <data key="name">Magento Luma</data>
+    <entity name="NavigationMenuColor" type="navigation_menu_color">
+        <data key="gray">rgb(232, 232, 232)</data>
+        <data key="white">rgb(255, 255, 255)</data>
+        <data key="orange">rgb(255, 85, 1)</data>
     </entity>
 </entities>
