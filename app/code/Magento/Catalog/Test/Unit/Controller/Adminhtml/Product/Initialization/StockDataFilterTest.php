@@ -6,11 +6,15 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\CatalogInventory\Model\Configuration;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class StockDataFilterTest
+ * StockDataFilter test.
  */
-class StockDataFilterTest extends \PHPUnit\Framework\TestCase
+class StockDataFilterTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -27,17 +31,23 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $stockDataFilter;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $stockConfiguration;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
+        $this->scopeConfigMock->method('getValue')
+            ->will($this->returnValue(1));
 
         $this->stockConfiguration = $this->createPartialMock(
-            \Magento\CatalogInventory\Model\Configuration::class,
+            Configuration::class,
             ['getManageStock']
         );
 
@@ -45,8 +55,11 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests filter method.
+     *
      * @param array $inputStockData
      * @param array $outputStockData
+     * @return void
      *
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::filter
      * @dataProvider filterDataProvider
@@ -54,8 +67,7 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
     public function testFilter(array $inputStockData, array $outputStockData)
     {
         if (isset($inputStockData['use_config_manage_stock']) && $inputStockData['use_config_manage_stock'] === 1) {
-            $this->stockConfiguration->expects($this->once())
-                ->method('getManageStock')
+            $this->stockConfiguration->method('getManageStock')
                 ->will($this->returnValue($outputStockData['manage_stock']));
         }
 
@@ -93,8 +105,13 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'case4' => [
-                'inputStockData' => ['min_qty' => -1],
-                'outputStockData' => ['min_qty' => 0, 'is_decimal_divided' => 0, 'use_config_manage_stock' => 0],
+                'inputStockData' => ['min_qty' => -1, 'backorders' => Stock::BACKORDERS_NO],
+                'outputStockData' => [
+                    'min_qty' => 0,
+                    'is_decimal_divided' => 0,
+                    'use_config_manage_stock' => 0,
+                    'backorders' => Stock::BACKORDERS_NO,
+                ],
             ],
             'case5' => [
                 'inputStockData' => ['is_qty_decimal' => 0],
@@ -103,7 +120,25 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
                     'is_decimal_divided' => 0,
                     'use_config_manage_stock' => 0,
                 ],
-            ]
+            ],
+            'case6' => [
+                'inputStockData' => ['min_qty' => -1, 'backorders' => Stock::BACKORDERS_YES_NONOTIFY],
+                'outputStockData' => [
+                    'min_qty' => -1,
+                    'is_decimal_divided' => 0,
+                    'use_config_manage_stock' => 0,
+                    'backorders' => Stock::BACKORDERS_YES_NONOTIFY,
+                ],
+            ],
+            'case7' => [
+                'inputStockData' => ['min_qty' => -1, 'backorders' => Stock::BACKORDERS_YES_NOTIFY],
+                'outputStockData' => [
+                    'min_qty' => -1,
+                    'is_decimal_divided' => 0,
+                    'use_config_manage_stock' => 0,
+                    'backorders' => Stock::BACKORDERS_YES_NOTIFY,
+                ],
+            ],
         ];
     }
 }
