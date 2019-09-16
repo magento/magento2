@@ -10,7 +10,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\View\Asset\File\NotFoundException;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Translation\Model\Js\Config as JsConfig;
@@ -64,26 +63,20 @@ class Dictionary implements ArgumentInterface
      * Get translation dictionary file content.
      *
      * @return string
+     * @throws FileSystemException
+     * @throws LocalizedException
      */
     public function getTranslationDictionary(): string
     {
         if ($this->appState->getMode() === AppState::MODE_PRODUCTION) {
-            try {
-                $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
-                $staticViewFilePath = $this->filesystem->getDirectoryRead(
-                    DirectoryList::STATIC_VIEW
-                )->getAbsolutePath();
-                $content = $this->filesystemDriver->fileGetContents($staticViewFilePath . $asset->getPath());
-            } catch (LocalizedException | FileSystemException $e) {
-                $content = '';
-            }
+            $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
+            $staticViewFilePath = $this->filesystem->getDirectoryRead(
+                DirectoryList::STATIC_VIEW
+            )->getAbsolutePath();
+            $content = $this->filesystemDriver->fileGetContents($staticViewFilePath . $asset->getPath());
         } else {
-            try {
-                $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
-                $content = $asset->getContent();
-            } catch (LocalizedException | NotFoundException $e) {
-                $content = '';
-            }
+            $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
+            $content = $asset->getContent();
         }
 
         return $content;

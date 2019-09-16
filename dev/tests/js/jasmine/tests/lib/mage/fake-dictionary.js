@@ -4,5 +4,7 @@
  */
 // Fake dictionary for js unit tests as real dictionary is defined is template and cannot be initialized by requirejs
 define([], function () {
+    'use strict';
+
     return {};
 });
