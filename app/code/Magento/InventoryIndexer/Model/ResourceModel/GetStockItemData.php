@@ -76,6 +76,8 @@ class GetStockItemData implements GetStockItemDataInterface
                     GetStockItemDataInterface::IS_SALABLE => 'stock_status',
                 ]
             )->where('product_id = ?', $productId);
+
+            return $connection->fetchRow($select) ?: null;
         } else {
             $stockItemTableName = $this->stockIndexTableNameResolver->execute($stockId);
             $select->from(
@@ -85,18 +87,16 @@ class GetStockItemData implements GetStockItemDataInterface
                     GetStockItemDataInterface::IS_SALABLE => IndexStructure::IS_SALABLE,
                 ]
             )->where(IndexStructure::SKU . ' = ?', $sku);
-        }
 
-        try {
-            if ($connection->isTableExists($stockItemTableName)) {
-                return $connection->fetchRow($select) ?: null;
+            try {
+                if ($connection->isTableExists($stockItemTableName)) {
+                    return $connection->fetchRow($select) ?: null;
+                }
+
+                return null;
+            } catch (\Exception $e) {
+                throw new LocalizedException(__('Could not receive Stock Item data'), $e);
             }
-
-            return null;
-        } catch (\Exception $e) {
-            throw new LocalizedException(__(
-                'Could not receive Stock Item data'
-            ), $e);
         }
     }
 }
