@@ -118,6 +118,6 @@
         <data key="include_in_menu">true</data>
     </entity>
     <entity name="SubCategoryNonAnchor" extends="SubCategoryWithParent">
-        <requiredEntity type="custom_attribute">CustomAttributeCategoryIsAnchor</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryNonAnchor</requiredEntity>
     </entity>
 </entities>
