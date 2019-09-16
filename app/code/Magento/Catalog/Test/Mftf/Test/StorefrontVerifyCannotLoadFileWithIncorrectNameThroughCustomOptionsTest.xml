@@ -53,7 +53,7 @@
 
         <!-- Upload file -->
         <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile">
-            <argument name="optionTitle" value="ProductOptionFile"/>
+            <argument name="optionTitle" value="{{ProductOptionFile.title}}"/>
             <argument name="file" value="ProductFileOptionWithScriptTag.file"/>
         </actionGroup>
 
