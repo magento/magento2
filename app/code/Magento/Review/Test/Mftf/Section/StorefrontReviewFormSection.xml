@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontReviewFormSection">
+        <element name="nicknameField" type="text" selector="#review-form [name='nickname']"/>
+        <element name="summaryField" type="text" selector="#review-form [name='title']"/>
+        <element name="reviewField" type="textarea" selector="#review-form [name='detail']"/>
+        <element name="submitReview" type="button" timeout="30" selector="#review-form button[type=submit]"/>
+    </section>
+</sections>

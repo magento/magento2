@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenReviewByUserNicknameActionGroup">
+        <arguments>
+            <argument name="nickname" type="string" defaultValue="{{SimpleProductReview.nickname}}"/>
+        </arguments>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+        <fillField selector="{{AdminReviewGridSection.nicknameColumnFilter}}" userInput="{{nickname}}" stepKey="fillNickname"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForEditReviewPageLoad"/>
+    </actionGroup>
+</actionGroups>
