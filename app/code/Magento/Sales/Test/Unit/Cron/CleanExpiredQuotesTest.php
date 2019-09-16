@@ -59,7 +59,7 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
         $this->quoteFactoryMock->expects($this->exactly(count($lifetimes)))
             ->method('create')
             ->will($this->returnValue($quotesMock));
-        $quotesMock->expects($this->exactly((3 + count($additionalFilterFields)) * count($lifetimes)))
+        $quotesMock->expects($this->exactly((2 + count($additionalFilterFields)) * count($lifetimes)))
             ->method('addFieldToFilter');
         if (!empty($lifetimes)) {
             $quotesMock->expects($this->exactly(count($lifetimes)))
