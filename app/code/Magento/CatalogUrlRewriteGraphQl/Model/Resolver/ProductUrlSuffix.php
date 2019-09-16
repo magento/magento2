@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewriteGraphQl\Model\Resolver;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -53,7 +53,9 @@ class ProductUrlSuffix implements ResolverInterface
         array $value = null,
         array $args = null
     ): string {
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        $storeId = (int)$store->getId();
         return $this->getProductUrlSuffix($storeId);
     }
 

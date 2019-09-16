@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewriteGraphQl\Model\Resolver;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -15,7 +15,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Returns the url suffix for catalog
+ * Returns the url suffix for category
  */
 class CategoryUrlSuffix implements ResolverInterface
 {
@@ -26,7 +26,7 @@ class CategoryUrlSuffix implements ResolverInterface
      *
      * @var array
      */
-    private $productUrlSuffix = [];
+    private $cateogryUrlSuffix = [];
 
     /**
      * @var ScopeConfigInterface
@@ -35,11 +35,11 @@ class CategoryUrlSuffix implements ResolverInterface
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param array $productUrlSuffix
+     * @param array $cateogryUrlSuffix
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, array $productUrlSuffix = [])
+    public function __construct(ScopeConfigInterface $scopeConfig, array $cateogryUrlSuffix = [])
     {
-        $this->productUrlSuffix = $productUrlSuffix;
+        $this->cateogryUrlSuffix = $cateogryUrlSuffix;
         $this->scopeConfig = $scopeConfig;
     }
 
@@ -53,25 +53,27 @@ class CategoryUrlSuffix implements ResolverInterface
         array $value = null,
         array $args = null
     ): string {
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        $storeId = (int)$store->getId();
         return $this->getProductUrlSuffix($storeId);
     }
 
     /**
-     * Retrieve product url suffix by store
+     * Retrieve category url suffix by store
      *
      * @param int $storeId
      * @return string
      */
     private function getProductUrlSuffix(int $storeId): string
     {
-        if (!isset($this->productUrlSuffix[$storeId])) {
-            $this->productUrlSuffix[$storeId] = $this->scopeConfig->getValue(
+        if (!isset($this->cateogryUrlSuffix[$storeId])) {
+            $this->cateogryUrlSuffix[$storeId] = $this->scopeConfig->getValue(
                 self::XML_PATH_PRODUCT_URL_SUFFIX,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
-        return $this->productUrlSuffix[$storeId];
+        return $this->cateogryUrlSuffix[$storeId];
     }
 }
