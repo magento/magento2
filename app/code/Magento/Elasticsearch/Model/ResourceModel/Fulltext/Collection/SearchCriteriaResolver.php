@@ -76,9 +76,6 @@ class SearchCriteriaResolver implements SearchCriteriaResolverInterface
      */
     public function resolve(): SearchCriteria
     {
-        if ($this->size !== 0) {
-            $this->builder->setPageSize($this->size);
-        }
         $searchCriteria = $this->builder->create();
         $searchCriteria->setRequestName($this->searchRequestName);
         $searchCriteria->setSortOrders($this->orders);
