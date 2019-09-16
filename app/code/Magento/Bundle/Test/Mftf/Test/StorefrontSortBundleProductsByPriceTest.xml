@@ -80,17 +80,17 @@
             <createData entity="ApiBundleProductPriceViewRange" stepKey="createThirdBundleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="DropDownBundleOption" stepKey="thirdProductBundleOption">
+            <createData entity="DropDownBundleOption" stepKey="createThirdProductBundleOption">
                 <requiredEntity createDataKey="createThirdBundleProduct"/>
             </createData>
             <createData entity="ApiBundleLink" stepKey="createBundleFirstLink">
                 <requiredEntity createDataKey="createThirdBundleProduct"/>
-                <requiredEntity createDataKey="thirdProductBundleOption"/>
+                <requiredEntity createDataKey="createThirdProductBundleOption"/>
                 <requiredEntity createDataKey="createFirstProductForBundle"/>
             </createData>
             <createData entity="ApiBundleLink" stepKey="createBundleSecondLink">
                 <requiredEntity createDataKey="createThirdBundleProduct"/>
-                <requiredEntity createDataKey="thirdProductBundleOption"/>
+                <requiredEntity createDataKey="createThirdProductBundleOption"/>
                 <requiredEntity createDataKey="createSecondProductForBundle"/>
             </createData>
 
@@ -116,8 +116,10 @@
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
 
-        <!-- Asset first bundle products in category product grid -->
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createFirstBundleProduct.name$$)}}" stepKey="assertFirstBundleProduct"/>
+        <!-- Assert first bundle products in category product grid -->
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstBundleProduct">
+            <argument name="product" value="$$createFirstBundleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeFromForFirstBundleProduct">
             <argument name="selector" value="{{StorefrontCategoryProductSection.priceFromByProductId($$createFirstBundleProduct.id$$)}}"/>
             <argument name="userInput" value="From $100.00"/>
@@ -127,8 +129,10 @@
             <argument name="userInput" value="To $123.00"/>
         </actionGroup>
 
-        <!-- Asset second bundle products in category product grid -->
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSecondBundleProduct.name$$)}}" stepKey="assertSecondBundleProduct"/>
+        <!-- Assert second bundle products in category product grid -->
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondBundleProduct">
+            <argument name="product" value="$$createSecondBundleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeFromForSecondBundleProduct">
             <argument name="selector" value="{{StorefrontCategoryProductSection.priceFromByProductId($$createSecondBundleProduct.id$$)}}"/>
             <argument name="userInput" value="From $10.00"/>
@@ -138,8 +142,10 @@
             <argument name="userInput" value="To $123.00"/>
         </actionGroup>
 
-        <!-- Asset third bundle products in category product grid -->
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createThirdBundleProduct.name$$)}}" stepKey="assertThirdBundleProduct"/>
+        <!-- Assert third bundle products in category product grid -->
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertThirdBundleProduct">
+            <argument name="product" value="$$createThirdBundleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeFromForThirdBundleProduct">
             <argument name="selector" value="{{StorefrontCategoryProductSection.priceFromByProductId($$createThirdBundleProduct.id$$)}}"/>
             <argument name="userInput" value="From $123.00"/>
@@ -155,9 +161,7 @@
         <!-- Sort products By Price -->
         <actionGroup ref="StorefrontCategoryPageSortProductActionGroup" stepKey="sortProductByPrice"/>
         <!-- Set Ascending Direction -->
-        <actionGroup ref="StorefrontCategoryPageSortDirectionActionGroup" stepKey="setAscendingDirection">
-            <argument name="directionSelector" value="{{StorefrontCategoryTopToolbarSection.sortDirectionAsc}}"/>
-        </actionGroup>
+        <actionGroup ref="StorefrontCategoryPageSortAscendingActionGroup" stepKey="setAscendingDirection"/>
 
         <!-- Assert new products positions -->
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductFirstPosition">
@@ -174,9 +178,7 @@
         </actionGroup>
 
         <!-- Set Descending Direction -->
-        <actionGroup ref="StorefrontCategoryPageSortDirectionActionGroup" stepKey="setDescendingDirection">
-            <argument name="directionSelector" value="{{StorefrontCategoryTopToolbarSection.sortDirectionDesc}}"/>
-        </actionGroup>
+        <actionGroup ref="StorefrontCategoryPageSortDescendingActionGroup" stepKey="setDescendingDirection"/>
 
         <!-- Assert new products positions -->
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductNewFirstPosition">
