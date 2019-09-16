@@ -23,7 +23,7 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 class Customer extends AbstractCustomer
 {
     /**
-     * Attribute collection name
+     * Collection name attribute
      */
     const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
