@@ -24,7 +24,7 @@
         <fillField selector="{{CheckoutPaymentSection.guestPostcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
         <fillField selector="{{CheckoutPaymentSection.guestTelephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
     </actionGroup>
-    <actionGroup name="CheckoutFillNewBillingAddressActionGroup" extends="GuestCheckoutFillNewBillingAddressActionGroup">
+    <actionGroup name="StorefrontCheckoutFillNewBillingAddressActionGroup" extends="GuestCheckoutFillNewBillingAddressActionGroup">
         <remove keyForRemoval="enterEmail"/>
         <remove keyForRemoval="waitForLoading3"/>
     </actionGroup>
