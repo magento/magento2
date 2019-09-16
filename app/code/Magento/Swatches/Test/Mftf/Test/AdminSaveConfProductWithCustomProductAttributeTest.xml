@@ -11,18 +11,17 @@
     <test name="AdminSaveConfProductWithCustomProductAttributeTest">
         <annotations>
             <features value="Swatches"/>
-            <stories value="Configurable product with custom product images as swatches attribute"/>
+            <stories value="Configurable product with swatch attribute"/>
             <title value="Saving configurable product with custom product attribute (images as swatches)"/>
             <description value="Saving configurable product with custom product attribute (images as swatches)"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13641"/>
             <useCaseId value="MC-10968"/>
-            <group value="swatches"/>
+            <group value="developer_mode_only"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create configurable product-->
-            <comment userInput="Create configurable product" stepKey="commentCreateConfProduct"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -30,7 +29,6 @@
         </before>
         <after>
             <!--Delete created data-->
-            <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
             <deleteData createDataKey="createConfigProduct"  stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory"  stepKey="deleteCategory"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
@@ -41,14 +39,12 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Create Visual swatch with preview image-->
-        <comment userInput="Create Visual swatch with preview image" stepKey="commentCreateAttribute"/>
         <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
         <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillProductAttributeProperties">
             <argument name="attributeName" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
             <argument name="attributeType" value="{{VisualSwatchProductAttribute.frontend_input}}"/>
         </actionGroup>
         <!--Add first option-->
-        <comment userInput="Add first option" stepKey="commentAddFirstOption"/>
         <actionGroup ref="AdminAddSwatchOptionAndFillFieldsActionGroup" stepKey="addFirstSwatchOptionAndFillFields">
             <argument name="swatchOption" value="visualSwatchOption1"/>
         </actionGroup>
@@ -60,7 +56,6 @@
             <argument name="index" value="1"/>
         </actionGroup>
         <!--Add second option-->
-        <comment userInput="Add second option" stepKey="commentAddSecondOption"/>
         <actionGroup ref="AdminAddSwatchOptionAndFillFieldsActionGroup" stepKey="addSecondSwatchOptionAndFillFields">
             <argument name="swatchOption" value="visualSwatchOption2"/>
         </actionGroup>
@@ -76,7 +71,6 @@
             <argument name="message" value="You saved the product attribute."/>
         </actionGroup>
         <!--Create configurations for product-->
-        <comment userInput="Create configurations for product" stepKey="commentCreateConfigsForProduct"/>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToProductEditPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <actionGroup ref="StartCreateConfigurationsForAttribute" stepKey="createConfigurations">

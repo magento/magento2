@@ -14,7 +14,7 @@
             <magentoCLI command="deploy:mode:set production" stepKey="enableProductionMode"/>
         </after>
         <include>
-            <test name="AdminSaveConfProductWithCustomProductAttributeTest"/>
+            <group name="developer_mode_only"/>
         </include>
     </suite>
 </suites>
