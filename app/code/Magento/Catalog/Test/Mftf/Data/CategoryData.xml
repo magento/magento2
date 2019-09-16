@@ -120,4 +120,8 @@
     <entity name="DefaultCategory" type="category">
         <data key="name">Default Category</data>
     </entity>
+    <!-- Category from file "export_import_configurable_product.csv" -->
+    <entity name="CategoryExportImport" extends="SimpleSubCategory" type="category">
+        <data key="name">CategoryExportImport</data>
+    </entity>
 </entities>
