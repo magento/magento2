@@ -1,8 +1,8 @@
 # Magento_Backup module
 
-The Magento_Backup allows administrators to perform backups and rollbacks. Types of backups include system, database and media backups. This module relies on the Cron module to schedule backups.
+The Magento_Backup module allows administrators to perform backups and rollbacks. Types of backups include system, database and media backups. This module relies on the Cron module to schedule backups.
 
-The Magento_Backup does not affect the storefront.
+The Magento_Backup module does not affect the storefront.
 
 For more information about this module, see [Magento Backups](https://docs.magento.com/m2/ce/user_guide/system/backups.html)
 
