@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSelectConfigurableAttributeOptionActionGroup">
+        <arguments>
+            <argument name="attributeLabel" type="string"/>
+            <argument name="optionValue" type="string"/>
+            <argument name="qty" type="string" defaultValue="1"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productOptionSelect(attributeLabel)}}" stepKey="waitForOptionSelectVisible"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(attributeLabel)}}" userInput="{{optionValue}}" stepKey="selectProductOption"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{qty}}" stepKey="fillProductQuantity"/>
+    </actionGroup>
+</actionGroups>

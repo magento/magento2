@@ -20,9 +20,11 @@
         <arguments>
             <argument name="useForPromoRule" type="string" defaultValue="Yes"/>
         </arguments>
-        <click selector="{{StorefrontPropertiesSection.storefrontPropertiesTab}}" stepKey="clickStoreFrontPropertiesTab"/>
-        <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="{{useForPromoRule}}" stepKey="changeOption"/>
+        <click selector="{{AdminEditAttributeStorefrontPropertiesSection.storeFrontPropertiesTab}}" stepKey="clickStoreFrontPropertiesTab"/>
+        <waitForElementVisible selector="{{AdminEditAttributeStorefrontPropertiesSection.useForPromoRuleConditions}}" stepKey="waitForUseForPromoRuleConditionsVisible"/>
+        <selectOption selector="{{AdminEditAttributeStorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="{{useForPromoRule}}" stepKey="changeOption"/>
         <click selector="{{AttributePropertiesSection.save}}" stepKey="saveAttribute"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the product attribute." stepKey="successMessage"/>
     </actionGroup>
     <actionGroup name="navigateToProductAttributeByCode">
