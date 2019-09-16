@@ -141,6 +141,8 @@
         <!--Create Shipment-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
