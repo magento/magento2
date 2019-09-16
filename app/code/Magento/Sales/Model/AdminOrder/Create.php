@@ -2038,17 +2038,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     protected function _getNewCustomerEmail()
     {
-        $emailrequired = $this->getIsEmailRequired();
-
-        if ($emailrequired) {
-          return $this->getData('account/email');
-        } else {
-           $email = $this->getData('account/email');
-            if (empty($email)) {
-              $email = $this-> generateEmail();
-            }
-           return $email;
+        $email = $this->getData('account/email');
+        
+        if ($email || $this->getIsEmailRequired()) {
+            return $email;
         }
+        
+        return $this->generateEmail();
     }
 
     /**
@@ -2056,9 +2052,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @return bool
      */
-    protected function getIsEmailRequired()
+    private function getIsEmailRequired(): bool
     {
-        return $this->_scopeConfig->getValue(
+        return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_REQUIRED_CREATE_ORDER,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -2069,7 +2065,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @return string
      */
-    protected function generateEmail()
+    private function generateEmail(): string
     {
         $host = $this->_scopeConfig->getValue(
             self::XML_PATH_DEFAULT_EMAIL_DOMAIN,
@@ -2080,6 +2076,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $account = $this->getData('account');
         $account['email'] = $email;
         $this->setData('account', $account);
+        
         return $email;
     }
 
