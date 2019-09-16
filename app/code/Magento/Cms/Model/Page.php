@@ -111,7 +111,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      */
     public function checkIdentifier($identifier, $storeId)
     {
-        return $this->_getResource()->checkIdentifier($identifier, $storeId);
+        return $this->_resource->checkIdentifier($identifier, $storeId);
     }
 
     /**
