@@ -21,7 +21,6 @@
         </annotations>
         <before>
             <!--Create category and configurable product with two options-->
-            <comment userInput="Create category and configurable product" stepKey="commentCreateData"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -45,7 +44,6 @@
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="navigateToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!--Create visual swatch attribute-->
-        <comment userInput="Create visual swatch attribute" stepKey="commentCreateAttribute"/>
         <actionGroup ref="AddVisualSwatchWithProductWithStorefrontPreviewImageConfigActionGroup" stepKey="addSwatchToProduct">
             <argument name="attribute" value="visualSwatchAttribute"/>
             <argument name="option1" value="visualSwatchOption1"/>
@@ -56,7 +54,6 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
         <!--Add images to product attribute options-->
-        <comment userInput="Add images to product attribute options" stepKey="commentAddImageToOptions"/>
         <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionOne">
             <argument name="image" value="MagentoLogo"/>
             <argument name="frontend_label" value="{{visualSwatchAttribute.default_label}}"/>
@@ -67,10 +64,10 @@
             <argument name="frontend_label" value="{{visualSwatchAttribute.default_label}}"/>
             <argument name="label" value="{{visualSwatchOption2.default_label}}"/>
         </actionGroup>
-        <actionGroup ref="GenerateConfiguredProductAfterSettingOptions" stepKey="generateConfigs"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}"  stepKey="clickOnNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnGenerateProductsButton"/>
         <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
         <!--Select any option in the Layered navigation and verify product image-->
-        <comment userInput="Select any option in the Layered navigation and verify product image" stepKey="commentVerifyImage"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeOption">
             <argument name="categoryName" value="$$createCategory.name$$"/>

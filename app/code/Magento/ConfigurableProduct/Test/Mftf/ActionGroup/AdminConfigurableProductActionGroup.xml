@@ -220,10 +220,6 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" before="clickOnSaveButton2" stepKey="clickOnNextButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" after="clickOnNextButton" stepKey="clickOnGenerateProductsButton"/>
     </actionGroup>
-    <actionGroup name="GenerateConfiguredProductAfterSettingOptions">
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}"  stepKey="clickOnNextButton"/>
-        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnGenerateProductsButton"/>
-    </actionGroup>
 
     <actionGroup name="addNewProductConfigurationAttribute">
         <annotations>
