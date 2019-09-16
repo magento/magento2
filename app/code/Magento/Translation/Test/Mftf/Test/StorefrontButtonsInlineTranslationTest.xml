@@ -53,7 +53,6 @@
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="showMiniCart"/>
 
         <!-- Small cart popup appeared. -->
-        <waitForElementVisible selector="{{StorefrontMinicartSection.blockMiniCart}}" stepKey="seePopUpAppeared"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.productName}}" stepKey="seeProductNameAppeared"/>
 
         <!-- Check button "Proceed to Checkout". There must be red borders and "book" icons on labels that can be translated. -->
