@@ -21,7 +21,7 @@ class AttributeGroupAttributeSetIdFilter implements CustomFilterInterface
     public function apply(Filter $filter, AbstractDb $collection)
     {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection $collection */
-        $collection->setAttributeSetFilter($filter->getValue());
+        $collection->setAttributeSetFilter($filter->getValue(), $filter->getConditionType());
 
         return true;
     }
