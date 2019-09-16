@@ -23,5 +23,17 @@
         <click stepKey="clickOnUpdateAddress" selector="{{SingleShippingSection.updateAddress}}" after="selectSecondShippingMethod" />
         <waitForPageLoad stepKey="waitForShippingInformation" after="clickOnUpdateAddress" />
     </actionGroup>
+    <actionGroup name="CheckingWithThreeDifferentAddressesActionGroup" extends="CheckingWithSingleAddressActionGroup">
+        <grabTextFrom stepKey="firstShippingAddressValue" selector="{{MultishippingSection.firstShippingAddressValue}}" after="waitForMultipleAddressPageLoad" />
+        <selectOption selector="{{MultishippingSection.firstShippingAddressOption}}" userInput="{$firstShippingAddressValue}" stepKey="selectFirstShippingMethod" after="firstShippingAddressValue" />
+        <waitForPageLoad stepKey="waitForSecondShippingAddresses" after="selectFirstShippingMethod" />
+        <grabTextFrom stepKey="secondShippingAddressValue" selector="{{MultishippingSection.secondShippingAddressValue}}" after="waitForSecondShippingAddresses" />
+        <selectOption selector="{{MultishippingSection.secondShippingAddressOption}}" userInput="{$secondShippingAddressValue}" stepKey="selectSecondShippingMethod" after="secondShippingAddressValue" />
+        <waitForPageLoad stepKey="waitForLastShippingAddressValue" after="selectSecondShippingMethod" />
+        <grabTextFrom stepKey="lastShippingAddressValue" selector="{{MultishippingSection.lastShippingAddressValue}}" after="waitForLastShippingAddressValue"/>
+        <selectOption selector="{{MultishippingSection.lastShippingAddressOption}}" userInput="{$lastShippingAddressValue}" stepKey="selectLastShippingMethod" after="lastShippingAddressValue"/>
+        <click stepKey="clickOnUpdateAddress" selector="{{SingleShippingSection.updateAddress}}" after="selectLastShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingInformationAfterUpdated" after="clickOnUpdateAddress"/>
+    </actionGroup>
 </actionGroups>
 

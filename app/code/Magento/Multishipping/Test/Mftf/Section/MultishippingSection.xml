@@ -20,5 +20,7 @@
         <element name="firstShippingAddressOption" type="select" selector="//table//tbody//tr[position()=1]//td[position()=3]//div//select"/>
         <element name="secondShippingAddressValue" type="select" selector="//table//tbody//tr[position()=2]//td[position()=3]//div//select//option[1]"/>
         <element name="secondShippingAddressOption" type="select" selector="//table//tbody//tr[position()=2]//td[position()=3]//div//select"/>
+        <element name="lastShippingAddressValue" type="select" selector="//table//tbody//tr[position()=2]//td[position()=3]//div//select//option[last()]"/>
+        <element name="lastShippingAddressOption" type="select" selector="//table//tbody//tr[position()=2]//td[position()=3]//div//select"/>
     </section>
 </sections>
