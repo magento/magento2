@@ -47,4 +47,7 @@
         <data key="name" unique="suffix">Bags</data>
         <data key="url_key" unique="suffix">bags</data>
     </entity>
+    <entity name="SubCategoryNonAnchor" extends="SubCategoryWithParent">
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryNonAnchor</requiredEntity>
+    </entity>
 </entities>
