@@ -119,10 +119,10 @@
         </actionGroup>
         <closeTab stepKey="closeTab"/>
         <!-- Check cart -->
+        <wait time="60" stepKey="waitForCartToBeUpdated"/>
         <reloadPage stepKey="reloadPage"/>
         <waitForPageLoad stepKey="waitForCheckoutPageReload"/>
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart"/>
-        <wait time="60" stepKey="waitForCartToBeUpdated"/>
         <dontSeeElement selector="{{StorefrontMiniCartSection.quantity}}" stepKey="dontSeeCartItem"/>
         <!-- Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.name$$)}}" stepKey="amOnSimpleProductPage2"/>
@@ -147,10 +147,10 @@
         </actionGroup>
         <closeTab stepKey="closeTab2"/>
         <!--Check cart-->
+        <wait time="60" stepKey="waitForCartToBeUpdated2"/>
         <reloadPage stepKey="reloadPage2"/>
         <waitForPageLoad stepKey="waitForCheckoutPageReload2"/>
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart2"/>
-        <wait time="60" stepKey="waitForCartToBeUpdated2"/>
         <dontSeeElement selector="{{StorefrontMiniCartSection.quantity}}" stepKey="dontSeeCartItem2"/>
     </test>
 </tests>
