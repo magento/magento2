@@ -106,7 +106,7 @@ class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 ['size' => 10, 'orders' => ['test' => 'ASC']],
-                ['size' => 10, 'orders' => ['test' => 'ASC']],
+                ['size' => null, 'orders' => ['test' => 'ASC']],
             ],
         ];
     }
