@@ -512,6 +512,11 @@
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
         <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
     </entity>
+    <entity name="ProductFileOptionWithScriptTag" type="product">
+        <var key="sku" entityType="product" entityKey="sku"/>
+        <data key="file">&lt;img src=x onerror='alert("XSS without &lt;script&gt;&lt;:script&gt; tags...")'&gt;.png</data>
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
+    </entity>
     <entity name="ApiVirtualProductWithDescription" type="product">
         <data key="sku" unique="suffix">api-virtual-product</data>
         <data key="type_id">virtual</data>
