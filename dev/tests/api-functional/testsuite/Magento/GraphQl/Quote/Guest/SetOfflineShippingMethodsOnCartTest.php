@@ -45,7 +45,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $carrierTitle
      * @param string $methodTitle
      * @param array $amount
-     * @param array $baseAmount
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @dataProvider offlineShippingMethodDataProvider
      */
@@ -54,8 +53,7 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
         string $methodCode,
         string $carrierTitle,
         string $methodTitle,
-        array $amount,
-        array $baseAmount
+        array $amount
     ) {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -88,9 +86,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('amount', $shippingAddress['selected_shipping_method']);
         self::assertEquals($amount, $shippingAddress['selected_shipping_method']['amount']);
-
-        self::assertArrayHasKey('base_amount', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($baseAmount, $shippingAddress['selected_shipping_method']['base_amount']);
     }
 
     /**
@@ -105,7 +100,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
                 'Flat Rate',
                 'Fixed',
                 ['value' => 10, 'currency' => 'USD'],
-                ['value' => 10, 'currency' => 'USD'],
             ],
             'tablerate_bestway' => [
                 'tablerate',
@@ -113,14 +107,12 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
                 'Best Way',
                 'Table Rate',
                 ['value' => 10, 'currency' => 'USD'],
-                ['value' => 10, 'currency' => 'USD'],
             ],
             'freeshipping_freeshipping' => [
                 'freeshipping',
                 'freeshipping',
                 'Free Shipping',
                 'Free',
-                ['value' => 0, 'currency' => 'USD'],
                 ['value' => 0, 'currency' => 'USD'],
             ],
         ];
@@ -155,10 +147,6 @@ mutation {
           carrier_title
           method_title
           amount {
-            value
-            currency
-          }
-          base_amount {
             value
             currency
           }

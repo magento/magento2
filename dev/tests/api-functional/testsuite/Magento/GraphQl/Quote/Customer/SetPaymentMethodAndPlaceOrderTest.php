@@ -78,9 +78,14 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
-        self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
-        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertArrayHasKey('code', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
+        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+
+        self::assertArrayHasKey('order', $response['placeOrder']);
+        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
     }
 
     /**
@@ -116,9 +121,14 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId, $methodCode);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
-        self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
-        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertArrayHasKey('code', $response['setPaymentMethodOnCart']['cart']['selected_payment_method']);
+        self::assertEquals($methodCode, $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']);
+
+        self::assertArrayHasKey('order', $response['placeOrder']);
+        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
     }
 
     /**
@@ -224,12 +234,25 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
     ) : string {
         return <<<QUERY
 mutation {
-  setPaymentMethodAndPlaceOrder(input: {
-      cart_id: "$maskedQuoteId"
+  setPaymentMethodOnCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
       payment_method: {
-          code: "$methodCode"
+        code: "{$methodCode}"
       }
-  }) {    
+    }
+  ) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+  placeOrder(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+    }
+  ) {
     order {
       order_id
     }
