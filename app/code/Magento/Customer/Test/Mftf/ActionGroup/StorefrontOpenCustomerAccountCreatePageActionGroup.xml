@@ -26,6 +26,5 @@
         </arguments>
 
         <amOnPage url="{{StorefrontStoreHomePage.url(storeView)}}{{StorefrontCustomerCreatePage.url}}" stepKey="goToCustomerAccountCreatePage"/>
-        <waitForPageLoad stepKey="waitForPageLoaded"/>
     </actionGroup>
 </actionGroups>
