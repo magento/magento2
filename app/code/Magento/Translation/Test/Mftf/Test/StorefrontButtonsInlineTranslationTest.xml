@@ -10,6 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontButtonsInlineTranslationTest">
         <annotations>
+            <features value="Translation"/>
             <stories value="Inline Translation"/>
             <title value="[Inline Translation] Buttons inline translation"/>
             <description value="[Inline Translation] Buttons inline translation"/>
@@ -36,29 +37,31 @@
             <magentoCLI
                     command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}"
                     stepKey="disableTranslateInlineForStorefront"/>
+            <!-- Set production mode -->
+            <magentoCLI command="deploy:mode:set production" stepKey="setProductionMode"/>
+
             <!-- Delete Simple Product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
         <!-- Add product to cart on storefront -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProduct">
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
         <!-- Click on cart button on the top -->
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForReload"/>
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="showMiniCart"/>
 
         <!-- Small cart popup appeared. -->
         <waitForElementVisible selector="{{StorefrontMinicartSection.blockMiniCart}}" stepKey="seePopUpAppeared"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productName}}" stepKey="seeProductNameAppeared"/>
 
         <!-- Check button "Proceed to Checkout". There must be red borders and "book" icons on labels that can be translated. -->
-        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertProceedToCheckout">
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertRedBordersAndBookIcon">
             <argument name="elementSelector" value="{{StorefrontMinicartSection.goToCheckout}}"/>
         </actionGroup>
 
-        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateProceedToCheckout">
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateProceedToCheckoutButtonText">
             <argument name="elementSelector" value="{{StorefrontMinicartSection.goToCheckout}}"/>
             <argument name="translateText" value="Proceed to Checkout Translated"/>
         </actionGroup>
