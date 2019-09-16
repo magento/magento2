@@ -20,13 +20,10 @@
         </annotations>
 
         <!--Register customer.-->
-        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickOnCreateAccountLink"/>
-        <fillField userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="fillFirstName"/>
-        <fillField userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" stepKey="fillLastName"/>
-        <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}" stepKey="fillEmail"/>
-        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}" stepKey="fillPassword"/>
-        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" stepKey="fillConfirmPassword"/>
-        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+        <actionGroup ref="RegisterCustomOnStorefrontActionGroup" stepKey="registerCustomer">
+            <argument name="Customer" value="Simple_US_Customer"/>
+            <argument name="storeCode" value="customStore.code"/>
+        </actionGroup>
         <!-- Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$simpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToPDP"/>
         <waitForPageLoad stepKey="waitForProductPage"/>

@@ -20,8 +20,7 @@
         </annotations>
 
         <!--Change Notify Quantity.-->
-        <amOnPage url="{{AdminProductEditPage.url($$downloadableProduct1.id$$)}}" stepKey="openConfigurableProductEditPage"/>
-        <waitForPageLoad stepKey="waitForDownloadableProductEditPageLoad"/>
+        <amOnPage url="{{AdminProductEditPage.url($$downloadableProduct1.id$$)}}" stepKey="openDownloadableProductEditPage"/>
         <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="uncheckNotifyQtyUseDefault"/>
         <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="95" stepKey="setLowStockNotification"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="saveProduct"/>

@@ -96,14 +96,10 @@
         <remove keyForRemoval="loginAsCustomer"/>
         <remove keyForRemoval="goToMyAccountPage"/>
         <!--Register customer.-->
-        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}" stepKey="amOnStorefrontPage" after="waitForPageLoad"/>
-        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickOnCreateAccountLink" after="amOnStorefrontPage"/>
-        <fillField userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="fillFirstName" after="clickOnCreateAccountLink"/>
-        <fillField userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" stepKey="fillLastName" after="fillFirstName"/>
-        <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}" stepKey="fillEmail" after="fillLastName"/>
-        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}" stepKey="fillPassword"  after="fillEmail"/>
-        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" stepKey="fillConfirmPassword" after="fillPassword"/>
-        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton" after="fillConfirmPassword"/>
+        <actionGroup ref="RegisterCustomOnStorefrontActionGroup" stepKey="registerCustomer">
+            <argument name="Customer" value="Simple_US_Customer"/>
+            <argument name="storeCode" value="customStore.code"/>
+        </actionGroup>
         <!--Place order from storefront.-->
         <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart" after="clickUpdateCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoPartialRefundFullInvoiceVirtualProductDefaultStock" extends="AdminCreateCreditMemoTotalRefundFullInvoiceVirtualProductDefaultStock">
+        <annotations>
+            <stories value="Virtual Product Default Stock."/>
+            <title value="Create Partial Refund Credit Memo after Full Invoice with Virtual Product on Default Stock."/>
+            <description value="Verify, admin able to create credit memo with partial refund after full invoice with virtual product on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735141/scenarios/2487619"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Process Partial Credit Memo.-->
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" stepKey="partialRefund" after="clickCreditMemo"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund" after="partialRefund"/>
+        <!--Verify product quantity.-->
+        <remove keyForRemoval="checkProductSourceQtyAfterCreditMemo"/>
+        <remove keyForRemoval="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="95" stepKey="checkProductSourceQtyAfterCreditMemo" after="findProductBySkuToCheckQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}" userInput="95" stepKey="checkSalableQtyAfterCreditMemo" after="checkProductSourceQtyAfterCreditMemo"/>
+    </test>
+</tests>

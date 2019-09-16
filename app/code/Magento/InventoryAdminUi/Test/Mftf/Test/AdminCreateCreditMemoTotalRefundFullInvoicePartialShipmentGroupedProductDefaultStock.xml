@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoTotalRefundFullInvoicePartialShipmentGroupedProductDefaultStock" extends="AdminCreateCreditMemoTotalRefundFullInvoiceFullShipmentGroupedProductDefaultStock">
+        <annotations>
+            <stories value="Grouped Product Default Stock."/>
+            <title value="Create Credit Memo with Total Refund after Full Invoice and Partial Shipment with Grouped product on Default stock."/>
+            <description value="Verify, admin able to create credit memo with total refund after full invoice and partial shipment with grouped product on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735182/scenarios/2551843"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Process partial shipment.-->
+        <fillField selector=".order-shipment-table tbody:nth-of-type(1) .col-qty input" userInput="5" stepKey="shipOneItem" after="clickShipAction"/>
+    </test>
+</tests>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoPartialRefundFullInvoicePartialShipmentGroupedProductDefaultStock" extends="AdminCreateCreditMemoTotalRefundFullInvoiceFullShipmentGroupedProductDefaultStock">
+        <annotations>
+            <stories value="Grouped Product Default Stock."/>
+            <title value="Create Credit Memo with Partial Refund after Full Invoice and Partial Shipment with Grouped product on Default stock."/>
+            <description value="Verify, admin able to create credit memo with partial refund after full invoice and partial shipment with grouped product on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735182/scenarios/2553271"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Process partial shipment.-->
+        <fillField selector=".order-shipment-table tbody:nth-of-type(1) .col-qty input" userInput="5" stepKey="shipOneItem" after="clickShipAction"/>
+        <!--Process Partial Credit Memo.-->
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" stepKey="partialRefund" after="clickCreditMemo"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund" after="partialRefund"/>
+        <!--Verify product quantity.-->
+        <remove keyForRemoval="checkProductSourceQtyAfterCreditMemo"/>
+        <remove keyForRemoval="checkSalableQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}" userInput="95" stepKey="checkProductSourceQtyAfterCreditMemo" after="findProductBySkuToCheckQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}" userInput="95" stepKey="checkSalableQtyAfterCreditMemo" after="checkProductSourceQtyAfterCreditMemo"/>
+    </test>
+</tests>
