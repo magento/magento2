@@ -19,6 +19,11 @@ require.config({
         'tests': '../../../../../../dev/tests/js/jasmine',
         'squire': '../../../../../../node_modules/squirejs/src/Squire'
     },
+    map: {
+        '*': {
+            dictionary: '../../../../../../dev/tests/js/jasmine/tests/lib/mage/fake-dictionary'
+        }
+    },
     shim: {
         squire: {
             exports: 'squire'

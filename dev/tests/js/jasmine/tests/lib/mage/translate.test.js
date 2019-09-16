@@ -14,6 +14,10 @@ define([
             $.mage.translate.add('Hello World!');
             expect('Hello World!').toEqual($.mage.translate.translate('Hello World!'));
         });
+        it('works with translation alias __', function () {
+            $.mage.translate.add('Hello World!');
+            expect('Hello World!').toEqual($.mage.__('Hello World!'));
+        });
         it('works with one array as parameter', function () {
             $.mage.translate.add(['Hello World!', 'Bonjour tout le monde!']);
             expect('Hello World!').toEqual($.mage.translate.translate('Hello World!'));
@@ -39,10 +43,6 @@ define([
         it('works with two string as parameter', function () {
             $.mage.translate.add('Hello World!', 'Bonjour tout le monde!');
             expect('Bonjour tout le monde!').toEqual($.mage.translate.translate('Hello World!'));
-        });
-        it('works with translation alias __', function () {
-            $.mage.translate.add('Hello World!');
-            expect('Hello World!').toEqual($.mage.__('Hello World!'));
         });
     });
 
