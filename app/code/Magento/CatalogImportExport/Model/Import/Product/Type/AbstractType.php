@@ -13,6 +13,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 /**
  * Import entity abstract product type model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
