@@ -11,18 +11,16 @@
         <arguments>
             <argument name="image" type="entity" defaultValue="MagentoLogo"/>
         </arguments>
-        <click selector="{{BlockContentItemsSection.addImageButton}}" stepKey="clickAddImageButton"/>
-        <waitForElementVisible selector="{{BlockInsertOrEditImageSection.browseImage}}" stepKey="waitForBrowseImage"/>
-        <click  selector="{{BlockInsertOrEditImageSection.browseImage}}" stepKey="clickBrowseImage"/>
-        <waitForElementVisible selector="{{BlockSelectImageSection.treeRoot}}" stepKey="waitForAttacheFiles"/>
-        <click  selector="{{BlockSelectImageSection.treeRoot}}" stepKey="clickRoot"/>
+        <click selector="{{TinyMCESection.InsertImage}}" stepKey="clickAddImageButton"/>
+        <waitForElementVisible selector="{{MediaGallerySection.Browse}}" stepKey="waitForBrowseImage"/>
+        <click  selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowseImage"/>
+        <waitForElementVisible selector="{{MediaGallerySection.StorageRootArrow}}" stepKey="waitForAttacheFiles"/>
+        <click  selector="{{MediaGallerySection.StorageRootArrow}}" stepKey="clickRoot"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <attachFile selector="{{BlockSelectImageSection.uploadFile}}" userInput="{{image.file}}" stepKey="attachLogo"/>
-        <waitForElementVisible selector="{{BlockSelectImageSection.addSelected}}" stepKey="waitForAddSelected"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
-        <click  selector="{{BlockSelectImageSection.addSelected}}" stepKey="clickAddSelected"/>
-        <waitForElementVisible selector="{{BlockInsertOrEditImageSection.ok}}" stepKey="waitForOkButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
-        <click  selector="{{BlockInsertOrEditImageSection.ok}}" stepKey="clickOk"/>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{image.file}}" stepKey="attachLogo"/>
+        <waitForElementVisible selector="{{MediaGallerySection.InsertFile}}" stepKey="waitForAddSelected"/>
+        <click  selector="{{MediaGallerySection.InsertFile}}" stepKey="clickAddSelected"/>
+        <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkButton"/>
+        <click  selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOk"/>
     </actionGroup>
 </actionGroups>
