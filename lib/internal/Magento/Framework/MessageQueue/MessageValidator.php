@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
@@ -58,6 +58,7 @@ class MessageValidator
      * @param bool $requestType
      * @return void
      * @throws InvalidArgumentException
+     * @throws LocalizedException
      */
     public function validate($topic, $message, $requestType = true)
     {
