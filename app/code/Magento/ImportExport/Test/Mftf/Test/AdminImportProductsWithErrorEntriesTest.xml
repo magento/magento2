@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportProductsWithErrorEntriesTest">
+        <annotations>
+            <features value="ImportExport"/>
+            <stories value="Import Products"/>
+            <title value="Import products with error entries"/>
+            <description value="Verify import status during import products with error entries"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-6358"/>
+            <useCaseId value="MAGETWO-65066"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <!--Login to Admin Page-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Clear products grid filters-->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
+            <!--Delete all imported products-->
+            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>
+            <!--Logout from Admin page-->
+            <actionGroup ref="logout" stepKey="logoutFromAdminPage"/>
+        </after>
+
+        <!--Import products with "Skip error entries"-->
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductsWithSkipErrorEntries">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="validationStrategy" value="Skip error entries"/>
+            <argument name="importFile" value="catalog_product_err_img.csv"/>
+            <argument name="importNoticeMessage" value="Created: 10, Updated: 0, Deleted: 0"/>
+            <argument name="validationNoticeMessage" value="Checked rows: 10, checked entities: 10, invalid rows: 0, total errors: 0"/>
+        </actionGroup>
+        <see selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 1, 2, 3, 4, 5, 6, 7, 8, 9, 10" stepKey="seeTenImportError"/>
+
+        <!--Import products with "Stop on Error" and "Allowed Errors Count" equals 5-->
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductsWithAllowedErrorsCountFive">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="allowedErrorsCount" value="5"/>
+            <argument name="importFile" value="catalog_product_err_img.csv"/>
+            <argument name="importNoticeMessage" value="Following Error(s) has been occurred during importing process"/>
+            <argument name="importMessageType" value="error"/>
+            <argument name="importMessage" value="Maximum error count has been reached or system error is occurred!"/>
+            <argument name="validationNoticeMessage" value="Checked rows: 10, checked entities: 10, invalid rows: 0, total errors: 0"/>
+        </actionGroup>
+        <see selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 1, 2, 3, 4, 5, 6" stepKey="seeAboutFiveImportError"/>
+
+        <!--Import products with "Stop on Error" and "Allowed Errors Count" equals 11-->
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductsWithAllowedErrorsCountEleven">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="allowedErrorsCount" value="11"/>
+            <argument name="importFile" value="catalog_product_err_img.csv"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 10, Deleted: 0"/>
+            <argument name="validationNoticeMessage" value="Checked rows: 10, checked entities: 10, invalid rows: 0, total errors: 0"/>
+        </actionGroup>
+        <see selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 1, 2, 3, 4, 5, 6, 7, 8, 9, 10" stepKey="seeAboutTenImportError"/>
+    </test>
+</tests>

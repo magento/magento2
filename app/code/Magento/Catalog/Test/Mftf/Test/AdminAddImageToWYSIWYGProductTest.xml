@@ -16,9 +16,6 @@
             <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84375"/>
-            <skip>
-                <issueId value="MC-17232"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
@@ -78,6 +75,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoading13"/>
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn2" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading14"/>
+        <click userInput="Storage Root" stepKey="clickOnRootFolder" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading15"/>
         <dontSeeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
         <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFileUpload3"/>
