@@ -353,11 +353,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function isSubscribed()
     {
-        if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
-            return true;
-        }
-
-        return false;
+        return $this->getId() && (int)$this->getStatus() === self::STATUS_SUBSCRIBED;
     }
 
     /**
@@ -495,7 +491,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 $this->sendConfirmationSuccessEmail();
             }
             return $this->getStatus();
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($e->getMessage());

@@ -119,7 +119,7 @@
         <column name="base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <settings>
                 <filter>textRange</filter>
-                <label translate="true">Refunded</label>
+                <label translate="true">Refunded (Base)</label>
             </settings>
         </column>
         <column name="order_status" component="Magento_Ui/js/grid/columns/select">
@@ -194,7 +194,7 @@
                 <visible>false</visible>
             </settings>
         </column>
-        <column name="subtotal" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="subtotal" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">Subtotal</label>
