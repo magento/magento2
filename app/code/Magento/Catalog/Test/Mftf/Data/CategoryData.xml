@@ -124,4 +124,7 @@
     <entity name="CategoryExportImport" extends="SimpleSubCategory" type="category">
         <data key="name">CategoryExportImport</data>
     </entity>
+    <entity name="SubCategoryNonAnchor" extends="SubCategoryWithParent">
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryNonAnchor</requiredEntity>
+    </entity>
 </entities>
