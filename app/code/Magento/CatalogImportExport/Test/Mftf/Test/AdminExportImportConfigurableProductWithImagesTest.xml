@@ -177,7 +177,7 @@
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProduct">
             <argument name="behavior" value="Add/Update"/>
             <argument name="importFile" value="export_import_configurable_product.csv"/>
-            <argument name="importMessage" value="Created: 1, Updated: 0, Deleted: 0"/>
+            <argument name="importNoticeMessage" value="Created: 1, Updated: 0, Deleted: 0"/>
         </actionGroup>
 
         <!-- Go to Catalog > Products: Configurable product exists -->
