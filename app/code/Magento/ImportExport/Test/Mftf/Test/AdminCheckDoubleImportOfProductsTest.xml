@@ -60,14 +60,14 @@
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsFirstTime">
             <argument name="behavior" value="Add/Update"/>
             <argument name="importFile" value="prepared-for-sample-data.csv"/>
-            <argument name="importMessage" value="Created: 100, Updated: 3, Deleted: 0"/>
+            <argument name="importNoticeMessage" value="Created: 100, Updated: 3, Deleted: 0"/>
         </actionGroup>
 
         <!-- Import products with add/update behavior again -->
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsSecondTime">
             <argument name="behavior" value="Add/Update"/>
             <argument name="importFile" value="prepared-for-sample-data.csv"/>
-            <argument name="importMessage" value="Created: 0, Updated: 300, Deleted: 0"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 300, Deleted: 0"/>
         </actionGroup>
     </test>
 </tests>
