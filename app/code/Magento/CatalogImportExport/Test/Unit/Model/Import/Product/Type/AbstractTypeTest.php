@@ -107,6 +107,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         ];
         $attribute1 = clone $attribute;
         $attribute2 = clone $attribute;
+        $attribute3 = clone $attribute;
 
         $attribute1->expects($this->any())->method('getId')->willReturn('1');
         $attribute1->expects($this->any())->method('getAttributeCode')->willReturn('attr_code');
@@ -118,6 +119,11 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $attribute2->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
         $attribute2->expects($this->any())->method('isStatic')->willReturn(false);
 
+        $attribute3->expects($this->any())->method('getId')->willReturn('3');
+        $attribute3->expects($this->any())->method('getAttributeCode')->willReturn('text_attribute');
+        $attribute3->expects($this->any())->method('getFrontendInput')->willReturn('text');
+        $attribute3->expects($this->any())->method('isStatic')->willReturn(false);
+
         $this->entityModel->expects($this->any())->method('getEntityTypeId')->willReturn(3);
         $this->entityModel->expects($this->any())->method('getAttributeOptions')->willReturnOnConsecutiveCalls(
             ['option1', 'option2'],
@@ -126,7 +132,9 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $attrSetColFactory->expects($this->any())->method('create')->willReturn($attrSetCollection);
         $attrSetCollection->expects($this->any())->method('setEntityTypeFilter')->willReturn([$attributeSet]);
         $attrColFactory->expects($this->any())->method('create')->willReturn($attrCollection);
-        $attrCollection->expects($this->any())->method('setAttributeSetFilter')->willReturn([$attribute1, $attribute2]);
+        $attrCollection->expects($this->any())
+            ->method('setAttributeSetFilter')
+            ->willReturn([$attribute1, $attribute2, $attribute3]);
         $attributeSet->expects($this->any())->method('getId')->willReturn(1);
         $attributeSet->expects($this->any())->method('getAttributeSetName')->willReturn('attribute_set_name');
 
@@ -157,7 +165,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             )
-            ->willReturn([$attribute1, $attribute2]);
+            ->willReturn([$attribute1, $attribute2, $attribute3]);
 
         $this->connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [
                 'select',
@@ -364,9 +372,14 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
     {
         $rowData = [
             '_attribute_set' => 'attributeSetName',
-            'boolean_attribute' => 'Yes'
+            'boolean_attribute' => 'Yes',
+        ];
+
+        $expected = [
+            'boolean_attribute' => 1,
+            'text_attribute' => 'default_value'
         ];
         $result = $this->simpleType->prepareAttributesWithDefaultValueForSave($rowData);
-        $this->assertEquals(['boolean_attribute' => 1], $result);
+        $this->assertEquals($expected, $result);
     }
 }
