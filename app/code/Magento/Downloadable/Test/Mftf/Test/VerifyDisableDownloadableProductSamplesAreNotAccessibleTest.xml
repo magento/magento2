@@ -90,7 +90,7 @@
         <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
 
         <!-- Assert product is disable on Storefront -->
-        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openProductPage">
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage">
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
