@@ -89,7 +89,7 @@ type Customer @doc(description: "Customer defines the customer name and address 
     default_shipping: String @doc(description: "The ID assigned to the shipping address")
     dob: String @doc(description: "The customer's date of birth")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
-    id: Int @doc(description: "The ID assigned to the customer")
+    id: Int @doc(description: "The ID assigned to the customer") @deprecated(reason: "id is not needed as part of Customer because on server side it can be identified based on customer token used for authentication. There is no need to know customer ID on the client side.")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
     gender: Int @doc(description: "The customer's gender(Male - 1, Female - 2)")
@@ -97,7 +97,7 @@ type Customer @doc(description: "Customer defines the customer name and address 
 
 type CustomerAddress @doc(description: "CustomerAddress contains detailed information about a customer's billing and shipping addresses"){
     id: Int @doc(description: "The ID assigned to the address object")
-    customer_id: Int @doc(description: "The customer ID")
+    customer_id: Int @doc(description: "The customer ID") @deprecated(reason: "customer_id is not needed as part of CustomerAddress, address ID (id) is unique identifier for the addresses.")
     region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID")
     region_id: Int @doc(description: "A number that uniquely identifies the state, province, or other area")
     country_id: String @doc(description: "The customer's country")

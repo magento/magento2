@@ -43,7 +43,6 @@ class CreateCustomerAddressTest extends GraphQlAbstract
      */
     public function testCreateCustomerAddress()
     {
-        $customerId = 1;
         $newAddress = [
             'region' => [
                 'region' => 'Arizona',
@@ -124,11 +123,12 @@ MUTATION;
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('createCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
-        $this->assertEquals($customerId, $response['createCustomerAddress']['customer_id']);
+        $this->assertEquals(null, $response['createCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['createCustomerAddress']);
 
         $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
         $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
+        $address->setCustomerId(null);
         $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
         $this->assertCustomerAddressesFields($address, $newAddress);
     }

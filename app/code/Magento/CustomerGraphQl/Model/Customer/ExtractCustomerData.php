@@ -103,6 +103,8 @@ class ExtractCustomerData
         $customerData = array_merge($customerData, $customAttributes);
 
         $customerData['model'] = $customer;
+        $customerData['id'] = null;
+
         return $customerData;
     }
 }
