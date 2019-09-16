@@ -15,9 +15,27 @@ use Magento\Framework\Event\ObserverInterface;
 class AddPaypalShortcuts implements ObserverInterface
 {
     /**
-     * Block class
+     * Alias for mini-cart block.
      */
-    const PAYPAL_SHORTCUT_BLOCK = \Magento\Braintree\Block\Paypal\Button::class;
+    private static $paypalMinicartAlias = 'mini_cart';
+
+    /**
+     * Alias for shopping cart page.
+     */
+    private static $paypalShoppingcartAlias = 'shopping_cart';
+
+    /**
+     * @var string[]
+     */
+    private $buttonBlocks;
+
+    /**
+     * @param string[] $buttonBlocks
+     */
+    public function __construct(array $buttonBlocks = [])
+    {
+        $this->buttonBlocks = $buttonBlocks;
+    }
 
     /**
      * Add Braintree PayPal shortcut buttons
@@ -35,7 +53,13 @@ class AddPaypalShortcuts implements ObserverInterface
         /** @var ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
 
-        $shortcut = $shortcutButtons->getLayout()->createBlock(self::PAYPAL_SHORTCUT_BLOCK);
+        if ($observer->getData('is_shopping_cart')) {
+            $shortcut = $shortcutButtons->getLayout()
+                ->createBlock($this->buttonBlocks[self::$paypalShoppingcartAlias]);
+        } else {
+            $shortcut = $shortcutButtons->getLayout()
+                ->createBlock($this->buttonBlocks[self::$paypalMinicartAlias]);
+        }
 
         $shortcutButtons->addShortcut($shortcut);
     }
