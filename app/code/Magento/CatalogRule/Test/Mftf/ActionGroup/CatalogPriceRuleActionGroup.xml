@@ -57,7 +57,7 @@
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
-    <actionGroup name="CreateMultipleWebsiteCatalogPriceRule" extends="createCatalogPriceRule">
+    <actionGroup name="AdminCreateMultipleWebsiteCatalogPriceRule" extends="createCatalogPriceRule">
         <remove keyForRemoval="selectSite"/>
         <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="['FirstWebsite', 'SecondWebsite']" stepKey="selectWebsite"/>
     </actionGroup>
