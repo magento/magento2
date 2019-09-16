@@ -12,6 +12,7 @@
         <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
         <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="viewAndEditCart"/>
         <seeInCurrentUrl url="checkout/cart" stepKey="seeInCurrentUrl"/>
+        <waitForPageLoad time="30" stepKey="waitForCartPageIsLoaded"/>
     </actionGroup>
     <actionGroup name="assertOneProductNameInMiniCart">
         <arguments>
@@ -38,6 +39,10 @@
 
     <!--Check that the minicart is empty-->
     <actionGroup name="AssertMiniCartEmpty">
+        <annotations>
+            <description>Validates that the provided Product Count appears in the Storefront Header next to the Shopping Cart icon. Clicks on the Mini Shopping Cart icon. Validates that the 'No Items' message is present and correct in the Storefront Mini Shopping Cart.</description>
+        </annotations>
+
         <dontSeeElement selector="{{StorefrontMinicartSection.productCount}}" stepKey="dontSeeMinicartProductCount"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="expandMinicart"/>
         <see selector="{{StorefrontMinicartSection.minicartContent}}" userInput="You have no items in your shopping cart." stepKey="seeEmptyCartMessage"/>

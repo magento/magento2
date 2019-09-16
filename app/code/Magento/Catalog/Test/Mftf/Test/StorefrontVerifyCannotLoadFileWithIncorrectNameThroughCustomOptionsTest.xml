@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyCannotLoadFileWithIncorrectNameThroughCustomOptionsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Custom options"/>
+            <title value="Verify cannot load file with incorrect name through Custom options"/>
+            <description value="Verify cannot load file with incorrect name through Custom options"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-7811"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Create simple product -->
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Add file upload custom option to the product -->
+            <updateData createDataKey="createProduct" entity="ProductFileOptionWithScriptTag" stepKey="updateProductWithOption"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        </after>
+
+        <!-- Login to storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Open product page -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Upload file -->
+        <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile">
+            <argument name="optionTitle" value="{{ProductOptionFile.title}}"/>
+            <argument name="file" value="ProductFileOptionWithScriptTag.file"/>
+        </actionGroup>
+
+        <!-- Add product to cart -->
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCartButton"/>
+        <waitForPageLoad stepKey="waitForProductAddToCart"/>
+
+        <!-- Assert alert message -->
+        <waitForElementVisible selector="{{StorefrontProductPageSection.alertMessage}}" stepKey="waitForElementVisible"/>
+        <see selector="{{StorefrontProductPageSection.alertMessage}}" userInput="The file is empty. Please choose another one" stepKey="seeAlertMessage"/>
+
+        <!-- Assert cart is empty -->
+        <actionGroup ref="AssertMiniCartEmpty" stepKey="assertMiniCartEmpty"/>
+    </test>
+</tests>

@@ -7,10 +7,14 @@
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Registry;
-use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filter\LocalizedToNormalizedFactory;
+use Magento\Framework\Filter\NormalizedToLocalizedFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -23,19 +27,43 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     protected $dataPersistor;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
+     * @var LocalizedToNormalizedFactory
+     */
+    private $localizedToNormalizedFactory;
+
+    /**
+     * @var NormalizedToLocalizedFactory
+     */
+    private $normalizedToLocalizedFactory;
+
+    /**
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Date $dateFilter
      * @param DataPersistorInterface $dataPersistor
+     * @param TimezoneInterface $localeDate
+     * @param LocalizedToNormalizedFactory $localizedToNormalizedFactory
+     * @param NormalizedToLocalizedFactory $normalizedToLocalizedFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         Date $dateFilter,
-        DataPersistorInterface $dataPersistor
+        DataPersistorInterface $dataPersistor,
+        TimezoneInterface $localeDate,
+        LocalizedToNormalizedFactory $localizedToNormalizedFactory,
+        NormalizedToLocalizedFactory $normalizedToLocalizedFactory
     ) {
-        $this->dataPersistor = $dataPersistor;
         parent::__construct($context, $coreRegistry, $dateFilter);
+        $this->dataPersistor = $dataPersistor;
+        $this->localeDate = $localeDate;
+        $this->localizedToNormalizedFactory = $localizedToNormalizedFactory;
+        $this->normalizedToLocalizedFactory = $normalizedToLocalizedFactory;
     }
 
     /**
@@ -61,16 +89,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 );
                 $data = $this->getRequest()->getPostValue();
 
-                $filterValues = ['from_date' => $this->_dateFilter];
-                if ($this->getRequest()->getParam('to_date')) {
-                    $filterValues['to_date'] = $this->_dateFilter;
-                }
-                $inputFilter = new \Zend_Filter_Input(
-                    $filterValues,
-                    [],
-                    $data
-                );
-                $data = $inputFilter->getUnescaped();
+                $data = $this->formatDateFields($data);
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model = $ruleRepository->get($id);
@@ -138,5 +157,40 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
             }
         }
         $this->_redirect('catalog_rule/*/');
+    }
+
+    /**
+     * Format date fields from localized to internal format.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatDateFields(array $data): array
+    {
+        $filterInput = $this->localizedToNormalizedFactory->create(
+            [
+                'options' => [
+                    'locale' => $this->_localeResolver->getLocale(),
+                    'date_format' => $this->localeDate->getDateFormat(\IntlDateFormatter::SHORT),
+                ],
+            ]
+        );
+        $filterInternal = $this->normalizedToLocalizedFactory->create(
+            [
+                'options' => [
+                    'date_format' => DateTime::DATE_INTERNAL_FORMAT,
+                ],
+            ]
+        );
+
+        foreach ($data as $fieldName => $fieldValue) {
+            if (in_array($fieldName, ['from_date', 'to_date']) && !empty($fieldValue)) {
+                $fieldValue = $filterInput->filter($fieldValue);
+                $fieldValue = $filterInternal->filter($fieldValue);
+                $data[$fieldName] = $fieldValue;
+            }
+        }
+
+        return $data;
     }
 }

@@ -60,9 +60,15 @@
 
     <!--Save product and see success message-->
     <actionGroup name="saveProductForm">
-        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <annotations>
+            <description>Clicks on the Save button. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveProductButton"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitProductSaveSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 
     <!--Upload image for product-->
