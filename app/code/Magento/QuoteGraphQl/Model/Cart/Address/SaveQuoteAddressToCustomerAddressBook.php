@@ -52,7 +52,6 @@ class SaveQuoteAddressToCustomerAddressBook
     }
 
     /**
-     *
      * @param QuoteAddress $quoteAddress
      * @param int $customerId
      *

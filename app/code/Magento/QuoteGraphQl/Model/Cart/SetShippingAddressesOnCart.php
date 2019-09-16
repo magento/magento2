@@ -78,6 +78,24 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
 
+       $shippingAddress = $this->createShippingAddress($context, $customerAddressId, $addressInput);
+
+        $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
+    }
+
+    /**
+     * @param ContextInterface $context
+     * @param int|null $customerAddressId
+     * @param array|null $addressInput
+     *
+     * @return \Magento\Quote\Model\Quote\Address
+     * @throws GraphQlAuthorizationException
+     */
+    private function createShippingAddress(
+        ContextInterface $context,
+        ?int $customerAddressId,
+        ?array $addressInput
+    ) {
         $customerId = $context->getUserId();
 
         if (null === $customerAddressId) {
@@ -98,6 +116,6 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
 
-        $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
+        return $shippingAddress;
     }
 }
