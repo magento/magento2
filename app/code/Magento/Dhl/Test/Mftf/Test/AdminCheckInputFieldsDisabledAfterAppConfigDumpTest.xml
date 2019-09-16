@@ -13,6 +13,7 @@
         <comment userInput="Assert configuration are disabled in DHL section" stepKey="commentSeeDisabledDHLConfigs"/>
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
         <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" visible="false" stepKey="expandDHLTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="waitDHLTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" userInput="disabled" stepKey="grabDHLActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabDHLActiveDisabled" stepKey="assertDHLActiveDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActiveRMA}}" userInput="disabled" stepKey="grabDHLActiveRMADisabled"/>

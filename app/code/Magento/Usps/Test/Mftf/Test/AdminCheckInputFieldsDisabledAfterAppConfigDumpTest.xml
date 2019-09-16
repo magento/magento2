@@ -13,6 +13,7 @@
         <comment userInput="Assert configuration are disabled in USPS section" stepKey="commentSeeDisabledUSPSConfigs"/>
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
         <conditionalClick selector="{{AdminShippingMethodUSPSSection.carriersUSPSTab}}" dependentSelector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" visible="false" stepKey="expandUSPSTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" stepKey="waitUSPSTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" userInput="disabled" stepKey="grabUSPSActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabUSPSActiveDisabled" stepKey="assertUSPSActiveDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSGatewayXMLUrl}}" userInput="disabled" stepKey="grabUSPSGatewayXMLUrlDisabled"/>
