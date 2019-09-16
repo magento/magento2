@@ -46,4 +46,11 @@
         <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{validationNoticeMessage}}" after="waitForValidationNoticeMessage" stepKey="seeValidationNoticeMessage"/>
         <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{validationMessage}}" after="seeValidationNoticeMessage" stepKey="seeValidationMessage"/>
     </actionGroup>
+    <actionGroup name="checkDataForImportProductActionGroup" extends="AdminImportProductsActionGroup">
+        <remove keyForRemoval="clickImportButton"/>
+        <remove keyForRemoval="AdminImportMainSectionLoad2"/>
+        <remove keyForRemoval="assertSuccessMessage"/>
+        <remove keyForRemoval="AdminMessagesSection"/>
+        <remove keyForRemoval="seeImportMessage"/>
+    </actionGroup>
 </actionGroups>
