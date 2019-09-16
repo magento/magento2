@@ -130,6 +130,15 @@ class StaticField implements FieldProviderInterface
                 ];
             }
 
+            if ($attributeAdapter->isTextType()) {
+                $keywordFieldName = FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD;
+                $allAttributes[$fieldName]['fields'][$keywordFieldName] = [
+                    'type' => $this->fieldTypeConverter->convert(
+                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                    )
+                ];
+            }
+
             if ($attributeAdapter->isComplexType()) {
                 $childFieldName = $this->fieldNameResolver->getFieldName(
                     $attributeAdapter,
