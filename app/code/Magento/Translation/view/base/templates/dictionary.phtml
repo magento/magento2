@@ -8,7 +8,7 @@
 $viewModel = $block->getData('dictionary_view_model');
 ?>
 <script>
-    define('dictionary', function () {
-        return <?= /* @noEscape */ $viewModel->getTranslationDictionary() ?>;
+    define('text!dictionary', function () {
+        return "[]";
     });
 </script>
