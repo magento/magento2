@@ -41,7 +41,6 @@
     </action>
     <action name="rest/*/V1/carts/*/payment-information">
         <section name="cart"/>
-        <section name="checkout-data"/>
         <section name="last-ordered-items"/>
     </action>
     <action name="rest/*/V1/guest-carts/*/payment-information">
