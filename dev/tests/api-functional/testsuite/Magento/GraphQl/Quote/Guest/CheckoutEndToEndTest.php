@@ -95,7 +95,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
   products (
     filter: {
       sku: {
-        like:"simple%"
+        eq:"simple1"
       }
     }
     pageSize: 1

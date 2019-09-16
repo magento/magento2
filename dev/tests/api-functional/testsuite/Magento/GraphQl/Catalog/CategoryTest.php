@@ -476,7 +476,7 @@ QUERY;
 {
   category(id: {$categoryId}) {
     name
-    products(sort: {sku: ASC}) {
+    products(sort: {name: DESC}) {
       total_count
       items {
         sku
@@ -493,8 +493,8 @@ QUERY;
                     'total_count' => 3,
                     'items' => [
                         ['sku' => '12345'],
-                        ['sku' => 'simple'],
-                        ['sku' => 'simple-4']
+                        ['sku' => 'simple-4'],
+                        ['sku' => 'simple']
                     ]
                 ]
             ]

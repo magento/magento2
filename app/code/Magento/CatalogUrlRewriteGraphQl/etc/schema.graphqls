@@ -12,6 +12,10 @@ input ProductFilterInput {
     url_path: FilterTypeInput @deprecated(reason: "Use product's `canonical_url` or url rewrites instead")
 }
 
+input ProductAttributeFilterInput {
+    url_key: FilterEqualTypeInput @doc(description: "The part of the URL that identifies the product")
+}
+
 input ProductSortInput {
     url_key: SortEnum @doc(description: "The part of the URL that identifies the product")
     url_path: SortEnum @deprecated(reason: "Use product's `canonical_url` or url rewrites instead")
