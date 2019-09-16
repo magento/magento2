@@ -21,7 +21,7 @@ interface CustomerRepositoryInterface
      * @param string $passwordHash
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\InputException If bad input is provided
-     * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
+     * @throws \Magento\Framework\Exception\AlreadyExistsException If the provided email is already used
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null);
