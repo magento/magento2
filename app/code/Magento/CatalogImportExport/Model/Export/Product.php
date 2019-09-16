@@ -727,7 +727,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $exportAttributes = (
             array_key_exists("skip_attr", $this->_parameters) && count($this->_parameters["skip_attr"])
         ) ?
-            array_intersect($this->_getExportMainAttrCodes(), $this->_getExportAttrCodes()) :
+            array_intersect(
+                $this->_getExportMainAttrCodes(),
+                $this->_customHeadersMapping($this->_getExportAttrCodes())
+            ) :
             $this->_getExportMainAttrCodes();
 
         if (!$this->_headerColumns) {
