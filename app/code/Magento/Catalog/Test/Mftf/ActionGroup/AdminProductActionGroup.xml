@@ -422,6 +422,10 @@
         <waitForPageLoad stepKey="waitForPageOpened"/>
         <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="selectWebsite"/>
     </actionGroup>
+    <actionGroup name="unassignWebsiteFromProductActionGroup" extends="SelectProductInWebsitesActionGroup">
+        <remove keyForRemoval="selectWebsite"/>
+        <uncheckOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="unSelectWebsite" after="waitForPageOpened"/>
+    </actionGroup>
 
     <actionGroup name="AdminProductAddSpecialPrice">
         <annotations>

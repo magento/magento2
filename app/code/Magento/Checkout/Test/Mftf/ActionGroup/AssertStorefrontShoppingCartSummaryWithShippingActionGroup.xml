@@ -17,6 +17,8 @@
         </arguments>
 
         <waitForElementVisible selector="{{CheckoutCartSummarySection.shipping}}" stepKey="waitForElementToBeVisible" after="assertSubtotal"/>
-        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="30" stepKey="assertShipping" after="waitForElementToBeVisible"/>
+        <reloadPage stepKey="reloadPage" after="waitForElementToBeVisible" />
+        <waitForPageLoad after="reloadPage" stepKey="WaitForPageLoaded" />
+        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="30" stepKey="assertShipping" after="WaitForPageLoaded"/>
     </actionGroup>
 </actionGroups>
