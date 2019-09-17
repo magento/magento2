@@ -24,9 +24,7 @@ $productRepository = Bootstrap::getObjectManager()
 try {
     $product = $productRepository->get('simple_with_custom_file_option', false, null, true);
     $productRepository->delete($product);
-}
-catch (NoSuchEntityException $e)
-{
+} catch (NoSuchEntityException $e) {
 }
 
 $registry->unregister('isSecureArea');
