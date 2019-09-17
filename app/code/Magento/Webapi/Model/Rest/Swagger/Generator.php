@@ -38,7 +38,9 @@ class Generator extends AbstractSchemaGenerator
      */
     const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
 
-    /** Array signifier */
+    /**
+     * Array signifier
+     */
     const ARRAY_SIGNIFIER = '[0]';
 
     /**
