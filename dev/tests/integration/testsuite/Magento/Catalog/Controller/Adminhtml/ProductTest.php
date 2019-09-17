@@ -79,7 +79,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     }
 
     /**
-     * Test saving and duplicate existing product after the script execution.
+     * Tests of saving and duplicating existing product after the script execution.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
