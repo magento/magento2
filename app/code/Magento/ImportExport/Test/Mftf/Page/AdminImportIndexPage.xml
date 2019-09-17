@@ -11,5 +11,6 @@
     <page name="AdminImportIndexPage" url="admin/import/" area="admin" module="Magento_ImportExport">
         <section name="AdminImportHeaderSection"/>
         <section name="AdminImportMainSection"/>
+        <section name="AdminImportValidationMessagesSection"/>
     </page>
 </pages>
