@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddProductReviewActionGroup">
+        <arguments>
+            <argument name="review" type="entity" defaultValue="SimpleProductReview"/>
+        </arguments>
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab"/>
+        <fillField selector="{{StorefrontReviewFormSection.nicknameField}}" userInput="{{review.nickname}}" stepKey="fillNicknameField"/>
+        <fillField selector="{{StorefrontReviewFormSection.summaryField}}" userInput="{{review.title}}" stepKey="fillSummaryField"/>
+        <fillField selector="{{StorefrontReviewFormSection.reviewField}}" userInput="{{review.detail}}" stepKey="fillReviewField"/>
+        <click selector="{{StorefrontReviewFormSection.submitReview}}" stepKey="clickSubmitReview"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.successMessage}}" userInput="You submitted your review for moderation." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
