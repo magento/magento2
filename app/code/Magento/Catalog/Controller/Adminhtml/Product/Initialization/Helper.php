@@ -10,13 +10,12 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOption
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeDefaultValueFilter;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 
 /**
  * Product helper
@@ -97,6 +96,11 @@ class Helper
     private $attributeFilter;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $timezone;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\RequestInterface $request
@@ -119,6 +123,7 @@ class Helper
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
         CustomOptionFactory $customOptionFactory = null,
         ProductLinkFactory $productLinkFactory = null,
         ProductRepositoryInterface $productRepository = null,
@@ -131,6 +136,7 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
+        $this->timezone = $timezone;
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->customOptionFactory = $customOptionFactory ?: $objectManager->get(CustomOptionFactory::class);
@@ -150,6 +156,7 @@ class Helper
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @since 101.0.0
+     * @throws \Exception
      */
     public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
     {
@@ -224,6 +231,7 @@ class Helper
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
+     * @throws \Exception
      */
     public function initialize(\Magento\Catalog\Model\Product $product)
     {
@@ -396,6 +404,17 @@ class Helper
     }
 
     /**
+     * Get Datetime
+     *
+     * @return string
+     */
+    private function getDateTime()
+    {
+        $dateTime = $this->timezone->date()->format('Y-m-d H:i:s');
+        return $dateTime;
+    }
+
+    /**
      * Remove ids of non selected websites from $websiteIds array and return filtered data
      *
      * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
@@ -466,11 +485,12 @@ class Helper
      *
      * @param array $productData
      * @return array
+     * @throws \Exception
      */
     private function convertSpecialFromDateStringToObject($productData)
     {
         if (isset($productData['special_from_date']) && $productData['special_from_date'] != '') {
-            $productData['special_from_date'] = $this->getDateTimeFilter()->filter($productData['special_from_date']);
+            $productData['special_from_date'] = $this->getDateTime();
             $productData['special_from_date'] = new \DateTime($productData['special_from_date']);
         }
 
