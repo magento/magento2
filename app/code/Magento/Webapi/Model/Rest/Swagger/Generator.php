@@ -738,7 +738,8 @@ class Generator extends AbstractSchemaGenerator
      */
     private function handleComplex($name, $type, $prefix, $isArray)
     {
-        $parameters = $this->typeProcessor->getTypeData($type)['parameters'];
+        $typeData = $this->typeProcessor->getTypeData($type);
+        $parameters = $typeData['parameters'] ?? [];
         $queryNames = [];
         foreach ($parameters as $subParameterName => $subParameterInfo) {
             $subParameterType = $subParameterInfo['type'];
