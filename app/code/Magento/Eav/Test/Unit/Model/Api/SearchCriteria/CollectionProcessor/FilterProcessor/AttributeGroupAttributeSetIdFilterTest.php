@@ -9,6 +9,11 @@ use Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\Att
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection;
 use Magento\Framework\Api\Filter;
 
+/**
+ * Class AttributeGroupAttributeSetIdFilterTest
+ *
+ * @package Magento\Eav\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor
+ */
 class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -36,7 +41,7 @@ class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
-            ->method('setAttributeSetFilter')
+            ->method('setAttributeSetConditionSetFilter')
             ->with($filterValue)
             ->willReturnSelf();
 

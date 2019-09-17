@@ -30,11 +30,26 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Set Attribute Set Filter
      *
+     * @deprecated since do not sets ConditionType
+     * @see setAttributeSetTypeSetFilter($setId, $conditionType = 'eq')
+     * @param int $setId
+     * @return $this
+     */
+    public function setAttributeSetFilter($setId)
+    {
+        $this->addFieldToFilter('attribute_set_id', ['eq' => $setId]);
+        $this->setOrder('sort_order');
+        return $this;
+    }
+
+    /**
+     * Set Attribute Set Condition Type Set Filter
+     *
      * @param string $setId
      * @param string $conditionType
      * @return $this
      */
-    public function setAttributeSetFilter($setId, $conditionType = 'eq')
+    public function setAttributeSetConditionSetFilter($setId, $conditionType = 'eq')
     {
         $this->addFieldToFilter('attribute_set_id', [$conditionType => $setId]);
         $this->setOrder('sort_order');
