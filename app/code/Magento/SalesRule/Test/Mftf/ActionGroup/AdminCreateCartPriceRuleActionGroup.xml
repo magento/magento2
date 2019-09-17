@@ -105,7 +105,7 @@
         <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="waitForCategoryVisible" after="openChooser"/>
         <checkOption selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="checkCategoryName" after="waitForCategoryVisible"/>
     </actionGroup>
-    <actionGroup name="AdminMultiWebsiteCartPriceRuleActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+    <actionGroup name="AdminCreateMultiWebsiteCartPriceRuleActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
         <annotations>
             <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'clickSaveButton' for the next data changing. Assign cart price rule to 2 websites instead of 1.</description>
         </annotations>
