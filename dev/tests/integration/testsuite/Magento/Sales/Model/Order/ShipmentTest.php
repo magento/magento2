@@ -173,7 +173,30 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
         $shipment->addTrack($track);
         $this->shipmentRepository->save($shipment);
-        $saved = $shipment->getTracksCollection();
-        self::assertTrue(in_array($track->getId(), $saved->getColumnValues('id')));
+
+        $secondOrder = $this->getOrder('100000002');
+        $secondOrderItems = [];
+        foreach ($secondOrder->getItems() as $item) {
+            $secondOrderItems[$item->getId()] = $item->getQtyOrdered();
+        }
+        /** @var \Magento\Sales\Model\Order\Shipment $secondOrderShipment */
+        $secondOrderShipment = $this->objectManager->get(ShipmentFactory::class)
+            ->create($secondOrder, $secondOrderItems);
+
+        /** @var ShipmentTrackInterface $secondShipmentTrack */
+        $secondShipmentTrack = $this->objectManager->create(ShipmentTrackInterface::class);
+        $secondShipmentTrack->setNumber('Test Number2')
+            ->setTitle('Test Title2')
+            ->setCarrierCode('Test CODE2');
+
+        $secondOrderShipment->addTrack($secondShipmentTrack);
+        $this->shipmentRepository->save($secondOrderShipment);
+
+        self::assertEmpty(
+            array_intersect(
+                $shipment->getTracksCollection()->getColumnValues('id'),
+                $secondOrderShipment->getTracksCollection()->getColumnValues('id')
+            )
+        );
     }
 }
