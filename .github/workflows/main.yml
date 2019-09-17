@@ -1,0 +1,21 @@
+name: Mirror branch
+
+on:
+  push:
+    branches:
+    - 2.3-develop
+    - 2.3.0-release
+jobs:
+  mirror_branches_job:
+    runs-on: ubuntu-latest
+    name: Mirror branch
+    steps:
+    - name: Mirror
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      id: mirror
+      with:
+        branch_matrix: '{"refs/heads/2.3-develop":"heads/1.1-develop","refs/heads/2.3.0-release":"heads/1.1.3-develop"}'
+      uses: magento-engcom/github-action-branch-mirroring@master
+    - name: Result
+      run: echo "${{ steps.mirror.outputs.status }}"
