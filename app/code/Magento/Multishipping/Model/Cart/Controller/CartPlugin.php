@@ -84,7 +84,7 @@ class CartPlugin
      *
      * @return bool
      */
-    private function isCheckoutComplete()
+    private function isCheckoutComplete() : bool
     {
         return (bool) ($this->checkoutSession->getStepData(State::STEP_SHIPPING)['is_complete'] ?? true);
     }
