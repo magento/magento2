@@ -318,7 +318,6 @@ class DtoProcessor
             $this->injectorProcessor->execute($type, $extensionAttributes)
         );
 
-
         foreach ($extensionAttributes as $attributeName => $attributeValue) {
             if (!is_array($attributeValue) && !is_object($attributeValue)) {
                 continue;
