@@ -199,11 +199,20 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
                 'getAddress',
                 'setAppliedRuleIds',
                 '__wakeup',
-                'getChildren'
+                'getChildren',
+                'getExtensionAttributes'
             ]
         );
+        $itemExtension = $this->getMockBuilder(
+            \Magento\Framework\Api\ExtensionAttributesInterface::class
+        )->setMethods(['setDiscounts', 'getDiscounts'])->getMock();
+        $itemExtension->method('getDiscounts')->willReturn([]);
+        $itemExtension->expects($this->once())
+            ->method('setDiscounts')
+            ->willReturn([]);
         $quote = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getStore', '__wakeUp']);
         $item->expects($this->any())->method('getAddress')->will($this->returnValue($address));
+        $item->expects($this->any())->method('getExtensionAttributes')->will($this->returnValue($itemExtension));
         $address->expects($this->any())
             ->method('getQuote')
             ->will($this->returnValue($quote));
