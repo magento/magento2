@@ -102,7 +102,7 @@ QUERY;
         $this->assertEquals($newMiddlename, $response['updateCustomer']['customer']['middlename']);
         $this->assertEquals($newLastname, $response['updateCustomer']['customer']['lastname']);
         $this->assertEquals($newSuffix, $response['updateCustomer']['customer']['suffix']);
-        $this->assertEquals($newDob, $response['updateCustomer']['customer']['date_of_birth']);
+        $this->assertEquals($newDob, $response['updateCustomer']['customer']['dob']);
         $this->assertEquals($newTaxVat, $response['updateCustomer']['customer']['taxvat']);
         $this->assertEquals($newEmail, $response['updateCustomer']['customer']['email']);
         $this->assertEquals($newGender, $response['updateCustomer']['customer']['gender']);
