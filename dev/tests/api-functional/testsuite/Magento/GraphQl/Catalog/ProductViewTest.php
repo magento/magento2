@@ -592,7 +592,7 @@ QUERY;
         $secondProductSku = 'simple-156';
         $query = <<<QUERY
        {
-           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           products(filter: {price: {from: "150.0", to: "250.0"}})
            {
                items {
                    attribute_set_id
@@ -795,6 +795,7 @@ QUERY;
                 ];
                 $this->assertResponseFields($value, $assertionMapValues);
             } else {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $assertionMap = array_merge(
                     $assertionMap,
                     [
@@ -823,7 +824,7 @@ QUERY;
                     $valueKeyName = 'date_option';
                     $valueAssertionMap = [];
                 }
-
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $valueAssertionMap = array_merge(
                     $valueAssertionMap,
                     [
@@ -980,7 +981,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: {sku: {in: ["12345"]}})
     {
         items
         {
@@ -1030,7 +1031,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: {sku: {in: ["12345"]}})
     {
         items
         {
@@ -1084,7 +1085,11 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: 
+             {
+             sku: {in:["12345"]}
+             }
+          )
     {
         items
         {
