@@ -11,11 +11,11 @@
     <test name="StorefrontAddCustomStockProductWithFileToTheCartFromRequisitionListTest" extends="StorefrontAddProductWithFileToTheCartFromRequisitionListTest">
         <annotations>
             <description value="Verify that a product with a custom file option can be added to a requisition list on additional stock."/>
-            <group value="msi"/>
+            <group value="msi_b2b"/>
             <group value="multi_mode"/>
         </annotations>
         <before>
-            <!--Create additional stock ans source.-->
+            <!--Create additional stock and source.-->
             <createData entity="_minimalSource" stepKey="additionalSource" before="additionalStock"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="stockSourceLink"/>
             <!--Link additional source with stock.-->
