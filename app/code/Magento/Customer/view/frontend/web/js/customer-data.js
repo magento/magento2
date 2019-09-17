@@ -320,9 +320,8 @@ define([
             var sectionDataIds,
                 sectionsNamesForInvalidation;
 
-            sectionsNamesForInvalidation = _.contains(sectionNames, '*')
-                ? sectionConfig.getSectionNames()
-                : sectionNames;
+            sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? sectionConfig.getSectionNames() :
+                sectionNames;
 
             $(document).trigger('customer-data-invalidate', [sectionsNamesForInvalidation]);
             buffer.remove(sectionsNamesForInvalidation);
