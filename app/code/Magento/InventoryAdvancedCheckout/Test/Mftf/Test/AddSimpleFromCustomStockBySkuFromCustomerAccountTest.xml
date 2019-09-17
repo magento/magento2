@@ -11,7 +11,7 @@
     <test name="AddSimpleFromCustomStockBySkuFromCustomerAccountTest" extends="AddSimpleProductBySkuFromCustomerAccountTest">
         <annotations>
             <description value="Add simple product by sku from customer account on additional stock."/>
-            <group value="msi"/>
+            <group value="msi_ee"/>
             <group value="multi_mode"/>
         </annotations>
         <before>

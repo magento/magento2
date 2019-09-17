@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test
+        name="StorefrontButtonReorderForTheOrderWithConfigurableProductOnTestStockInCustomerCabinetOnHomepageIsNotPresentIfProductSoldOutTest"
+        extends="StorefrontButtonReorderForTheOrderWithConfigurableProductOnDefaultStockInCustomerCabinetOnHomepageIsNotPresentIfProductSoldOutTest">
+        <annotations>
+            <stories value="Configurable Product Custom Stock."/>
+            <title
+                value="Button 'Reorder' for the Order with Configurable product on Test stock in customer cabinet on Homepage is not present if product sold out."/>
+            <description
+                value="Button 'Reorder' for the Order with Configurable product on Test stock in customer cabinet on Homepage is not present if product sold out."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735208/scenarios/1676780"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="customer"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="logoutOfAdmin1">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </after>
+        <remove keyForRemoval="createConfigurationsWithCustomStock"/>
+        <actionGroup ref="createConfigurationsForTwoAttributeCustomSource"
+                     stepKey="createConfigurationsWithCustomStock"
+                     after="fillCategory">
+            <argument name="attributeCode" value="$$createFirstConfigProductAttribute.attribute_code$$"/>
+            <argument name="secondAttributeCode" value="$$createSecondConfigProductAttribute.attribute_code$$"/>
+            <argument name="sourceName" value="$$createSource.source[name]$$"/>
+        </actionGroup>
+    </test>
+</tests>

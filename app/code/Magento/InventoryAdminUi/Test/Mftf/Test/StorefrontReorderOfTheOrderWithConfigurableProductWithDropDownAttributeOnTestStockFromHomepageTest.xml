@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontReorderOfTheOrderWithConfigurableProductWithDropDownAttributeOnTestStockFromHomepageTest"
+          extends="AdminReorderOfTheOrderWithConfigurableProductWithDropDownAttributeOnDefaultStockFromAdminTest">
+        <annotations>
+            <stories value="Reorder of the Order"/>
+            <title
+                value="Reorder of the Order with Configurable product with drop-down attribute on Test stock from Homepage."/>
+            <description
+                value="Reorder of the Order with Configurable product with drop-down attribute on Test stock from Homepage."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735208/scenarios/1482737"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <remove keyForRemoval="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="createSource"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="logoutOfAdmin1">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </after>
+        <remove keyForRemoval="createConfigurationsWithCustomStock"/>
+
+        <!-- Configurable Product with drop-down attribute created and its variables assigned to Test Stock in admin -->
+        <actionGroup ref="createConfigurationsForTwoAttributeCustomSource"
+                     stepKey="createConfigurationsWithCustomStock"
+                     before="saveConfigurableProduct">
+            <argument name="attributeCode" value="$$createFirstConfigProductAttribute.attribute_code$$"/>
+            <argument name="secondAttributeCode" value="$$createSecondConfigProductAttribute.attribute_code$$"/>
+            <argument name="sourceName" value="$$createSource.source[name]$$"/>
+        </actionGroup>
+
+        <!-- Remove create order from admin steps -->
+        <remove keyForRemoval="newOrder"/>
+        <remove keyForRemoval="filterConfigProduct"/>
+        <remove keyForRemoval="addConfProduct"/>
+        <remove keyForRemoval="selectFlatRate"/>
+        <remove keyForRemoval="submitOrder"/>
+        <remove keyForRemoval="getOrderId"/>
+        <remove keyForRemoval="assertOrderIdIsNotEmpty"/>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront" before="navigateToProductIndexPageForCheckProductQty">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <!-- Add Configurable Product to the cart -->
+        <actionGroup ref="StorefrontAddConfigurableProductWithTwoAttributesToTheCartActionGroup" stepKey="addConfigurableProductToCart" after="loginToStorefront">
+            <argument name="urlKey" value="{{ConfigurableMsiProduct.urlKey}}" />
+            <argument name="productAttribute" value="$$createFirstConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="secondProductAttribute" value="$$createSecondConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="productOption" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
+            <argument name="secondProductOption" value="$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
+            <argument name="qty" value="5"/>
+        </actionGroup>
+
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout" after="addConfigurableProductToCart"/>
+        <click selector=".continue" stepKey="clickOnNextPaymentPage" after="addConfigurableProductToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoadCheckout1" after="clickOnNextPaymentPage"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButtonVisible" after="waitForPageLoadCheckout1"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder" after="waitForPlaceOrderButtonVisible"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced" after="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderId" after="waitUntilOrderPlaced"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage" after="getOrderId"/>
+
+        <!--Verify that reservation '-5' items of 'Configurable product 1-red' on Custom stock is created correctly -->
+        <remove keyForRemoval="checkProductSourceQty"/>
+        <remove keyForRemoval="checkSalableQty"/>
+
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource.source[name]$$)}}"
+             userInput="100" stepKey="checkProductSourceQty" after="findVirtualProductBySkuToCheckQty"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}"
+             userInput="95" stepKey="checkSalableQty" after="checkProductSourceQty"/>
+
+        <!-- Remove Reorder from admin steps -->
+        <remove keyForRemoval="goToOrders1"/>
+        <remove keyForRemoval="waitForPageLoad6"/>
+        <remove keyForRemoval="filterOrderGridById1"/>
+        <remove keyForRemoval="clickOnViewAction1"/>
+        <remove keyForRemoval="waitForOrderPageToLoad"/>
+        <remove keyForRemoval="clickOnReorderButton"/>
+        <remove keyForRemoval="waitForReorderFormToLoad"/>
+        <remove keyForRemoval="submitOrder1"/>
+
+
+        <!-- Reorder of the Order from Homepage -->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage" before="navigateToProductIndexPageForCheckProductQtyAfterReorder"/>
+        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage" after="goToCustomerDashboardPage">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+        <click selector="//td[text()='{$getOrderId}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="clickReorderBtn" after="goToMyOrdersPage"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout" after="clickReorderBtn"/>
+        <waitForPageLoad stepKey="waitForPageLoadCheckoutSelectPaymentToReorder" after="goToCheckout"/>
+        <click selector=".continue" stepKey="clickOnNextPaymentPageToReorder" after="waitForPageLoadCheckoutSelectPaymentToReorder"/>
+        <waitForPageLoad stepKey="waitForPageLoadCheckout2" after="clickOnNextPaymentPageToReorder"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrderToReorder" after="waitForPageLoadCheckout2"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlacedToReorder" after="placeOrderToReorder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="reorderNumber" after="waitUntilOrderPlacedToReorder"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessageAfterReorder" after="reorderNumber"/>
+
+        <!--Verify that reservation '-5' items of 'Configurable product 1-red' on Test stock is created correctly -->
+        <remove keyForRemoval="checkProductSourceQtyAfterReorder"/>
+        <remove keyForRemoval="checkSalableQtyAfterReorder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource.source[name]$$)}}"
+             userInput="100" stepKey="checkProductSourceQtyAfterReorder" after="findProductBySkuToCheckQtyAfterReorder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}"
+             userInput="90" stepKey="checkSalableQtyAfterReorder" after="checkProductSourceQtyAfterReorder"/>
+
+    </test>
+</tests>

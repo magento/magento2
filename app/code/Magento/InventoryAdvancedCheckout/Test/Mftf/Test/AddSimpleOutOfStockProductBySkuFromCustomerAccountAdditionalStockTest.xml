@@ -12,7 +12,7 @@
         <annotations>
             <stories value="Add Product By SKU from custom stock"/>
             <title value="Add simple out of stock product by sku from customer account test, additional stock."/>
-            <group value="msi"/>
+            <group value="msi_ee"/>
             <group value="multi_mode"/>
         </annotations>
         <before>

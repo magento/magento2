@@ -11,6 +11,7 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryCatalog\Model\ResourceModel\AddStockStatusToSelect;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\Store\Model\Website;
@@ -31,18 +32,28 @@ class AdaptAddStockStatusToSelectPlugin
     private $addStockStatusToSelect;
 
     /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param StockResolverInterface $stockResolver
      * @param AddStockStatusToSelect $addStockStatusToSelect
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         StockResolverInterface $stockResolver,
-        AddStockStatusToSelect $addStockStatusToSelect
+        AddStockStatusToSelect $addStockStatusToSelect,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->stockResolver = $stockResolver;
         $this->addStockStatusToSelect = $addStockStatusToSelect;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
+     * Adapt adding stock status to select for multi stocks.
+     *
      * @param Status $stockStatus
      * @param callable $proceed
      * @param Select $select
@@ -64,8 +75,11 @@ class AdaptAddStockStatusToSelectPlugin
 
         $stock = $this->stockResolver->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
         $stockId = (int)$stock->getStockId();
-
-        $this->addStockStatusToSelect->execute($select, $stockId);
+        if ($this->defaultStockProvider->getId() === $stockId) {
+            return $proceed($select, $website);
+        } else {
+            $this->addStockStatusToSelect->execute($select, $stockId);
+        }
 
         return $stockStatus;
     }
