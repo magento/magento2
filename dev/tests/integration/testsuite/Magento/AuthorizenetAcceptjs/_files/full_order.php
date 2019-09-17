@@ -41,12 +41,14 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setMetaDescription('meta description')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setStockData([
-        'use_config_manage_stock'   => 1,
-        'qty'                       => 100,
-        'is_qty_decimal'            => 0,
-        'is_in_stock'               => 1,
-    ])->setCanSaveCustomOptions(true)
+    ->setStockData(
+        [
+            'use_config_manage_stock'   => 1,
+            'qty'                       => 100,
+            'is_qty_decimal'            => 0,
+            'is_in_stock'               => 1,
+        ]
+    )->setCanSaveCustomOptions(true)
     ->setHasOptions(false);
 
 /** @var ProductRepositoryInterface $productRepository */
@@ -65,6 +67,7 @@ $shippingAddress->setId(null)
     ->setLastname('Doe')
     ->setShippingMethod('flatrate_flatrate');
 
+/** @var Payment $payment */
 $payment = $objectManager->create(Payment::class);
 $payment->setAdditionalInformation('ccLast4', '1111');
 $payment->setAdditionalInformation('opaqueDataDescriptor', 'mydescriptor');
@@ -116,6 +119,7 @@ $order->setIncrementId('100000001')
     ->setShippingAddress($shippingAddress)
     ->setShippingDescription('Flat Rate - Fixed')
     ->setShippingAmount(10)
+    ->setBaseShippingAmount(10)
     ->setStoreId(1)
     ->addItem($orderItem1)
     ->addItem($orderItem2)

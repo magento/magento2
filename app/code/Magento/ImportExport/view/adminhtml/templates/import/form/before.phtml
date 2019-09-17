@@ -209,7 +209,7 @@ require([
         postToFrameProcessResponse: function(response) {
             if ('object' != typeof(response)) {
                 alert({
-                    content: 'Invalid response'
+                    content: '<?= $block->escapeHtml(__('Invalid response')); ?>'
                 });
 
                 return false;
