@@ -345,4 +345,9 @@
         <data key="quantity">0</data>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ProductFileOptionWithScriptTag" type="product">
+        <var key="sku" entityType="product" entityKey="sku"/>
+        <data key="file">&lt;img src=x onerror='alert("XSS without &lt;script&gt;&lt;:script&gt; tags...")'&gt;.png</data>
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
+    </entity>
 </entities>

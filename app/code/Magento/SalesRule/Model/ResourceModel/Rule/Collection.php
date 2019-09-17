@@ -290,7 +290,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         if (!$this->getFlag('website_group_date_filter')) {
             if ($now === null) {
-                $now = $this->_date->date()->format('Y-m-d');
+                $now = $this->_date->date(null, null, false, false)->format('Y-m-d');
             }
 
             $this->addWebsiteFilter($websiteId);
