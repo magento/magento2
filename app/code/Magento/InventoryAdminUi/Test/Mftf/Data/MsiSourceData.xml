@@ -123,6 +123,380 @@
         <data key="postcode">QC G2E 6J5</data>
         <data key="use_default_carrier_config">1</data>
     </entity>
+    <entity name="FullSource5" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 5 </data>
+        <data key="source_code" unique="suffix">test_source_5_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 5</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">500</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource6" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 6 </data>
+        <data key="source_code" unique="suffix">test_source_6_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 6</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">600</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource7" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 7 </data>
+        <data key="source_code" unique="suffix">test_source_7_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 7</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">700</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource8" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 8 </data>
+        <data key="source_code" unique="suffix">test_source_8_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 8</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">800</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource9" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 9 </data>
+        <data key="source_code" unique="suffix">test_source_9_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 9</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">900</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource10" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 10 </data>
+        <data key="source_code" unique="suffix">test_source_10_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 10</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1000</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource11" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 11 </data>
+        <data key="source_code" unique="suffix">test_source_11_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 4</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1100</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource12" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 12 </data>
+        <data key="source_code" unique="suffix">test_source_12_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 12</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1200</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource13" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 13 </data>
+        <data key="source_code" unique="suffix">test_source_13_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 4</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1300</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource14" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 14 </data>
+        <data key="source_code" unique="suffix">test_source_14_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 14</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1400</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource15" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 15 </data>
+        <data key="source_code" unique="suffix">test_source_15_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 15</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1500</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource16" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 16 </data>
+        <data key="source_code" unique="suffix">test_source_16_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 16</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1600</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource17" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 17 </data>
+        <data key="source_code" unique="suffix">test_source_17_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 17</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1700</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource18" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 18 </data>
+        <data key="source_code" unique="suffix">test_source_18_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 18</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1800</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource19" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 19 </data>
+        <data key="source_code" unique="suffix">test_source_19_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 19</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">1900</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource20" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 20 </data>
+        <data key="source_code" unique="suffix">test_source_20_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 20</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">400</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
+    <entity name="FullSource21" type="source">
+        <data key="id_field_name">source_code</data>
+        <data key="name" unique="suffix">Test Source 21 </data>
+        <data key="source_code" unique="suffix">test_source_21_</data>
+        <data key="enabled">1</data>
+        <data key="description">Test Source 21</data>
+        <data key="latitude">0</data>
+        <data key="longitude">0</data>
+        <data key="priority">400</data>
+        <data key="contact_name">New First New Last</data>
+        <data key="email" unique="prefix">new@test.com</data>
+        <data key="phone">987-654-3210</data>
+        <data key="fax">987-654-3210</data>
+        <data key="country">Canada</data>
+        <data key="country_id">CA</data>
+        <data key="stateProvince">Quebec</data>
+        <data key="region_id">76</data>
+        <data key="city">Québec City</data>
+        <data key="street">1234 Test Avenue</data>
+        <data key="postcode">QC G2E 6J5</data>
+        <data key="use_default_carrier_config">1</data>
+    </entity>
     <entity name="USSource" type="source">
         <data key="id_field_name">source_code</data>
         <data key="name" unique="suffix">Test US Source 1 </data>

@@ -100,10 +100,27 @@ class StockSaveProcessor
         $assignedSources =
             isset($requestData['sources']['assigned_sources'])
             && is_array($requestData['sources']['assigned_sources'])
-                ? $requestData['sources']['assigned_sources']
+                ? $this->prepareAssignedSources($requestData['sources']['assigned_sources'])
                 : [];
         $this->stockSourceLinkProcessor->process($stockId, $assignedSources);
 
         return $stockId;
+    }
+
+    /**
+     * Convert built-in UI component property position into priority
+     *
+     * @param array $assignedSources
+     * @return array
+     */
+    private function prepareAssignedSources(array $assignedSources): array
+    {
+        foreach ($assignedSources as $key => $source) {
+            if (empty($source['priority'])) {
+                $source['priority'] = (int) $source['position'];
+                $assignedSources[$key] = $source;
+            }
+        }
+        return $assignedSources;
     }
 }
