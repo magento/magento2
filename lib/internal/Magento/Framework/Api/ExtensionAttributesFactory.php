@@ -7,12 +7,9 @@
 namespace Magento\Framework\Api;
 
 use LogicException;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Reflection\TypeProcessor;
 use ReflectionClass;
 use ReflectionException;
-use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Factory class for instantiation of extension attributes objects.
@@ -20,7 +17,7 @@ use Zend\Code\Reflection\ClassReflection;
 class ExtensionAttributesFactory
 {
     /**
-     * Extensible interface name constant
+     * Extensible interface name
      */
     public const EXTENSIBLE_INTERFACE_NAME = ExtensibleDataInterface::class;
 
@@ -39,22 +36,13 @@ class ExtensionAttributesFactory
     private $classInterfaceMap = [];
 
     /**
-     * @var TypeProcessor
-     */
-    private $typeProcessor;
-
-    /**
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param TypeProcessor $typeProcessor
      */
-    public function __construct(
-        ObjectManagerInterface $objectManager,
-        TypeProcessor $typeProcessor
-    ) {
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
         $this->objectManager = $objectManager;
-        $this->typeProcessor = $typeProcessor;
     }
 
     /**
@@ -67,36 +55,29 @@ class ExtensionAttributesFactory
      */
     public function create($extensibleClassName, $data = [])
     {
-        $interfaceReflection = new ClassReflection($this->getExtensibleInterfaceName($extensibleClassName));
+        $interfaceReflection = new ReflectionClass($this->getExtensibleInterfaceName($extensibleClassName));
 
         $methodReflection = $interfaceReflection->getMethod('getExtensionAttributes');
         if ($methodReflection->getDeclaringClass()->getName() === self::EXTENSIBLE_INTERFACE_NAME) {
             throw new LogicException(
                 "Method 'getExtensionAttributes' must be overridden in the interfaces "
                 . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
+                . 'Concrete return type should be specified.'
             );
         }
 
         $interfaceName = '\\' . $interfaceReflection->getName();
         $extensionClassName = substr($interfaceName, 0, -strlen('Interface')) . 'Extension';
+        $extensionInterfaceName = $extensionClassName . 'Interface';
 
         /** Ensure that proper return type of getExtensionAttributes() method is specified */
         $methodDocBlock = $methodReflection->getDocComment();
-        if (!preg_match('/@return\s+([\w\\\\]+)/', $methodDocBlock, $matches)) {
+        $pattern = "/@return\s+" . str_replace('\\', '\\\\', $extensionInterfaceName) . "/";
+        if (!preg_match($pattern, $methodDocBlock)) {
             throw new LogicException(
-                "Method 'getExtensionAttributes' must specify a return value."
-            );
-        }
-
-        $extensionInterfaceName = $this->typeProcessor
-            ->resolveFullyQualifiedClassName($interfaceReflection, $extensionClassName . 'Interface');
-
-        $returnExtensionInterfaceName = $this->typeProcessor
-            ->resolveFullyQualifiedClassName($interfaceReflection, $matches[1]);
-
-        if ($returnExtensionInterfaceName !== $extensionInterfaceName) {
-            throw new LogicException(
-                "Method 'getExtensionAttributes' must return $returnExtensionInterfaceName"
+                "Method 'getExtensionAttributes' must be overridden in the interfaces "
+                . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
+                . 'Concrete return type must be specified. Please fix :' . $interfaceName
             );
         }
 
@@ -125,6 +106,7 @@ class ExtensionAttributesFactory
 
             return $this->classInterfaceMap[$extensibleClassName];
         }
+
         $modelReflection = new ReflectionClass($extensibleClassName);
         if ($modelReflection->isInterface()
             && $modelReflection->isSubclassOf(self::EXTENSIBLE_INTERFACE_NAME)
@@ -133,6 +115,7 @@ class ExtensionAttributesFactory
             $this->classInterfaceMap[$extensibleClassName] = $extensibleClassName;
             return $this->classInterfaceMap[$extensibleClassName];
         }
+
         foreach ($modelReflection->getInterfaces() as $interfaceReflection) {
             if ($interfaceReflection->isSubclassOf(self::EXTENSIBLE_INTERFACE_NAME)
                 && $interfaceReflection->hasMethod('getExtensionAttributes')
@@ -141,6 +124,7 @@ class ExtensionAttributesFactory
                 return $this->classInterfaceMap[$extensibleClassName];
             }
         }
+
         $this->classInterfaceMap[$extensibleClassName] = $notExtensibleClassFlag;
         throw new LogicException($exceptionMessage);
     }
