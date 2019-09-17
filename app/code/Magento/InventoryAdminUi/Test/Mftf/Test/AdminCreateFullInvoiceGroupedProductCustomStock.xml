@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateFullInvoiceGroupedProductCustomStock" extends="AdminCreatePartialInvoiceGroupedProductDefaultStock">
+        <annotations>
+            <stories value="Grouped Product Custom Stock."/>
+            <title value="Create full invoice with Grouped product on Custom stock."/>
+            <description value="Verify, admin able to create full invoice with grouped product on custom source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735236/scenarios/1694909"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional stock.-->
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="additionalSource"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="disableSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="additionalStock" stepKey="deleteAdditionalStock" after="deleteGroupedProduct"/>
+        </after>
+
+        <!--Assign virtual product to additional source.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openVirtualProductEditPage" before="assignTestSourceToCreatedProduct"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct" before="setCustomSourceQuantity">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1000" stepKey="setCustomSourceQuantity" before="saveVirtualProduct"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveVirtualProduct" before="openGroupedProductEditPage"/>
+        <!--Make partial invoice full.-->
+        <remove keyForRemoval="scrollToQty"/>
+        <remove keyForRemoval="InvoiceQuantityPartial"/>
+        <remove keyForRemoval="clickUpdateQty"/>
+        <!--Verify product quantity after order placement.-->
+        <remove keyForRemoval="checkProductSourceQtyAfterPlaceOrder"/>
+        <remove keyForRemoval="checkSalableQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder" after="findProductBySkuToCheckQtyAfterPlaceOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="998" stepKey="checkSalableQtyAfterPlaceOrder" after="checkProductSourceQtyAfterPlaceOrder"/>
+        <!--Verify Order Status after invoice placement.-->
+        <remove keyForRemoval="verifyOrderStatus"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="verifyOrderStatus" after="checkSuccessMessage"/>
+    </test>
+</tests>

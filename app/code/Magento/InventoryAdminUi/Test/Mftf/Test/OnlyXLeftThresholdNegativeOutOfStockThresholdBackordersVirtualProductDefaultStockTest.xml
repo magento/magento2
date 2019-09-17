@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnlyXLeftThresholdNegativeOutOfStockThresholdBackordersVirtualProductDefaultStockTest">
+        <annotations>
+            <stories value="Virtual Product Default Stock."/>
+            <title value="Only X Left with Backorders and Negative 'Out Of Stock' Threshold with Virtual Product on Default Stock."/>
+            <description value="Verify, 'Only X Left' message appears on storefront with backorders and negative 'Out of Stock' threshold combination on default stock with virtual product."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/607680/scenarios/2079442"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Set "Only X Left" to 5.-->
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 5" stepKey="setStockThreshold"/>
+            <!--Crate additional source and stock.-->
+            <createData entity="_minimalSource" stepKey="additionalSource"/>
+            <!--Create virtual product and customer.-->
+            <createData entity="VirtualProduct" stepKey="product"/>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <!--Perform reindex and flash cache.-->
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Revert "Only X Left".-->
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 0" stepKey="revertOnlyXLeftConfig"/>
+            <!--Perform reindex and flush cache.-->
+            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterRevertThresholdConfig"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterRevertThresholdConfig"/>
+            <!--Remove test data.-->
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Set backorders and 'Out of Stock' threshold for created product.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="10" stepKey="setProductQuantity"/>
+        <actionGroup ref="AdminChangeOutOfStockThresholdOnProductEditPageActionGroup" stepKey="setOutOfStockThreshold">
+            <argument name="threshold" value="-10"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnableBackordersOnProductEditPageActionGroup" stepKey="enableBackorders"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Add virtual product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$product.name$$)}}" stepKey="navigateToPDP"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="15" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--flash cache-->
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <!--Verify 'Only X Left' message.-->
+        <amOnPage url="{{StorefrontProductPage.url($$product.name$$)}}" stepKey="navigateToProductDetailsPage"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageLoadToVerifyMessage"/>
+        <see selector=".availability.only" userInput="Only 5 left" stepKey="verifyMessage"/>
+    </test>
+</tests>

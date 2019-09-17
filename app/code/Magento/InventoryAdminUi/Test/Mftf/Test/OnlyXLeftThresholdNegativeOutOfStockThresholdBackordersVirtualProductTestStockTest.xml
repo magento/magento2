@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnlyXLeftThresholdNegativeOutOfStockThresholdBackordersVirtualProductTestStockTest" extends="OnlyXLeftThresholdNegativeOutOfStockThresholdBackordersVirtualProductDefaultStockTest">
+        <annotations>
+            <stories value="Virtual Product Custom Stock."/>
+            <title value="Only X Left with Backorders and Negative 'Out Of Stock' Threshold with Virtual Product on Custom Stock."/>
+            <description value="Verify, 'Only X Left' message appears on storefront with backorders and negative 'Out of Stock' threshold combination on custom stock with virtual product."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/607680/scenarios/2079469"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Crate additional stock.-->
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="additionalSource"/>
+            <!--Link additional source with stock.-->
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="disableCreatedSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Remove stock.-->
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="deleteCustomer"/>
+        </after>
+
+        <!--Assign created product to additional stock.-->
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProduct" after="openProductEditPage">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="10" stepKey="setProductQuantity" after="assignSourceToProduct"/>
+    </test>
+</tests>
