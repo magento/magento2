@@ -19,7 +19,12 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class ProductUrlSuffix implements ResolverInterface
 {
-    const XML_PATH_PRODUCT_URL_SUFFIX = 'catalog/seo/product_url_suffix';
+    /**
+     * System setting for the url suffix for products
+     *
+     * @var string
+     */
+    private static $xml_path_product_url_suffix = 'catalog/seo/product_url_suffix';
 
     /**
      * Cache for product rewrite suffix
@@ -35,11 +40,9 @@ class ProductUrlSuffix implements ResolverInterface
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param array $productUrlSuffix
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, array $productUrlSuffix = [])
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
-        $this->productUrlSuffix = $productUrlSuffix;
         $this->scopeConfig = $scopeConfig;
     }
 
@@ -69,7 +72,7 @@ class ProductUrlSuffix implements ResolverInterface
     {
         if (!isset($this->productUrlSuffix[$storeId])) {
             $this->productUrlSuffix[$storeId] = $this->scopeConfig->getValue(
-                self::XML_PATH_PRODUCT_URL_SUFFIX,
+                self::$xml_path_product_url_suffix,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             );

@@ -19,14 +19,19 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class CategoryUrlSuffix implements ResolverInterface
 {
-    const XML_PATH_PRODUCT_URL_SUFFIX = 'catalog/seo/category_url_suffix';
+    /**
+     * System setting for the url suffix for categories
+     *
+     * @var string
+     */
+    private static $xml_path_category_url_suffix = 'catalog/seo/category_url_suffix';
 
     /**
      * Cache for product rewrite suffix
      *
      * @var array
      */
-    private $cateogryUrlSuffix = [];
+    private $categoryUrlSuffix = [];
 
     /**
      * @var ScopeConfigInterface
@@ -35,11 +40,9 @@ class CategoryUrlSuffix implements ResolverInterface
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param array $cateogryUrlSuffix
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, array $cateogryUrlSuffix = [])
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
-        $this->cateogryUrlSuffix = $cateogryUrlSuffix;
         $this->scopeConfig = $scopeConfig;
     }
 
@@ -56,7 +59,7 @@ class CategoryUrlSuffix implements ResolverInterface
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
         $storeId = (int)$store->getId();
-        return $this->getProductUrlSuffix($storeId);
+        return $this->getCategoryUrlSuffix($storeId);
     }
 
     /**
@@ -65,15 +68,15 @@ class CategoryUrlSuffix implements ResolverInterface
      * @param int $storeId
      * @return string
      */
-    private function getProductUrlSuffix(int $storeId): string
+    private function getCategoryUrlSuffix(int $storeId): string
     {
-        if (!isset($this->cateogryUrlSuffix[$storeId])) {
-            $this->cateogryUrlSuffix[$storeId] = $this->scopeConfig->getValue(
-                self::XML_PATH_PRODUCT_URL_SUFFIX,
+        if (!isset($this->categoryUrlSuffix[$storeId])) {
+            $this->categoryUrlSuffix[$storeId] = $this->scopeConfig->getValue(
+                self::$xml_path_category_url_suffix,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
-        return $this->cateogryUrlSuffix[$storeId];
+        return $this->categoryUrlSuffix[$storeId];
     }
 }
