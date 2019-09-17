@@ -82,7 +82,7 @@ mutation {
             middlename
             lastname
             suffix
-            date_of_birth
+            dob
             taxvat
             email
             gender
