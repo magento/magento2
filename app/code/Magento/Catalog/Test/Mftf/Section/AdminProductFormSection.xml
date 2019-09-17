@@ -121,10 +121,10 @@
         <element name="InsertImageIcon" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-image']" parameterized="true"/>
         <element name="InsertTable" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-table']" parameterized="true"/>
         <element name="SpecialCharacter" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-charmap']" parameterized="true"/>
-        <element name="TinyMCE4" type="text" selector="//div[contains(@id, '{{var1}}')]//div[@class='mce-branding-powered-by']" parameterized="true"/>
+        <element name="TinyMCE4" type="text" selector="//div[contains(@id, '{{var1}}')]//*[contains(@class,'mce-branding')]" parameterized="true"/>
     </section>
     <section name="ProductDescriptionWYSIWYGToolbarSection">
-        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_description']//div[@class='mce-branding-powered-by']" />
+        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_description']//*[contains(@class,'mce-branding')]" />
         <element name="showHideBtn" type="button" selector="#toggleproduct_form_description"/>
         <element name="InsertImageBtn" type="button" selector="#buttonsproduct_form_description > .scalable.action-add-image.plugin" />
         <element name="Style" type="button" selector="//div[@id='editorproduct_form_description']//span[text()='Paragraph']" />
@@ -162,7 +162,7 @@
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
     <section name="ProductShortDescriptionWYSIWYGToolbarSection">
-        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_short_description']//div[@class='mce-branding-powered-by']" />
+        <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_short_description']//*[contains(@class,'mce-branding')]" />
         <element name="InsertImageBtn" type="button" selector="#buttonsproduct_form_short_description > .scalable.action-add-image.plugin" />
         <element name="showHideBtn" type="button" selector="#toggleproduct_form_short_description"/>
         <element name="Style" type="button" selector="//div[@id='editorproduct_form_short_description']//span[text()='Paragraph']" />

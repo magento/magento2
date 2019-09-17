@@ -9,12 +9,16 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup">
+        <annotations>
+            <description>Adds the provided Attribute Name, Select Value, Index A and Index B details to the 'Conditions' section on the Admin Catalog Price Rule creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="attributeName" type="string"/>
             <argument name="targetSelectValue" type="string"/>
             <argument name="indexA" type="string"/>
             <argument name="indexB" type="string"/>
         </arguments>
+        
         <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="openConditionsTab"/>
         <waitForPageLoad stepKey="waitForConditionTabOpened"/>
         <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>

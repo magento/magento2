@@ -50,6 +50,11 @@ class CartTotalsTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(21.5, $cartItem['prices']['row_total_including_tax']['value']);
+
         self::assertArrayHasKey('prices', $response['cart']);
         $pricesResponse = $response['cart']['prices'];
         self::assertEquals(21.5, $pricesResponse['grand_total']['value']);
@@ -105,6 +110,11 @@ class CartTotalsTest extends GraphQlAbstract
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
+
         $pricesResponse = $response['cart']['prices'];
         self::assertEquals(20, $pricesResponse['grand_total']['value']);
         self::assertEquals(20, $pricesResponse['subtotal_including_tax']['value']);
@@ -127,6 +137,11 @@ class CartTotalsTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
 
         $pricesResponse = $response['cart']['prices'];
         self::assertEquals(20, $pricesResponse['grand_total']['value']);
@@ -191,9 +206,25 @@ class CartTotalsTest extends GraphQlAbstract
         return <<<QUERY
 {
   cart(cart_id: "$maskedQuoteId") {
+    items {
+      prices {
+        price {
+          value
+          currency
+        }
+        row_total {
+          value
+          currency
+        }
+        row_total_including_tax {
+          value
+          currency
+        }
+      }
+    }
     prices {
       grand_total {
-        value,
+        value
         currency
       }
       subtotal_including_tax {

@@ -5,43 +5,56 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product;
 
+use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Catalog\Model\Indexer\Product\Price\Action\Full as FullAction;
+use Magento\Catalog\Model\Indexer\Product\Price\Action\Row as RowAction;
+use Magento\Catalog\Model\Indexer\Product\Price\Action\Rows as RowsAction;
+use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 
-class Price implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
+/**
+ * Price indexer
+ */
+class Price implements IndexerActionInterface, MviewActionInterface
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Action\Row
+     * @var RowAction
      */
     protected $_productPriceIndexerRow;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Action\Rows
+     * @var RowsAction
      */
     protected $_productPriceIndexerRows;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Action\Full
+     * @var FullAction
      */
     protected $_productPriceIndexerFull;
 
     /**
-     * @var \Magento\Framework\Indexer\CacheContext
+     * @var CacheContext
      */
     private $cacheContext;
 
     /**
-     * @param Price\Action\Row $productPriceIndexerRow
-     * @param Price\Action\Rows $productPriceIndexerRows
-     * @param Price\Action\Full $productPriceIndexerFull
+     * @param RowAction $productPriceIndexerRow
+     * @param RowsAction $productPriceIndexerRows
+     * @param FullAction $productPriceIndexerFull
+     * @param CacheContext $cacheContext
      */
     public function __construct(
-        \Magento\Catalog\Model\Indexer\Product\Price\Action\Row $productPriceIndexerRow,
-        \Magento\Catalog\Model\Indexer\Product\Price\Action\Rows $productPriceIndexerRows,
-        \Magento\Catalog\Model\Indexer\Product\Price\Action\Full $productPriceIndexerFull
+        RowAction $productPriceIndexerRow,
+        RowsAction $productPriceIndexerRows,
+        FullAction $productPriceIndexerFull,
+        CacheContext $cacheContext
     ) {
         $this->_productPriceIndexerRow = $productPriceIndexerRow;
         $this->_productPriceIndexerRows = $productPriceIndexerRows;
         $this->_productPriceIndexerFull = $productPriceIndexerFull;
+        $this->cacheContext = $cacheContext;
     }
 
     /**
@@ -53,7 +66,7 @@ class Price implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     public function execute($ids)
     {
         $this->_productPriceIndexerRows->execute($ids);
-        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
+        $this->cacheContext->registerEntities(ProductModel::CACHE_TAG, $ids);
     }
 
     /**
@@ -64,10 +77,10 @@ class Price implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     public function executeFull()
     {
         $this->_productPriceIndexerFull->execute();
-        $this->getCacheContext()->registerTags(
+        $this->cacheContext->registerTags(
             [
-                \Magento\Catalog\Model\Category::CACHE_TAG,
-                \Magento\Catalog\Model\Product::CACHE_TAG
+                CategoryModel::CACHE_TAG,
+                ProductModel::CACHE_TAG
             ]
         );
     }
@@ -81,6 +94,7 @@ class Price implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     public function executeList(array $ids)
     {
         $this->_productPriceIndexerRows->execute($ids);
+        $this->cacheContext->registerEntities(ProductModel::CACHE_TAG, $ids);
     }
 
     /**
@@ -92,20 +106,6 @@ class Price implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     public function executeRow($id)
     {
         $this->_productPriceIndexerRow->execute($id);
-    }
-
-    /**
-     * Get cache context
-     *
-     * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated 100.0.11
-     */
-    protected function getCacheContext()
-    {
-        if (!($this->cacheContext instanceof CacheContext)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
-        } else {
-            return $this->cacheContext;
-        }
+        $this->cacheContext->registerEntities(ProductModel::CACHE_TAG, [$id]);
     }
 }

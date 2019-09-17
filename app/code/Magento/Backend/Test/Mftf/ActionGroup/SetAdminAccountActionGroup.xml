@@ -7,8 +7,11 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SetAdminAccountActionGroup">
+        <annotations>
+            <description>Update the Interface Language configuration setting using provided Interface Language.</description>
+        </annotations>
         <arguments>
             <argument name="InterfaceLocaleByValue" defaultValue="en_US" type="string"/>
         </arguments>

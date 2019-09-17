@@ -7,8 +7,12 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="EnableWebUrlOptions">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Url Options'. Enables 'Add Store Code to Urls'. Clicks on the Save button.</description>
+        </annotations>
+        
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{WebSection.UrlOptionsTab}}" dependentSelector="{{WebSection.CheckIfUrlOptionsTabExpand}}" visible="true" stepKey="expandUrlSectionTab"/>
@@ -16,9 +20,14 @@
         <uncheckOption selector="{{UrlOptionsSection.systemValueForStoreCode}}" stepKey="uncheckUseSystemValue"/>
         <selectOption selector="{{UrlOptionsSection.addStoreCodeToUrl}}" userInput="Yes" stepKey="enableStoreCode"/>
         <click selector="{{WebSection.UrlOptionsTab}}" stepKey="collapseUrlOptions"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
     </actionGroup>
+
     <actionGroup name="ResetWebUrlOptions">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Url Options'. Disables 'Add Store Code to Urls'. Clicks on the Save button.</description>
+        </annotations>
+        
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPagetoReset"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <conditionalClick selector="{{WebSection.UrlOptionsTab}}" dependentSelector="{{WebSection.CheckIfUrlOptionsTabExpand}}" visible="true" stepKey="closeUrlSectionTab"/>
