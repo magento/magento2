@@ -17,7 +17,8 @@ define([
     'Magento_Vault/js/view/payment/vault-enabler',
     'Magento_Checkout/js/action/create-billing-address',
     'Magento_Braintree/js/view/payment/kount',
-    'mage/translate'
+    'mage/translate',
+    'Magento_Ui/js/model/messageList'
 ], function (
     $,
     _,
@@ -31,7 +32,8 @@ define([
     VaultEnabler,
     createBillingAddress,
     kount,
-    $t
+    $t,
+    globalMessageList
 ) {
     'use strict';
 
@@ -415,6 +417,18 @@ define([
          */
         onVaultPaymentTokenEnablerChange: function () {
             this.reInitPayPal();
+        },
+
+        /**
+         * Show error message
+         *
+         * @param {String} errorMessage
+         * @private
+         */
+        showError: function (errorMessage) {
+            globalMessageList.addErrorMessage({
+                message: errorMessage
+            });
         }
     });
 });
