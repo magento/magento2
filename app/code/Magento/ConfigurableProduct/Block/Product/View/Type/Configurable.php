@@ -296,6 +296,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                 $tierPrices[] = [
                     'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
                     'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                    'priceExTax' => $this->localeFormat->getNumber($tierPrice['price']->getValue('tax')),
                     'percentage' => $this->localeFormat->getNumber(
                         $tierPriceModel->getSavePercent($tierPrice['price'])
                     ),

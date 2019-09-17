@@ -3,16 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 ?>
 <script type="text/x-magento-template" id="tier-prices-template">
     <ul class="prices-tier items">
-        <% _.each(tierPrices, function(item, key) { %>
-        <%  var priceStr = '<span class="price-container price-tier_price">'
+        <?php $taxDisplayType = $block->getTaxDisplayType(); ?>
+        <?php if ($taxDisplayType == Magento\ConfigurableProduct\Pricing\Render\TierPriceBox::DISPLAY_TIER_PRICE_BOTH): ?>
+            <% _.each(tierPrices, function(item, key) { %>
+            <%  var priceStr = '<span class="price-container price-tier_price tax">'
                 + '<span data-price-amount="' + priceUtils.formatPrice(item.price, currencyFormat) + '"'
                 + ' data-price-type=""' + ' class="price-wrapper ">'
-                + '<span class="price">' + priceUtils.formatPrice(item.price, currencyFormat) + '</span>'
+                + '<span class="price-wrapper price-including-tax">' + priceUtils.formatPrice(item.price, currencyFormat) + '</span>'
+                + '<span class="price-wrapper price-excluding-tax" data-label="<?=__('Excl. Tax') ?>">' + priceUtils.formatPrice(item.priceExTax, currencyFormat) + '</span>'
                 + '</span>'
             + '</span>'; %>
+        <?php else: ?>
+            <% _.each(tierPrices, function(item, key) { %>
+            <%  var priceStr = '<span class="price-container price-tier_price">'
+                + '<span data-price-amount="' + priceUtils.formatPrice(item.<?= $taxDisplayType ?>, currencyFormat) + '"'
+                + ' data-price-type=""' + ' class="price-wrapper ">'
+                + '<span class="price">' + priceUtils.formatPrice(item.<?= $taxDisplayType ?>, currencyFormat) + '</span>'
+                + '</span>'
+            + '</span>'; %>
+        <?php endif ?>
         <li class="item">
             <%= '<?= $block->escapeHtml(__('Buy %1 for %2 each and', '%1', '%2')) ?>'
             .replace('%1', item.qty)

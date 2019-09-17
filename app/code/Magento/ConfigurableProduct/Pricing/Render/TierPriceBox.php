@@ -14,6 +14,11 @@ use Magento\Catalog\Pricing\Price\TierPrice;
  */
 class TierPriceBox extends FinalPriceBox
 {
+    // Price display settings
+    const DISPLAY_TIER_PRICE_EXCLUDING_TAX = 'priceExTax';
+    const DISPLAY_TIER_PRICE_INCLUDING_TAX = 'price';
+    const DISPLAY_TIER_PRICE_BOTH = 'both';
+
     /**
      * @inheritdoc
      */
@@ -41,5 +46,25 @@ class TierPriceBox extends FinalPriceBox
             }
         }
         return false;
+    }
+
+    /**
+     * Get price display settings
+     *
+     * @return string
+     */
+    public function getTaxDisplayType()
+    {
+        switch ($this->_scopeConfig->getValue('tax/display/type', \Magento\Store\Model\ScopeInterface::SCOPE_STORES)) {
+            case \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX:
+                return self::DISPLAY_TIER_PRICE_EXCLUDING_TAX;
+                break;
+            case  \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX:
+                return self::DISPLAY_TIER_PRICE_INCLUDING_TAX;
+                break;
+            case \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH:
+                return self::DISPLAY_TIER_PRICE_BOTH;
+                break;
+        }
     }
 }
