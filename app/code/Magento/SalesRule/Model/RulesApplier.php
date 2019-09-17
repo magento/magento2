@@ -49,8 +49,8 @@ class RulesApplier
      * @param CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Utility $utility
-     * @param DataFactory $discountDataFactory
      * @param ChildrenValidationLocator|null $childrenValidationLocator
+     * @param DataFactory $discountDataFactory
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
@@ -209,10 +209,10 @@ class RulesApplier
         $discount->setAmount($discountData->getAmount());
         $discount->setBaseAmount($discountData->getBaseAmount());
         $discount->setOriginalAmount($discountData->getOriginalAmount());
-        $discountBreakdown = $item->getDiscountBreakdown() ?? [];
+        $discountBreakdown = $item->getExtensionAttributes()->getDiscounts() ?? [];
         $discountBreakdown[$rule->getId()]['discount'] = $discount;
         $discountBreakdown[$rule->getId()]['rule'] = $rule;
-        $item->setDiscountBreakdown($discountBreakdown);
+        $item->getExtensionAttributes()->setDiscounts($discountBreakdown);
         return $this;
     }
 

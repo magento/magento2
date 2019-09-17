@@ -11,8 +11,6 @@ namespace Magento\Quote\Model\Quote\Address;
  * @method string getCode()
  *
  * @api
- * @method array getDiscounts()
- * @method Total setDiscounts(array $value)
  * @since 100.0.2
  */
 class Total extends \Magento\Framework\DataObject

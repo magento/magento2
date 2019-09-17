@@ -87,9 +87,10 @@ class CartItemPrices implements ResolverInterface
      */
     private function getDiscountValues($cartItem, $currencyCode)
     {
-        if ($cartItem->getDiscountBreakdown()) {
+        $itemDiscounts = $cartItem->getExtensionAttributes()->getDiscounts();
+        if ($itemDiscounts) {
             $discountValues=[];
-            foreach ($cartItem->getDiscountBreakdown() as $value) {
+            foreach ($itemDiscounts as $value) {
                 $discount = [];
                 $amount = [];
                 /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */

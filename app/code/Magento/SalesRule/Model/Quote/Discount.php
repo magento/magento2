@@ -5,9 +5,6 @@
  */
 namespace Magento\SalesRule\Model\Quote;
 
-use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
-use Magento\Framework\App\ObjectManager;
-
 /**
  * Discount totals calculation model.
  */
@@ -40,30 +37,22 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     protected $priceCurrency;
 
     /**
-     * @var DataFactory
-     */
-    private $discountFactory;
-
-    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\SalesRule\Model\Validator $validator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param DataFactory $discountDataFactory
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\SalesRule\Model\Validator $validator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        DataFactory $discountDataFactory
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {
         $this->setCode(self::COLLECTOR_TYPE_CODE);
         $this->eventManager = $eventManager;
         $this->calculator = $validator;
         $this->storeManager = $storeManager;
         $this->priceCurrency = $priceCurrency;
-        $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
     }
 
     /**
@@ -138,7 +127,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $this->calculator->process($item);
                 $this->aggregateItemDiscount($item, $total);
             }
-            $this->aggregateDiscountPerRule($item, $total);
         }
 
         $this->calculator->prepareDescription($address);
@@ -229,52 +217,5 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             ];
         }
         return $result;
-    }
-
-    /**
-     * Aggregate Discount per rule
-     *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
-     * @return $this
-     */
-    private function aggregateDiscountPerRule(
-        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
-        \Magento\Quote\Model\Quote\Address\Total $total
-    ) {
-        $discountBreakdown = $item->getDiscountBreakdown();
-        if ($discountBreakdown) {
-            foreach ($discountBreakdown as $key => $value) {
-                $discountPerRule = $total->getDiscounts() ?? [];
-                /**
-                 * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount
-                 */
-                $discount = $value['discount'];
-                $rule = $value['rule'];
-                if (isset($discountPerRule[$key])) {
-                    /**
-                     * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $ruleDiscount
-                     */
-                    $ruleDiscount = $this->discountFactory->create();
-                    /**
-                     * @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-                     */
-                    $discountData = $discountPerRule[$key]['discount'];
-                    $ruleDiscount->setAmount($discountData->getAmount()+$discount->getAmount());
-                    $ruleDiscount->setBaseAmount($discountData->getBaseAmount()+$discount->getBaseAmount());
-                    $ruleDiscount->setOriginalAmount($discountData->getOriginalAmount()+$discount->getOriginalAmount());
-                    $ruleDiscount->setBaseOriginalAmount(
-                        $discountData->getBaseOriginalAmount()+$discount->getBaseOriginalAmount()
-                    );
-                    $discountPerRule[$key]['discount'] = $ruleDiscount;
-                    $discountPerRule[$key]['rule'] = $rule;
-                } else {
-                    $discountPerRule[$key]['discount'] = $discount;
-                    $discountPerRule[$key]['rule'] = $rule;
-                }
-                $total->setDiscounts($discountPerRule);
-            }
-        }
-        return $this;
     }
 }

@@ -57,7 +57,6 @@ class CartPrices implements ResolverInterface
             ],
             'applied_taxes' => $this->getAppliedTaxes($cartTotals, $currency),
             'discount' => $this->getDiscount($cartTotals, $currency),
-            'discounts' => $this->getDiscountValues($cartTotals, $quote),
             'model' => $quote
         ];
     }
@@ -103,34 +102,5 @@ class CartPrices implements ResolverInterface
             'label' => explode(', ', $total->getDiscountDescription()),
             'amount' => ['value' => $total->getDiscountAmount(), 'currency' => $currency]
         ];
-    }
-
-    /**
-     * Get Discount Values
-     *
-     * @param Total $total
-     * @param Quote $quote
-     * @return array
-     */
-    private function getDiscountValues(Total $total, Quote $quote)
-    {
-        $discountValues=[];
-        if ($total->getDiscounts()) {
-            foreach ($total->getDiscounts() as $value) {
-                $discount = [];
-                $amount = [];
-                /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
-                $discountData = $value['discount'];
-                /* @var \Magento\SalesRule\Model\Rule $rule*/
-                $rule = $value['rule'];
-                $discount['label'] = $rule->getStoreLabel($quote->getStore()) ?: __('Discount');
-                $amount['value'] = $discountData->getAmount();
-                $amount['currency'] = $quote->getQuoteCurrencyCode();
-                $discount['amount'] = $amount;
-                $discountValues[] = $discount;
-            }
-            return $discountValues;
-        }
-        return null;
     }
 }
