@@ -38,7 +38,7 @@ class AllPurposeAction extends AbstractRule implements ClassAware
             return;
         }
 
-        if (in_array(ActionInterface::class, $impl, true)) {
+        if (is_array($impl) && in_array(ActionInterface::class, $impl, true)) {
             $methodsDefined = false;
             foreach ($impl as $i) {
                 if (preg_match('/\\\Http[a-z]+ActionInterface$/i', $i)) {

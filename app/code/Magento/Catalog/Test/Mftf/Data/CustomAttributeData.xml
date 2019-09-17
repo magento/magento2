@@ -51,4 +51,8 @@
         <data key="attribute_code">short_description</data>
         <data key="value">Short Fixedtest 555</data>
     </entity>
+    <entity name="CustomAttributeCategoryNonAnchor" type="custom_attribute">
+        <data key="attribute_code">is_anchor</data>
+        <data key="value">0</data>
+    </entity>
 </entities>
