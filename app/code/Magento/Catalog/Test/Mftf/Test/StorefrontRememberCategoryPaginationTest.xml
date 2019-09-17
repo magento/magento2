@@ -30,7 +30,6 @@
             </createData>
 
             <createData entity="RememberPaginationCatalogStorefrontConfig" stepKey="setRememberPaginationCatalogStorefrontConfig"/>
-            <magentoCLI command="cache:flush" stepKey="clearCache"/>
         </before>
 
         <after>
@@ -40,17 +39,19 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
-
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
-        <actionGroup ref="GoToStorefrontCategoryPageByParameters" stepKey="goToStorefrontCategory1Page">
-            <argument name="category" value="$$createCategory.name$$"/>
+        <actionGroup ref="GoToStorefrontCategoryPageByParameters" stepKey="goToStorefrontCategoryPage">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
             <argument name="mode" value="grid"/>
         </actionGroup>
 
         <selectOption selector="{{StorefrontCategoryPagerSection.perPage}}" userInput="12" stepKey="setPerPage" />
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="categoryUrlKey" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
 
         <actionGroup ref="VerifyCategoryPageParameters" stepKey="verifyCategoryPageParameters">
             <argument name="categoryName" value="$$createCategory.name$$"/>
@@ -58,8 +59,9 @@
             <argument name="numOfProductsPerPage" value="12"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory1.name$$)}}" stepKey="navigateToCategory1Page"/>
-        <waitForPageLoad stepKey="waitForCategory1PageToLoad"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategory1Page">
+            <argument name="categoryUrlKey" value="$$createCategory1.custom_attributes[url_key]$$"/>
+        </actionGroup>
 
         <actionGroup ref="VerifyCategoryPageParameters" stepKey="verifyCategory1PageParameters">
             <argument name="categoryName" value="$$createCategory1.name$$"/>
