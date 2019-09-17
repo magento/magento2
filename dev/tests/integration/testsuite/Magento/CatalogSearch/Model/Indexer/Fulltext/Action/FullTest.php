@@ -82,37 +82,45 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $taxClassId = $attributeRepository
             ->get(\Magento\Customer\Api\Data\GroupInterface::TAX_CLASS_ID)
             ->getAttributeId();
+        $urlKeyId = $attributeRepository
+            ->get(\Magento\Catalog\Api\Data\ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY)
+            ->getAttributeId();
         return [
             'configurable' => [
                 $skuId => 'configurable',
                 $configurableId => 'Option 2',
                 $nameId => 'Configurable Product | Configurable OptionOption 2',
                 $taxClassId => 'Taxable Goods | Taxable Goods',
-                $statusId => 'Enabled | Enabled'
+                $statusId => 'Enabled | Enabled',
+                $urlKeyId => 'configurable-product | configurable-optionoption-2'
             ],
             'index_enabled' => [
                 $skuId => 'index_enabled',
                 $nameId => 'index enabled',
                 $taxClassId => 'Taxable Goods',
-                $statusId => 'Enabled'
+                $statusId => 'Enabled',
+                $urlKeyId => 'index-enabled'
             ],
             'index_visible_search' => [
                 $skuId => 'index_visible_search',
                 $nameId => 'index visible search',
                 $taxClassId => 'Taxable Goods',
-                $statusId => 'Enabled'
+                $statusId => 'Enabled',
+                $urlKeyId => 'index-visible-search'
             ],
             'index_visible_category' => [
                 $skuId => 'index_visible_category',
                 $nameId => 'index visible category',
                 $taxClassId => 'Taxable Goods',
-                $statusId => 'Enabled'
+                $statusId => 'Enabled',
+                $urlKeyId => 'index-visible-category'
             ],
             'index_visible_both' => [
                 $skuId => 'index_visible_both',
                 $nameId => 'index visible both',
                 $taxClassId => 'Taxable Goods',
-                $statusId => 'Enabled'
+                $statusId => 'Enabled',
+                $urlKeyId => 'index-visible-both'
             ]
         ];
     }
