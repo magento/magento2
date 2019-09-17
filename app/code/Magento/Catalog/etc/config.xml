@@ -23,9 +23,9 @@
             </fields_masks>
             <frontend>
                 <list_mode>grid-list</list_mode>
-                <grid_per_page_values>9,15,30</grid_per_page_values>
+                <grid_per_page_values>12,24,36</grid_per_page_values>
                 <list_per_page_values>5,10,15,20,25</list_per_page_values>
-                <grid_per_page>9</grid_per_page>
+                <grid_per_page>12</grid_per_page>
                 <list_per_page>10</list_per_page>
                 <flat_catalog_category>0</flat_catalog_category>
                 <default_sort_by>position</default_sort_by>
