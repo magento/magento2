@@ -15,11 +15,17 @@ $salesRule->setData(
         'simple_action' => 'by_percent',
         'discount_amount' => 50,
         'discount_step' => 0,
-        'stop_rules_processing' => 1,
+        'stop_rules_processing' => 0,
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Store\Model\StoreManagerInterface::class
             )->getWebsite()->getId()
+        ],
+        'store_labels' => [
+
+                'store_id' => 0,
+                'store_label' => 'TestRule_Label',
+
         ]
     ]
 );
