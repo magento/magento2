@@ -148,6 +148,7 @@ class Navigation extends \Magento\Framework\View\Element\Template
             /** @var Collection $collection */
             $collection = $this->getLayer()->getProductCollection();
             $toolbarBlock->setCollection($collection);
+            $collection->setPageSize(false);
         }
     }
 }
