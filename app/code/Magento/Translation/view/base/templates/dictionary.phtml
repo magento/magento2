@@ -6,9 +6,12 @@
 
 /** @var \Magento\Translation\ViewModel\Dictionary $viewModel */
 $viewModel = $block->getData('dictionary_view_model');
+$dictionary = json_encode($viewModel->getTranslationDictionary(), JSON_HEX_APOS | JSON_UNESCAPED_SLASHES);
 ?>
 <script>
     define('dictionary', function () {
-        return <?= /* @noEscape */ $viewModel->getTranslationDictionary() ?>;
+        var dict = <?= /* @noEscape */ $dictionary ?>;
+        // Use of JSON.parse is intentional as JSON is significantly faster to parse than JavaScript
+        return JSON.parse(dict);
     });
 </script>
