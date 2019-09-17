@@ -44,7 +44,7 @@ class Severity extends AbstractRenderer
      * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(DataObject $row) : string
+    public function render(DataObject $row)
     {
         $class = '';
         $value = '';

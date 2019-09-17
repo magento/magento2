@@ -45,7 +45,7 @@ class Actions extends AbstractRenderer
      * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(DataObject $row) : string
+    public function render(DataObject $row)
     {
         $readDetailsHtml = $row->getData('url') ? '<a class="action-details" target="_blank" href="' .
             $this->escapeUrl($row->getData('url'))

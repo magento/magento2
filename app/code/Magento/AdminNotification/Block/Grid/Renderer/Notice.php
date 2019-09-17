@@ -25,7 +25,7 @@ class Notice extends AbstractRenderer
      * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(DataObject $row) : string
+    public function render(DataObject $row)
     {
         return '<span class="grid-row-title">' .
             $this->escapeHtml($row->getData('title')) .
