@@ -139,6 +139,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
         $isComplexType,
         $complexType,
         $isSortable,
+        $isTextType,
         $fieldName,
         $compositeFieldName,
         $sortFieldName,
@@ -153,29 +154,33 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
         $this->indexTypeConverter->expects($this->any())
             ->method('convert')
             ->with($this->anything())
-            ->will($this->returnCallback(
-                function ($type) {
-                    if ($type === 'no_index') {
-                        return 'no';
-                    } elseif ($type === 'no_analyze') {
-                        return 'not_analyzed';
+            ->will(
+                $this->returnCallback(
+                    function ($type) {
+                        if ($type === 'no_index') {
+                            return 'no';
+                        } elseif ($type === 'no_analyze') {
+                            return 'not_analyzed';
+                        }
                     }
-                }
-            ));
+                )
+            );
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
             ->with($this->anything())
-            ->will($this->returnCallback(
-                function ($attributeMock, $context) use ($fieldName, $compositeFieldName, $sortFieldName) {
-                    if (empty($context)) {
-                        return $fieldName;
-                    } elseif ($context['type'] === 'sort') {
-                        return $sortFieldName;
-                    } elseif ($context['type'] === 'text') {
-                        return $compositeFieldName;
+            ->will(
+                $this->returnCallback(
+                    function ($attributeMock, $context) use ($fieldName, $compositeFieldName, $sortFieldName) {
+                        if (empty($context)) {
+                            return $fieldName;
+                        } elseif ($context['type'] === 'sort') {
+                            return $sortFieldName;
+                        } elseif ($context['type'] === 'text') {
+                            return $compositeFieldName;
+                        }
                     }
-                }
-            ));
+                )
+            );
 
         $productAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->setMethods(['getAttributeCode'])
@@ -189,7 +194,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
 
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isComplexType', 'getAttributeCode', 'isSortable'])
+            ->setMethods(['isComplexType', 'getAttributeCode', 'isSortable', 'isTextType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isComplexType')
@@ -197,6 +202,9 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->any())
             ->method('isSortable')
             ->willReturn($isSortable);
+        $attributeMock->expects($this->any())
+            ->method('isTextType')
+            ->willReturn($isTextType);
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
@@ -207,22 +215,24 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
         $this->fieldTypeConverter->expects($this->any())
             ->method('convert')
             ->with($this->anything())
-            ->will($this->returnCallback(
-                function ($type) use ($complexType) {
-                    static $callCount = [];
-                    $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
+            ->will(
+                $this->returnCallback(
+                    function ($type) use ($complexType) {
+                        static $callCount = [];
+                        $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
 
-                    if ($type === 'string') {
-                        return 'string';
-                    } elseif ($type === 'float') {
-                        return 'float';
-                    } elseif ($type === 'keyword') {
-                        return 'string';
-                    } else {
-                        return $complexType;
+                        if ($type === 'string') {
+                            return 'string';
+                        } elseif ($type === 'float') {
+                            return 'float';
+                        } elseif ($type === 'keyword') {
+                            return 'string';
+                        } else {
+                            return $complexType;
+                        }
                     }
-                }
-            ));
+                )
+            );
 
         $this->assertEquals(
             $expected,
@@ -243,13 +253,19 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 true,
                 'text',
                 false,
+                true,
                 'category_ids',
                 'category_ids_value',
                 '',
                 [
                     'category_ids' => [
                         'type' => 'select',
-                        'index' => true
+                        'index' => true,
+                        'fields' => [
+                            'keyword' => [
+                                'type' => 'string',
+                            ]
+                        ]
                     ],
                     'category_ids_value' => [
                         'type' => 'string'
@@ -267,13 +283,19 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 false,
                 null,
                 false,
+                true,
                 'attr_code',
                 '',
                 '',
                 [
                     'attr_code' => [
                         'type' => 'text',
-                        'index' => 'no'
+                        'index' => 'no',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => 'string',
+                            ]
+                        ]
                     ],
                     'store_id' => [
                         'type' => 'string',
@@ -287,6 +309,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 null,
                 false,
                 null,
+                false,
                 false,
                 'attr_code',
                 '',
@@ -308,6 +331,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                 false,
                 null,
                 true,
+                false,
                 'attr_code',
                 '',
                 'sort_attr_code',
