@@ -168,19 +168,19 @@
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$$createConfigProductAttribute.default_frontend_label$$')}}" stepKey="waitForCartRuleButton"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$$createConfigProductAttribute.default_frontend_label$$')}}" stepKey="expandFirstAttribute"/>
         <waitForPageLoad stepKey="waitForFilterLoad"/>
-        <click selector="{{StorefrontCategorySidebarSection.filterOptionContent('$$createConfigProductAttribute.default_frontend_label$$','option2')}}" stepKey="expandFirstAttributeOption"/>
+        <click selector="{{LayeredNavigationSection.filterOptionContent('$$createConfigProductAttribute.default_frontend_label$$','option2')}}" stepKey="expandFirstAttributeOption"/>
         <waitForPageLoad stepKey="waitForAttributeOption"/>
-        <see userInput="{{ConfigurableProductWithAttributeSet3.name}}" stepKey="seeFirstProduct"/>
-        <see userInput="{{ConfigurableProductWithAttributeSet2.name}}" stepKey="seeSecondProduct"/>
-        <see userInput="{{ConfigurableProductWithAttributeSet1.name}}" stepKey="seeThirdProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(ConfigurableProductWithAttributeSet3.name)}}" stepKey="seeFirstProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(ConfigurableProductWithAttributeSet2.name)}}" stepKey="seeSecondProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(ConfigurableProductWithAttributeSet1.name)}}" stepKey="seeThirdProduct"/>
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToCategoryPageAgain">
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
         <!-- Choose Second attribute filter -->
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$$createConfigProductAttribute2.default_frontend_label$$')}}" stepKey="expandSecondAttributeOption"/>
         <waitForPageLoad stepKey="waitForFilterPageLoad"/>
-        <click selector="{{StorefrontCategorySidebarSection.filterOptionContent('$$createConfigProductAttribute2.default_frontend_label$$','option1')}}" stepKey="expandSecondAttribute"/>
-        <see userInput="{{ConfigurableProductWithAttributeSet1.name}}" stepKey="seeFourthProduct"/>
-        <see userInput="{{ConfigurableProductWithAttributeSet2.name}}" stepKey="seeFifthProduct"/>
+        <click selector="{{LayeredNavigationSection.filterOptionContent('$$createConfigProductAttribute2.default_frontend_label$$','option1')}}" stepKey="expandSecondAttribute"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(ConfigurableProductWithAttributeSet1.name)}}" stepKey="seeFourthProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(ConfigurableProductWithAttributeSet2.name)}}" stepKey="seeFifthProduct"/>
     </test>
 </tests>
