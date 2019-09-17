@@ -535,4 +535,7 @@
         <waitForPageLoad stepKey="waitForSubmitOrder"/>
         <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
+    <actionGroup name="CreateOrderFilteringCustomerByEmailActionGroup" extends="CreateOrderActionGroup">
+        <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.email)}}"/>
+    </actionGroup>
 </actionGroups>

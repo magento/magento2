@@ -349,6 +349,7 @@
                 <settings>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
+                        <rule name="validate-number" xsi:type="boolean">true</rule>
                     </validation>
                     <additionalClasses>
                         <class name="admin__field-small">true</class>

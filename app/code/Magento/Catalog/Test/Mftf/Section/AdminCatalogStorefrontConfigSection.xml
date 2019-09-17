@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCatalogStorefrontConfigSection">
+        <element name="sectionHeader" type="button" selector="#catalog_frontend-head"/>
+        <element name="productsPerPageAllowedValues" type="input" selector="#catalog_frontend_grid_per_page_values"/>
+        <element name="productsPerPageDefaultValue" type="input" selector="#catalog_frontend_grid_per_page"/>
+    </section>
+</sections>
