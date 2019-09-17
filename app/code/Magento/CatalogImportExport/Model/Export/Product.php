@@ -717,11 +717,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
      * @return array
      */
-    private function getNonSystemAttributes()
+    private function getNonSystemAttributes(): array
     {
         $attrKeys = [];
         foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
-            $attrKeys []= $attribute->getAttributeCode();
+            $attrKeys[] = $attribute->getAttributeCode();
         }
 
         return array_diff($this->_getExportMainAttrCodes(), $this->_customHeadersMapping($attrKeys));
