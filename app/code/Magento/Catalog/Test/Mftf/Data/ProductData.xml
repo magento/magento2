@@ -351,6 +351,11 @@
         <data key="filename">adobe-base</data>
         <data key="file_extension">jpg</data>
     </entity>
+    <entity name="TestImage" extends="TestImageAdobe" type="image">
+        <data key="title" unique="suffix">test_image</data>
+        <data key="file">test_image.jpg</data>
+        <data key="filename">test_image</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="type_id">simple</data>
@@ -510,6 +515,11 @@
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
+    </entity>
+    <entity name="ProductFileOptionWithScriptTag" type="product">
+        <var key="sku" entityType="product" entityKey="sku"/>
+        <data key="file">&lt;img src=x onerror='alert("XSS without &lt;script&gt;&lt;:script&gt; tags...")'&gt;.png</data>
         <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
     </entity>
     <entity name="ApiVirtualProductWithDescription" type="product">
@@ -1164,6 +1174,15 @@
         <data key="quantity">10</data>
         <requiredEntity type="product_extension_attribute">EavStock10</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <!-- Products from file "export_import_configurable_product.csv" -->
+    <entity name="ApiSimpleOneExportImport" extends="ApiSimpleOne" type="product2">
+        <data key="sku">api-simple-one-export-import</data>
+        <data key="name">Api Simple Product One Export Import</data>
+    </entity>
+    <entity name="ApiSimpleTwoExportImport" extends="ApiSimpleTwo" type="product2">
+        <data key="sku">api-simple-two-export-import</data>
+        <data key="name">Api Simple Product Two Export Import</data>
     </entity>
     <entity name="SimpleProductPrice10Qty1" type="product">
         <data key="sku" unique="suffix">simple-product_</data>
