@@ -763,6 +763,10 @@ define([
                 ]);
 
             $widget._loadMedia();
+            if (parseInt(checkAdditionalData['update_product_preview_image'], 10) === 1) {
+                $widget._loadMedia();
+            }
+
             $input.trigger('change');
         },
 
