@@ -49,11 +49,11 @@ define([
                 html = $(widget._RenderSwatchOptions(attribute, 'option-label-control-id-1'))[0];
             });
 
-            it('check first conditional statement', function () {
+            it('check if swatch config has attribute id', function () {
                 expect(widget.options.jsonSwatchConfig.hasOwnProperty(attribute.id)).toEqual(true);
             });
 
-            it('check second conditional statement', function () {
+            it('check if option config has option id', function () {
                 expect(optionConfig.hasOwnProperty(optionId)).toEqual(true);
             });
 
