@@ -93,7 +93,7 @@ class CartPromotionsTest extends GraphQlAbstract
                             0 =>[
                                 'amount' =>
                                     ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5],
-                                'label' => 'TestRule_Label'
+                                'label' => $ruleLabels[0]
                             ]
                         ]
                     ],
