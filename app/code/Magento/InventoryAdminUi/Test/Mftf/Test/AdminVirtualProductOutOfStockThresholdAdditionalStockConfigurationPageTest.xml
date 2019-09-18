@@ -20,7 +20,7 @@
 
         <before>
             <!--Enable Manage Stock in case it's been disabled in previous tests.-->
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStock"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableManageStock"/>
             <!--Create Product and Category.-->
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <createData entity="VirtualProduct" stepKey="product"/>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LoggedInCustomerOrderedSimpleProductFromTestSourceUsingMultiShipmentsToSeveralAddressesTest"
+          extends="StorefrontLoggedInCustomerCreateOrderWithSimpleProductOnTestStockFromCustomWebsiteTest">
+        <annotations>
+            <stories value="Logged in customer create order."/>
+            <title value="Logged in customer create order with Simple product on Default stock from Custom website."/>
+            <description
+                value="Logged in customer create order with Simple product on Default stock from Custom website."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/2918512"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="assignStockToAdditionalWebsite"/>
+        </before>
+
+        <remove keyForRemoval="assignTestSourceToCreatedProduct"/>
+        <remove keyForRemoval="setProductQuantity"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="10" stepKey="setProductQuantity" before="assignProductToAdditionalWebsite"/>
+
+        <remove keyForRemoval="checkProductSourceQtyAfterReorder"/>
+        <remove keyForRemoval="checkSalableQtyAfterReorder"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}"
+             userInput="10" stepKey="checkProductSourceQtyAfterReorder"
+            after="findProductBySkuToCheckQtyAfterReorder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}"
+             userInput="5" stepKey="checkSalableQtyAfterReorder" after="checkProductSourceQtyAfterReorder"/>
+    </test>
+</tests>

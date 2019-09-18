@@ -21,9 +21,9 @@
                 <issueId value="MSI-1588"/>
             </skip>
         </annotations>
-        
+
         <before>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="magentoCLI1"/>
 
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
             <createData entity="SimpleMsiProduct" stepKey="simpleProduct1"/>
@@ -42,6 +42,11 @@
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
         </before>
         <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
             <magentoCLI command="config:set cataloginventory/item_options/min_qty 1" stepKey="setNotifyForQuantityBelowToOne"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>

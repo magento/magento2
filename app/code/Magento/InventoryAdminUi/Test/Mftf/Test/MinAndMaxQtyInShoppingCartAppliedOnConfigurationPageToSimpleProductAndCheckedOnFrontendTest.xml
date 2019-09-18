@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MinAndMaxQtyInShoppingCartAppliedOnConfigurationPageToSimpleProductAndCheckedOnFrontendTest"
+          extends="AdminUserApplyMinMaxQtyForSimpleProductOnTestSourceTest">
+        <annotations>
+            <stories value="Simple Product Custom Stock."/>
+            <title value="Min and Max Qty in shopping cart applied on Configuration page to Simple product and checked on frontend."/>
+            <description
+                value="Min and Max Qty in shopping cart applied on Configuration page to Simple product and checked on frontend."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/481999/scenarios/1652582"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{SetMinQtyAllowedInShoppingCart.path}} 5" stepKey="fillConfigValueMinQty" before="additionalSource"/>
+            <magentoCLI command="config:set {{SetMaxQtyAllowedInShoppingCart.path}} 5" stepKey="fillConfigValueMaxQty" after="fillConfigValueMinQty"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{SetMinQtyAllowedInShoppingCart.path}} 1" stepKey="restoreDefaultValueMin"/>
+            <magentoCLI command="config:set {{SetMaxQtyAllowedInShoppingCart.path}} 1000" stepKey="restoreDefaultValueMax"/>
+        </after>
+        <remove keyForRemoval="setMaxMinQty"/>
+
+    </test>
+</tests>

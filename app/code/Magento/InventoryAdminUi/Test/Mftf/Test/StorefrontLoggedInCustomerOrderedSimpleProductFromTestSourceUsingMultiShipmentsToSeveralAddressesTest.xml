@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoggedInCustomerOrderedSimpleProductFromTestSourceUsingMultiShipmentsToSeveralAddressesTest"
+          extends="StorefrontLoggedInCustomerCreateOrderWithSimpleProductOnTestStockFromCustomWebsiteTest">
+        <annotations>
+            <stories value="Logged in customer create order."/>
+            <title value="Logged in customer ordered Simple product from Test source using multi-shipments to several addresses."/>
+            <description value="Logged in customer ordered Simple product from Test source using multi-shipments to several addresses."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/2921363"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="additionalStock"/>
+            <remove keyForRemoval="createWebsite"/>
+            <remove keyForRemoval="createStore"/>
+            <remove keyForRemoval="createStoreView"/>
+            <remove keyForRemoval="assignStockToAdditionalWebsite"/>
+            <remove keyForRemoval="reindex"/>
+            <remove keyForRemoval="addStoreCodeToUrlEnable"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" after="createSource" stepKey="additionalStock"/>
+            <createData entity="Simple_US_Customer_Two_Addresses" after="additionalStock" stepKey="customer"/>
+        </before>
+        <after>
+            <remove keyForRemoval="deleteWebsite"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" before="logoutOfAdmin1" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <remove keyForRemoval="assignProductToAdditionalWebsite"/>
+        <remove keyForRemoval="createAnAccount"/>
+        <remove keyForRemoval="openProductPageUsingStoreCodeInUrl"/>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" after="setProductQuantity" stepKey="saveEditedSimpleProduct"/>
+        <!-- Login as Customer and add Product to Cart-->
+        <actionGroup ref="LoginToStorefrontActionGroup" before="fillCorrectQuantity" stepKey="customerLogin">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" after="customerLogin" stepKey="openProductPage1">
+            <argument name="productUrl" value="$$simpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <remove keyForRemoval="waitForShipmentPageLoad"/>
+        <remove keyForRemoval="clickNext"/>
+        <remove keyForRemoval="fillShippingAddress"/>
+        <remove keyForRemoval="waitForCheckoutPage"/>
+        <remove keyForRemoval="goToCheckout"/>
+        <remove keyForRemoval="openMiniCart"/>
+        <remove keyForRemoval="checkOrderPlaceSuccessMessage"/>
+        <remove keyForRemoval="grabOrderNumber"/>
+
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart" after="addProductToCart"/>
+        <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses" after="openCart"/>
+        <click selector="{{ShippingMethodSection.goToBillingInfo}}" after="checkoutWithMultipleAddresses" stepKey="clickContinue"/>
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod" after="clickContinue"/>
+        <actionGroup ref="ReviewOrderForSingleShipmentActionGroup" stepKey="reviewOrderForSingleShipment" after="checkoutWithPaymentMethod"/>
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder" after="reviewOrderForSingleShipment"/>
+
+        <remove keyForRemoval="navigateToProductIndexPageForCheckProductQtyAfterReorder"/>
+        <remove keyForRemoval="findProductBySkuToCheckQtyAfterReorder"/>
+        <remove keyForRemoval="checkProductSourceQtyAfterReorder"/>
+        <remove keyForRemoval="checkSalableQtyAfterReorder"/>
+    </test>
+</tests>

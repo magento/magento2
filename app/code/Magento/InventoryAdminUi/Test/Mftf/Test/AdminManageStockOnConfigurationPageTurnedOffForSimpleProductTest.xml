@@ -59,7 +59,7 @@
             <click selector="{{AdminGridMainControls.saveAndContinue}}" stepKey="saveDefaultStock"/>
 
             <comment userInput="Enable 'Manage Stock' configuration." stepKey="revertManageStockConfigurationComment"/>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableMangeStock"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableMangeStock"/>
 
             <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexCacheFlushComment"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
@@ -120,7 +120,7 @@
         <dontSee userInput="{{SimpleMsiProduct.price}}" stepKey="checkProductPriceIsAbsentOnCategoryPage"/>
 
         <comment userInput="Disable 'Manage Stock' configuration." stepKey="disableMangeStockComment"/>
-        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="disableManageStock"/>
+        <magentoCLI command="config:set {{TurnOffManageStockConfig.path}} {{TurnOffManageStockConfig.value}}" stepKey="disableManageStock"/>
 
         <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexAndCacheFlushAfterStockConfigurationSaved"/>
         <magentoCLI command="indexer:reindex" stepKey="performReindexAfterConfigurationIsSaved"/>

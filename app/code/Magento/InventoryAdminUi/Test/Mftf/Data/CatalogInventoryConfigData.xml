@@ -13,6 +13,16 @@
         <data key="scope_id">0</data>
         <data key="value">1</data>
     </entity>
+    <entity name="TurnOnManageStockConfig">
+        <data key="path">cataloginventory/item_options/manage_stock</data>
+        <data key="scope_id">0</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="TurnOffManageStockConfig">
+        <data key="path">cataloginventory/item_options/manage_stock</data>
+        <data key="scope_id">0</data>
+        <data key="value">0</data>
+    </entity>
     <entity name="TurnOnAutoReturnConfiguration">
         <data key="path">cataloginventory/item_options/auto_return</data>
         <data key="scope_id">0</data>
@@ -32,5 +42,27 @@
         <data key="path">cataloginventory/options/stock_threshold_qty </data>
         <data key="scope_id">0</data>
         <data key="value">0</data>
+    </entity>
+    <entity name="SetMaxQtyAllowedInShoppingCart">
+        <data key="path">cataloginventory/item_options/max_sale_qty</data>
+        <data key="scope_id">0</data>
+    </entity>
+    <entity name="SetMinQtyAllowedInShoppingCart">
+        <data key="path">cataloginventory/item_options/min_sale_qty</data>
+        <data key="scope_id">0</data>
+    </entity>
+    <entity name="EnableQtyIncrements">
+        <data key="path">cataloginventory/item_options/enable_qty_increments</data>
+        <data key="scope_id">0</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableQtyIncrements">
+        <data key="path">cataloginventory/item_options/enable_qty_increments</data>
+        <data key="scope_id">0</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="SetQtyIncrements">
+        <data key="path">cataloginventory/item_options/qty_increments</data>
+        <data key="scope_id">0</data>
     </entity>
 </entities>
