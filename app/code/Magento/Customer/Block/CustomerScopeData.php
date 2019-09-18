@@ -15,7 +15,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * with appropriate value in store front private cache.
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.9
  */
 class CustomerScopeData extends \Magento\Framework\View\Element\Template
 {
@@ -54,7 +54,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      * Can be used when necessary to obtain website id of the current customer.
      *
      * @return integer
-     * @since 100.2.0
+     * @since 100.1.9
      */
     public function getWebsiteId()
     {
@@ -67,6 +67,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      * @param array $configuration
      * @return bool|string
      * @throws \InvalidArgumentException
+     * @since 102.0.0
      */
     public function encodeConfiguration(array $configuration)
     {

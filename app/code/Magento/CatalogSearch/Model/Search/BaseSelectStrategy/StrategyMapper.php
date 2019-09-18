@@ -12,7 +12,7 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectAttri
 /**
  * This class is responsible for deciding which BaseSelectStrategyInterface should be used for passed SelectContainer
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class StrategyMapper

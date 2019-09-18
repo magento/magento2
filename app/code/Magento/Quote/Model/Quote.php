@@ -871,7 +871,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return $this
      */
     public function loadByCustomer($customer)

@@ -18,6 +18,7 @@ use Magento\Framework\Phrase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Dom
 {
@@ -83,7 +84,6 @@ class Dom
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private static $resolvedSchemaPaths = [];
 
@@ -122,7 +122,6 @@ class Dom
      *
      * @param string $errorFormat
      * @return string[]
-     * @since 2.1.0
      */
     private static function getXmlErrors($errorFormat)
     {

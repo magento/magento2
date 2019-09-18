@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @api
  * @since 100.2.0
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class IndexTableNotExistException extends LocalizedException

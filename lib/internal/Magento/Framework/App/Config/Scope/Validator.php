@@ -15,7 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
 /**
- * @deprecated 100.2.0 Added in order to avoid backward incompatibility because class was moved to another directory.
+ * @deprecated 101.0.0 Added in order to avoid backward incompatibility because class was moved to another directory.
  * @see \Magento\Framework\App\Scope\Validator
  */
 class Validator implements ValidatorInterface

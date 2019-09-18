@@ -13,7 +13,7 @@ use Magento\Eav\Model\Entity\Attribute;
 /**
  * @api
  * @since 100.0.2
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface

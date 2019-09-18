@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
 /**
  * @inheritdoc
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 class Field implements FieldInterface

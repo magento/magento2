@@ -7,6 +7,7 @@ namespace Magento\Framework\Stdlib\DateTime;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface DateTimeFormatterInterface
 {

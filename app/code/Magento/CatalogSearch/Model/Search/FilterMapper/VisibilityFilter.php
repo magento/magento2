@@ -17,7 +17,7 @@ use Magento\Eav\Model\Config as EavConfig;
  * Class VisibilityFilter
  * Applies filter by visibility to base select
  *
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class VisibilityFilter

@@ -9,7 +9,7 @@ namespace Magento\Authorizenet\Model\ResourceModel\Debug;
 
 /**
  * Resource Authorize.net debug collection model
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

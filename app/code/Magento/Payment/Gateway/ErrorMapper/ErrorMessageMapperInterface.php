@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
  * Interface to provide customization for payment validation errors.
  *
  * @api
+ * @since 100.2.2
  */
 interface ErrorMessageMapperInterface
 {
@@ -22,6 +23,7 @@ interface ErrorMessageMapperInterface
      *
      * @param string $code
      * @return Phrase|null
+     * @since 100.2.2
      */
     public function getMessage(string $code);
 }

@@ -626,7 +626,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Unset Region from address
      *
      * @return $this
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function unsRegion()
     {
@@ -637,7 +637,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is company required
      *
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isCompanyRequired()
@@ -649,7 +649,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is telephone required
      *
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isTelephoneRequired()
@@ -661,7 +661,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is fax required
      *
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function isFaxRequired()

@@ -38,6 +38,7 @@ use Magento\Framework\Setup\SchemaListener;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
@@ -634,7 +635,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -3780,7 +3781,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $columns
      * @param array $values
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function _getReplaceSqlQuery($tableName, array $columns, array $values)
     {
@@ -4026,6 +4027,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Required to listen all DDL changes done by 3-rd party modules with old Install/UpgradeSchema scripts.
      *
      * @return SchemaListener
+     * @since 102.0.0
      */
     public function getSchemaListener()
     {

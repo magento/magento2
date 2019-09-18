@@ -548,7 +548,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
-     * @deprecated this variable isn't used anymore.
+     * @deprecated 101.0.0 this variable isn't used anymore.
      */
     protected $_stockResItemFac;
 
@@ -612,7 +612,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var array
-     * @deprecated 100.1.5
+     * @deprecated 100.0.3
      * @since 100.0.3
      */
     protected $productUrlKeys = [];
@@ -935,6 +935,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Return empty attribute value constant
      *
      * @return string
+     * @since 101.0.0
      */
     public function getEmptyAttributeValueConstant()
     {
@@ -1444,7 +1445,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return void
      * @since 100.0.4
-     * @deprecated
+     * @deprecated 100.2.3
      */
     protected function initMediaGalleryResources()
     {

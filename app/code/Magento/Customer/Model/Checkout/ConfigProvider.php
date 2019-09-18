@@ -26,7 +26,7 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * @var UrlInterface
-     * @deprecated
+     * @deprecated 101.0.4
      */
     protected $urlBuilder;
 

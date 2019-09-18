@@ -9,7 +9,7 @@ namespace Magento\Authorizenet\Model\ResourceModel;
 
 /**
  * Resource Authorize.net debug model
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class Debug extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

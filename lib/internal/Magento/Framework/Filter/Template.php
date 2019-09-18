@@ -13,6 +13,7 @@ namespace Magento\Framework\Filter;
  * Template filter
  *
  * @api
+ * @since 100.0.2
  */
 class Template implements \Zend_Filter_Interface
 {

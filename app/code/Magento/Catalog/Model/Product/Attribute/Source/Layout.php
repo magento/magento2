@@ -19,7 +19,7 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @inheritdoc
-     * @deprecated since the cache is now handled by \Magento\Theme\Model\PageLayout\Config\Builder::$configFiles
+     * @deprecated 103.0.1 since the cache is now handled by \Magento\Theme\Model\PageLayout\Config\Builder::$configFiles
      */
     protected $_options = null;
 

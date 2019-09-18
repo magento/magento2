@@ -9,6 +9,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class AlreadyExistsException extends LocalizedException
 {
@@ -16,7 +17,6 @@ class AlreadyExistsException extends LocalizedException
      * @param Phrase $phrase
      * @param \Exception $cause
      * @param int $code
-     * @since 100.2.0
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
     {

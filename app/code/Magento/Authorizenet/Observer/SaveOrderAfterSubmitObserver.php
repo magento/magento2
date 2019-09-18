@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order;
 
 /**
  * Class SaveOrderAfterSubmitObserver
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 class SaveOrderAfterSubmitObserver implements ObserverInterface
 {

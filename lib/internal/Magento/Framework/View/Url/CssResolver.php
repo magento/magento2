@@ -11,6 +11,7 @@ use Magento\Framework\View\FileSystem;
  * CSS URLs resolver class.
  * This utility class provides a set of methods to work with CSS files.
  * @api
+ * @since 100.0.2
  */
 class CssResolver
 {
