@@ -27,7 +27,12 @@ class DtoProcessorTest extends TestCase
     /**
      * @var DtoProcessor
      */
-    private $dataProcessor;
+    private $dtoProcessor;
+
+    /**
+     * @var DtoProcessor
+     */
+    private $dtoProcessorWithNoTypeCasting;
 
     /**
      * @inheritDoc
@@ -41,13 +46,19 @@ class DtoProcessorTest extends TestCase
         ]);
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->dataProcessor = $this->objectManager->get(DtoProcessor::class);
+        $this->dtoProcessor = $this->objectManager->get(DtoProcessor::class);
+        $this->dtoProcessorWithNoTypeCasting = $this->objectManager->create(
+            DtoProcessor::class,
+            [
+                'typeCasting' => false
+            ]
+        );
     }
 
     public function testCreateDtoFromArrayWithCustomAttributesAsKeyValueFormat(): void
     {
         /** @var TestDtoWithCustomAttributes $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'param_one' => 1,
                 'param_two' => 2.0,
@@ -69,7 +80,7 @@ class DtoProcessorTest extends TestCase
     public function testCreateDtoFromArrayWithCustomAttributes(): void
     {
         /** @var TestDtoWithCustomAttributes $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'param_one' => 1,
                 'param_two' => 2.0,
@@ -88,7 +99,7 @@ class DtoProcessorTest extends TestCase
     public function testCreateImmutableDtoFromArray(): void
     {
         /** @var ImmutableDto $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'prop1' => 1,
                 'prop2' => 'b',
@@ -107,7 +118,7 @@ class DtoProcessorTest extends TestCase
     public function testCreateWithCamelCaseParameters(): void
     {
         /** @var ImmutableDtoTwo $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'propOne' => 1,
                 'propTwo' => 'b',
@@ -126,7 +137,7 @@ class DtoProcessorTest extends TestCase
     public function testCreateWithSnakeCaseParameters(): void
     {
         /** @var ImmutableDtoTwo $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'prop_one' => 1,
                 'prop_two' => 'b',
@@ -145,7 +156,7 @@ class DtoProcessorTest extends TestCase
     public function testCreateImmutableDtoWithArraysFromArray(): void
     {
         /** @var ImmutableNestedDto $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'id' => 'my-id',
                 'test_dto1' => [
@@ -206,7 +217,7 @@ class DtoProcessorTest extends TestCase
     public function testCreateUpdatedDataObject(): void
     {
         /** @var ImmutableDto $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'prop1' => 1,
                 'prop2' => 'b',
@@ -217,7 +228,7 @@ class DtoProcessorTest extends TestCase
         );
 
         /** @var ImmutableDto $updatedDto */
-        $updatedDto = $this->dataProcessor->createUpdatedObjectFromArray(
+        $updatedDto = $this->dtoProcessor->createUpdatedObjectFromArray(
             $dto,
             [
                 'prop2' => 'c'
@@ -237,7 +248,7 @@ class DtoProcessorTest extends TestCase
     public function testCreateMutableDataObject(): void
     {
         /** @var MutableDto $dto */
-        $dto = $this->dataProcessor->createFromArray(
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'prop1' => 1,
                 'prop3' => ['abc', 'def', 'ghi'],
@@ -256,7 +267,7 @@ class DtoProcessorTest extends TestCase
         );
 
         /** @var MutableDto $dto */
-        $this->dataProcessor->createFromArray(
+        $this->dtoProcessor->createFromArray(
             [
                 'prop1' => 1,
                 'prop2' => 'b',
@@ -275,14 +286,13 @@ class DtoProcessorTest extends TestCase
         );
 
         /** @var MutableDto $dto */
-        $this->dataProcessor->createFromArray(
+        $this->dtoProcessorWithNoTypeCasting->createFromArray(
             [
                 'prop1' => 'invalid_format',
                 'prop2' => 'b',
                 'prop3' => ['abc', 'def', 'ghi']
             ],
-            MutableDto::class,
-            false
+            MutableDto::class
         );
     }
 }
