@@ -700,6 +700,7 @@ mutation {
             telephone: "88776655"
             save_in_address_book: true
           }
+          customer_notes: "Test note"
         }
       ]
     }
@@ -718,6 +719,7 @@ mutation {
           label
         }
         __typename
+        customer_notes
       }
     }
   }
@@ -769,6 +771,7 @@ mutation {
             telephone: "88776655"
             save_in_address_book: false
           }
+          customer_notes: "Test note"
         }
       ]
     }
@@ -787,6 +790,7 @@ mutation {
           label
         }
         __typename
+        customer_notes
       }
     }
   }

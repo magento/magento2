@@ -709,7 +709,6 @@ QUERY;
         $this->assertNewAddressFields($billingAddressResponse);
     }
 
-
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php

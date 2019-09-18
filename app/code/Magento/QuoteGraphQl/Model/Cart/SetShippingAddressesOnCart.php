@@ -78,12 +78,14 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
 
-       $shippingAddress = $this->createShippingAddress($context, $customerAddressId, $addressInput);
+        $shippingAddress = $this->createShippingAddress($context, $customerAddressId, $addressInput);
 
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
     }
 
     /**
+     * Create shipping address.
+     *
      * @param ContextInterface $context
      * @param int|null $customerAddressId
      * @param array|null $addressInput
