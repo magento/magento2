@@ -18,14 +18,6 @@ use Magento\Wishlist\Model\Item;
 class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
 {
     /**
-     * Load product attributes to present in grid
-     */
-    private const PRODUCT_ATTRIBUTES_TO_GRID = [
-        'name',
-        'price',
-    ];
-
-    /**
      * @var \Magento\Framework\Registry
      */
     protected $_registryManager;
@@ -120,7 +112,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
     {
         /** @var ProductCollection $productCollection */
         $productCollection = $this->_productCollectionFactory->create()
-            ->addAttributeToSelect(self::PRODUCT_ATTRIBUTES_TO_GRID)
+            ->addAttributeToSelect($this->_wishlistConfig->getProductAttributes())
             ->addIdFilter($this->_productIds);
 
         /** @var Item $item */
