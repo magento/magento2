@@ -178,7 +178,11 @@ class DtoProcessor
                 return $this->typeProcessor->processSimpleAndAnyType($value, $type);
             }
 
-            return $this->createFromArray($value, $type);
+            if (is_array($value)) {
+                return $this->createFromArray($value, $type);
+            }
+
+            return $value;
         } catch (\Exception $e) {
             throw new LocalizedException(
                 new Phrase(
