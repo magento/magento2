@@ -9,14 +9,14 @@
         "magento/module-config": "101.0.*",
         "magento/module-media-storage": "100.2.*",
         "magento/framework": "101.0.*",
-        "magento/module-customer": "*",
-        "magento/module-authorization": "*"
+        "magento/module-customer": "101.0.*",
+        "magento/module-authorization": "100.2.*"
     },
     "suggest": {
         "magento/module-deploy": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.8",
+    "version": "100.2.9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -12,12 +12,12 @@
         "magento/module-catalog-inventory": "100.2.*",
         "magento/module-media-storage": "100.2.*",
         "magento/module-customer": "101.0.*",
-        "magento/module-authorization": "*",
+        "magento/module-authorization": "100.2.*",
         "magento/framework": "101.0.*",
         "ext-ctype": "*"
     },
     "type": "magento2-module",
-    "version": "100.2.8",
+    "version": "100.2.9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
