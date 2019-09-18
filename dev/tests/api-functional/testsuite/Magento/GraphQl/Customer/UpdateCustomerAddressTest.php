@@ -306,8 +306,8 @@ MUTATION;
     {
         return [
             ['', '"input" value must be specified'],
-            ['input: ""', 'Expected type CustomerAddressInput, found ""'],
-            ['input: "foo"', 'Expected type CustomerAddressInput, found "foo"']
+            ['input: ""', 'requires type CustomerAddressInput, found ""'],
+            ['input: "foo"', 'requires type CustomerAddressInput, found "foo"']
         ];
     }
 

@@ -347,7 +347,7 @@ define([
                 if ($(this).find('.options').length > 0) {
                     $(this).collapsible();
                 }
-                outerHeight = $(this).outerHeight();
+                outerHeight = $(this).outerHeight(true);
 
                 if (counter-- > 0) {
                     height += outerHeight;

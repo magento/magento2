@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\OfflinePayments\Model\Checkmo;
@@ -76,19 +77,12 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
         $this->payment->expects(self::once())
             ->method('getMethod')
             ->willReturn($methodCode);
+        $this->payment->method('getAdditionalInformation')
+            ->with('instructions')
+            ->willReturn('payment configuration');
         $this->payment->expects(self::once())
             ->method('setAdditionalInformation')
             ->with('instructions', 'payment configuration');
-        $method = $this->getMockBuilder(Banktransfer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $method->expects(self::once())
-            ->method('getInstructions')
-            ->willReturn('payment configuration');
-        $this->payment->expects(self::once())
-            ->method('getMethodInstance')
-            ->willReturn($method);
 
         $this->_model->execute($this->observer);
     }

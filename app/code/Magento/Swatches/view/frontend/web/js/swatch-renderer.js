@@ -750,11 +750,11 @@ define([
 
             $(document).trigger('updateMsrpPriceBlock',
                 [
-                    parseInt($this.attr('index'), 10) + 1,
+                    _.findKey($widget.options.jsonConfig.index, $widget.options.jsonConfig.defaultValues),
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
-            if (checkAdditionalData['update_product_preview_image'] === '1') {
+            if (parseInt(checkAdditionalData['update_product_preview_image'], 10) === 1) {
                 $widget._loadMedia();
             }
 
