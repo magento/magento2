@@ -8,6 +8,9 @@ namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
 use Magento\CheckoutAgreements\Model\Config\Source\AgreementForms;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Checkout agreement form.
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -66,6 +69,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Prepare form.
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

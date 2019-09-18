@@ -11,9 +11,14 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Api\Filter;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection;
 
+/**
+ * Form Filter.
+ */
 class FormFilter implements CustomFilterInterface
 {
     /**
+     * Apply filter.
+     *
      * @param Filter $filter
      * @param AbstractDb $collection
      * @return bool

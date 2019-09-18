@@ -9,6 +9,8 @@ namespace Magento\CheckoutAgreements\Block;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Agreements block.
+ *
  * @api
  * @since 100.0.2
  */
@@ -35,6 +37,8 @@ class Agreements extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get agreements.
+     *
      * @return mixed
      */
     public function getAgreements()

@@ -9,13 +9,16 @@ namespace Magento\CheckoutAgreements\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
+/**
+ * Agreement Forms.
+ */
 class AgreementForms implements OptionSourceInterface
 {
     const CHECKOUT_CODE = 'checkout';
     const CUSTOMER_REGISTRATION_CODE = 'customer_account_create';
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function toOptionArray()
     {
