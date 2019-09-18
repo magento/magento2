@@ -2,7 +2,7 @@ require([
     'jquery',
     'moment',
     'jquery/validate',
-    'mage/translate',
+    'mage/translate'
 ], function ($, moment) {
     'use strict';
 
