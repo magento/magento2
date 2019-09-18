@@ -8,6 +8,9 @@ namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Test for \Magento\Newsletter\Block\Adminhtml\Template\Preview
+ */
 class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Newsletter\Block\Adminhtml\Template\Preview */
@@ -36,7 +39,9 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->appState = $this->createMock(\Magento\Framework\App\State::class);
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->template = $this->createPartialMock(\Magento\Newsletter\Model\Template::class, [
+        $this->template = $this->createPartialMock(
+            \Magento\Newsletter\Model\Template::class,
+            [
                 'setTemplateType',
                 'setTemplateText',
                 'setTemplateStyles',
@@ -45,7 +50,8 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
                 'revertDesign',
                 'getProcessedTemplate',
                 'load'
-            ]);
+            ]
+        );
         $templateFactory = $this->createPartialMock(\Magento\Newsletter\Model\TemplateFactory::class, ['create']);
         $templateFactory->expects($this->once())->method('create')->willReturn($this->template);
         $this->subscriberFactory = $this->createPartialMock(
@@ -54,6 +60,9 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $escaper = $this->objectManagerHelper->getObject(
+            \Magento\Framework\Escaper::class
+        );
         $this->preview = $this->objectManagerHelper->getObject(
             \Magento\Newsletter\Block\Adminhtml\Template\Preview::class,
             [
@@ -61,7 +70,8 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
                 'storeManager' => $this->storeManager,
                 'request' => $this->request,
                 'templateFactory' => $templateFactory,
-                'subscriberFactory' => $this->subscriberFactory
+                'subscriberFactory' => $this->subscriberFactory,
+                'escaper' => $escaper
             ]
         );
     }

@@ -34,7 +34,7 @@
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
 
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$}}/" stepKey="onAttributeSetEdit"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/" stepKey="onAttributeSetEdit"/>
             <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
                 <argument name="group" value="Product Details"/>
                 <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>

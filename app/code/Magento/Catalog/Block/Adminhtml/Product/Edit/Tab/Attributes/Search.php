@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
+/**
+ * Admin product attribute search block
+ */
 class Search extends \Magento\Backend\Block\Widget
 {
     /**
@@ -62,13 +65,15 @@ class Search extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get selector options
+     *
      * @return array
      */
     public function getSelectorOptions()
     {
         $templateId = $this->_coreRegistry->registry('product')->getAttributeSetId();
         return [
-            'source' => $this->getUrl('catalog/product/suggestAttributes'),
+            'source' => $this->escapeUrl($this->getUrl('catalog/product/suggestAttributes')),
             'minLength' => 0,
             'ajaxOptions' => ['data' => ['template_id' => $templateId]],
             'template' => '[data-template-for="product-attribute-search-' . $this->getGroupId() . '"]',
@@ -110,6 +115,8 @@ class Search extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get add attribute url
+     *
      * @return string
      */
     public function getAddAttributeUrl()

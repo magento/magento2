@@ -107,7 +107,7 @@
                 comment="Oauth consumer"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Creation Time"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Update Time"/>
         <column xsi:type="smallint" name="setup_type" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Integration type - manual or config file"/>

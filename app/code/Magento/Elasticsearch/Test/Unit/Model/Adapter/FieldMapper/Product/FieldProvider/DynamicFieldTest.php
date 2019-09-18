@@ -184,21 +184,25 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
 
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
-            ->will($this->returnCallback(
-                function ($attribute) use ($categoryId) {
-                    static $callCount = [];
-                    $attributeCode = $attribute->getAttributeCode();
-                    $callCount[$attributeCode] = !isset($callCount[$attributeCode]) ? 1 : ++$callCount[$attributeCode];
+            ->will(
+                $this->returnCallback(
+                    function ($attribute) use ($categoryId) {
+                        static $callCount = [];
+                        $attributeCode = $attribute->getAttributeCode();
+                        $callCount[$attributeCode] = !isset($callCount[$attributeCode])
+                            ? 1
+                            : ++$callCount[$attributeCode];
 
-                    if ($attributeCode === 'category') {
-                        return 'category_name_' . $categoryId;
-                    } elseif ($attributeCode === 'position') {
-                        return 'position_' . $categoryId;
-                    } elseif ($attributeCode === 'price') {
-                        return 'price_' . $categoryId . '_1';
+                        if ($attributeCode === 'category') {
+                            return 'category_name_' . $categoryId;
+                        } elseif ($attributeCode === 'position') {
+                            return 'position_' . $categoryId;
+                        } elseif ($attributeCode === 'price') {
+                            return 'price_' . $categoryId . '_1';
+                        }
                     }
-                }
-            ));
+                )
+            );
         $priceAttributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode'])
@@ -215,44 +219,47 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $this->attributeAdapterProvider->expects($this->any())
             ->method('getByAttributeCode')
             ->with($this->anything())
-            ->will($this->returnCallback(
-                function ($code) use (
-                    $categoryAttributeMock,
-                    $positionAttributeMock,
-                    $priceAttributeMock
-                ) {
-                    static $callCount = [];
-                    $callCount[$code] = !isset($callCount[$code]) ? 1 : ++$callCount[$code];
+            ->will(
+                $this->returnCallback(
+                    function ($code) use (
+                        $categoryAttributeMock,
+                        $positionAttributeMock,
+                        $priceAttributeMock
+                    ) {
+                        static $callCount = [];
+                        $callCount[$code] = !isset($callCount[$code]) ? 1 : ++$callCount[$code];
 
-                    if ($code === 'position') {
-                        return $positionAttributeMock;
-                    } elseif ($code === 'category_name') {
-                        return $categoryAttributeMock;
-                    } elseif ($code === 'price') {
-                        return $priceAttributeMock;
+                        if ($code === 'position') {
+                            return $positionAttributeMock;
+                        } elseif ($code === 'category_name') {
+                            return $categoryAttributeMock;
+                        } elseif ($code === 'price') {
+                            return $priceAttributeMock;
+                        }
                     }
-                }
-            ));
+                )
+            );
         $this->fieldTypeConverter->expects($this->any())
             ->method('convert')
             ->with($this->anything())
-            ->will($this->returnCallback(
-                function ($type) use ($complexType) {
-                    static $callCount = [];
-                    $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
+            ->will(
+                $this->returnCallback(
+                    function ($type) use ($complexType) {
+                        static $callCount = [];
+                        $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
 
-                    if ($type === 'string') {
-                        return 'string';
+                        if ($type === 'string') {
+                            return 'string';
+                        } elseif ($type === 'float') {
+                            return 'float';
+                        } elseif ($type === 'integer') {
+                            return 'integer';
+                        } else {
+                            return $complexType;
+                        }
                     }
-                    if ($type === 'string') {
-                        return 'string';
-                    } elseif ($type === 'float') {
-                        return 'float';
-                    } else {
-                        return $complexType;
-                    }
-                }
-            ));
+                )
+            );
 
         $this->assertEquals(
             $expected,
@@ -276,7 +283,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'position_1' => [
-                        'type' => 'string',
+                        'type' => 'integer',
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
@@ -295,7 +302,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'position_1' => [
-                        'type' => 'string',
+                        'type' => 'integer',
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
@@ -314,7 +321,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'position_1' => [
-                        'type' => 'string',
+                        'type' => 'integer',
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [

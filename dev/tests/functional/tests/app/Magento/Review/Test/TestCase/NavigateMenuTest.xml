@@ -8,21 +8,25 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest70">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Marketing > All Reviews</data>
             <data name="pageTitle" xsi:type="string">Reviews</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest71">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Reports > By Customers</data>
             <data name="pageTitle" xsi:type="string">Customer Reviews Report</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest72">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Reports > By Products</data>
             <data name="pageTitle" xsi:type="string">Product Reviews Report</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest73">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="menuItem" xsi:type="string">Stores > Rating</data>
             <data name="pageTitle" xsi:type="string">Ratings</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>

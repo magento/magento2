@@ -203,6 +203,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Delete entity
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute
+     * @throws LocalizedException
      * @codeCoverageIgnore
      */
     public function deleteEntity()
@@ -313,20 +314,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Save additional data
      *
      * @return $this
+     * @throws LocalizedException
      */
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
         return parent::afterSave();
-    }
-
-    /**
-     * @inheritdoc
-     * @since 100.0.7
-     */
-    public function afterDelete()
-    {
-        return parent::afterDelete();
     }
 
     /**

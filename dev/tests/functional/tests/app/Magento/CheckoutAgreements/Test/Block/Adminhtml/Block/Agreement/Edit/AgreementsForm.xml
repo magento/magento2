@@ -18,7 +18,7 @@
             <input>select</input>
         </mode>
         <stores>
-            <selector>[name="stores[]"]</selector>
+            <selector>[name="stores[0]"]</selector>
             <input>multiselectgrouplist</input>
         </stores>
         <checkbox_text />

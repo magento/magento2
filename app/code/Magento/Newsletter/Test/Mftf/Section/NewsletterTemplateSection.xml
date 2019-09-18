@@ -12,14 +12,14 @@
         <element name="templateSubject" type="input" selector="#subject"/>
         <element name="senderName" type="input" selector="#sender_name"/>
         <element name="senderEmail" type="input" selector="#sender_email"/>
-        <element name="save" type="button" selector="button[data-role='template-save']"/>
+        <element name="save" type="button" selector="button[data-role='template-save']" timeout="60"/>
         <element name="searchButton" type="button" selector=".admin__filter-actions button[title=Search]"/>
         <element name="searchInput" type="input" selector="input[name=code]"/>
     </section>
     <section name="NewsletterWYSIWYGSection">
         <element name="TextArea" type="text" selector="#text" />
-        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by" />
-        <element name="ShowHideBtn" type="button" selector="#toggletext"/>
+        <element name="TinyMCE4" type="text" selector=".mce-branding" />
+        <element name="ShowHideBtn" type="button" selector="#toggletext" timeout="60"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
         <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
         <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert Variable']"/>
@@ -51,6 +51,6 @@
         <element name="InsertImage" type="button" selector=".mce-i-image" />
         <element name="InsertTable" type="button" selector=".mce-i-table" />
         <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
-        <element name="Preview" type="text" selector="//td[contains(text(),'{{var1}}')]//following-sibling::td/select//option[contains(text(), 'Preview')]" parameterized="true"/>
+        <element name="Preview" type="text" selector="//td[contains(text(),'{{var1}}')]//following-sibling::td/select//option[contains(text(), 'Preview')]" parameterized="true" timeout="60"/>
     </section>
 </sections>

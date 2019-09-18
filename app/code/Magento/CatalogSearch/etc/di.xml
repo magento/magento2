@@ -200,6 +200,7 @@
     <type name="Magento\CatalogSearch\Model\Search\ItemCollectionProvider">
         <arguments>
             <argument name="factories" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory</item>
                 <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory</item>
             </argument>
         </arguments>
@@ -207,6 +208,7 @@
     <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
         <arguments>
             <argument name="strategies" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
                 <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
             </argument>
         </arguments>

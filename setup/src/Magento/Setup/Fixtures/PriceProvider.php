@@ -19,6 +19,7 @@ class PriceProvider
      */
     public function getPrice($productIndex)
     {
+        // phpcs:disable
         mt_srand($productIndex);
         switch (mt_rand(0, 3)) {
             case 0:
@@ -30,5 +31,6 @@ class PriceProvider
             case 3:
                 return mt_rand(1, 10000) / 10;
         }
+        // phpcs:enable
     }
 }

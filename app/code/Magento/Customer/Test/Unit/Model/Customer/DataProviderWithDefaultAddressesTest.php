@@ -339,7 +339,6 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
             'default_shipping' => 2,
             'password_hash' => 'password_hash',
             'rp_token' => 'rp_token',
-            'confirmation' => 'confirmation',
         ];
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)

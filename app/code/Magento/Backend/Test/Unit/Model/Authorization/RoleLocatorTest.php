@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Authorization;
 
+/**
+ * Class RoleLocatorTest
+ */
 class RoleLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**

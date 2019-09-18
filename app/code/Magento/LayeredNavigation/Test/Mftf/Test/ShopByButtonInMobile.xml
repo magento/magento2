@@ -11,11 +11,11 @@
     <test name="ShopByButtonInMobile">
         <annotations>
             <features value="Layered Navigation"/>
-            <stories value="Shop By button is not working in a mobile theme"/>
-            <title value="Layered Navigation"/>
-            <description value="Storefront Shop By collapsible button works in a mobile theme"/>
+            <stories value="Storefront Shop By collapsible button in mobile themes"/>
+            <title value="Storefront Shop By collapsible button works in a mobile theme"/>
+            <description value="Storefront Shop By collapsible button should work in a mobile theme"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-94873"/>
+            <testCaseId value="MC-6092"/>
             <group value="LayeredNavigation"/>
         </annotations>
         <before>

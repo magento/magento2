@@ -87,7 +87,7 @@
                         <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
                     </label>
                     <div class="control _with-tooltip">
-                        <div data-bind="attr: {id: getCode() + '_cc_cid'}" class="hosted-control hosted-cid"></div>
+                        <div data-bind="afterRender: initHostedFields, attr: {id: getCode() + '_cc_cid'}" class="hosted-control hosted-cid"></div>
                         <div class="hosted-error"><!-- ko i18n: 'Please, enter valid Card Verification Number'--><!-- /ko --></div>
 
                         <div class="field-tooltip toggle">

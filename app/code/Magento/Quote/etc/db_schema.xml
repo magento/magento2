@@ -108,7 +108,7 @@
                 default="0" comment="Quote Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer Id"/>
@@ -220,7 +220,7 @@
                 default="0" comment="Quote Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Product Id"/>
@@ -324,7 +324,7 @@
                 default="0" comment="Quote Item Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="text" name="applied_rule_ids" nullable="true" comment="Applied Rule Ids"/>
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
@@ -436,7 +436,7 @@
                 default="0" comment="Quote Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="varchar" name="method" nullable="true" length="255" comment="Method"/>
         <column xsi:type="varchar" name="cc_type" nullable="true" length="255" comment="Cc Type"/>
@@ -472,7 +472,7 @@
                 default="0" comment="Address Id"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
         <column xsi:type="varchar" name="carrier" nullable="true" length="255" comment="Carrier"/>
         <column xsi:type="varchar" name="carrier_title" nullable="true" length="255" comment="Carrier Title"/>

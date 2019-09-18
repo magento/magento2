@@ -5,15 +5,20 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCustomerWithWebsiteAndStoreViewActionGroup">
+        <annotations>
+            <description>Goes to the Customer grid page. Click on 'Add New Customer'. Fills provided Customer Data. Fill provided Customer Address data. Assigns Product to Website and Store View. Click on Save Address.</description>
+        </annotations>
         <arguments>
             <argument name="customerData"/>
             <argument name="address"/>
             <argument name="website" type="string"/>
             <argument name="storeView" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersPage"/>
         <click stepKey="addNewCustomer" selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}"/>
         <selectOption stepKey="selectWebSite" selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{website}}"/>
@@ -44,17 +49,19 @@
     </actionGroup>
 
     <actionGroup name="AdminCreateCustomerWithWebSiteAndGroup">
+        <annotations>
+            <description>Goes to the Customer grid page. Click on 'Add New Customer'. Fills provided Customer Data. Fill provided Customer Address data. Assigns Product to Website and Store View. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="customerData" defaultValue="Simple_US_Customer"/>
-            <argument name="website" type="string" defaultValue="customWebsite"/>
-            <argument name="storeView" type="string" defaultValue="customStore"/>
+            <argument name="website" type="string" defaultValue="{{_defaultWebsite.name}}"/>
+            <argument name="storeView" type="string" defaultValue="{{_defaultStore.name}}"/>
         </arguments>
+
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersPage"/>
         <click stepKey="addNewCustomer" selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}"/>
         <selectOption stepKey="selectWebSite" selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{website}}"/>
-        <click selector="{{AdminCustomerAccountInformationSection.group}}" stepKey="ClickToExpandGroup"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceGroupOrCatalogOption('Default (General)')}}" stepKey="waitForCustomerGroupExpand"/>
-        <click selector="{{AdminCustomerAccountInformationSection.groupValue('Default (General)')}}" after="waitForCustomerGroupExpand" stepKey="ClickToSelectGroup"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="{{customerData.group}}" stepKey="selectCustomerGroup"/>
         <fillField stepKey="FillFirstName" selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{customerData.firstname}}"/>
         <fillField stepKey="FillLastName" selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{customerData.lastname}}"/>
         <fillField stepKey="FillEmail" selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customerData.email}}"/>

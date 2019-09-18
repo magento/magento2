@@ -13,5 +13,9 @@
         <element name="productCustomOptions" type="text" selector="//strong[contains(@class, 'product-item-name') and normalize-space(.)='{{var1}}']/following-sibling::*[contains(@class, 'item-options')]/dt[normalize-space(.)='{{var2}}']/following-sibling::dd[normalize-space(.)='{{var3}}']" parameterized="true"/>
         <element name="productCustomOptionsFile" type="text" selector="//strong[contains(@class, 'product-item-name') and normalize-space(.)='{{var1}}']/following-sibling::*[contains(@class, 'item-options')]/dt[normalize-space(.)='{{var2}}']/following-sibling::dd[contains(.,'{{var3}}')]" parameterized="true"/>
         <element name="productCustomOptionsLink" type="text" selector="//strong[contains(@class, 'product-item-name') and normalize-space(.)='{{var1}}']/following-sibling::*[contains(@class, 'item-options')]/dt[normalize-space(.)='{{var2}}']/following-sibling::dd//a[text() = '{{var3}}']" parameterized="true"/>
+        <element name="status" type="text" selector="//td[contains(concat(' ',normalize-space(@class),' '),' col status ')]"/>
+        <element name="viewOrder" type="button" selector="//td[contains(concat(' ',normalize-space(@class),' '),' col actions ')]/a[contains(concat(' ',normalize-space(@class),' '),' action view ')]"/>
+        <element name="tabRefund" type="button" selector="//a[text()='Refunds']"/>
+        <element name="grandTotalRefund" type="text" selector="td[data-th='Grand Total'] > strong > span.price"/>
     </section>
 </sections>

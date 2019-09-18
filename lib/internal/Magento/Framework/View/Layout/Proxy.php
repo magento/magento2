@@ -57,6 +57,8 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
+     * Sleep magic method.
+     *
      * @return array
      */
     public function __sleep()
@@ -100,7 +102,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setGeneratorPool(\Magento\Framework\View\Layout\GeneratorPool $generatorPool)
     {
@@ -108,7 +110,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setBuilder(\Magento\Framework\View\Layout\BuilderInterface $builder)
     {
@@ -116,7 +118,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function publicBuild()
     {
@@ -124,7 +126,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUpdate()
     {
@@ -132,7 +134,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function generateXml()
     {
@@ -140,7 +142,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function generateElements()
     {
@@ -148,7 +150,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getChildBlock($parentName, $alias)
     {
@@ -156,7 +158,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setChild($parentName, $elementName, $alias)
     {
@@ -164,7 +166,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function reorderChild($parentName, $childName, $offsetOrSibling, $after = true)
     {
@@ -172,7 +174,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function unsetChild($parentName, $alias)
     {
@@ -180,7 +182,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getChildNames($parentName)
     {
@@ -188,7 +190,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getChildBlocks($parentName)
     {
@@ -196,7 +198,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getChildName($parentName, $alias)
     {
@@ -204,7 +206,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function renderElement($name, $useCache = true)
     {
@@ -212,7 +214,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function renderNonCachedElement($name)
     {
@@ -220,7 +222,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function addToParentGroup($blockName, $parentGroupName)
     {
@@ -228,7 +230,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getGroupChildNames($blockName, $groupName)
     {
@@ -236,7 +238,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasElement($name)
     {
@@ -244,7 +246,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getElementProperty($name, $attribute)
     {
@@ -252,7 +254,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isBlock($name)
     {
@@ -260,7 +262,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isUiComponent($name)
     {
@@ -268,7 +270,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isContainer($name)
     {
@@ -276,7 +278,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isManipulationAllowed($name)
     {
@@ -284,7 +286,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setBlock($name, $block)
     {
@@ -292,7 +294,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function unsetElement($name)
     {
@@ -300,7 +302,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function createBlock($type, $name = '', array $arguments = [])
     {
@@ -308,7 +310,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function addBlock($block, $name = '', $parent = '', $alias = '')
     {
@@ -316,7 +318,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function addContainer($name, $label, array $options = [], $parent = '', $alias = '')
     {
@@ -324,7 +326,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function renameElement($oldName, $newName)
     {
@@ -332,7 +334,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAllBlocks()
     {
@@ -340,7 +342,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getBlock($name)
     {
@@ -348,7 +350,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUiComponent($name)
     {
@@ -356,7 +358,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getParentName($childName)
     {
@@ -364,7 +366,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getElementAlias($name)
     {
@@ -372,7 +374,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function addOutputElement($name)
     {
@@ -380,7 +382,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function removeOutputElement($name)
     {
@@ -388,7 +390,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getOutput()
     {
@@ -396,7 +398,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getMessagesBlock()
     {
@@ -404,7 +406,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getBlockSingleton($type)
     {
@@ -412,7 +414,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template, $data = [])
     {
@@ -427,7 +429,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getRendererOptions($namespace, $staticType, $dynamicType)
     {
@@ -435,7 +437,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function executeRenderer($namespace, $staticType, $dynamicType, $data = [])
     {
@@ -443,7 +445,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function initMessages($messageGroups = [])
     {
@@ -451,7 +453,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isCacheable()
     {
@@ -459,7 +461,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isPrivate()
     {
@@ -467,7 +469,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setIsPrivate($isPrivate = true)
     {
@@ -475,7 +477,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getReaderContext()
     {
@@ -483,7 +485,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setXml(\Magento\Framework\Simplexml\Element $node)
     {
@@ -491,7 +493,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getNode($path = null)
     {
@@ -499,7 +501,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getXpath($xpath)
     {
@@ -507,7 +509,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getXmlString()
     {
@@ -515,7 +517,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function loadFile($filePath)
     {
@@ -523,7 +525,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function loadString($string)
     {
@@ -531,7 +533,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function loadDom(\DOMNode $dom)
     {
@@ -539,7 +541,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setNode($path, $value, $overwrite = true)
     {
@@ -547,7 +549,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function applyExtends()
     {
@@ -555,7 +557,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function processFileData($text)
     {
@@ -563,7 +565,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function extend(\Magento\Framework\Simplexml\Config $config, $overwrite = true)
     {
