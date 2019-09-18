@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateCreditMemoTotalRefundGroupedProductCustomStock" extends="AdminCreateCreditMemoTotalRefundGroupedProductDefaultStock">
+    <test name="AdminCreateFullInvoiceGroupedProductCustomStock" extends="AdminCreatePartialInvoiceGroupedProductDefaultStock">
         <annotations>
             <stories value="Grouped Product Custom Stock."/>
-            <title value="Create Credit Memo with Grouped product on Custom stock."/>
-            <description value="Verify, admin create Credit Memo with total refund. Grouped product on Custom source."/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735182/scenarios/2553502"/>
+            <title value="Create full invoice with Grouped product on Custom stock."/>
+            <description value="Verify, admin able to create full invoice with grouped product on custom source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735236/scenarios/1694909"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -44,15 +44,17 @@
         </actionGroup>
         <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1000" stepKey="setCustomSourceQuantity" before="saveVirtualProduct"/>
         <actionGroup ref="AdminFormSaveAndClose" stepKey="saveVirtualProduct" before="openGroupedProductEditPage"/>
+        <!--Make partial invoice full.-->
+        <remove keyForRemoval="scrollToQty"/>
+        <remove keyForRemoval="InvoiceQuantityPartial"/>
+        <remove keyForRemoval="clickUpdateQty"/>
         <!--Verify product quantity after order placement.-->
         <remove keyForRemoval="checkProductSourceQtyAfterPlaceOrder"/>
         <remove keyForRemoval="checkSalableQtyAfterPlaceOrder"/>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="1000" stepKey="checkProductSourceQtyAfterPlaceOrder" after="findProductBySkuToCheckQtyAfterPlaceOrder"/>
         <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="998" stepKey="checkSalableQtyAfterPlaceOrder" after="checkProductSourceQtyAfterPlaceOrder"/>
-        <!--Verify product quantity after invoice has been placed.-->
-        <remove keyForRemoval="checkProductSourceQtyAfterCreditMemo"/>
-        <remove keyForRemoval="checkSalableQtyAfterCreditMemo"/>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$additionalSource.source[name]$$)}}" userInput="998" stepKey="checkProductSourceQtyAfterCreditMemo" after="findProductBySkuToCheckQtyAfterCreditMemo"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="998" stepKey="checkSalableQtyAfterCreditMemo" after="checkProductSourceQtyAfterCreditMemo"/>
+        <!--Verify Order Status after invoice placement.-->
+        <remove keyForRemoval="verifyOrderStatus"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="verifyOrderStatus" after="checkSuccessMessage"/>
     </test>
 </tests>

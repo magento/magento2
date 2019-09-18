@@ -51,7 +51,12 @@
                 <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
                 <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
             </createData>
+            <!--Assign Default Stock to Default Website.-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">

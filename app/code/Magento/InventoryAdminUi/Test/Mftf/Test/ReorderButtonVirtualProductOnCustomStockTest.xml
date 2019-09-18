@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ReorderButtonVirtualProductOnCustomStockTest" extends="ReorderButtonVirtualProductOnDefaultStockTest">
+        <annotations>
+            <stories value="Virtual Product Custom Stock."/>
+            <title value="Re-order button for virtual product on custom stock."/>
+            <description value="Verify, re-order button is not visible after invoice created for order with virtual product on custom source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735203/scenarios/2601674"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="customer"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock" after="additionalSource">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableAdditionalSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Clean up created data.-->
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="deleteProduct"/>
+        </after>
+
+        <!--Assign source to product.-->
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProduct" after="openProductEditPageToSetQuantity">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <remove keyForRemoval="setDefaultStockQuantity"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1" stepKey="setAdditionalSourceQuantity" after="assignSourceToProduct"/>
+    </test>
+</tests>

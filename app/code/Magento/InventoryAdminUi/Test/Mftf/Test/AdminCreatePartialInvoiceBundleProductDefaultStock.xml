@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialInvoiceBundleProductDefaultStock" extends="AdminCreateFullInvoiceBundleProductDefaultStock">
+        <annotations>
+            <stories value="Bundle Product Default Stock."/>
+            <title value="Create Partial Invoice with Bundle product on Default stock."/>
+            <description value="Verify admin able to create partial invoice with bundle product on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735235/scenarios/1440236"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!--Process Partial Invoice.-->
+        <scrollTo selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="scrollToQty" after="clickInvoice"/>
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="1" stepKey="InvoiceQuantityPartial" after="scrollToQty"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="clickUpdateQty" after="InvoiceQuantityPartial"/>
+        <waitForPageLoad time="20" stepKey="WaitForInvoiceQtyUpdate" after="clickUpdateQty"/>
+        <!--Verify product quantity.-->
+        <remove keyForRemoval="checkProductSourceQtyAfterInvoice"/>
+        <remove keyForRemoval="checkSalableQtyAfterInvoice"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="90" stepKey="checkProductSourceQtyAfterInvoice" after="findProductBySkuToCheckQtyAfterInvoice"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}" userInput="80" stepKey="checkSalableQtyAfterInvoice" after="checkProductSourceQtyAfterInvoice"/>
+    </test>
+</tests>

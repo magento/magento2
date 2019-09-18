@@ -25,6 +25,7 @@
         <before>
             <remove keyForRemoval="additionalStock"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="customer"/>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
         </before>
         <after>
             <!--Assign Default Stock to Default Website.-->

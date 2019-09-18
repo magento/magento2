@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBackordersEnablesOnConfigurationPageAndAppliedToGroupedProductCustomStock" extends="AdminCreateGroupedProductCustomStock">
+        <annotations>
+            <stories value="Grouped Product Custom Stock."/>
+            <title value="Enable Backorder on Configuration for Grouped Product on Custom Stock."/>
+            <description value="Verify admin able to place order with grouped product on custom stock with backorders enabled."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735263/scenarios/1619872"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Enable backorders in configuration.-->
+            <magentoCLI command="config:set cataloginventory/item_options/backorders 1" stepKey="enableBackorders" before="additionalSource"/>
+            <!--Create customer.-->
+            <createData entity="Simple_US_Customer" stepKey="customer" after="stockSourceLink"/>
+        </before>
+        <after>
+            <!--Disable backorders in configuration.-->
+            <magentoCLI command="config:set cataloginventory/item_options/backorders 0" stepKey="disableBackorders" after="deleteStock"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer" after="disableBackorders"/>
+        </after>
+        <!--Login To storefront as Customer-->
+        <comment userInput="Login to storefront as customer." stepKey="loginToStorefrontComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!--Add product to cart.-->
+        <amOnPage url="{{StorefrontProductPage.url($$groupedProduct.name$$)}}" stepKey="navigateToGroupedPDP"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInputWithProduct($$product.name$$)}}" userInput="101" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <!--Place order.-->
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad time="30" stepKey="waitForCheckoutPage"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad time="30" stepKey="waitForOrderPlacement"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--Verify order.-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
+        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 101" stepKey="orderedQuantity"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderStatus"/>
+    </test>
+</tests>

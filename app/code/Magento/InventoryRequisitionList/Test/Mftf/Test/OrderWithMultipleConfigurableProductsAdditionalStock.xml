@@ -154,14 +154,10 @@
         <remove keyForRemoval="goToDetailProductPageOnStorefront"/>
         <remove keyForRemoval="attachValidFile"/>
         <!--Register customer.-->
-        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}" stepKey="amOnStorefrontPage" after="waitForProductPageLoad"/>
-        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickOnCreateAccountLink" after="amOnStorefrontPage"/>
-        <fillField userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="fillFirstName" after="clickOnCreateAccountLink"/>
-        <fillField userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" stepKey="fillLastName" after="fillFirstName"/>
-        <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}" stepKey="fillEmail" after="fillLastName"/>
-        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}" stepKey="fillPassword"  after="fillEmail"/>
-        <fillField userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" stepKey="fillConfirmPassword" after="fillPassword"/>
-        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton" after="fillConfirmPassword"/>
+        <actionGroup ref="RegisterCustomOnStorefrontActionGroup" stepKey="registerCustomer">
+            <argument name="Customer" value="Simple_US_Customer"/>
+            <argument name="storeCode" value="customStore.code"/>
+        </actionGroup>
         <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$configurableProduct.sku$$.html" stepKey="goToDetailProductPageOnStorefront" after="clickCreateAccountButton"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="option1" stepKey="selectOption" after="goToDetailProductPageOnStorefront"/>
         <see selector="{{StorefrontProductPageSection.successMsg}}" userInput="Product $$configurableProduct.name$$ has been added to the requisition list RL {{SimpleProduct.name}}." stepKey="seeSuccessMessage" after="clickSaveButton"/>

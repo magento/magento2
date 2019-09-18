@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCancelOrderWithGroupedProductCustomStockTest" extends="AdminCreateOrderWithGroupedProductDefaultStockTest">
+    <test name="AdminCancelOrderWithGroupedProductCustomStockTest">
         <annotations>
             <stories value="Grouped Product Custom Stock."/>
             <title value="Cancel order with grouped product on custom stock from admin area"/>
@@ -20,45 +20,78 @@
         </annotations>
 
         <before>
-            <remove keyForRemoval="customStock"/>
-            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock" after="customSource"/>
-            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+            <!--Create test data.-->
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="virtualProduct"/>
+            <createData entity="GroupedProduct" stepKey="groupedProduct"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
         </before>
         <after>
-            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="logoutFromAdminArea">
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
                 <argument name="stockName" value="{{_defaultStock.name}}"/>
                 <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
             </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <!--Delete created test data.-->
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteAdditionalStock"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="groupedProduct" stepKey="deleteGroupedProduct"/>
         </after>
 
-        <!--Assign simple product to additional source.-->
-        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openSimpleProductEditPage" before="assignTestSourceToSimpleProduct"/>
-        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToSimpleProduct" before="setCustomSourceSimpleProductQuantity">
-            <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+        <!--Assign virtual product ot additional source.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+        <amOnPage url="{{AdminProductEditPage.url($$virtualProduct.id$$)}}" stepKey="openVirtualProductEditPage"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
         </actionGroup>
-        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1000" stepKey="setCustomSourceSimpleProductQuantity" before="saveSimpleProduct"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveSimpleProduct" before="navigateToProductIndexPageForEditVirtualProduct"/>
-        <!--Assign virtual product to additional source.-->
-        <scrollToTopOfPage stepKey="scrollToTheTopOfProductPage" before="setCustomSourceQuantity"/>
-        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct" before="setCustomSourceQuantity">
-            <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1000" stepKey="setAdditionalSourceVirtualProductQuantity"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveVirtualProduct"/>
+        <!--Assign virtual product to grouped.-->
+        <amOnPage url="{{AdminProductEditPage.url($$groupedProduct.id$$)}}" stepKey="openGroupedProductEditPage"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsByVirtual">
+            <argument name="product" value="$$virtualProduct$$"/>
         </actionGroup>
-        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="1000" stepKey="setCustomSourceQuantity" before="saveAndCloseCreatedVirtualProduct"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkVirtualProductFilterResult"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+        <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultQtyForVirtualProduct">
+            <argument name="productName" value="$$virtualProduct.name$$"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedGroupedProduct"/>
+        <!--Create order with grouped product.-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent1"/>
+        <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductVirtualOptionToOrder">
+            <argument name="product" value="GroupedProduct"/>
+            <argument name="option" value="$$virtualProduct$$"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <see selector="" stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="verifyOrderHasBeenPlaced"/>
         <!--Cancel created order-->
-        <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder" after="seeViewOrderPage"/>
-        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation" after="clickCancelOrder"/>
-        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage" after="waitForCancelConfirmation"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel" after="seeConfirmationMessage"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage" after="confirmOrderCancel"/>
-        <!--Verify simple product quantity.-->
-        <remove keyForRemoval="checkSimpleProductSourceQtyAfterPlaceOrder"/>
-        <remove keyForRemoval="checkSimpleProductSalableQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$customSource.source[name]$$)}}" userInput="1000" stepKey="checkSimpleProductSourceQtyAfterPlaceOrder" after="findSimpleProductBySkuToCheckQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1', $$customStock.stock[name]$$)}}" userInput="1000" stepKey="checkSimpleProductSalableQtyAfterPlaceOrder" after="checkSimpleProductSourceQtyAfterPlaceOrder"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
+        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
         <!--Verify virtual product quantity.-->
-        <remove keyForRemoval="checkVirtualProductSourceQtyAfterPlaceOrder"/>
-        <remove keyForRemoval="checkVirtualProductSalableQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$customSource.source[name]$$)}}" userInput="1000" stepKey="checkVirtualProductSourceQtyAfterPlaceOrder" after="findVirtualProductBySkuToCheckQtyAfterPlaceOrder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1', $$customStock.stock[name]$$)}}" userInput="1000" stepKey="checkVirtualProductSalableQtyAfterPlaceOrder" after="checkVirtualProductSourceQtyAfterPlaceOrder"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$virtualProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="1000" stepKey="checkVirtualProductSourceQtyAfterCancelOrder"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="1000" stepKey="checkVirtualProductSalableQtyAfterCancelOrder"/>
     </test>
 </tests>

@@ -59,7 +59,7 @@
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
         </after>
     </suite>
-    <suite name="MSI_Enterprise_Multi_Mode">
+    <suite name="MSI_EE_Multi_Mode">
         <before>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
@@ -76,7 +76,7 @@
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
         </after>
     </suite>
-    <suite name="MSI_Enterprise_Single_Mode">
+    <suite name="MSI_EE_Single_Mode">
         <before>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
@@ -93,7 +93,7 @@
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
         </after>
     </suite>
-    <suite name="MSI_B2b_Multi_Mode">
+    <suite name="MSI_B2B_Multi_Mode">
         <before>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
@@ -110,7 +110,7 @@
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
         </after>
     </suite>
-    <suite name="MSI_B2b_Single_Mode">
+    <suite name="MSI_B2B_Single_Mode">
         <before>
             <magentoCLI stepKey="maintenanceDisable" command="maintenance:disable"/>
             <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled"/>
