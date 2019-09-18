@@ -24,7 +24,7 @@
 
         <before>
             <!--Enable 'Mange Stock' in configuration.-->
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="magentoCLI1"/>
             <!--Create category, simple product, bundle product, additional stock and additional source.-->
             <createData entity="_defaultCategory" stepKey="category"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct">

@@ -18,9 +18,9 @@
             <group value="msi"/>
             <group value="single_mode"/>
         </annotations>
-        
+
         <before>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableStockManagement1"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableStockManagement1"/>
 
             <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
             <createData entity="SimpleMsiProduct" stepKey="simpleProduct1">

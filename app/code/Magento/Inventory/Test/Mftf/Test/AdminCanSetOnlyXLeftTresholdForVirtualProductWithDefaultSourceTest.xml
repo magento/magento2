@@ -18,7 +18,7 @@
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
-        
+
         <before>
             <createData entity="Msi_US_Customer" stepKey="customer"/>
 
@@ -56,6 +56,11 @@
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         </before>
         <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MinAndMaxQtyInShoppingCartAppliedToSimpleProductOnProductPageAndCheckedInAdminTest"
+          extends="AdminUserApplyMinMaxQtyForSimpleProductOnTestSourceTest">
+        <annotations>
+            <stories value="Simple Product Custom Stock."/>
+            <title value="Min and Max Qty in shopping cart applied to Simple product on product page and checked in admin."/>
+            <description
+                value="Min and Max Qty in shopping cart applied to Simple product on product page and checked in admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/481999/scenarios/1652611"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- remove storefront steps -->
+        <remove keyForRemoval="navigateToPDP"/>
+        <remove keyForRemoval="fillProductQtyLowerThanAllowed"/>
+        <remove keyForRemoval="addToCartLowerThenAllowedQty"/>
+        <remove keyForRemoval="witForLowQtyAdded"/>
+        <remove keyForRemoval="seeLowQtyErrorMessage"/>
+        <remove keyForRemoval="fillProductQtyGreaterThanAllowed"/>
+        <remove keyForRemoval="addToCartGreaterThenAllowedQty"/>
+        <remove keyForRemoval="witForHighQtyAdded"/>
+        <remove keyForRemoval="seeHighQtyErrorMessage"/>
+        <remove keyForRemoval="addProductToCartWithProperQty"/>
+
+        <!-- Create order -->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <!--Try to add product to cart with lower qty than allowed.-->
+        <actionGroup ref="AddSimpleProductWithQtyToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$product$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <see selector=".row-messages-error div" userInput="The fewest you may purchase is 5" after="addProductToOrder" stepKey="seeLowQtyErrorMessage"/>
+        <!--Try to add product ot cart with greater qty than allowed.-->
+        <fillField selector="{{AdminCustomerCreateNewOrderSection.productQty}}" userInput="6" after="seeLowQtyErrorMessage" stepKey="addProductToOrderSecondTime"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" after="addProductToOrderSecondTime" stepKey="updateItemsAndQunatities"/>
+        <waitForPageLoad after="updateItemsAndQunatities" stepKey="waitForPageLoad2"/>
+        <see selector=".row-messages-error div" userInput="The requested qty exceeds the maximum qty allowed in shopping cart" after="waitForPageLoad2" stepKey="seeLowQtyErrorMessageSecondTime"/>
+        <fillField selector="{{AdminCustomerCreateNewOrderSection.productQty}}" userInput="5" after="seeLowQtyErrorMessageSecondTime" stepKey="addProduct" />
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" after="addProduct" stepKey="clickAddSelectedProducts"/>
+        <waitForPageLoad after="clickAddSelectedProducts" stepKey="waitForPageLoad3"/>
+        <actionGroup ref="orderSelectFlatRateShipping" after="waitForPageLoad3" stepKey="selectShipping"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" after="selectShipping" stepKey="submitOrder"/>
+        <grabTextFrom selector="|Order # (\d+)|" after="submitOrder" stepKey="getOrderId"/>
+    </test>
+</tests>

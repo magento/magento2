@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="magentoCLI1"/>
 
             <createData entity="SimpleSubCategory" stepKey="createSimpleSubCategory"/>
             <createData entity="_minimalSource" stepKey="createCustomSource"/>
@@ -37,7 +37,11 @@
         </before>
         <after>
             <deleteData createDataKey="createSimpleSubCategory" stepKey="deleteSimpleSubCategory"/>
-
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 

@@ -21,7 +21,7 @@
 
         <before>
             <!--Enable "Manage Stock", set distance based algorithm to offline and download tables.-->
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStock"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableManageStock"/>
             <magentoCLI command="config:set cataloginventory/source_selection_distance_based/provider offline" stepKey="setSelectionAlgorithm"/>
             <magentoCLI command="inventory-geonames:import us ua" stepKey="downloadTables"/>
             <!--Create Category and Simple Product.-->

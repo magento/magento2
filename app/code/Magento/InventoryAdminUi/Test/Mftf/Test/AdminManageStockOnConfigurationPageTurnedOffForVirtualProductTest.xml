@@ -21,7 +21,7 @@
 
         <before>
             <!--Enable Manage Stock in case it's been disabled in previous tests.-->
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStockBeforeTest"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableManageStockBeforeTest"/>
             <!--Create Additional Source and Stock.-->
             <createData entity="_minimalSource" stepKey="additionalSource"/>
             <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
@@ -44,7 +44,7 @@
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
             <!--Revert manage stock configuration.-->
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStock"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableManageStock"/>
             <magentoCLI command="indexer:reindex" stepKey="reindexAfterManageStockRestored"/>
             <magentoCLI command="cache:flush" stepKey="flushCacheAfterManageStockRestored"/>
         </after>
@@ -68,7 +68,7 @@
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <dontSee userInput="$$product.name$$" stepKey="verifyProductIsNotPresentOnStorefront"/>
         <!--Disable manage stock on configuration page.-->
-        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="disableManageStock"/>
+        <magentoCLI command="config:set {{TurnOffManageStockConfig.path}} {{TurnOffManageStockConfig.value}}" stepKey="disableManageStock"/>
         <magentoCLI command="indexer:reindex" stepKey="reindexAfterManageStockDisabled"/>
         <magentoCLI command="cache:flush" stepKey="flushCacheAfterManageStockDisabled"/>
         <!--Verify product is visible on storefront.-->

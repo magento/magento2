@@ -72,6 +72,11 @@
             <magentoCLI command="indexer:reindex" stepKey="doReindex"/>
         </before>
         <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite" after="deleteProduct">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>

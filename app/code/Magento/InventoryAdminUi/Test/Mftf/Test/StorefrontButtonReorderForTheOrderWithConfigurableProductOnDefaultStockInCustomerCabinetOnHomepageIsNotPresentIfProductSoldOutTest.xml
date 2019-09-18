@@ -124,6 +124,7 @@
         <!-- Shipment created for whole  order -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMask"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$getOrderId}" stepKey="searchOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchShipping"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMask"/>

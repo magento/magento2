@@ -18,9 +18,9 @@
             <group value="msi"/>
             <group value="multi_mode"/>
         </annotations>
-        
+
         <before>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="magentoCLI1"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="setAutoReturnOn"/>
 
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
@@ -37,8 +37,13 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="revertConfiguration"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="revertConfiguration"/>
         </after>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductGridPage1"/>
@@ -85,7 +90,7 @@
         <selectOption selector="{{AdminProductSourcesGrid.rowStatus('1')}}" userInput="Out of Stock" stepKey="selectOutOfStock2"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveVirtualProduct2"/>
 
-        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="magentoCLI1"/>
+        <magentoCLI command="config:set {{TurnOffManageStockConfig.path}} {{TurnOffManageStockConfig.value}}" stepKey="magentoCLI1"/>
         <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock"/>
         <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock"/>
 

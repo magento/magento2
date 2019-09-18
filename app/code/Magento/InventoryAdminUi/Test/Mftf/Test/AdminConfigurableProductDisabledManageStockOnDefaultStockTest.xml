@@ -27,7 +27,7 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
 
             <comment userInput="Enable 'Manage Stock' configuration." stepKey="revertManageStockConfigurationComment"/>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableMangeStock"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableMangeStock"/>
 
             <comment userInput="Perform reindex and cache flush after save stock related config." stepKey="reindexCacheFlushComment"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
@@ -130,7 +130,7 @@
         <see userInput="Out of Stock" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="checkConfigurableProductHasOutOfStockStatus"/>
 
         <comment userInput="Disable 'Manage Stock' configuration" stepKey="disableMangeStockConfigurationComment"/>
-        <magentoCLI command="config:set cataloginventory/item_options/manage_stock 0" stepKey="disableMangeStock"/>
+        <magentoCLI command="config:set {{TurnOffManageStockConfig.path}} {{TurnOffManageStockConfig.value}}" stepKey="disableMangeStock"/>
 
         <comment userInput="Perform reindex and cache flush after disable 'Mange Stock' configuration config." stepKey="reindexCacheFlushAfterDisableManageStockComment"/>
         <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock"/>

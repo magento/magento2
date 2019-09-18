@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <magentoCLI command="config:set cataloginventory/item_options/manage_stock 1" stepKey="enableManageStock"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableManageStock"/>
             <!--Create additional Stock and sources-->
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
             <createData entity="FullSource1" stepKey="additionalSource1"/>

@@ -106,6 +106,7 @@
         <comment userInput="Admin - Process Partial invoice" stepKey="PartialInvoice"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateInvoice"/>
         <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoaded"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchApplied"/>
