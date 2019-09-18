@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -433,6 +436,7 @@ class AdvancedPricing extends AbstractModifier
                         'component' => 'Magento_Catalog/js/components/dynamic-rows-tier-price',
                         'label' => __('Customer Group Price'),
                         'renderDefaultRecord' => false,
+                        'additionalClasses' => 'position-initial',
                         'recordTemplate' => 'record',
                         'dataScope' => '',
                         'dndConfig' => [
