@@ -315,7 +315,7 @@ class CartPromotionsTest extends GraphQlAbstract
                     'prices' => [
                         'row_total' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty],
                         'row_total_including_tax' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty],
-                        'discount' => ['value' => round(($rowTotal/$sumOfPricesForBothProducts)*5, 2)],
+                        'total_item_discount' => ['value' => round(($rowTotal/$sumOfPricesForBothProducts)*5, 2)],
                         'discounts' => [
                             0 =>[
                                 'amount' =>
