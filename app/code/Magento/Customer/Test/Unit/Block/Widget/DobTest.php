@@ -545,7 +545,9 @@ class DobTest extends TestCase
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
             ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}')
-            ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'));
+            ->will($this->returnValue(
+                '{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'
+            ));
 
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 

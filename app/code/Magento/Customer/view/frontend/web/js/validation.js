@@ -6,7 +6,7 @@ require([
 ], function($, moment) {
     'use strict';
     $.validator.addMethod(
-        "validate-dob",
+        'validate-dob',
         function (value) {
             if (value === '') {
                 return true;
