@@ -120,7 +120,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testSetNewBillingAddressWithUseForShippingParameter()
+    public function testSetNewBillingAddressWithSameAsShippingParameter()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -142,7 +142,7 @@ mutation {
           telephone: "88776655"
           save_in_address_book: false
          }
-         use_for_shipping: true
+         same_as_shipping: true
       }
     }
   ) {
@@ -337,7 +337,7 @@ mutation {
     input: {
       cart_id: "$maskedQuoteId"
       billing_address: {
-        use_for_shipping: true
+        same_as_shipping: true
       }
     }
   ) {
@@ -363,7 +363,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_multishipping_with_two_shipping_addresses.php
      */
-    public function testSetNewBillingAddressWithUseForShippingAndMultishipping()
+    public function testSetNewBillingAddressWithSameAsShippingAndMultishipping()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -385,7 +385,7 @@ mutation {
           telephone: "88776655"
           save_in_address_book: false
         }
-        use_for_shipping: true
+        same_as_shipping: true
       }
     }
   ) {
@@ -399,7 +399,7 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'Using the "use_for_shipping" option with multishipping is not possible.'
+            'Using the "same_as_shipping" option with multishipping is not possible.'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
