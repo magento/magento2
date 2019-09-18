@@ -376,4 +376,9 @@
         <data key="frontend_label">Size</data>
         <data key="attribute_code" unique="suffix">size_attr</data>
     </entity>
+    <!-- Product attribute from file "export_import_configurable_product.csv" -->
+    <entity name="ProductAttributeWithTwoOptionsForExportImport" extends="productAttributeDropdownTwoOptions" type="ProductAttribute">
+        <data key="attribute_code">attribute</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelForExportImport</requiredEntity>
+    </entity>
 </entities>
