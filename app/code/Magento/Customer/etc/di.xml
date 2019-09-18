@@ -468,4 +468,7 @@
     <preference
             for="Magento\Customer\Api\AccountDelegationInterface"
             type="Magento\Customer\Model\Delegation\AccountDelegation" />
+    <preference
+        for="Magento\Customer\Api\RedirectCookieManagerInterface"
+        type="Magento\Customer\Model\RedirectCookieManager" />
 </config>
