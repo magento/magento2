@@ -5,9 +5,9 @@
         "sort-packages": true
     },
     "require": {
-        "magento/framework": "*",
-        "magento/framework-amqp": "*",
-        "magento/framework-message-queue": "*",
+        "magento/framework": "102.0.*",
+        "magento/framework-amqp": "100.3.*",
+        "magento/framework-message-queue": "100.3.*",
         "php": "~7.1.3||~7.2.0||~7.3.0"
     },
     "type": "magento2-module",
@@ -22,5 +22,6 @@
         "psr-4": {
             "Magento\\Amqp\\": ""
         }
-    }
+    },
+    "version": "100.3.3"
 }

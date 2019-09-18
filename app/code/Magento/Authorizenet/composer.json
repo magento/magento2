@@ -6,17 +6,17 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-catalog": "*",
-        "magento/module-checkout": "*",
-        "magento/module-payment": "*",
-        "magento/module-quote": "*",
-        "magento/module-sales": "*",
-        "magento/module-store": "*"
+        "magento/framework": "102.0.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-catalog": "103.0.*",
+        "magento/module-checkout": "100.3.*",
+        "magento/module-payment": "100.3.*",
+        "magento/module-quote": "101.1.*",
+        "magento/module-sales": "102.0.*",
+        "magento/module-store": "101.0.*"
     },
     "suggest": {
-        "magento/module-config": "*"
+        "magento/module-config": "101.1.*"
     },
     "type": "magento2-module",
     "license": [
@@ -30,5 +30,6 @@
         "psr-4": {
             "Magento\\Authorizenet\\": ""
         }
-    }
+    },
+    "version": "100.3.3"
 }

@@ -6,11 +6,11 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-checkout": "*",
-        "magento/module-customer": "*",
-        "magento/module-store": "*",
+        "magento/framework": "102.0.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-checkout": "100.3.*",
+        "magento/module-customer": "102.0.*",
+        "magento/module-store": "101.0.*",
         "zendframework/zend-captcha": "^2.7.1",
         "zendframework/zend-db": "^2.8.2",
         "zendframework/zend-session": "^2.7.3"
@@ -27,5 +27,6 @@
         "psr-4": {
             "Magento\\Captcha\\": ""
         }
-    }
+    },
+    "version": "100.3.3"
 }
