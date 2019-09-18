@@ -42,6 +42,11 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     private $onDelete;
 
     /**
+     * @var string
+     */
+    private $onUpdate;
+
+    /**
      * Constructor.
      *
      * @param string $name
@@ -52,6 +57,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
      * @param Table $referenceTable
      * @param Column $referenceColumn
      * @param string $onDelete
+     * @param string $onUpdate
      * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
@@ -62,13 +68,15 @@ class Reference extends Constraint implements ElementDiffAwareInterface
         Column $column,
         Table $referenceTable,
         Column $referenceColumn,
-        string $onDelete
+        string $onDelete,
+        string $onUpdate = 'NO ACTION'
     ) {
         parent::__construct($name, $type, $table, $nameWithoutPrefix);
         $this->column = $column;
         $this->referenceTable = $referenceTable;
         $this->referenceColumn = $referenceColumn;
         $this->onDelete = $onDelete;
+        $this->onUpdate = $onUpdate;
     }
 
     /**
@@ -112,6 +120,16 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
+     * On update action.
+     *
+     * @return string
+     */
+    public function getOnUpdate()
+    {
+        return $this->onUpdate;
+    }
+
+    /**
      * For foreign key type is always 'reference'.
      *
      * @return string
@@ -133,7 +151,8 @@ class Reference extends Constraint implements ElementDiffAwareInterface
             'referenceTableName' => $this->getReferenceTable()->getName(),
             'tableName' => $this->getTable()->getName(),
             'onDelete' => $this->getOnDelete(),
-            'resource' => $this->getTable()->getResource()
+            'resource' => $this->getTable()->getResource(),
+            'onUpdate' => $this->getOnUpdate(),
         ];
     }
 }

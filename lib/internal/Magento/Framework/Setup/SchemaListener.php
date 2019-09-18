@@ -353,6 +353,7 @@ class SchemaListener
      * @param string $refTableName
      * @param string $refColumnName
      * @param string $onDelete
+     * @param string $onUpdate
      */
     public function addForeignKey(
         $fkName,
@@ -360,7 +361,8 @@ class SchemaListener
         $columnName,
         $refTableName,
         $refColumnName,
-        $onDelete = AdapterInterface::FK_ACTION_CASCADE
+        $onDelete = AdapterInterface::FK_ACTION_CASCADE,
+        $onUpdate = AdapterInterface::FK_ACTION_NO_ACTION
     ) {
         $dataToLog['constraints']['foreign'][$fkName] =
             [
@@ -369,7 +371,8 @@ class SchemaListener
                 'referenceTable' => strtolower($refTableName),
                 'referenceColumn' => strtolower($refColumnName),
                 'onDelete' => $onDelete,
-                'disabled' => false
+                'disabled' => false,
+                'onUpdate' => $onUpdate,
             ];
         $this->log($tableName, $dataToLog);
     }

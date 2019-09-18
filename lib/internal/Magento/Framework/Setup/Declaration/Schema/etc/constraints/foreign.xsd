@@ -23,6 +23,7 @@
         <xs:attribute name="column" type="xs:string" />
         <xs:attribute name="referenceColumn" type="xs:string" />
         <xs:attribute name="referenceTable" type="xs:string" />
+        <xs:attribute name="onUpdate" type="referenceOptionsType"  />
         <xs:attribute name="onDelete" type="referenceOptionsType"  />
 
         <xs:attributeGroup ref="baseConstraint" />

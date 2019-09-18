@@ -55,13 +55,14 @@ class ForeignKey implements DbDefinitionProcessorInterface
         );
         //CONSTRAINT `fk_name` FOREIGN KEY (`column`) REFERENCES `table` (`column`) option
         $foreignKeySql = sprintf(
-            "CONSTRAINT %s %s (%s) REFERENCES %s (%s) %s",
+            "CONSTRAINT %s %s (%s) REFERENCES %s (%s) %s %s",
             $adapter->quoteIdentifier($foreignKey->getName()),
             self::FOREIGN_KEY_STATEMENT,
             $adapter->quoteIdentifier($foreignKey->getColumn()->getName()),
             $adapter->quoteIdentifier($referenceTable),
             $adapter->quoteIdentifier($foreignKey->getReferenceColumn()->getName()),
-            $foreignKey->getOnDelete() ? sprintf(" ON DELETE %s", $foreignKey->getOnDelete()) : ''
+            $foreignKey->getOnDelete() ? sprintf(" ON DELETE %s", $foreignKey->getOnDelete()) : '',
+            $foreignKey->getOnUpdate() ? sprintf(" ON UPDATE %s", $foreignKey->getOnUpdate()) : ''
         );
 
         return $foreignKeySql;
@@ -94,7 +95,8 @@ class ForeignKey implements DbDefinitionProcessorInterface
                     'column' => $match[2],
                     'referenceTable' => $match[5],
                     'referenceColumn' => $match[6],
-                    'onDelete' => isset($match[7]) ? $match[8] : 'NO ACTION'
+                    'onDelete' => isset($match[7]) ? $match[8] : 'NO ACTION',
+                    'onUpdate' => isset($match[9]) ? $match[10] : 'NO ACTION',
                 ];
             }
         }

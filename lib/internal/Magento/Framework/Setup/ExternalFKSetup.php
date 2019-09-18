@@ -43,6 +43,11 @@ class ExternalFKSetup
     protected $onDelete;
 
     /**
+     * @var string
+     */
+    protected $onUpdate;
+
+    /**
      * Install external foreign key
      *
      * @param SchemaSetupInterface $setup
@@ -51,6 +56,7 @@ class ExternalFKSetup
      * @param string $externalTable
      * @param string $externalColumn
      * @param string $onDelete
+     * @param string $onUpdate
      * @return void
      */
     public function install(
@@ -59,7 +65,8 @@ class ExternalFKSetup
         $entityColumn,
         $externalTable,
         $externalColumn,
-        $onDelete = AdapterInterface::FK_ACTION_CASCADE
+        $onDelete = AdapterInterface::FK_ACTION_CASCADE,
+        $onUpdate = AdapterInterface::FK_ACTION_NO_ACTION
     ) {
         $this->setup = $setup;
         $this->entityTable = $entityTable;
@@ -67,6 +74,7 @@ class ExternalFKSetup
         $this->externalTable = $externalTable;
         $this->externalColumn = $externalColumn;
         $this->onDelete = $onDelete;
+        $this->onUpdate = $onUpdate;
 
         $this->execute();
     }
@@ -166,7 +174,8 @@ class ExternalFKSetup
                 $this->externalColumn,
                 $this->setup->getTable($this->entityTable),
                 $this->entityColumn,
-                $this->onDelete
+                $this->onDelete,
+                $this->onUpdate
             );
         }
     }
@@ -205,7 +214,8 @@ class ExternalFKSetup
                     $this->externalColumn,
                     $foreignKeyInfo['REF_TABLE_NAME'],
                     $foreignKeyInfo['REF_COLUMN_NAME'],
-                    $this->onDelete
+                    $this->onDelete,
+                    $this->onUpdate
                 );
             }
         }
