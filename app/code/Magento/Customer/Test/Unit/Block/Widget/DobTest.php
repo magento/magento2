@@ -547,7 +547,7 @@ class DobTest extends TestCase
             ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}')
             ->will(
                 $this->returnValue(
-                '{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'
+                    '{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'
                 )
             );
 

@@ -3,7 +3,7 @@ require([
     'moment',
     'jquery/validate',
     'mage/translate',
-], function($, moment) {
+], function ($, moment) {
     'use strict';
 
     $.validator.addMethod(
