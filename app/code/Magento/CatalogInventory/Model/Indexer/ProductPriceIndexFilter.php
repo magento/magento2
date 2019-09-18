@@ -9,11 +9,11 @@ namespace Magento\CatalogInventory\Model\Indexer;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DB\Query\Generator;
 
 /**
  * Class for filter product price index.
@@ -41,37 +41,21 @@ class ProductPriceIndexFilter implements PriceModifierInterface
     private $connectionName;
 
     /**
-     * @var Generator
-     */
-    private $batchQueryGenerator;
-
-    /**
-     * @var int
-     */
-    private $batchSize;
-
-    /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param Item $stockItem
      * @param ResourceConnection $resourceConnection
      * @param string $connectionName
-     * @param Generator $batchQueryGenerator
-     * @param int $batchSize
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         Item $stockItem,
         ResourceConnection $resourceConnection = null,
-        $connectionName = 'indexer',
-        Generator $batchQueryGenerator = null,
-        $batchSize = 100
+        $connectionName = 'indexer'
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockItem = $stockItem;
         $this->resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
         $this->connectionName = $connectionName;
-        $this->batchQueryGenerator = $batchQueryGenerator ?: ObjectManager::getInstance()->get(Generator::class);
-        $this->batchSize = $batchSize;
     }
 
     /**
@@ -80,9 +64,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
      * @param IndexTableStructure $priceTable
      * @param array $entityIds
      * @return void
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []) : void
     {
@@ -91,38 +73,47 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         }
 
         $connection = $this->resourceConnection->getConnection($this->connectionName);
-        $select = $connection->select();
 
-        $select->from(
-            ['stock_item' => $this->stockItem->getMainTable()],
-            ['stock_item.product_id', 'MAX(stock_item.is_in_stock) as max_is_in_stock']
-        );
-
+        $stockSelect = $connection->select();
         if ($this->stockConfiguration->getManageStock()) {
-            $select->where('stock_item.use_config_manage_stock = 1 OR stock_item.manage_stock = 1');
+            $stockStatus = $connection->getCheckSql(
+                'use_config_manage_stock = 0 AND manage_stock = 0',
+                Stock::STOCK_IN_STOCK,
+                'is_in_stock'
+            );
         } else {
-            $select->where('stock_item.use_config_manage_stock = 0 AND stock_item.manage_stock = 1');
+            $stockStatus = $connection->getCheckSql(
+                'use_config_manage_stock = 0 AND manage_stock = 1',
+                'is_in_stock',
+                Stock::STOCK_IN_STOCK
+            );
         }
-
-        $select->group('stock_item.product_id');
-        $select->having('max_is_in_stock = 0');
-
-        $batchSelectIterator = $this->batchQueryGenerator->generate(
-            'product_id',
-            $select,
-            $this->batchSize,
-            \Magento\Framework\DB\Query\BatchIteratorInterface::UNIQUE_FIELD_ITERATOR
+        $stockStatus = new \Zend_Db_Expr('MAX(' . $stockStatus . ')');
+        $stockSelect->from(
+            $this->stockItem->getMainTable(),
+            [
+                'product_id' => 'product_id',
+                'stock_status' => $stockStatus,
+            ]
         );
-
-        foreach ($batchSelectIterator as $select) {
-            $productIds = null;
-            foreach ($connection->query($select)->fetchAll() as $row) {
-                $productIds[] = $row['product_id'];
-            }
-            if ($productIds !== null) {
-                $where = [$priceTable->getEntityField() .' IN (?)' => $productIds];
-                $connection->delete($priceTable->getTableName(), $where);
-            }
+        if (!empty($entityIds)) {
+            $stockSelect->where('product_id IN (?)', $entityIds);
         }
+        $stockSelect->group('product_id');
+
+        $select = $connection->select();
+        $select->from(
+            ['price_index' => $priceTable->getTableName()],
+            []
+        );
+        $select->joinInner(
+            ['stock_item' => $stockSelect],
+            'stock_item.product_id = price_index.' . $priceTable->getEntityField(),
+            []
+        );
+        $select->where('stock_item.stock_status = ?', Stock::STOCK_OUT_OF_STOCK);
+
+        $query = $select->deleteFromSelect('price_index');
+        $connection->query($query);
     }
 }
