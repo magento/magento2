@@ -4,7 +4,7 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/mtf": "dev-MC-17912",
+        "magento/mtf": "1.0.0-rc64",
         "allure-framework/allure-phpunit": "~1.2.0",
         "doctrine/annotations": "1.4.*",
         "phpunit/phpunit": "~6.5.0",
@@ -19,11 +19,5 @@
             "Magento\\": ["lib/Magento/", "testsuites/Magento", "generated/Magento/", "tests/app/Magento/"],
             "Test\\": "generated/Test/"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/magento-techdivision/mtf.git"
-        }
-    ]
+    }
 }

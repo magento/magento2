@@ -7,7 +7,7 @@ define([
     'jquery',
     'mage/template',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/validation'
 ], function ($, mageTemplate, _) {
     'use strict';

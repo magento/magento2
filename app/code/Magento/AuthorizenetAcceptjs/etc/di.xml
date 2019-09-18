@@ -206,8 +206,7 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="transaction_id" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\TransactionIdHandler</item>
-                <item name="close_parent_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseParentTransactionHandler</item>
-                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\CloseTransactionHandler</item>
+                <item name="close_transaction" xsi:type="string">Magento\AuthorizenetAcceptjs\Gateway\Response\ClosePartialTransactionHandler</item>
             </argument>
         </arguments>
     </virtualType>

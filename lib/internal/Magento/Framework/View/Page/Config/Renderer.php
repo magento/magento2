@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Page\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
 
 /**
  * Page config Renderer model
@@ -75,12 +76,18 @@ class Renderer implements RendererInterface
     protected $urlBuilder;
 
     /**
+     * @var MsApplicationTileImage
+     */
+    private $msApplicationTileImage;
+
+    /**
      * @param Config $pageConfig
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
+     * @param MsApplicationTileImage|null $msApplicationTileImage
      */
     public function __construct(
         Config $pageConfig,
@@ -88,7 +95,8 @@ class Renderer implements RendererInterface
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Stdlib\StringUtils $string,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        MsApplicationTileImage $msApplicationTileImage = null
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMergeService = $assetMergeService;
@@ -96,6 +104,8 @@ class Renderer implements RendererInterface
         $this->escaper = $escaper;
         $this->string = $string;
         $this->logger = $logger;
+        $this->msApplicationTileImage = $msApplicationTileImage ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(MsApplicationTileImage::class);
     }
 
     /**
@@ -179,6 +189,10 @@ class Renderer implements RendererInterface
         if (method_exists($this->pageConfig, $method)) {
             $content = $this->pageConfig->$method();
         }
+        if ($content && $name === $this->msApplicationTileImage::META_NAME) {
+            $content = $this->msApplicationTileImage->getUrl($content);
+        }
+
         return $content;
     }
 

@@ -35,7 +35,10 @@ class ChangeTmpTablesEngine implements SchemaPatchInterface
     {
         $this->schemaSetup->startSetup();
 
-        $this->schemaSetup->getConnection()->changeTableEngine('catalog_product_index_price_downlod_tmp', 'InnoDB');
+        $tableName = $this->schemaSetup->getTable('catalog_product_index_price_downlod_tmp');
+        if ($this->schemaSetup->getConnection()->isTableExists($tableName)) {
+            $this->schemaSetup->getConnection()->changeTableEngine($tableName, 'InnoDB');
+        }
 
         $this->schemaSetup->endSetup();
     }

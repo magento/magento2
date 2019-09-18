@@ -63,6 +63,9 @@ define([
                             var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
 
                             $('.page-main-actions', selectorPrefix).after($wrapper);
+                            $('html, body').animate({
+                                scrollTop: $('.page-main-actions', selectorPrefix).offset().top
+                            });
                         }
                     });
                 });

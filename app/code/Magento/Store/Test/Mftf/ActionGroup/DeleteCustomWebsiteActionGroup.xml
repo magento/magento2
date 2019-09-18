@@ -5,16 +5,21 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="DeleteCustomWebsiteActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Website Name. Deletes the provided Website Name. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="websiteName" defaultValue="customWebsite.name"/>
         </arguments>
+        
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnTheStorePage"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
         <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton" />
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <see userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="verifyThatCorrectWebsiteFound"/>
         <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingWebsite"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterWebsiteSelected" time="30"/>
