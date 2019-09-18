@@ -5,6 +5,7 @@ require([
     'mage/translate',
 ], function($, moment) {
     'use strict';
+
     $.validator.addMethod(
         'validate-dob',
         function (value) {
