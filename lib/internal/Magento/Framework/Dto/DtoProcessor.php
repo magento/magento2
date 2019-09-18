@@ -432,7 +432,12 @@ class DtoProcessor
             }
         }
 
-        $resObject = $this->objectFactory->create($type, $constructorParams);
+        if ($this->dtoReflection->isExtensionAttribute($type)) {
+            $realType = preg_replace('/Interface$/', '', $type);
+            $resObject = $this->objectFactory->create($realType, $constructorParams);
+        } else {
+            $resObject = $this->objectFactory->create($type, $constructorParams);
+        }
 
         foreach ($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_SETTER] as $paramName => $info) {
             $methodName = $info['method'];

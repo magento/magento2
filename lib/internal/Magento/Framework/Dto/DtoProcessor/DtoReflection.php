@@ -12,6 +12,7 @@ use Exception;
 use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
@@ -65,10 +66,25 @@ class DtoReflection
      */
     public function isDataObject(string $className): bool
     {
+        // TODO: Add a cache layer here
         $className = $this->getRealClassName($className);
         return
             is_subclass_of($className, AbstractSimpleObject::class) ||
             is_subclass_of($className, DataObject::class);
+    }
+
+    /**
+     * Return true if a class is a data object using "data" constructor field
+     *
+     * @param string $className
+     * @return bool
+     */
+    public function isExtensionAttribute(string $className): bool
+    {
+        // TODO: Add a cache layer here
+        $className = $this->getRealClassName($className);
+        return
+            is_subclass_of($className, ExtensionAttributesInterface::class);
     }
 
     /**
@@ -109,6 +125,7 @@ class DtoReflection
      */
     public function isCustomAttributesObject(string $className): bool
     {
+        // TODO: Add a cache layer here
         return
             is_subclass_of($className, CustomAttributesDataInterface::class);
     }
@@ -121,6 +138,7 @@ class DtoReflection
      */
     public function isDataModel(string $className): bool
     {
+        // TODO: Add a cache layer here
         $className = $this->getRealClassName($className);
         return
             is_subclass_of($className, AbstractModel::class);
@@ -134,6 +152,7 @@ class DtoReflection
      */
     public function getRealClassName(string $className): string
     {
+        // TODO: Add a cache layer here
         $preferenceClass = $this->config->getPreference($className);
         return $preferenceClass ?: $className;
     }
