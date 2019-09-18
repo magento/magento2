@@ -158,7 +158,8 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
                         'column' => 'col_name',
                         'referenceTable' => 'ref_table',
                         'referenceColumn' => 'ref_col_name',
-                        'onDelete' => 'NO ACTION'
+                        'onDelete' => 'NO ACTION',
+                        'onUpdate' => 'NO ACTION'
                     ]
                 ]
             ],
@@ -175,7 +176,8 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
                         'column' => 'column_name',
                         'referenceTable' => 'ref_table',
                         'referenceColumn' => 'ref_col_name',
-                        'onDelete' => 'SET DEFAULT'
+                        'onDelete' => 'SET DEFAULT',
+                        'onUpdate' => 'NO ACTION'
                     ]
                 ]
             ],
@@ -192,7 +194,8 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
                         'column' => 'column_name',
                         'referenceTable' => 'ref_table',
                         'referenceColumn' => 'ref_col_name',
-                        'onDelete' => 'SET NULL'
+                        'onDelete' => 'SET NULL',
+                        'onUpdate' => 'NO ACTION'
                     ]
                 ]
             ],
@@ -209,7 +212,8 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
                         'column' => 'column_name',
                         'referenceTable' => 'ref_table',
                         'referenceColumn' => 'ref_col_name',
-                        'onDelete' => 'RESTRICT'
+                        'onDelete' => 'RESTRICT',
+                        'onUpdate' => 'RESTRICT'
                     ]
                 ]
             ],

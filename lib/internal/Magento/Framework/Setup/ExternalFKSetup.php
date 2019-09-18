@@ -100,10 +100,10 @@ class ExternalFKSetup
     /**
      * Get foreign keys for tables and columns
      *
-     * @param $targetTable
-     * @param $targetColumn
-     * @param $refTable
-     * @param $refColumn
+     * @param string $targetTable
+     * @param string $targetColumn
+     * @param string $refTable
+     * @param string $refColumn
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -157,16 +157,14 @@ class ExternalFKSetup
      */
     protected function addDefaultForeignKey()
     {
-        if (
-            !count(
-                $this->getForeignKeys(
-                    $this->externalTable,
-                    $this->externalColumn,
-                    $this->entityTable,
-                    $this->entityColumn
-                )
+        if (!count(
+            $this->getForeignKeys(
+                $this->externalTable,
+                $this->externalColumn,
+                $this->entityTable,
+                $this->entityColumn
             )
-        ) {
+        )) {
             $this->setup->getConnection()->addForeignKey(
                 $this->setup->getFkName(
                     $this->externalTable,
@@ -201,16 +199,14 @@ class ExternalFKSetup
             }
         );
         foreach ($foreignKeys as $foreignKeyInfo) {
-            if (
-                !count(
-                    $this->getForeignKeys(
-                        $this->externalTable,
-                        $this->externalColumn,
-                        $this->setup->getTablePlaceholder($foreignKeyInfo['REF_TABLE_NAME']),
-                        $foreignKeyInfo['REF_COLUMN_NAME']
-                    )
+            if (!count(
+                $this->getForeignKeys(
+                    $this->externalTable,
+                    $this->externalColumn,
+                    $this->setup->getTablePlaceholder($foreignKeyInfo['REF_TABLE_NAME']),
+                    $foreignKeyInfo['REF_COLUMN_NAME']
                 )
-            ) {
+            )) {
                 $this->setup->getConnection()->addForeignKey(
                     $this->setup->getFkName(
                         $this->externalTable,
@@ -236,16 +232,14 @@ class ExternalFKSetup
      */
     protected function dropOldForeignKey()
     {
-        if (
-            count(
-                $this->getForeignKeys(
-                    $this->externalTable,
-                    $this->externalColumn,
-                    $this->entityTable,
-                    $this->entityColumn
-                )
+        if (count(
+            $this->getForeignKeys(
+                $this->externalTable,
+                $this->externalColumn,
+                $this->entityTable,
+                $this->entityColumn
             )
-        ) {
+        )) {
             $this->clearForeignKey(
                 $this->externalTable,
                 $this->externalColumn,
