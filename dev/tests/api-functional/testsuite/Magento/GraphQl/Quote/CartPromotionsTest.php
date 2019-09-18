@@ -65,6 +65,8 @@ class CartPromotionsTest extends GraphQlAbstract
         $this->assertCount(2, $response['cart']['items']);
         //validating the line item prices, quantity and discount
         $this->assertLineItemDiscountPrices($response, $productsInCart, $qty, $ruleLabels);
+        //total discount on the cart which is the sum of the individual row discounts
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 21.98);
     }
 
     /**
@@ -144,7 +146,7 @@ class CartPromotionsTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $this->assertCount(2, $response['cart']['items']);
 
-        //validating the individual discounts per product and aggregate discount per product
+        //validating the individual discounts per line item and total discounts per line item
         $productsInResponse = array_map(null, $response['cart']['items'], $productsInCart);
         $count = count($productsInCart);
         for ($itemIndex = 0; $itemIndex < $count; $itemIndex++) {
@@ -181,6 +183,8 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 21.98);
+        $this->assertEquals($response['cart']['prices']['discounts'][1]['amount']['value'], 2.2);
     }
 
     /**
@@ -330,6 +334,28 @@ class CartPromotionsTest extends GraphQlAbstract
     }
 
     /**
+     * Validating if the discount label in the response shows the default value if no label is available on cart rule
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off.php
+     */
+    public function testCartPromotionsWithNoRuleLabels()
+    {
+        $skus =['simple1', 'simple2'];
+        $qty = 1;
+        $cartId = $this->createEmptyCart();
+        $this->addMultipleSimpleProductsToCart($cartId, $qty, $skus[0], $skus[1]);
+        $query = $this->getCartItemPricesQuery($cartId);
+        $response = $this->graphQlMutation($query);
+        //total items added to cart
+        $this->assertCount(2, $response['cart']['items']);
+        //checking the default label for individual line item when cart rule doesn't have a label set
+        foreach ($response['cart']['items'] as $cartItem) {
+            $this->assertEquals('Discount', $cartItem['prices']['discounts'][0]['label']);
+        }
+    }
+
+    /**
      * Apply coupon to the cart
      *
      * @param string $cartId
@@ -362,25 +388,36 @@ QUERY;
     {
         return <<<QUERY
 {
-  cart(cart_id:"{$cartId}"){
+  cart(cart_id:"$cartId"){
     items{
       quantity
+      
       prices{
         row_total{
           value
+          
         }
         row_total_including_tax{
           value
         }
-        discount{value}
+        discount{
+          value
+        }
         discounts{
           amount{value}
           label
+          
         }
       }
       }
+    prices{
+      discounts{
+        amount{value}
+      }
+      
     }
   }
+}
 
 QUERY;
     }
