@@ -48,8 +48,8 @@ type ProductPrices @deprecated(reason: "Use PriceRange instead.") @doc(descripti
 }
 
 type PriceRange @doc(description: "Price range for a product. If the product only has a single price minimum and maximum price will be the same."){
-    minimum_price: ProductPrice! @doc(description: "The lowest possible final price for the product.")
-    maximum_price: ProductPrice @doc(description: "The highest possible final price for the product.")
+    minimum_price: ProductPrice! @doc(description: "The lowest possible price for the product.")
+    maximum_price: ProductPrice @doc(description: "The highest possible price for the product.")
 }
 
 type ProductPrice @doc(description: "Represents a product price.") {

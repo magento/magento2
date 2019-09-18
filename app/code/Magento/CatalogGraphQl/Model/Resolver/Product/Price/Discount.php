@@ -13,13 +13,18 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\Price;
 class Discount
 {
     /**
+     * @var float
+     */
+    private $zeroThreshold = 0.0001;
+
+    /**
      * Get formatted discount between two prices
      *
      * @param float $regularPrice
      * @param float $finalPrice
      * @return array
      */
-    public function getPriceDiscount(float $regularPrice, float $finalPrice)
+    public function getPriceDiscount(float $regularPrice, float $finalPrice): array
     {
         return [
             'amount_off' => $this->getPriceDifferenceAsValue($regularPrice, $finalPrice),
@@ -34,9 +39,13 @@ class Discount
      * @param float $finalPrice
      * @return float
      */
-    private function getPriceDifferenceAsValue(float $regularPrice, float $finalPrice)
+    private function getPriceDifferenceAsValue(float $regularPrice, float $finalPrice): float
     {
-        return round($regularPrice - $finalPrice, 2);
+        $difference = $regularPrice - $finalPrice;
+        if ($difference <= $this->zeroThreshold) {
+            return 0;
+        }
+        return round($difference, 2);
     }
 
     /**
@@ -44,13 +53,13 @@ class Discount
      *
      * @param float $regularPrice
      * @param float $finalPrice
-     * @return float|int
+     * @return float
      */
-    private function getPriceDifferenceAsPercent(float $regularPrice, float $finalPrice)
+    private function getPriceDifferenceAsPercent(float $regularPrice, float $finalPrice): float
     {
         $difference = $this->getPriceDifferenceAsValue($regularPrice, $finalPrice);
 
-        if ($difference === 0 || $regularPrice === 0) {
+        if ($difference <= $this->zeroThreshold || $regularPrice <= $this->zeroThreshold) {
             return 0;
         }
 
