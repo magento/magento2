@@ -88,7 +88,7 @@ class CartPromotionsTest extends GraphQlAbstract
                     'prices' => [
                         'row_total' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty],
                         'row_total_including_tax' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty],
-                        'discount' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5],
+                        'total_item_discount' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5],
                         'discounts' => [
                             0 =>[
                                 'amount' =>
@@ -169,7 +169,7 @@ class CartPromotionsTest extends GraphQlAbstract
 
             //removing the elements from the response so that the rest of the response values can be compared
             unset($productsInResponse[$itemIndex][0]['prices']['discounts']);
-            unset($productsInResponse[$itemIndex][0]['prices']['discount']);
+            unset($productsInResponse[$itemIndex][0]['prices']['total_item_discount']);
             $this->assertResponseFields(
                 $productsInResponse[$itemIndex][0],
                 [
@@ -253,7 +253,7 @@ class CartPromotionsTest extends GraphQlAbstract
                         // row_total including tax is the price + price * tax rate
                         'row_total_including_tax' => ['value' => $rowTotalIncludingTax],
                         // discount from cart rule after tax is applied : 50% of row_total_including_tax
-                        'discount' => ['value' => round($rowTotalIncludingTax/2, 2)],
+                        'total_item_discount' => ['value' => round($rowTotalIncludingTax/2, 2)],
                         'discounts' => [
                             0 =>[
                                 'amount' =>
@@ -285,7 +285,7 @@ class CartPromotionsTest extends GraphQlAbstract
         row_total_including_tax{
           value
         }
-        discount{value}
+        total_item_discount{value}
         discounts{
           amount{value}
           label

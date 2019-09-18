@@ -70,7 +70,7 @@ class CartItemPrices implements ResolverInterface
                 'currency' => $currencyCode,
                 'value' => $cartItem->getRowTotalInclTax(),
             ],
-            'discount' => [
+            'total_item_discount' => [
                 'currency' => $currencyCode,
                 'value' => $cartItem->getDiscountAmount(),
             ],
