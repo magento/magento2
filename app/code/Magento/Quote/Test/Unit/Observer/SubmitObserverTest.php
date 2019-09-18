@@ -10,6 +10,10 @@ use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 
+/**
+ * Test for \Magento\Quote\Observer\SubmitObserver class.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SubmitObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
