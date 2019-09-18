@@ -203,7 +203,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @return $this
      */
-    private function customizePrice()
+    private function customizePrice(): self
     {
         $pathFrom = $this->arrayManager->findPath('price', $this->meta, null, 'children');
 
