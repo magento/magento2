@@ -16,9 +16,9 @@ type Query {
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
 }
 
-type Price @doc(description: "The Price object defines the price of a product as well as any tax-related adjustments.") {
-    amount: Money @doc(description: "The price of a product plus a three-letter currency code.")
-    adjustments: [PriceAdjustment] @doc(description: "An array that provides information about tax, weee, or weee_tax adjustments.")
+type Price @doc(description: "Price is deprecated, replaced by ProductPrice. The Price object defines the price of a product as well as any tax-related adjustments.") {
+    amount: Money @deprecated(reason: "Price is deprecated, use ProductPrice.") @doc(description: "The price of a product plus a three-letter currency code.")
+    adjustments: [PriceAdjustment] @deprecated(reason: "Price is deprecated, use ProductPrice.") @doc(description: "An array that provides information about tax, weee, or weee_tax adjustments.")
 }
 
 type PriceAdjustment @doc(description: "The PricedAdjustment object defines the amount of money to apply as an adjustment, the type of adjustment to apply, and whether the item is included or excluded from the adjustment.") {
@@ -44,7 +44,7 @@ enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
 type ProductPrices @deprecated(reason: "Use PriceRange instead.") @doc(description: "The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
     minimalPrice: Price @deprecated(reason: "Use PriceRange.minimum_price.") @doc(description: "The lowest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the from value.")
     maximalPrice: Price @deprecated(reason: "Use PriceRange.maximum_price.") @doc(description: "The highest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the to value.")
-    regularPrice: Price @deprecated(reason: "Use PriceRange.minimum_price or PriceRange.minimum_price.") @doc(description: "The base price of a product.")
+    regularPrice: Price @deprecated(reason: "Use regular_price from PriceRange.minimum_price or PriceRange.minimum_price.") @doc(description: "The base price of a product.")
 }
 
 type PriceRange @doc(description: "Price range for a product. If the product only has a single price minimum and maximum price will be the same."){
@@ -63,6 +63,12 @@ type ProductDiscount @doc(description: "Price discount applied to a product.") {
     amount_off: Float @doc(description: "The discount expressed an absolute value.")
 }
 
+type TierPrice @doc(description: "TierPrice defines a tier price, which is a price offered based on a particular quantity purchased.") {
+    final_price: Money @doc(desription: "The price of the product at this tier.")
+    quantity: Float @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
+    discount: ProductDiscount @doc(description: "The price discount that this tier represents.")
+}
+
 type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface.") {
 }
 
@@ -74,12 +80,12 @@ interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\M
     position: Int @doc(description: "The position within the list of product links.")
 }
 
-type ProductTierPrices @doc(description: "The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group.") {
-    customer_group_id: String @doc(description: "The ID of the customer group.")
-    qty: Float @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
-    value: Float @deprecated(reason: "Use final_price") @doc(description: "The price of the fixed price item.")
-    percentage_value: Float @decprected(reason: "Use TierPrice.discount.") @doc(description: "The percentage discount of the item.")
-    website_id: Float @doc(description: "The ID assigned to the website.")
+type ProductTierPrices @doc(description: "ProductTierPrices is deprecated and has been replaced by TierPrice. The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group.") {
+    customer_group_id: String @deprecated(reason: "customer_group_id is not relevant for storefront.") @doc(description: "The ID of the customer group.")
+    qty: Float @deprecated(reason: "ProductTierPrices is deprecated, use TierPrice.quantity.") @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
+    value: Float @deprecated(reason: "ProductTierPrices is deprecated. Use TierPrice.final_price") @doc(description: "The price of the fixed price item.")
+    percentage_value: Float @decprected(reason: "ProductTierPrices is deprecated. Use TierPrice.discount.") @doc(description: "The percentage discount of the item.")
+    website_id: Float @deprecated(reason: "website_id is not relevant for storefront.") @doc(description: "The ID assigned to the website.")
 }
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
@@ -112,7 +118,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     tier_prices: [ProductTierPrices] @deprecated(reason: "Use price_tiers for product tier price information.") @doc(description: "An array of ProductTierPrices objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\TierPrices")
     price: ProductPrices @deprecated(reason: "Use price_range for product price information.") @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     price_range: PriceRange! @doc(description: "A PriceRange object, indicating the range of prices for the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\PriceRange")
-#TODO    price_tiers: [TierPrice] @doc(description: "An array of TierPrice objects.")
+    price_tiers: [TierPrice] @doc(description: "An array of TierPrice objects.")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
