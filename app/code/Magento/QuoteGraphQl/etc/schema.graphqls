@@ -333,7 +333,7 @@ type CartItemPrices {
     row_total: Money!
     row_total_including_tax: Money!
     discounts: [Discount] @doc(description:"An array of discounts to be applied to the cart item")
-    discount: Money @doc(description:"The total of all discounts applied to the item")
+    total_item_discount: Money @doc(description:"The total of all discounts applied to the item")
 }
 
 type SelectedCustomizableOption {
