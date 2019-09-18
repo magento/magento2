@@ -52,7 +52,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      * @covers \Magento\Bundle\Model\Product\Type::getSearchableData
      * @magentoDbIsolation disabled
      */
-    public function testPrepareProductIndexForBundleProduct()
+    public function testGetSearchableData()
     {
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Model\Product $bundleProduct */
