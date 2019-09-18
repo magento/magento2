@@ -268,6 +268,93 @@ class CartPromotionsTest extends GraphQlAbstract
     }
 
     /**
+     * Apply cart rule with a fixed discount when specific coupon code
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     */
+    public function testCartPromotionsWithCoupons()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        /** @var Product $prod2 */
+        $prod1 = $productRepository->get('simple1');
+        $prod2 = $productRepository->get('simple2');
+        $productsInCart = [$prod1, $prod2];
+        $prod2->setVisibility(Visibility::VISIBILITY_BOTH);
+        $productRepository->save($prod2);
+        $skus =['simple1', 'simple2'];
+
+        /** @var Collection $ruleCollection */
+        $ruleCollection = $objectManager->get(Collection::class);
+        $ruleLabels = [];
+        /** @var Rule $rule */
+        foreach ($ruleCollection as $rule) {
+            $ruleLabels =  $rule->getStoreLabels();
+        }
+        $qty = 2;
+        // coupon code obtained from the fixture
+        $couponCode = '2?ds5!2d';
+        $cartId = $this->createEmptyCart();
+        $this->addMultipleSimpleProductsToCart($cartId, $qty, $skus[0], $skus[1]);
+        $this->applyCouponToCart($cartId, $couponCode);
+        $query = $this->getCartItemPricesQuery($cartId);
+        $response = $this->graphQlMutation($query);
+        $this->assertCount(2, $response['cart']['items']);
+        $productsInResponse = array_map(null, $response['cart']['items'], $productsInCart);
+        $count = count($productsInCart);
+        for ($itemIndex = 0; $itemIndex < $count; $itemIndex++) {
+            $this->assertNotEmpty($productsInResponse[$itemIndex]);
+            $sumOfPricesForBothProducts = 43.96;
+            $rowTotal = ($productsInCart[$itemIndex]->getSpecialPrice()*$qty);
+            $this->assertResponseFields(
+                $productsInResponse[$itemIndex][0],
+                [
+                    'quantity' => $qty,
+                    'prices' => [
+                        'row_total' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty],
+                        'row_total_including_tax' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty],
+                        'discount' => ['value' => round(($rowTotal/$sumOfPricesForBothProducts)*5, 2)],
+                        'discounts' => [
+                            0 =>[
+                                'amount' =>
+                                    ['value' => round(($rowTotal/$sumOfPricesForBothProducts)*5, 2)],
+                                'label' => $ruleLabels[0]
+                            ]
+                        ]
+                    ],
+                ]
+            );
+        }
+    }
+
+    /**
+     * Apply coupon to the cart
+     *
+     * @param string $cartId
+     * @param string $couponCode
+     */
+    private function applyCouponToCart(string $cartId, string $couponCode)
+    {
+        $query = <<<QUERY
+mutation {
+  applyCouponToCart(input: {cart_id: "$cartId", coupon_code: "$couponCode"}) {
+    cart {
+      applied_coupon {
+        code
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('applyCouponToCart', $response);
+        self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
+    }
+
+    /**
      * @param string $cartId
      * @return string
      */
