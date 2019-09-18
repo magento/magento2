@@ -10,8 +10,6 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -20,25 +18,17 @@ use Magento\Quote\Model\Quote;
 class GetCartForUser
 {
     /**
-     * @var MaskedQuoteIdToQuoteIdInterface
+     * @var GetCart
      */
-    private $maskedQuoteIdToQuoteId;
+    private $getCart;
 
     /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
-    /**
-     * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
-     * @param CartRepositoryInterface $cartRepository
+     * @param GetCart $getCart
      */
     public function __construct(
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        CartRepositoryInterface $cartRepository
+        GetCart $getCart
     ) {
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->cartRepository = $cartRepository;
+        $this->getCart = $getCart;
     }
 
     /**
@@ -54,35 +44,11 @@ class GetCartForUser
      */
     public function execute(string $cartHash, ?int $customerId, int $storeId): Quote
     {
-        try {
-            $cartId = $this->maskedQuoteIdToQuoteId->execute($cartHash);
-        } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(
-                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $cartHash])
-            );
-        }
-
-        try {
-            /** @var Quote $cart */
-            $cart = $this->cartRepository->get($cartId);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(
-                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $cartHash])
-            );
-        }
+        $cart = $this->getCart->execute($cartHash, $customerId, $storeId);
 
         if (false === (bool)$cart->getIsActive()) {
             throw new GraphQlNoSuchEntityException(
                 __('Current user does not have an active cart.')
-            );
-        }
-
-        if ((int)$cart->getStoreId() !== $storeId) {
-            throw new GraphQlNoSuchEntityException(
-                __(
-                    'Wrong store code specified for cart "%masked_cart_id"',
-                    ['masked_cart_id' => $cartHash]
-                )
             );
         }
 
