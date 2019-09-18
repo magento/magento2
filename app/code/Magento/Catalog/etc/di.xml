@@ -76,6 +76,9 @@
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
+    <type name="Magento\Catalog\Model\Category\DataProvider">
+        <plugin name="set_page_layout_default_value" type="Magento\Catalog\Model\Plugin\SetPageLayoutDefaultValue" />
+    </type>
     <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="catalogTopmenu" type="Magento\Catalog\Plugin\Block\Topmenu" />
     </type>
