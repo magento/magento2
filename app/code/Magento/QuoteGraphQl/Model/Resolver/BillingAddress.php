@@ -44,7 +44,13 @@ class BillingAddress implements ResolverInterface
         $cart = $value['model'];
 
         $billingAddress = $cart->getBillingAddress();
-        if (null === $billingAddress) {
+        if (null === $billingAddress ||
+            null === $billingAddress->getFirstname() ||
+            null === $billingAddress->getLastname() ||
+            null === $billingAddress->getCity() ||
+            null === $billingAddress->getCountry() ||
+            null === $billingAddress->getTelephone() ||
+            null === $billingAddress->getStreet()) {
             return null;
         }
 
