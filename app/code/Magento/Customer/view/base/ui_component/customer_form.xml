@@ -260,9 +260,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>
-                    <item name="options" xsi:type="array">
-                        <item name="maxDate" xsi:type="string">-1d</item>
-                    </item>
                 </item>
             </argument>
             <settings>
@@ -273,6 +270,15 @@
                 <dataType>text</dataType>
                 <visible>true</visible>
             </settings>
+            <formElements>
+                <date>
+                    <settings>
+                        <options>
+                            <option name="maxDate" xsi:type="string">-1d</option>
+                        </options>
+                    </settings>
+                </date>
+            </formElements>
         </field>
         <field name="taxvat" formElement="input">
             <argument name="data" xsi:type="array">

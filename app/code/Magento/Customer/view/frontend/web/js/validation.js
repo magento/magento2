@@ -1,7 +1,6 @@
 require([
     'jquery',
     'moment',
-    'jquery/ui',
     'jquery/validate',
     'mage/translate',
 ], function($, moment) {
@@ -12,6 +11,7 @@ require([
             if (value === '') {
                 return true;
             }
+
             return moment(value).isBefore(moment());
         },
         $.mage.__('The Date of Birth should not be greater than today.')
