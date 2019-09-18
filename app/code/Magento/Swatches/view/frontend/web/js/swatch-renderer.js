@@ -689,7 +689,7 @@ define([
 
             if (this.options.useAjax) {
                 this._debouncedLoadProductMedia();
-            }  else {
+            } else {
                 images = this.options.jsonConfig.images[this.getProduct()];
 
                 if (!images) {
@@ -763,7 +763,7 @@ define([
                 ]);
 
             $widget._loadMedia();
-            
+
             if (parseInt(checkAdditionalData['update_product_preview_image'], 10) === 1) {
                 $widget._loadMedia();
             }
@@ -1019,7 +1019,7 @@ define([
                 }
 
                 if (optionPriceDiff !== 0) {
-                    newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
+                    newPrices = this.options.jsonConfig.optionPrices[allowedProduct];
                 } else {
                     newPrices = $widget.options.jsonConfig.prices;
                 }
