@@ -306,51 +306,52 @@ class DtoProcessor
             return [];
         }
 
-        $extensionAttributesType = $this->dtoReflection->getPropertyTypeFromGetterMethod(
-            $type,
-            ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY
-        );
-
         $extensionAttributes = $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] ?? [];
-
         $extensionAttributes = array_replace(
             $extensionAttributes,
             $this->injectorProcessor->execute($type, $extensionAttributes)
         );
 
-        foreach ($extensionAttributes as $attributeName => $attributeValue) {
-            if (!is_array($attributeValue) && !is_object($attributeValue)) {
-                continue;
-            }
-
-            $methodReturnType = $this->dtoReflection->getPropertyTypeFromGetterMethod(
-                $extensionAttributesType,
-                $attributeName
+        if (!empty($extensionAttributes)) {
+            $extensionAttributesType = $this->dtoReflection->getPropertyTypeFromGetterMethod(
+                $type,
+                ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY
             );
 
-            $isArray = $this->typeProcessor->isArrayType($methodReturnType);
-            $attributeType = $isArray
-                ? $this->typeProcessor->getArrayItemType($methodReturnType)
-                : $methodReturnType;
-
-            if ($isArray) {
-                foreach ($attributeValue as $k => $v) {
-                    $extensionAttributes[$attributeName][$k] = $this->typeProcessor->isTypeSimple($attributeType) ?
-                        $v :
-                        $this->createFromArray($v, $attributeType);
+            foreach ($extensionAttributes as $attributeName => $attributeValue) {
+                if (!is_array($attributeValue) && !is_object($attributeValue)) {
+                    continue;
                 }
-            } else {
-                $extensionAttributes[$attributeName] = $this->createFromArray(
-                    $attributeValue,
-                    $attributeType
-                );
-            }
-        }
 
-        $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $this->extensionAttributesFactory->create(
-            $type,
-            ['data' => $extensionAttributes]
-        );
+                $methodReturnType = $this->dtoReflection->getPropertyTypeFromGetterMethod(
+                    $extensionAttributesType,
+                    $attributeName
+                );
+
+                $isArray = $this->typeProcessor->isArrayType($methodReturnType);
+                $attributeType = $isArray
+                    ? $this->typeProcessor->getArrayItemType($methodReturnType)
+                    : $methodReturnType;
+
+                if ($isArray) {
+                    foreach ($attributeValue as $k => $v) {
+                        $extensionAttributes[$attributeName][$k] = $this->typeProcessor->isTypeSimple($attributeType) ?
+                            $v :
+                            $this->createFromArray($v, $attributeType);
+                    }
+                } else {
+                    $extensionAttributes[$attributeName] = $this->createFromArray(
+                        $attributeValue,
+                        $attributeType
+                    );
+                }
+            }
+
+            $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $this->extensionAttributesFactory->create(
+                $type,
+                ['data' => $extensionAttributes]
+            );
+        }
 
         return $data;
     }
