@@ -90,11 +90,12 @@ class Observer
     /**
      * Schedule update currency rates
      *
+     * @param mixed $schedule
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function scheduledUpdateCurrencyRates()
+    public function scheduledUpdateCurrencyRates($schedule)
     {
         $importWarnings = [];
         if (!$this->_scopeConfig->getValue(
