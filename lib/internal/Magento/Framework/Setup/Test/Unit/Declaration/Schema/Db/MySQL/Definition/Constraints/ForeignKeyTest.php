@@ -140,7 +140,8 @@ class ForeignKeyTest extends \PHPUnit\Framework\TestCase
                         'column' => 'col_name',
                         'referenceTable' => 'ref_table',
                         'referenceColumn' => 'ref_col_name',
-                        'onDelete' => 'CASCADE'
+                        'onDelete' => 'CASCADE',
+                        'onUpdate' => 'NO ACTION'
                     ]
                 ],
             ],

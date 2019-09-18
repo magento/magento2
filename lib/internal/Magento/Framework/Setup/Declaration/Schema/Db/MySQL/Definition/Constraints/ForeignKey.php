@@ -55,7 +55,7 @@ class ForeignKey implements DbDefinitionProcessorInterface
         );
         //CONSTRAINT `fk_name` FOREIGN KEY (`column`) REFERENCES `table` (`column`) option
         $foreignKeySql = sprintf(
-            "CONSTRAINT %s %s (%s) REFERENCES %s (%s) %s %s",
+            "CONSTRAINT %s %s (%s) REFERENCES %s (%s) %s%s",
             $adapter->quoteIdentifier($foreignKey->getName()),
             self::FOREIGN_KEY_STATEMENT,
             $adapter->quoteIdentifier($foreignKey->getColumn()->getName()),

@@ -183,6 +183,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
                                 'referenceColumn' => 'column_with_type_integer',
                                 'onDelete' => 'CASCADE',
                                 'disabled' => false,
+                                'onUpdate' => 'NO ACTION',
                             ],
                     ],
             ],
