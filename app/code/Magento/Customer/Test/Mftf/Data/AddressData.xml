@@ -239,6 +239,21 @@
         <data key="state">Côtes-d'Armor</data>
         <data key="postcode">12345</data>
     </entity>
+    <entity name="updateCustomerChinaAddress" type="address">
+        <data key="firstname">Xian</data>
+        <data key="lastname">Shai</data>
+        <data key="company">Hunan Fenmian</data>
+        <data key="telephone">+86 851 8410 4337</data>
+        <array key="street">
+            <item>Nanyuan Rd, Wudang</item>
+            <item>Hunan Fenmian</item>
+        </array>
+        <data key="country_id">CN</data>
+        <data key="country">China</data>
+        <data key="city">Guiyang</data>
+        <data key="state">Guizhou Sheng</data>
+        <data key="postcode">550002</data>
+    </entity>
     <entity name="updateCustomerNoXSSInjection" type="address">
         <data key="firstname">Jany</data>
         <data key="lastname">Doe</data>
