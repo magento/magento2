@@ -158,7 +158,7 @@ QUERY;
   products (
     filter: {
       sku: {
-        like:"simple%"
+        eq:"simple1"
       }
     }
     pageSize: 1
