@@ -198,7 +198,6 @@ class CartPromotionsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_price_and_cart_display_settings.php
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_category.php
-     *
      */
     public function testCartPromotionsSingleCartRulesWithTaxes()
     {
@@ -269,6 +268,8 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
+        // checking the total discount on the entire cart
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 11.82);
     }
 
     /**
@@ -331,6 +332,7 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 5);
     }
 
     /**
