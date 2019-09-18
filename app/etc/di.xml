@@ -1781,4 +1781,15 @@
     <type name="Magento\Framework\DB\Adapter\AdapterInterface">
         <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
     </type>
+
+    <virtualType name="Magento\Framework\Webapi\Dto\DtoProcessor" type="Magento\Framework\Dto\DtoProcessor">
+        <arguments>
+            <argument name="typeCasting" xsi:type="boolean">false</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Webapi\ServiceInputProcessor">
+        <arguments>
+            <argument name="dtoProcessor" xsi:type="object">Magento\Framework\Webapi\Dto\DtoProcessor</argument>
+        </arguments>
+    </type>
 </config>
