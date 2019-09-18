@@ -37,7 +37,8 @@ $salesRule->setData(
     ]
 );
 
-$salesRule->getConditions()->loadArray([
+$salesRule->getConditions()->loadArray(
+    [
     'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
     'attribute' => null,
     'operator' => null,
@@ -65,6 +66,7 @@ $salesRule->getConditions()->loadArray([
                     ],
             ],
         ],
-]);
+    ]
+);
 
 $salesRule->save();
