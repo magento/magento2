@@ -141,26 +141,26 @@ QUERY;
     }
 
     /**
-     * TODO: Verify whether exception should be thrown in this scenario
-     *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage You need to choose options for your item.
      */
     public function testAddVariationFromAnotherConfigurableProductWithTheSameSuperAttributeToCart()
     {
+        $this->markTestSkipped(
+            'Magento automatically selects the correct child product according to the super attribute
+             https://github.com/magento/graphql-ce/issues/940'
+        );
+
         $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
         $product = current($searchResponse['products']['items']);
-        $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
-        $optionId = $product['configurable_options'][0]['values'][1]['value_index'];
 
         $quantity = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $parentSku = $product['sku'];
 
-        //'configurable' -> ['simple_10', 'simple_20']
-        //'configurable_12345' -> ['simple_30', 'simple_40']
-        //'simple_20' has same configurable option value index (super attribute) as 'simple_40'
-        //therefore 'simple_40' should be added to cart
         $sku = 'simple_20';
 
         $query = $this->getQuery(
@@ -170,18 +170,7 @@ QUERY;
             $quantity
         );
 
-        $response = $this->graphQlMutation($query);
-
-        $cartItem = current($response['addConfigurableProductsToCart']['cart']['items']);
-        self::assertEquals($quantity, $cartItem['quantity']);
-        self::assertEquals($parentSku, $cartItem['product']['sku']);
-        self::assertArrayHasKey('configurable_options', $cartItem);
-
-        $option = current($cartItem['configurable_options']);
-        self::assertEquals($attributeId, $option['id']);
-        self::assertEquals($optionId, $option['value_id']);
-        self::assertArrayHasKey('option_label', $option);
-        self::assertArrayHasKey('value_label', $option);
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -200,10 +189,6 @@ QUERY;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $parentSku = $product['sku'];
 
-        //'configurable' -> ['simple_10', 'simple_20']
-        //'configurable_12345' -> ['simple_30', 'simple_40']
-        //'simple_20' hasn't any common configurable option with 'configurable_12345' children
-        //therefore exception is thrown
         $sku = 'simple_20';
 
         $query = $this->getQuery(
