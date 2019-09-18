@@ -5,8 +5,10 @@
  */
 namespace Magento\Quote\Observer;
 
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Model\Order\Invoice;
 
 class SubmitObserver implements ObserverInterface
 {
@@ -21,15 +23,22 @@ class SubmitObserver implements ObserverInterface
     private $orderSender;
 
     /**
+     * @var InvoiceSender
+     */
+    private $invoiceSender;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param OrderSender $orderSender
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        OrderSender $orderSender
+        OrderSender $orderSender,
+        InvoiceSender $invoiceSender
     ) {
         $this->logger = $logger;
         $this->orderSender = $orderSender;
+        $this->invoiceSender = $invoiceSender;
     }
 
     /**
@@ -51,6 +60,11 @@ class SubmitObserver implements ObserverInterface
         if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
             try {
                 $this->orderSender->send($order);
+                foreach ($order->getInvoiceCollection()->getItems() as $invoice) {
+                    if ($invoice->getState() === Invoice::STATE_PAID) {
+                        $this->invoiceSender->send($invoice);
+                    }
+                }
             } catch (\Exception $e) {
                 $this->logger->critical($e);
             }

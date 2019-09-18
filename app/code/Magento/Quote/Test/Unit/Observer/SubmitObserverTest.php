@@ -5,6 +5,11 @@
  */
 namespace Magento\Quote\Test\Unit\Observer;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
+
 class SubmitObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -42,6 +47,21 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $paymentMock;
 
+    /**
+     * @var InvoiceSender|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $invoiceSenderMock;
+
+    /**
+     * @var Invoice|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $invoiceMock;
+
+    /**
+     * @var InvoiceCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $invoiceCollectionMock;
+
     protected function setUp()
     {
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -59,9 +79,18 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
         $eventMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $eventMock->expects($this->once())->method('getOrder')->willReturn($this->orderMock);
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
-        $this->model = new \Magento\Quote\Observer\SubmitObserver(
-            $this->loggerMock,
-            $this->orderSenderMock
+        $this->invoiceSenderMock = $this->createMock(InvoiceSender::class);
+        $this->invoiceMock = $this->createMock(Invoice::class);
+        $this->invoiceCollectionMock = $this->createMock(InvoiceCollection::class);
+        $objectManager = new ObjectManager($this);
+
+        $this->model = $objectManager->getObject(
+            \Magento\Quote\Observer\SubmitObserver::class,
+            [
+                'logger' => $this->loggerMock,
+                'orderSender' => $this->orderSenderMock,
+                'invoiceSender' => $this->invoiceSenderMock,
+            ]
         );
     }
 
@@ -70,6 +99,10 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
         $this->paymentMock->expects($this->once())->method('getOrderPlaceRedirectUrl')->willReturn('');
         $this->orderMock->expects($this->once())->method('getCanSendNewEmailFlag')->willReturn(true);
         $this->orderSenderMock->expects($this->once())->method('send')->willReturn(true);
+        $this->orderMock->expects($this->once())
+            ->method('getInvoiceCollection')
+            ->willReturn($this->invoiceCollectionMock);
+        $this->invoiceCollectionMock->expects($this->once())->method('getItems')->willReturn([]);
         $this->loggerMock->expects($this->never())->method('critical');
         $this->model->execute($this->observerMock);
     }
@@ -92,5 +125,39 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
         $this->orderSenderMock->expects($this->never())->method('send');
         $this->loggerMock->expects($this->never())->method('critical');
         $this->model->execute($this->observerMock);
+    }
+
+    public function testSendEmailWithPaidInvoice()
+    {
+        $this->prepareDataForSendInvoice();
+        $this->invoiceMock->expects($this->once())->method('getState')->willReturn(Invoice::STATE_PAID);
+        $this->invoiceSenderMock->expects($this->once())
+            ->method('send')
+            ->with($this->invoiceMock)
+            ->willReturn(true);
+        $this->loggerMock->expects($this->never())->method('critical');
+
+        $this->model->execute($this->observerMock);
+    }
+
+    public function testSendEmailWithNotPaidInvoice()
+    {
+        $this->prepareDataForSendInvoice();
+        $this->invoiceMock->expects($this->once())->method('getState')->willReturn(Invoice::STATE_OPEN);
+        $this->invoiceSenderMock->expects($this->never())->method('send');
+        $this->loggerMock->expects($this->never())->method('critical');
+
+        $this->model->execute($this->observerMock);
+    }
+
+    private function prepareDataForSendInvoice()
+    {
+        $this->paymentMock->expects($this->once())->method('getOrderPlaceRedirectUrl')->willReturn('');
+        $this->orderMock->expects($this->once())->method('getCanSendNewEmailFlag')->willReturn(true);
+        $this->orderSenderMock->expects($this->once())->method('send')->willReturn(true);
+        $this->orderMock->expects($this->once())
+            ->method('getInvoiceCollection')
+            ->willReturn($this->invoiceCollectionMock);
+        $this->invoiceCollectionMock->expects($this->once())->method('getItems')->willReturn([$this->invoiceMock]);
     }
 }
