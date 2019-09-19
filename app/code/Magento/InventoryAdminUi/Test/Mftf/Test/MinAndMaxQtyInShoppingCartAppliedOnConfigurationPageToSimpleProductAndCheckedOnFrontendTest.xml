@@ -26,7 +26,7 @@
         </before>
         <after>
             <magentoCLI command="config:set {{SetDefaultMinQtyAllowedInShoppingCart.path}} {{SetDefaultMinQtyAllowedInShoppingCart.value}}" stepKey="restoreDefaultValueMin"/>
-            <magentoCLI command="config:set {{SetDefaultMaxQtyAllowedInShoppingCar.path}} {{SetDefaultMaxQtyAllowedInShoppingCart.value}}" stepKey="restoreDefaultValueMax"/>
+            <magentoCLI command="config:set {{SetDefaultMaxQtyAllowedInShoppingCart.path}} {{SetDefaultMaxQtyAllowedInShoppingCart.value}}" stepKey="restoreDefaultValueMax"/>
         </after>
         <remove keyForRemoval="setMaxMinQty"/>
 
