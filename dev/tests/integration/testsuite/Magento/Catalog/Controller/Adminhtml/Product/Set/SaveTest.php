@@ -172,7 +172,9 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $product->setAttributeSetId($attributeSet->getId());
         $product = $this->productRepository->save($product);
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
-        $this->assertNotContains($message, $this->getSyslogContent());
+        $syslogPath = $this->getSyslogPath();
+        $syslogContent = file_exists($syslogPath) ? file_get_contents($syslogPath) : '';
+        $this->assertNotContains($message, $syslogContent);
     }
 
     /**
@@ -200,33 +202,9 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     private function removeSyslog()
     {
-        $this->detachLogger();
+        $this->syslogHandler->close();
         if (file_exists($this->getSyslogPath())) {
             unlink($this->getSyslogPath());
         }
-    }
-
-    /**
-     * Detach system log handler.
-     *
-     * @return void
-     */
-    private function detachLogger()
-    {
-        $this->syslogHandler->close();
-    }
-
-    /**
-     * Retrieve content of system.log file
-     *
-     * @return bool|string
-     */
-    private function getSyslogContent()
-    {
-        if (!file_exists($this->getSyslogPath())) {
-            return '';
-        }
-
-        return file_get_contents($this->getSyslogPath());
     }
 }
