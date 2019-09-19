@@ -848,7 +848,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * Test that after product import images from "hide_from_product_page" attribute hidden properly.
+     * Tests that "hide_from_product_page" attribute is hidden after importing product images.
      *
      * @magentoDataFixture mediaImportImageFixture
      * @magentoAppIsolation enabled
