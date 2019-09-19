@@ -104,13 +104,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
             $select->where('stock_item.use_config_manage_stock = 0 AND stock_item.manage_stock = 1');
         }
 
-        if ($entityIds !== null) {
-            if (count($entityIds) > 1) {
-                $select->where('stock_item.product_id in (?)', $entityIds);
-            } else {
-                $select->where('stock_item.product_id = ?', $entityIds);
-            }
-        }
+        $select->where('stock_item.product_id in (?)', $entityIds);
 
         $select->group('stock_item.product_id');
         $select->having('max_is_in_stock = 0');
