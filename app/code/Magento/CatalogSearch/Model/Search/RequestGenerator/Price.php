@@ -14,12 +14,12 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Catalog search range request generator.
  */
-class Decimal implements GeneratorInterface
+class Price implements GeneratorInterface
 {
     /**
      * @inheritdoc
      */
-    public function getFilterData(Attribute $attribute, $filterName)
+    public function getFilterData(Attribute $attribute, $filterName): array
     {
         return [
             'type' => FilterInterface::TYPE_RANGE,
@@ -33,13 +33,13 @@ class Decimal implements GeneratorInterface
     /**
      * @inheritdoc
      */
-    public function getAggregationData(Attribute $attribute, $bucketName)
+    public function getAggregationData(Attribute $attribute, $bucketName): array
     {
         return [
             'type' => BucketInterface::TYPE_DYNAMIC,
             'name' => $bucketName,
             'field' => $attribute->getAttributeCode(),
-            'method' => 'manual',
+            'method' => '$price_dynamic_algorithm$',
             'metric' => [['type' => 'count']],
         ];
     }
