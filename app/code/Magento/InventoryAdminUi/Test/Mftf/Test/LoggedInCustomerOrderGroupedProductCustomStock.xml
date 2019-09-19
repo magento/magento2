@@ -94,6 +94,8 @@
         <!--Verify order.-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
         <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrderGrid"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
