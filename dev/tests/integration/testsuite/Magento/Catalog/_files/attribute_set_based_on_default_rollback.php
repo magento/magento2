@@ -9,8 +9,8 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)->loadByCode('catalog_product');
 
 $attributeSetCollection = $objectManager->create(
-    \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class
-);
+    \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class
+)->create();
 $attributeSetCollection->addFilter('attribute_set_name', 'new_attribute_set');
 $attributeSetCollection->addFilter('entity_type_id', $entityType->getId());
 $attributeSetCollection->setOrder('attribute_set_id');
