@@ -23,7 +23,7 @@
         <element name="secondShippingAddressOption" type="select" selector="//table//tbody//tr[position()=2]//td[position()=3]//div//select"/>
     </section>
     <section name="StorefrontMultipleShippingMethodSection">
-        <element name="orderId" type="text" selector="(//div[@class='order-id'])[{{rowNum}}]" parameterized="true"/>
+        <element name="orderId" type="text" selector=".shipping-list:nth-child({{rowNum}}) .order-id" parameterized="true"/>
         <element name="placeOrderButton" type="button" selector="#review-button"/>
         <element name="goToReviewYourOrderButton" type="button" selector="#payment-continue"/>
         <element name="continueToBillingInformationButton" type="button" selector=".action.primary.continue"/>
