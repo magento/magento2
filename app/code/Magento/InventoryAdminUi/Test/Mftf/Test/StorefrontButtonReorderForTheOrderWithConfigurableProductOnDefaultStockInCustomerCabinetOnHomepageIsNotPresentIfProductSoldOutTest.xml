@@ -140,6 +140,6 @@
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage" >
             <argument name="menu" value="My Orders"/>
         </actionGroup>
-        <dontSeeElement selector="//td[text()='{$getOrderId}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="verifyReorderButton"/>
+        <dontSeeElement selector="{{StorefrontCustomerOrdersGridSection.reorderBtn($getOrderId)}}" stepKey="verifyReorderButton"/>
     </test>
 </tests>

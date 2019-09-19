@@ -97,15 +97,11 @@
         <remove keyForRemoval="waitForReorderFormToLoad"/>
         <remove keyForRemoval="submitOrder1"/>
 
-
         <!-- Reorder of the Order from Homepage -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage" before="navigateToProductIndexPageForCheckProductQtyAfterReorder"/>
-        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
-        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage" after="goToCustomerDashboardPage">
-            <argument name="menu" value="My Orders"/>
+        <actionGroup ref="StorefrontCustomerReorderActionGroup" stepKey="reorder" before="navigateToProductIndexPageForCheckProductQtyAfterReorder">
+            <argument name="orderNumber" value="${getOrderId}"/>
         </actionGroup>
-        <click selector="//td[text()='{$getOrderId}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="clickReorderBtn" after="goToMyOrdersPage"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout" after="clickReorderBtn"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout" after="reorder"/>
         <waitForPageLoad stepKey="waitForPageLoadCheckoutSelectPaymentToReorder" after="goToCheckout"/>
         <click selector=".continue" stepKey="clickOnNextPaymentPageToReorder" after="waitForPageLoadCheckoutSelectPaymentToReorder"/>
         <waitForPageLoad stepKey="waitForPageLoadCheckout2" after="clickOnNextPaymentPageToReorder"/>
