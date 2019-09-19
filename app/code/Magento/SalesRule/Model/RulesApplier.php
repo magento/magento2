@@ -203,16 +203,18 @@ class RulesApplier
      */
     private function setDiscountBreakdown($discountData, $item, $rule)
     {
-        /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
-        $discount = $this->discountFactory->create();
-        $discount->setBaseOriginalAmount($discountData->getBaseOriginalAmount());
-        $discount->setAmount($discountData->getAmount());
-        $discount->setBaseAmount($discountData->getBaseAmount());
-        $discount->setOriginalAmount($discountData->getOriginalAmount());
-        $discountBreakdown = $item->getExtensionAttributes()->getDiscounts() ?? [];
-        $discountBreakdown[$rule->getId()]['discount'] = $discount;
-        $discountBreakdown[$rule->getId()]['rule'] = $rule;
-        $item->getExtensionAttributes()->setDiscounts($discountBreakdown);
+        if ($discountData->getAmount() > 0) {
+            /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
+            $discount = $this->discountFactory->create();
+            $discount->setBaseOriginalAmount($discountData->getBaseOriginalAmount());
+            $discount->setAmount($discountData->getAmount());
+            $discount->setBaseAmount($discountData->getBaseAmount());
+            $discount->setOriginalAmount($discountData->getOriginalAmount());
+            $discountBreakdown = $item->getExtensionAttributes()->getDiscounts() ?? [];
+            $discountBreakdown[$rule->getId()]['discount'] = $discount;
+            $discountBreakdown[$rule->getId()]['rule'] = $rule;
+            $item->getExtensionAttributes()->setDiscounts($discountBreakdown);
+        }
         return $this;
     }
 
