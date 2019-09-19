@@ -16,7 +16,8 @@
                     $block->getUrl(null, ['_secure' => true]),
                     $block->getUrl(null, ['_secure' => false]),
                 ])) ?>,
-                "sectionNames": <?= $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getData('sectionNamesProvider')->getSectionNames()) ?>
+                "sectionNames": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)
+                    ->jsonEncode($block->getData('sectionNamesProvider')->getSectionNames()) ?>
             }
         }
     }
