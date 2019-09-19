@@ -53,7 +53,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
 class Wishlist extends AbstractModel implements IdentityInterface
 {
     /**
-     * Cache tag
+     * Wishlist cache tag name
      */
     const CACHE_TAG = 'wishlist';
 
