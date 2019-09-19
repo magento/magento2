@@ -16,7 +16,8 @@
         "magento/module-media-storage": "*",
         "magento/module-quote": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-tax": "*"
     },
     "suggest": {
         "magento/module-msrp": "*",
@@ -25,8 +26,7 @@
         "magento/module-sales-rule": "*",
         "magento/module-product-video": "*",
         "magento/module-configurable-sample-data": "*",
-        "magento/module-product-links-sample-data": "*",
-        "magento/module-tax": "*"
+        "magento/module-product-links-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

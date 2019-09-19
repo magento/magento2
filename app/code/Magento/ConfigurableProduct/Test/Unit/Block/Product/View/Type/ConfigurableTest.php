@@ -503,6 +503,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $tierPrice = [
             'price_qty' => $priceQty,
             'price' => $amountMock,
+            'priceExclTax' => $amountMock,
         ];
 
         $tierPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\TierPriceInterface::class)
