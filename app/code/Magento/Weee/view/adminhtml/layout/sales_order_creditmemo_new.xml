@@ -10,7 +10,7 @@
         <referenceBlock name="creditmemo_totals">
             <block class="Magento\Weee\Block\Sales\Order\Totals" name="weee_cm_totals">
                 <action method="setBeforeCondition">
-                    <argument name="condition" xsi:type="string">tax</argument>
+                    <argument name="condition" xsi:type="string">grand_total</argument>
                 </action>
             </block>
         </referenceBlock>
