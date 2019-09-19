@@ -65,6 +65,8 @@ class CartPromotionsTest extends GraphQlAbstract
         $this->assertCount(2, $response['cart']['items']);
         //validating the line item prices, quantity and discount
         $this->assertLineItemDiscountPrices($response, $productsInCart, $qty, $ruleLabels);
+        //total discount on the cart which is the sum of the individual row discounts
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 21.98);
     }
 
     /**
@@ -144,7 +146,7 @@ class CartPromotionsTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $this->assertCount(2, $response['cart']['items']);
 
-        //validating the individual discounts per product and aggregate discount per product
+        //validating the individual discounts per line item and total discounts per line item
         $productsInResponse = array_map(null, $response['cart']['items'], $productsInCart);
         $count = count($productsInCart);
         for ($itemIndex = 0; $itemIndex < $count; $itemIndex++) {
@@ -181,6 +183,8 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 21.98);
+        $this->assertEquals($response['cart']['prices']['discounts'][1]['amount']['value'], 2.2);
     }
 
     /**
@@ -194,7 +198,6 @@ class CartPromotionsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_price_and_cart_display_settings.php
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_category.php
-     *
      */
     public function testCartPromotionsSingleCartRulesWithTaxes()
     {
@@ -265,6 +268,8 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
+        // checking the total discount on the entire cart
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 11.82);
     }
 
     /**
@@ -327,6 +332,29 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 5);
+    }
+
+    /**
+     * Validating if the discount label in the response shows the default value if no label is available on cart rule
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off.php
+     */
+    public function testCartPromotionsWithNoRuleLabels()
+    {
+        $skus =['simple1', 'simple2'];
+        $qty = 1;
+        $cartId = $this->createEmptyCart();
+        $this->addMultipleSimpleProductsToCart($cartId, $qty, $skus[0], $skus[1]);
+        $query = $this->getCartItemPricesQuery($cartId);
+        $response = $this->graphQlMutation($query);
+        //total items added to cart
+        $this->assertCount(2, $response['cart']['items']);
+        //checking the default label for individual line item when cart rule doesn't have a label set
+        foreach ($response['cart']['items'] as $cartItem) {
+            $this->assertEquals('Discount', $cartItem['prices']['discounts'][0]['label']);
+        }
     }
 
     /**
@@ -379,8 +407,14 @@ QUERY;
         }
       }
       }
+    prices{
+      discounts{
+        amount{value}
+      }
+      
     }
   }
+}
 
 QUERY;
     }
