@@ -18,9 +18,6 @@
             <testCaseId value="MC-56"/>
             <group value="Catalog"/>
             <group value="Product Attributes"/>
-            <skip>
-                <issueId value="MC-17140"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -38,7 +35,7 @@
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!-- Search and select products -->
@@ -58,10 +55,11 @@
         <!-- Switch store view -->
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewActionGroup"/>
         <!-- Update attribute -->
-        <click selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
+        <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$$createProductOne.price$$0" stepKey="fillAttributeNameField"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters"/>
 
         <!-- Run cron twice -->
         <magentoCLI command="cron:run" stepKey="runCron1"/>
@@ -77,6 +75,7 @@
             <argument name="priceTo" value="$$createProductOne.price$$0"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <waitForElementVisible selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="waitForSearchResultInDefaultView"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
         <!-- Assert on storefront custom view -->
@@ -88,6 +87,7 @@
             <argument name="priceTo" value="$$createProductOne.price$$0"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultCustom"/>
+        <waitForElementVisible selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="waitForSearchResultInCustomView"/>
         <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInCustom"/>
     </test>
 </tests>
