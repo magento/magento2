@@ -53,34 +53,27 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setCanSaveCustomOptions(true)
     ->setHasOptions(true);
 
-$options = [
-    [
-        'title' => 'file option',
-        'type' => 'file',
-        'is_require' => true,
-        'sort_order' => 1,
-        'price' => 30.0,
-        'price_type' => 'percent',
-        'sku' => 'sku3',
-        'file_extension' => 'jpg, png, gif',
-        'image_size_x' => 100,
-        'image_size_y' => 100,
-
-    ],
+$option = [
+    'title' => 'file option',
+    'type' => 'file',
+    'is_require' => true,
+    'sort_order' => 1,
+    'price' => 30.0,
+    'price_type' => 'percent',
+    'sku' => 'sku3',
+    'file_extension' => 'jpg, png, gif',
+    'image_size_x' => 100,
+    'image_size_y' => 100,
 ];
 
 $customOptions = [];
 
 /** @var ProductCustomOptionInterfaceFactory $customOptionFactory */
 $customOptionFactory = $objectManager->create(ProductCustomOptionInterfaceFactory::class);
-
-foreach ($options as $option) {
-    /** @var ProductCustomOptionInterface $customOption */
-    $customOption = $customOptionFactory->create(['data' => $option]);
-    $customOption->setProductSku($product->getSku());
-
-    $customOptions[] = $customOption;
-}
+/** @var ProductCustomOptionInterface $customOption */
+$customOption = $customOptionFactory->create(['data' => $option]);
+$customOption->setProductSku($product->getSku());
+$customOptions[] = $customOption;
 
 $product->setOptions($customOptions);
 
