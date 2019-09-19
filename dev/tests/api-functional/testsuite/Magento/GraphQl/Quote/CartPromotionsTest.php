@@ -199,7 +199,7 @@ class CartPromotionsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_price_and_cart_display_settings.php
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_category.php
      */
-    public function testCartPromotionsSingleCartRulesWithTaxes()
+    public function testCartPromotionsCartRulesWithTaxes()
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var ProductRepositoryInterface $productRepository */
@@ -303,7 +303,7 @@ class CartPromotionsTest extends GraphQlAbstract
         $couponCode = '2?ds5!2d';
         $cartId = $this->createEmptyCart();
         $this->addMultipleSimpleProductsToCart($cartId, $qty, $skus[0], $skus[1]);
-        $this->applyCouponToCart($cartId, $couponCode);
+        $this->applyCouponsToCart($cartId, $couponCode);
         $query = $this->getCartItemPricesQuery($cartId);
         $response = $this->graphQlMutation($query);
         $this->assertCount(2, $response['cart']['items']);
@@ -349,7 +349,6 @@ class CartPromotionsTest extends GraphQlAbstract
         /** @var Product $prod2 */
         $prod1 = $productRepository->get('simple1');
         $prod2 = $productRepository->get('simple2');
-        $productsInCart = [$prod1, $prod2];
         $prod2->setVisibility(Visibility::VISIBILITY_BOTH);
         $productRepository->save($prod2);
         $skus =['simple1', 'simple2'];
@@ -393,13 +392,13 @@ class CartPromotionsTest extends GraphQlAbstract
      * @param string $cartId
      * @param string $couponCode
      */
-    private function applyCouponToCart(string $cartId, string $couponCode)
+    private function applyCouponsToCart(string $cartId, string $couponCode)
     {
         $query = <<<QUERY
 mutation {
   applyCouponToCart(input: {cart_id: "$cartId", coupon_code: "$couponCode"}) {
     cart {
-      applied_coupon {
+      applied_coupons {
         code
       }
     }
@@ -409,7 +408,7 @@ QUERY;
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('applyCouponToCart', $response);
-        self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
+        self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupons'][0]['code']);
     }
 
     /**
