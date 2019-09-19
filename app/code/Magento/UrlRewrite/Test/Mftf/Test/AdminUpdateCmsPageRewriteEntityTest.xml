@@ -11,7 +11,7 @@
         <annotations>
             <stories value="Update CMS Page URL Redirect"/>
             <title value="Update CMS Page URL Redirect"/>
-            <description value="Login as Admin and tried to update the create URL Rewrite for CMS page"/>
+            <description value="Login as Admin and tried to update the created URL Rewrite for CMS page"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -66,12 +66,11 @@
             <argument name="message" value="The URL Rewrite has been saved."/>
         </actionGroup>
 
+        <!-- Assert Url Rewrite Cms Page Redirect -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
-        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchStoreView">
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchToCustomStoreView">
             <argument name="storeView" value="customStore"/>
         </actionGroup>
-
-        <!-- Assert Url Rewrite Cms Page Redirect -->
         <actionGroup ref="navigateToStorefrontForCreatedPage" stepKey="navigateToTheStoreFront">
             <argument name="page" value="newrequestpath"/>
         </actionGroup>
@@ -81,10 +80,11 @@
             <argument name="cmsContentHeading" value="$$createCMSPage.content_heading$$"/>
         </actionGroup>
 
-        <!--Search created CMS page url rewrite in grid-->
+        <!--Search created CMS page url rewrite in grid second attempt-->
         <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="searchUrlRewriteSecondAttempt">
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
+
         <!-- Update URL Rewrite for CMS Page Second Attempt -->
         <actionGroup ref="AdminUpdateUrlRewrite" stepKey="updateUrlRewriteSecondAttempt">
             <argument name="storeValue" value="Default Store View"/>
@@ -92,15 +92,15 @@
             <argument name="redirectTypeValue" value="Temporary (302)"/>
             <argument name="description" value="test description_302"/>
         </actionGroup>
+
         <!-- Assert Url Rewrite Save Message -->
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessageSecondAttempt">
             <argument name="message" value="The URL Rewrite has been saved."/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepageSecondAttempt"/>
-        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefualtStoreView"/>
-
         <!-- Assert Url Rewrite Cms Page Redirect -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepageSecondAttempt"/>
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefaultStoreView"/>
         <actionGroup ref="navigateToStorefrontForCreatedPage" stepKey="navigateToTheStoreFrontSecondAttempt">
             <argument name="page" value="temporaryrequestpath.html"/>
         </actionGroup>
@@ -110,8 +110,36 @@
             <argument name="cmsContentHeading" value="$$createCMSPage.content_heading$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+        <!--Search created CMS page url rewrite in grid third attempt-->
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="searchUrlRewriteThirdAttempt">
             <argument name="requestPath" value="temporaryrequestpath.html"/>
+        </actionGroup>
+
+        <!-- Update URL Rewrite for CMS Page Third Attempt -->
+        <actionGroup ref="AdminUpdateUrlRewrite" stepKey="updateUrlRewriteThirdAttempt">
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="permanentrequestpath.htm"/>
+            <argument name="redirectTypeValue" value="Permanent (301)"/>
+            <argument name="description" value="test_description_301"/>
+        </actionGroup>
+
+        <!-- Assert Url Rewrite Save Message -->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessageThirdAttempt">
+            <argument name="message" value="The URL Rewrite has been saved."/>
+        </actionGroup>
+
+        <!-- Assert Url Rewrite Cms Page Redirect -->
+        <actionGroup ref="navigateToStorefrontForCreatedPage" stepKey="navigateToTheStoreFrontThirdAttempt">
+            <argument name="page" value="permanentrequestpath.htm"/>
+        </actionGroup>
+        <actionGroup ref="AssertStoreFrontCMSPage" stepKey="assertCMSPageThirdAttempt">
+            <argument name="cmsTitle"  value="$$createCMSPage.title$$"/>
+            <argument name="cmsContent" value="$$createCMSPage.content$$"/>
+            <argument name="cmsContentHeading" value="$$createCMSPage.content_heading$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+            <argument name="requestPath" value="permanentrequestpath.htm"/>
         </actionGroup>
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView"/>
 
