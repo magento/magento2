@@ -45,6 +45,11 @@ class CurrencyConverterApi extends AbstractImport
     private $currencyConverterServiceHost = '';
 
     /**
+     * @var string
+     */
+    private $serviceUrl = '';
+
+    /**
      * @param CurrencyFactory $currencyFactory
      * @param ScopeConfig $scopeConfig
      * @param ZendClientFactory $httpClientFactory
@@ -151,25 +156,27 @@ class CurrencyConverterApi extends AbstractImport
      */
     private function getServiceURL(string $currencyFrom, array $currenciesTo): string
     {
-        // Get access key
-        $accessKey = $this->scopeConfig->getValue('currency/currencyconverterapi/api_key', ScopeInterface::SCOPE_STORE);
-        if (empty($accessKey)) {
-            $this->_messages[] = __('No API Key was specified or an invalid API Key was specified.');
-            return '';
+        if (!$this->serviceUrl) {
+            // Get access key
+            $accessKey = $this->scopeConfig
+                ->getValue('currency/currencyconverterapi/api_key', ScopeInterface::SCOPE_STORE);
+            if (empty($accessKey)) {
+                $this->_messages[] = __('No API Key was specified or an invalid API Key was specified.');
+                return '';
+            }
+            // Get currency rates request
+            $currencyQueryParts = [];
+            foreach ($currenciesTo as $currencyTo) {
+                $currencyQueryParts[] = sprintf('%s_%s', $currencyFrom, $currencyTo);
+            }
+            $currencyRates = implode(',', $currencyQueryParts);
+            $this->serviceUrl = str_replace(
+                ['{{ACCESS_KEY}}', '{{CURRENCY_RATES}}'],
+                [$accessKey, $currencyRates],
+                self::CURRENCY_CONVERTER_URL
+            );
         }
-
-        // Get currency rates request
-        $currencyQueryParts = [];
-        foreach ($currenciesTo as $currencyTo) {
-            $currencyQueryParts[] = sprintf('%s_%s', $currencyFrom, $currencyTo);
-        }
-        $currencyRates = implode(',', $currencyQueryParts);
-
-        return str_replace(
-            ['{{ACCESS_KEY}}', '{{CURRENCY_RATES}}'],
-            [$accessKey, $currencyRates],
-            self::CURRENCY_CONVERTER_URL
-        );
+        return $this->serviceUrl;
     }
 
     /**
