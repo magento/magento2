@@ -193,7 +193,7 @@ type PlaceOrderOutput {
 type Cart {
     items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
     applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @doc(description:"An array of coupons that have been applied to the cart") @deprecated(reason: "Use applied_coupons instead ")
-    applied_coupons: [AppliedCoupon]
+    applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code")
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
     shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: BillingCartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
