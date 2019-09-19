@@ -446,7 +446,9 @@ class DtoProcessor
         foreach ($strategy[GetHydrationStrategy::HYDRATOR_STRATEGY_SETTER] as $paramName => $info) {
             $methodName = $info['method'];
             $paramType = $info['type'];
-            $resObject->$methodName($this->createObjectByType($paramName, $data[$paramName], $paramType));
+            if ($data[$paramName] !== null) {
+                $resObject->$methodName($this->createObjectByType($paramName, $data[$paramName], $paramType));
+            }
         }
 
         if ($resObject instanceof CustomAttributesDataInterface) {
