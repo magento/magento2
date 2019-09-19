@@ -90,7 +90,7 @@
         <remove keyForRemoval="checkProductSourceQty"/>
         <remove keyForRemoval="checkSalableQty"/>
         <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$createSource.source[name]$$)}}"
-             userInput="98" stepKey="checkProductSourceQty" before="findProductBySkuToCheckQty"/>
+             userInput="98" stepKey="checkProductSourceQty" after="findProductBySkuToCheckQty"/>
         <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}"
              userInput="98" stepKey="checkSalableQty" after="checkProductSourceQty"/>
     </test>
