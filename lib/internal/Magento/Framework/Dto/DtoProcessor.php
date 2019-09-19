@@ -178,11 +178,13 @@ class DtoProcessor
                 return $this->typeProcessor->processSimpleAndAnyType($value, $type);
             }
 
-            if (is_array($value)) {
-                return $this->createFromArray($value, $type);
+            if (!is_array($value)) {
+                throw new LocalizedException(
+                    __('An array was expected for data definition of %type', ['type' => $type])
+                );
             }
 
-            return $value;
+            return $this->createFromArray(is_array($value) ? $value : [], $type);
         } catch (\Exception $e) {
             throw new LocalizedException(
                 new Phrase(
