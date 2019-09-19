@@ -31,7 +31,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Set Attribute Set Filter
      *
      * @deprecated since do not sets ConditionType
-     * @see setAttributeSetTypeSetFilter($setId, $conditionType = 'eq')
+     * @see setAttributeSetConditionSetFilter($setId, $conditionType = 'eq')
      * @param int $setId
      * @return $this
      */
