@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminAfterFullShipmentTest" extends="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminTest">
+        <annotations>
+            <stories value="Add Order"/>
+            <title value="Order with Simple product on Default stock canceled from Admin after full shipment."/>
+            <description value="Order with Simple product on Default stock canceled from Admin after full shipment."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/2367500"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!-- Ship the order and assert the status -->
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder" before="cancelPendingOrder" />
+
+        <!-- Assert order buttons -->
+        <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons" after="shipTheOrder"/>
+
+        <remove keyForRemoval="checkProductSourceQty"/>
+        <remove keyForRemoval="checkSalableQty"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}"
+             userInput="995" stepKey="checkProductSourceQty"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}"
+             userInput="995" stepKey="checkSalableQty"/>
+    </test>
+</tests>

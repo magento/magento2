@@ -13,7 +13,7 @@
             <stories value="Virtual Product Default Stock."/>
             <title value="Manage Stock on Product page turned off for Virtual Product in admin"/>
             <description value="Verify, admin should be able to turn off Manage Stock option on Product page for virtual product."/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/911989/scenarios/2720787"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/911989/scenarios/2720713"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

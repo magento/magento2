@@ -21,12 +21,12 @@
             <group value="multi_mode"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set {{SetMinQtyAllowedInShoppingCart.path}} 5" stepKey="fillConfigValueMinQty" before="additionalSource"/>
-            <magentoCLI command="config:set {{SetMaxQtyAllowedInShoppingCart.path}} 5" stepKey="fillConfigValueMaxQty" after="fillConfigValueMinQty"/>
+            <magentoCLI command="config:set {{SetMinQtyAllowedInShoppingCart.path}} {{SetMinQtyAllowedInShoppingCart.value}}" stepKey="fillConfigValueMinQty" before="additionalSource"/>
+            <magentoCLI command="config:set {{SetMaxQtyAllowedInShoppingCart.path}} {{SetMaxQtyAllowedInShoppingCart.value}}" stepKey="fillConfigValueMaxQty" after="fillConfigValueMinQty"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{SetMinQtyAllowedInShoppingCart.path}} 1" stepKey="restoreDefaultValueMin"/>
-            <magentoCLI command="config:set {{SetMaxQtyAllowedInShoppingCart.path}} 1000" stepKey="restoreDefaultValueMax"/>
+            <magentoCLI command="config:set {{SetDefaultMinQtyAllowedInShoppingCart.path}} {{SetDefaultMinQtyAllowedInShoppingCart.value}}" stepKey="restoreDefaultValueMin"/>
+            <magentoCLI command="config:set {{SetDefaultMaxQtyAllowedInShoppingCar.path}} {{SetDefaultMaxQtyAllowedInShoppingCar.value}}" stepKey="restoreDefaultValueMax"/>
         </after>
         <remove keyForRemoval="setMaxMinQty"/>
 

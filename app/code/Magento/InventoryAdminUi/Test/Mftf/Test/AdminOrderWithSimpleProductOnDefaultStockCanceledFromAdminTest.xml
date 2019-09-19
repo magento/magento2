@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminTest">
+        <annotations>
+            <stories value="Add Order"/>
+            <title value="Order with Simple product on Default stock canceled from Admin."/>
+            <description value="Order with Simple product on Default stock canceled from Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/2605764"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <!--Create additional source and stock.-->
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="createSource"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="createSource"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteCustomStock"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <!-- Create order -->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="newOrder">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductWithQtyToOrderActionGroup" stepKey="addFirstProductToOrder" >
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="5"/>
+        </actionGroup>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty"/>
+
+        <!-- Cancel whole  order from admin -->
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder"/>
+
+        <!--Verify that reservation '-5' items of 'Configurable product 1-red' on Default stock is created correctly -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQty"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProductBySkuToCheckQty">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}"
+             userInput="1000" stepKey="checkProductSourceQty"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}"
+             userInput="1000" stepKey="checkSalableQty"/>
+    </test>
+</tests>
