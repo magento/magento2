@@ -93,6 +93,7 @@ class Cli extends Console\Application
         }
 
         parent::__construct($name, $version);
+        $this->serviceManager->setService(\Symfony\Component\Console\Application::class, $this);
     }
 
     /**
