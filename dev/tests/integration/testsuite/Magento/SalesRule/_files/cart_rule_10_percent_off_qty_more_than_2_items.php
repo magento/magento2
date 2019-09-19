@@ -27,6 +27,7 @@ $salesRule->setData(
         'discount_amount' => 10,
         'discount_step' => 0,
         'stop_rules_processing' => 1,
+        'is_advanced' => 1,
         'website_ids' => [$websiteId],
         'store_labels' => [
 

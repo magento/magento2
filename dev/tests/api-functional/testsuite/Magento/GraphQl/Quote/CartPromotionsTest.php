@@ -336,6 +336,36 @@ class CartPromotionsTest extends GraphQlAbstract
     }
 
     /**
+     * If no discount is applicable to the cart, row total discount should be zero and no rule label shown
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/buy_3_get_1_free.php
+     */
+    public function testCartPromotionsWhenNoDiscountIsAvailable()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        /** @var Product $prod2 */
+        $prod1 = $productRepository->get('simple1');
+        $prod2 = $productRepository->get('simple2');
+        $productsInCart = [$prod1, $prod2];
+        $prod2->setVisibility(Visibility::VISIBILITY_BOTH);
+        $productRepository->save($prod2);
+        $skus =['simple1', 'simple2'];
+        $qty = 2;
+        $cartId = $this->createEmptyCart();
+        $this->addMultipleSimpleProductsToCart($cartId, $qty, $skus[0], $skus[1]);
+        $query = $this->getCartItemPricesQuery($cartId);
+        $response = $this->graphQlMutation($query);
+        $this->assertCount(2, $response['cart']['items']);
+        foreach ($response['cart']['items'] as $cartItems) {
+            $this->assertEquals(0, $cartItems['prices']['total_item_discount']['value']);
+            $this->assertNull($cartItems['prices']['discounts']);
+        }
+    }
+
+    /**
      * Validating if the discount label in the response shows the default value if no label is available on cart rule
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
