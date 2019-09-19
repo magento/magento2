@@ -66,7 +66,7 @@ class AuthorizeCommandTest extends AbstractTest
             'authCode' => 'abc123',
             'avsResultCode' => 'P',
             'cvvResultCode' => '',
-            'cavvResultCode' => '',
+            'cavvResultCode' => '2',
             'accountType' => 'Visa',
         ];
         $this->assertSame('1111', $payment->getCcLast4());
@@ -148,6 +148,7 @@ class AuthorizeCommandTest extends AbstractTest
 
         $expectedRequest = include __DIR__ . '/../../../AuthorizenetAcceptjs/_files/expected_request/authorize.php';
         $response = include __DIR__ . '/../../../AuthorizenetAcceptjs/_files/response/authorize.php';
+        $response['transactionResponse']['cavvResultCode'] = '0';
 
         $this->clientMock->method('setRawData')
             ->with(json_encode($expectedRequest), 'application/json');
@@ -167,7 +168,7 @@ class AuthorizeCommandTest extends AbstractTest
             'authCode' => 'abc123',
             'avsResultCode' => 'Y',
             'cvvResultCode' => 'P',
-            'cavvResultCode' => '2',
+            'cavvResultCode' => '0',
             'accountType' => 'Visa',
         ];
         $this->assertSame('1111', $payment->getCcLast4());

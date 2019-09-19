@@ -1380,7 +1380,7 @@ XMLAuth;
             $shipperPart->addChild('PhoneNumber', $request->getShipperContactPhoneNumber());
 
             $addressPart = $shipperPart->addChild('Address');
-            $addressPart->addChild('AddressLine1', $request->getShipperAddressStreet());
+            $addressPart->addChild('AddressLine1', $request->getShipperAddressStreet1());
             $addressPart->addChild('AddressLine2', $request->getShipperAddressStreet2());
             $addressPart->addChild('City', $request->getShipperAddressCity());
             $addressPart->addChild('CountryCode', $request->getShipperAddressCountryCode());

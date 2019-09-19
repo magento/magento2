@@ -271,6 +271,20 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionUT</requiredEntity>
     </entity>
+    <entity name="CustomerUKAddress" type="address">
+        <data key="firstname">Jane</data>
+        <data key="lastname">Miller</data>
+        <data key="company">Magento</data>
+        <data key="telephone">44 20 7123 1234</data>
+        <array key="street">
+            <item>1 London Bridge Street</item>
+        </array>
+        <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
+        <data key="city">London</data>
+        <data key="state"></data>
+        <data key="postcode">SE12 9GF</data>
+    </entity>
     <entity name="DE_Address_Berlin_Not_Default_Address" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>

@@ -11,12 +11,13 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
+    'mage/url',
     'mage/storage',
     'jquery/jquery-storageapi'
-], function ($, _, ko, sectionConfig) {
+], function ($, _, ko, sectionConfig, url) {
     'use strict';
 
-    var options,
+    var options = {},
         storage,
         storageInvalidation,
         invalidateCacheBySessionTimeOut,
@@ -24,6 +25,9 @@ define([
         dataProvider,
         buffer,
         customerData;
+
+    url.setBaseUrl(window.BASE_URL);
+    options.sectionLoadUrl = url.build('customer/section/load');
 
     //TODO: remove global change, in this case made for initNamespaceStorage
     $.cookieStorage.setConf({
@@ -194,13 +198,11 @@ define([
          * Customer data initialization
          */
         init: function () {
-            var countryData,
-                privateContentVersion = 'private_content_version',
+            var privateContentVersion = 'private_content_version',
                 privateContent = $.cookieStorage.get(privateContentVersion),
                 localPrivateContent = $.localStorage.get(privateContentVersion),
                 needVersion = 'need_version',
-                expiredSectionNames = this.getExpiredSectionNames(),
-                isLoading = false;
+                expiredSectionNames = this.getExpiredSectionNames();
 
             if (privateContent &&
                 !$.cookieStorage.isSet(privateContentVersion) &&
@@ -209,7 +211,6 @@ define([
                 $.cookieStorage.set(privateContentVersion, needVersion);
                 $.localStorage.set(privateContentVersion, needVersion);
                 this.reload([], false);
-                isLoading = true;
             } else if (localPrivateContent !== privateContent) {
                 if (!$.cookieStorage.isSet(privateContentVersion)) {
                     privateContent = needVersion;
@@ -220,7 +221,6 @@ define([
                     buffer.notify(sectionName, sectionData);
                 });
                 this.reload([], false);
-                isLoading = true;
             } else if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -233,14 +233,6 @@ define([
 
                 if (!_.isEmpty(storageInvalidation.keys())) {
                     this.reload(storageInvalidation.keys(), false);
-                }
-            }
-
-            if (!_.isEmpty(privateContent)) {
-                countryData = this.get('directory-data');
-
-                if (_.isEmpty(countryData()) && !isLoading) {
-                    customerData.reload(['directory-data'], false);
                 }
             }
         },
@@ -328,6 +320,9 @@ define([
         },
 
         /**
+         * Avoid using this function directly 'cause of possible performance drawbacks.
+         * Each customer section reload brings new non-cached ajax request.
+         *
          * @param {Array} sectionNames
          * @param {Boolean} forceNewSectionTimestamp
          * @return {*}

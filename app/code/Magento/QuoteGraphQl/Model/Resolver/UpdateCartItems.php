@@ -71,7 +71,8 @@ class UpdateCartItems implements ResolverInterface
         }
         $cartItems = $args['input']['cart_items'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         try {
             $this->processCartItems($cart, $cartItems);

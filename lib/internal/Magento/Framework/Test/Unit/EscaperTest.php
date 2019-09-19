@@ -43,6 +43,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
      *
      * @param int $codepoint Unicode codepoint in hex notation
      * @return string UTF-8 literal string
+     * @throws \Exception
      */
     protected function codepointToUtf8($codepoint)
     {
@@ -265,13 +266,38 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeUrl
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider escapeUrlDataProvider
      */
-    public function testEscapeUrl()
+    public function testEscapeUrl(string $data, string $expected): void
     {
-        $data = 'http://example.com/search?term=this+%26+that&view=list';
-        $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
         $this->assertEquals($expected, $this->escaper->escapeUrl($data));
         $this->assertEquals($expected, $this->escaper->escapeUrl($expected));
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeUrlDataProvider(): array
+    {
+        return [
+            [
+                'data' => "http://example.com/search?term=this+%26+that&view=list",
+                'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
+            ],
+            [
+                'data' => "http://exam\r\nple.com/search?term=this+%26+that&view=list",
+                'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
+            ],
+            [
+                'data' => "http://&#x65;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;/",
+                'expected' => "http://example.com/",
+            ],
+        ];
     }
 
     /**
@@ -317,6 +343,10 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     public function escapeDataProvider()
     {
         return [
+            [
+                '0',
+                '0',
+            ],
             [
                 'javascript%3Aalert%28String.fromCharCode%280x78%29%2BString.'
                 . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29',

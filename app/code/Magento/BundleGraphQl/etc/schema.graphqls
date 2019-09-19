@@ -14,7 +14,8 @@ type BundleItem @doc(description: "BundleItem defines an individual item in a bu
 type BundleItemOption @doc(description: "BundleItemOption defines characteristics and options for a specific bundle item.") {
     id: Int @doc(description: "The ID assigned to the bundled item option.")
     label: String @doc(description: "The text that identifies the bundled item option.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\Label")
-    qty: Float @doc(description: "Indicates the quantity of this specific bundle item.")
+    qty: Float @deprecated(reason: "The `qty` is deprecated. Use `quantity` instead.") @doc(description: "Indicates the quantity of this specific bundle item.")
+    quantity: Float @doc(description: "Indicates the quantity of this specific bundle item.")
     position: Int @doc(description: "When a bundle item contains multiple options, the relative position of this option compared to the other options.")
     is_default: Boolean @doc(description: "Indicates whether this option is the default option.")
     price: Float @doc(description: "The price of the selected option.")

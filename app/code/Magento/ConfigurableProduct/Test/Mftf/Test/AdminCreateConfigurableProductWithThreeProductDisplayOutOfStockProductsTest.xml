@@ -135,6 +135,6 @@
         <!-- Assert out of stock option is absent on product page -->
         <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <dontSee userInput="$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="assertOptionNotAvailable" />
+        <see userInput="$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="assertOptionNotAvailable" />
     </test>
 </tests>

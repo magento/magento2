@@ -10,10 +10,14 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Check configurable product attribute options on the category page -->
     <actionGroup name="SelectStorefrontSideBarAttributeOption">
+        <annotations>
+            <description>Goes to the provided Storefront Category page. Validates that the provided Attribute Label is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="categoryName" type="string"/>
             <argument name="attributeDefaultLabel" type="string"/>
         </arguments>
+        
         <amOnPage url="{{categoryName}}" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="seeCategoryInFrontPage"/>

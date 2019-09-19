@@ -5,63 +5,74 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Render;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $saleableItem;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInterface|MockObject
      */
     private $price;
 
     /**
-     * @var \Magento\Framework\Pricing\Render\RendererPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererPool|MockObject
      */
     private $rendererPool;
 
     /**
-     * @var LowestPriceOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SalableResolverInterface|MockObject
      */
-    private $lowestPriceOptionsProvider;
+    private $salableResolver;
+
+    /**
+     * @var MinimalPriceCalculatorInterface|MockObject
+     */
+    private $minimalPriceCalculator;
+
+    /**
+     * @var ConfigurableOptionsProviderInterface|MockObject
+     */
+    private $configurableOptionsProvider;
 
     /**
      * @var FinalPriceBox
      */
     private $model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->saleableItem = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->price = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->rendererPool = $this->getMockBuilder(\Magento\Framework\Pricing\Render\RendererPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->lowestPriceOptionsProvider = $this->getMockBuilder(LowestPriceOptionsProviderInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(Context::class);
+        $this->saleableItem = $this->createMock(Product::class);
+        $this->price = $this->createMock(PriceInterface::class);
+        $this->rendererPool = $this->createMock(RendererPool::class);
+        $this->salableResolver = $this->createMock(SalableResolverInterface::class);
+        $this->minimalPriceCalculator = $this->createMock(MinimalPriceCalculatorInterface::class);
+        $this->configurableOptionsProvider = $this->createMock(ConfigurableOptionsProviderInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(
             FinalPriceBox::class,
@@ -70,7 +81,9 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
                 'saleableItem' => $this->saleableItem,
                 'price' => $this->price,
                 'rendererPool' => $this->rendererPool,
-                'lowestPriceOptionsProvider' => $this->lowestPriceOptionsProvider,
+                'salableResolver' => $this->salableResolver,
+                'minimalPriceCalculator' => $this->minimalPriceCalculator,
+                'configurableOptionsProvider' => $this->configurableOptionsProvider,
             ]
         );
     }
@@ -82,44 +95,33 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
      * @dataProvider hasSpecialPriceDataProvider
      */
     public function testHasSpecialPrice(
-        $regularPrice,
-        $finalPrice,
-        $expected
+        float $regularPrice,
+        float $finalPrice,
+        bool $expected
     ) {
-        $priceMockOne = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
-            ->getMockForAbstractClass();
-
+        $priceMockOne = $this->createMock(PriceInterface::class);
         $priceMockOne->expects($this->once())
             ->method('getValue')
             ->willReturn($regularPrice);
-
-        $priceMockTwo = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
-            ->getMockForAbstractClass();
-
+        $priceMockTwo = $this->createMock(PriceInterface::class);
         $priceMockTwo->expects($this->once())
             ->method('getValue')
             ->willReturn($finalPrice);
-
-        $priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $priceInfoMock = $this->createMock(PriceInfoInterface::class);
         $priceInfoMock->expects($this->exactly(2))
             ->method('getPrice')
-            ->willReturnMap([
-                [RegularPrice::PRICE_CODE, $priceMockOne],
-                [FinalPrice::PRICE_CODE, $priceMockTwo],
-            ]);
+            ->willReturnMap(
+                [
+                    [RegularPrice::PRICE_CODE, $priceMockOne],
+                    [FinalPrice::PRICE_CODE, $priceMockTwo],
+                ]
+            );
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->setMethods(['getPriceInfo'])
-            ->getMockForAbstractClass();
-
+        $productMock = $this->createMock(Product::class);
         $productMock->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->willReturn($priceInfoMock);
-
-        $this->lowestPriceOptionsProvider->expects($this->once())
+        $this->configurableOptionsProvider->expects($this->once())
             ->method('getProducts')
             ->with($this->saleableItem)
             ->willReturn([$productMock]);
@@ -130,7 +132,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function hasSpecialPriceDataProvider()
+    public function hasSpecialPriceDataProvider(): array
     {
         return [
             [10., 20., false],

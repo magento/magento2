@@ -77,12 +77,6 @@
                 <field key="qty">2</field>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
-            <!--Go to bundle product page and save it to force "in stock" status-->
-            <actionGroup ref="goToProductPageViaID" stepKey="goToBundleProductPage">
-                <argument name="productId" value="$product.id$"/>
-            </actionGroup>
-            <actionGroup ref="saveProductForm" stepKey="saveBundleProduct"/>
         </before>
 
         <!--Create new customer order-->

@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminNavigateMenuActionGroup">
+        <annotations>
+            <description>Open Backend Admin side Navigation Menu. Click on Sub-Navigation Menu item.</description>
+        </annotations>
         <arguments>
             <argument name="menuUiId" type="string"/>
             <argument name="submenuUiId" type="string"/>
         </arguments>
+
         <click selector="{{AdminMenuSection.menuItem(menuUiId)}}" stepKey="clickOnMenuItem"/>
         <click selector="{{AdminMenuSection.menuItem(submenuUiId)}}" stepKey="clickOnSubmenuItem"/>
     </actionGroup>

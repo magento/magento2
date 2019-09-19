@@ -8,10 +8,6 @@
  * @deprecated
  */
 
-/**
- * @codingStandardsIgnoreFile
- */
-
 /* @var $block \Magento\Reports\Block\Product\Widget\Viewed\Item */
 
 $type = $block->getType() . '-' . $block->getViewMode();
@@ -54,7 +50,7 @@ $rating = 'short';
                                     <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                 </button>
                             <?php else : ?>
-                                <?php $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+                                <?php $postDataHelper = $this->helper(\Magento\Framework\Data\Helper\PostHelper::class);
                                 $postData = $postDataHelper->getPostData($block->getAddToCartUrl($item), ['product' => $item->getEntityId()])
                                 ?>
                                 <button class="action tocart"
@@ -73,14 +69,14 @@ $rating = 'short';
                     </div>
 
                     <div class="secondary-addto-links" data-role="add-to-links">
-                        <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+                        <?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow()) : ?>
                             <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>'  class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
                                 <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                             </a>
                         <?php endif; ?>
                         <?php if ($block->getAddToCompareUrl()) : ?>
                             <?php
-                            $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
+                            $compareHelper = $this->helper(\Magento\Catalog\Helper\Product\Compare::class);
                             ?>
                             <a href="#" class="action tocompare"
                                data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($item) ?>'

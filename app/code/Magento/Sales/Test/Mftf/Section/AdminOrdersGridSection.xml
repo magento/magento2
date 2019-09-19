@@ -16,7 +16,7 @@
         <element name="submitSearch22" type="button" selector=".//*[@class=&quot;admin__data-grid-filters-wrap&quot;]/parent::*/div[@class=&quot;data-grid-search-control-wrap&quot;]/button"/>
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']" timeout="30"/>
         <element name="idFilter" type="input" selector=".admin__data-grid-filters input[name='increment_id']"/>
-        <element name="selectStatus" type="select" selector="select[name='status']"/>
+        <element name="selectStatus" type="select" selector="select[name='status']" timeout="60"/>
         <element name="billToNameFilter" type="input" selector=".admin__data-grid-filters input[name='billing_name']"/>
         <element name="enabledFilters" type="block" selector=".admin__data-grid-header .admin__data-grid-filters-current._show"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
@@ -30,14 +30,14 @@
         <element name="viewBookmark" type="button" selector="//div[contains(@class, 'admin__data-grid-action-bookmarks')]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>
         <element name="columnsDropdown" type="button" selector="div.admin__data-grid-action-columns button" timeout="30"/>
         <element name="viewColumnCheckbox" type="checkbox" selector="//div[contains(@class,'admin__data-grid-action-columns')]//div[contains(@class, 'admin__field-option')]//label[text() = '{{column}}']/preceding-sibling::input" parameterized="true"/>
-        <element name="customerInOrdersSection" type="button" selector="(//td[contains(text(),'{{customer}}')])[1]" parameterized="true"/>
-        <element name="productForOrder" type="button" selector="//td[contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="customerInOrdersSection" type="button" selector="(//td[contains(text(),'{{customer}}')])[1]" parameterized="true" timeout="60"/>
+        <element name="productForOrder" type="button" selector="//td[contains(text(),'{{var}}')]" parameterized="true" timeout="60"/>
         <element name="selectActions" type="button" selector=".action-select-wrap > .action-select" timeout="30"/>
         <element name="dropdownActionItem" type="button" selector="(//div[contains(@class, 'action-menu-items')]//span[text()='{{action}}'])[1]" timeout="30" parameterized="true"/>
         <element name="checkOrder" type="input" selector="//td[count(//div[@data-role='grid-wrapper'])]//input"/>
-        <element name="orderActions" type="button" selector="//div[contains(concat(' ',normalize-space(@class),' '),' row-gutter ')]//button[@title='Select Items']"/>
+        <element name="orderActions" type="button" selector="//div[contains(concat(' ',normalize-space(@class),' '),' row-gutter ')]//button[@title='Select Items']" timeout="60"/>
         <element name="changeOrderStatus" type="button" selector="//div[contains(concat(' ',normalize-space(@class),' '),' row-gutter ')]//span[text()='{{status}}']" parameterized="true" timeout="30"/>
         <element name="viewLink" type="text" selector="//td/div[contains(.,'{{orderID}}')]/../..//a[@class='action-menu-item']" parameterized="true"/>
-        <element name="selectOrderID" type="checkbox" selector="//td/div[text()='{{orderId}}']/../preceding-sibling::td//input" parameterized="true"/>
+        <element name="selectOrderID" type="checkbox" selector="//td/div[text()='{{orderId}}']/../preceding-sibling::td//input" parameterized="true" timeout="60"/>
     </section>
 </sections>

@@ -7,12 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
-use Magento\Framework\App\Request\Http;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\DataObject;
 
 /**
@@ -22,11 +19,6 @@ use Magento\Framework\DataObject;
  */
 class PaypalPayflowProSetPaymentMethodTest extends PaypalPayflowProAbstractTest
 {
-    /**
-     * @var Http
-     */
-    private $request;
-
     /**
      * @var SerializerInterface
      */
@@ -41,13 +33,8 @@ class PaypalPayflowProSetPaymentMethodTest extends PaypalPayflowProAbstractTest
     {
         parent::setUp();
 
-        $this->request = $this->objectManager->create(Http::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->quoteIdToMaskedId = $this->objectManager->get(QuoteIdToMaskedQuoteId::class);
-
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
     }
 
     /**
@@ -84,15 +71,11 @@ class PaypalPayflowProSetPaymentMethodTest extends PaypalPayflowProAbstractTest
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
 
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
-
         $query = <<<QUERY
 mutation {
     setPaymentMethodOnCart(input: {
         payment_method: {
           code: "{$paymentMethod}",
-          additional_data: {
             payflowpro: {
               cc_details: {
                  cc_exp_month: 12,
@@ -100,7 +83,6 @@ mutation {
                  cc_last_4: 1111,
                  cc_type: "IV",
               }
-            }
           }
         },
         cart_id: "{$cartId}"})
@@ -115,9 +97,9 @@ mutation {
         input: {
           cart_id:"{$cartId}",
           urls: {
-            cancel_url: "{$baseUrl}paypal/transparent/cancel/"
-            error_url: "{$baseUrl}paypal/transparent/error/"
-            return_url: "{$baseUrl}paypal/transparent/response/"
+            cancel_url: "paypal/transparent/cancel/"
+            error_url: "paypal/transparent/error/"
+            return_url: "paypal/transparent/response/"
           }
         }
       ) {
@@ -145,14 +127,6 @@ mutation {
       }
 }
 QUERY;
-
-        $postData = $this->json->serialize(['query' => $query]);
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('POST');
-        $this->request->setContent($postData);
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
-            ->addHeaders(['Content-Type' => 'application/json']);
-        $this->request->setHeaders($headers);
 
         $paypalResponse = new DataObject(
             [
@@ -197,7 +171,7 @@ QUERY;
                 )
             );
 
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
 
         $this->assertArrayHasKey('data', $responseData);
