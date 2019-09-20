@@ -42,7 +42,7 @@ input CustomerAddressInput {
 input CustomerAddressRegionInput @doc(description: "CustomerAddressRegionInput defines the customer's state or province") {
     region_code: String @doc(description: "The address region code")
     region: String @doc(description: "The state or province name")
-    region_id: Int @doc(description: "Uniquely identifies the region")
+    region_id: Int @doc(description: "region_id is deprecated. Region ID is excessive on storefront and region code should suffice for all scenarios")
 }
 
 input CustomerAddressAttributeInput {
@@ -99,7 +99,7 @@ type CustomerAddress @doc(description: "CustomerAddress contains detailed inform
     id: Int @doc(description: "The ID assigned to the address object")
     customer_id: Int @doc(description: "The customer ID") @deprecated(reason: "customer_id is not needed as part of CustomerAddress, address ID (id) is unique identifier for the addresses.")
     region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID")
-    region_id: Int @doc(description: "A number that uniquely identifies the state, province, or other area")
+    region_id: Int @deprecated(reason: "Region ID is excessive on storefront and region code should suffice for all scenarios")
     country_id: String @doc(description: "The customer's country")
     street: [String] @doc(description: "An array of strings that define the street number and name")
     company: String @doc(description: "The customer's company")
@@ -122,7 +122,7 @@ type CustomerAddress @doc(description: "CustomerAddress contains detailed inform
 type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the customer's state or province") {
     region_code: String @doc(description: "The address region code")
     region: String @doc(description: "The state or province name")
-    region_id: Int @doc(description: "Uniquely identifies the region")
+    region_id: Int @deprecated(reason: "Region ID is excessive on storefront and region code should suffice for all scenarios")
 }
 
 type CustomerAddressAttribute {
