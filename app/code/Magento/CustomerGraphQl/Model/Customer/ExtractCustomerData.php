@@ -104,6 +104,8 @@ class ExtractCustomerData
         //Field is deprecated and should not be exposed on storefront.
         $customerData['group_id'] = null;
         $customerData['model'] = $customer;
+        $customerData['id'] = null;
+
         return $customerData;
     }
 }
